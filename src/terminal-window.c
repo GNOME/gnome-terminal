@@ -3631,11 +3631,11 @@ terminal_window_update_geometry (TerminalWindow *window)
   GtkWidget *widget;
   GdkGeometry hints;
   GtkBorder padding;
-  GtkRequisition toplevel_request, vbox_request, widget_request;
+  GtkRequisition vbox_request, widget_request;
   int grid_width, grid_height;
   int char_width, char_height;
   int chrome_width, chrome_height;
-  int csd_width, csd_height;
+  int csd_width = 0, csd_height = 0;
   
   if (priv->active_screen == NULL)
     return;
@@ -3666,20 +3666,35 @@ terminal_window_update_geometry (TerminalWindow *window)
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "content area requests %dx%d px\n",
                          vbox_request.width, vbox_request.height);
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (window), NULL, &toplevel_request);
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "window requests %dx%d px\n",
-                         toplevel_request.width, toplevel_request.height);
 
   chrome_width = vbox_request.width - (char_width * grid_width);
   chrome_height = vbox_request.height - (char_height * grid_height);
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "chrome: %dx%d px\n",
                          chrome_width, chrome_height);
 
-  csd_width = toplevel_request.width - vbox_request.width;
-  csd_height = toplevel_request.height - vbox_request.height;
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "CSDs: %dx%d px%s\n",
-                         csd_width, csd_height,
-                         priv->realized ? "" : " (just a guess)");
+  if (priv->realized)
+    {
+      /* Only when having been realize the CSD can be calculated. Do this by
+       * using the actual allocation rather then the preferred size as the
+       * the preferred size takes the natural size of e.g. the title bar into
+       * account which can be far wider then the contents size when using a
+       * very long title */
+      GtkAllocation toplevel_allocation, vbox_allocation;
+
+      gtk_widget_get_allocation (GTK_WIDGET (priv->main_vbox), &vbox_allocation);
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "terminal widget allocation %dx%d px\n",
+                         vbox_allocation.width, vbox_allocation.height);
+
+      gtk_widget_get_allocation (GTK_WIDGET (window), &toplevel_allocation);
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "window allocation %dx%d px\n",
+                         toplevel_allocation.width, toplevel_allocation.height);
+
+      csd_width =  toplevel_allocation.width - vbox_allocation.width;
+      csd_height = toplevel_allocation.height - vbox_allocation.height;
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "CSDs: %dx%d px\n",
+                             csd_width, csd_height);
+    }
 
   gtk_widget_get_preferred_size (widget, NULL, &widget_request);
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "terminal widget requests %dx%d px\n",
@@ -3688,8 +3703,8 @@ terminal_window_update_geometry (TerminalWindow *window)
   if (!priv->realized)
     {
       /* Don't actually set the geometry hints until we have been realized,
-       * because we don't know precisely how large the client-side decorations
-       * are going to be. We also avoid setting priv->old_csd_width or
+       * because we don't know how large the client-side decorations are going
+       * to be. We also avoid setting priv->old_csd_width or
        * priv->old_csd_height, so that next time through this function we'll
        * definitely recalculate the hints.
        *
