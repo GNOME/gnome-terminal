@@ -255,7 +255,12 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_print ("%s %s\n", _("GNOME Terminal"), VERSION);
+  g_print ("%s %s ", _("GNOME Terminal"), VERSION);
+  g_print (_("Using VTE version %u.%u.%u"),
+           vte_get_major_version (),
+           vte_get_minor_version (),
+           vte_get_micro_version ());
+  g_print (" %s\n", vte_get_features ());
 
   exit (EXIT_SUCCESS);
 }
