@@ -51,6 +51,8 @@ enum
 
 G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY)
 
+#define TERMINAL_SCREEN_CONTAINER_CSS_NAME "terminal-screen-container"
+
 /* helper functions */
 
 /* Widget class implementation */
@@ -220,6 +222,10 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 
 #ifndef USE_SCROLLED_WINDOW
   widget_class->style_updated = terminal_screen_container_style_updated;
+#endif
+
+#if GTK_CHECK_VERSION(3, 19, 5)
+  gtk_widget_class_set_css_name(widget_class, TERMINAL_SCREEN_CONTAINER_CSS_NAME);
 #endif
 
   g_object_class_install_property
