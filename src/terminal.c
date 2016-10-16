@@ -386,6 +386,9 @@ main (int argc, char **argv)
   /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
     options->startup_id = terminal_client_get_fallback_startup_id ();
+  /* Still NULL? */
+  if (options->startup_id == NULL)
+    g_printerr("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
