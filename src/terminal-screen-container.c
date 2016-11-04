@@ -210,9 +210,6 @@ static void
 terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-#ifndef USE_SCROLLED_WINDOW
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-#endif
 
   g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
 
@@ -221,11 +218,30 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   gobject_class->set_property = terminal_screen_container_set_property;
 
 #ifndef USE_SCROLLED_WINDOW
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
   widget_class->style_updated = terminal_screen_container_style_updated;
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_enum ("window-placement", NULL, NULL,
+                                                              GTK_TYPE_CORNER_TYPE,
+                                                              GTK_CORNER_BOTTOM_RIGHT,
+                                                              G_PARAM_READWRITE |
+                                                              G_PARAM_STATIC_STRINGS));
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("window-placement-set", NULL, NULL,
+                                                                 FALSE,
+                                                                 G_PARAM_READWRITE |
+                                                                 G_PARAM_STATIC_STRINGS));
+}
 #endif
 
 #if GTK_CHECK_VERSION(3, 19, 5)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_css_name(widget_class, TERMINAL_SCREEN_CONTAINER_CSS_NAME);
+}
 #endif
 
   g_object_class_install_property
@@ -253,20 +269,6 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                         GTK_POLICY_AUTOMATIC,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS));
-
-#ifndef USE_SCROLLED_WINDOW
-   gtk_widget_class_install_style_property (widget_class,
-                                            g_param_spec_enum ("window-placement", NULL, NULL,
-                                                               GTK_TYPE_CORNER_TYPE,
-                                                               GTK_CORNER_BOTTOM_RIGHT,
-                                                               G_PARAM_READWRITE |
-                                                               G_PARAM_STATIC_STRINGS));
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("window-placement-set", NULL, NULL,
-                                                                 FALSE,
-                                                                 G_PARAM_READWRITE |
-                                                                 G_PARAM_STATIC_STRINGS));
-#endif
 }
 
 /* public API */
