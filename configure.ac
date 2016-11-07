@@ -60,7 +60,7 @@ case "$with_gtk" in
        GTK_MIN_REQUIRED=3.8
        GTK_MAX_ALLOWED=3.20
        VTE_API_VERSION=2.91
-       VTE_REQUIRED=0.46.0
+       VTE_REQUIRED=0.46.1
        ;;
 esac
 
