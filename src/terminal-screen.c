@@ -1208,7 +1208,9 @@ get_child_environment (TerminalScreen *screen,
 					     GDK_WINDOW_XID (gtk_widget_get_window (window))));
       g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
     }
+  else
 #endif
+    g_hash_table_remove (env_table, "WINDOWID");
 
   /* We need to put the working directory also in PWD, so that
    * e.g. bash starts in the right directory if @cwd is a symlink.
