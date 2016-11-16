@@ -224,6 +224,16 @@ deprecated_option_warning (const gchar *option_name)
   g_printerr ("\n");
 }
 
+static void
+deprecated_command_option_warning (const char *option_name)
+{
+  deprecated_option_warning (option_name);
+
+  /* %s is being replaced with "-- " (without quotes), which must be used literally, not translatable */
+  g_printerr (_("Use “%s” to terminate the options and put the command line to execute after it."), "-- ");
+  g_printerr ("\n");
+}
+
 static gboolean
 unsupported_option_callback (const gchar *option_name,
                              const gchar *value,
@@ -294,6 +304,8 @@ option_command_callback (const gchar *option_name,
   TerminalOptions *options = data;
   GError *err = NULL;
   char  **exec_argv;
+
+  deprecated_command_option_warning (option_name);
 
   if (!g_shell_parse_argv (value, NULL, &exec_argv, &err))
     {
@@ -845,6 +857,9 @@ terminal_options_parse (const char *working_directory,
 
       if (!is_execute && !is_dashdash)
         continue;
+
+      if (is_execute)
+        deprecated_command_option_warning (argv[i]);
 
       options->execute = is_execute;
 
