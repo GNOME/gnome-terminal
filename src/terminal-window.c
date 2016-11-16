@@ -2510,10 +2510,10 @@ terminal_window_init (TerminalWindow *window)
 	NULL,
 	G_CALLBACK (search_clear_highlight_callback) },
 #if 0
-      { "SearchGoToLine", "go-jump", N_("Go to _Line..."), "<shift><control>I",
+      { "SearchGoToLine", "go-jump", N_("Go to _Line…"), "<shift><control>I",
 	NULL,
 	G_CALLBACK (search_goto_line_callback) },
-      { "SearchIncrementalSearch", "edit-find", N_("_Incremental Search..."), "<shift><control>K",
+      { "SearchIncrementalSearch", "edit-find", N_("_Incremental Search…"), "<shift><control>K",
 	NULL,
 	G_CALLBACK (search_incremental_search_callback) },
 #endif

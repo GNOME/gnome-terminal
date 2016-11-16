@@ -219,7 +219,7 @@ add_new_window (TerminalOptions *options,
 static void
 deprecated_option_warning (const gchar *option_name)
 {
-  g_printerr (_("Option \"%s\" is deprecated and might be removed in a later version of gnome-terminal."),
+  g_printerr (_("Option “%s” is deprecated and might be removed in a later version of gnome-terminal."),
               option_name);
   g_printerr ("\n");
 }
@@ -230,7 +230,7 @@ unsupported_option_callback (const gchar *option_name,
                              gpointer     data,
                              GError     **error)
 {
-  g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal."),
+  g_printerr (_("Option “%s” is no longer supported in this version of gnome-terminal."),
               option_name);
   g_printerr ("\n");
   return TRUE; /* we do not want to bail out here but continue */
@@ -243,7 +243,7 @@ unsupported_option_fatal_callback (const gchar *option_name,
                                    GError     **error)
 {
   g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_UNKNOWN_OPTION,
-               _("Option \"%s\" is no longer supported in this version of gnome-terminal."),
+               _("Option “%s” is no longer supported in this version of gnome-terminal."),
                option_name);
   return FALSE;
 }
@@ -300,7 +300,7 @@ option_command_callback (const gchar *option_name,
       g_set_error(error,
                   G_OPTION_ERROR,
                   G_OPTION_ERROR_BAD_VALUE,
-                  _("Argument to \"%s\" is not a valid command: %s"),
+                  _("Argument to “%s” is not a valid command: %s"),
                    "--command/-e",
                   err->message);
       g_error_free (err);
@@ -489,7 +489,7 @@ option_show_menubar_callback (const gchar *option_name,
       iw = g_list_last (options->initial_windows)->data;
       if (iw->force_menubar_state && iw->menubar_state == TRUE)
         {
-          g_printerr (_("\"%s\" option given twice for the same window\n"),
+          g_printerr (_("“%s” option given twice for the same window\n"),
                         "--show-menubar");
 
           return TRUE;
@@ -522,7 +522,7 @@ option_hide_menubar_callback (const gchar *option_name,
 
       if (iw->force_menubar_state && iw->menubar_state == FALSE)
         {
-          g_printerr (_("\"%s\" option given twice for the same window\n"),
+          g_printerr (_("“%s” option given twice for the same window\n"),
                         "--hide-menubar");
           return TRUE;
         }
@@ -715,14 +715,14 @@ option_zoom_callback (const gchar *option_name,
       g_set_error (error,
                    G_OPTION_ERROR,
                    G_OPTION_ERROR_BAD_VALUE,
-                   _("\"%s\" is not a valid zoom factor"),
+                   _("“%s” is not a valid zoom factor"),
                    value);
       return FALSE;
     }
 
   if (zoom < (TERMINAL_SCALE_MINIMUM + 1e-6))
     {
-      g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
+      g_printerr (_("Zoom factor “%g” is too small, using %g\n"),
                   zoom,
                   TERMINAL_SCALE_MINIMUM);
       zoom = TERMINAL_SCALE_MINIMUM;
@@ -730,7 +730,7 @@ option_zoom_callback (const gchar *option_name,
 
   if (zoom > (TERMINAL_SCALE_MAXIMUM - 1e-6))
     {
-      g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
+      g_printerr (_("Zoom factor “%g” is too large, using %g\n"),
                   zoom,
                   TERMINAL_SCALE_MAXIMUM);
       zoom = TERMINAL_SCALE_MAXIMUM;
@@ -768,7 +768,7 @@ digest_options_callback (GOptionContext *context,
           g_set_error (error,
                        G_OPTION_ERROR,
                        G_OPTION_ERROR_BAD_VALUE,
-                       _("Option \"%s\" requires specifying the command to run"
+                       _("Option “%s” requires specifying the command to run"
                          " on the rest of the command line"),
                        "--execute/-x");
           return FALSE;
@@ -1219,7 +1219,7 @@ get_goption_context (TerminalOptions *options)
       0,
       G_OPTION_ARG_CALLBACK,
       option_zoom_callback,
-      N_("Set the terminal's zoom factor (1.0 = normal size)"),
+      N_("Set the terminal’s zoom factor (1.0 = normal size)"),
       N_("ZOOM")
     },
     { NULL, 0, 0, 0, NULL, NULL, NULL }

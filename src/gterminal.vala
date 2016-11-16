@@ -82,7 +82,7 @@ namespace GTerminal
                                        void *unused_user_data) throws OptionError
     {
       if (!GLib.Application.id_is_valid (value))
-        throw new OptionError.BAD_VALUE (_("\"%s\" is not a valid application ID"), value);
+        throw new OptionError.BAD_VALUE (_("“%s” is not a valid application ID"), value);
       app_id = value;
       return true;
     }
@@ -146,7 +146,7 @@ namespace GTerminal
         int64 v;
         if (!int64.try_parse (pass_fds[i], out v) ||
             v == -1 || v < int.MIN || v > int.MAX)
-          throw new OptionError.BAD_VALUE (_("Invalid argument \"%s\" to --fd option"), pass_fds[i]);
+          throw new OptionError.BAD_VALUE (_("Invalid argument “%s” to --fd option"), pass_fds[i]);
 
         int fd = (int) v;
 
@@ -261,11 +261,11 @@ namespace GTerminal
     {
       double v;
       if (!double.try_parse (value, out v))
-        throw new OptionError.BAD_VALUE (_("\"%s\" is not a valid zoom factor"),
+        throw new OptionError.BAD_VALUE (_("“%s” is not a valid zoom factor"),
                                          value);
 
       if (v < 0.25 || v > 4.0)
-        throw new OptionError.BAD_VALUE (_("Zoom value \"%s\" is outside allowed range"),
+        throw new OptionError.BAD_VALUE (_("Zoom value “%s” is outside allowed range"),
                                          value);
 
       zoom = v;
@@ -279,7 +279,7 @@ namespace GTerminal
       { "cwd", 0, 0, OptionArg.FILENAME, ref working_directory,
         N_("Set the working directory"), N_("DIRNAME") },
       { "zoom", 0, 0, OptionArg.CALLBACK, (void*) option_zoom,
-        N_("Set the terminal's zoom factor (1.0 = normal size)"),
+        N_("Set the terminal’s zoom factor (1.0 = normal size)"),
         N_("ZOOM") },
       { null, 0, 0, 0, null, null, null }
     };
@@ -496,7 +496,7 @@ namespace GTerminal
           Output.print ("%s\n", commands[i].verb);
       }
     } else {
-      throw new OptionError.FAILED (_("Unknown command \"%s\""), argv[0]);
+      throw new OptionError.FAILED (_("Unknown command “%s”"), argv[0]);
     }
 
     return Posix.EXIT_SUCCESS;
@@ -523,10 +523,10 @@ namespace GTerminal
     OpenOptions.parse_argv (argv);
 
     if (argv[0] == "run" && OpenOptions.argv_post == null)
-      throw new OptionError.BAD_VALUE (_("'%s' needs the command to run as arguments after '--'"),
+      throw new OptionError.BAD_VALUE (_("“%s” needs the command to run as arguments after “--”"),
                                        argv[0]);
     else if (argv[0] == "shell" && OpenOptions.argv_post != null)
-      throw new OptionError.BAD_VALUE (_("Extraneous arguments after '--'"));
+      throw new OptionError.BAD_VALUE (_("Extraneous arguments after “--”"));
 
     var builder = new GLib.VariantBuilder (VariantType.TUPLE);
     builder.open (VariantType.VARDICT); {
