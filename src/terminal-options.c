@@ -1326,7 +1326,6 @@ get_goption_context (TerminalOptions *options)
   parameter = g_strdup_printf ("[-- %s …]", _("COMMAND"));
   context = g_option_context_new (parameter);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
-  g_option_context_set_description (context, N_("GNOME Terminal Emulator"));
   g_option_context_set_ignore_unknown_options (context, FALSE);
 
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
