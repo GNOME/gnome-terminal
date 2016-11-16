@@ -33,6 +33,7 @@
 #include "terminal-app.h"
 #include "terminal-util.h"
 #include "terminal-version.h"
+#include "terminal-libgsystem.h"
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
@@ -1320,8 +1321,10 @@ get_goption_context (TerminalOptions *options)
 
   GOptionContext *context;
   GOptionGroup *group;
+  gs_free char *parameter;
 
-  context = g_option_context_new (NULL);
+  parameter = g_strdup_printf ("[-- %s …]", _("COMMAND"));
+  context = g_option_context_new (parameter);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_set_description (context, N_("GNOME Terminal Emulator"));
   g_option_context_set_ignore_unknown_options (context, FALSE);
