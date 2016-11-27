@@ -119,8 +119,11 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
   windows = gtk_application_get_windows (GTK_APPLICATION (app));
   for (l = windows; l != NULL; l = l->next)
     {
-      TerminalWindow *window = TERMINAL_WINDOW (l->data);
+      TerminalWindow *window = (TerminalWindow*)(l->data);
       GList *c, *containers;
+
+      if (!TERMINAL_IS_WINDOW (l->data))
+        continue;
 
       containers = terminal_window_list_screen_containers (window);
       for (c = containers; c != NULL; c = c->next)
