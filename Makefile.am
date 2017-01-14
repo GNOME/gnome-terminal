@@ -29,7 +29,7 @@ appdata_in_files = \
 	org.gnome.Terminal.Nautilus.metainfo.xml.in \
 	$(NULL)
 
-appdatadir = $(datadir)/appdata
+appdatadir = $(datadir)/metainfo
 nodist_appdata_DATA = \
 	org.gnome.Terminal.appdata.xml \
 	$(NULL)
