@@ -2055,6 +2055,9 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   gsize len;
   int fgpid;
 
+  if (priv->child_pid == -1)
+    return FALSE;
+
   pty = vte_terminal_get_pty (VTE_TERMINAL (screen));
   if (pty == NULL)
     return FALSE;
