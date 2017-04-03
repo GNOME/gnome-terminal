@@ -1608,7 +1608,7 @@ terminal_screen_button_press (GtkWidget      *widget,
 
           terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
           url = NULL; /* adopted to the popup info */
-          number_info = NULL; /* detto */
+          number_info = NULL; /* ditto */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
@@ -1616,7 +1616,7 @@ terminal_screen_button_press (GtkWidget      *widget,
           /* do popup on shift+right-click */
           terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
           url = NULL; /* adopted to the popup info */
-          number_info = NULL; /* detto */
+          number_info = NULL; /* ditto */
           return TRUE;
         }
     }
