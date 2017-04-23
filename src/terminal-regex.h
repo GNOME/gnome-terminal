@@ -121,21 +121,26 @@
 /* Optional colon-prefixed port, e.g. ":1080", "" */
 #define PORT "(?x: \\:" N_1_65535 " )?"
 
+/* Omit the parentheses, see below */
 #define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,:;@&=?/~#|%\\E]"
-/* Chars not to end a URL */
-#define PATHNONTERM_CLASS "[\\Q.!,?\\E]"
+/* Chars to end a URL */
+#define PATHTERM_CLASS "[-[:alnum:]\\Q_$+*:;@&=/~#|%\\E]"
 
-/* Lookbehind at the end, so that the last character (if we matched a character at all) is not from PATHTERM_CLASS */
-#define URLPATH "(?x: /" PATHCHARS_CLASS "* (?<! " PATHNONTERM_CLASS " ) )?"
-#define VOIP_PATH "(?x: [;?]" PATHCHARS_CLASS "* (?<! " PATHNONTERM_CLASS " ) )?"
+/* Recursive definition of PATH that allows parentheses only if balanced, see bug 763980. */
+#define PATH_INNER_DEF "(?(DEFINE)(?<PATH_INNER>(?x: (?: " PATHCHARS_CLASS "* \\( (?&PATH_INNER) \\) )* " PATHCHARS_CLASS "* )))"
+/* Same as above, but the last character (if exists and is not a parenthesis) must be from PATHTERM_CLASS. */
+#define PATH_DEF "(?(DEFINE)(?<PATH>(?x: (?: " PATHCHARS_CLASS "* \\( (?&PATH_INNER) \\) )* (?: " PATHCHARS_CLASS "* " PATHTERM_CLASS " )? )))"
+
+#define URLPATH "(?x: /(?&PATH) )?"
+#define VOIP_PATH "(?x: [;?](?&PATH) )?"
 
 /* Now let's put these fragments together */
 
-#define DEFS IP_DEF
+#define DEFS IP_DEF PATH_INNER_DEF PATH_DEF
 
 #define REGEX_URL_AS_IS  DEFS SCHEME "://" USERPASS URL_HOST PORT URLPATH
 /* TODO: also support file:/etc/passwd */
-#define REGEX_URL_FILE   DEFS "(?ix: file:/ (?: / (?: " HOSTNAME1 " )? / )? (?! / ) )(?x: " PATHCHARS_CLASS "+ (?<! " PATHNONTERM_CLASS " ) )?" 
+#define REGEX_URL_FILE   DEFS "(?ix: file:/ (?: / (?: " HOSTNAME1 " )? / )? (?! / ) )(?&PATH)"
 /* Lookbehind so that we don't catch "abc.www.foo.bar", bug 739757. Lookahead for www/ftp for convenience (so that we can reuse HOSTNAME1). */
 #define REGEX_URL_HTTP   DEFS "(?<!(?:" HOSTNAMESEGMENTCHARS_CLASS "|[.]))(?=(?i:www|ftp))" HOSTNAME1 PORT URLPATH
 #define REGEX_URL_VOIP   DEFS "(?i:h323:|sips?:)" USERPASS URL_HOST PORT VOIP_PATH

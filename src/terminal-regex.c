@@ -203,9 +203,23 @@ main (int argc, char **argv)
   assert_match_anchored (PORT, ":65535", ENTIRE);
   assert_match_anchored (PORT, ":65536", "");     /* TODO: can/should we totally abort here? */
 
+  /* Parentheses are only allowed in matching pairs, see bug 763980. */
   /* TODO: add tests for PATHCHARS and PATHNONTERM; and/or URLPATH */
-  assert_match_anchored (URLPATH, "/ab/cd",       ENTIRE);
-  assert_match_anchored (URLPATH, "/ab/cd.html.", "/ab/cd.html");
+  assert_match_anchored (DEFS URLPATH, "/ab/cd",       ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/ab/cd.html.", "/ab/cd.html");
+  assert_match_anchored (DEFS URLPATH, "/The_Offspring_(album)", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/The_Offspring)", "/The_Offspring");
+  assert_match_anchored (DEFS URLPATH, "/a((b(c)d)e(f))", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/a((b(c)d)e(f)))", "/a((b(c)d)e(f))");
+  assert_match_anchored (DEFS URLPATH, "/a(b).(c).", "/a(b).(c)");
+  assert_match_anchored (DEFS URLPATH, "/a.(b.(c.).).(d.(e.).).)", "/a.(b.(c.).).(d.(e.).)");
+  assert_match_anchored (DEFS URLPATH, "/a)b(c", "/a");
+  assert_match_anchored (DEFS URLPATH, "/.", "/");
+  assert_match_anchored (DEFS URLPATH, "/(.", "/");
+  assert_match_anchored (DEFS URLPATH, "/).", "/");
+  assert_match_anchored (DEFS URLPATH, "/().", "/()");
+  assert_match_anchored (DEFS URLPATH, "/", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "", ENTIRE);
 
 
   /* Put the components together and test the big picture */
@@ -257,6 +271,13 @@ main (int argc, char **argv)
 
   assert_match (REGEX_URL_AS_IS, "http://ab.cd/ef?g=h&i=j|k=l#m=n:o=p", ENTIRE);
   assert_match (REGEX_URL_AS_IS, "http:///foo",                         NULL);
+
+  /* Parentheses are only allowed in matching pairs, see bug 763980. */
+  assert_match (REGEX_URL_AS_IS, "https://en.wikipedia.org/wiki/The_Offspring_(album)", ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "[markdown](https://en.wikipedia.org/wiki/The_Offspring)", "https://en.wikipedia.org/wiki/The_Offspring");
+  assert_match (REGEX_URL_AS_IS, "[markdown](https://en.wikipedia.org/wiki/The_Offspring_(album))", "https://en.wikipedia.org/wiki/The_Offspring_(album)");
+  assert_match (REGEX_URL_AS_IS, "[markdown](http://foo.bar/(a(b)c)d)e)f", "http://foo.bar/(a(b)c)d");
+  assert_match (REGEX_URL_AS_IS, "[markdown](http://foo.bar/a)b(c", "http://foo.bar/a");
 
   /* No scheme */
   assert_match (REGEX_URL_HTTP, "www.foo.bar/baz",     ENTIRE);
