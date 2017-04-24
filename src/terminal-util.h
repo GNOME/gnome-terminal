@@ -98,6 +98,8 @@ char *terminal_util_number_info (const char *str);
 gboolean terminal_util_uri_is_allowed (const char *uri,
                                        GError **error);
 
+char *terminal_util_hyperlink_uri_label (const char *str);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */

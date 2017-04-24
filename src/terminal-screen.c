@@ -152,6 +152,8 @@ static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
+static char* terminal_screen_check_hyperlink   (TerminalScreen            *screen,
+                                                GdkEvent                  *event);
 static void terminal_screen_check_extra (TerminalScreen *screen,
                                          GdkEvent       *event,
                                          char           **number_info);
@@ -357,6 +359,8 @@ terminal_screen_init (TerminalScreen *screen)
   vte_terminal_set_mouse_autohide (terminal, TRUE);
 
   priv->child_pid = -1;
+
+  vte_terminal_set_allow_hyperlink (terminal, TRUE);
 
   for (i = 0; i < n_url_regexes; ++i)
     {
@@ -1509,6 +1513,7 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
 
   g_object_unref (info->screen);
   g_weak_ref_clear (&info->window_weak_ref);
+  g_free (info->hyperlink);
   g_free (info->url);
   g_free (info->number_info);
   g_slice_free (TerminalScreenPopupInfo, info);
@@ -1547,6 +1552,7 @@ terminal_screen_popup_menu (GtkWidget *widget)
 static void
 terminal_screen_do_popup (TerminalScreen *screen,
                           GdkEventButton *event,
+                          char *hyperlink,
                           char *url,
                           int url_flavor,
                           char *number_info)
@@ -1557,6 +1563,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   info->button = event->button;
   info->state = event->state & gtk_accelerator_get_default_mod_mask ();
   info->timestamp = event->time;
+  info->hyperlink = hyperlink; /* adopted */
   info->url = url; /* adopted */
   info->url_flavor = url_flavor;
   info->number_info = number_info; /* adopted */
@@ -1572,6 +1579,7 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
+  gs_free char *hyperlink = NULL;
   gs_free char *url = NULL;
   int url_flavor = 0;
   gs_free char *number_info = NULL;
@@ -1579,8 +1587,24 @@ terminal_screen_button_press (GtkWidget      *widget,
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
+  hyperlink = terminal_screen_check_hyperlink (screen, (GdkEvent*)event);
   url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
   terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
+
+  if (hyperlink != NULL &&
+      (event->button == 1 || event->button == 2) &&
+      (state & GDK_CONTROL_MASK))
+    {
+      gboolean handled = FALSE;
+
+      g_signal_emit (screen, signals[MATCH_CLICKED], 0,
+                     hyperlink,
+                     FLAVOR_AS_IS,
+                     state,
+                     &handled);
+      if (handled)
+        return TRUE; /* don't do anything else such as select with the click */
+    }
 
   if (url != NULL &&
       (event->button == 1 || event->button == 2) &&
@@ -1606,16 +1630,18 @@ terminal_screen_button_press (GtkWidget      *widget,
           if (button_press_event && button_press_event (widget, event))
             return TRUE;
 
-          terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
-          url = NULL; /* adopted to the popup info */
+          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info);
+          hyperlink = NULL; /* adopted to the popup info */
+          url = NULL; /* ditto */
           number_info = NULL; /* ditto */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
-          terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
-          url = NULL; /* adopted to the popup info */
+          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info);
+          hyperlink = NULL; /* adopted to the popup info */
+          url = NULL; /* ditto */
           number_info = NULL; /* ditto */
           return TRUE;
         }
@@ -1951,6 +1977,13 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
 
   *cell_width_pixels = vte_terminal_get_char_width (terminal);
   *cell_height_pixels = vte_terminal_get_char_height (terminal);
+}
+
+static char*
+terminal_screen_check_hyperlink (TerminalScreen *screen,
+                                 GdkEvent       *event)
+{
+  return vte_terminal_hyperlink_check_event (VTE_TERMINAL (screen), event);
 }
 
 static char*

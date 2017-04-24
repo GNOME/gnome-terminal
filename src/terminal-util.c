@@ -20,6 +20,7 @@
  */
 
 #include "config.h"
+#define _GNU_SOURCE /* for strchrnul */
 
 #include <string.h>
 #include <stdlib.h>
@@ -1139,4 +1140,50 @@ terminal_util_uri_is_allowed (const char *uri,
     return FALSE;
   }
   return TRUE;
+}
+
+/**
+ * terminal_util_hyperlink_uri_label:
+ * @uri: a URI
+ *
+ * Formats @uri to be displayed in a tooltip.
+ * Performs URI-decoding and converts IDN hostname to UTF-8.
+ *
+ * Returns: (transfer full): The human readable URI as plain text
+ */
+char *terminal_util_hyperlink_uri_label (const char *uri)
+{
+  char *unesc = NULL;
+  gboolean replace_hostname;
+
+  if (uri == NULL)
+    return NULL;
+
+  unesc = g_uri_unescape_string(uri, NULL);
+  if (unesc == NULL)
+    unesc = g_strdup(uri);
+
+  if (g_ascii_strncasecmp(unesc, "ftp://", 6) == 0 ||
+      g_ascii_strncasecmp(unesc, "http://", 7) == 0 ||
+      g_ascii_strncasecmp(unesc, "https://", 8) == 0) {
+    gs_free char *unidn = NULL;
+    char *hostname = strchr(unesc, '/') + 2;
+    char *hostname_end = strchrnul(hostname, '/');
+    char save = *hostname_end;
+    *hostname_end = '\0';
+    unidn = g_hostname_to_unicode(hostname);
+    replace_hostname = unidn != NULL && g_ascii_strcasecmp(unidn, hostname) != 0;
+    *hostname_end = save;
+    if (replace_hostname) {
+      char *new_unesc = g_strdup_printf("%.*s%s%s",
+                                        (int) (hostname - unesc),
+                                        unesc,
+                                        unidn,
+                                        hostname_end);
+      g_free(unesc);
+      unesc = new_unesc;
+    }
+  }
+
+  return unesc;
 }
