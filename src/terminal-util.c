@@ -126,7 +126,8 @@ open_url (GtkWindow *parent,
   else
     screen = gdk_screen_get_default ();
 
-  return gtk_show_uri (screen, uri, user_time, error);
+  return terminal_util_uri_is_allowed (uri, error) &&
+         gtk_show_uri (screen, uri, user_time, error);
 }
 
 void
@@ -1103,4 +1104,39 @@ terminal_util_number_info (const char *str)
   }
 
   return g_strdup_printf(hex ? "0x%2$s = %1$s%3$s" : "%s = 0x%s%s", decstr, hexstr, magnitudestr);
+}
+
+/**
+ * terminal_util_is_uri_allowed:
+ * @uri: The URI to check
+ * @error: a #GError that is returned in case of errors
+ *
+ * Checks if gnome-terminal should attempt to handle the given URI.
+ * Currently URIs of "file://some-other-host/..." are refused because
+ * GIO (e.g. gtk_show_uri()) silently strips off the remote hostname
+ * and opens the local counterpart which is incorrect and misleading.
+ *
+ * Returns: TRUE if gnome-terminal should attempt to handle the URI,
+ *   FALSE if it should refuse to handle.
+ */
+gboolean
+terminal_util_uri_is_allowed (const char *uri,
+                              GError **error)
+{
+  gs_free char *filename;
+  gs_free char *hostname;
+
+  filename = g_filename_from_uri (uri, &hostname, NULL);
+  if (filename != NULL &&
+      hostname != NULL &&
+      hostname[0] != '\0' &&
+      g_ascii_strcasecmp (hostname, "localhost") != 0 &&
+      g_ascii_strcasecmp (hostname, g_get_host_name()) != 0) {
+    g_set_error_literal (error,
+                         G_IO_ERROR,
+                         G_IO_ERROR_NOT_SUPPORTED,
+                         _("“file” scheme with remote hostname not supported"));
+    return FALSE;
+  }
+  return TRUE;
 }
