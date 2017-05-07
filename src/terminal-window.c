@@ -187,6 +187,8 @@ static void file_close_tab_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_copy_callback                (GtkAction *action,
                                                TerminalWindow *window);
+static void edit_copy_html_callback           (GtkAction *action,
+                                               TerminalWindow *window);
 static void edit_paste_callback               (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_select_all_callback          (GtkAction *action,
@@ -607,11 +609,23 @@ action_copy_cb (GSimpleAction *action,
 {
   TerminalWindow *window = user_data;
   TerminalWindowPrivate *priv = window->priv;
+  const char *format_str;
+  VteFormat format;
 
   if (!priv->active_screen)
     return;
-      
-  vte_terminal_copy_clipboard (VTE_TERMINAL (priv->active_screen));
+
+  g_assert (parameter != NULL);
+  g_variant_get (parameter, "&s", &format_str);
+
+  if (g_str_equal (format_str, "text"))
+    format = VTE_FORMAT_TEXT;
+  else if (g_str_equal (format_str, "html"))
+    format = VTE_FORMAT_HTML;
+  else
+    return;
+
+  vte_terminal_copy_clipboard_format (VTE_TERMINAL (priv->active_screen), format);
 }
 
 static void
@@ -619,7 +633,14 @@ edit_copy_callback (GtkAction *action,
                     TerminalWindow *window)
 {
   g_action_activate (g_action_map_lookup_action (G_ACTION_MAP (window), "copy"),
-                     NULL);
+                     g_variant_new_string ("text"));
+}
+
+static void edit_copy_html_callback (GtkAction *action,
+                                     TerminalWindow *window)
+{
+  g_action_activate (g_action_map_lookup_action (G_ACTION_MAP (window), "copy"),
+                     g_variant_new_string ("html"));
 }
 
 static void
@@ -1762,6 +1783,9 @@ terminal_window_update_copy_sensitivity (TerminalScreen *screen,
 
   action = gtk_action_group_get_action (priv->action_group, "EditCopy");
   gtk_action_set_sensitive (action, can_copy);
+
+  action = gtk_action_group_get_action (priv->action_group, "EditCopyHTML");
+  gtk_action_set_sensitive (action, can_copy);
 }
 
 static void
@@ -2086,6 +2110,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu;
   GtkAction *action;
+  gboolean has_selection;
   gboolean can_paste, can_paste_uris, show_hyperlink, show_link, show_email_link, show_call_link, show_number_info;
 
   window = terminal_screen_popup_info_ref_window (info);
@@ -2102,6 +2127,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   remove_popup_info (window);
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
+  has_selection = vte_terminal_get_has_selection (VTE_TERMINAL (screen));
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
   show_hyperlink = info->hyperlink != NULL;
@@ -2134,7 +2160,9 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_visible (action, show_number_info);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
-  gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
+  gtk_action_set_sensitive (action, has_selection);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCopyHTML");
+  gtk_action_set_sensitive (action, has_selection);
   action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
   gtk_action_set_sensitive (action, can_paste);
   action = gtk_action_group_get_action (priv->action_group, "PopupPasteURIPaths");
@@ -2448,7 +2476,7 @@ terminal_window_init (TerminalWindow *window)
     { "new-profile",         action_new_profile_cb,    NULL,   NULL, NULL },
     { "save-contents",       action_save_contents_cb,  NULL,   NULL, NULL },
     { "close",               action_close_cb,          "s",    NULL, NULL },
-    { "copy",                action_copy_cb,           NULL,   NULL, NULL },
+    { "copy",                action_copy_cb,           "s",    NULL, NULL },
     { "paste",               action_paste_cb,          "s",    NULL, NULL },
     { "select-all",          action_select_all_cb,     NULL,   NULL, NULL },
     { "reset",               action_reset_cb,          "b",    NULL, NULL },
@@ -2505,10 +2533,13 @@ terminal_window_init (TerminalWindow *window)
         G_CALLBACK (file_close_window_callback) },
 
       /* Edit menu */
-      { "EditCopy", "edit-copy", N_("Copy"), "<shift><control>C",
+      { "EditCopy", "edit-copy", N_("_Copy"), "<shift><control>C",
         NULL,
         G_CALLBACK (edit_copy_callback) },
-      { "EditPaste", "edit-paste", N_("Paste"), "<shift><control>V",
+      { "EditCopyHTML", "edit-copy", N_("Copy as _HTML"), NULL,
+        NULL,
+        G_CALLBACK (edit_copy_html_callback) },
+      { "EditPaste", "edit-paste", N_("_Paste"), "<shift><control>V",
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "EditPasteURIPaths", "edit-paste", N_("Paste _Filenames"), "",
@@ -2629,10 +2660,13 @@ terminal_window_init (TerminalWindow *window)
         NULL,
         NULL },
       { "PopupTerminalProfiles", NULL, N_("P_rofiles") },
-      { "PopupCopy", "edit-copy", N_("Copy"), "",
+      { "PopupCopy", "edit-copy", N_("_Copy"), "",
         NULL,
         G_CALLBACK (edit_copy_callback) },
-      { "PopupPaste", "edit-paste", N_("Paste"), "",
+      { "PopupCopyHTML", "edit-copy", N_("Copy as _HTML"), "",
+        NULL,
+        G_CALLBACK (edit_copy_html_callback) },
+      { "PopupPaste", "edit-paste", N_("_Paste"), "",
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "PopupPasteURIPaths", "edit-paste", N_("Paste _Filenames"), "",
