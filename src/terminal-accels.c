@@ -52,6 +52,7 @@
 #define KEY_CLOSE_TAB           "close-tab"
 #define KEY_CLOSE_WINDOW        "close-window"
 #define KEY_COPY                "copy"
+#define KEY_COPY_HTML           "copy-html"
 #define KEY_DETACH_TAB          "detach-tab"
 #define KEY_FIND                "find"
 #define KEY_FIND_CLEAR          "find-clear"
@@ -85,6 +86,7 @@
 #define ACCEL_PATH_KEY_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
 #define ACCEL_PATH_KEY_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
 #define ACCEL_PATH_KEY_COPY                 ACCEL_PATH_ROOT "EditCopy"
+#define ACCEL_PATH_KEY_COPY_HTML            ACCEL_PATH_ROOT "EditCopyHtml"
 #define ACCEL_PATH_KEY_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
 #define ACCEL_PATH_KEY_FIND                 ACCEL_PATH_ROOT "SearchFind"
 #define ACCEL_PATH_KEY_FIND_CLEAR           ACCEL_PATH_ROOT "SearchClearHighlight"
@@ -164,7 +166,8 @@ static KeyEntry file_entries[] = {
 };
 
 static KeyEntry edit_entries[] = {
-  ENTRY (N_("Copy"),                KEY_COPY,                "copy",         NULL, NULL      ),
+  ENTRY (N_("Copy"),                KEY_COPY,                "copy",         "s", "'text'"   ),
+  ENTRY (N_("Copy as HTML"),        KEY_COPY_HTML,           "copy",         "s", "'html'"   ),
   ENTRY (N_("Paste"),               KEY_PASTE,               "paste",        "s",  "'normal'"),
   ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   NULL, NULL      ),
   ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "preferences",  NULL, NULL      ),
