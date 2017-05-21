@@ -363,10 +363,10 @@ AC_SUBST([WARN_CFLAGS])
 AC_SUBST([AM_CPPFLAGS])
 AC_SUBST([AM_CFLAGS])
 AC_SUBST([AM_LDFLAGS])
-AC_DEFINE_UNQUOTED([GLIB_VERSION_MIN_REQUIRED],[G_ENCODE_VERSION(${GLIB_MIN_REQUIRED/./,})],[Define the min required glib version])
-AC_DEFINE_UNQUOTED([GLIB_VERSION_MAX_ALLOWED],[G_ENCODE_VERSION(${GLIB_MAX_ALLOWED/./,})],[Define the max allowed glib version])
-AC_DEFINE_UNQUOTED([GDK_VERSION_MIN_REQUIRED],[G_ENCODE_VERSION(${GTK_MIN_REQUIRED/./,})],[Define the min required gtk version])
-AC_DEFINE_UNQUOTED([GDK_VERSION_MAX_ALLOWED],[G_ENCODE_VERSION(${GTK_MAX_ALLOWED/./,})],[Define the max allowed gtk version])
+AC_DEFINE_UNQUOTED([GLIB_VERSION_MIN_REQUIRED],[G_ENCODE_VERSION($(echo $GLIB_MIN_REQUIRED | tr . ,))],[Define the min required glib version])
+AC_DEFINE_UNQUOTED([GLIB_VERSION_MAX_ALLOWED],[G_ENCODE_VERSION($(echo $GLIB_MAX_ALLOWED | tr . ,))],[Define the max allowed glib version])
+AC_DEFINE_UNQUOTED([GDK_VERSION_MIN_REQUIRED],[G_ENCODE_VERSION($(echo $GTK_MIN_REQUIRED | tr . ,))],[Define the min required gtk version])
+AC_DEFINE_UNQUOTED([GDK_VERSION_MAX_ALLOWED],[G_ENCODE_VERSION($(echo $GTK_MAX_ALLOWED | tr . ,))],[Define the max allowed gtk version])
 
 # ****************************
 
