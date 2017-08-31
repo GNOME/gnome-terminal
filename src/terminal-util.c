@@ -121,14 +121,18 @@ open_url (GtkWindow *parent,
           GError **error)
 {
   GdkScreen *screen;
+  gs_free char *uri_fixed;
 
   if (parent)
     screen = gtk_widget_get_screen (GTK_WIDGET (parent));
   else
     screen = gdk_screen_get_default ();
 
-  return terminal_util_uri_is_allowed (uri, error) &&
-         gtk_show_uri (screen, uri, user_time, error);
+  uri_fixed = terminal_util_uri_fixup (uri, error);
+  if (uri_fixed == NULL)
+    return FALSE;
+
+  return gtk_show_uri (screen, uri_fixed, user_time, error);
 }
 
 void
@@ -1108,21 +1112,27 @@ terminal_util_number_info (const char *str)
 }
 
 /**
- * terminal_util_is_uri_allowed:
- * @uri: The URI to check
+ * terminal_util_uri_fixup:
+ * @uri: The URI to verify and maybe fixup
  * @error: a #GError that is returned in case of errors
  *
- * Checks if gnome-terminal should attempt to handle the given URI.
+ * Checks if gnome-terminal should attempt to handle the given URI,
+ * and rewrites if necessary.
+ *
  * Currently URIs of "file://some-other-host/..." are refused because
  * GIO (e.g. gtk_show_uri()) silently strips off the remote hostname
  * and opens the local counterpart which is incorrect and misleading.
  *
- * Returns: TRUE if gnome-terminal should attempt to handle the URI,
- *   FALSE if it should refuse to handle.
+ * Furthermore, once the hostname is verified, it is stripped off to
+ * avoid potential confusion around short hostname vs. fqdn, and to
+ * work around bug 781800 (LibreOffice bug 107461).
+ *
+ * Returns: The possibly rewritten URI if gnome-terminal should attempt
+ *   to handle it, NULL if it should refuse to handle.
  */
-gboolean
-terminal_util_uri_is_allowed (const char *uri,
-                              GError **error)
+char *
+terminal_util_uri_fixup (const char *uri,
+                         GError **error)
 {
   gs_free char *filename;
   gs_free char *hostname;
@@ -1130,16 +1140,45 @@ terminal_util_uri_is_allowed (const char *uri,
   filename = g_filename_from_uri (uri, &hostname, NULL);
   if (filename != NULL &&
       hostname != NULL &&
-      hostname[0] != '\0' &&
-      g_ascii_strcasecmp (hostname, "localhost") != 0 &&
-      g_ascii_strcasecmp (hostname, g_get_host_name()) != 0) {
-    g_set_error_literal (error,
-                         G_IO_ERROR,
-                         G_IO_ERROR_NOT_SUPPORTED,
+      hostname[0] != '\0') {
+    /* "file" scheme and nonempty hostname */
+    if (g_ascii_strcasecmp (hostname, "localhost") == 0 ||
+        g_ascii_strcasecmp (hostname, g_get_host_name()) == 0) {
+      /* hostname corresponds to localhost */
+      char *slash1, *slash2, *slash3;
+
+      /* We shouldn't enter this branch in case of URIs like
+       * "file:/etc/passwd", but just in case we do, or encounter
+       * something else unexpected, leave the URI unchanged. */
+      slash1 = strchr(uri, '/');
+      if (slash1 == NULL)
+        return g_strdup (uri);
+
+      slash2 = slash1 + 1;
+      if (*slash2 != '/')
+        return g_strdup (uri);
+
+      slash3 = strchr(slash2 + 1, '/');
+      if (slash3 == NULL)
+        return g_strdup (uri);
+
+      return g_strdup_printf("%.*s%s",
+                             (int) (slash2 + 1 - uri),
+                             uri,
+                             slash3);
+    } else {
+      /* hostname refers to another host (e.g. the OSC 8 escape sequence
+       * was correctly emitted by a utility inside an ssh session) */
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
                          _("“file” scheme with remote hostname not supported"));
-    return FALSE;
+      return NULL;
+    }
+  } else {
+    /* "file" scheme without hostname, or some other scheme */
+    return g_strdup (uri);
   }
-  return TRUE;
 }
 
 /**

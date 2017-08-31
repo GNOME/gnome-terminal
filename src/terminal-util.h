@@ -95,8 +95,8 @@ void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
 char *terminal_util_number_info (const char *str);
 
-gboolean terminal_util_uri_is_allowed (const char *uri,
-                                       GError **error);
+char *terminal_util_uri_fixup (const char *uri,
+                               GError **error);
 
 char *terminal_util_hyperlink_uri_label (const char *str);
 
