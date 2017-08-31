@@ -1153,7 +1153,7 @@ terminal_util_uri_is_allowed (const char *uri,
  */
 char *terminal_util_hyperlink_uri_label (const char *uri)
 {
-  char *unesc = NULL;
+  gs_free char *unesc = NULL;
   gboolean replace_hostname;
 
   if (uri == NULL)
@@ -1185,5 +1185,58 @@ char *terminal_util_hyperlink_uri_label (const char *uri)
     }
   }
 
-  return unesc;
+  return terminal_util_utf8_make_valid (unesc, -1);
+}
+
+/**
+ * terminal_util_utf8_make_valid:
+ *
+ * Just as g_utf8_make_valid().
+ *
+ * FIXME: Use g_utf8_make_valid() instead once we require glib >= 2.52.
+ */
+gchar *
+terminal_util_utf8_make_valid (const gchar *str,
+                               gssize       len)
+{
+  /* copied from glib's g_utf8_make_valid() implementation */
+  GString *string;
+  const gchar *remainder, *invalid;
+  gsize remaining_bytes, valid_bytes;
+
+  g_return_val_if_fail (str != NULL, NULL);
+
+  if (len < 0)
+    len = strlen (str);
+
+  string = NULL;
+  remainder = str;
+  remaining_bytes = len;
+
+  while (remaining_bytes != 0)
+    {
+      if (g_utf8_validate (remainder, remaining_bytes, &invalid))
+	break;
+      valid_bytes = invalid - remainder;
+
+      if (string == NULL)
+	string = g_string_sized_new (remaining_bytes);
+
+      g_string_append_len (string, remainder, valid_bytes);
+      /* append U+FFFD REPLACEMENT CHARACTER */
+      g_string_append (string, "\357\277\275");
+
+      remaining_bytes -= valid_bytes + 1;
+      remainder = invalid + 1;
+    }
+
+  if (string == NULL)
+    return g_strndup (str, len);
+
+  g_string_append (string, remainder);
+  g_string_append_c (string, '\0');
+
+  g_assert (g_utf8_validate (string->str, -1, NULL));
+
+  return g_string_free (string, FALSE);
 }
