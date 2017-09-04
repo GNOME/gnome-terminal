@@ -160,7 +160,7 @@ terminal_util_show_help (const char *topic,
 #define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
 
 void
-terminal_util_show_about (GtkWindow *transient_parent)
+terminal_util_show_about (GtkWindow *transient_parent G_GNUC_UNUSED)
 {
   static const char copyright[] =
     "Copyright © 2002–2004 Havoc Pennington\n"
@@ -178,6 +178,7 @@ terminal_util_show_about (GtkWindow *transient_parent)
   GPtrArray *array;
   gs_free char *comment;
   gs_free char *vte_version;
+  GtkWindow *dialog;
 
   bytes = g_resources_lookup_data (TERMINAL_RESOURCES_PATH_PREFIX "/ui/terminal.about",
                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
@@ -232,7 +233,9 @@ terminal_util_show_about (GtkWindow *transient_parent)
                             vte_version,
                             vte_get_features ());
 
-  gtk_show_about_dialog (transient_parent,
+  dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
+                         /* Hold the application while the window is shown */
+                         "application", terminal_app_get (),
                          "program-name", _("GNOME Terminal"),
                          "copyright", copyright,
                          "comments", comment,
@@ -246,6 +249,9 @@ terminal_util_show_about (GtkWindow *transient_parent)
                          "translator-credits", _("translator-credits"),
                          "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
                          NULL);
+
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  gtk_window_present (dialog);
 
   g_strfreev (array_strv);
   g_strfreev (artists);
