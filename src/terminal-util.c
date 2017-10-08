@@ -38,6 +38,7 @@
 
 #include <gdesktop-enums.h>
 
+#include "terminal-pcre2.h"
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
@@ -729,6 +730,78 @@ terminal_util_get_screen_by_display_name (const char *display_name,
     screen = gdk_display_get_default_screen (display);
 
   return screen;
+}
+
+static void
+free_url_handler (UrlHandler *uh)
+{
+  if (uh) {
+    if (uh->match) g_free(uh->match);
+    if (uh->rewrite) g_free(uh->rewrite);
+    g_free(uh);
+  }
+}
+
+/**
+ * terminal_util_load_url_handlers:
+ *
+ * Returns: loads custom-url handling patterns
+ */
+GHashTable *
+terminal_util_load_url_handlers (void)
+{
+  GError *error = NULL;
+  GKeyFile *key_file = NULL;
+  gsize n_groups;
+  char **groups = NULL;
+  GHashTable *handlers = NULL;
+  gs_free char* rcpath = NULL;
+
+  const char *home = g_getenv("HOME");
+  if (home == NULL)
+    return NULL;
+  key_file = g_key_file_new ();
+  rcpath = g_strdup_printf("%s/.gnome-terminal-customurls.rc", home);
+  if (!g_key_file_load_from_file (key_file, rcpath, G_KEY_FILE_NONE, &error)) {
+    g_key_file_free (key_file);
+    return NULL;
+  }
+  groups = g_key_file_get_groups (key_file, &n_groups);
+  handlers = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                    NULL, (GDestroyNotify) free_url_handler);
+  for (gsize i = 0; i < n_groups; ++i) {
+    UrlHandler *uh = g_new0(UrlHandler, 1);
+    if (!uh) {
+      g_printerr ("Failed to alloc UrlHandler\n");
+      g_hash_table_destroy(handlers);
+      handlers = NULL;
+      break;
+    }
+    uh->match = g_key_file_get_string (key_file, groups[i], "Match", NULL);
+    uh->rewrite = g_key_file_get_string (key_file, groups[i], "Rewrite", NULL);
+    if (!uh->match && !uh->rewrite) {
+      g_printerr ("UrlHandler: couldn't read Match/Rewrite\n");
+      free_url_handler(uh);
+      continue;
+    }
+    uh->_regex = vte_regex_new_for_match (uh->match, -1,
+                                          PCRE2_UTF | PCRE2_NO_UTF_CHECK |
+                                          PCRE2_MULTILINE, &error);
+    g_assert_no_error (error);
+    if (!vte_regex_jit (uh->_regex, PCRE2_JIT_COMPLETE, &error) ||
+        !vte_regex_jit (uh->_regex, PCRE2_JIT_PARTIAL_SOFT, &error)) {
+      g_printerr ("Failed to JIT regex '%s': %s\n",
+                  (char*)uh->match, error->message);
+      g_clear_error (&error);
+      free_url_handler(uh);
+      continue;
+    }
+    g_hash_table_replace (handlers, uh->match, uh);
+  }
+
+  g_free (groups);
+  g_key_file_free (key_file);
+  return handlers;
 }
 
 /**
