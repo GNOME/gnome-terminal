@@ -76,6 +76,7 @@ typedef struct
 {
   int tag;
   TerminalURLFlavor flavor;
+  UrlHandler *url_handler;
 } TagData;
 
 struct _TerminalScreenPrivate
@@ -159,7 +160,8 @@ static void terminal_screen_check_extra (TerminalScreen *screen,
                                          char           **number_info);
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 GdkEvent                  *event,
-                                                int                  *flavor);
+                                                int                  *flavor,
+                                                UrlHandler           **uhandler);
 
 static void terminal_screen_set_override_command (TerminalScreen  *screen,
                                                   char           **argv,
@@ -185,6 +187,7 @@ static const TerminalRegexPattern extra_regex_patterns[] = {
   { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER },
 };
 
+static GHashTable *custom_url_handlers = NULL;
 static VteRegex **url_regexes;
 static VteRegex **extra_regexes;
 static TerminalURLFlavor *url_regex_flavors;
@@ -369,10 +372,29 @@ terminal_screen_init (TerminalScreen *screen)
       tag_data = g_slice_new (TagData);
       tag_data->flavor = url_regex_flavors[i];
       tag_data->tag = vte_terminal_match_add_regex (terminal, url_regexes[i], 0);
+      tag_data->url_handler = NULL;
       vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
+
+  if (custom_url_handlers) {
+    GHashTableIter iter;
+    gpointer match;
+    UrlHandler *uh;
+    g_hash_table_iter_init (&iter, custom_url_handlers);
+    while (g_hash_table_iter_next (&iter, &match, (gpointer*)&uh))
+      {
+        TagData *tag_data;
+        tag_data = g_slice_new (TagData);
+        tag_data->flavor = FLAVOR_AS_IS;
+        tag_data->tag = vte_terminal_match_add_regex (terminal, uh->_regex, 0);
+        tag_data->url_handler = uh;
+        vte_terminal_match_set_cursor_type (terminal,
+                                            tag_data->tag, URL_MATCH_CURSOR);
+        priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
+      }
+  }
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
@@ -568,6 +590,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
+
+  // alloc'd once and forever
+  if (!custom_url_handlers) {
+    custom_url_handlers = terminal_util_load_url_handlers ();
+  }
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
@@ -1582,13 +1609,15 @@ terminal_screen_button_press (GtkWidget      *widget,
   gs_free char *hyperlink = NULL;
   gs_free char *url = NULL;
   int url_flavor = 0;
+  UrlHandler *uhandler = NULL;
   gs_free char *number_info = NULL;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   hyperlink = terminal_screen_check_hyperlink (screen, (GdkEvent*)event);
-  url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
+  url = terminal_screen_check_match (screen, (GdkEvent*)event,
+                                     &url_flavor, &uhandler);
   terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
 
   if (hyperlink != NULL &&
@@ -1611,6 +1640,15 @@ terminal_screen_button_press (GtkWidget      *widget,
       (state & GDK_CONTROL_MASK))
     {
       gboolean handled = FALSE;
+
+      if (uhandler != NULL && uhandler->rewrite != NULL) {
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wformat-nonliteral"
+        gchar *urltmp = g_strdup_printf (uhandler->rewrite, url);
+        #pragma GCC diagnostic pop
+        g_free(url);
+        url = urltmp;
+      }
 
       g_signal_emit (screen, signals[MATCH_CLICKED], 0,
                      url,
@@ -1989,7 +2027,8 @@ terminal_screen_check_hyperlink (TerminalScreen *screen,
 static char*
 terminal_screen_check_match (TerminalScreen *screen,
                              GdkEvent       *event,
-                             int       *flavor)
+                             int       *flavor,
+                             UrlHandler **uhandler)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSList *tags;
@@ -2004,6 +2043,8 @@ terminal_screen_check_match (TerminalScreen *screen,
 	{
 	  if (flavor)
 	    *flavor = tag_data->flavor;
+	  if (uhandler != NULL)
+	    *uhandler = tag_data->url_handler;
 	  return match;
 	}
     }

@@ -34,6 +34,13 @@ typedef enum {
   FLAVOR_NUMBER,
 } TerminalURLFlavor;
 
+typedef struct
+{
+  char *match;
+  char *rewrite;
+  VteRegex *_regex;
+} UrlHandler;
+
 /* Forward decls */
 typedef struct _TerminalScreenPopupInfo TerminalScreenPopupInfo;
 typedef struct _TerminalWindow        TerminalWindow;
