@@ -53,6 +53,7 @@ GS_DEFINE_CLEANUP_FUNCTION0(GBytes*, gs_local_bytes_unref, g_bytes_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GChecksum*, gs_local_checksum_free, g_checksum_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GError*, gs_local_free_error, g_error_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_unref)
+GS_DEFINE_CLEANUP_FUNCTION0(GKeyFile*, gs_local_key_file_unref, g_key_file_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GList*, gs_local_list_free, g_list_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GMatchInfo*, gs_local_match_info_free, g_match_info_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GObject*, gs_local_obj_unref, g_object_unref)
@@ -66,6 +67,14 @@ GS_DEFINE_CLEANUP_FUNCTION0(GVariantIter*, gs_local_variant_iter_free, g_variant
 
 GS_DEFINE_CLEANUP_FUNCTION(char**, gs_local_strfreev, g_strfreev)
 GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
+
+/* special */
+
+static inline void gs_local_gstring_free (void *v) \
+{                                                  \
+  if (*(GString**)v)                               \
+    g_string_free (*(GString**)v, TRUE);           \
+}
 
 /**
  * gs_free:
@@ -136,6 +145,15 @@ GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
  * be %NULL.
  */
 #define gs_unref_hashtable __attribute__ ((cleanup(gs_local_hashtable_unref)))
+
+/**
+ * gs_unref_key_file:
+ *
+ * Call g_key_file_unref() on a variable location when it goes out
+ * of scope.  Note that unlike g_key_file_unref(), the variable may
+ * be %NULL.
+ */
+#define gs_unref_key_file __attribute__ ((cleanup(gs_local_key_file_unref)))
 
 /**
  * gs_free_checksum:
@@ -215,6 +233,15 @@ GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
 
  */
 #define gs_unref_settings_schema_key __attribute__ ((cleanup(gs_local_settings_schema_key_unref)))
+
+/**
+ * gs_free_gstring:
+ *
+ * Call g_string_free(TRUE) on a variable location when it goes out
+ * of scope.  Note that unlike g_string_free(), the variable may
+ * be %NULL.
+ */
+#define gs_free_gstring __attribute__ ((cleanup(gs_local_gstring_free)))
 
 G_END_DECLS
 

@@ -54,6 +54,7 @@
 #define KEY_COPY                "copy"
 #define KEY_COPY_HTML           "copy-html"
 #define KEY_DETACH_TAB          "detach-tab"
+#define KEY_EXPORT              "export"
 #define KEY_FIND                "find"
 #define KEY_FIND_CLEAR          "find-clear"
 #define KEY_FIND_PREV           "find-previous"
@@ -69,6 +70,7 @@
 #define KEY_PASTE               "paste"
 #define KEY_PREFERENCES         "preferences"
 #define KEY_PREV_TAB            "prev-tab"
+#define KEY_PRINT               "print"
 #define KEY_PROFILE_PREFERENCES "profile-preferences"
 #define KEY_READ_ONLY           "read-only"
 #define KEY_RESET_AND_CLEAR     "reset-and-clear"
@@ -80,40 +82,6 @@
 #define KEY_ZOOM_NORMAL         "zoom-normal"
 #define KEY_ZOOM_OUT            "zoom-out"
 #define KEY_SWITCH_TAB_PREFIX   "switch-to-tab-"
-
-/* Accel paths for the gtkuimanager based menus */
-#define ACCEL_PATH_ROOT "<Actions>/Main/"
-#define ACCEL_PATH_KEY_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
-#define ACCEL_PATH_KEY_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
-#define ACCEL_PATH_KEY_COPY                 ACCEL_PATH_ROOT "EditCopy"
-#define ACCEL_PATH_KEY_COPY_HTML            ACCEL_PATH_ROOT "EditCopyHtml"
-#define ACCEL_PATH_KEY_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
-#define ACCEL_PATH_KEY_FIND                 ACCEL_PATH_ROOT "SearchFind"
-#define ACCEL_PATH_KEY_FIND_CLEAR           ACCEL_PATH_ROOT "SearchClearHighlight"
-#define ACCEL_PATH_KEY_FIND_PREV            ACCEL_PATH_ROOT "SearchFindPrevious"
-#define ACCEL_PATH_KEY_FIND_NEXT            ACCEL_PATH_ROOT "SearchFindNext"
-#define ACCEL_PATH_KEY_FULL_SCREEN          ACCEL_PATH_ROOT "ViewFullscreen"
-#define ACCEL_PATH_KEY_HELP                 ACCEL_PATH_ROOT "HelpContents"
-#define ACCEL_PATH_KEY_MOVE_TAB_LEFT        ACCEL_PATH_ROOT "TabsMoveLeft"
-#define ACCEL_PATH_KEY_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
-#define ACCEL_PATH_KEY_NEW_PROFILE          ACCEL_PATH_ROOT "FileNewProfile"
-#define ACCEL_PATH_KEY_NEW_TAB              ACCEL_PATH_ROOT "FileNewTab"
-#define ACCEL_PATH_KEY_NEW_WINDOW           ACCEL_PATH_ROOT "FileNewWindow"
-#define ACCEL_PATH_KEY_NEXT_TAB             ACCEL_PATH_ROOT "TabsNext"
-#define ACCEL_PATH_KEY_PASTE                ACCEL_PATH_ROOT "EditPaste"
-#define ACCEL_PATH_KEY_PREFERENCES          ACCEL_PATH_ROOT "EditPreferences"
-#define ACCEL_PATH_KEY_PREV_TAB             ACCEL_PATH_ROOT "TabsPrevious"
-#define ACCEL_PATH_KEY_PROFILE_PREFERENCES  ACCEL_PATH_ROOT "EditCurrentProfile"
-#define ACCEL_PATH_KEY_READ_ONLY            ACCEL_PATH_ROOT "TerminalReadOnly"
-#define ACCEL_PATH_KEY_RESET                ACCEL_PATH_ROOT "TerminalReset"
-#define ACCEL_PATH_KEY_RESET_AND_CLEAR      ACCEL_PATH_ROOT "TerminalResetClear"
-#define ACCEL_PATH_KEY_SAVE_CONTENTS        ACCEL_PATH_ROOT "FileSaveContents"
-#define ACCEL_PATH_KEY_SELECT_ALL           ACCEL_PATH_ROOT "EditSelectAll"
-#define ACCEL_PATH_KEY_TOGGLE_MENUBAR       ACCEL_PATH_ROOT "ViewMenubar"
-#define ACCEL_PATH_KEY_ZOOM_IN              ACCEL_PATH_ROOT "ViewZoomIn"
-#define ACCEL_PATH_KEY_ZOOM_NORMAL          ACCEL_PATH_ROOT "ViewZoom100"
-#define ACCEL_PATH_KEY_ZOOM_OUT             ACCEL_PATH_ROOT "ViewZoomOut"
-#define ACCEL_PATH_KEY_SWITCH_TAB_PREFIX    ACCEL_PATH_ROOT "TabsSwitch"
 
 #if 1
 /*
@@ -137,11 +105,7 @@ typedef struct
   const GVariantType *action_parameter_type;
   const char *action_parameter;
   GVariant *parameter;
-  gboolean installed;
-#if 1
-  /* Legacy gtkuimanager menu accelerator */
-  const char *legacy_accel_path;
-#endif
+  const char *shadow_action_name;
 } KeyEntry;
 
 typedef struct
@@ -151,42 +115,52 @@ typedef struct
   const char *user_visible_name;
 } KeyEntryList;
 
+#define ENTRY_FULL(name, key, action, type, parameter, shadow_name) \
+  { name, key, "win." action, (const GVariantType *) type, parameter, NULL, shadow_name }
 #define ENTRY(name, key, action, type, parameter) \
-  { name, key, "win." action, (const GVariantType *) type, parameter, NULL, FALSE, ACCEL_PATH_##key }
+  ENTRY_FULL (name, key, action, type, parameter, "win.shadow")
+#define ENTRY_MDI(name, key, action, type, parameter) \
+  ENTRY_FULL (name, key, action, type, parameter, "win.shadow-mdi")
 
 static KeyEntry file_entries[] = {
-  ENTRY (N_("New Terminal in New Tab"),    KEY_NEW_TAB,       "new-terminal",  "(ss)",  "('tab','current')"   ),
-  ENTRY (N_("New Terminal in New Window"), KEY_NEW_WINDOW,    "new-terminal",  "(ss)",  "('window','current')"),
-  ENTRY (N_("New Profile"),                KEY_NEW_PROFILE,   "new-profile",   NULL,    NULL                  ),
+  ENTRY (N_("New Tab"),       KEY_NEW_TAB,       "new-terminal",  "(ss)",  "('tab','current')"   ),
+  ENTRY (N_("New Window"),    KEY_NEW_WINDOW,    "new-terminal",  "(ss)",  "('window','current')"),
+  ENTRY (N_("New Profile"),   KEY_NEW_PROFILE,   "new-profile",   NULL,    NULL                  ),
 #ifdef ENABLE_SAVE
-  ENTRY (N_("Save Contents"),              KEY_SAVE_CONTENTS, "save-contents", NULL,    NULL                  ),
+  ENTRY (N_("Save Contents"), KEY_SAVE_CONTENTS, "save-contents", NULL,    NULL                  ),
 #endif
-  ENTRY (N_("Close Terminal"),             KEY_CLOSE_TAB,     "close",         "s",     "'tab'"               ),
-  ENTRY (N_("Close All Terminals"),        KEY_CLOSE_WINDOW,  "close",         "s",     "'window'"            ),
+#ifdef ENABLE_EXPORT
+  ENTRY (N_("Export"),        KEY_EXPORT,        "export",        NULL,    NULL                  ),
+#endif
+#ifdef ENABLE_PRINT
+  ENTRY (N_("Print"),         KEY_PRINT,         "print",         NULL,    NULL                  ),
+#endif
+  ENTRY (N_("Close Tab"),     KEY_CLOSE_TAB,     "close",         "s",     "'tab'"               ),
+  ENTRY (N_("Close Window"),  KEY_CLOSE_WINDOW,  "close",         "s",     "'window'"            ),
 };
 
 static KeyEntry edit_entries[] = {
   ENTRY (N_("Copy"),                KEY_COPY,                "copy",         "s", "'text'"   ),
   ENTRY (N_("Copy as HTML"),        KEY_COPY_HTML,           "copy",         "s", "'html'"   ),
-  ENTRY (N_("Paste"),               KEY_PASTE,               "paste",        "s",  "'normal'"),
+  ENTRY (N_("Paste"),               KEY_PASTE,               "paste-text",   NULL, NULL      ),
   ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   NULL, NULL      ),
-  ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "preferences",  NULL, NULL      ),
+  ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "edit-preferences",  NULL, NULL      ),
   ENTRY (N_("Profile Preferences"), KEY_PROFILE_PREFERENCES, "edit-profile", NULL, NULL      ),
 };
 
 static KeyEntry find_entries[] = {
-  ENTRY (N_("Find"),                 KEY_FIND,       "find", "s", "'find'"    ),
-  ENTRY (N_("Find Next"),            KEY_FIND_NEXT,  "find", "s", "'next'"    ),
-  ENTRY (N_("Find Previous"),        KEY_FIND_PREV,  "find", "s", "'previous'"),
-  ENTRY (N_("Clear Find Highlight"), KEY_FIND_CLEAR, "find", "s", "'clear'"   )
+  ENTRY (N_("Find"),            KEY_FIND,       "find",          NULL, NULL),
+  ENTRY (N_("Find Next"),       KEY_FIND_NEXT,  "find-forward",  NULL, NULL),
+  ENTRY (N_("Find Previous"),   KEY_FIND_PREV,  "find-backward", NULL, NULL),
+  ENTRY (N_("Clear Highlight"), KEY_FIND_CLEAR, "find-clear",    NULL, NULL)
 };
 
 static KeyEntry view_entries[] = {
-  ENTRY (N_("Hide and Show toolbar"), KEY_TOGGLE_MENUBAR, "show-menubar", NULL, NULL),
+  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "show-menubar", NULL, NULL),
   ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",   NULL, NULL),
-  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom",         "i",  "1" ),
-  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom",         "i",  "-1"),
-  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom",         "i",  "0" )
+  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",      NULL, NULL),
+  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",     NULL, NULL),
+  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom-normal",  NULL, NULL)
 };
 
 static KeyEntry terminal_entries[] = {
@@ -196,37 +170,56 @@ static KeyEntry terminal_entries[] = {
 };
 
 static KeyEntry tabs_entries[] = {
-  ENTRY (N_("Switch to Previous Terminal"), KEY_PREV_TAB,       "switch-tab", "i",  "-2"),
-  ENTRY (N_("Switch to Next Terminal"),     KEY_NEXT_TAB,       "switch-tab", "i",  "-1"),
-  ENTRY (N_("Move Terminal to the Left"),   KEY_MOVE_TAB_LEFT,  "move-tab",   "i",  "-1"),
-  ENTRY (N_("Move Terminal to the Right"),  KEY_MOVE_TAB_RIGHT, "move-tab",   "i",  "1" ),
-  ENTRY (N_("Detach Terminal"),             KEY_DETACH_TAB,     "detach-tab", NULL, NULL),
-
-#define SWITCH_TAB_ENTRY(num) \
-  ENTRY (NULL, \
-         KEY_SWITCH_TAB_PREFIX # num, \
-         "switch-tab", \
-         "i", \
-         # num)
-
-  SWITCH_TAB_ENTRY (1),  SWITCH_TAB_ENTRY (2),  SWITCH_TAB_ENTRY (3),  SWITCH_TAB_ENTRY (4),
-  SWITCH_TAB_ENTRY (5),  SWITCH_TAB_ENTRY (6),  SWITCH_TAB_ENTRY (7),  SWITCH_TAB_ENTRY (8),
-  SWITCH_TAB_ENTRY (9),  SWITCH_TAB_ENTRY (10), SWITCH_TAB_ENTRY (11), SWITCH_TAB_ENTRY (12),
-  SWITCH_TAB_ENTRY (13), SWITCH_TAB_ENTRY (14), SWITCH_TAB_ENTRY (15), SWITCH_TAB_ENTRY (16),
-  SWITCH_TAB_ENTRY (17), SWITCH_TAB_ENTRY (18), SWITCH_TAB_ENTRY (19), SWITCH_TAB_ENTRY (20),
-  SWITCH_TAB_ENTRY (21), SWITCH_TAB_ENTRY (22), SWITCH_TAB_ENTRY (23), SWITCH_TAB_ENTRY (24),
-  SWITCH_TAB_ENTRY (25), SWITCH_TAB_ENTRY (26), SWITCH_TAB_ENTRY (27), SWITCH_TAB_ENTRY (28),
-  SWITCH_TAB_ENTRY (29), SWITCH_TAB_ENTRY (30), SWITCH_TAB_ENTRY (31), SWITCH_TAB_ENTRY (32),
-  SWITCH_TAB_ENTRY (33), SWITCH_TAB_ENTRY (34), SWITCH_TAB_ENTRY (35)
-
-#undef SWITCH_TAB_ENTRY
+  ENTRY_MDI (N_("Switch to Previous Tab"), KEY_PREV_TAB,       "tab-switch-left",  NULL, NULL),
+  ENTRY_MDI (N_("Switch to Next Tab"),     KEY_NEXT_TAB,       "tab-switch-right", NULL, NULL),
+  ENTRY_MDI (N_("Move Tab to the Left"),   KEY_MOVE_TAB_LEFT,  "tab-move-left",    NULL, NULL),
+  ENTRY_MDI (N_("Move Tab to the Right"),  KEY_MOVE_TAB_RIGHT, "tab-move-right",   NULL, NULL),
+  ENTRY_MDI (N_("Detach Tab"),             KEY_DETACH_TAB,     "tab-detach",       NULL, NULL),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "1", "active-tab", "i", "0"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "2", "active-tab", "i", "1"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "3", "active-tab", "i", "2"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "4", "active-tab", "i", "3"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "5", "active-tab", "i", "4"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "6", "active-tab", "i", "5"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "7", "active-tab", "i", "6"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "8", "active-tab", "i", "7"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "9", "active-tab", "i", "8"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "10", "active-tab", "i", "9"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "11", "active-tab", "i", "10"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "12", "active-tab", "i", "11"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "13", "active-tab", "i", "12"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "14", "active-tab", "i", "13"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "15", "active-tab", "i", "14"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "16", "active-tab", "i", "15"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "17", "active-tab", "i", "16"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "18", "active-tab", "i", "17"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "19", "active-tab", "i", "18"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "20", "active-tab", "i", "19"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "21", "active-tab", "i", "20"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "22", "active-tab", "i", "21"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "23", "active-tab", "i", "22"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "24", "active-tab", "i", "23"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "25", "active-tab", "i", "24"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "26", "active-tab", "i", "25"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "27", "active-tab", "i", "26"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "28", "active-tab", "i", "27"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "29", "active-tab", "i", "28"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "30", "active-tab", "i", "29"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "31", "active-tab", "i", "30"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "32", "active-tab", "i", "31"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "33", "active-tab", "i", "32"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "34", "active-tab", "i", "33"),
+  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "35", "active-tab", "i", "34"),
+  ENTRY_MDI (N_("Switch to Last Tab"), KEY_SWITCH_TAB_PREFIX "last", "active-tab", "i", "-1"),
 };
 
 static KeyEntry help_entries[] = {
   ENTRY (N_("Contents"), KEY_HELP, "help", NULL, NULL)
 };
 
+#undef ENTRY_FULL
 #undef ENTRY
+#undef ENTRY_MDI
 
 static KeyEntryList all_entries[] =
 {
@@ -268,14 +261,12 @@ key_changed_cb (GSettings *settings,
                 gpointer user_data)
 {
   GtkApplication *application = user_data;
-  KeyEntry *key_entry;
-  gs_free char *value = NULL;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
                          settings_key);
 
-  key_entry = g_hash_table_lookup (settings_key_to_entry, settings_key);
+  KeyEntry *key_entry = g_hash_table_lookup (settings_key_to_entry, settings_key);
   if (!key_entry)
     {
       /* shouldn't really happen, but let's be safe */
@@ -284,34 +275,38 @@ key_changed_cb (GSettings *settings,
       return;
     }
 
-  value = g_settings_get_string (settings, settings_key);
+  gs_free char *value = g_settings_get_string (settings, settings_key);
+
+  gs_free char *detailed = g_action_print_detailed_name (key_entry->action_name,
+                                                         key_entry->parameter);
+  gs_unref_variant GVariant *shadow_parameter = g_variant_new_string (detailed);
+
+  /* We want to always consume the action's accelerators, even if the corresponding
+   * action is insensitive, so the corresponding shortcut key escape code isn't sent
+   * to the terminal. See bug #453193, bug #138609, and bug #559728.
+   * Since GtkApplication's accelerators don't use GtkAccelGroup, we have no way
+   * to intercept/chain on its activation. The only way to do this that I found
+   * was to install an extra action with the same accelerator that shadows
+   * the real action and gets activated when the shadowed action is disabled.
+   */
 
   if (g_str_equal (value, "disabled")) {
-    if (key_entry->installed)
-      gtk_application_remove_accelerator (application,
-                                          key_entry->action_name,
-                                          key_entry->parameter);
-    key_entry->installed = FALSE;
+    gtk_application_remove_accelerator (application,
+                                        key_entry->action_name,
+                                        key_entry->parameter);
+    gtk_application_remove_accelerator (application,
+                                        key_entry->shadow_action_name,
+                                        shadow_parameter);
   } else {
     gtk_application_add_accelerator (application,
                                      value,
                                      key_entry->action_name,
                                      key_entry->parameter);
-    key_entry->installed = TRUE;
+    gtk_application_add_accelerator (application,
+                                     value,
+                                     key_entry->shadow_action_name,
+                                     shadow_parameter);
   }
-
-#if 1
-  /* Legacy gtkuimanager menu accelerator */
-  {
-    GdkModifierType mods = 0;
-    guint key = 0;
-
-    if (!g_str_equal (value, "disabled"))
-      gtk_accelerator_parse (value, &key, &mods);
-
-    gtk_accel_map_change_entry (key_entry->legacy_accel_path, key, mods, TRUE);
-  }
-#endif
 }
 
 void

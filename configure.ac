@@ -13,6 +13,8 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
 
+AC_USE_SYSTEM_EXTENSIONS
+
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GETTEXT_PACKAGE=gnome-terminal
@@ -26,7 +28,7 @@ AM_MAINTAINER_MODE([enable])
 
 PKG_PROG_PKG_CONFIG
 AC_PROG_MKDIR_P
-AC_PROG_CC
+AC_PROG_CC_C99
 AC_ISC_POSIX
 AC_HEADER_STDC
 AM_PROG_LIBTOOL
@@ -294,7 +296,6 @@ CC_CHECK_FLAGS_APPEND([WARN_CFLAGS],[CFLAGS],[ \
   -Wall \
   -Wcast-align \
   -Wendif-labels \
-  -Werror=declaration-after-statement \
   "-Werror=format=2 -Werror=format-nonliteral -Werror=format-security" \
   -Werror=implicit-function-declaration \
   -Werror=init-self \

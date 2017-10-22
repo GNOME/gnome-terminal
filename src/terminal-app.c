@@ -3,7 +3,7 @@
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
- * Copyright © 2008, 2010, 2011, 2015 Christian Persch
+ * Copyright © 2008, 2010, 2011, 2015, 2017 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,11 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
 
 #include "terminal-intl.h"
 #include "terminal-debug.h"
@@ -74,7 +77,8 @@
 struct _TerminalAppClass {
   GtkApplicationClass parent_class;
 
-  void (* encoding_list_changed) (TerminalApp *app);
+  void (* clipboard_targets_changed) (TerminalApp *app,
+                                      GtkClipboard *clipboard);
 };
 
 struct _TerminalApp
@@ -84,9 +88,6 @@ struct _TerminalApp
   GDBusObjectManagerServer *object_manager;
 
   TerminalSettingsList *profiles_list;
-
-  GHashTable *encodings;
-  gboolean encodings_locked;
 
   GHashTable *screen_map;
 
@@ -98,15 +99,103 @@ struct _TerminalApp
 #ifdef ENABLE_SEARCH_PROVIDER
   TerminalSearchProvider *search_provider;
 #endif /* ENABLE_SEARCH_PROVIDER */
+
+  GMenuModel *menubar;
+  GMenu *menubar_new_terminal_section;
+  GMenu *menubar_set_profile_section;
+  GMenu *menubar_set_encoding_submenu;
+  GMenu *set_profile_menu;
+
+  GtkClipboard *clipboard;
+  GdkAtom *clipboard_targets;
+  int n_clipboard_targets;
 };
 
 enum
 {
-  ENCODING_LIST_CHANGED,
+  CLIPBOARD_TARGETS_CHANGED,
   LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL];
+
+/* Debugging helper */
+
+static void
+terminal_app_init_debug (void)
+{
+#ifdef ENABLE_DEBUG
+  const char *env = g_getenv ("GTK_TEXT_DIR");
+  if (env != NULL) {
+    if (g_str_equal (env, "help")) {
+      g_printerr ("Usage: GTK_TEXT_DIR=ltr|rtl\n");
+    } else {
+      GtkTextDirection dir;
+      if (g_str_equal (env, "rtl"))
+        dir = GTK_TEXT_DIR_RTL;
+      else
+        dir = GTK_TEXT_DIR_LTR;
+
+      gtk_widget_set_default_direction (dir);
+    }
+  }
+
+  env = g_getenv ("GTK_SETTINGS");
+  if (env == NULL)
+    return;
+
+  GObject *settings = G_OBJECT (gtk_settings_get_default ());
+  GObjectClass *settings_class = G_OBJECT_GET_CLASS (settings);
+
+  if (g_str_equal (env, "help")) {
+    g_printerr ("Usage: GTK_SETTINGS=setting[,setting…] where 'setting' is one of these:\n");
+
+    guint n_props;
+    GParamSpec **props = g_object_class_list_properties (settings_class, &n_props);
+    for (guint i = 0; i < n_props; i++) {
+      if (G_PARAM_SPEC_VALUE_TYPE (props[i]) != G_TYPE_BOOLEAN)
+        continue;
+
+      GValue value = { 0, };
+      g_value_init (&value, G_TYPE_BOOLEAN);
+      g_object_get_property (settings, props[i]->name, &value);
+      g_printerr ("  %s (%s)\n", props[i]->name, g_value_get_boolean (&value) ? "true" : "false");
+      g_value_unset (&value);
+    }
+    g_printerr ("  Use 'setting' to set to true, "
+                "'~setting' to set to false, "
+                "and '!setting' to invert.\n");
+  } else {
+    gs_strfreev char **tokens = g_strsplit (env, ",", -1);
+    for (guint i = 0; tokens[i] != NULL; i++) {
+      const char *prop = tokens[i];
+      char c = prop[0];
+      if (c == '~' || c == '!')
+        prop++;
+
+      GParamSpec *pspec = g_object_class_find_property (settings_class, prop);
+      if (pspec == NULL) {
+        g_printerr ("Setting \"%s\" does not exist.\n", prop);
+      } else if (G_PARAM_SPEC_VALUE_TYPE (pspec) != G_TYPE_BOOLEAN) {
+        g_printerr ("Setting \"%s\" is not boolean.\n", prop);
+      } else {
+        GValue value = { 0, };
+        g_value_init (&value, G_TYPE_BOOLEAN);
+        if (c == '!') {
+          g_object_get_property (settings, pspec->name, &value);
+          g_value_set_boolean (&value, !g_value_get_boolean (&value));
+        } else if (c == '~') {
+          g_value_set_boolean (&value, FALSE);
+        } else {
+          g_value_set_boolean (&value, TRUE);
+        }
+        g_object_set_property (settings, pspec->name, &value);
+        g_value_unset (&value);
+      }
+    }
+  }
+#endif
+}
 
 /* Helper functions */
 
@@ -134,6 +223,14 @@ maybe_migrate_settings (TerminalApp *app)
   }
 
 #ifdef ENABLE_MIGRATION
+  /* Only do migration if the settings backend is dconf */
+  GType type = G_OBJECT_TYPE (g_settings_backend_get_default ());
+  if (!g_type_is_a (type, g_type_from_name ("DConfSettingsBackend"))) {
+    _terminal_debug_print (TERMINAL_DEBUG_SERVER | TERMINAL_DEBUG_PROFILE,
+                           "Not migration settings to %s\n", g_type_name (type));
+    goto done;
+  }
+
   if (!g_spawn_sync (NULL /* our home directory */,
                      (char **) argv,
                      NULL /* envv */,
@@ -152,11 +249,11 @@ maybe_migrate_settings (TerminalApp *app)
   } else {
     g_printerr ("Profile migrator exited abnormally.\n");
   }
-#else
+done:
+#endif /* ENABLE_MIGRATION */
   g_settings_set_uint (terminal_app_get_global_settings (app),
                        TERMINAL_SETTING_SCHEMA_VERSION,
                        TERMINAL_SCHEMA_VERSION);
-#endif /* ENABLE_MIGRATION */
 }
 
 static gboolean
@@ -215,8 +312,7 @@ app_load_css (GApplication *application)
 
 void
 terminal_app_new_profile (TerminalApp *app,
-                          GSettings   *base_profile,
-                          GtkWindow   *transient_parent)
+                          GSettings   *base_profile)
 {
   gs_unref_object GSettings *profile = NULL;
   gs_free char *uuid;
@@ -237,79 +333,33 @@ terminal_app_new_profile (TerminalApp *app,
   if (profile == NULL)
     return;
 
-  terminal_profile_edit (profile, NULL, "profile-name-entry");
+  terminal_profile_edit (profile, "profile-name-entry");
 }
 
 void
 terminal_app_remove_profile (TerminalApp *app,
                              GSettings *profile)
 {
-  gs_free char *uuid;
+  g_return_if_fail (TERMINAL_IS_APP (app));
+  g_return_if_fail (G_IS_SETTINGS (profile));
 
-  uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+  gs_unref_object GSettings *default_profile = terminal_settings_list_ref_default_child (app->profiles_list);
+  if (default_profile == profile)
+    return;
+
+  /* First, we need to switch any screen using this profile to the default profile */
+  gs_free_list GList *screens = g_hash_table_get_values (app->screen_map);
+  for (GList *l = screens; l != NULL; l = l->next) {
+    TerminalScreen *screen = TERMINAL_SCREEN (l->data);
+    if (terminal_screen_get_profile (screen) != profile)
+      continue;
+
+    terminal_screen_set_profile (screen, default_profile);
+  }
+
+  /* Now we can safely remove the profile */
+  gs_free char *uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
   terminal_settings_list_remove_child (app->profiles_list, uuid);
-}
-
-gboolean
-terminal_app_can_remove_profile (TerminalApp *app,
-                                 GSettings *profile)
-{
-  return TRUE;
-}
-
-static int
-compare_encodings (TerminalEncoding *a,
-                   TerminalEncoding *b)
-{
-  return g_utf8_collate (a->name, b->name);
-}
-
-static void
-encoding_mark_active (gpointer key,
-                      gpointer value,
-                      gpointer data)
-{
-  TerminalEncoding *encoding = (TerminalEncoding *) value;
-  guint active = GPOINTER_TO_UINT (data);
-
-  encoding->is_active = active;
-}
-
-static void
-terminal_app_encoding_list_notify_cb (GSettings   *settings,
-                                      const char  *key,
-                                      TerminalApp *app)
-{
-  gs_strfreev char **encodings = NULL;
-  int i;
-  TerminalEncoding *encoding;
-
-  app->encodings_locked = !g_settings_is_writable (settings, key);
-
-  /* Mark all as non-active, then re-enable the active ones */
-  g_hash_table_foreach (app->encodings, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
-
-  /* Also always make UTF-8 available */
-  encoding = g_hash_table_lookup (app->encodings, "UTF-8");
-  g_assert (encoding);
-  g_assert (terminal_encoding_is_valid (encoding));
-  encoding->is_active = TRUE;
-
-  g_settings_get (settings, key, "^as", &encodings);
-  for (i = 0; encodings[i] != NULL; ++i)
-    {
-      /* Pre-3.13, not supported anymore */
-      if (g_str_equal (encodings[i], "current"))
-        continue;
-
-      encoding = terminal_app_ensure_encoding (app, encodings[i]);
-      if (!terminal_encoding_is_valid (encoding))
-        continue;
-
-      encoding->is_active = TRUE;
-    }
-
-  g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
 }
 
 #if GTK_CHECK_VERSION (3, 19, 0)
@@ -331,6 +381,241 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
 }
 #endif /* GTK+ 3.19 */
 
+/* Submenus for New Terminal per profile, and to change profiles */
+
+static void terminal_app_update_profile_menus (TerminalApp *app);
+
+typedef struct {
+  char *uuid;
+  char *label;
+} ProfileData;
+
+static void
+profile_data_clear (ProfileData *data)
+{
+  g_free (data->uuid);
+  g_free (data->label);
+}
+
+typedef struct {
+  GArray *array;
+  TerminalApp *app;
+} ProfilesForeachData;
+
+static void
+foreach_profile_cb (TerminalSettingsList *list,
+                    const char *uuid,
+                    GSettings *profile,
+                    ProfilesForeachData *user_data)
+{
+  ProfileData data;
+  data.uuid = g_strdup (uuid);
+  data.label = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+
+  g_array_append_val (user_data->array, data);
+
+  /* only connect if we haven't seen this profile before */
+  if (g_signal_handler_find (profile, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
+                             0, 0, NULL, terminal_app_update_profile_menus, user_data->app) == 0)
+    g_signal_connect_swapped (profile, "changed::" TERMINAL_PROFILE_VISIBLE_NAME_KEY,
+                              G_CALLBACK (terminal_app_update_profile_menus), user_data->app);
+}
+
+static int
+compare_profile_label_cb (gconstpointer ap,
+                          gconstpointer bp)
+{
+  const ProfileData *a = ap;
+  const ProfileData *b = bp;
+
+  return g_utf8_collate (a->label, b->label);
+}
+
+static void
+menu_append_numbered (GMenu *menu,
+                      const char *label,
+                      int num,
+                      const char *action_name,
+                      GVariant *target)
+{
+  gs_free_gstring GString *str;
+  gs_unref_object GMenuItem *item;
+  const char *p;
+
+  /* Who'd use more that 4 underscores in a profile name... */
+  str = g_string_sized_new (strlen (label) + 4 + 1 + 8);
+
+  if (num < 10)
+    g_string_append_printf (str, "%Id. ", num);
+  else if (num < 36)
+    g_string_append_printf (str, "%c. ",  (char)('A' + num - 10));
+
+  /* Append the label with underscores elided */
+  for (p = label; *p; p++) {
+    if (*p == '_')
+      g_string_append (str, "__");
+    else
+      g_string_append_c (str, *p);
+  }
+
+  item = g_menu_item_new (str->str, NULL);
+  g_menu_item_set_action_and_target_value (item, action_name, target);
+  g_menu_append_item (menu, item);
+}
+
+static void
+append_new_terminal_item (GMenu *section,
+                          const char *label,
+                          const char *target,
+                          ProfileData *data,
+                          guint n_profiles)
+{
+  gs_unref_object GMenuItem *item = g_menu_item_new (label, NULL);
+
+  if (n_profiles > 1) {
+    gs_unref_object GMenu *submenu = g_menu_new ();
+
+    for (guint i = 0; i < n_profiles; i++) {
+      menu_append_numbered (submenu, data[i].label, i + 1,
+                            "win.new-terminal",
+                            g_variant_new ("(ss)", target, data[i].uuid));
+    }
+
+    g_menu_item_set_link (item, G_MENU_LINK_SUBMENU, G_MENU_MODEL (submenu));
+  } else {
+    g_menu_item_set_action_and_target (item, "win.new-terminal",
+                                       "(ss)", target, "default");
+  }
+  g_menu_append_item (section, item);
+}
+
+static void
+fill_new_terminal_section (GMenu *section,
+                           ProfileData *profiles,
+                           guint n_profiles)
+{
+#ifndef DISUNIFY_NEW_TERMINAL_SECTION
+  append_new_terminal_item (section, _("New _Terminal"), "default", profiles, n_profiles);
+#else
+  append_new_terminal_item (section, _("New _Tab"), "tab", profiles, n_profiles);
+  append_new_terminal_item (section, _("New _Window"), "window", profiles, n_profiles);
+#endif
+}
+
+static GMenu *
+set_profile_submenu_new (ProfileData *data,
+                         guint n_profiles)
+{
+  GMenu *menu = g_menu_new ();
+
+  /* No submenu if there's only one profile */
+  if (n_profiles <= 1)
+    return NULL;
+
+  for (guint i = 0; i < n_profiles; i++) {
+    menu_append_numbered (menu, data[i].label, i + 1,
+                          "win.profile",
+                          g_variant_new_string (data[i].uuid));
+  }
+
+  return menu;
+}
+
+static void
+terminal_app_update_profile_menus (TerminalApp *app)
+{
+  g_menu_remove_all (G_MENU (app->menubar_new_terminal_section));
+  g_menu_remove_all (G_MENU (app->menubar_set_profile_section));
+  g_clear_object (&app->set_profile_menu);
+
+  /* Get profiles list and sort by label */
+  gs_unref_array GArray *array = g_array_sized_new (FALSE, TRUE, sizeof (ProfileData),
+                                                    terminal_settings_list_get_n_children (app->profiles_list));
+  g_array_set_clear_func (array, (GDestroyNotify) profile_data_clear);
+
+  ProfilesForeachData data = { array, app };
+  terminal_settings_list_foreach_child (app->profiles_list,
+                                        (TerminalSettingsListForeachFunc) foreach_profile_cb,
+                                        &data);
+  g_array_sort (array, compare_profile_label_cb);
+
+  ProfileData *profiles = (ProfileData*) array->data;
+  guint n_profiles = array->len;
+
+  fill_new_terminal_section (app->menubar_new_terminal_section, profiles, n_profiles);
+
+  app->set_profile_menu = set_profile_submenu_new (profiles, n_profiles);
+
+  if (app->set_profile_menu != NULL) {
+    g_menu_append_submenu (app->menubar_set_profile_section, _("Change _Profile"),
+                           G_MENU_MODEL (app->set_profile_menu));
+  }
+}
+
+/* Clipboard */
+
+static void
+free_clipboard_targets (TerminalApp *app)
+{
+  g_free (app->clipboard_targets);
+  app->clipboard_targets = NULL;
+  app->n_clipboard_targets = 0;
+}
+
+static void
+update_clipboard_targets (TerminalApp *app,
+                          GdkAtom *targets,
+                          int n_targets)
+{
+  free_clipboard_targets (app);
+
+  /* Sometimes we receive targets == NULL but n_targets == -1 */
+  if (targets != NULL) {
+    app->clipboard_targets = g_memdup (targets, sizeof (targets[0]) * n_targets);
+    app->n_clipboard_targets = n_targets;
+  }
+}
+
+static void
+clipboard_targets_received_cb (GtkClipboard *clipboard,
+                               GdkAtom *targets,
+                               int n_targets,
+                               TerminalApp *app)
+{
+  update_clipboard_targets (app, targets, n_targets);
+
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_CLIPBOARD) {
+    g_printerr ("Clipboard has %d targets:", app->n_clipboard_targets);
+
+    int i;
+    for (i = 0; i < app->n_clipboard_targets; i++) {
+      gs_free char *atom_name = gdk_atom_name (app->clipboard_targets[i]);
+      g_printerr (" %s", atom_name);
+    }
+    g_printerr ("\n");
+  }
+
+  g_signal_emit (app, signals[CLIPBOARD_TARGETS_CHANGED], 0, clipboard);
+}
+
+static void
+clipboard_owner_change_cb (GtkClipboard *clipboard,
+                           GdkEvent *event G_GNUC_UNUSED,
+                           TerminalApp *app)
+{
+  _terminal_debug_print (TERMINAL_DEBUG_CLIPBOARD,
+                         "Clipboard owner changed\n");
+
+  clipboard_targets_received_cb (clipboard, NULL, 0, app); /* clear */
+
+  /* We can do this without holding a reference to @app since
+   * the app lives as long as the process.
+   */
+  gtk_clipboard_request_targets (clipboard,
+                                 (GtkClipboardTargetsReceivedFunc) clipboard_targets_received_cb,
+                                 app);
+}
+
 /* App menu callbacks */
 
 static void
@@ -340,7 +625,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = user_data;
 
-  terminal_app_edit_preferences (app, NULL);
+  terminal_app_edit_preferences (app);
 }
 
 static void
@@ -348,7 +633,7 @@ app_menu_help_cb (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  terminal_util_show_help (NULL, NULL);
+  terminal_util_show_help (NULL);
 }
 
 static void
@@ -356,7 +641,7 @@ app_menu_about_cb (GSimpleAction *action,
                    GVariant      *parameter,
                    gpointer       user_data)
 {
-  terminal_util_show_about (NULL);
+  terminal_util_show_about ();
 }
 
 static void
@@ -389,7 +674,9 @@ terminal_app_activate (GApplication *application)
 static void
 terminal_app_startup (GApplication *application)
 {
-  const GActionEntry app_menu_actions[] = {
+  TerminalApp *app = TERMINAL_APP (application);
+  GtkApplication *gtk_application = GTK_APPLICATION (application);
+  const GActionEntry action_entries[] = {
     { "preferences", app_menu_preferences_cb,   NULL, NULL, NULL },
     { "help",        app_menu_help_cb,          NULL, NULL, NULL },
     { "about",       app_menu_about_cb,         NULL, NULL, NULL },
@@ -404,11 +691,42 @@ terminal_app_startup (GApplication *application)
   gdk_set_program_class("Gnome-terminal");
 
   g_action_map_add_action_entries (G_ACTION_MAP (application),
-                                   app_menu_actions, G_N_ELEMENTS (app_menu_actions),
+                                   action_entries, G_N_ELEMENTS (action_entries),
                                    application);
 
-
   app_load_css (application);
+
+  /* App menu */
+  GMenu *appmenu_new_terminal_section = gtk_application_get_menu_by_id (gtk_application,
+                                                                        "new-terminal-section");
+  fill_new_terminal_section (appmenu_new_terminal_section, NULL, 0); /* no submenu */
+
+  /* Menubar */
+  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/menubar.ui",
+                                       "menubar", &app->menubar,
+                                       "new-terminal-section", &app->menubar_new_terminal_section,
+                                       "set-profile-section", &app->menubar_set_profile_section,
+                                       "set-encoding-submenu", &app->menubar_set_encoding_submenu,
+                                       NULL);
+
+  /* Create dynamic menus and keep them updated */
+  terminal_app_update_profile_menus (app);
+  g_signal_connect_swapped (app->profiles_list, "children-changed",
+                            G_CALLBACK (terminal_app_update_profile_menus), app);
+
+  /* Install the encodings submenu */
+  terminal_encodings_append_menu (app->menubar_set_encoding_submenu);
+
+  /* If the shell wants to show the appmenu/menubar, make it available */
+  gboolean shell_shows_appmenu, shell_shows_menubar;
+  g_object_get (gtk_settings_get_default (),
+                "gtk-shell-shows-app-menu", &shell_shows_appmenu,
+                "gtk-shell-shows-menubar", &shell_shows_menubar,
+                NULL);
+  if (!shell_shows_appmenu)
+    gtk_application_set_app_menu (GTK_APPLICATION (app), NULL);
+  if (shell_shows_menubar)
+    gtk_application_set_menubar (GTK_APPLICATION (app), app->menubar);
 
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
@@ -418,7 +736,7 @@ terminal_app_startup (GApplication *application)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  gs_unref_object GSettings *settings;
+  terminal_app_init_debug ();
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
@@ -437,18 +755,24 @@ terminal_app_init (TerminalApp *app)
                                                      GTK_DEBUG_ENABLE_INSPECTOR_TYPE);
 
 #if GTK_CHECK_VERSION (3, 19, 0)
-  {
-  GtkSettings *gtk_settings;
-
-  gtk_settings = gtk_settings_get_default ();
+  GtkSettings *gtk_settings = gtk_settings_get_default ();
   terminal_app_theme_variant_changed_cb (app->global_settings,
                                          TERMINAL_SETTING_THEME_VARIANT_KEY, gtk_settings);
   g_signal_connect (app->global_settings,
                     "changed::" TERMINAL_SETTING_THEME_VARIANT_KEY,
                     G_CALLBACK (terminal_app_theme_variant_changed_cb),
                     gtk_settings);
-  }
 #endif /* GTK+ 3.19 */
+
+  /* Clipboard targets */
+  GdkDisplay *display = gdk_display_get_default ();
+  app->clipboard = gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);
+  clipboard_owner_change_cb (app->clipboard, NULL, app);
+  g_signal_connect (app->clipboard, "owner-change",
+                    G_CALLBACK (clipboard_owner_change_cb), app);
+
+  if (!gdk_display_supports_selection_notification (display))
+    g_printerr ("Display does not support owner-change; copy/paste will be broken!\n");
 
   /* Check if we need to migrate from gconf to dconf */
   maybe_migrate_settings (app);
@@ -456,17 +780,9 @@ terminal_app_init (TerminalApp *app)
   /* Get the profiles */
   app->profiles_list = terminal_profiles_list_new ();
 
-  /* Get the encodings */
-  app->encodings = terminal_encodings_get_builtins ();
-  terminal_app_encoding_list_notify_cb (app->global_settings, "encodings", app);
-  g_signal_connect (app->global_settings,
-                    "changed::encodings",
-                    G_CALLBACK (terminal_app_encoding_list_notify_cb),
-                    app);
-
   app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-  settings = g_settings_get_child (app->global_settings, "keybindings");
+  gs_unref_object GSettings *settings = g_settings_get_child (app->global_settings, "keybindings");
   terminal_accels_init (G_APPLICATION (app), settings);
 }
 
@@ -475,16 +791,26 @@ terminal_app_finalize (GObject *object)
 {
   TerminalApp *app = TERMINAL_APP (object);
 
-  g_signal_handlers_disconnect_by_func (app->global_settings,
-                                        G_CALLBACK (terminal_app_encoding_list_notify_cb),
+  g_signal_handlers_disconnect_by_func (app->clipboard,
+                                        G_CALLBACK (clipboard_owner_change_cb),
                                         app);
-  g_hash_table_destroy (app->encodings);
+  free_clipboard_targets (app);
+
+  g_signal_handlers_disconnect_by_func (app->profiles_list,
+                                        G_CALLBACK (terminal_app_update_profile_menus),
+                                        app);
   g_hash_table_destroy (app->screen_map);
 
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
   g_object_unref (app->system_proxy_settings);
   g_clear_object (&app->gtk_debug_settings);
+
+  g_clear_object (&app->menubar);
+  g_clear_object (&app->menubar_new_terminal_section);
+  g_clear_object (&app->menubar_set_profile_section);
+  g_clear_object (&app->menubar_set_encoding_submenu);
+  g_clear_object (&app->set_profile_menu);
 
   terminal_accels_shutdown ();
 
@@ -574,14 +900,14 @@ terminal_app_class_init (TerminalAppClass *klass)
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
 
-  signals[ENCODING_LIST_CHANGED] =
-    g_signal_new (I_("encoding-list-changed"),
+  signals[CLIPBOARD_TARGETS_CHANGED] =
+    g_signal_new (I_("clipboard-targets-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalAppClass, encoding_list_changed),
+                  G_STRUCT_OFFSET (TerminalAppClass, clipboard_targets_changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1, G_TYPE_OBJECT);
 }
 
 /* Public API */
@@ -615,7 +941,7 @@ TerminalScreen *
 terminal_app_new_terminal (TerminalApp     *app,
                            TerminalWindow  *window,
                            GSettings       *profile,
-                           const char      *encoding,
+                           const char      *charset,
                            char           **override_command,
                            const char      *title,
                            const char      *working_dir,
@@ -626,8 +952,9 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (charset == NULL || terminal_encodings_is_known_charset (charset), NULL);
 
-  screen = terminal_screen_new (profile, encoding, override_command, title,
+  screen = terminal_screen_new (profile, charset, override_command, title,
                                 working_dir, child_env, zoom);
 
   terminal_window_add_screen (window, screen, -1);
@@ -669,27 +996,35 @@ terminal_app_unregister_screen (TerminalApp *app,
   g_assert (found == TRUE);
 }
 
+GdkAtom *
+terminal_app_get_clipboard_targets (TerminalApp *app,
+                                    GtkClipboard *clipboard,
+                                    int *n_targets)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (n_targets != NULL, NULL);
+
+  if (clipboard != app->clipboard) {
+    *n_targets = 0;
+    return NULL;
+  }
+
+  *n_targets = app->n_clipboard_targets;
+  return app->clipboard_targets;
+}
+
 void
 terminal_app_edit_profile (TerminalApp     *app,
                            GSettings       *profile,
-                           GtkWindow       *transient_parent,
                            const char      *widget_name)
 {
-  terminal_profile_edit (profile, NULL, widget_name);
+  terminal_profile_edit (profile, widget_name);
 }
 
 void
-terminal_app_edit_preferences (TerminalApp     *app,
-                               GtkWindow       *transient_parent)
+terminal_app_edit_preferences (TerminalApp *app)
 {
-  terminal_prefs_show_preferences (NULL, "general");
-}
-
-void
-terminal_app_edit_encodings (TerminalApp     *app,
-                             GtkWindow       *transient_parent)
-{
-  terminal_prefs_show_preferences (NULL, "encodings");
+  terminal_prefs_show_preferences ("general");
 }
 
 /**
@@ -703,88 +1038,28 @@ terminal_app_get_profiles_list (TerminalApp *app)
   return app->profiles_list;
 }
 
-GHashTable *
-terminal_app_get_encodings (TerminalApp *app)
+/**
+ * terminal_app_get_menubar:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the main window menu bar as a #GMenuModel
+ */
+GMenuModel *
+terminal_app_get_menubar (TerminalApp *app)
 {
-  return app->encodings;
-}
-
-static const char *
-charset_validated (const char *charset)
-{
-  gsize i;
-
-  if (charset == NULL)
-    goto out;
-
-  for (i = 0; charset[i] != '\0'; i++) {
-    char c = charset[i];
-    if (!(g_ascii_isalnum(c) || c == '_' || c == '-'))
-      goto out;
-  }
-
-  return charset;
- out:
-  return "UTF-8";
+  return app->menubar;
 }
 
 /**
- * terminal_app_ensure_encoding:
- * @app:
- * @charset: (allow-none): a charset, or %NULL
+ * terminal_app_get_profile_section:
+ * @app: a #TerminalApp
  *
- * Ensures there's a #TerminalEncoding for @charset available. If @charset
- * is %NULL, returns the #TerminalEncoding for the locale's charset. If
- * @charset is not a known charset, returns a #TerminalEncoding for a
- * custom charset.
- *
- * Returns: (transfer none): a #TerminalEncoding, or %NULL
+ * Returns: (tranfer none): the main window's menubar's profiles section as a #GMenuModel
  */
-TerminalEncoding *
-terminal_app_ensure_encoding (TerminalApp *app,
-                              const char *charset)
+GMenuModel *
+terminal_app_get_profile_section (TerminalApp *app)
 {
-  TerminalEncoding *encoding;
-
-  encoding = g_hash_table_lookup (app->encodings, charset_validated (charset));
-  if (encoding == NULL)
-    {
-      encoding = terminal_encoding_new (charset,
-                                        _("User Defined"),
-                                        TRUE,
-                                        TRUE /* scary! */);
-      g_hash_table_insert (app->encodings,
-                          (gpointer) terminal_encoding_get_charset (encoding),
-                          encoding);
-    }
-
-  return encoding;
-}
-
-/**
- * terminal_app_get_active_encodings:
- *
- * Returns: a newly allocated list of newly referenced #TerminalEncoding objects.
- */
-GSList*
-terminal_app_get_active_encodings (TerminalApp *app)
-{
-  GSList *list = NULL;
-  GHashTableIter iter;
-  gpointer key, value;
-
-  g_hash_table_iter_init (&iter, app->encodings);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      TerminalEncoding *encoding = (TerminalEncoding *) value;
-
-      if (!encoding->is_active)
-        continue;
-
-      list = g_slist_prepend (list, terminal_encoding_ref (encoding));
-    }
-
-  return g_slist_sort (list, (GCompareFunc) compare_encodings);
+  return G_MENU_MODEL (app->set_profile_menu);
 }
 
 /**
@@ -834,7 +1109,7 @@ terminal_app_get_gtk_debug_settings (TerminalApp *app)
  * @app:
  *
  * Creates a #PangoFontDescription for the system monospace font.
- * 
+ *
  * Returns: (transfer full): a new #PangoFontDescription
  */
 PangoFontDescription *

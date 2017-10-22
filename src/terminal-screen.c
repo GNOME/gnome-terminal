@@ -17,7 +17,6 @@
  */
 
 #include "config.h"
-#define _GNU_SOURCE /* for dup3 */
 
 #include "terminal-pcre2.h"
 #include "terminal-regex.h"
@@ -49,6 +48,7 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
+#include "terminal-encoding.h"
 #include "terminal-enums.h"
 #include "terminal-intl.h"
 #include "terminal-marshal.h"
@@ -644,7 +644,7 @@ terminal_screen_finalize (GObject *object)
 
 TerminalScreen *
 terminal_screen_new (GSettings       *profile,
-                     const char      *encoding,
+                     const char      *charset,
                      char           **override_command,
                      const char      *title,
                      const char      *working_dir,
@@ -665,12 +665,11 @@ terminal_screen_new (GSettings       *profile,
    * override the profile encoding; otherwise use the profile
    * encoding.
    */
-  if (encoding != NULL && override_command != NULL) {
-    TerminalEncoding *enc;
-
-    enc = terminal_app_ensure_encoding (terminal_app_get (), encoding);
+  if (charset != NULL &&
+      terminal_encodings_is_known_charset (charset) &&
+      override_command != NULL) {
     vte_terminal_set_encoding (VTE_TERMINAL (screen),
-                               terminal_encoding_get_charset (enc),
+                               charset,
                                NULL);
   }
 
@@ -797,14 +796,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING_KEY))
     {
-      TerminalEncoding *encoding;
-      gs_free char *str;
-
-      str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
-      encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
-      vte_terminal_set_encoding (vte_terminal,
-                                 terminal_encoding_get_charset (encoding),
-                                 NULL);
+      gs_free char *charset = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
+      g_warn_if_fail (terminal_encodings_is_known_charset (charset));
+      vte_terminal_set_encoding (vte_terminal, charset, NULL);
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY))
@@ -1204,17 +1198,17 @@ get_child_environment (TerminalScreen *screen,
   g_hash_table_remove (env_table, "COLUMNS");
   g_hash_table_remove (env_table, "LINES");
   g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
- 
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SCREEN (gtk_widget_get_screen (window)))
-    {
-      /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
-      g_hash_table_replace (env_table, g_strdup ("WINDOWID"),
-			    g_strdup_printf ("%lu",
-					     GDK_WINDOW_XID (gtk_widget_get_window (window))));
-      g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
-    }
-#endif
+
+  /* WINDOWID does not work correctly ever since we don't use a native
+   * GdkWindow anymore, and it also becomes incorrect if the screen is
+   * moved to a different window, or the window unrealized and re-realized.
+   * Additionally, it cannot ever work on non-X11 displays like wayland.
+   * And on X11, the only use for this is broken foreign drawing on the
+   * window (w3m etc), and trying to find the focused screen (brltty),
+   * which can now be done correctly using DECSET 1004.
+   * Therefore we do not set WINDOWID, and remove an existing variable.
+   */
+  g_hash_table_remove (env_table, "WINDOWID");
 
   /* We need to put the working directory also in PWD, so that
    * e.g. bash starts in the right directory if @cwd is a symlink.
@@ -1260,7 +1254,6 @@ info_bar_response_cb (GtkWidget *info_bar,
     case RESPONSE_EDIT_PROFILE:
       terminal_app_edit_profile (terminal_app_get (),
                                  terminal_screen_get_profile (screen),
-                                 GTK_WINDOW (terminal_screen_get_window (screen)),
                                  "custom-command-entry");
       break;
     default:
@@ -1487,9 +1480,6 @@ terminal_screen_popup_info_new (TerminalScreen *screen)
 
   info = g_slice_new0 (TerminalScreenPopupInfo);
   info->ref_count = 1;
-  info->screen = g_object_ref (screen);
-
-  g_weak_ref_init (&info->window_weak_ref, terminal_screen_get_window (screen));
 
   return info;
 }
@@ -1511,26 +1501,10 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
   if (--info->ref_count > 0)
     return;
 
-  g_object_unref (info->screen);
-  g_weak_ref_clear (&info->window_weak_ref);
   g_free (info->hyperlink);
   g_free (info->url);
   g_free (info->number_info);
   g_slice_free (TerminalScreenPopupInfo, info);
-}
-
-/**
- * terminal_screen_popup_info_ref_window:
- * @info: a #TerminalScreenPopupInfo
- *
- * Returns: the window, or %NULL
- */
-TerminalWindow *
-terminal_screen_popup_info_ref_window (TerminalScreenPopupInfo *info)
-{
-  g_return_val_if_fail (info != NULL, NULL);
-
-  return g_weak_ref_get (&info->window_weak_ref);
 }
 
 static gboolean

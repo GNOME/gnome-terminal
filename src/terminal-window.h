@@ -70,7 +70,6 @@ void terminal_window_move_screen (TerminalWindow *source_window,
  */
 void terminal_window_set_menubar_visible     (TerminalWindow *window,
                                               gboolean        setting);
-gboolean terminal_window_get_menubar_visible (TerminalWindow *window);
 
 void terminal_window_update_size (TerminalWindow *window);
 
@@ -88,8 +87,6 @@ void terminal_window_update_geometry  (TerminalWindow *window);
 GtkWidget* terminal_window_get_mdi_container (TerminalWindow *window);
 
 void terminal_window_request_close (TerminalWindow *window);
-
-GtkActionGroup *terminal_window_get_main_action_group (TerminalWindow *window);
 
 const char *terminal_window_get_uuid (TerminalWindow *window);
 

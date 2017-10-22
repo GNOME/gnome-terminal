@@ -1,7 +1,6 @@
-/* Encoding stuff */
-
 /*
  * Copyright © 2002 Red Hat, Inc.
+ * Copyright © 2017 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,34 +21,11 @@
 
 #include <gtk/gtk.h>
 
-#define TERMINAL_TYPE_ENCODING (terminal_encoding_get_type ())
+gboolean terminal_encodings_is_known_charset (const char *charset);
 
-typedef struct
-{
-  int   refcount;
-  const char *charset; /* interned */
-  char *name;
-  guint valid            : 1;
-  guint validity_checked : 1;
-  guint is_custom        : 1;
-  guint is_active        : 1;
-} TerminalEncoding;
+void terminal_encodings_append_menu (GMenu *menu);
 
-GType terminal_encoding_get_type (void);
-
-TerminalEncoding *terminal_encoding_new (const char *charset,
-                                         const char *display_name,
-                                         gboolean is_custom,
-                                         gboolean force_valid);
-
-TerminalEncoding *terminal_encoding_ref (TerminalEncoding *encoding);
-
-void terminal_encoding_unref (TerminalEncoding *encoding);
-
-gboolean terminal_encoding_is_valid (TerminalEncoding *encoding);
-
-const char *terminal_encoding_get_charset (TerminalEncoding *encoding);
-
-GHashTable *terminal_encodings_get_builtins (void);
+GtkListStore *terminal_encodings_list_store_new (int column_id,
+                                                 int column_text);
 
 #endif /* TERMINAL_ENCODING_H */

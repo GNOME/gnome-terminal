@@ -2,7 +2,7 @@
 /*
  * Copyright © 2002 Havoc Pennington
  * Copyright © 2002 Mathias Hasselmann
- * Copyright © 2008, 2011 Christian Persch
+ * Copyright © 2008, 2011, 2017 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include <gio/gio.h>
 
 #include "terminal-app.h"
+#include "terminal-encoding.h"
 #include "terminal-enums.h"
 #include "profile-editor.h"
 #include "terminal-schemas.h"
@@ -486,55 +487,36 @@ init_color_scheme_menu (GtkWidget *widget)
 }
 
 enum {
-  ENCODINGS_COLUMN_ID,
-  ENCODINGS_COLUMN_MARKUP
+  ENCODINGS_COLUMN_ID = 0,
+  ENCODINGS_COLUMN_TEXT = 1
 };
 
 static void
 init_encodings_combo (GtkWidget *widget)
 {
-  GtkCellRenderer *renderer;
-  GHashTableIter ht_iter;
-  gpointer key, value;
-  gs_unref_object GtkListStore *store;
-
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-
-  g_hash_table_iter_init (&ht_iter, terminal_app_get_encodings (terminal_app_get ()));
-  while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
-    TerminalEncoding *encoding = value;
-    GtkTreeIter iter;
-    gs_free char *name;
-
-    name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
-                                    terminal_encoding_get_charset (encoding),
-                                    encoding->name);
-    gtk_list_store_insert_with_values (store, &iter, -1,
-                                       ENCODINGS_COLUMN_MARKUP, name,
-                                       ENCODINGS_COLUMN_ID, terminal_encoding_get_charset (encoding),
-                                       -1);
-  }
+  gs_unref_object GtkListStore *store = terminal_encodings_list_store_new (ENCODINGS_COLUMN_ID,
+                                                                           ENCODINGS_COLUMN_TEXT);
 
   /* Now turn on sorting */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        ENCODINGS_COLUMN_MARKUP,
+                                        ENCODINGS_COLUMN_TEXT,
                                         GTK_SORT_ASCENDING);
 
   gtk_combo_box_set_id_column (GTK_COMBO_BOX (widget), ENCODINGS_COLUMN_ID);
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 
   /* Cell renderer */
-  renderer = gtk_cell_renderer_text_new ();
+  GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer,
-                                  "markup", ENCODINGS_COLUMN_MARKUP, NULL);
+                                  "text", ENCODINGS_COLUMN_TEXT, NULL);
 }
 
 static void
 editor_help_button_clicked_cb (GtkWidget *button,
                                GtkWidget *editor)
 {
-  terminal_util_show_help ("profile", GTK_WINDOW (editor));
+  terminal_util_show_help ("profile");
 }
 
 static void
@@ -799,7 +781,6 @@ fixup_color_chooser_button (void)
 /**
  * terminal_profile_edit:
  * @profile: a #GSettings
- * @transient_parent: a #GtkWindow, or %NULL
  * @widget_name: a widget name in the profile editor's UI, or %NULL
  *
  * Shows the profile editor with @profile, anchored to @transient_parent.
@@ -808,7 +789,6 @@ fixup_color_chooser_button (void)
  */
 void
 terminal_profile_edit (GSettings  *profile,
-                       GtkWindow  *transient_parent,
                        const char *widget_name)
 {
   TerminalSettingsList *profiles_list;
@@ -823,8 +803,6 @@ terminal_profile_edit (GSettings  *profile,
     {
       terminal_util_dialog_focus_widget (editor, widget_name);
 
-      gtk_window_set_transient_for (GTK_WINDOW (editor),
-                                    GTK_WINDOW (transient_parent));
       gtk_window_present (GTK_WINDOW (editor));
       return;
     }
@@ -1220,7 +1198,5 @@ terminal_profile_edit (GSettings  *profile,
 
   terminal_util_dialog_focus_widget (editor, widget_name);
 
-  gtk_window_set_transient_for (GTK_WINDOW (editor),
-                                GTK_WINDOW (transient_parent));
   gtk_window_present (GTK_WINDOW (editor));
 }

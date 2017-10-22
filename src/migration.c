@@ -205,6 +205,7 @@ migrate_string (GConfClient *client,
     gconf_value_free (value);
 }
 
+#if 0
 static void
 migrate_string_list (GConfClient *client,
                      const char *gconf_path,
@@ -235,6 +236,7 @@ migrate_string_list (GConfClient *client,
   if (value)
     gconf_value_free (value);
 }
+#endif
 
 static void
 migrate_enum (GConfClient *client,
@@ -328,8 +330,6 @@ migrate_global_prefs (GSettings *settings,
   migrate_bool (client, GCONF_GLOBAL_PREFIX, "use_menu_accelerator",
                 settings, TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                 FALSE);
-  migrate_string_list (client, GCONF_GLOBAL_PREFIX, "active_encodings",
-                       settings, TERMINAL_SETTING_ENCODINGS_KEY);
 
   g_object_unref (client);
 

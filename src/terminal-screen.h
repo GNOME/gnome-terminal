@@ -76,7 +76,7 @@ GType terminal_screen_get_type (void) G_GNUC_CONST;
 const char *terminal_screen_get_uuid (TerminalScreen *screen);
 
 TerminalScreen *terminal_screen_new (GSettings       *profile,
-                                     const char      *encoding,
+                                     const char      *charset,
                                      char           **override_command,
                                      const char      *title,
                                      const char      *working_dir,
@@ -138,8 +138,6 @@ gboolean terminal_screen_has_foreground_process (TerminalScreen *screen,
 
 struct _TerminalScreenPopupInfo {
   int ref_count;
-  GWeakRef window_weak_ref;
-  TerminalScreen *screen;
   char *url;
   TerminalURLFlavor url_flavor;
   char *hyperlink;
@@ -152,8 +150,6 @@ struct _TerminalScreenPopupInfo {
 TerminalScreenPopupInfo *terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info);
 
 void terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info);
-
-TerminalWindow *terminal_screen_popup_info_ref_window (TerminalScreenPopupInfo *info);
 
 G_END_DECLS
 

@@ -29,6 +29,7 @@ _terminal_debug_init(void)
 #ifdef ENABLE_DEBUG
   const GDebugKey keys[] = {
     { "accels",        TERMINAL_DEBUG_ACCELS        },
+    { "clipboard",     TERMINAL_DEBUG_CLIPBOARD     },
     { "encodings",     TERMINAL_DEBUG_ENCODINGS     },
     { "server",        TERMINAL_DEBUG_SERVER        },
     { "geometry",      TERMINAL_DEBUG_GEOMETRY      },
@@ -36,12 +37,12 @@ _terminal_debug_init(void)
     { "processes",     TERMINAL_DEBUG_PROCESSES     },
     { "profile",       TERMINAL_DEBUG_PROFILE       },
     { "settings-list", TERMINAL_DEBUG_SETTINGS_LIST },
-    { "appmenu",       TERMINAL_DEBUG_APPMENU       },
     { "search",        TERMINAL_DEBUG_SEARCH        },
   };
 
   _terminal_debug_flags = g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),
                                                 keys, G_N_ELEMENTS (keys));
+
 #endif /* ENABLE_DEBUG */
 }
 

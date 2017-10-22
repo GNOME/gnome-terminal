@@ -20,7 +20,6 @@
  */
 
 #include "config.h"
-#define _GNU_SOURCE
 
 #include <errno.h>
 #include <locale.h>

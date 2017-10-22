@@ -61,6 +61,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-libgsystem.h \
 	terminal-mdi-container.c \
 	terminal-mdi-container.h \
+	terminal-menu-button.h \
+	terminal-menu-button.c \
 	terminal-notebook.c \
 	terminal-notebook.h \
 	terminal-pcre2.h \
@@ -80,8 +82,6 @@ gnome_terminal_server_SOURCES = \
 	terminal-search-popover.h \
 	terminal-tab-label.c \
 	terminal-tab-label.h \
-	terminal-tabs-menu.c \
-	terminal-tabs-menu.h \
 	terminal-util.c \
 	terminal-util.h \
 	terminal-version.h \
@@ -94,7 +94,6 @@ nodist_gnome_terminal_server_SOURCES = $(gnome_terminal_server_built)
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
 	$(AM_CPPFLAGS)
 
@@ -416,7 +415,6 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	terminal.about \
-	terminal.xml \
 	terminal-menus.ui \
 	terminal-window.ui \
 	terminal.gresource.xml \

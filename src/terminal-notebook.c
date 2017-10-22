@@ -105,6 +105,15 @@ close_button_clicked_cb (TerminalTabLabel *tab_label,
 }
 
 
+static void
+remove_reorder_bindings (GtkBindingSet    *binding_set,
+                         guint             keysym)
+{
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
+  gtk_binding_entry_skip (binding_set, keysym, GDK_MOD1_MASK);
+  gtk_binding_entry_skip (binding_set, keypad_keysym, GDK_MOD1_MASK);
+}
+
 /* TerminalMdiContainer impl */
 
 static void
@@ -560,6 +569,21 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  /* Remove unwanted and interfering keybindings */
+  GtkBindingSet *binding_set = gtk_binding_set_by_class (terminal_notebook_parent_class);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK | GDK_MOD1_MASK);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK | GDK_MOD1_MASK);
+  remove_reorder_bindings (binding_set, GDK_KEY_Up);
+  remove_reorder_bindings (binding_set, GDK_KEY_Down);
+  remove_reorder_bindings (binding_set, GDK_KEY_Left);
+  remove_reorder_bindings (binding_set, GDK_KEY_Right);
+  remove_reorder_bindings (binding_set, GDK_KEY_Home);
+  remove_reorder_bindings (binding_set, GDK_KEY_Home);
+  remove_reorder_bindings (binding_set, GDK_KEY_End);
+  remove_reorder_bindings (binding_set, GDK_KEY_End);
 }
 
 /* public API */

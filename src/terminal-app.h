@@ -21,7 +21,6 @@
 
 #include <gtk/gtk.h>
 
-#include "terminal-encoding.h"
 #include "terminal-screen.h"
 #include "terminal-profiles-list.h"
 
@@ -53,17 +52,16 @@ GApplication *terminal_app_new (const char *app_id);
 
 GDBusObjectManagerServer *terminal_app_get_object_manager (TerminalApp *app);
 
+GdkAtom *terminal_app_get_clipboard_targets (TerminalApp *app,
+                                             GtkClipboard *clipboard,
+                                             int *n_targets);
+
 void terminal_app_edit_profile (TerminalApp *app,
                                 GSettings   *profile,
-                                GtkWindow   *transient_parent,
                                 const char  *widget_name);
 
 void terminal_app_new_profile (TerminalApp *app,
-                               GSettings   *default_base_profile,
-                               GtkWindow   *transient_parent);
-
-gboolean terminal_app_can_remove_profile (TerminalApp *app,
-                                          GSettings *profile);
+                               GSettings   *default_base_profile);
 
 void terminal_app_remove_profile (TerminalApp *app,
                                   GSettings *profile);
@@ -74,7 +72,7 @@ TerminalWindow * terminal_app_new_window   (TerminalApp *app,
 TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            TerminalWindow  *window,
                                            GSettings       *profile,
-                                           const char      *encoding,
+                                           const char      *charset,
                                            char           **override_command,
                                            const char      *title,
                                            const char      *working_dir,
@@ -90,19 +88,15 @@ void terminal_app_register_screen (TerminalApp *app,
 void terminal_app_unregister_screen (TerminalApp *app,
                                      TerminalScreen *screen);
 
-void terminal_app_edit_preferences (TerminalApp     *app,
-                                    GtkWindow       *transient_parent);
-void terminal_app_edit_encodings   (TerminalApp     *app,
-                                    GtkWindow       *transient_parent);
+void terminal_app_edit_preferences (TerminalApp *app);
 
 TerminalSettingsList *terminal_app_get_profiles_list (TerminalApp *app);
 
-TerminalEncoding *terminal_app_ensure_encoding (TerminalApp *app,
-                                                const char *charset);
+/* Menus */
 
-GHashTable *terminal_app_get_encodings (TerminalApp *app);
+GMenuModel *terminal_app_get_menubar (TerminalApp *app);
 
-GSList* terminal_app_get_active_encodings (TerminalApp *app);
+GMenuModel *terminal_app_get_profile_section (TerminalApp *app);
 
 /* GSettings */
 

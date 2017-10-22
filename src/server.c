@@ -100,13 +100,11 @@ increase_rlimit_nofile (void)
   return TRUE;
 }
 
-int
-main (int argc, char **argv)
+static int
+init_server (int argc,
+             char *argv[],
+             GApplication **application)
 {
-  gs_unref_object GApplication *app = NULL;
-  const char *home_dir, *charset;
-  GError *error = NULL;
-
   if (G_UNLIKELY ((getuid () != geteuid () ||
                   getgid () != getegid ()) &&
                   geteuid () == 0 &&
@@ -121,7 +119,7 @@ main (int argc, char **argv)
   }
 
   terminal_i18n_init (TRUE);
-
+  const char *charset;
   if (!g_get_charset (&charset)) {
     g_printerr ("Non UTF-8 locale (%s) is not supported!\n", charset);
     return _EXIT_FAILURE_NO_UTF8;
@@ -134,36 +132,38 @@ main (int argc, char **argv)
   if (g_getenv ("G_ENABLE_DIAGNOSTIC") == NULL)
     g_setenv ("G_ENABLE_DIAGNOSTIC", "0", TRUE);
 
-#ifndef ENABLE_DISTRO_PACKAGING
 #ifdef HAVE_UBUNTU
+#ifndef ENABLE_DISTRO_PACKAGING
   /* Set some env vars to disable the ubuntu modules. Their package will be 
    * built using --enable-distro-packaging, but anyone running from git will
    * get the right behaviour.
    */
   g_setenv ("LIBOVERLAY_SCROLLBAR", "0", TRUE);
+#endif
   g_setenv ("UBUNTU_MENUPROXY", "0", TRUE);
   g_setenv ("NO_UNITY_GTK_MODULE", "1", TRUE);
-#endif
 #endif
 
   _terminal_debug_init ();
 
-  // FIXMEchpe: just use / here but make sure #565328 doesn't regress
   /* Change directory to $HOME so we don't prevent unmounting, e.g. if the
    * factory is started by nautilus-open-terminal. See bug #565328.
    * On failure back to /.
    */
-  home_dir = g_get_home_dir ();
+  const char *home_dir = g_get_home_dir ();
   if (home_dir == NULL || chdir (home_dir) < 0)
     (void) chdir ("/");
 
   g_set_prgname ("gnome-terminal-server");
   g_set_application_name (_("Terminal"));
 
+  GError *error = NULL;
   if (!gtk_init_with_args (&argc, &argv, NULL, options, NULL, &error)) {
-    g_printerr ("Failed to parse arguments: %s\n", error->message);
-    g_error_free (error);
-    exit (_EXIT_FAILURE_GTK_INIT);
+    if (error != NULL) {
+      g_printerr ("Failed to parse arguments: %s\n", error->message);
+      g_error_free (error);
+    }
+    return _EXIT_FAILURE_GTK_INIT;
   }
 
   if (!increase_rlimit_nofile ()) {
@@ -171,11 +171,25 @@ main (int argc, char **argv)
   }
 
   /* Now we can create the app */
-  app = terminal_app_new (app_id);
+  GApplication *app = terminal_app_new (app_id);
   g_free (app_id);
+  app_id = NULL;
 
   /* We stay around a bit after the last window closed */
   g_application_set_inactivity_timeout (app, INACTIVITY_TIMEOUT);
+
+  *application = app;
+  return 0;
+}
+
+int
+main (int argc,
+      char *argv[])
+{
+  gs_unref_object GApplication *app = NULL;
+  int r = init_server (argc, argv, &app);
+  if (r != 0)
+    return r;
 
   return g_application_run (app, 0, NULL);
 }

@@ -310,7 +310,11 @@
         <choice value="ISO-8859-14" />
         <choice value="ISO-8859-15" />
         <choice value="ISO-8859-16" />
+        <!-- <choice value="UTF-7" /> -->
         <choice value="UTF-8" />
+        <!-- <choice value="UTF-16" /> -->
+        <!-- <choice value="UTF-32" /> -->
+        <!-- <choice value="UCS-4" /> -->
         <choice value="ARMSCII-8" />
         <choice value="BIG5" />
         <choice value="BIG5-HKSCS" />
@@ -331,6 +335,7 @@
         <choice value="ISO-2022-JP" />
         <choice value="ISO-2022-KR" />
         <choice value="ISO-IR-111" />
+        <!-- <choice value="JOHAB" /> -->
         <choice value="KOI8-R" />
         <choice value="KOI8-U" />
         <choice value="MAC_ARABIC" />
@@ -390,6 +395,14 @@
     <key name="save-contents" type="s">
       <default>'disabled'</default>
       <summary>Keyboard shortcut to save the current tab contents to file</summary>
+    </key>
+    <key name="export" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to export the current tab contents to file in various formats</summary>
+    </key>
+    <key name="print" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to print the current tab contents to printer or file</summary>
     </key>
     <key name="close-tab" type="s">
       <default>'&lt;Ctrl&gt;&lt;Shift&gt;w'</default>
@@ -619,6 +632,10 @@
       <default>'disabled'</default>
       <summary>Keyboard shortcut to switch to the numbered tab</summary>
     </key>
+    <key name="switch-to-tab-last" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to switch to the last tab</summary>
+    </key>
     <key name="help" type="s">
       <default>'F1'</default>
       <summary>Keyboard shortcut to launch help</summary>
@@ -677,21 +694,9 @@
       <summary>Whether the shell integration is enabled</summary>
     </key>
 
+    <!-- This one is deprecated and unused -->
     <key name="encodings" type="as">
-      <!-- Translators: Please note that this has to be a list of
-           valid encodings (which are to be taken from the list in src/encoding.c).
-           It has to include UTF-8 the list entries themselves are not to be
-           translated. This is provided for customization of the default encoding
-           menu; see bug 144810 for an use case. In most cases, this should be
-           left alone.
-      -->
       <default>["UTF-8"]</default>
-      <summary>List of available encodings</summary>
-      <description>
-        A subset of possible encodings are presented in
-        the Encoding submenu. This is a list of encodings
-        to appear there.
-      </description>
     </key>
 
     <key name="confirm-close" type="b">

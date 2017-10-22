@@ -817,7 +817,7 @@ terminal_settings_list_remove_child (TerminalSettingsList *list,
  * @list: a #TerminalSettingsList
  * @child: a #GSettings of a child in the list
  *
- * Returns the UUID of @child in the list, or %NULL if @child is in the list.
+ * Returns the UUID of @child in the list, or %NULL if @child is not in the list.
  *
  * Returns: (transfer full): the UUID of the child in the settings list, or %NULL
  */
@@ -837,6 +837,7 @@ terminal_settings_list_dup_uuid_from_child (TerminalSettingsList *list,
   g_return_val_if_fail (p[0] == ':', NULL);
   p++;
   g_return_val_if_fail (strlen (p) == 37, NULL);
+  g_return_val_if_fail (p[36] == '/', NULL);
   p[36] = '\0';
   g_assert (terminal_settings_list_valid_uuid (p));
 
@@ -850,7 +851,7 @@ terminal_settings_list_dup_uuid_from_child (TerminalSettingsList *list,
  *
  * Sets @uuid as the default child.
  */
-void 
+void
 terminal_settings_list_set_default_child (TerminalSettingsList *list,
                                           const char *uuid)
 {
@@ -861,4 +862,44 @@ terminal_settings_list_set_default_child (TerminalSettingsList *list,
     return;
 
   g_settings_set_string (&list->parent, TERMINAL_SETTINGS_LIST_DEFAULT_KEY, uuid);
+}
+
+/**
+ * terminal_settings_list_foreach_child:
+ * @list: a #TerminalSettingsList
+ * @callback: a #TerminalSettingsListForeachFunc
+ * @user_data: user data for @callback
+ *
+ * Calls @callback for each child of @list.
+ *
+ * NOTE: No changes to @list must be made from @callback.
+ */
+void
+terminal_settings_list_foreach_child (TerminalSettingsList *list,
+                                      TerminalSettingsListForeachFunc callback,
+                                      gpointer user_data)
+{
+  g_return_if_fail (TERMINAL_IS_SETTINGS_LIST (list));
+  g_return_if_fail (callback);
+
+  for (char **p = list->uuids; *p; p++) {
+    const char *uuid = *p;
+    gs_unref_object GSettings *child = terminal_settings_list_ref_child_internal (list, uuid);
+    if (child != NULL)
+      callback (list, uuid, child, user_data);
+  }
+}
+
+/**
+ * terminal_settings_list_foreach_child:
+ * @list: a #TerminalSettingsList
+ *
+ * Returns: the number of children of @list.
+ */
+guint
+terminal_settings_list_get_n_children (TerminalSettingsList *list)
+{
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), 0);
+
+  return g_hash_table_size (list->children);
 }

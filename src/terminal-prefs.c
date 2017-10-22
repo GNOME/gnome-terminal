@@ -34,7 +34,6 @@
 #include "terminal-schemas.h"
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
-#include "terminal-encoding.h"
 #include "terminal-libgsystem.h"
 
 typedef struct {
@@ -48,10 +47,6 @@ typedef struct {
   GtkWidget *manage_profiles_clone_button;
   GtkWidget *manage_profiles_delete_button;
   GtkWidget *profiles_default_combo;
-
-  GtkListStore *encoding_base_store;
-  GtkTreeModel *encodings_model;
-  GtkTreeView *encodings_tree_view;
 } PrefData;
 
 static GtkWidget *prefs_dialog = NULL;
@@ -60,7 +55,7 @@ static void
 prefs_dialog_help_button_clicked_cb (GtkWidget *button,
                                      PrefData *data)
 {
-  terminal_util_show_help ("pref", GTK_WINDOW (data->dialog));
+  terminal_util_show_help ("pref");
 }
 
 static void
@@ -300,7 +295,7 @@ profile_list_row_activated_cb (GtkTreeView *tree_view,
   if (selected_profile == NULL)
     return;
 
-  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL, NULL);
+  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL);
 }
 
 static GtkTreeView *
@@ -399,7 +394,7 @@ static void
 profile_list_new_button_clicked_cb (GtkWidget *button,
                                     PrefData *data)
 {
-  terminal_app_new_profile (terminal_app_get (), NULL, GTK_WINDOW (data->parent));
+  terminal_app_new_profile (terminal_app_get (), NULL);
 }
 
 static void
@@ -412,7 +407,7 @@ profile_list_clone_button_clicked_cb (GtkWidget *button,
   if (selected_profile == NULL)
     return;
 
-  terminal_app_new_profile (terminal_app_get (), selected_profile, GTK_WINDOW (data->parent));
+  terminal_app_new_profile (terminal_app_get (), selected_profile);
 }
 
 static void
@@ -425,112 +420,23 @@ profile_list_edit_button_clicked_cb (GtkWidget *button,
   if (selected_profile == NULL)
     return;
 
-  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL, NULL);
+  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL);
 }
 
 static void
 profile_list_selection_changed_cb (GtkTreeSelection *selection,
                                    PrefData *data)
 {
-  gboolean selected;
-  gs_unref_object GSettings *selected_profile;
-
-  selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
-  selected_profile = profile_list_ref_selected (data);
+  gboolean selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
 
   gtk_widget_set_sensitive (data->manage_profiles_edit_button, selected);
   gtk_widget_set_sensitive (data->manage_profiles_clone_button, selected);
-  gtk_widget_set_sensitive (data->manage_profiles_delete_button,
-                            selected && 
-                            terminal_app_can_remove_profile (terminal_app_get (), selected_profile));
+  gtk_widget_set_sensitive (data->manage_profiles_delete_button, selected);
 }
 
 /* Keybindings tab */
 
 /* Encodings tab */
-
-static void
-update_active_encodings_setting (void)
-{
-  TerminalApp *app;
-  GSList *list, *l;
-  GVariantBuilder builder;
-  GSettings *settings;
-
-  app = terminal_app_get ();
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("as"));
-
-  list = terminal_app_get_active_encodings (app);
-  for (l = list; l != NULL; l = l->next)
-    {
-      TerminalEncoding *encoding = (TerminalEncoding *) l->data;
-
-      g_variant_builder_add (&builder, "s", terminal_encoding_get_charset (encoding));
-    }
-  g_slist_foreach (list, (GFunc) terminal_encoding_unref, NULL);
-  g_slist_free (list);
-
-  settings = terminal_app_get_global_settings (app);
-  g_settings_set (settings, TERMINAL_SETTING_ENCODINGS_KEY, "as", &builder);
-}
-
-enum
-{
-  COLUMN_NAME,
-  COLUMN_CHARSET,
-  COLUMN_DATA,
-  N_ENCODING_COLUMNS
-};
-
-static void
-encoding_active_toggled_cb (GtkCellRendererToggle *cell,
-                            gchar *path_as_string,
-                            PrefData *data)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  TerminalEncoding *encoding;
-
-  path = gtk_tree_path_new_from_string (path_as_string);
-  if (!gtk_tree_model_get_iter (data->encodings_model, &iter, path))
-    goto out;
-
-  gtk_tree_model_get (data->encodings_model, &iter, COLUMN_DATA, &encoding, -1);
-  g_assert (encoding != NULL);
-
-  encoding->is_active = !encoding->is_active;
-  terminal_encoding_unref (encoding);
-
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (data->encodings_model), path, &iter);
-
-  /* Persist the change */
-  update_active_encodings_setting ();
-
- out:
-  gtk_tree_path_free (path);
-}
-
-static void
-encoding_active_cell_data_func (GtkTreeViewColumn *tree_column,
-                                GtkCellRenderer *cell,
-                                GtkTreeModel *tree_model,
-                                GtkTreeIter *iter,
-                                PrefData *data)
-{
-  TerminalEncoding *encoding;
-
-  gtk_tree_model_get (tree_model, iter, (int) COLUMN_DATA, &encoding, -1);
-  g_object_set (G_OBJECT (cell), "active", encoding->is_active, NULL);
-  terminal_encoding_unref (encoding);
-}
-
-static void
-encodings_list_changed_cb (PrefData *data)
-{
-  /* We just queue a redraw here which will take care of everything */
-  gtk_widget_queue_draw (GTK_WIDGET (data->encodings_tree_view));
-}
 
 /* misc */
 
@@ -538,12 +444,8 @@ static void
 prefs_dialog_destroy_cb (GtkWidget *widget,
                          PrefData *data)
 {
-  TerminalApp *app = terminal_app_get ();
-
   g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_combo_box_refill), data);
   g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_list_treeview_refill), data);
-
-  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (encodings_list_changed_cb), data);
 
   /* Don't run this handler again */
   g_signal_handlers_disconnect_by_func (widget, G_CALLBACK (prefs_dialog_destroy_cb), data);
@@ -551,8 +453,7 @@ prefs_dialog_destroy_cb (GtkWidget *widget,
 }
 
 void
-terminal_prefs_show_preferences (GtkWindow *transient_parent,
-                                 const char *page)
+terminal_prefs_show_preferences (const char *page)
 {
   TerminalApp *app = terminal_app_get ();
   PrefData *data;
@@ -560,25 +461,20 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   GtkWidget *show_menubar_button, *disable_mnemonics_button, *disable_menu_accel_button;
   GtkWidget *disable_shortcuts_button;
   GtkWidget *tree_view_container, *new_button, *edit_button, *clone_button, *remove_button;
-  GtkWidget *theme_variant_label, *theme_variant_combo, *new_terminal_mode_combo;
+  GtkWidget *theme_variant_label, *theme_variant_combo;
+  GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
   GtkWidget *default_hbox, *default_label;
   GtkWidget *close_button, *help_button;
   GtkTreeSelection *selection;
   GSettings *settings;
-  GtkCellRenderer *cell_renderer;
-  GtkTreeViewColumn *column;
-  GtkListStore *list_store;
-  GHashTableIter ht_iter;
-  gpointer key, value;
 
   if (prefs_dialog != NULL)
     goto done;
 
   data = g_new0 (PrefData, 1);
-  data->parent = transient_parent;
   data->profiles_list = terminal_app_get_profiles_list (app);
 
-  terminal_util_load_builder_resource ("/org/gnome/terminal/ui/preferences.ui",
+  terminal_util_load_widgets_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
                                        "close-button", &close_button,
@@ -586,6 +482,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        "default-show-menubar-checkbutton", &show_menubar_button,
                                        "theme-variant-label", &theme_variant_label,
                                        "theme-variant-combobox", &theme_variant_combo,
+                                       "new-terminal-mode-label", &new_terminal_mode_label,
                                        "new-terminal-mode-combobox", &new_terminal_mode_combo,
                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
                                        "disable-shortcuts-checkbutton", &disable_shortcuts_button,
@@ -598,7 +495,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        "delete-profile-button", &remove_button,
                                        "default-profile-hbox", &default_hbox,
                                        "default-profile-label", &default_label,
-                                       "encodings-treeview", &data->encodings_tree_view,
                                        NULL);
 
   data->dialog = dialog;
@@ -611,11 +507,19 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
 
   /* General tab */
 
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
-                   show_menubar_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  gboolean shell_shows_menubar;
+  g_object_get (gtk_settings_get_default (),
+                "gtk-shell-shows-menubar", &shell_shows_menubar,
+                NULL);
+  if (shell_shows_menubar) {
+    gtk_widget_set_visible (show_menubar_button, FALSE);
+  } else {
+    g_settings_bind (settings,
+                     TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
+                     show_menubar_button,
+                     "active",
+                     G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  }
 
 #if GTK_CHECK_VERSION (3, 19, 0)
   g_settings_bind (settings,
@@ -628,11 +532,16 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   gtk_widget_set_visible (theme_variant_combo, FALSE);
 #endif /* GTK+ 3.19 */
 
+#ifndef DISUNIFY_NEW_TERMINAL_SECTION
   g_settings_bind (settings,
                    TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
                    new_terminal_mode_combo,
                    "active-id",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+#else
+  gtk_widget_set_visible (new_terminal_mode_label, FALSE);
+  gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
+#endif
 
   /* Keybindings tab */
 
@@ -697,70 +606,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   // FIXMEchpe
   gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), data->profiles_default_combo);
 
-  /* Encodings tab */
-
-  selection = gtk_tree_view_get_selection (data->encodings_tree_view);
-  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
-
-  /* Column 1 */
-  cell_renderer = gtk_cell_renderer_toggle_new ();
-  g_object_set (cell_renderer, "xalign", 0.0, NULL);
-  g_signal_connect (cell_renderer, "toggled",
-                    G_CALLBACK (encoding_active_toggled_cb), data);
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("Show"));
-  gtk_tree_view_column_pack_start (column, cell_renderer, FALSE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column),
-                                      cell_renderer,
-                                      (GtkCellLayoutDataFunc) encoding_active_cell_data_func,
-                                      data, NULL);
-
-  gtk_tree_view_append_column (data->encodings_tree_view, column);
-
-  /* Column 2 */
-  cell_renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("_Encoding"),
-						     cell_renderer,
-						     "markup", COLUMN_NAME,
-						     NULL);
-  gtk_tree_view_append_column (data->encodings_tree_view, column);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);
-
-  /* Add the data */
-
-  list_store = gtk_list_store_new (N_ENCODING_COLUMNS,
-                                   G_TYPE_STRING,
-                                   G_TYPE_STRING,
-                                   TERMINAL_TYPE_ENCODING);
-  data->encodings_model = GTK_TREE_MODEL (list_store);
-
-  g_hash_table_iter_init (&ht_iter, terminal_app_get_encodings (app));
-  while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
-    TerminalEncoding *encoding = value;
-    GtkTreeIter iter;
-    gs_free char *name;
-
-    name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
-                                    terminal_encoding_get_charset (encoding),
-                                    encoding->name);
-    gtk_list_store_insert_with_values (list_store, &iter, -1,
-                                       COLUMN_NAME, name,
-                                       COLUMN_CHARSET, terminal_encoding_get_charset (encoding),
-                                       COLUMN_DATA, encoding,
-                                       -1);
-  }
-
-  /* Now turn on sorting */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (data->encodings_model),
-                                        COLUMN_CHARSET,
-                                        GTK_SORT_ASCENDING);
-
-  gtk_tree_view_set_model (data->encodings_tree_view, data->encodings_model);
-  g_object_unref (data->encodings_model);
-
-  g_signal_connect_swapped (app, "encoding-list-changed",
-                            G_CALLBACK (encodings_list_changed_cb), data);
-
   /* misc */
 
   g_signal_connect (close_button, "clicked", G_CALLBACK (prefs_dialog_close_button_clicked_cb), data);
@@ -772,8 +617,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   g_object_add_weak_pointer (G_OBJECT (dialog), (gpointer *) &prefs_dialog);
 
 done:
-  gtk_window_set_transient_for (GTK_WINDOW (prefs_dialog), transient_parent);
-
   terminal_util_dialog_focus_widget (prefs_dialog, page);
 
   gtk_window_present (GTK_WINDOW (prefs_dialog));

@@ -20,7 +20,6 @@
  */
 
 #include "config.h"
-#define _GNU_SOURCE /* for strchrnul */
 
 #include <string.h>
 #include <stdlib.h>
@@ -41,9 +40,7 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
-#include "terminal-screen.h"
 #include "terminal-util.h"
-#include "terminal-window.h"
 #include "terminal-libgsystem.h"
 
 /**
@@ -136,8 +133,7 @@ open_url (GtkWindow *parent,
 }
 
 void
-terminal_util_show_help (const char *topic, 
-                         GtkWindow  *parent)
+terminal_util_show_help (const char *topic)
 {
   gs_free_error GError *error = NULL;
   gs_free char *uri;
@@ -148,9 +144,9 @@ terminal_util_show_help (const char *topic,
     uri = g_strdup ("help:gnome-terminal");
   }
 
-  if (!open_url (GTK_WINDOW (parent), uri, gtk_get_current_event_time (), &error))
+  if (!open_url (NULL, uri, gtk_get_current_event_time (), &error))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
+      terminal_util_show_error_dialog (NULL, NULL, error,
                                        _("There was an error displaying help"));
     }
 }
@@ -160,13 +156,13 @@ terminal_util_show_help (const char *topic,
 #define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
 
 void
-terminal_util_show_about (GtkWindow *transient_parent G_GNUC_UNUSED)
+terminal_util_show_about (void)
 {
   static const char copyright[] =
     "Copyright © 2002–2004 Havoc Pennington\n"
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2016 Christian Persch";
+    "Copyright © 2007–2017 Christian Persch";
   char *licence_text;
   GKeyFile *key_file;
   GBytes *bytes;
@@ -277,11 +273,10 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
       return;
     }
 
-  
   if (!GTK_IS_ACCESSIBLE (obj))
     return; /* This means GAIL is not loaded so we have the NoOp accessible */
-      
-  g_return_if_fail (GTK_IS_ACCESSIBLE (obj));  
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (obj));
   if (desc)
     atk_object_set_description (obj, desc);
   if (name)
@@ -413,7 +408,7 @@ main_object_destroy_cb (GtkWidget *widget)
 }
 
 void
-terminal_util_load_builder_resource (const char *path,
+terminal_util_load_widgets_resource (const char *path,
                                      const char *main_object_name,
                                      const char *object_name,
                                      ...)
@@ -458,6 +453,37 @@ terminal_util_load_builder_resource (const char *path,
       gtk_widget_set_margin_bottom (action_area, 5);
     }
   }
+}
+
+void
+terminal_util_load_objects_resource (const char *path,
+                                     const char *object_name,
+                                     ...)
+{
+  gs_unref_object GtkBuilder *builder;
+  GError *error = NULL;
+  va_list args;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, path, &error);
+  g_assert_no_error (error);
+
+  va_start (args, object_name);
+
+  while (object_name) {
+    GObject **objectptr;
+
+    objectptr = va_arg (args, GObject**);
+    *objectptr = gtk_builder_get_object (builder, object_name);
+    if (*objectptr)
+      g_object_ref (*objectptr);
+    else
+      g_error ("Failed to fetch object \"%s\" from resource \"%s\"\n", object_name, path);
+
+    object_name = va_arg (args, const char*);
+  }
+
+  va_end (args);
 }
 
 gboolean
@@ -1284,4 +1310,180 @@ terminal_util_utf8_make_valid (const gchar *str,
   g_assert (g_utf8_validate (string->str, -1, NULL));
 
   return g_string_free (string, FALSE);
+}
+
+#define TERMINAL_CACHE_DIR                 "gnome-terminal"
+#define TERMINAL_PRINT_SETTINGS_FILENAME   "print-settings.ini"
+#define TERMINAL_PRINT_SETTINGS_GROUP_NAME "Print Settings"
+#define TERMINAL_PAGE_SETUP_GROUP_NAME     "Page Setup"
+
+#define KEYFILE_FLAGS_FOR_LOAD (G_KEY_FILE_NONE)
+#define KEYFILE_FLAGS_FOR_SAVE (G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS)
+
+static char *
+get_cache_dir (void)
+{
+  return g_build_filename (g_get_user_cache_dir (), TERMINAL_CACHE_DIR, NULL);
+}
+
+static gboolean
+ensure_cache_dir (void)
+{
+  gs_free char *cache_dir;
+  int r;
+
+  cache_dir = get_cache_dir ();
+  errno = 0;
+  r = g_mkdir_with_parents (cache_dir, 0700);
+  if (r == -1 && errno != EEXIST)
+    g_printerr ("Failed to create cache dir: %m\n");
+  return r == 0;
+}
+
+static char *
+get_cache_filename (const char *filename)
+{
+  gs_free char *cache_dir = get_cache_dir ();
+  return g_build_filename (cache_dir, filename, NULL);
+}
+
+static GKeyFile *
+load_cache_keyfile (const char *filename,
+                    GKeyFileFlags flags,
+                    gboolean ignore_error)
+{
+  gs_free char *path;
+  GKeyFile *keyfile;
+
+  path = get_cache_filename (filename);
+  keyfile = g_key_file_new ();
+  if (g_key_file_load_from_file (keyfile, path, flags, NULL) || ignore_error)
+    return keyfile;
+
+  g_key_file_unref (keyfile);
+  return NULL;
+}
+
+static void
+save_cache_keyfile (GKeyFile *keyfile,
+                    const char *filename)
+{
+  gs_free char *path = NULL;
+  gs_free char *data = NULL;
+  gsize len = 0;
+
+  if (!ensure_cache_dir ())
+    return;
+
+  data = g_key_file_to_data (keyfile, &len, NULL);
+  if (data == NULL || len == 0)
+    return;
+
+  path = get_cache_filename (filename);
+
+  /* Ignore errors */
+  GError *err = NULL;
+  if (!g_file_set_contents (path, data, len, &err)) {
+    g_printerr ("Error saving print settings: %s\n", err->message);
+    g_error_free (err);
+  }
+}
+
+static void
+keyfile_remove_keys (GKeyFile *keyfile,
+                     const char *group_name,
+                     ...)
+{
+  va_list args;
+  const char *key;
+
+  va_start (args, group_name);
+  while ((key = va_arg (args, const char *)) != NULL) {
+    g_key_file_remove_key (keyfile, group_name, key, NULL);
+  }
+  va_end (args);
+}
+
+/**
+ * terminal_util_load_print_settings:
+ *
+ * Loads the saved print settings, if any.
+ */
+void
+terminal_util_load_print_settings (GtkPrintSettings **settings,
+                                   GtkPageSetup **page_setup)
+{
+  gs_unref_key_file GKeyFile *keyfile = load_cache_keyfile (TERMINAL_PRINT_SETTINGS_FILENAME,
+                                                            KEYFILE_FLAGS_FOR_LOAD,
+                                                            FALSE);
+  if (keyfile == NULL) {
+    *settings = NULL;
+    *page_setup = NULL;
+    return;
+  }
+
+  /* Ignore errors */
+  *settings = gtk_print_settings_new_from_key_file (keyfile,
+                                                    TERMINAL_PRINT_SETTINGS_GROUP_NAME,
+                                                    NULL);
+  *page_setup = gtk_page_setup_new_from_key_file (keyfile,
+                                                  TERMINAL_PAGE_SETUP_GROUP_NAME,
+                                                  NULL);
+}
+
+/**
+ * terminal_util_save_print_settings:
+ * @settings: (allow-none): a #GtkPrintSettings
+ * @page_setup: (allow-none): a #GtkPageSetup
+ *
+ * Saves the print settings.
+ */
+void
+terminal_util_save_print_settings (GtkPrintSettings *settings,
+                                   GtkPageSetup *page_setup)
+{
+  gs_unref_key_file GKeyFile *keyfile = NULL;
+
+  keyfile = load_cache_keyfile (TERMINAL_PRINT_SETTINGS_FILENAME,
+                                KEYFILE_FLAGS_FOR_SAVE,
+                                TRUE);
+  g_assert (keyfile != NULL);
+
+  if (settings != NULL)
+    gtk_print_settings_to_key_file (settings, keyfile,
+                                    TERMINAL_PRINT_SETTINGS_GROUP_NAME);
+
+  /* Some keys are not desirable to persist; remove these.
+   * This list comes from evince.
+   */
+  keyfile_remove_keys (keyfile,
+                       TERMINAL_PRINT_SETTINGS_GROUP_NAME,
+                       GTK_PRINT_SETTINGS_COLLATE,
+                       GTK_PRINT_SETTINGS_NUMBER_UP,
+                       GTK_PRINT_SETTINGS_N_COPIES,
+                       GTK_PRINT_SETTINGS_OUTPUT_URI,
+                       GTK_PRINT_SETTINGS_PAGE_RANGES,
+                       GTK_PRINT_SETTINGS_PAGE_SET,
+                       GTK_PRINT_SETTINGS_PRINT_PAGES,
+                       GTK_PRINT_SETTINGS_REVERSE,
+                       GTK_PRINT_SETTINGS_SCALE,
+                       NULL);
+
+  if (page_setup != NULL)
+    gtk_page_setup_to_key_file (page_setup, keyfile,
+                                TERMINAL_PAGE_SETUP_GROUP_NAME);
+
+  /* Some keys are not desirable to persist; remove these.
+   * This list comes from evince.
+   */
+  keyfile_remove_keys (keyfile,
+                       TERMINAL_PAGE_SETUP_GROUP_NAME,
+                       "page-setup-orientation",
+                       "page-setup-margin-bottom",
+                       "page-setup-margin-left",
+                       "page-setup-margin-right",
+                       "page-setup-margin-top",
+                       NULL);
+
+  save_cache_keyfile (keyfile, TERMINAL_PRINT_SETTINGS_FILENAME);
 }

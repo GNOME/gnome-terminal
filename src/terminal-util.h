@@ -22,8 +22,6 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include "terminal-screen.h"
-
 G_BEGIN_DECLS
 
 void terminal_util_show_error_dialog (GtkWindow *transient_parent,
@@ -31,9 +29,9 @@ void terminal_util_show_error_dialog (GtkWindow *transient_parent,
                                       GError *error,
                                       const char *message_format, ...) G_GNUC_PRINTF(4, 5);
 
-void terminal_util_show_help (const char *topic, GtkWindow  *transient_parent);
+void terminal_util_show_help (const char *topic);
 
-void terminal_util_show_about (GtkWindow *transient_parent);
+void terminal_util_show_about (void);
 
 void terminal_util_set_labelled_by          (GtkWidget  *widget,
                                              GtkLabel   *label);
@@ -53,8 +51,12 @@ char *terminal_util_concat_uris (char **uris,
 
 char *terminal_util_get_licence_text (void);
 
-void terminal_util_load_builder_resource (const char *path,
+void terminal_util_load_widgets_resource (const char *path,
                                           const char *main_object_name,
+                                          const char *object_name,
+                                          ...);
+
+void terminal_util_load_objects_resource (const char *path,
                                           const char *object_name,
                                           ...);
 
@@ -102,6 +104,12 @@ char *terminal_util_hyperlink_uri_label (const char *str);
 
 gchar *terminal_util_utf8_make_valid (const gchar *str,
                                       gssize       len) G_GNUC_MALLOC;
+
+void terminal_util_load_print_settings (GtkPrintSettings **settings,
+                                        GtkPageSetup **page_setup);
+
+void terminal_util_save_print_settings (GtkPrintSettings *settings,
+                                        GtkPageSetup *page_setup);
 
 G_END_DECLS
 
