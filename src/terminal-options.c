@@ -681,8 +681,6 @@ option_title_callback (const gchar *option_name,
 {
   TerminalOptions *options = data;
 
-  deprecated_option_warning (option_name);
-
   if (options->initial_windows)
     {
       InitialTab *it = ensure_top_tab (options);
@@ -1248,7 +1246,7 @@ get_goption_context (TerminalOptions *options)
     {
       "title",
       't',
-      G_OPTION_FLAG_HIDDEN,
+      0,
       G_OPTION_ARG_CALLBACK,
       option_title_callback,
       N_("Set the initial terminal title"),
