@@ -25,6 +25,8 @@
 #include <glib.h>
 #include <stdio.h>
 
+#include <gio/gunixfdlist.h>
+
 #include "terminal-profiles-list.h"
 
 G_BEGIN_DECLS
@@ -100,6 +102,8 @@ typedef struct
   char *title;
   char *working_dir;
   double zoom;
+  GUnixFDList *fd_list;
+  GArray *fd_array;
   guint zoom_set : 1;
   guint active : 1;
 } InitialTab;

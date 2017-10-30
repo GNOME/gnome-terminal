@@ -318,18 +318,21 @@ handle_options (TerminalFactory *factory,
           argv = it->exec_argv ? it->exec_argv : options->exec_argv,
           argc = argv ? g_strv_length (argv) : 0;
 
+          PassFdElement *fd_array = it->fd_array ? (PassFdElement*)it->fd_array->data : NULL;
+          gsize fd_array_len = it->fd_array ? it->fd_array->len : 0;
+
           terminal_client_append_exec_options (&builder,
                                                it->working_dir ? it->working_dir 
                                                                : options->default_working_dir,
-                                               NULL, 0, /* FD array */
+                                               fd_array, fd_array_len,
                                                argc == 0);
 
           if (!terminal_receiver_call_exec_sync (receiver,
                                                  g_variant_builder_end (&builder),
                                                  g_variant_new_bytestring_array ((const char * const *) argv, argc),
-                                                 NULL /* infdlist */, NULL /* outfdlist */,
-                                                NULL /* cancellable */,
-                                                &err)) {
+                                                 it->fd_list, NULL /* outfdlist */,
+                                                 NULL /* cancellable */,
+                                                 &err)) {
             if (handle_exec_error (err, service_name))
               return FALSE;
             else

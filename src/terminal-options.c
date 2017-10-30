@@ -30,6 +30,7 @@
 #include <glib/gprintf.h>
 
 #include "terminal-options.h"
+#include "terminal-client-utils.h"
 #include "terminal-screen.h"
 #include "terminal-app.h"
 #include "terminal-util.h"
@@ -120,6 +121,8 @@ initial_tab_new (char *profile /* adopts */)
   it->zoom = 1.0;
   it->zoom_set = FALSE;
   it->active = FALSE;
+  it->fd_list = NULL;
+  it->fd_array = NULL;
 
   return it;
 }
@@ -131,6 +134,9 @@ initial_tab_free (InitialTab *it)
   g_strfreev (it->exec_argv);
   g_free (it->title);
   g_free (it->working_dir);
+  g_clear_object (&it->fd_list);
+  if (it->fd_array)
+    g_array_unref (it->fd_array);
   g_slice_free (InitialTab, it);
 }
 
@@ -722,6 +728,87 @@ option_working_directory_callback (const gchar *option_name,
 }
 
 static gboolean
+option_pass_std_cb (const gchar *option_name,
+                    const gchar *value,
+                    gpointer     data,
+                    GError     **error)
+{
+  g_assert (g_str_has_prefix (option_name, "--std"));
+  /* We may support this later */
+  g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+               "FD passing of %s is not supported",
+               option_name + 2);
+  return FALSE;
+}
+
+static gboolean
+option_pass_fd_cb (const gchar *option_name,
+                   const gchar *value,
+                   gpointer     data,
+                   GError     **error)
+{
+  TerminalOptions *options = data;
+
+  errno = 0;
+  char *end;
+  gint64 v = g_ascii_strtoll (value, &end, 10);
+  if (errno || end == value || v == -1 || v < G_MININT || v > G_MAXINT) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "Failed to parse \"%s\" as file descriptor number",
+                 value);
+    return FALSE;
+  }
+
+  int fd = v;
+  if (fd == STDIN_FILENO ||
+      fd == STDOUT_FILENO ||
+      fd == STDERR_FILENO) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "FD passing of %s is not supported",
+                 fd == STDIN_FILENO ? "stdin" : fd == STDOUT_FILENO ? "stdout" : "stderr");
+    return FALSE;
+  }
+
+  InitialTab *it = ensure_top_tab (options);
+  if (it->fd_list == NULL)
+    it->fd_list = g_unix_fd_list_new ();
+  if (it->fd_array == NULL)
+    it->fd_array = g_array_sized_new (FALSE /* zero terminate */,
+                                      TRUE /* clear */,
+                                      sizeof (PassFdElement),
+                                      8 /* that should be plenty */);
+
+
+  for (guint i = 0; i < it->fd_array->len; i++) {
+    PassFdElement *e = &g_array_index (it->fd_array, PassFdElement, i);
+    if (e->fd == fd) {
+      g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                   _("Cannot pass FD %d twice"), fd);
+      return FALSE;
+    }
+  }
+
+  int idx = g_unix_fd_list_append (it->fd_list, fd, error);
+  if (idx == -1) {
+    g_prefix_error (error, "%d: ", fd);
+    return FALSE;
+  }
+
+  PassFdElement e = { idx, fd };
+  g_array_append_val (it->fd_array, e);
+
+#if 0
+  if (fd == STDOUT_FILENO ||
+      fd == STDERR_FILENO)
+    verbosity = 0;
+  if (fd == STDIN_FILENO)
+    it->wait = TRUE;
+#endif
+
+  return TRUE;
+}
+
+static gboolean
 option_active_callback (const gchar *option_name,
                         const gchar *value,
                         gpointer     data,
@@ -1260,6 +1347,43 @@ get_goption_context (TerminalOptions *options)
       option_working_directory_callback,
       N_("Set the working directory"),
       N_("DIRNAME")
+    },
+    {
+      "stdin",
+      0,
+      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_pass_std_cb,
+      "Forward stdin",
+      NULL
+    },
+    {
+      "stdout",
+      0,
+      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_pass_std_cb,
+      "Forward stdout",
+      NULL
+    },
+    {
+      "stderr",
+      0,
+      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_pass_std_cb,
+      "Forward stderr",
+      NULL
+    },
+    {
+      "fd",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_pass_fd_cb,
+      N_("Forward file descriptor"),
+      /* FD = file descriptor */
+      N_("FD")
     },
     {
       "zoom",
