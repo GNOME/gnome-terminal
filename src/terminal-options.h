@@ -23,6 +23,7 @@
 #define TERMINAL_OPTIONS_H
 
 #include <glib.h>
+#include <stdio.h>
 
 #include "terminal-profiles-list.h"
 
@@ -144,6 +145,29 @@ gboolean terminal_options_merge_config (TerminalOptions *options,
 void terminal_options_ensure_window (TerminalOptions *options);
 
 void terminal_options_free (TerminalOptions *options);
+
+typedef enum {
+  TERMINAL_VERBOSITY_QUIET  = 0,
+  TERMINAL_VERBOSITY_NORMAL = 1,
+  TERMINAL_VERBOSITY_DETAIL = 2,
+  TERMINAL_VERBOSITY_DEBUG  = 3
+} TerminalVerbosity;
+
+void terminal_fprintf (FILE* fp,
+                       int verbosity_level,
+                       char const* format,
+                       ...) G_GNUC_PRINTF(3, 4);
+
+#define terminal_print_level(level,...) terminal_fprintf(stdout, TERMINAL_VERBOSITY_ ## level, __VA_ARGS__)
+#define terminal_printerr_level(level,...) terminal_fprintf(stderr, TERMINAL_VERBOSITY_ ## level, __VA_ARGS__)
+
+#define terminal_print(...) terminal_print_level(NORMAL, __VA_ARGS__)
+#define terminal_print_detail(...) terminal_print_level(DETAIL, __VA_ARGS__)
+#define terminal_print_debug(...) terminal_print_level(DEBUG, __VA_ARGS__)
+
+#define terminal_printerr_detail(...) terminal_print_level(DETAIL, __VA_ARGS__)
+#define terminal_printerr(...) terminal_print_level(NORMAL, __VA_ARGS__)
+#define terminal_printerr_debug(...) terminal_print_level(DEBUG, __VA_ARGS__)
 
 G_END_DECLS
 

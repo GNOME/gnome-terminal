@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <glib/gprintf.h>
 
 #include "terminal-options.h"
 #include "terminal-screen.h"
@@ -34,6 +35,23 @@
 #include "terminal-util.h"
 #include "terminal-version.h"
 #include "terminal-libgsystem.h"
+
+static int verbosity = 1;
+
+void
+terminal_fprintf (FILE* fp,
+                  int verbosity_level,
+                  char const* format,
+                  ...)
+{
+        if (verbosity < verbosity_level)
+                return;
+
+        va_list args;
+        va_start(args, format);
+        g_vfprintf(fp, format, args);
+        va_end(args);
+}
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
@@ -220,9 +238,9 @@ add_new_window (TerminalOptions *options,
 static void
 deprecated_option_warning (const gchar *option_name)
 {
-  g_printerr (_("Option “%s” is deprecated and might be removed in a later version of gnome-terminal."),
-              option_name);
-  g_printerr ("\n");
+  terminal_printerr (_("Option “%s” is deprecated and might be removed in a later version of gnome-terminal."),
+                     option_name);
+  terminal_printerr ("\n");
 }
 
 static void
@@ -231,8 +249,8 @@ deprecated_command_option_warning (const char *option_name)
   deprecated_option_warning (option_name);
 
   /* %s is being replaced with "-- " (without quotes), which must be used literally, not translatable */
-  g_printerr (_("Use “%s” to terminate the options and put the command line to execute after it."), "-- ");
-  g_printerr ("\n");
+  terminal_printerr (_("Use “%s” to terminate the options and put the command line to execute after it."), "-- ");
+  terminal_printerr ("\n");
 }
 
 static gboolean
@@ -241,9 +259,9 @@ unsupported_option_callback (const gchar *option_name,
                              gpointer     data,
                              GError     **error)
 {
-  g_printerr (_("Option “%s” is no longer supported in this version of gnome-terminal."),
+  terminal_printerr (_("Option “%s” is no longer supported in this version of gnome-terminal."),
               option_name);
-  g_printerr ("\n");
+  terminal_printerr ("\n");
   return TRUE; /* we do not want to bail out here but continue */
 }
 
@@ -266,14 +284,28 @@ option_version_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  g_print ("%s %s ", _("GNOME Terminal"), VERSION);
-  g_print (_("Using VTE version %u.%u.%u"),
-           vte_get_major_version (),
-           vte_get_minor_version (),
-           vte_get_micro_version ());
-  g_print (" %s\n", vte_get_features ());
+  terminal_print ("%s %s ", _("GNOME Terminal"), VERSION);
+  terminal_print (_("Using VTE version %u.%u.%u"),
+                  vte_get_major_version (),
+                  vte_get_minor_version (),
+                  vte_get_micro_version ());
+  terminal_print (" %s\n", vte_get_features ());
 
   exit (EXIT_SUCCESS);
+}
+
+static gboolean
+option_verbosity_cb (const gchar *option_name,
+                     const gchar *value,
+                     gpointer     data,
+                     GError     **error)
+{
+  if (g_str_equal (option_name, "--quiet") || g_str_equal (option_name, "-q"))
+    verbosity = 0;
+  else
+    verbosity++;
+
+  return TRUE;
 }
 
 static gboolean
@@ -349,8 +381,8 @@ option_profile_cb (const gchar *option_name,
                                                      value, error);
   if (profile == NULL)
   {
-      g_printerr ("Profile '%s' specified but not found. Attempting to fall back "
-                  "to the default profile.\n", value);
+      terminal_printerr ("Profile '%s' specified but not found. Attempting to fall back "
+                         "to the default profile.\n", value);
       g_clear_error (error);
       profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                          NULL, error);
@@ -420,8 +452,8 @@ option_window_callback (const gchar *option_name,
 
   if (value && profile == NULL)
   {
-      g_printerr ("Profile '%s' specified but not found. Attempting to fall back "
-                  "to the default profile.\n", value);
+      terminal_printerr ("Profile '%s' specified but not found. Attempting to fall back "
+                         "to the default profile.\n", value);
       g_clear_error (error);
       profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                          NULL, error);
@@ -502,8 +534,8 @@ option_show_menubar_callback (const gchar *option_name,
       iw = g_list_last (options->initial_windows)->data;
       if (iw->force_menubar_state && iw->menubar_state == TRUE)
         {
-          g_printerr (_("“%s” option given twice for the same window\n"),
-                        "--show-menubar");
+          terminal_printerr_detail (_("“%s” option given twice for the same window\n"),
+                                    "--show-menubar");
 
           return TRUE;
         }
@@ -535,8 +567,8 @@ option_hide_menubar_callback (const gchar *option_name,
 
       if (iw->force_menubar_state && iw->menubar_state == FALSE)
         {
-          g_printerr (_("“%s” option given twice for the same window\n"),
-                        "--hide-menubar");
+          terminal_printerr_detail (_("“%s” option given twice for the same window\n"),
+                                    "--hide-menubar");
           return TRUE;
         }
 
@@ -735,17 +767,17 @@ option_zoom_callback (const gchar *option_name,
 
   if (zoom < (TERMINAL_SCALE_MINIMUM + 1e-6))
     {
-      g_printerr (_("Zoom factor “%g” is too small, using %g\n"),
-                  zoom,
-                  TERMINAL_SCALE_MINIMUM);
+      terminal_printerr (_("Zoom factor “%g” is too small, using %g\n"),
+                         zoom,
+                         TERMINAL_SCALE_MINIMUM);
       zoom = TERMINAL_SCALE_MINIMUM;
     }
 
   if (zoom > (TERMINAL_SCALE_MAXIMUM - 1e-6))
     {
-      g_printerr (_("Zoom factor “%g” is too large, using %g\n"),
-                  zoom,
-                  TERMINAL_SCALE_MAXIMUM);
+      terminal_printerr (_("Zoom factor “%g” is too large, using %g\n"),
+                         zoom,
+                         TERMINAL_SCALE_MAXIMUM);
       zoom = TERMINAL_SCALE_MAXIMUM;
     }
 
@@ -823,7 +855,7 @@ terminal_options_parse (const char *working_directory,
   int i;
   char **argv = *argvp;
 
-  options = g_slice_new0 (TerminalOptions);
+  options = g_new0 (TerminalOptions, 1);
 
   options->remote_arguments = FALSE;
   options->default_window_menubar_forced = FALSE;
@@ -1100,6 +1132,8 @@ get_goption_context (TerminalOptions *options)
     },
     { "preferences", 0, 0, G_OPTION_ARG_NONE, &options->show_preferences, N_("Show preferences window"), NULL },
     { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
+    { "verbose", 'v', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, option_verbosity_cb, N_("Increase diagnostic verbosity"), NULL },
+    { "quiet", 'q', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, option_verbosity_cb, N_("Suppress output"), NULL },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 

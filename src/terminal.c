@@ -88,25 +88,25 @@ handle_factory_error (GError *error,
     return FALSE;
 
   g_dbus_error_strip_remote_error (error);
-  g_printerr ("%s\n\n", error->message);
+  terminal_printerr ("%s\n\n", error->message);
 
   switch (exit_status) {
   case _EXIT_FAILURE_WRONG_ID:
-    g_printerr ("You tried to run gnome-terminal-server with elevated privileged. This is not supported.\n");
+    terminal_printerr ("You tried to run gnome-terminal-server with elevated privileged. This is not supported.\n");
     break;
   case _EXIT_FAILURE_NO_UTF8:
-    g_printerr ("The environment that gnome-terminal-server was launched with specified a non-UTF-8 locale. This is not supported.\n");
+    terminal_printerr ("The environment that gnome-terminal-server was launched with specified a non-UTF-8 locale. This is not supported.\n");
     break;
   case _EXIT_FAILURE_UNSUPPORTED_LOCALE:
-    g_printerr ("The environment that gnome-terminal-server was launched with specified an unsupported locale.\n");
+    terminal_printerr ("The environment that gnome-terminal-server was launched with specified an unsupported locale.\n");
     break;
   case _EXIT_FAILURE_GTK_INIT:
-    g_printerr ("The environment that gnome-terminal-server was launched with most likely contained an incorrect or unset \"DISPLAY\" variable.\n");
+    terminal_printerr ("The environment that gnome-terminal-server was launched with most likely contained an incorrect or unset \"DISPLAY\" variable.\n");
     break;
   default:
     break;
   }
-  g_printerr ("See https://wiki.gnome.org/Apps/Terminal/FAQ#Exit_status_%d for more information.\n", exit_status);
+  terminal_printerr ("See https://wiki.gnome.org/Apps/Terminal/FAQ#Exit_status_%d for more information.\n", exit_status);
 
   return TRUE;
 }
@@ -119,7 +119,7 @@ handle_create_instance_error (GError *error,
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
-  g_printerr ("Error creating terminal: %s\n", error->message);
+  terminal_printerr ("Error creating terminal: %s\n", error->message);
   return FALSE; /* don't abort */
 }
 
@@ -132,7 +132,7 @@ handle_create_receiver_proxy_error (GError *error,
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
-  g_printerr ("Failed to create proxy for terminal: %s\n", error->message);
+  terminal_printerr ("Failed to create proxy for terminal: %s\n", error->message);
   return FALSE; /* don't abort */
 }
 
@@ -144,7 +144,7 @@ handle_exec_error (GError *error,
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
-  g_printerr ("Error: %s\n", error->message);
+  terminal_printerr ("Error: %s\n", error->message);
   return FALSE; /* don't abort */
 }
 
@@ -158,7 +158,7 @@ handle_show_preferences (const char *service_name)
 
   bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
   if (bus == NULL) {
-    g_printerr ("Failed to get session bus: %s\n", error->message);
+    terminal_printerr ("Failed to get session bus: %s\n", error->message);
     return;
   }
 
@@ -186,7 +186,7 @@ handle_show_preferences (const char *service_name)
                                     30 * 1000 /* ms timeout */,
                                     NULL /* cancelleable */,
                                     &error)) {
-    g_printerr ("Activate call failed: %s\n", error->message);
+    terminal_printerr ("Activate call failed: %s\n", error->message);
     return;
   }
 }
@@ -376,7 +376,7 @@ main (int argc, char **argv)
                                     &argc, &argv,
                                     &error);
   if (options == NULL) {
-    g_printerr (_("Failed to parse arguments: %s\n"), error->message);
+    terminal_printerr (_("Failed to parse arguments: %s\n"), error->message);
     goto out;
   }
 
@@ -387,7 +387,7 @@ main (int argc, char **argv)
     options->startup_id = terminal_client_get_fallback_startup_id ();
   /* Still NULL? */
   if (options->startup_id == NULL)
-    g_printerr("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
+    terminal_printerr_detail ("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
@@ -404,8 +404,8 @@ main (int argc, char **argv)
                                                      &error);
   if (factory == NULL) {
     if (!handle_factory_error (error, service_name))
-      g_printerr ("Error constructing proxy for %s:%s: %s\n",
-                  service_name, TERMINAL_FACTORY_OBJECT_PATH, error->message);
+      terminal_printerr ("Error constructing proxy for %s:%s: %s\n",
+                         service_name, TERMINAL_FACTORY_OBJECT_PATH, error->message);
 
     goto out;
   }
