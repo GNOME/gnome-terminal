@@ -135,10 +135,10 @@ terminal-marshal.h: $(srcdir)/terminal-marshal.list
 	|| ( rm -f terminal-marshal.h.tmp && exit 1 )
 
 terminal-marshal.c: $(srcdir)/terminal-marshal.list
-	$(AM_V_GEN) ( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
-				--header \
+	$(AM_V_GEN) ( echo '#include "terminal-marshal.h"' > terminal-marshal.c.tmp  && \
+	              $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
 				--body \
-				--internal > terminal-marshal.c.tmp \
+				--internal >> terminal-marshal.c.tmp \
 		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
