@@ -92,6 +92,7 @@ typedef struct
   char *sm_config_prefix;
 
   guint zoom_set : 1;
+  guint any_wait : 1;
 } TerminalOptions;
 
 typedef struct
@@ -106,6 +107,7 @@ typedef struct
   GArray *fd_array;
   guint zoom_set : 1;
   guint active : 1;
+  guint wait : 1;
 } InitialTab;
 
 typedef struct

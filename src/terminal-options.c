@@ -728,6 +728,28 @@ option_working_directory_callback (const gchar *option_name,
 }
 
 static gboolean
+option_wait_cb (const gchar *option_name,
+                const gchar *value,
+                gpointer     data,
+                GError     **error)
+{
+  TerminalOptions *options = data;
+
+  if (options->any_wait) {
+    g_set_error_literal (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                         _("Can only use --wait once"));
+    return FALSE;
+  }
+
+  options->any_wait = TRUE;
+
+  InitialTab *it = ensure_top_tab (options);
+  it->wait = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
 option_pass_std_cb (const gchar *option_name,
                     const gchar *value,
                     gpointer     data,
@@ -957,6 +979,7 @@ terminal_options_parse (const char *working_directory,
   options->default_title = NULL;
   options->zoom = 1.0;
   options->zoom_set = FALSE;
+  options->any_wait = FALSE;
 
   options->screen_number = -1;
   options->default_working_dir = g_strdup (working_directory);
@@ -1001,11 +1024,12 @@ terminal_options_parse (const char *working_directory,
   retval = g_option_context_parse (context, argcp, argvp, error);
   g_option_context_free (context);
 
-  if (retval)
-    return options;
+  if (!retval) {
+    terminal_options_free (options);
+    return NULL;
+  }
 
-  terminal_options_free (options);
-  return NULL;
+  return options;
 }
 
 /**
@@ -1347,6 +1371,15 @@ get_goption_context (TerminalOptions *options)
       option_working_directory_callback,
       N_("Set the working directory"),
       N_("DIRNAME")
+    },
+    {
+      "wait",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_wait_cb,
+      N_("Wait until the child exits"),
+      NULL
     },
     {
       "stdin",

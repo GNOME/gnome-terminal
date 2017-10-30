@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include <glib.h>
 #include <glib/gstdio.h>
@@ -44,6 +45,50 @@
 
 GS_DEFINE_CLEANUP_FUNCTION0(TerminalOptions*, gs_local_options_free, terminal_options_free)
 #define gs_free_options __attribute__ ((cleanup(gs_local_options_free)))
+
+/* Wait-for-exit helper */
+
+typedef struct {
+  GMainLoop *loop;
+  int status;
+} RunData;
+
+static void
+receiver_child_exited_cb (TerminalReceiver *receiver,
+                          int status,
+                          RunData *data)
+{
+  data->status = status;
+
+  if (g_main_loop_is_running (data->loop))
+    g_main_loop_quit (data->loop);
+}
+
+static int
+run_receiver (TerminalReceiver *receiver)
+{
+  RunData data = { g_main_loop_new (NULL, FALSE), 0 };
+  gulong id = g_signal_connect (receiver, "child-exited",
+                                G_CALLBACK (receiver_child_exited_cb), &data);
+  g_main_loop_run (data.loop);
+  g_signal_handler_disconnect (receiver, id);
+  g_main_loop_unref (data.loop);
+
+  /* Mangle the exit status */
+  int exit_code;
+  if (WIFEXITED (data.status))
+    exit_code = WEXITSTATUS (data.status);
+  else if (WIFSIGNALED (data.status))
+    exit_code = 128 + (int) WTERMSIG (data.status);
+  else if (WCOREDUMP (data.status))
+    exit_code = 127;
+  else
+    exit_code = 127;
+
+  return exit_code;
+}
+
+/* Factory helpers */
 
 static gboolean
 get_factory_exit_status (const char *message,
@@ -197,7 +242,7 @@ handle_show_preferences (const char *service_name)
  * @options: a #TerminalOptions
  * @allow_resume: whether to merge the terminal configuration from the
  *   saved session on resume
- * @error: a #GError to fill in
+ * @wait_for_receiver: location to store the #TerminalReceiver to wait for
  *
  * Processes @options. It loads or saves the terminal configuration, or
  * opens the specified windows and tabs.
@@ -208,7 +253,8 @@ handle_show_preferences (const char *service_name)
 static gboolean
 handle_options (TerminalFactory *factory,
                 const char *service_name,
-                TerminalOptions *options)
+                TerminalOptions *options,
+                TerminalReceiver **wait_for_receiver)
 {
   GList *lw;
   const char *encoding;
@@ -300,7 +346,7 @@ handle_options (TerminalFactory *factory,
 
           receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                                                               G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                                               (it->wait ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
                                                                options->server_app_id ? options->server_app_id
                                                                                       : TERMINAL_APPLICATION_ID,
                                                                object_path,
@@ -338,6 +384,9 @@ handle_options (TerminalFactory *factory,
             else
               continue; /* Continue processing the remaining options! */
           }
+
+          if (it->wait)
+            gs_transfer_out_value (wait_for_receiver, &receiver);
         }
     }
 
@@ -413,7 +462,14 @@ main (int argc, char **argv)
     goto out;
   }
 
-  if (handle_options (factory, service_name, options))
+  TerminalReceiver *receiver = NULL;
+  if (!handle_options (factory, service_name, options, &receiver))
+    goto out;
+
+  if (receiver != NULL) {
+    exit_code = run_receiver (receiver);
+    g_object_unref (receiver);
+  } else
     exit_code = EXIT_SUCCESS;
 
  out:
