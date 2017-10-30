@@ -146,6 +146,17 @@ struct _TerminalWindowPrivate
 #endif
 #endif
 
+/* See bug #789356 */
+#if GTK_CHECK_VERSION (3, 22, 23)
+#define WINDOW_STATE_TILED (GDK_WINDOW_STATE_TILED       | \
+                            GDK_WINDOW_STATE_LEFT_TILED  | \
+                            GDK_WINDOW_STATE_RIGHT_TILED | \
+                            GDK_WINDOW_STATE_TOP_TILED   | \
+                            GDK_WINDOW_STATE_BOTTOM_TILED)
+#else
+#define WINDOW_STATE_TILED (GDK_WINDOW_STATE_TILED)
+#endif
+
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
@@ -1886,7 +1897,9 @@ screen_resize_window_cb (TerminalScreen *screen,
   GtkWidget *widget = GTK_WIDGET (screen);
 
   if (gtk_widget_get_realized (widget) &&
-      (gdk_window_get_state (gtk_widget_get_window (widget)) & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)) != 0)
+      (gdk_window_get_state (gtk_widget_get_window (widget)) & (GDK_WINDOW_STATE_MAXIMIZED |
+                                                                GDK_WINDOW_STATE_FULLSCREEN |
+                                                                WINDOW_STATE_TILED)) != 0)
     return;
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), columns, rows);
@@ -3325,7 +3338,7 @@ terminal_window_update_size (TerminalWindow *window)
 
   if (gdk_window != NULL &&
       (gdk_window_get_state (gdk_window) &
-       (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED)))
+       (GDK_WINDOW_STATE_MAXIMIZED | WINDOW_STATE_TILED)))
     {
       /* Don't adjust the size of maximized or tiled (snapped, half-maximized)
        * windows: if we do, there will be ugly gaps of up to 1 character cell
