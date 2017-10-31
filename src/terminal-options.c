@@ -750,20 +750,6 @@ option_wait_cb (const gchar *option_name,
 }
 
 static gboolean
-option_pass_std_cb (const gchar *option_name,
-                    const gchar *value,
-                    gpointer     data,
-                    GError     **error)
-{
-  g_assert (g_str_has_prefix (option_name, "--std"));
-  /* We may support this later */
-  g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
-               "FD passing of %s is not supported",
-               option_name + 2);
-  return FALSE;
-}
-
-static gboolean
 option_pass_fd_cb (const gchar *option_name,
                    const gchar *value,
                    gpointer     data,
@@ -1379,33 +1365,6 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       option_wait_cb,
       N_("Wait until the child exits"),
-      NULL
-    },
-    {
-      "stdin",
-      0,
-      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_pass_std_cb,
-      "Forward stdin",
-      NULL
-    },
-    {
-      "stdout",
-      0,
-      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_pass_std_cb,
-      "Forward stdout",
-      NULL
-    },
-    {
-      "stderr",
-      0,
-      G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_pass_std_cb,
-      "Forward stderr",
       NULL
     },
     {
