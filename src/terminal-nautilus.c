@@ -705,24 +705,22 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 
   terminal_file_info = get_terminal_file_info_from_uri (uri);
 
-  if (terminal_file_info == FILE_INFO_SFTP ||
-      terminal_file_info == FILE_INFO_DESKTOP ||
-      uri_has_local_path (uri)) {
-    /* local locations or SSH */
+
+  if (terminal_file_info == FILE_INFO_SFTP) {
+    /* remote SSH location */
     item = terminal_nautilus_menu_item_new (nautilus,
                                             file_info, 
                                             terminal_file_info, 
                                             gtk_widget_get_screen (window),
                                             FALSE, 
-                                            terminal_file_info == FILE_INFO_SFTP, 
+                                            TRUE,
                                             FALSE);
     items = g_list_append (items, item);
   }
 
-  if ((terminal_file_info == FILE_INFO_SFTP ||
-        terminal_file_info == FILE_INFO_OTHER) &&
+  if (terminal_file_info == FILE_INFO_DESKTOP ||
       uri_has_local_path (uri)) {
-    /* remote locations that offer local back-mapping */
+    /* local locations and remote locations that offer local back-mapping */
     item = terminal_nautilus_menu_item_new (nautilus,
                                             file_info, 
                                             terminal_file_info, 
