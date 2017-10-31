@@ -93,31 +93,6 @@ PKG_CHECK_MODULES([TERM],
    $PLATFORM_DEPS])
 
 # ****
-# Vala
-# ****
-
-AC_MSG_CHECKING([whether gterminal is requested])
-AC_ARG_ENABLE([gterminal],[AS_HELP_STRING([--disable-gterminal],[Disable gterminal])],
-  [],[enable_gterminal=yes])
-AC_MSG_RESULT([$enable_gterminal])
-
-AS_IF([test "$enable_gterminal" = "yes"],[
-  AM_PROG_VALAC([0.26])
-
-  VALA_CHECK_PACKAGES([glib-2.0 gio-2.0 gio-unix-2.0 linux posix])
-  PKG_CHECK_MODULES([GTERMINAL],
-    [glib-2.0 >= $GLIB_REQUIRED
-     gio-2.0 >= $GIO_REQUIRED
-     gio-unix-2.0 >= $GIO_REQUIRED
-     gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
-     dconf >= $DCONF_REQUIRED
-     uuid
-     $PLATFORM_DEPS])
-])
-
-AM_CONDITIONAL([ENABLE_GTERMINAL],[test "$enable_gterminal" = "yes"])
-
-# ****
 # DBus
 # ****
 
