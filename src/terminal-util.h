@@ -67,9 +67,6 @@ gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);
 
 void terminal_util_add_proxy_env (GHashTable *env_table);
 
-GdkScreen *terminal_util_get_screen_by_display_name (const char *display_name,
-                                                     int screen_number);
-
 char **terminal_util_get_etc_shells (void);
 
 gboolean terminal_util_get_is_shell (const char *command);

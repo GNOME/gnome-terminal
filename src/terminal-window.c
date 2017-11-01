@@ -385,7 +385,7 @@ action_new_terminal_cb (GSimpleAction *action,
     return;
 
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
-    window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
+    window = terminal_app_new_window (app, 0);
 
   new_working_directory = terminal_screen_get_current_dir (priv->active_screen);
   terminal_app_new_terminal (app, window, profile, NULL /* use profile encoding */,
@@ -925,7 +925,7 @@ action_tab_detach_cb (GSimpleAction *action,
   terminal_screen_get_size (screen, &width, &height);
   g_snprintf (geometry, sizeof (geometry), "%dx%d", width, height);
 
-  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
+  new_window = terminal_app_new_window (app, 0);
 
   terminal_window_move_screen (window, new_window, screen, -1);
 
@@ -1698,8 +1698,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
 
-  new_window = terminal_app_new_window (terminal_app_get (),
-                                        gtk_widget_get_screen (GTK_WIDGET (source_window)));
+  new_window = terminal_app_new_window (terminal_app_get (), 0);
   new_priv = new_window->priv;
   new_priv->present_on_insert = TRUE;
 

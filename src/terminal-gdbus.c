@@ -409,31 +409,28 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     window = TERMINAL_WINDOW (win);
     have_new_window = FALSE;
   } else {
-    const char *startup_id, *display_name, *role;
+    const char *startup_id, *role;
     gboolean start_maximized, start_fullscreen;
-    int screen_number;
-    GdkScreen *gdk_screen;
 
     /* Create a new window */
 
-    if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
-      g_dbus_method_invocation_return_error_literal (invocation, 
-                                                     G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                                     "No display specified");
-      goto out;
-    }
+    /* We don't do multi-display anymore */
+#if 0
+    const char *display_name;
+    if (g_variant_lookup (options, "display", "^&ay", &display_name)) {
+      GdkDisplay *display = gdk_display_get_default ();
+      const char *default_display_name = display ? gdk_display_get_name (display) : NULL;
 
-    screen_number = 0;
-    gdk_screen = terminal_util_get_screen_by_display_name (display_name, screen_number);
-    if (gdk_screen == NULL) {
-      g_dbus_method_invocation_return_error (invocation, 
-                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                             "No screen %d on display \"%s\"",
-                                             screen_number, display_name);
-      goto out;
+      if (g_strcmp0 (default_display_name, display_name) != 0)
+        g_printerr ("Display \"%s\" requested but default display is \"%s\"\n",
+                    display_name, default_display_name);
+      /* Open window on our display anyway */
     }
+#endif
 
-    window = terminal_app_new_window (app, gdk_screen);
+    int monitor = 0;
+
+    window = terminal_app_new_window (app, monitor);
 
     if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
       gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);

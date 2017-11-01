@@ -67,7 +67,7 @@ void terminal_app_remove_profile (TerminalApp *app,
                                   GSettings *profile);
 
 TerminalWindow * terminal_app_new_window   (TerminalApp *app,
-                                            GdkScreen *screen);
+                                            int monitor);
 
 TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            TerminalWindow  *window,

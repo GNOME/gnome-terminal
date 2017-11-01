@@ -923,16 +923,20 @@ terminal_app_new (const char *app_id)
                        NULL);
 }
 
+/**
+ * terminal_app_new_window:
+ * @app:
+ * @monitor:
+ *
+ * Creates a new #TerminalWindow on the default display.
+ */
 TerminalWindow *
 terminal_app_new_window (TerminalApp *app,
-                         GdkScreen *screen)
+                         int monitor)
 {
   TerminalWindow *window;
 
   window = terminal_window_new (G_APPLICATION (app));
-
-  if (screen)
-    gtk_window_set_screen (GTK_WINDOW (window), screen);
 
   return window;
 }
