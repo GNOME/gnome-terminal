@@ -78,7 +78,6 @@ struct _TerminalNautilusMenuItem {
   NautilusMenuItem parent_instance;
 
   TerminalNautilus *nautilus;
-  GdkScreen *screen;
   NautilusFileInfo *file_info;
   gboolean run_in_mc;
   gboolean remote_terminal;
@@ -323,7 +322,6 @@ typedef struct {
   guint32 timestamp;
   char *path;
   char *uri;
-  char *display;
   TerminalFileInfo info;
   gboolean remote;
   gboolean run_in_mc;
@@ -335,7 +333,6 @@ exec_data_free (ExecData *data)
   g_object_unref (data->nautilus);
   g_free (data->path);
   g_free (data->uri);
-  g_free (data->display);
 
   g_free (data);
 }
@@ -375,7 +372,7 @@ create_terminal (ExecData *data /* transfer full */)
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
   terminal_client_append_create_instance_options (&builder,
-                                                  data->display,
+                                                  gdk_display_get_name (gdk_display_get_default ()),
                                                   startup_id,
                                                   NULL /* geometry */,
                                                   NULL /* role */,
@@ -520,7 +517,6 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
   data->timestamp = gtk_get_current_event_time ();
   data->path = path;
   data->uri = uri;
-  data->display = gdk_screen_make_display_name (menu_item->screen);
   data->info = info;
   data->remote = menu_item->remote_terminal;
   data->run_in_mc = menu_item->run_in_mc;
@@ -540,10 +536,6 @@ terminal_nautilus_menu_item_dispose (GObject *object)
 {
   TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (object);
 
-  if (menu_item->screen != NULL) {
-    g_object_unref (menu_item->screen);
-    menu_item->screen = NULL;
-  }
   if (menu_item->file_info != NULL) {
     g_object_unref (menu_item->file_info);
     menu_item->file_info = NULL;
@@ -576,7 +568,6 @@ static NautilusMenuItem *
 terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
                                  NautilusFileInfo *file_info,
                                  TerminalFileInfo  terminal_file_info,
-                                 GdkScreen        *screen,
                                  gboolean          run_in_mc,
                                  gboolean          remote_terminal,
                                  gboolean          is_file_item)
@@ -674,7 +665,6 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
 
   item->nautilus = g_object_ref (nautilus);
   item->file_info = g_object_ref (file_info);
-  item->screen = g_object_ref (screen);
   item->run_in_mc = run_in_mc;
   item->remote_terminal = remote_terminal;
 
@@ -710,8 +700,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
     /* remote SSH location */
     item = terminal_nautilus_menu_item_new (nautilus,
                                             file_info, 
-                                            terminal_file_info, 
-                                            gtk_widget_get_screen (window),
+                                            terminal_file_info,
                                             FALSE, 
                                             TRUE,
                                             FALSE);
@@ -723,8 +712,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
     /* local locations and remote locations that offer local back-mapping */
     item = terminal_nautilus_menu_item_new (nautilus,
                                             file_info, 
-                                            terminal_file_info, 
-                                            gtk_widget_get_screen (window),
+                                            terminal_file_info,
                                             FALSE, 
                                             FALSE, 
                                             FALSE);
@@ -738,8 +726,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
        uri_has_local_path (uri))) {
     item = terminal_nautilus_menu_item_new (nautilus,
                                             file_info, 
-                                            terminal_file_info, 
-                                            gtk_widget_get_screen (window), 
+                                            terminal_file_info,
                                             TRUE, 
                                             FALSE, 
                                             FALSE);
@@ -794,8 +781,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
           uri_has_local_path (uri)) {
         item = terminal_nautilus_menu_item_new (nautilus,
                                                 file_info,
-                                                terminal_file_info, 
-                                                gtk_widget_get_screen (window),
+                                                terminal_file_info,
                                                 FALSE, 
                                                 terminal_file_info == FILE_INFO_SFTP, 
                                                 TRUE);
@@ -806,8 +792,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
           uri_has_local_path (uri)) {
         item = terminal_nautilus_menu_item_new (nautilus,
                                                 file_info, 
-                                                terminal_file_info, 
-                                                gtk_widget_get_screen (window), 
+                                                terminal_file_info,
                                                 FALSE, 
                                                 FALSE, 
                                                 TRUE);
@@ -819,8 +804,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
           uri_has_local_path (uri)) {
         item = terminal_nautilus_menu_item_new (nautilus,
                                                 file_info, 
-                                                terminal_file_info, 
-                                                gtk_widget_get_screen (window), 
+                                                terminal_file_info,
                                                 TRUE, 
                                                 TRUE, 
                                                 FALSE);
