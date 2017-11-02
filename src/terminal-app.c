@@ -446,9 +446,9 @@ menu_append_numbered (GMenu *menu,
   str = g_string_sized_new (strlen (label) + 4 + 1 + 8);
 
   if (num < 10)
-    g_string_append_printf (str, "%Id. ", num);
+    g_string_append_printf (str, "_%Id. ", num);
   else if (num < 36)
-    g_string_append_printf (str, "%c. ",  (char)('A' + num - 10));
+    g_string_append_printf (str, "_%c. ",  (char)('A' + num - 10));
 
   /* Append the label with underscores elided */
   for (p = label; *p; p++) {
