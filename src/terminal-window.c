@@ -302,6 +302,13 @@ popup_menu_selection_done_cb (GtkMenu *menu,
   gtk_menu_detach (menu);
 }
 
+static void
+popup_menu_detach_cb (GtkWidget *attach_widget,
+                      GtkMenu *menu)
+{
+  gtk_menu_shell_deactivate (GTK_MENU_SHELL (menu));
+}
+
 static GtkWidget *
 context_menu_new (GMenuModel *menu,
                   GtkWidget *widget)
@@ -312,7 +319,8 @@ context_menu_new (GMenuModel *menu,
   gtk_style_context_add_class (gtk_widget_get_style_context (popup_menu),
                                GTK_STYLE_CLASS_CONTEXT_MENU);
   gtk_menu_set_screen (GTK_MENU (popup_menu), gtk_widget_get_screen (widget));
-  gtk_menu_attach_to_widget (GTK_MENU (popup_menu), widget, NULL);
+  gtk_menu_attach_to_widget (GTK_MENU (popup_menu), widget,
+                             (GtkMenuDetachFunc)popup_menu_detach_cb);
 
   popup_menu_remove_accelerators (popup_menu);
 
@@ -1753,12 +1761,16 @@ unset_popup_info (TerminalWindow *window)
 
 static void
 screen_popup_menu_deactivate_cb (GtkWidget *popup,
-                                 TerminalWindow *window)
+                                 GtkWidget *window)
 {
   g_signal_handlers_disconnect_by_func
     (popup, G_CALLBACK (screen_popup_menu_deactivate_cb), window);
 
-  unset_popup_info (window);
+  GtkWidget *attach_widget = gtk_menu_get_attach_widget (GTK_MENU (popup));
+  if (attach_widget != window || !TERMINAL_IS_WINDOW (attach_widget))
+    return;
+
+  unset_popup_info (TERMINAL_WINDOW (attach_widget));
 }
 
 static void
