@@ -298,7 +298,8 @@ popup_menu_selection_done_cb (GtkMenu *menu,
   /* g_printerr ("selection-done %p\n", menu); */
 
   /* This will remove the ref from the attach widget widget, and destroy the menu */
-  gtk_menu_detach (menu);
+  if (gtk_menu_get_attach_widget (menu) != NULL)
+    gtk_menu_detach (menu);
 }
 
 static void
