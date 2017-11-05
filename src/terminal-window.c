@@ -52,7 +52,6 @@ struct _TerminalWindowPrivate
   GtkClipboard *clipboard;
 
   TerminalScreenPopupInfo *popup_info;
-  guint remove_popup_info_idle;
 
   GtkWidget *menubar;
   TerminalMdiContainer *mdi_container;
@@ -1720,12 +1719,6 @@ remove_popup_info (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (priv->remove_popup_info_idle != 0)
-    {
-      g_source_remove (priv->remove_popup_info_idle);
-      priv->remove_popup_info_idle = 0;
-    }
-
   if (priv->popup_info != NULL)
     {
       terminal_screen_popup_info_unref (priv->popup_info);
@@ -1733,44 +1726,18 @@ remove_popup_info (TerminalWindow *window)
     }
 }
 
-static gboolean
-idle_remove_popup_info (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-
-  priv->remove_popup_info_idle = 0;
-  remove_popup_info (window);
-  return FALSE;
-}
-
 static void
-unset_popup_info (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-
-  /* Unref the event from idle since we still need it
-   * from the action callbacks which will run before idle.
-   */
-  if (priv->remove_popup_info_idle == 0 &&
-      priv->popup_info != NULL)
-    {
-      priv->remove_popup_info_idle =
-        g_idle_add ((GSourceFunc) idle_remove_popup_info, window);
-    }
-}
-
-static void
-screen_popup_menu_deactivate_cb (GtkWidget *popup,
-                                 GtkWidget *window)
+screen_popup_menu_selection_done_cb (GtkWidget *popup,
+                                     GtkWidget *window)
 {
   g_signal_handlers_disconnect_by_func
-    (popup, G_CALLBACK (screen_popup_menu_deactivate_cb), window);
+    (popup, G_CALLBACK (screen_popup_menu_selection_done_cb), window);
 
   GtkWidget *attach_widget = gtk_menu_get_attach_widget (GTK_MENU (popup));
   if (attach_widget != window || !TERMINAL_IS_WINDOW (attach_widget))
     return;
 
-  unset_popup_info (TERMINAL_WINDOW (attach_widget));
+  remove_popup_info (TERMINAL_WINDOW (attach_widget));
 }
 
 static void
@@ -1902,8 +1869,9 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   /* Now create the popup menu and show it */
   GtkWidget *popup_menu = context_menu_new (G_MENU_MODEL (menu), GTK_WIDGET (window));
 
-  g_signal_connect (popup_menu, "deactivate",
-                    G_CALLBACK (screen_popup_menu_deactivate_cb), window);
+  /* Remove the popup info after the menu is done */
+  g_signal_connect (popup_menu, "selection-done",
+                    G_CALLBACK (screen_popup_menu_selection_done_cb), window);
 
   gtk_menu_popup (GTK_MENU (popup_menu), NULL, NULL,
                   NULL, NULL,
