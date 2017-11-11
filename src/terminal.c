@@ -281,7 +281,7 @@ handle_options (TerminalOptions *options,
 
       gs_free char *previous_screen_object_path = NULL;
       if (iw->implicit_first_window)
-        previous_screen_object_path = g_strdup (options->parent_screen_object_path);
+        previous_screen_object_path = g_strdup (terminal_options_get_parent_screen_object_path (options));
 
       /* Now add the tabs */
       for (GList *lt = iw->tabs; lt != NULL; lt = lt->next)
@@ -305,9 +305,10 @@ handle_options (TerminalOptions *options,
                                                           iw->start_fullscreen);
 
           /* This will be used to apply missing defaults */
-          if (options->parent_screen_object_path)
+          const char *parent_screen_object_path = terminal_options_get_parent_screen_object_path (options);
+          if (parent_screen_object_path != NULL)
             g_variant_builder_add (&builder, "{sv}",
-                                   "parent-screen", g_variant_new_object_path (options->parent_screen_object_path));
+                                   "parent-screen", g_variant_new_object_path (parent_screen_object_path));
 
           /* This will be used to get the parent window */
           if (previous_screen_object_path)

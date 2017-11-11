@@ -154,7 +154,9 @@ void terminal_options_ensure_window (TerminalOptions *options);
 
 const char *terminal_options_get_service_name (TerminalOptions *options);
 
-  void terminal_options_free (TerminalOptions *options);
+const char *terminal_options_get_parent_screen_object_path (TerminalOptions *options);
+
+void terminal_options_free (TerminalOptions *options);
 
 typedef enum {
   TERMINAL_VERBOSITY_QUIET  = 0,

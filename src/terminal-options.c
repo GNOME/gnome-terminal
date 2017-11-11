@@ -1240,6 +1240,25 @@ terminal_options_get_service_name (TerminalOptions *options)
 }
 
 /**
+ * terminal_options_get_service_name:
+ * @options:
+ *
+ * Returns the DBus object path of the parent screen, if using the server
+ * specified by the GNOME_TERMINAL_SERVICE environment variable; else %NULL.
+ *
+ * Returns: (transfer none): the DBus object path of the parent screen, or %NULL
+ */
+const char *
+terminal_options_get_parent_screen_object_path (TerminalOptions *options)
+{
+  if (options->server_app_id == NULL &&
+      options->server_unique_name != NULL)
+    return options->parent_screen_object_path;
+
+  return NULL;
+}
+
+/**
  * terminal_options_free:
  * @options:
  *
