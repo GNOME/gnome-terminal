@@ -196,6 +196,7 @@ handle_exec_error (const char *service_name,
 
 static gboolean
 factory_proxy_new_for_service_name (const char *service_name,
+                                    gboolean ping_server,
                                     TerminalFactory **factory_ptr,
                                     char **service_name_ptr,
                                     GError **error)
@@ -219,6 +220,26 @@ factory_proxy_new_for_service_name (const char *service_name,
     g_propagate_error (error, err);
     err = NULL;
     return FALSE;
+  }
+
+  if (ping_server) {
+    /* If we try to use the environment specified server, we need to make
+     * sure it actually exists so we can later fall back to the default name.
+     * There doesn't appear to a way to fail proxy creation above if the
+     * unique name doesn't exist; so we do it this way.
+     */
+    gs_unref_variant GVariant *v = g_dbus_proxy_call_sync (G_DBUS_PROXY (factory),
+                                                           "org.freedesktop.DBus.Peer.Ping",
+                                                           g_variant_new ("()"),
+                                                           G_DBUS_CALL_FLAGS_NONE,
+                                                           1000 /* 1s */,
+                                                           NULL /* cancelleable */,
+                                                           &err);
+    if (v == NULL) {
+      g_propagate_error (error, err);
+      err = NULL;
+      return FALSE;
+    }
   }
 
   gs_transfer_out_value (factory_ptr, &factory);
@@ -246,6 +267,7 @@ factory_proxy_new (TerminalOptions *options,
       options->server_unique_name != NULL) {
     gs_free_error GError *err = NULL;
     if (factory_proxy_new_for_service_name (options->server_unique_name,
+                                            TRUE,
                                             factory_ptr,
                                             service_name_ptr,
                                             &err)) {
@@ -253,7 +275,10 @@ factory_proxy_new (TerminalOptions *options,
       return TRUE;
     }
 
-    g_print ("code %d msg %s\n", err->code, err->message);
+    terminal_printerr ("Failed to use specified server: %s\n",
+                       err->message);
+    terminal_printerr ("Falling back to default server.\n");
+
     /* Fall back to the default */
     service_name = NULL;
   }
@@ -261,6 +286,7 @@ factory_proxy_new (TerminalOptions *options,
   *parent_screen_object_path_ptr = NULL;
 
   return factory_proxy_new_for_service_name (service_name,
+                                             FALSE,
                                              factory_ptr,
                                              service_name_ptr,
                                              error);
