@@ -55,7 +55,7 @@ TerminalReceiverImpl *terminal_receiver_impl_new (TerminalScreen *screen);
 
 TerminalScreen *terminal_receiver_impl_get_screen (TerminalReceiverImpl *impl);
 
-void _terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl);
+void terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl);
 
 /* ------------------------------------------------------------------------- */
 

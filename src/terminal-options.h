@@ -65,8 +65,12 @@ typedef struct
 {
   TerminalSettingsList *profiles_list; /* may be NULL */
 
+  gboolean print_environment;
+
+  char    *server_unique_name;
+  char    *parent_screen_object_path;
+
   char    *server_app_id;
-  gboolean remote_arguments;
   char    *startup_id;
   char    *display_name;
   gboolean show_preferences;
@@ -112,6 +116,7 @@ typedef struct
 typedef struct
 {
   guint source_tag;
+  gboolean implicit_first_window;
 
   GList *tabs; /* list of InitialTab */
 
@@ -136,9 +141,7 @@ typedef enum {
   TERMINAL_OPTION_ERROR_INCOMPATIBLE_CONFIG_FILE
 } TerminalOptionError;
 
-TerminalOptions *terminal_options_parse (const char *working_directory,
-                                         const char *startup_id,
-                                         int *argcp,
+TerminalOptions *terminal_options_parse (int *argcp,
                                          char ***argvp,
                                          GError **error);
 
@@ -149,7 +152,9 @@ gboolean terminal_options_merge_config (TerminalOptions *options,
 
 void terminal_options_ensure_window (TerminalOptions *options);
 
-void terminal_options_free (TerminalOptions *options);
+const char *terminal_options_get_service_name (TerminalOptions *options);
+
+  void terminal_options_free (TerminalOptions *options);
 
 typedef enum {
   TERMINAL_VERBOSITY_QUIET  = 0,
@@ -160,7 +165,7 @@ typedef enum {
 
 void terminal_fprintf (FILE* fp,
                        int verbosity_level,
-                       char const* format,
+                       const char* format,
                        ...) G_GNUC_PRINTF(3, 4);
 
 #define terminal_print_level(level,...) terminal_fprintf(stdout, TERMINAL_VERBOSITY_ ## level, __VA_ARGS__)
@@ -173,6 +178,13 @@ void terminal_fprintf (FILE* fp,
 #define terminal_printerr_detail(...) terminal_print_level(DETAIL, __VA_ARGS__)
 #define terminal_printerr(...) terminal_print_level(NORMAL, __VA_ARGS__)
 #define terminal_printerr_debug(...) terminal_print_level(DEBUG, __VA_ARGS__)
+
+#if GLIB_CHECK_VERSION (2, 50, 0)
+GLogWriterOutput terminal_log_writer (GLogLevelFlags log_level,
+                                      const GLogField *fields,
+                                      gsize n_fields,
+                                      gpointer user_data);
+#endif
 
 G_END_DECLS
 

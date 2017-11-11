@@ -28,6 +28,7 @@
 #include "terminal-mdi-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+#include "terminal-libgsystem.h"
 
 /* ------------------------------------------------------------------------- */
 
@@ -44,17 +45,6 @@ enum {
 
 /* helper functions */
 
-static char *
-get_object_path_for_screen (TerminalWindow *window,
-                            TerminalScreen *screen)
-{
-  return g_strdelimit (g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_FORMAT,
-                                        gtk_application_window_get_id (GTK_APPLICATION_WINDOW (window)),
-                                        terminal_screen_get_uuid (screen)),
-                       "-", '_');
-
-}
-
 static void
 child_exited_cb (VteTerminal *terminal,
                  int exit_code,
@@ -65,7 +55,7 @@ child_exited_cb (VteTerminal *terminal,
 
 static void
 terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
-                                TerminalScreen *screen)
+                                   TerminalScreen *screen)
 {
   TerminalReceiverImplPrivate *priv;
 
@@ -85,11 +75,8 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
   priv->screen = screen;
   if (screen) {
     g_signal_connect (screen, "child-exited",
-                      G_CALLBACK (child_exited_cb), 
+                      G_CALLBACK (child_exited_cb),
                       impl);
-    g_signal_connect_swapped (screen, "destroy",
-                              G_CALLBACK (_terminal_receiver_impl_unset_screen), 
-                              impl);
   }
 
   g_object_notify (G_OBJECT (impl), "screen");
@@ -97,7 +84,7 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
 
 /* Class implementation */
 
-static gboolean 
+static gboolean
 terminal_receiver_impl_exec (TerminalReceiver *receiver,
                              GDBusMethodInvocation *invocation,
                              GUnixFDList *fd_list,
@@ -292,15 +279,15 @@ terminal_receiver_impl_class_init (TerminalReceiverImplClass *klass)
 TerminalReceiverImpl *
 terminal_receiver_impl_new (TerminalScreen *screen)
 {
-  return g_object_new (TERMINAL_TYPE_RECEIVER_IMPL, 
-                       "screen", screen, 
+  return g_object_new (TERMINAL_TYPE_RECEIVER_IMPL,
+                       "screen", screen,
                        NULL);
 }
 
 /**
  * terminal_receiver_impl_get_screen:
  * @impl: a #TerminalReceiverImpl
- * 
+ *
  * Returns: (transfer none): the impl's #TerminalScreen, or %NULL
  */
 TerminalScreen *
@@ -312,13 +299,13 @@ terminal_receiver_impl_get_screen (TerminalReceiverImpl *impl)
 }
 
 /**
- * terminal_receiver_impl_get_screen:
+ * terminal_receiver_impl_unget_screen:
  * @impl: a #TerminalReceiverImpl
- * 
+ *
  * Unsets the impls #TerminalScreen.
  */
 void
-_terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl)
+terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl)
 {
   g_return_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl));
 
@@ -334,85 +321,69 @@ struct _TerminalFactoryImplPrivate {
   gpointer dummy;
 };
 
-#define RECEIVER_IMPL_SKELETON_DATA_KEY  "terminal-object-skeleton"
-
-static void
-screen_destroy_cb (GObject *screen,
-                   gpointer user_data)
-{
-  GDBusObjectManagerServer *object_manager;
-  GDBusObjectSkeleton *skeleton;
-  const char *object_path;
-
-  skeleton = g_object_get_data (screen, RECEIVER_IMPL_SKELETON_DATA_KEY);
-  if (skeleton == NULL)
-    return;
-
-  object_manager = terminal_app_get_object_manager (terminal_app_get ());
-  object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (skeleton));
-  g_dbus_object_manager_server_unexport (object_manager, object_path);
-  g_object_set_data (screen, RECEIVER_IMPL_SKELETON_DATA_KEY, NULL);
-}
-
 static gboolean
 terminal_factory_impl_create_instance (TerminalFactory *factory,
                                        GDBusMethodInvocation *invocation,
                                        GVariant *options)
 {
   TerminalApp *app = terminal_app_get ();
-  TerminalSettingsList *profiles_list;
-  GDBusObjectManagerServer *object_manager;
-  TerminalWindow *window;
-  TerminalScreen *screen;
-  TerminalReceiverImpl *impl;
-  TerminalObjectSkeleton *skeleton;
-  char *object_path;
-  GSettings *profile = NULL;
-  const char *profile_uuid, *title, *encoding;
-  gboolean zoom_set = FALSE;
-  gdouble zoom = 1.0;
-  guint window_id;
-  gboolean show_menubar;
-  gboolean active;
-  gboolean have_new_window, present_window, present_window_set;
-  GError *err = NULL;
 
-  /* Look up the profile */
-  if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
-    profile_uuid = NULL;
+  /* If a parent screen is specified, use that to fill in missing information */
+  TerminalScreen *parent_screen = NULL;
+  const char *parent_screen_object_path;
+  if (g_variant_lookup (options, "parent-screen", "&o", &parent_screen_object_path)) {
+    parent_screen = terminal_app_get_screen_by_object_path (app, parent_screen_object_path);
+    if (parent_screen == NULL) {
+      g_dbus_method_invocation_return_error (invocation,
+                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Failed to get screen from object path %s",
+                                             parent_screen_object_path);
+      return TRUE;
+    }
+  }
 
-  if (!g_variant_lookup (options, "encoding", "&s", &encoding))
-    encoding = NULL; /* use profile encoding */
-
-  profiles_list = terminal_app_get_profiles_list (app);
-  profile = terminal_profiles_list_ref_profile_by_uuid (profiles_list, profile_uuid, &err);
-  if (profile == NULL)
-    {
-      g_dbus_method_invocation_return_gerror (invocation, err);
-      g_error_free (err);
-      goto out;
+  /* Try getting a parent window, first by parent screen then by window ID;
+   * if that fails, create a new window.
+   */
+  TerminalWindow *window = NULL;
+  gboolean have_new_window = FALSE;
+  const char *window_from_screen_object_path;
+  if (g_variant_lookup (options, "window-from-screen", "&o", &window_from_screen_object_path)) {
+    TerminalScreen *window_screen =
+      terminal_app_get_screen_by_object_path (app, window_from_screen_object_path);
+    if (window_screen == NULL) {
+      g_dbus_method_invocation_return_error (invocation,
+                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Failed to get screen from object path %s",
+                                             parent_screen_object_path);
+      return TRUE;
     }
 
-  if (g_variant_lookup (options, "window-id", "u", &window_id)) {
-    GtkWindow *win;
+    GtkWidget *win = gtk_widget_get_toplevel (GTK_WIDGET (window_screen));
+    if (TERMINAL_IS_WINDOW (win))
+      window = TERMINAL_WINDOW (win);
+  }
 
-    win = gtk_application_get_window_by_id (GTK_APPLICATION (app), window_id);
+  /* Support old client */
+  guint window_id;
+  if (window == NULL && g_variant_lookup (options, "window-id", "u", &window_id)) {
+    GtkWindow *win = gtk_application_get_window_by_id (GTK_APPLICATION (app), window_id);
 
     if (!TERMINAL_IS_WINDOW (win)) {
       g_dbus_method_invocation_return_error (invocation,
                                              G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
                                              "Nonexisting window %u referenced",
                                              window_id);
-      goto out;
+      return TRUE;
     }
 
     window = TERMINAL_WINDOW (win);
-    have_new_window = FALSE;
-  } else {
+  }
+
+  /* Still no parent window? Create a new one */
+  if (window == NULL) {
     const char *startup_id, *role;
     gboolean start_maximized, start_fullscreen;
-
-    /* Create a new window */
 
     /* We don't do multi-display anymore */
 #if 0
@@ -429,8 +400,8 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 #endif
 
     int monitor = 0;
-
     window = terminal_app_new_window (app, monitor);
+    have_new_window = TRUE;
 
     if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
       gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
@@ -439,6 +410,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     if (g_variant_lookup (options, "role", "&s", &role))
       gtk_window_set_role (GTK_WINDOW (window), role);
 
+    gboolean show_menubar;
     if (g_variant_lookup (options, "show-menubar", "b", &show_menubar))
       terminal_window_set_menubar_visible (window, show_menubar);
 
@@ -454,42 +426,61 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     have_new_window = TRUE;
   }
 
-  g_assert (window != NULL);
+  g_assert_nonnull (window);
 
+  const char *title;
   if (!g_variant_lookup (options, "title", "&s", &title))
     title = NULL;
-  if (g_variant_lookup (options, "zoom", "d", &zoom))
-    zoom_set = TRUE;
 
-  screen = terminal_screen_new (profile, encoding, NULL, title, NULL, NULL,
-                                zoom_set ? zoom : 1.0);
+  double zoom;
+  if (!g_variant_lookup (options, "zoom", "d", &zoom)) {
+    if (parent_screen != NULL)
+      zoom = vte_terminal_get_font_scale (VTE_TERMINAL (parent_screen));
+    else
+      zoom = 1.0;
+  }
+
+  const char *encoding;
+  if (!g_variant_lookup (options, "encoding", "&s", &encoding)) {
+    if (parent_screen != NULL)
+      encoding = vte_terminal_get_encoding (VTE_TERMINAL (parent_screen));
+    else
+      encoding = NULL; /* use profile encoding */
+  }
+
+  /* Look up the profile */
+  gs_unref_object GSettings *profile = NULL;
+  const char *profile_uuid;
+  if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
+    profile_uuid = NULL;
+
+  if (profile_uuid == NULL && parent_screen != NULL) {
+    profile = terminal_screen_ref_profile (parent_screen);
+  } else {
+    GError *err = NULL;
+    profile = terminal_profiles_list_ref_profile_by_uuid (terminal_app_get_profiles_list (app),
+                                                          profile_uuid /* default if NULL */,
+                                                          &err);
+    if (profile == NULL) {
+      g_dbus_method_invocation_return_gerror (invocation, err);
+      g_error_free (err);
+      return TRUE;
+    }
+  }
+
+  g_assert_nonnull (profile);
+
+  /* Now we can create the new screen */
+  TerminalScreen *screen = terminal_screen_new (profile, encoding, NULL, title, NULL, NULL, zoom);
   terminal_window_add_screen (window, screen, -1);
 
-  object_path = get_object_path_for_screen (window, screen);
-  g_assert (g_variant_is_object_path (object_path));
-
-  skeleton = terminal_object_skeleton_new (object_path);
-  impl = terminal_receiver_impl_new (screen);
-  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (impl));
-  g_object_unref (impl);
-
-  object_manager = terminal_app_get_object_manager (app);
-  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (skeleton));
-  g_object_set_data_full (G_OBJECT (screen), RECEIVER_IMPL_SKELETON_DATA_KEY,
-                          skeleton, (GDestroyNotify) g_object_unref);
-  g_signal_connect (screen, "destroy",
-                    G_CALLBACK (screen_destroy_cb), app);
-
+  /* Apply window properties */
+  gboolean active;
   if (g_variant_lookup (options, "active", "b", &active) &&
       active) {
     terminal_window_switch_screen (window, screen);
     gtk_widget_grab_focus (GTK_WIDGET (screen));
   }
-
-  if (g_variant_lookup (options, "present-window", "b", &present_window))
-    present_window_set = TRUE;
-  else
-    present_window_set = FALSE;
 
   if (have_new_window) {
     const char *geometry;
@@ -500,16 +491,14 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
                              "Invalid geometry string \"%s\"", geometry);
   }
 
+  gboolean present_window;
+  gboolean present_window_set = g_variant_lookup (options, "present-window", "b", &present_window);
+
   if (have_new_window || (present_window_set && present_window))
     gtk_window_present (GTK_WINDOW (window));
 
+  gs_free char *object_path = terminal_app_dup_screen_object_path (app, screen);
   terminal_factory_complete_create_instance (factory, invocation, object_path);
-
-  g_free (object_path);
-
-out:
-  if (profile)
-    g_object_unref (profile);
 
   return TRUE; /* handled */
 }
@@ -532,7 +521,7 @@ terminal_factory_impl_init (TerminalFactoryImpl *impl)
 static void
 terminal_factory_impl_class_init (TerminalFactoryImplClass *klass)
 {
-  g_type_class_add_private (klass, sizeof (TerminalFactoryImplPrivate));
+  /* g_type_class_add_private (klass, sizeof (TerminalFactoryImplPrivate)); */
 }
 
 /**

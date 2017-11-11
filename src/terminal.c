@@ -36,6 +36,7 @@
 #include <gtk/gtk.h>
 
 #include "terminal-debug.h"
+#include "terminal-defines.h"
 #include "terminal-i18n.h"
 #include "terminal-options.h"
 #include "terminal-gdbus-generated.h"
@@ -91,8 +92,8 @@ run_receiver (TerminalReceiver *receiver)
 /* Factory helpers */
 
 static gboolean
-get_factory_exit_status (const char *message,
-                         const char *service_name,
+get_factory_exit_status (TerminalOptions *options,
+                         const char *message,
                          int *exit_status)
 {
   gs_free char *pattern = NULL, *number = NULL;
@@ -102,7 +103,8 @@ get_factory_exit_status (const char *message,
   char *end;
   GError *err = NULL;
 
-  pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$", service_name);
+  pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$",
+                             terminal_options_get_service_name (options));
   regex = g_regex_new (pattern, 0, 0, &err);
   g_assert_no_error (err);
 
@@ -110,7 +112,7 @@ get_factory_exit_status (const char *message,
     return FALSE;
 
   number = g_match_info_fetch (match_info, 1);
-  g_assert_true (number != NULL);
+  g_assert_nonnull (number);
 
   errno = 0;
   v = g_ascii_strtoll (number, &end, 10);
@@ -122,14 +124,14 @@ get_factory_exit_status (const char *message,
 }
 
 static gboolean
-handle_factory_error (GError *error,
-                      const char *service_name)
+handle_factory_error (TerminalOptions *options,
+                      GError *error)
 {
   int exit_status;
 
   if (!g_dbus_error_is_remote_error (error) ||
       !g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SPAWN_CHILD_EXITED) ||
-      !get_factory_exit_status (error->message, service_name, &exit_status))
+      !get_factory_exit_status (options, error->message, &exit_status))
     return FALSE;
 
   g_dbus_error_strip_remote_error (error);
@@ -157,10 +159,10 @@ handle_factory_error (GError *error,
 }
 
 static gboolean
-handle_create_instance_error (GError *error,
-                              const char *service_name)
+handle_create_instance_error (TerminalOptions *options,
+                              GError *error)
 {
-  if (handle_factory_error (error, service_name))
+  if (handle_factory_error (options, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -169,11 +171,10 @@ handle_create_instance_error (GError *error,
 }
 
 static gboolean
-handle_create_receiver_proxy_error (GError *error,
-                                    const char *service_name,
-                                    const char *object_path)
+handle_create_receiver_proxy_error (TerminalOptions *options,
+                                    GError *error)
 {
-  if (handle_factory_error (error, service_name))
+  if (handle_factory_error (options, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -182,10 +183,10 @@ handle_create_receiver_proxy_error (GError *error,
 }
 
 static gboolean
-handle_exec_error (GError *error,
-                   const char *service_name)
+handle_exec_error (TerminalOptions *options,
+                   GError *error)
 {
-  if (handle_factory_error (error, service_name))
+  if (handle_factory_error (options, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -194,7 +195,7 @@ handle_exec_error (GError *error,
 }
 
 static void
-handle_show_preferences (const char *service_name)
+handle_show_preferences (TerminalOptions *options)
 {
   gs_free_error GError *error = NULL;
   gs_unref_object GDBusConnection *bus = NULL;
@@ -211,6 +212,7 @@ handle_show_preferences (const char *service_name)
    * is derived from the service name, i.e. for service name
    * "foo.bar.baz" the object path is "/foo/bar/baz".
    */
+  const char *service_name = terminal_options_get_service_name (options);
   object_path = g_strdelimit (g_strdup_printf (".%s", service_name), ".", '/');
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sava{sv})"));
@@ -251,46 +253,43 @@ handle_show_preferences (const char *service_name)
  *   error
  */
 static gboolean
-handle_options (TerminalFactory *factory,
-                const char *service_name,
-                TerminalOptions *options,
+handle_options (TerminalOptions *options,
+                TerminalFactory *factory,
                 TerminalReceiver **wait_for_receiver)
 {
-  GList *lw;
-  const char *encoding;
 
   /* We need to forward the locale encoding to the server, see bug #732128 */
+  const char *encoding;
   g_get_charset (&encoding);
 
   if (options->show_preferences) {
-    handle_show_preferences (service_name);
+    handle_show_preferences (options);
   } else {
     /* Make sure we open at least one window */
     terminal_options_ensure_window (options);
   }
 
-  for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
+  const char *factory_unique_name = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (factory));
+
+  for (GList *lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {
       InitialWindow *iw = lw->data;
-      GList *lt;
-      guint window_id;
 
-      g_assert (iw->tabs);
+      g_assert_nonnull (iw);
 
-      window_id = 0;
+      guint window_id = 0;
+
+      gs_free char *previous_screen_object_path = NULL;
+      if (iw->implicit_first_window)
+        previous_screen_object_path = g_strdup (options->parent_screen_object_path);
 
       /* Now add the tabs */
-      for (lt = iw->tabs; lt != NULL; lt = lt->next)
+      for (GList *lt = iw->tabs; lt != NULL; lt = lt->next)
         {
           InitialTab *it = lt->data;
-          GVariantBuilder builder;
-          char **argv;
-          int argc;
-          char *p;
-          gs_free_error GError *err = NULL;
-          gs_free char *object_path = NULL;
-          gs_unref_object TerminalReceiver *receiver = NULL;
+          g_assert_nonnull (it);
 
+          GVariantBuilder builder;
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
           terminal_client_append_create_instance_options (&builder,
@@ -305,10 +304,18 @@ handle_options (TerminalFactory *factory,
                                                           iw->start_maximized,
                                                           iw->start_fullscreen);
 
+          /* This will be used to apply missing defaults */
+          if (options->parent_screen_object_path)
+            g_variant_builder_add (&builder, "{sv}",
+                                   "parent-screen", g_variant_new_object_path (options->parent_screen_object_path));
+
+          /* This will be used to get the parent window */
+          if (previous_screen_object_path)
+            g_variant_builder_add (&builder, "{sv}",
+                                   "window-from-screen", g_variant_new_object_path (previous_screen_object_path));
           if (window_id)
             g_variant_builder_add (&builder, "{sv}",
                                    "window-id", g_variant_new_uint32 (window_id));
-
           /* Restored windows shouldn't demand attention; see bug #586308. */
           if (iw->source_tag == SOURCE_SESSION)
             g_variant_builder_add (&builder, "{sv}",
@@ -320,19 +327,22 @@ handle_options (TerminalFactory *factory,
             g_variant_builder_add (&builder, "{sv}",
                                    "show-menubar", g_variant_new_boolean (iw->menubar_state));
 
-          if (!terminal_factory_call_create_instance_sync 
+          gs_free_error GError *err = NULL;
+          gs_free char *object_path = NULL;
+          if (!terminal_factory_call_create_instance_sync
                  (factory,
                   g_variant_builder_end (&builder),
                   &object_path,
                   NULL /* cancellable */,
                   &err)) {
-            if (handle_create_instance_error (err, service_name))
+            if (handle_create_instance_error (options, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
           }
 
-          p = strstr (object_path, "/window/");
+          /* Deprecated and not working on new server anymore */
+          char *p = strstr (object_path, "/window/");
           if (p) {
             char *end = NULL;
             guint64 value;
@@ -344,16 +354,19 @@ handle_options (TerminalFactory *factory,
               window_id = (guint) value;
           }
 
-          receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                                                               (it->wait ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
-                                                               options->server_app_id ? options->server_app_id
-                                                                                      : TERMINAL_APPLICATION_ID,
-                                                               object_path,
-                                                               NULL /* cancellable */,
-                                                               &err);
+          g_free (previous_screen_object_path);
+          previous_screen_object_path = g_strdup (object_path);
+
+          gs_unref_object TerminalReceiver *receiver =
+            terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                                                      (it->wait ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
+                                                      factory_unique_name,
+                                                      object_path,
+                                                      NULL /* cancellable */,
+                                                      &err);
           if (receiver == NULL) {
-            if (handle_create_receiver_proxy_error (err, service_name, object_path))
+            if (handle_create_receiver_proxy_error (options, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
@@ -361,14 +374,14 @@ handle_options (TerminalFactory *factory,
 
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
-          argv = it->exec_argv ? it->exec_argv : options->exec_argv,
-          argc = argv ? g_strv_length (argv) : 0;
+          char **argv = it->exec_argv ? it->exec_argv : options->exec_argv;
+          int argc = argv ? g_strv_length (argv) : 0;
 
           PassFdElement *fd_array = it->fd_array ? (PassFdElement*)it->fd_array->data : NULL;
           gsize fd_array_len = it->fd_array ? it->fd_array->len : 0;
 
           terminal_client_append_exec_options (&builder,
-                                               it->working_dir ? it->working_dir 
+                                               it->working_dir ? it->working_dir
                                                                : options->default_working_dir,
                                                fd_array, fd_array_len,
                                                argc == 0);
@@ -379,7 +392,7 @@ handle_options (TerminalFactory *factory,
                                                  it->fd_list, NULL /* outfdlist */,
                                                  NULL /* cancellable */,
                                                  &err)) {
-            if (handle_exec_error (err, service_name))
+            if (handle_exec_error (options, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
@@ -387,6 +400,9 @@ handle_options (TerminalFactory *factory,
 
           if (it->wait)
             gs_transfer_out_value (wait_for_receiver, &receiver);
+
+          if (options->print_environment)
+            g_print ("%s=%s\n", TERMINAL_ENV_SCREEN, object_path);
         }
     }
 
@@ -398,14 +414,18 @@ main (int argc, char **argv)
 {
   int i;
   gs_free char **argv_copy = NULL;
-  const char *startup_id, *display_name;
+  const char *display_name;
   GdkDisplay *display;
   gs_free_options TerminalOptions *options = NULL;
   gs_unref_object TerminalFactory *factory = NULL;
   gs_free_error GError *error = NULL;
-  gs_free char *working_directory = NULL;
   int exit_code = EXIT_FAILURE;
-  const char *service_name;
+
+#if GLIB_CHECK_VERSION (2, 50, 0)
+  g_log_set_writer_func (terminal_log_writer, NULL, NULL);
+#endif
+
+  g_set_prgname ("gterminalclient");
 
   setlocale (LC_ALL, "");
 
@@ -419,14 +439,7 @@ main (int argc, char **argv)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-
-  working_directory = g_get_current_dir ();
-
-  options = terminal_options_parse (working_directory,
-                                    startup_id,
-                                    &argc, &argv,
-                                    &error);
+  options = terminal_options_parse (&argc, &argv, &error);
   if (options == NULL) {
     terminal_printerr (_("Failed to parse arguments: %s\n"), error->message);
     goto out;
@@ -434,19 +447,11 @@ main (int argc, char **argv)
 
   g_set_application_name (_("Terminal"));
 
-  /* Do this here so that gdk_display is initialized */
-  if (options->startup_id == NULL)
-    options->startup_id = terminal_client_get_fallback_startup_id ();
-  /* Still NULL? */
-  if (options->startup_id == NULL)
-    terminal_printerr_detail ("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
-
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
   options->display_name = g_strdup (display_name);
 
-  service_name = options->server_app_id ? options->server_app_id : TERMINAL_APPLICATION_ID;
-
+  const char *service_name = terminal_options_get_service_name (options);
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
@@ -455,15 +460,23 @@ main (int argc, char **argv)
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
-    if (!handle_factory_error (error, service_name))
+    if (!handle_factory_error (options, error))
       terminal_printerr ("Error constructing proxy for %s:%s: %s\n",
                          service_name, TERMINAL_FACTORY_OBJECT_PATH, error->message);
 
     goto out;
   }
 
+  if (options->print_environment) {
+    const char *name_owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (factory));
+    if (name_owner != NULL)
+      g_print ("%s=%s\n", TERMINAL_ENV_SERVICE_NAME, name_owner);
+    else
+      goto out;
+  }
+
   TerminalReceiver *receiver = NULL;
-  if (!handle_options (factory, service_name, options, &receiver))
+  if (!handle_options (options, factory, &receiver))
     goto out;
 
   if (receiver != NULL) {

@@ -48,6 +48,7 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
+#include "terminal-defines.h"
 #include "terminal-encoding.h"
 #include "terminal-enums.h"
 #include "terminal-intl.h"
@@ -81,6 +82,7 @@ typedef struct
 struct _TerminalScreenPrivate
 {
   char *uuid;
+  gboolean registered; /* D-Bus interface is registered */
 
   GSettings *profile; /* never NULL */
   guint profile_changed_id;
@@ -585,12 +587,12 @@ static void
 terminal_screen_constructed (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
-  TerminalApp *app;
+  TerminalScreenPrivate *priv = screen->priv;
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->constructed (object);
 
-  app = terminal_app_get ();
-  terminal_app_register_screen (app, screen);
+  terminal_app_register_screen (terminal_app_get (), screen);
+  priv->registered = TRUE;
 }
 
 static void
@@ -611,6 +613,11 @@ terminal_screen_dispose (GObject *object)
       priv->launch_child_source_id = 0;
     }
 
+  if (priv->registered) {
+    terminal_app_unregister_screen (terminal_app_get (), screen);
+    priv->registered = FALSE;
+  }
+
   G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 }
 
@@ -619,10 +626,6 @@ terminal_screen_finalize (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
-  TerminalApp *app;
-
-  app = terminal_app_get ();
-  terminal_app_unregister_screen (app, screen);
 
   g_signal_handlers_disconnect_by_func (terminal_app_get_desktop_interface_settings (terminal_app_get ()),
                                         G_CALLBACK (terminal_screen_system_font_changed_cb),
@@ -1038,7 +1041,6 @@ terminal_screen_get_profile (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  g_assert (priv->profile != NULL);
   return priv->profile;
 }
 
@@ -1047,8 +1049,9 @@ terminal_screen_ref_profile (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  g_assert (priv->profile != NULL);
-  return g_object_ref (priv->profile);
+  if (priv->profile != NULL)
+    return g_object_ref (priv->profile);
+  return NULL;
 }
 
 static void
@@ -1166,19 +1169,14 @@ get_child_environment (TerminalScreen *screen,
                        const char *cwd,
                        char **shell)
 {
+  TerminalApp *app = terminal_app_get ();
   TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *term = GTK_WIDGET (screen);
-  GtkWidget *window;
   char **env;
   char *e, *v;
   GHashTable *env_table;
   GHashTableIter iter;
   GPtrArray *retval;
   guint i;
-
-  window = gtk_widget_get_toplevel (term);
-  g_assert (window != NULL);
-  g_assert (gtk_widget_is_toplevel (window));
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
@@ -1218,6 +1216,15 @@ get_child_environment (TerminalScreen *screen,
 
   terminal_util_add_proxy_env (env_table);
 
+  /* Add gnome-terminal private env vars used to communicate back to g-t-server */
+  GDBusConnection *connection = g_application_get_dbus_connection (G_APPLICATION (app));
+  g_hash_table_replace (env_table, g_strdup (TERMINAL_ENV_SERVICE_NAME),
+                        g_strdup (g_dbus_connection_get_unique_name (connection)));
+
+  g_hash_table_replace (env_table, g_strdup (TERMINAL_ENV_SCREEN),
+                        terminal_app_dup_screen_object_path (app, screen));
+
+  /* Convert to strv */
   retval = g_ptr_array_sized_new (g_hash_table_size (env_table));
   g_hash_table_iter_init (&iter, env_table);
   while (g_hash_table_iter_next (&iter, (gpointer *) &e, (gpointer *) &v))

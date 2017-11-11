@@ -79,8 +79,14 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            char           **child_env,
                                            double           zoom);
 
+char *terminal_app_dup_screen_object_path (TerminalApp *app,
+                                           TerminalScreen *screen);
+
 TerminalScreen *terminal_app_get_screen_by_uuid (TerminalApp *app,
                                                  const char  *uuid);
+
+TerminalScreen *terminal_app_get_screen_by_object_path (TerminalApp *app,
+                                                        const char *object_path);
 
 void terminal_app_register_screen (TerminalApp *app,
                                    TerminalScreen *screen);

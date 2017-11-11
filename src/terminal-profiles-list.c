@@ -165,7 +165,6 @@ terminal_profiles_list_ref_profile_by_uuid (TerminalSettingsList *list,
     return NULL;
 
   profile = terminal_settings_list_ref_child (list, profile_uuid);
-  g_assert (profile != NULL);
   return profile;
 }
 

@@ -975,29 +975,104 @@ TerminalScreen *
 terminal_app_get_screen_by_uuid (TerminalApp *app,
                                  const char  *uuid)
 {
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
   return g_hash_table_lookup (app->screen_map, uuid);
+}
+
+char *
+terminal_app_dup_screen_object_path (TerminalApp *app,
+                                     TerminalScreen *screen)
+{
+  char *object_path = g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_FORMAT,
+                                       terminal_screen_get_uuid (screen));
+  object_path = g_strdelimit (object_path,  "-", '_');
+  g_assert (g_variant_is_object_path (object_path));
+  return object_path;
+}
+
+/**
+ * terminal_app_get_receiver_impl_by_object_path:
+ * @app:
+ * @object_path:
+ *
+ * Returns: (transfer full): the #TerminalReceiverImpl for @object_path, or %NULL
+ */
+static TerminalReceiverImpl *
+terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
+                                               const char *object_path)
+{
+  gs_unref_object GDBusObject *skeleton =
+    g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (app->object_manager),
+                                      object_path);
+  if (skeleton == NULL || !TERMINAL_IS_OBJECT_SKELETON (skeleton))
+    return NULL;
+
+  TerminalReceiverImpl *impl = NULL;
+  g_object_get (skeleton, "receiver", &impl, NULL);
+  if (impl == NULL)
+    return NULL;
+
+  g_assert (TERMINAL_IS_RECEIVER_IMPL (impl));
+  return impl;
+}
+
+/**
+ * terminal_app_get_screen_by_object_path:
+ * @app:
+ * @object_path:
+ *
+ * Returns: (transfer full): the #TerminalScreen for @object_path, or %NULL
+ */
+TerminalScreen *
+terminal_app_get_screen_by_object_path (TerminalApp *app,
+                                        const char *object_path)
+{
+  gs_unref_object TerminalReceiverImpl *impl =
+    terminal_app_get_receiver_impl_by_object_path (app, object_path);
+  if (impl == NULL)
+    return NULL;
+
+  return terminal_receiver_impl_get_screen (impl);
 }
 
 void
 terminal_app_register_screen (TerminalApp *app,
                               TerminalScreen *screen)
 {
-  const char *uuid;
-
-  uuid = terminal_screen_get_uuid (screen);
+  const char *uuid = terminal_screen_get_uuid (screen);
   g_hash_table_insert (app->screen_map, g_strdup (uuid), screen);
+
+  gs_free char *object_path = terminal_app_dup_screen_object_path (app, screen);
+  TerminalObjectSkeleton *skeleton = terminal_object_skeleton_new (object_path);
+
+  TerminalReceiverImpl *impl = terminal_receiver_impl_new (screen);
+  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (impl));
+  g_object_unref (impl);
+
+  g_dbus_object_manager_server_export (app->object_manager,
+                                       G_DBUS_OBJECT_SKELETON (skeleton));
 }
 
 void
 terminal_app_unregister_screen (TerminalApp *app,
                                 TerminalScreen *screen)
 {
-  gboolean found;
-  const char *uuid;
+  const char *uuid = terminal_screen_get_uuid (screen);
+  gboolean found = g_hash_table_remove (app->screen_map, uuid);
+  g_warn_if_fail (found);
+  if (!found)
+    return; /* repeat unregistering */
 
-  uuid = terminal_screen_get_uuid (screen);
-  found = g_hash_table_remove (app->screen_map, uuid);
-  g_assert (found == TRUE);
+  gs_free char *object_path = terminal_app_dup_screen_object_path (app, screen);
+  gs_unref_object TerminalReceiverImpl *impl =
+    terminal_app_get_receiver_impl_by_object_path (app, object_path);
+  g_warn_if_fail (impl != NULL);
+
+  if (impl != NULL)
+    terminal_receiver_impl_unset_screen (impl);
+
+  g_dbus_object_manager_server_unexport (app->object_manager, object_path);
 }
 
 GdkAtom *
