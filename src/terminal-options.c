@@ -32,6 +32,7 @@
 #include "terminal-options.h"
 #include "terminal-client-utils.h"
 #include "terminal-defines.h"
+#include "terminal-schemas.h"
 #include "terminal-screen.h"
 #include "terminal-app.h"
 #include "terminal-util.h"
@@ -1205,7 +1206,14 @@ terminal_options_merge_config (TerminalOptions *options,
 void
 terminal_options_ensure_window (TerminalOptions *options)
 {
-  ensure_top_window (options, FALSE);
+  gs_unref_object GSettings *global_settings =
+    g_settings_new (TERMINAL_SETTING_SCHEMA);
+
+  gs_free char *mode_str = g_settings_get_string (global_settings,
+                                                  TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY);
+
+  gboolean implicit_if_first_window = g_str_equal (mode_str, "tab");
+  ensure_top_window (options, implicit_if_first_window);
 }
 
 /**
