@@ -1070,6 +1070,10 @@ terminal_options_parse (int *argcp,
   if (options->startup_id == NULL)
     terminal_printerr_detail ("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
 
+  GdkDisplay *display = gdk_display_get_default ();
+  if (display != NULL)
+    options->display_name = g_strdup (gdk_display_get_name (display));
+
   return options;
 }
 
@@ -1214,48 +1218,6 @@ terminal_options_ensure_window (TerminalOptions *options)
 
   gboolean implicit_if_first_window = g_str_equal (mode_str, "tab");
   ensure_top_window (options, implicit_if_first_window);
-}
-
-/**
- * terminal_options_get_service_name:
- * @options:
- *
- * Returns the DBus service name of the terminal server.
- *
- * Returns: (transfer none): the DBus service name of the terminal server to use
- */
-const char *
-terminal_options_get_service_name (TerminalOptions *options)
-{
-  /* Prefer an explicitly specified --app-id */
-  if (options->server_app_id != NULL)
-    return options->server_app_id;
-
-  /* If that's not set, use the env var, if set */
-  if (options->server_unique_name != NULL)
-    return options->server_unique_name;
-
-  /* Finally fall back to the default */
-  return TERMINAL_APPLICATION_ID;
-}
-
-/**
- * terminal_options_get_service_name:
- * @options:
- *
- * Returns the DBus object path of the parent screen, if using the server
- * specified by the GNOME_TERMINAL_SERVICE environment variable; else %NULL.
- *
- * Returns: (transfer none): the DBus object path of the parent screen, or %NULL
- */
-const char *
-terminal_options_get_parent_screen_object_path (TerminalOptions *options)
-{
-  if (options->server_app_id == NULL &&
-      options->server_unique_name != NULL)
-    return options->parent_screen_object_path;
-
-  return NULL;
 }
 
 /**

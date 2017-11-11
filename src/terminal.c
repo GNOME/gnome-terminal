@@ -92,7 +92,7 @@ run_receiver (TerminalReceiver *receiver)
 /* Factory helpers */
 
 static gboolean
-get_factory_exit_status (TerminalOptions *options,
+get_factory_exit_status (const char *service_name,
                          const char *message,
                          int *exit_status)
 {
@@ -104,7 +104,7 @@ get_factory_exit_status (TerminalOptions *options,
   GError *err = NULL;
 
   pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$",
-                             terminal_options_get_service_name (options));
+                             service_name);
   regex = g_regex_new (pattern, 0, 0, &err);
   g_assert_no_error (err);
 
@@ -124,14 +124,14 @@ get_factory_exit_status (TerminalOptions *options,
 }
 
 static gboolean
-handle_factory_error (TerminalOptions *options,
+handle_factory_error (const char *service_name,
                       GError *error)
 {
   int exit_status;
 
   if (!g_dbus_error_is_remote_error (error) ||
       !g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SPAWN_CHILD_EXITED) ||
-      !get_factory_exit_status (options, error->message, &exit_status))
+      !get_factory_exit_status (service_name, error->message, &exit_status))
     return FALSE;
 
   g_dbus_error_strip_remote_error (error);
@@ -159,10 +159,10 @@ handle_factory_error (TerminalOptions *options,
 }
 
 static gboolean
-handle_create_instance_error (TerminalOptions *options,
+handle_create_instance_error (const char *service_name,
                               GError *error)
 {
-  if (handle_factory_error (options, error))
+  if (handle_factory_error (service_name, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -171,10 +171,10 @@ handle_create_instance_error (TerminalOptions *options,
 }
 
 static gboolean
-handle_create_receiver_proxy_error (TerminalOptions *options,
+handle_create_receiver_proxy_error (const char *service_name,
                                     GError *error)
 {
-  if (handle_factory_error (options, error))
+  if (handle_factory_error (service_name, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -183,10 +183,10 @@ handle_create_receiver_proxy_error (TerminalOptions *options,
 }
 
 static gboolean
-handle_exec_error (TerminalOptions *options,
+handle_exec_error (const char *service_name,
                    GError *error)
 {
-  if (handle_factory_error (options, error))
+  if (handle_factory_error (service_name, error))
     return TRUE;
 
   g_dbus_error_strip_remote_error (error);
@@ -194,8 +194,80 @@ handle_exec_error (TerminalOptions *options,
   return FALSE; /* don't abort */
 }
 
+static gboolean
+factory_proxy_new_for_service_name (const char *service_name,
+                                    TerminalFactory **factory_ptr,
+                                    char **service_name_ptr,
+                                    GError **error)
+{
+  if (service_name == NULL)
+    service_name = TERMINAL_APPLICATION_ID;
+
+  gs_free_error GError *err = NULL;
+  gs_unref_object TerminalFactory *factory =
+    terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                             G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                                             G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                             service_name,
+                                             TERMINAL_FACTORY_OBJECT_PATH,
+                                             NULL /* cancellable */,
+                                             &err);
+  if (factory == NULL) {
+    if (!handle_factory_error (service_name, err))
+      terminal_printerr ("Error constructing proxy for %s:%s: %s\n",
+                         service_name, TERMINAL_FACTORY_OBJECT_PATH, err->message);
+    g_propagate_error (error, err);
+    err = NULL;
+    return FALSE;
+  }
+
+  gs_transfer_out_value (factory_ptr, &factory);
+  *service_name_ptr = g_strdup (service_name);
+  return TRUE;
+}
+
+static gboolean
+factory_proxy_new (TerminalOptions *options,
+                   TerminalFactory **factory_ptr,
+                   char **service_name_ptr,
+                   char **parent_screen_object_path_ptr,
+                   GError **error)
+{
+  const char *service_name = options->server_app_id;
+
+  /* If --app-id was specified, or the environment does not specify
+   * the server to use, create the factory proxy from the given (or default)
+   * name, with no fallback.
+   *
+   * If the server specified by the environment doesn't exist, fall back to the
+   * default server, and ignore the environment-specified parent screen.
+   */
+  if (options->server_app_id == NULL &&
+      options->server_unique_name != NULL) {
+    gs_free_error GError *err = NULL;
+    if (factory_proxy_new_for_service_name (options->server_unique_name,
+                                            factory_ptr,
+                                            service_name_ptr,
+                                            &err)) {
+      *parent_screen_object_path_ptr = g_strdup (options->parent_screen_object_path);
+      return TRUE;
+    }
+
+    g_print ("code %d msg %s\n", err->code, err->message);
+    /* Fall back to the default */
+    service_name = NULL;
+  }
+
+  *parent_screen_object_path_ptr = NULL;
+
+  return factory_proxy_new_for_service_name (service_name,
+                                             factory_ptr,
+                                             service_name_ptr,
+                                             error);
+}
+
 static void
-handle_show_preferences (TerminalOptions *options)
+handle_show_preferences (const char *service_name)
 {
   gs_free_error GError *error = NULL;
   gs_unref_object GDBusConnection *bus = NULL;
@@ -212,7 +284,6 @@ handle_show_preferences (TerminalOptions *options)
    * is derived from the service name, i.e. for service name
    * "foo.bar.baz" the object path is "/foo/bar/baz".
    */
-  const char *service_name = terminal_options_get_service_name (options);
   object_path = g_strdelimit (g_strdup_printf (".%s", service_name), ".", '/');
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sava{sv})"));
@@ -255,6 +326,8 @@ handle_show_preferences (TerminalOptions *options)
 static gboolean
 handle_options (TerminalOptions *options,
                 TerminalFactory *factory,
+                const char *service_name,
+                const char *parent_screen_object_path,
                 TerminalReceiver **wait_for_receiver)
 {
 
@@ -263,7 +336,7 @@ handle_options (TerminalOptions *options,
   g_get_charset (&encoding);
 
   if (options->show_preferences) {
-    handle_show_preferences (options);
+    handle_show_preferences (service_name);
   } else {
     /* Make sure we open at least one window */
     terminal_options_ensure_window (options);
@@ -281,7 +354,7 @@ handle_options (TerminalOptions *options,
 
       gs_free char *previous_screen_object_path = NULL;
       if (iw->implicit_first_window)
-        previous_screen_object_path = g_strdup (terminal_options_get_parent_screen_object_path (options));
+        previous_screen_object_path = g_strdup (parent_screen_object_path);
 
       /* Now add the tabs */
       for (GList *lt = iw->tabs; lt != NULL; lt = lt->next)
@@ -305,7 +378,6 @@ handle_options (TerminalOptions *options,
                                                           iw->start_fullscreen);
 
           /* This will be used to apply missing defaults */
-          const char *parent_screen_object_path = terminal_options_get_parent_screen_object_path (options);
           if (parent_screen_object_path != NULL)
             g_variant_builder_add (&builder, "{sv}",
                                    "parent-screen", g_variant_new_object_path (parent_screen_object_path));
@@ -336,7 +408,7 @@ handle_options (TerminalOptions *options,
                   &object_path,
                   NULL /* cancellable */,
                   &err)) {
-            if (handle_create_instance_error (options, err))
+            if (handle_create_instance_error (service_name, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
@@ -367,7 +439,7 @@ handle_options (TerminalOptions *options,
                                                       NULL /* cancellable */,
                                                       &err);
           if (receiver == NULL) {
-            if (handle_create_receiver_proxy_error (options, err))
+            if (handle_create_receiver_proxy_error (service_name, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
@@ -393,7 +465,7 @@ handle_options (TerminalOptions *options,
                                                  it->fd_list, NULL /* outfdlist */,
                                                  NULL /* cancellable */,
                                                  &err)) {
-            if (handle_exec_error (options, err))
+            if (handle_exec_error (service_name, err))
               return FALSE;
             else
               continue; /* Continue processing the remaining options! */
@@ -413,13 +485,6 @@ handle_options (TerminalOptions *options,
 int
 main (int argc, char **argv)
 {
-  int i;
-  gs_free char **argv_copy = NULL;
-  const char *display_name;
-  GdkDisplay *display;
-  gs_free_options TerminalOptions *options = NULL;
-  gs_unref_object TerminalFactory *factory = NULL;
-  gs_free_error GError *error = NULL;
   int exit_code = EXIT_FAILURE;
 
 #if GLIB_CHECK_VERSION (2, 50, 0)
@@ -435,50 +500,42 @@ main (int argc, char **argv)
   _terminal_debug_init ();
 
   /* Make a NULL-terminated copy since we may need it later */
-  argv_copy = g_new (char *, argc + 1);
+  gs_free char **argv_copy = g_new (char *, argc + 1);
+  int i;
   for (i = 0; i < argc; ++i)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
-  options = terminal_options_parse (&argc, &argv, &error);
+  gs_free_error GError *error = NULL;
+  gs_free_options TerminalOptions *options = terminal_options_parse (&argc, &argv, &error);
   if (options == NULL) {
     terminal_printerr (_("Failed to parse arguments: %s\n"), error->message);
-    goto out;
+    return exit_code;
   }
 
   g_set_application_name (_("Terminal"));
 
-  display = gdk_display_get_default ();
-  display_name = gdk_display_get_name (display);
-  options->display_name = g_strdup (display_name);
-
-  const char *service_name = terminal_options_get_service_name (options);
-  factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                                     G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                                                     G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     service_name,
-                                                     TERMINAL_FACTORY_OBJECT_PATH,
-                                                     NULL /* cancellable */,
-                                                     &error);
-  if (factory == NULL) {
-    if (!handle_factory_error (options, error))
-      terminal_printerr ("Error constructing proxy for %s:%s: %s\n",
-                         service_name, TERMINAL_FACTORY_OBJECT_PATH, error->message);
-
-    goto out;
-  }
+  gs_unref_object TerminalFactory *factory = NULL;
+  gs_free char *service_name = NULL;
+  gs_free char *parent_screen_object_path = NULL;
+  if (!factory_proxy_new (options,
+                          &factory,
+                          &service_name,
+                          &parent_screen_object_path,
+                          &error))
+    return exit_code;
 
   if (options->print_environment) {
     const char *name_owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (factory));
     if (name_owner != NULL)
       g_print ("%s=%s\n", TERMINAL_ENV_SERVICE_NAME, name_owner);
     else
-      goto out;
+      return exit_code;
   }
 
   TerminalReceiver *receiver = NULL;
-  if (!handle_options (options, factory, &receiver))
-    goto out;
+  if (!handle_options (options, factory, service_name, parent_screen_object_path, &receiver))
+    return exit_code;
 
   if (receiver != NULL) {
     exit_code = run_receiver (receiver);
@@ -486,6 +543,5 @@ main (int argc, char **argv)
   } else
     exit_code = EXIT_SUCCESS;
 
- out:
   return exit_code;
 }
