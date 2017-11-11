@@ -61,6 +61,9 @@ update_tab_visibility (TerminalNotebook *notebook,
   int new_n_pages;
   gboolean show_tabs;
 
+  if (gtk_widget_in_destruction (GTK_WIDGET (notebook)))
+    return;
+
   new_n_pages = gtk_notebook_get_n_pages (gtk_notebook) + change;
   /* Don't do anything if we're going to have zero pages (and thus close the window) */
   if (new_n_pages == 0)

@@ -3115,7 +3115,10 @@ terminal_window_update_geometry (TerminalWindow *window)
   int char_width, char_height;
   int chrome_width, chrome_height;
   int csd_width = 0, csd_height = 0;
-  
+
+  if (gtk_widget_in_destruction (GTK_WIDGET (window)))
+    return;
+
   if (priv->active_screen == NULL)
     return;
 
