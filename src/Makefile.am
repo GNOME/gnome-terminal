@@ -350,7 +350,9 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	terminal.about \
-	terminal-menus.ui \
+	terminal-appmenu.ui \
+	terminal-menubar.ui \
+	terminal-notebook-menu.ui \
 	terminal-window.ui \
 	terminal.gresource.xml \
 	terminal-marshal.list \
@@ -363,7 +365,6 @@ EXTRA_DIST = \
 	profile-preferences.ui \
 	terminal.common.css \
 	$(about_DATA) \
-	$(uimanager_DATA) \
 	$(builder_DATA) \
 	$(gsettings_SCHEMAS) \
 	$(NULL)
