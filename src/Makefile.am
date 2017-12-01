@@ -99,6 +99,7 @@ gnome_terminal_server_CPPFLAGS = \
 
 gnome_terminal_server_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
@@ -106,7 +107,9 @@ gnome_terminal_server_LDFLAGS = \
 	$(AM_LDFLAGS)
 
 gnome_terminal_server_LDADD = \
-	$(TERM_LIBS)
+	$(TERM_LIBS) \
+	$(PTHREAD_LIBS) \
+	$(NULL)
 
 TYPES_H_FILES = \
 	terminal-enums.h \
