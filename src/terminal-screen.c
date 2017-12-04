@@ -815,7 +815,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (gtk_widget_get_realized (GTK_WIDGET (screen)) &&
       (!prop_name ||
        prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY) ||
-       prop_name == I_(TERMINAL_PROFILE_FONT_KEY)))
+       prop_name == I_(TERMINAL_PROFILE_FONT_KEY) ||
+       prop_name == I_(TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY) ||
+       prop_name == I_(TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY)))
     terminal_screen_set_font (screen);
 
   if (!prop_name ||
@@ -981,6 +983,11 @@ terminal_screen_set_font (TerminalScreen *screen)
   vte_terminal_set_font (VTE_TERMINAL (screen), desc);
 
   pango_font_description_free (desc);
+
+  vte_terminal_set_cell_width_scale (VTE_TERMINAL (screen),
+                                     g_settings_get_double (profile, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY));
+  vte_terminal_set_cell_height_scale (VTE_TERMINAL (screen),
+                                      g_settings_get_double (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY));
 }
 
 static void

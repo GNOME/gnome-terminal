@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_BACKSPACE_BINDING_KEY          "backspace-binding"
 #define TERMINAL_PROFILE_BOLD_COLOR_KEY                 "bold-color"
 #define TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY      "bold-color-same-as-fg"
+#define TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY          "cell-height-scale"
+#define TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY           "cell-width-scale"
 #define TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY          "cursor-colors-set"
 #define TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY    "cursor-background-color"
 #define TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY    "cursor-foreground-color"
