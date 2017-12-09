@@ -931,10 +931,6 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping)
                                 string_to_window_title, NULL, NULL, NULL);
 
-  g_settings_bind (profile,
-                   TERMINAL_PROFILE_ALLOW_BOLD_KEY,
-                   gtk_builder_get_object (builder, "allow-bold-checkbutton"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
                                 gtk_builder_get_object (builder,
