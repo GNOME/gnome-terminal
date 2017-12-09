@@ -953,6 +953,10 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
                                 vte_erase_binding_get_type, NULL);
+  g_settings_bind (profile,
+                   TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY,
+                   gtk_builder_get_object (builder, "bold-is-bright-checkbutton"),
+                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    gtk_builder_get_object (builder,
                                            "bold-color-checkbutton"),
