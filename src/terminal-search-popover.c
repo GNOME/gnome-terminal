@@ -367,10 +367,10 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
 
 #if 0 // GTK_CHECK_VERSION (3, 17, 2)
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_next_button);
+  gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_prev_button);
   G_GNUC_END_IGNORE_DEPRECATIONS
 #else
-  gtk_window_set_default (GTK_WINDOW (popover), priv->search_next_button);
+  gtk_window_set_default (GTK_WINDOW (popover), priv->search_prev_button);
 #endif
 
 #if GTK_CHECK_VERSION (3, 16, 0)
