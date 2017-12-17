@@ -41,10 +41,11 @@
 
 static int verbosity = 1;
 
-static char * G_GNUC_FORMAT (1)
-format_as_comment (const char *format)
+/* @freeme is a workaround for Clang; see gnome-terminal bug 790318. */
+static char * G_GNUC_FORMAT (2)
+format_as_comment (char** freeme, const char *format)
 {
-  return g_strdup_printf ("# %s", format);
+  return *freeme = g_strdup_printf ("# %s", format);
 }
 
 void
@@ -56,10 +57,10 @@ terminal_fprintf (FILE* fp,
         if (verbosity < verbosity_level)
                 return;
 
-        gs_free char *commented_format = format_as_comment (format);
+        gs_free char* freeme;
         va_list args;
         va_start(args, format);
-        g_vfprintf(fp, commented_format, args);
+        g_vfprintf(fp, format_as_comment(&freeme, format), args);
         va_end(args);
 }
 
