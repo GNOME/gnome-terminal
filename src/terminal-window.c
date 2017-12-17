@@ -1772,12 +1772,12 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     const char *open_label = NULL, *copy_label = NULL;
     switch (info->url_flavor) {
     case FLAVOR_EMAIL:
-      open_label = _("Call _To…");
-      copy_label = _("Copy Call _Address ");
-      break;
-    case FLAVOR_VOIP_CALL:
       open_label = _("Send Mail _To…");
       copy_label = _("Copy Mail _Address");
+      break;
+    case FLAVOR_VOIP_CALL:
+      open_label = _("Call _To…");
+      copy_label = _("Copy Call _Address ");
       break;
     case FLAVOR_AS_IS:
     case FLAVOR_DEFAULT_TO_HTTP:
