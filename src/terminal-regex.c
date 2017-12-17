@@ -220,6 +220,13 @@ main (int argc, char **argv)
   assert_match_anchored (DEFS URLPATH, "/().", "/()");
   assert_match_anchored (DEFS URLPATH, "/", ENTIRE);
   assert_match_anchored (DEFS URLPATH, "", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/php?param[]=value1&param[]=value2", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/foo?param1[index1]=value1&param2[index2]=value2", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/[[[]][]]", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/[([])]([()])", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/([()])[([])]", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "/[(])", "/");
+  assert_match_anchored (DEFS URLPATH, "/([)]", "/");
 
 
   /* Put the components together and test the big picture */
