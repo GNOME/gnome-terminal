@@ -880,6 +880,10 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
     vte_terminal_set_rewrap_on_resize (vte_terminal,
                                        g_settings_get_boolean (profile, TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY));
 
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY))
+    vte_terminal_set_text_blink_mode (vte_terminal,
+                                      g_settings_get_enum (profile, TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY));
+
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHAR_EXCEPTIONS_KEY))
     {
       gs_free char *word_char_exceptions;

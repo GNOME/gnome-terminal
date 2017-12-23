@@ -1047,6 +1047,14 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
                                 vte_cursor_shape_get_type, NULL);
+  g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY,
+                                gtk_builder_get_object (builder,
+                                                        "text-blink-mode-combobox"),
+                                "active",
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                (GSettingsBindGetMapping) string_to_enum,
+                                (GSettingsBindSetMapping) enum_to_string,
+                                vte_text_blink_mode_get_type, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
                    gtk_builder_get_object (builder, "custom-command-entry"),
                    "text", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);

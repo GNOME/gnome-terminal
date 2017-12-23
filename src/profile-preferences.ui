@@ -58,6 +58,26 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="model5">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="Text blink mode">Never</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Text blink mode">When focused</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Text blink mode">When unfocused</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Text blink mode">Always</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="model2">
     <columns>
       <!-- column-name gchararray -->
@@ -174,7 +194,7 @@
                   <object class="GtkTable" id="general-table">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">8</property>
+                    <property name="n_rows">9</property>
                     <property name="n_columns">4</property>
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
@@ -401,6 +421,44 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="label481">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Allow b_linking text:</property>
+                        <property name="use_underline">True</property>
+                        <property name="margin_left">12</property>
+                        <property name="mnemonic_widget">text-blink-mode-combobox</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">6</property>
+                        <property name="bottom_attach">7</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="text-blink-mode-combobox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">model5</property>
+                        <property name="focus_on_click">False</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">4</property>
+                        <property name="top_attach">6</property>
+                        <property name="bottom_attach">7</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="rewrap-on-resize-checkbutton">
                         <property name="label" translatable="yes">_Rewrap on resize</property>
                         <property name="visible">True</property>
@@ -413,8 +471,8 @@
                       </object>
                       <packing>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">6</property>
-                        <property name="bottom_attach">7</property>
+                        <property name="top_attach">7</property>
+                        <property name="bottom_attach">8</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
@@ -430,8 +488,8 @@
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="top_attach">7</property>
-                        <property name="bottom_attach">8</property>
+                        <property name="top_attach">8</property>
+                        <property name="bottom_attach">9</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
@@ -447,8 +505,8 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">7</property>
-                        <property name="bottom_attach">8</property>
+                        <property name="top_attach">8</property>
+                        <property name="bottom_attach">9</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>

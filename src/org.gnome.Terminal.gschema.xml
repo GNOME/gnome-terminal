@@ -87,6 +87,12 @@
     <value nick='ibeam' value='1'/>
     <value nick='underline' value='2'/>
   </enum>
+  <enum id='org.gnome.Terminal.TextBlinkMode'>
+    <value nick='never' value='0'/>
+    <value nick='focused' value='1'/>
+    <value nick='unfocused' value='2'/>
+    <value nick='always' value='3'/>
+  </enum>
 
   <!-- SettingsList base schema -->
 
@@ -259,6 +265,10 @@
     <key name="cursor-shape" enum="org.gnome.Terminal.Cursor.Shape">
       <default>'block'</default>
       <summary>The cursor appearance</summary>
+    </key>
+    <key name="text-blink-mode" enum="org.gnome.Terminal.TextBlinkMode">
+      <default>'always'</default>
+      <summary>Possible values are “always” or “never” allow blinking text, or only when the terminal is “focused” or “unfocused”.</summary>
     </key>
     <key name="custom-command" type="s">
       <default>''</default>
