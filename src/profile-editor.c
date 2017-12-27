@@ -778,6 +778,14 @@ fixup_color_chooser_button (void)
 
 #endif /* GTK+ < 3.19.8 HACK */
 
+static gboolean
+monospace_filter (const PangoFontFamily *family,
+                  const PangoFontFace   *face,
+                  gpointer data)
+{
+  return pango_font_family_is_monospace ((PangoFontFamily *) family);
+}
+
 /**
  * terminal_profile_edit:
  * @profile: a #GSettings
@@ -1086,8 +1094,10 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
                                 terminal_exit_action_get_type, NULL);
+  w = (GtkWidget*) gtk_builder_get_object (builder, "font-selector");
+  gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (w), monospace_filter, NULL, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_FONT_KEY,
-                   gtk_builder_get_object (builder, "font-selector"),
+                   w,
                    "font-name", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
