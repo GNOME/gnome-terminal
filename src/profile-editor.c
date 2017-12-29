@@ -1,4 +1,3 @@
-
 /*
  * Copyright © 2002 Havoc Pennington
  * Copyright © 2002 Mathias Hasselmann
@@ -46,36 +45,38 @@ struct _TerminalColorScheme
   const GdkRGBA background;
 };
 
+#define COLOR(r, g, b) { .red = (r) / 255.0, .green = (g) / 255.0, .blue = (b) / 255.0, .alpha = 1.0 }
+
 static const TerminalColorScheme color_schemes[] = {
   { N_("Black on light yellow"),
-    { 0, 0, 0, 1 },
-    { 1, 1, 0.866667, 1 }
+    COLOR (0x00, 0x00, 0x00),
+    COLOR (0xff, 0xff, 0xdd)
   },
   { N_("Black on white"),
-    { 0, 0, 0, 1 },
-    { 1, 1, 1, 1 }
+    COLOR (0x00, 0x00, 0x00),
+    COLOR (0xff, 0xff, 0xff)
   },
   { N_("Gray on black"),
-    { 0.666667, 0.666667, 0.666667, 1 },
-    { 0, 0, 0, 1 }
+    COLOR (0xaa, 0xaa, 0xaa),
+    COLOR (0x00, 0x00, 0x00)
   },
   { N_("Green on black"),
-    { 0, 1, 0, 1 },
-    { 0, 0, 0, 1 }
+    COLOR (0x00, 0xff, 0x00),
+    COLOR (0x00, 0x00, 0x00)
   },
   { N_("White on black"),
-    { 1, 1, 1, 1 },
-    { 0, 0, 0, 1 }
+    COLOR (0xff, 0xff, 0xff),
+    COLOR (0x00, 0x00, 0x00)
   },
   /* Translators: "Solarized" is the name of a colour scheme, "light" can be translated */
   { N_("Solarized light"),
-    { 0.396078, 0.482352, 0.513725, 1 },
-    { 0.992156, 0.964705, 0.890196, 1 }
+    COLOR (0x65, 0x7B, 0x83),
+    COLOR (0xfd, 0xf6, 0xe3)
   },
   /* Translators: "Solarized" is the name of a colour scheme, "dark" can be translated */
   { N_("Solarized dark"),
-    { 0.513725, 0.580392, 0.588235, 1 },
-    { 0,        0.168627, 0.211764, 1 }
+    COLOR (0x83, 0x94, 0x96),
+    COLOR (0x00, 0x2b, 0x36)
   },
 };
 
@@ -90,8 +91,6 @@ enum
   TERMINAL_PALETTE_SOLARIZED = 4,
   TERMINAL_PALETTE_N_BUILTINS
 };
-
-#define COLOR(r, g, b) { .red = (r) / 255.0, .green = (g) / 255.0, .blue = (b) / 255.0, .alpha = 1.0 }
 
 static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
 {
