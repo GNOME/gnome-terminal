@@ -68,6 +68,16 @@ static const TerminalColorScheme color_schemes[] = {
     COLOR (0xff, 0xff, 0xff),
     COLOR (0x00, 0x00, 0x00)
   },
+  /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
+  { N_("Tango light"),
+    COLOR (0x2e, 0x34, 0x36),
+    COLOR (0xee, 0xee, 0xec)
+  },
+  /* Translators: "Tango" is the name of a colour scheme, "dark" can be translated */
+  { N_("Tango dark"),
+    COLOR (0xd3, 0xd7, 0xcf),
+    COLOR (0x2e, 0x34, 0x36)
+  },
   /* Translators: "Solarized" is the name of a colour scheme, "light" can be translated */
   { N_("Solarized light"),
     COLOR (0x65, 0x7B, 0x83),
@@ -96,7 +106,7 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PAL
 {
   /* Tango palette */
   {
-    COLOR (0x00, 0x00, 0x00),
+    COLOR (0x2e, 0x34, 0x36),
     COLOR (0xcc, 0x00, 0x00),
     COLOR (0x4e, 0x9a, 0x06),
     COLOR (0xc4, 0xa0, 0x00),
