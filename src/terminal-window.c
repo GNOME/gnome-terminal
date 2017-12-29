@@ -2920,6 +2920,10 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
                     G_CALLBACK (screen_font_any_changed_cb), window);
   g_signal_connect (screen, "notify::font-scale",
                     G_CALLBACK (screen_font_any_changed_cb), window);
+  g_signal_connect (screen, "notify::cell-height-scale",
+                    G_CALLBACK (screen_font_any_changed_cb), window);
+  g_signal_connect (screen, "notify::cell-width-scale",
+                    G_CALLBACK (screen_font_any_changed_cb), window);
   g_signal_connect (screen, "notify::encoding",
                     G_CALLBACK (screen_encoding_changed_cb), window);
   g_signal_connect (screen, "selection-changed",
