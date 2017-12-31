@@ -458,6 +458,14 @@ default_size_reset_cb (GtkWidget *button,
 }
 
 static void
+cell_scale_reset_cb (GtkWidget *button,
+                     GSettings *profile)
+{
+  g_settings_reset (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY);
+  g_settings_reset (profile, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY);
+}
+
+static void
 reset_compat_defaults_cb (GtkWidget *button,
                           GSettings *profile)
 {
@@ -867,6 +875,10 @@ terminal_profile_edit (GSettings  *profile,
                     "clicked",
                     G_CALLBACK (default_size_reset_cb),
                     profile);
+  g_signal_connect (gtk_builder_get_object  (builder, "cell-scale-reset-button"),
+                    "clicked",
+                    G_CALLBACK (cell_scale_reset_cb),
+                    profile);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
@@ -992,6 +1004,18 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+  g_settings_bind (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
+                   gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
+                                                   (gtk_builder_get_object
+                                                    (builder,
+                                                     "cell-height-scale-spinbutton"))),
+                   "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  g_settings_bind (profile, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY,
+                   gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
+                                                   (gtk_builder_get_object
+                                                    (builder,
+                                                     "cell-width-scale-spinbutton"))),
+                   "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
                    gtk_builder_get_object (builder,
                                            "cursor-colors-checkbutton"),
