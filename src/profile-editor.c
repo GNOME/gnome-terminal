@@ -416,7 +416,7 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
     {
       char name[32];
 
-      g_snprintf (name, sizeof (name), "palette-colorpicker-%" G_GSIZE_FORMAT, i + 1);
+      g_snprintf (name, sizeof (name), "palette-colorpicker-%" G_GSIZE_FORMAT, i);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
 
       g_signal_handlers_block_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
@@ -878,7 +878,7 @@ terminal_profile_edit (GSettings  *profile,
       char name[32];
       char *text;
 
-      g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i + 1);
+      g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
 
 #if GTK_CHECK_VERSION (3, 19, 8)
@@ -887,11 +887,11 @@ terminal_profile_edit (GSettings  *profile,
 
       g_object_set_data (G_OBJECT (w), "palette-entry-index", GUINT_TO_POINTER (i));
 
-      text = g_strdup_printf (_("Choose Palette Color %u"), i + 1);
+      text = g_strdup_printf (_("Choose Palette Color %u"), i);
       gtk_color_button_set_title (GTK_COLOR_BUTTON (w), text);
       g_free (text);
 
-      text = g_strdup_printf (_("Palette entry %u"), i + 1);
+      text = g_strdup_printf (_("Palette entry %u"), i);
       gtk_widget_set_tooltip_text (w, text);
       g_free (text);
 
