@@ -288,6 +288,13 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "[markdown](http://foo.bar/(a(b)c)d)e)f", "http://foo.bar/(a(b)c)d");
   assert_match (REGEX_URL_AS_IS, "[markdown](http://foo.bar/a)b(c", "http://foo.bar/a");
 
+  /* Apostrophes are allowed, except at trailing position if the URL is preceded by an apostrophe, see bug 448044. */
+  assert_match (REGEX_URL_AS_IS, "https://en.wikipedia.org/wiki/Moore's_law", ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "<a href=\"https://en.wikipedia.org/wiki/Moore's_law\">", "https://en.wikipedia.org/wiki/Moore's_law");
+  assert_match (REGEX_URL_AS_IS, "https://en.wikipedia.org/wiki/Cryin'", ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "<a href=\"https://en.wikipedia.org/wiki/Cryin'\">", "https://en.wikipedia.org/wiki/Cryin'");
+  assert_match (REGEX_URL_AS_IS, "<a href='https://en.wikipedia.org/wiki/Aerosmith'>", "https://en.wikipedia.org/wiki/Aerosmith");
+
   /* No scheme */
   assert_match (REGEX_URL_HTTP, "www.foo.bar/baz",     ENTIRE);
   assert_match (REGEX_URL_HTTP, "WWW3.foo.bar/baz",    ENTIRE);

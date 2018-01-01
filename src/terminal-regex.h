@@ -43,6 +43,9 @@
 #ifndef TERMINAL_REGEX_H
 #define TERMINAL_REGEX_H
 
+/* Lookbehind to see if there's a preceding apostrophe */
+#define APOS_START_DEF "(?<APOS_START>(?<='))?"
+
 #define SCHEME "(?ix: news | telnet | nntp | https? | ftps? | sftp | webcal )"
 
 #define USERCHARS "-+.[:alnum:]"
@@ -122,21 +125,22 @@
 #define PORT "(?x: \\:" N_1_65535 " )?"
 
 /* Omit the parentheses, see below */
-#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,:;@&=?/~#|%\\E]"
-/* Chars to end a URL */
-#define PATHTERM_CLASS "[-[:alnum:]\\Q_$+*:@&=/~#|%\\E]"
+#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,:;@&=?/~#|%'\\E]"
+/* Chars to end a URL. Apostrophe only allowed if there wasn't one in front of the URL, see bug 448044 */
+#define PATHTERM_CLASS        "[-[:alnum:]\\Q_$+*:@&=/~#|%'\\E]"
+#define PATHTERM_NOAPOS_CLASS "[-[:alnum:]\\Q_$+*:@&=/~#|%\\E]"
 
 /* Recursive definition of PATH that allows parentheses and square brackets only if balanced, see bug 763980. */
 #define PATH_INNER_DEF "(?(DEFINE)(?<PATH_INNER>(?x: (?: " PATHCHARS_CLASS "* (?: \\( (?&PATH_INNER) \\) | \\[ (?&PATH_INNER) \\] ) )* " PATHCHARS_CLASS "* )))"
 /* Same as above, but the last character (if exists and is not a parenthesis) must be from PATHTERM_CLASS. */
-#define PATH_DEF "(?(DEFINE)(?<PATH>(?x: (?: " PATHCHARS_CLASS "* (?: \\( (?&PATH_INNER) \\) | \\[ (?&PATH_INNER) \\] ) )* (?: " PATHCHARS_CLASS "* " PATHTERM_CLASS " )? )))"
+#define PATH_DEF "(?(DEFINE)(?<PATH>(?x: (?: " PATHCHARS_CLASS "* (?: \\( (?&PATH_INNER) \\) | \\[ (?&PATH_INNER) \\] ) )* (?: " PATHCHARS_CLASS "* (?(<APOS_START>)" PATHTERM_NOAPOS_CLASS "|" PATHTERM_CLASS ") )? )))"
 
 #define URLPATH "(?x: /(?&PATH) )?"
 #define VOIP_PATH "(?x: [;?](?&PATH) )?"
 
 /* Now let's put these fragments together */
 
-#define DEFS IP_DEF PATH_INNER_DEF PATH_DEF
+#define DEFS APOS_START_DEF IP_DEF PATH_INNER_DEF PATH_DEF
 
 #define REGEX_URL_AS_IS  DEFS SCHEME "://" USERPASS URL_HOST PORT URLPATH
 /* TODO: also support file:/etc/passwd */
