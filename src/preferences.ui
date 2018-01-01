@@ -136,21 +136,8 @@
                         <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="new-terminal-mode-label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Open _new terminals in:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">new-terminal-mode-combobox</property>
-                      </object>
-                      <packing>
                         <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -167,8 +154,21 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
                         <property name="top_attach">0</property>
+                        <property name="left_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="new-terminal-mode-label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Open _new terminals in:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">new-terminal-mode-combobox</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="left_attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -185,8 +185,8 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
+                        <property name="left_attach">1</property>
                       </packing>
                     </child>
                   </object>
@@ -209,11 +209,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTable" id="keybindings">
+              <object class="GtkGrid" id="keybindings">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="n_rows">2</property>
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
                 <child>
@@ -228,7 +227,8 @@
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="y_options">GTK_FILL</property>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
                   </packing>
                 </child>
                 <child>
@@ -237,6 +237,8 @@
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">never</property>
                     <property name="shadow_type">in</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkTreeView" id="accelerators-treeview">
                         <property name="visible">True</property>
@@ -250,7 +252,7 @@
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
+                    <property name="left_attach">0</property>
                   </packing>
                 </child>
               </object>
