@@ -436,6 +436,14 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
 
 /* Keybindings tab */
 
+/* Make sure the treeview is repainted with the correct text color, see bug 792139. */
+static void
+shortcuts_button_toggled_cb (GtkWidget *widget,
+                             GtkTreeView *tree_view)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (tree_view));
+}
+
 /* Encodings tab */
 
 /* misc */
@@ -560,6 +568,9 @@ terminal_prefs_show_preferences (const char *page)
                    disable_menu_accel_button,
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  g_signal_connect (disable_shortcuts_button, "toggled",
+                    G_CALLBACK (shortcuts_button_toggled_cb), tree_view);
 
   terminal_accels_fill_treeview (tree_view, disable_shortcuts_button);
 
