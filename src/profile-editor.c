@@ -960,15 +960,19 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping)
                                 string_to_window_title, NULL, NULL, NULL);
 
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "background-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "background-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
                                 gtk_builder_get_object (builder,
@@ -989,21 +993,25 @@ terminal_profile_edit (GSettings  *profile,
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_INVERT_BOOLEAN |
                    G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "bold-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
   g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
-                   gtk_builder_get_object (builder,
-                                           "bold-colorpicker"),
+                   w,
                    "sensitive",
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_INVERT_BOOLEAN |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "bold-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
   g_settings_bind (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
                    gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
                                                    (gtk_builder_get_object
@@ -1020,66 +1028,80 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder,
                                            "cursor-colors-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "cursor-foreground-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
   g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
-                   gtk_builder_get_object (builder,
-                                           "cursor-foreground-colorpicker"),
-                   "sensitive",
-                   G_SETTINGS_BIND_GET |
-                   G_SETTINGS_BIND_NO_SENSITIVITY);
-  g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
-                   gtk_builder_get_object (builder,
-                                           "cursor-background-colorpicker"),
+                   w,
                    "sensitive",
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "cursor-foreground-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "cursor-background-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
+  g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
+                   w,
+                   "sensitive",
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "cursor-background-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
   g_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
                    gtk_builder_get_object (builder,
                                            "highlight-colors-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "highlight-foreground-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
   g_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
-                   gtk_builder_get_object (builder,
-                                           "highlight-foreground-colorpicker"),
-                   "sensitive",
-                   G_SETTINGS_BIND_GET |
-                   G_SETTINGS_BIND_NO_SENSITIVITY);
-  g_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
-                   gtk_builder_get_object (builder,
-                                           "highlight-background-colorpicker"),
+                   w,
                    "sensitive",
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "highlight-foreground-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "highlight-background-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+  g_object_set (w, "show-editor", TRUE, NULL);
+#endif
+  g_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
+                   w,
+                   "sensitive",
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "highlight-background-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                                 gtk_builder_get_object (builder,
                                                         "cursor-shape-combobox"),
@@ -1140,15 +1162,20 @@ terminal_profile_edit (GSettings  *profile,
   g_settings_bind (profile, TERMINAL_PROFILE_FONT_KEY,
                    w,
                    "font-name", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "foreground-colorpicker"));
+#if GTK_CHECK_VERSION (3, 19, 8)
+      g_object_set (w, "show-editor", TRUE, NULL);
+#endif
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
-                                gtk_builder_get_object (builder,
-                                                        "foreground-colorpicker"),
+                                w,
                                 "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+
   g_settings_bind (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY,
                    gtk_builder_get_object (builder,
                                            "login-shell-checkbutton"),
