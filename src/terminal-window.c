@@ -1822,7 +1822,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     g_menu_append_section (submenu5, NULL, profiles_menu);
 
     gs_unref_object GMenu *section51 = g_menu_new ();
-    g_menu_append (section51, _("_Profile Preferences…"), "win.edit-profile");
+    g_menu_append (section51, _("_Profile Preferences"), "win.edit-profile");
     g_menu_append_section (submenu5, NULL, G_MENU_MODEL (section51));
 
     gs_unref_object GMenuItem *item5 = g_menu_item_new (_("P_rofiles"), NULL);
@@ -1832,7 +1832,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     /* If there's only a single profile, put the Profile Preferences item in the
      * context menu itself.
      */
-    g_menu_append (section5, _("_Profile Preferences…"), "win.edit-profile");
+    g_menu_append (section5, _("_Profile Preferences"), "win.edit-profile");
   }
 
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section5));
