@@ -263,11 +263,18 @@ popup_menu_remove_accelerators (GtkWidget *menu)
 
   menu_items = gtk_container_get_children (GTK_CONTAINER (menu));
   for (l = menu_items; l != NULL; l = l ->next) {
-    GtkWidget *label;
+    GtkMenuItem *item = (GtkMenuItem*) (l->data);
+    GtkWidget *label, *submenu;
 
-    if (GTK_IS_BIN (l->data) &&
-        GTK_IS_ACCEL_LABEL ((label = gtk_bin_get_child (GTK_BIN (l->data)))))
+    if (!GTK_IS_MENU_ITEM (item))
+      continue;
+
+    if (GTK_IS_ACCEL_LABEL ((label = gtk_bin_get_child (GTK_BIN (item)))))
       gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), 0, 0);
+
+    /* Recurse into submenus */
+    if ((submenu = gtk_menu_item_get_submenu (item)))
+      popup_menu_remove_accelerators (submenu);
   }
 }
 
