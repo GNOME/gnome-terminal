@@ -821,6 +821,7 @@ terminal_profile_edit (GSettings  *profile,
   GError *error = NULL;
   GtkWidget *editor, *w;
   gs_free char *uuid = NULL;
+  char *text;
   guint i;
 
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
@@ -880,6 +881,17 @@ terminal_profile_edit (GSettings  *profile,
                     G_CALLBACK (cell_scale_reset_cb),
                     profile);
 
+  /* Translators: Appears as: [numeric entry] × width */
+  text = g_strdup_printf ("× %s", _("width"));
+  gtk_label_set_text ((GtkLabel *) gtk_builder_get_object (builder, "cell-width-scale-label"),
+                      text);
+  g_free (text);
+  /* Translators: Appears as: [numeric entry] × height */
+  text = g_strdup_printf ("× %s", _("height"));
+  gtk_label_set_text ((GtkLabel *) gtk_builder_get_object (builder, "cell-height-scale-label"),
+                      text);
+  g_free (text);
+
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
 
@@ -888,7 +900,6 @@ terminal_profile_edit (GSettings  *profile,
   for (i = 0; i < TERMINAL_PALETTE_SIZE; ++i)
     {
       char name[32];
-      char *text;
 
       g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
