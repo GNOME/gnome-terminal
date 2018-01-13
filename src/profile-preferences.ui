@@ -1708,197 +1708,155 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox4">
+              <object class="GtkGrid" id="table30">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="spacing">12</property>
+                <property name="column_spacing">12</property>
+                <property name="row_spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label51">
+                  <object class="GtkLabel" id="backspace-binding-combobox-label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Note:&lt;/b&gt; These options may cause some applications to behave incorrectly.  They are only here to allow you to work around certain applications and operating systems that expect different terminal behavior.</property>
-                    <property name="wrap">True</property>
+                    <property name="label" translatable="yes">_Backspace key generates:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">backspace-binding-combobox</property>
                     <property name="xalign">0</property>
-                    <property name="yalign">7.4505801528346183e-09</property>
-                    <attributes>
-                      <attribute name="style" value="italic"/>
-                      <attribute name="size" value="0"/>
-                    </attributes>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkGrid" id="table30">
+                  <object class="GtkComboBox" id="backspace-binding-combobox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="column_spacing">12</property>
-                    <property name="row_spacing">6</property>
+                    <property name="model">model6</property>
+                    <property name="focus_on_click">False</property>
                     <child>
-                      <object class="GtkLabel" id="backspace-binding-combobox-label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Backspace key generates:</property>
-                        <property name="use_underline">True</property>
-                        <property name="justify">center</property>
-                        <property name="mnemonic_widget">backspace-binding-combobox</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="backspace-binding-combobox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="model">model6</property>
-                        <property name="focus_on_click">False</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer6"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="delete-binding-combobox-label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Delete key generates:</property>
-                        <property name="use_underline">True</property>
-                        <property name="justify">center</property>
-                        <property name="mnemonic_widget">delete-binding-combobox</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="delete-binding-combobox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="model">model6</property>
-                        <property name="focus_on_click">False</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="renderer7"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="encoding-label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">_Encoding:</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="left_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="encoding-combobox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="focus_on_click">False</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="left_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="cjk-ambiguous-width-label">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Ambiguous-_width characters:</property>
-                        <property name="use_underline">True</property>
-                        <property name="justify">center</property>
-                        <property name="mnemonic_widget">cjk-ambiguous-width-combobox</property>
-                        <property name="xalign">0</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="left_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkComboBox" id="cjk-ambiguous-width-combobox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="model">cjk-ambiguous-width-model</property>
-                        <property name="focus_on_click">False</property>
-                        <property name="id_column">1</property>
-                        <child>
-                          <object class="GtkCellRendererText" id="cjk-ambiguous-width-renderer"/>
-                          <attributes>
-                            <attribute name="text">0</attribute>
-                          </attributes>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="left_attach">1</property>
-                      </packing>
+                      <object class="GtkCellRendererText" id="renderer6"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHButtonBox" id="hbuttonbox1">
+                  <object class="GtkLabel" id="delete-binding-combobox-label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="layout_style">start</property>
+                    <property name="label" translatable="yes">_Delete key generates:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">delete-binding-combobox</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="delete-binding-combobox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">model6</property>
+                    <property name="focus_on_click">False</property>
                     <child>
-                      <object class="GtkButton" id="reset-compat-defaults-button">
-                        <property name="label" translatable="yes">_Reset Compatibility Options to Defaults</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="focus_on_click">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
+                      <object class="GtkCellRendererText" id="renderer7"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="encoding-label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">_Encoding:</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="encoding-combobox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="focus_on_click">False</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="cjk-ambiguous-width-label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Ambiguous-_width characters:</property>
+                    <property name="use_underline">True</property>
+                    <property name="justify">center</property>
+                    <property name="mnemonic_widget">cjk-ambiguous-width-combobox</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="left_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="cjk-ambiguous-width-combobox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">cjk-ambiguous-width-model</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cjk-ambiguous-width-renderer"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="left_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="reset-compat-defaults-button">
+                    <property name="label" translatable="yes">_Reset Compatibility Options to Defaults</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="focus_on_click">False</property>
+                    <property name="halign">start</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="position">5</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child type="tab">
