@@ -1251,7 +1251,12 @@ terminal_profile_edit (GSettings  *profile,
 
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
-                   gtk_builder_get_object (builder, "custom-command-box"),
+                   gtk_builder_get_object (builder, "custom-command-entry-label"),
+                   "sensitive",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind (profile,
+                   TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
+                   gtk_builder_get_object (builder, "custom-command-entry"),
                    "sensitive",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (profile,
