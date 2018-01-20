@@ -121,9 +121,25 @@ terminal_screen_container_init (TerminalScreenContainer *container)
   priv->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
 }
 
+static gboolean
+scrollbar_bg_draw_cb (GtkWidget *widget, cairo_t *cr, TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+  GdkRGBA * bg = terminal_screen_get_bg_color (priv->screen);
+
+  cairo_save (cr);
+  cairo_set_source_rgba (cr, bg->red, bg->green, bg->blue, bg->alpha);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+  cairo_restore (cr);
+
+  return FALSE;
+}
+
 static void
 terminal_screen_container_constructed (GObject *object)
 {
+  GtkWidget *scrollbar;
   TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
   TerminalScreenContainerPrivate *priv = container->priv;
 
@@ -151,9 +167,12 @@ terminal_screen_container_constructed (GObject *object)
 }
 #else
   priv->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->vscrollbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
-                                        gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen)));
+  scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
+                                 gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen)));
+
+  gtk_box_pack_start (GTK_BOX (priv->vscrollbar), scrollbar, TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->hbox), priv->vscrollbar, FALSE, FALSE, 0);
@@ -163,6 +182,11 @@ terminal_screen_container_constructed (GObject *object)
 #endif
 
   _terminal_screen_update_scrollbar (priv->screen);
+
+  g_signal_connect (G_OBJECT (priv->vscrollbar), "draw",
+                    G_CALLBACK (scrollbar_bg_draw_cb), container);
+  g_signal_connect_swapped (priv->screen, "notify::bg-color",
+                            G_CALLBACK (gtk_widget_queue_draw), priv->vscrollbar);
 }
 
 static void
