@@ -1035,7 +1035,17 @@ action_copy_match_cb (GSimpleAction *action,
   if (info->url == nullptr)
     return;
 
-  gtk_clipboard_set_text (priv->clipboard, info->url, -1);
+  if (info->url_flavor == FLAVOR_LP)
+    {
+      char *uri;
+      uri = terminal_util_get_lp_url (info->url);
+      gtk_clipboard_set_text (priv->clipboard, uri, -1);
+      g_free (uri);
+    }
+  else
+    {
+      gtk_clipboard_set_text (priv->clipboard, info->url, -1);
+    }
 }
 
 static void
@@ -1731,6 +1741,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
       break;
     case FLAVOR_AS_IS:
     case FLAVOR_DEFAULT_TO_HTTP:
+    case FLAVOR_LP:
     default:
       open_label = _("_Open Link");
       copy_label = _("Copy _Link");

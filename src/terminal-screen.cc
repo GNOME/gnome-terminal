@@ -214,6 +214,7 @@ static const TerminalRegexPattern url_regex_patterns[] = {
   { REGEX_URL_VOIP,  FLAVOR_VOIP_CALL },
   { REGEX_EMAIL,     FLAVOR_EMAIL },
   { REGEX_NEWS_MAN,  FLAVOR_AS_IS },
+  { REGEX_LP,        FLAVOR_LP },
 };
 
 static const TerminalRegexPattern extra_regex_patterns[] = {

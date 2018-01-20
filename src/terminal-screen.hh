@@ -32,6 +32,7 @@ typedef enum {
   FLAVOR_VOIP_CALL,
   FLAVOR_EMAIL,
   FLAVOR_NUMBER,
+  FLAVOR_LP
 } TerminalURLFlavor;
 
 /* Forward decls */

@@ -326,6 +326,9 @@ terminal_util_open_url (GtkWidget *parent,
     case FLAVOR_AS_IS:
       uri = g_strdup (orig_url);
       break;
+    case FLAVOR_LP:
+      uri = terminal_util_get_lp_url (orig_url);
+      break;
     default:
       uri = nullptr;
       g_assert_not_reached ();
@@ -337,6 +340,20 @@ terminal_util_open_url (GtkWidget *parent,
                                        _("Could not open the address “%s”"),
                                        uri);
     }
+}
+
+char *
+terminal_util_get_lp_url (const char *orig_url)
+{
+  char *uri;
+  const char *bugnum = orig_url;
+
+  while (*bugnum && ! g_ascii_isdigit (*bugnum))
+      bugnum++;
+
+  uri = g_strdup_printf ("https://bugs.launchpad.net/bugs/%s", bugnum);
+
+  return uri;
 }
 
 /**

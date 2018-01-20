@@ -154,5 +154,6 @@
 #define REGEX_URL_VOIP   DEFS "(?i:h323:|sips?:)" USERPASS URL_HOST PORT VOIP_PATH
 #define REGEX_EMAIL      DEFS "(?i:mailto:)?" USER "@" EMAIL_HOST
 #define REGEX_NEWS_MAN   "(?i:news:|man:|info:|apt:)[-[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+"
+#define REGEX_LP         "(?i:lp: #)[[:digit:]]+"
 
 #endif /* !TERMINAL_REGEX_H */
