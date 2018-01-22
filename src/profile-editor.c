@@ -1276,10 +1276,6 @@ terminal_profile_edit (GSettings  *profile,
                             gtk_builder_get_object (builder, "palette-box"),
                             "sensitive",
                             FALSE);
-  g_settings_bind (profile,
-                   TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY,
-                   gtk_builder_get_object (builder, "rewrap-on-resize-checkbutton"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   /* Compatibility options */
   w = (GtkWidget *) gtk_builder_get_object  (builder, "encoding-combobox");
