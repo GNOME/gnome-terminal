@@ -148,7 +148,7 @@ static KeyEntry edit_entries[] = {
   ENTRY (N_("Profile Preferences"), KEY_PROFILE_PREFERENCES, "edit-profile", NULL, NULL      ),
 };
 
-static KeyEntry find_entries[] = {
+static KeyEntry search_entries[] = {
   ENTRY (N_("Find"),            KEY_FIND,       "find",          NULL, NULL),
   ENTRY (N_("Find Next"),       KEY_FIND_NEXT,  "find-forward",  NULL, NULL),
   ENTRY (N_("Find Previous"),   KEY_FIND_PREV,  "find-backward", NULL, NULL),
@@ -226,7 +226,7 @@ static KeyEntryList all_entries[] =
   { file_entries, G_N_ELEMENTS (file_entries), N_("File") },
   { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
-  { find_entries, G_N_ELEMENTS (find_entries), N_("Find") },
+  { search_entries, G_N_ELEMENTS (search_entries), N_("Search") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
   { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
   { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
