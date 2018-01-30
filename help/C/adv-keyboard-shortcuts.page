@@ -45,6 +45,9 @@
       <gui style="tab">Shortcuts</gui></guiseq>.</p>
     </item>
     <item>
+      <p>Make sure <gui style="checkbox">Enable shortcuts</gui> is selected.</p>
+    </item>
+    <item>
       <p>Select the shortcut that you wish to edit by clicking on it.</p>
     </item>
     <item>
@@ -54,8 +57,8 @@
     <item>
       <p>Press your desired shortcut key combination as you would enter it to
       use it. The keys that you can use include <key>Alt</key>,
-      <key>Alt Gr</key>, <key>Ctrl</key>, <key>Shift</key>, number and letter
-      keys.</p>
+      <key>Alt Gr</key>, <key>Ctrl</key>, <key>Shift</key>, <key>Super</key>,
+      number and letter keys.</p>
       <note>
         <p>Mnemonic key combinations, such as <keyseq><key>Alt</key>
         <key>F</key></keyseq> will not work.</p>
@@ -123,11 +126,11 @@
       <tbody>
         <tr>
           <td><p>Copy</p></td>
-          <td><p><keyseq><key>Ctrl</key><key>Shift</key><key>C</key></keyseq></p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>C</key></keyseq></p></td>
         </tr>
         <tr>
           <td><p>Paste</p></td>
-          <td><p><keyseq><key>Ctrl</key><key>Shift</key><key>V</key></keyseq></p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>V</key></keyseq></p></td>
         </tr>
       </tbody>
     </table>
@@ -162,6 +165,40 @@
         <tr>
           <td><p>Normal Size</p></td>
           <td><p><keyseq><key>Ctrl</key><key>0</key></keyseq></p></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="find-shortcuts">
+    <title><gui style="menu">Find</gui> shortcuts</title>
+
+    <p>The default shortcuts for options under <gui style="menu">Find</gui>
+    menu are:</p>
+
+    <table rules="rows" frame="top bottom" ui:expanded="false">
+      <thead>
+        <tr>
+          <td><p>Action</p></td>
+          <td><p>Keyboard Shortcut</p></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><p>Find</p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>F</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Find Next</p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>G</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Find Previous</p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>H</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Clear Highlight</p></td>
+          <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>J</key></keyseq></p></td>
         </tr>
       </tbody>
     </table>
@@ -240,28 +277,6 @@
     </table>
   </section>
 
-  <section id="help-shortcuts">
-    <title>Help shortcuts</title>
-
-    <p>The default shortcuts for accessing items in the
-    <gui style="menu">Help</gui> menu are:</p>
-
-    <table rules="rows" frame="top bottom" ui:expanded="false">
-      <thead>
-        <tr>
-          <td><p>Action</p></td>
-          <td><p>Keyboard Shortcut</p></td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><p>Contents</p></td>
-          <td><p><key>F1</key></p></td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
   <section id="other-shortcuts">
     <title>Other</title>
 
@@ -282,6 +297,22 @@
         <tr>
           <td><p>Scroll down by one line</p></td>
           <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>Down</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Scroll up by one page</p></td>
+          <td><p><keyseq><key>Shift</key><key>Page Up</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Scroll down by one page</p></td>
+          <td><p><keyseq><key>Shift</key><key>Page Down</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Scroll to the top</p></td>
+          <td><p><keyseq><key>Shift</key><key>Home</key></keyseq></p></td>
+        </tr>
+        <tr>
+          <td><p>Scroll to the bottom</p></td>
+          <td><p><keyseq><key>Shift</key><key>End</key></keyseq></p></td>
         </tr>
       </tbody>
     </table>
@@ -341,29 +372,28 @@
           <td><p><keyseq><key>Alt</key><key>F</key></keyseq></p></td> 
         </tr>
         <tr>
-          <td><p>Delete from the cursor to the beginning of the line.</p></td>
+          <td><p>Delete from the cursor to the beginning of the line</p></td>
           <td><p><keyseq><key>Ctrl</key><key>u</key></keyseq></p></td> 
         </tr>
         <tr>
-          <td><p>Delete from the cursor to the end of the line.</p></td>
+          <td><p>Delete from the cursor to the end of the line</p></td>
           <td><p><keyseq><key>Ctrl</key><key>K</key></keyseq></p></td> 
         </tr>
         <tr>
-          <td><p>Delete from the cursor to the start of the word.</p></td>
+          <td><p>Delete from the cursor to the start of the word</p></td>
           <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td> 
         </tr>
         <tr>
           <td><p>Delete previous word</p></td>
-          <td><p><keyseq><key>Esc</key><key>Del</key></keyseq> or
-          <keyseq><key>Esc</key><key>Backspace</key></keyseq></p></td>
+          <td><p><keyseq><key>Alt</key><key>Backspace</key></keyseq></p></td>
         </tr>
         <tr>
-          <td><p>Pastes text from the clipboard.</p></td>
+          <td><p>Paste text from the clipboard</p></td>
           <td><p><keyseq><key>Ctrl</key><key>Y</key></keyseq></p></td> 
         </tr>
         <tr>
           <td><p>Clear the screen leaving the current line at the top of the
-          screen.</p></td>
+          screen</p></td>
           <td><p><keyseq><key>Ctrl</key><key>L</key></keyseq></p></td> 
         </tr>
         <tr>

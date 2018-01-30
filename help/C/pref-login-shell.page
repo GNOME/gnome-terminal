@@ -31,22 +31,23 @@
 
   <title>Login shells</title>
 
-  <p>Shells in UNIX based systems are classified into two types:</p>
+  <p>Shells in UNIX based systems can be started up in login and non-login
+  modes:</p>
 
   <terms>
     <item>
       <title>Login shell</title>
       <p>A login shell is a shell given to a user upon login into their user
-      account. This login shell is defined at the time of creation of the user
-      account by the super user. It is initiated by using the
-      <cmd>--login</cmd> option with bash. It starts after a successful login
-      using <file>/bin/login</file> and by reading the <file>/etc/passwd</file>
-      file.</p>
+      account. This is initiated by using the <cmd>-l</cmd> or
+      <cmd>--login</cmd> option, or placing a dash as the initial character
+      of the command name, for example invoking <cmd>bash</cmd> as
+      <cmd>-bash</cmd>.</p>
     </item>
     <item>
       <title>Sub shell</title>
       <p>Sub shell, also called a non-login shell is a shell started after
-      the login process without the <cmd>--login</cmd> option.</p>
+      the login process without the <cmd>-l</cmd> or <cmd>--login</cmd>
+      option and without an extra dash before the command name.</p>
     </item>
   </terms>
 
@@ -67,9 +68,8 @@
   <section id="login-shell-howto">
     <title>Start a login shell</title>
 
-    <p>You can allow <app>Terminal</app> to start a login shell. The
-    <cmd>--login</cmd> will be passed to <app>Bash</app> or your
-    <link xref="pref-custom-command">custom shell</link>.</p>
+    <p>You can allow <app>Terminal</app> to start a login shell. Your default
+    shell will be started with a dash character prepended to its name.</p>
 
     <steps>
       <item>
@@ -85,38 +85,7 @@
         <p>Under the <gui>Command</gui> label, select
         <gui style="checkbox">Run command as a login shell</gui>.</p>
       </item>
-      <item>
-        <p>Click <gui style="button">Close</gui> to quit the dialog and return
-        to <app>Terminal</app>.</p>
-      </item>
     </steps>
-
-  </section>
-
-  <section id="login-shell-update-records">
-    <title>Update login records</title>
-
-    <p>UNIX based systems maintain files to keep information about user logins
-    and sessions. They are called login records. To allow <app>Terminal</app>
-    to write an entry of your login in these records:</p>
-
-    <steps>
-      <item>
-        <p>Select
-        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
-        Preferences</gui><gui style="tab">General</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Under the <gui>Command</gui> label, check
-        <gui style="checkbox">Update login records when command is
-        launched</gui>. Your change will be applied automatically.</p>
-      </item>
-    </steps>
-
-    <note style="tip">
-      <p>The command <cmd>last</cmd> followed by a username in your computer
-      shows the login records for a particular user.</p>
-    </note>
 
   </section>
 

@@ -54,7 +54,7 @@
     <title>Scroll on output</title>
 
     <p>You can lock scrolling so that it always shows the newest output while a
-    command executes.</p>
+    command executes and produces output.</p>
 
     <steps>
       <item>
@@ -90,9 +90,8 @@
   <section id="lines">
     <title>Scrollback lines</title>
 
-    <p>You can limit the number of lines of terminal output which are stored in
-    memory. You may want to do this if you rarely restart your terminal so that
-    there is a limit to how much memory the scrollback can use.</p>
+    <p>You can limit the number of lines of terminal output which are
+    remembered.</p>
 
     <steps>
       <item>
@@ -102,7 +101,7 @@
       </item>
       <item>
         <p>Check <gui>Limit scrollback to</gui> and enter a number of lines
-        which is greater than 0 to limit scrollback.</p>
+        to limit scrollback.</p>
       </item>
       <item>
         <p>Optionally, you can click on <gui style="button">+</gui> to
@@ -110,9 +109,38 @@
       </item>
     </steps>
 
+    <p>You can choose to have unlimited scrollback.</p>
+
+    <steps>
+      <item>
+        <p>Select
+        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+        Preferences</gui><gui style="tab">Scrolling</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Uncheck <gui>Limit scrollback to</gui>.</p>
+      </item>
+    </steps>
+
+    <note style="tip">
+      <p>Scrollback data is stored in compressed and encrypted files on disk,
+      under the system’s default location for temporary files (usually
+      <file>/tmp</file>). These files are unlinked immediately after their
+      creation, and as such, do not show up in the directory listing. The
+      occupied disk space is freed up as soon as the corresponding terminal
+      closes.</p>
+    </note>
+
     <note style="warning">
-      <p>Using unlimited scrollback can make your <app>Terminal</app> sluggish
-      during scrolling!</p>
+      <p>Make sure you have sufficient disk space available for these temporary
+      files. If in doubt, monitor disk usage for example with the command
+      <cmd>du /tmp</cmd>.</p>
+    </note>
+
+    <note style="important">
+      <p>A giant scrollback buffer makes resizing the terminal window slower.
+      As a rule of thumb, resizing gets noticeably slow at around 1 million
+      lines.</p>
     </note>
 
   </section>
