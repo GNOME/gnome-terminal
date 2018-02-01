@@ -132,18 +132,6 @@ init_server (int argc,
   if (g_getenv ("G_ENABLE_DIAGNOSTIC") == NULL)
     g_setenv ("G_ENABLE_DIAGNOSTIC", "0", TRUE);
 
-#ifdef HAVE_UBUNTU
-#ifndef ENABLE_DISTRO_PACKAGING
-  /* Set some env vars to disable the ubuntu modules. Their package will be 
-   * built using --enable-distro-packaging, but anyone running from git will
-   * get the right behaviour.
-   */
-  g_setenv ("LIBOVERLAY_SCROLLBAR", "0", TRUE);
-#endif
-  g_setenv ("UBUNTU_MENUPROXY", "0", TRUE);
-  g_setenv ("NO_UNITY_GTK_MODULE", "1", TRUE);
-#endif
-
   _terminal_debug_init ();
 
   /* Change directory to $HOME so we don't prevent unmounting, e.g. if the

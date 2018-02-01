@@ -238,30 +238,6 @@ fi
 
 AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes"])
 
-# **********************
-# Distribution specifics
-# **********************
-
-if test -f /etc/os-release; then
-  DISTRO="$(. /etc/os-release && echo $ID)"
-else
-  DISTRO="unknown"
-fi
-
-case "$DISTRO" in
-  ubuntu) AC_DEFINE([HAVE_UBUNTU],[1],[Define if building under ubuntu]) ;;
-esac
-
-AC_MSG_CHECKING([whether building a distro package])
-AC_ARG_ENABLE([distro-packaging],
-  [AS_HELP_STRING([--enable-distro-packaging],[enable when building a distro package])],
-  [],[enable_distro_packaging=no])
-AC_MSG_RESULT([$enable_distro_packaging])
-
-if test "$enable_distro_packaging" = "yes"; then
-  AC_DEFINE([ENABLE_DISTRO_PACKAGING],[1],[Define if building a distro package])
-fi
-
 # ***********
 # Compilation
 # ***********
