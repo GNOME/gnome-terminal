@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-01-06 10:22+0000\n"
-"PO-Revision-Date: 2018-01-12 10:31+0200\n"
+"POT-Creation-Date: 2018-02-02 20:31+0000\n"
+"PO-Revision-Date: 2018-02-03 13:53+0200\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -29,13 +29,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-02-19 15:25:13+0000\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:158
+#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:146
 #: ../src/terminal-accels.c:230 ../src/terminal.c:542
-#: ../src/terminal-tab-label.c:81 ../src/terminal-window.c:1932
-#: ../src/terminal-window.c:2200 ../src/terminal-window.c:2478
+#: ../src/terminal-tab-label.c:81 ../src/terminal-window.c:1939
+#: ../src/terminal-window.c:2207 ../src/terminal-window.c:2485
 msgid "Terminal"
 msgstr "Pääte"
 
@@ -742,7 +742,7 @@ msgid "Preferences"
 msgstr "Asetukset"
 
 #: ../src/preferences.ui.h:9
-msgid "Show _menubar by default in new terminals"
+msgid "_Show menubar by default in new terminals"
 msgstr "Näytä _valikkopalkki oletuksena uusissa päätteissä"
 
 #: ../src/preferences.ui.h:10
@@ -761,7 +761,7 @@ msgstr "Teemam_uunnelma:"
 msgid "Open _new terminals in:"
 msgstr "Avaa _uudet päätteet:"
 
-#: ../src/preferences.ui.h:14 ../src/profile-preferences.ui.h:80
+#: ../src/preferences.ui.h:14 ../src/profile-preferences.ui.h:76
 msgid "General"
 msgstr "Yleistä"
 
@@ -840,12 +840,22 @@ msgstr "Mukautettu"
 msgid "Editing Profile “%s”"
 msgstr "Muokataan profiilia ”%s”"
 
-#: ../src/profile-editor.c:902
+#. Translators: Appears as: [numeric entry] × width
+#: ../src/profile-editor.c:885
+msgid "width"
+msgstr "leveys"
+
+#. Translators: Appears as: [numeric entry] × height
+#: ../src/profile-editor.c:890
+msgid "height"
+msgstr "korkeus"
+
+#: ../src/profile-editor.c:913
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Valitse paletin väri %u"
 
-#: ../src/profile-editor.c:906
+#: ../src/profile-editor.c:917
 #, c-format
 msgid "Palette entry %u"
 msgstr "Paletin väri %u"
@@ -1035,209 +1045,182 @@ msgid "Text Appearance"
 msgstr "Tekstin ulkoasu"
 
 #: ../src/profile-preferences.ui.h:72
-msgid "Allow b_linking text:"
-msgstr "_Salli vilkkuva teksti:"
-
-#: ../src/profile-preferences.ui.h:73
-msgid "_Rewrap on resize"
-msgstr "_Rivitä uudelleen koon muuttuessa"
-
-#: ../src/profile-preferences.ui.h:74
-msgid "_Custom font:"
+msgid "Custom _font:"
 msgstr "Mukautettu _fontti:"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/profile-preferences.ui.h:73
 msgid "Choose A Terminal Font"
 msgstr "Valitse päätteen fontti"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/profile-preferences.ui.h:74
 msgid "Cell spaci_ng:"
 msgstr "Solun v_älistys:"
 
+#: ../src/profile-preferences.ui.h:75
+msgid "Allow b_linking text:"
+msgstr "_Salli vilkkuva teksti:"
+
 #: ../src/profile-preferences.ui.h:77
-msgid "× width"
-msgstr "× leveys"
-
-#: ../src/profile-preferences.ui.h:78
-msgid "× height"
-msgstr "× korkeus"
-
-#: ../src/profile-preferences.ui.h:79
-msgid "R_eset"
-msgstr "_Nollaa"
-
-#: ../src/profile-preferences.ui.h:81
-msgid "_Run command as a login shell"
-msgstr "_Aja komento kirjautumiskomentotulkkina"
-
-#: ../src/profile-preferences.ui.h:82
-msgid "Ru_n a custom command instead of my shell"
-msgstr "Suorita _muu komento komentotulkin sijaan"
-
-#: ../src/profile-preferences.ui.h:83
-msgid "Custom co_mmand:"
-msgstr "Muu _komento:"
-
-#: ../src/profile-preferences.ui.h:84
-msgid "When command _exits:"
-msgstr "Kun komento _loppuu:"
-
-#: ../src/profile-preferences.ui.h:85
-msgid "Command"
-msgstr "Komento"
-
-#: ../src/profile-preferences.ui.h:86
 msgid "Text and Background Color"
 msgstr "Tekstin ja taustan väri"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:78
 msgid "_Use colors from system theme"
 msgstr "Käytä _järjestelmäteeman värejä"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:79
 msgid "Built-in sche_mes:"
 msgstr "Sisäänrakennetut _mallit:"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:80
 msgid "Text"
 msgstr "Teksti"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:81
 msgid "Background"
 msgstr "Tausta"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:82
 msgid "_Default color:"
 msgstr "Oletusv_äri:"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:83
 msgid "Choose Terminal Text Color"
 msgstr "Valitse päätteen tekstin väri"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:84
 msgid "Choose Terminal Background Color"
 msgstr "Valitse päätteen taustaväri"
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:85
 msgid "Bo_ld color:"
 msgstr "_Lihavoitu väri:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:86
 msgid "Choose Terminal Bold Text Color"
 msgstr "Valitse päätteen lihavoidun tekstin väri"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:87
 msgid "_Underline color:"
 msgstr "_Alleviivausväri:"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/profile-preferences.ui.h:88
 msgid "Choose Terminal Underlined Text Color"
 msgstr "Valitse päätteen alleviivatun tekstin väri"
 
-#: ../src/profile-preferences.ui.h:98
+#: ../src/profile-preferences.ui.h:89
 msgid "Cu_rsor color:"
 msgstr "Kursorin _väri:"
 
-#: ../src/profile-preferences.ui.h:99
+#: ../src/profile-preferences.ui.h:90
 msgid "Choose Terminal Cursor Foreground Color"
 msgstr "Valitse päätteen kursorin edustaväri"
 
-#: ../src/profile-preferences.ui.h:100
+#: ../src/profile-preferences.ui.h:91
 msgid "Choose Terminal Cursor Background Color"
 msgstr "Valitse päätteen kursorin taustaväri"
 
-#: ../src/profile-preferences.ui.h:101
+#: ../src/profile-preferences.ui.h:92
 msgid "_Highlight color:"
 msgstr "K_orostusväri:"
 
-#: ../src/profile-preferences.ui.h:102
+#: ../src/profile-preferences.ui.h:93
 msgid "Choose Terminal Highlight Foreground Color"
 msgstr "Valitse päätteen korostuksen edustaväri"
 
-#: ../src/profile-preferences.ui.h:103
+#: ../src/profile-preferences.ui.h:94
 msgid "Choose Terminal Highlight Background Color"
 msgstr "Valitse päätteen korostuksen taustaväri"
 
-#: ../src/profile-preferences.ui.h:104
+#: ../src/profile-preferences.ui.h:95
 msgid "Palette"
 msgstr "Paletti"
 
-#: ../src/profile-preferences.ui.h:105
+#: ../src/profile-preferences.ui.h:96
 msgid "Built-in _schemes:"
 msgstr "Sisään_rakennetut mallit:"
 
-#: ../src/profile-preferences.ui.h:106
+#: ../src/profile-preferences.ui.h:97
 msgid "Color p_alette:"
 msgstr "Väri_paletti:"
 
-#: ../src/profile-preferences.ui.h:107
+#: ../src/profile-preferences.ui.h:98
 msgid "Show _bold text in bright colors"
 msgstr "N_äytä lihavoitu teksti kirkkailla väreillä"
 
-#: ../src/profile-preferences.ui.h:108
+#: ../src/profile-preferences.ui.h:99
 msgid "Colors"
 msgstr "Värit"
 
-#: ../src/profile-preferences.ui.h:109
+#: ../src/profile-preferences.ui.h:100
 msgid "_Show scrollbar"
 msgstr "N_äytä vierityspalkki"
 
-#: ../src/profile-preferences.ui.h:110
+#: ../src/profile-preferences.ui.h:101
 msgid "Scroll on _output"
 msgstr "Vieritä t_ulostaessa"
 
-#: ../src/profile-preferences.ui.h:111
+#: ../src/profile-preferences.ui.h:102
 msgid "Scroll on _keystroke"
 msgstr "Vieritä _kirjoitettaessa"
 
-#: ../src/profile-preferences.ui.h:112
+#: ../src/profile-preferences.ui.h:103
 msgid "_Limit scrollback to:"
 msgstr "_Takaisinvieritys:"
 
-#: ../src/profile-preferences.ui.h:113
+#: ../src/profile-preferences.ui.h:104
 msgid "lines"
 msgstr "riviä"
 
-#: ../src/profile-preferences.ui.h:114
+#: ../src/profile-preferences.ui.h:105
 msgid "Scrolling"
 msgstr "Vieritys"
 
-#: ../src/profile-preferences.ui.h:115
-msgid ""
-"<b>Note:</b> These options may cause some applications to behave "
-"incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior."
-msgstr ""
-"<b>Huomautus:</b> Nämä valinnat saattavat saada jotkin sovellukset toimimaan "
-"väärin. Ne ovat olemassa vain, jotta voit käyttää ohjelmia ja "
-"käyttöjärjestelmiä, jotka odottavat erilaista päätteen käyttäytymistä."
+#: ../src/profile-preferences.ui.h:106
+msgid "_Run command as a login shell"
+msgstr "_Aja komento kirjautumiskomentotulkkina"
 
-#: ../src/profile-preferences.ui.h:116
+#: ../src/profile-preferences.ui.h:107
+msgid "Ru_n a custom command instead of my shell"
+msgstr "Suorita _muu komento komentotulkin sijaan"
+
+#: ../src/profile-preferences.ui.h:108
+msgid "Custom co_mmand:"
+msgstr "Muu _komento:"
+
+#: ../src/profile-preferences.ui.h:109
+msgid "When command _exits:"
+msgstr "Kun komento _loppuu:"
+
+#: ../src/profile-preferences.ui.h:110
+msgid "Command"
+msgstr "Komento"
+
+#: ../src/profile-preferences.ui.h:111
 msgid "_Backspace key generates:"
 msgstr "_Askelpalautin tuottaa:"
 
-#: ../src/profile-preferences.ui.h:117
+#: ../src/profile-preferences.ui.h:112
 msgid "_Delete key generates:"
 msgstr "_Delete tuottaa:"
 
-#: ../src/profile-preferences.ui.h:118
+#: ../src/profile-preferences.ui.h:113
 msgid "_Encoding:"
 msgstr "_Merkistö:"
 
-#: ../src/profile-preferences.ui.h:119
+#: ../src/profile-preferences.ui.h:114
 msgid "Ambiguous-_width characters:"
 msgstr "L_eveydeltään asiayhteyskohtaiset merkit:"
 
-#: ../src/profile-preferences.ui.h:120
+#: ../src/profile-preferences.ui.h:115
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Palauta yhteensopivuusasetukset oletuksiksi"
 
-#: ../src/profile-preferences.ui.h:121
+#: ../src/profile-preferences.ui.h:116
 msgid "Compatibility"
 msgstr "Yhteensopivuus"
 
 #: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:152
-#: ../src/terminal-accels.c:229
 msgid "Find"
 msgstr "Etsi"
 
@@ -1405,6 +1388,10 @@ msgstr "Muokkaa"
 msgid "View"
 msgstr "Näytä"
 
+#: ../src/terminal-accels.c:229
+msgid "Search"
+msgstr "Etsi"
+
 #: ../src/terminal-accels.c:231
 msgid "Tabs"
 msgstr "Välilehdet"
@@ -1426,15 +1413,15 @@ msgstr "_Toiminto"
 msgid "Shortcut _Key"
 msgstr "Pika_näppäin"
 
-#: ../src/terminal-app.c:498 ../src/terminal-window.c:1843
+#: ../src/terminal-app.c:498 ../src/terminal-window.c:1850
 msgid "New _Terminal"
 msgstr "_Uusi pääte"
 
-#: ../src/terminal-app.c:500 ../src/terminal-window.c:1852
+#: ../src/terminal-app.c:500 ../src/terminal-window.c:1859
 msgid "New _Tab"
 msgstr "Uusi _välilehti"
 
-#: ../src/terminal-app.c:501 ../src/terminal-window.c:1848
+#: ../src/terminal-app.c:501 ../src/terminal-window.c:1855
 msgid "New _Window"
 msgstr "Uusi _ikkuna"
 
@@ -1644,19 +1631,19 @@ msgstr "_Sulje ikkuna"
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../src/terminal-menubar.ui.h:9 ../src/terminal-window.c:1807
+#: ../src/terminal-menubar.ui.h:9 ../src/terminal-window.c:1814
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: ../src/terminal-menubar.ui.h:10 ../src/terminal-window.c:1808
+#: ../src/terminal-menubar.ui.h:10 ../src/terminal-window.c:1815
 msgid "Copy as _HTML"
 msgstr "Kopioi _HTML:nä"
 
-#: ../src/terminal-menubar.ui.h:11 ../src/terminal-window.c:1809
+#: ../src/terminal-menubar.ui.h:11 ../src/terminal-window.c:1816
 msgid "_Paste"
 msgstr "_Liitä"
 
-#: ../src/terminal-menubar.ui.h:12 ../src/terminal-window.c:1811
+#: ../src/terminal-menubar.ui.h:12 ../src/terminal-window.c:1818
 msgid "Paste as _Filenames"
 msgstr "Liitä _tiedostoniminä"
 
@@ -1676,7 +1663,7 @@ msgstr "_Profiilin asetukset"
 msgid "_View"
 msgstr "_Näytä"
 
-#: ../src/terminal-menubar.ui.h:17 ../src/terminal-window.c:1864
+#: ../src/terminal-menubar.ui.h:17 ../src/terminal-window.c:1871
 msgid "Show _Menubar"
 msgstr "Näytä valikkopalkki"
 
@@ -1697,7 +1684,7 @@ msgid "Zoom _Out"
 msgstr "_Pienennä"
 
 #: ../src/terminal-menubar.ui.h:22
-msgid "_Find"
+msgid "_Search"
 msgstr "_Etsi"
 
 #: ../src/terminal-menubar.ui.h:23
@@ -1728,7 +1715,7 @@ msgstr "Aseta _otsikko…"
 msgid "Set _Character Encoding"
 msgstr "Aseta _merkistö"
 
-#: ../src/terminal-menubar.ui.h:30 ../src/terminal-window.c:1817
+#: ../src/terminal-menubar.ui.h:30 ../src/terminal-window.c:1824
 msgid "Read-_Only"
 msgstr "_Vain luku"
 
@@ -1855,7 +1842,7 @@ msgstr "Siirrä pääte _oikealle"
 msgid "_Detach Terminal"
 msgstr "_Irrota pääte"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3353
+#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3360
 msgid "C_lose Terminal"
 msgstr "S_ulje pääte"
 
@@ -2125,7 +2112,7 @@ msgstr "Profiililuettelo"
 msgid "Delete profile “%s”?"
 msgstr "Poista profiili ”%s”?"
 
-#: ../src/terminal-prefs.c:369 ../src/terminal-window.c:488
+#: ../src/terminal-prefs.c:369 ../src/terminal-window.c:495
 msgid "_Cancel"
 msgstr "_Peru"
 
@@ -2144,8 +2131,8 @@ msgstr "Komentoa ei annettu eikä komentotulkkia pyydetty"
 #. If there's only a single profile, put the Profile Preferences item in the
 #. * context menu itself.
 #.
-#: ../src/terminal-screen.c:1392 ../src/terminal-window.c:1825
-#: ../src/terminal-window.c:1835
+#: ../src/terminal-screen.c:1392 ../src/terminal-window.c:1832
+#: ../src/terminal-window.c:1842
 msgid "_Profile Preferences"
 msgstr "_Profiilin asetukset"
 
@@ -2247,67 +2234,67 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr ""
 
-#: ../src/terminal-window.c:465
+#: ../src/terminal-window.c:472
 msgid "Could not save contents"
 msgstr "Ei voitu tallentaa sisältöä"
 
-#: ../src/terminal-window.c:485
+#: ../src/terminal-window.c:492
 msgid "Save as…"
 msgstr "Tallenna nimellä…"
 
-#: ../src/terminal-window.c:489
+#: ../src/terminal-window.c:496
 msgid "_Save"
 msgstr "_Tallenna"
 
-#: ../src/terminal-window.c:1764
+#: ../src/terminal-window.c:1771
 msgid "Open _Hyperlink"
 msgstr "_Avaa linkki"
 
-#: ../src/terminal-window.c:1765
+#: ../src/terminal-window.c:1772
 msgid "Copy Hyperlink _Address"
 msgstr "Kopioi li_nkin osoite"
 
-#: ../src/terminal-window.c:1775
+#: ../src/terminal-window.c:1782
 msgid "Send Mail _To…"
 msgstr "_Lähetä sähköpostia…"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:1783
 msgid "Copy Mail _Address"
 msgstr "Kopioi _sähköpostiosoite"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1786
 msgid "Call _To…"
 msgstr "_Soita…"
 
-#: ../src/terminal-window.c:1780
+#: ../src/terminal-window.c:1787
 msgid "Copy Call _Address "
 msgstr "Kopioi soitto-o_soite "
 
-#: ../src/terminal-window.c:1785
+#: ../src/terminal-window.c:1792
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1793
 msgid "Copy _Link"
 msgstr "Kopioi _linkki"
 
-#: ../src/terminal-window.c:1828
+#: ../src/terminal-window.c:1835
 msgid "P_rofiles"
 msgstr "P_rofiilit"
 
-#: ../src/terminal-window.c:1866
+#: ../src/terminal-window.c:1873
 msgid "L_eave Full Screen"
 msgstr "Po_istu koko näytön tilasta"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3347
 msgid "Close this window?"
 msgstr "Suljetaanko tämä ikkuna?"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3347
 msgid "Close this terminal?"
 msgstr "Suljetaanko tämä pääte?"
 
-#: ../src/terminal-window.c:3344
+#: ../src/terminal-window.c:3351
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2315,7 +2302,7 @@ msgstr ""
 "Joissain tämän ikkunan päätteissä on vielä prosesseja käynnissä. Ikkunan "
 "sulkeminen lopettaa kaikki nämä prosessit."
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3355
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2323,9 +2310,28 @@ msgstr ""
 "Tässä päätteessä on vielä käynnissä prosessi. Päätteen sulkeminen lopettaa "
 "tämän prosessin."
 
-#: ../src/terminal-window.c:3353
+#: ../src/terminal-window.c:3360
 msgid "C_lose Window"
 msgstr "_Sulje ikkuna"
+
+#~ msgid "_Rewrap on resize"
+#~ msgstr "_Rivitä uudelleen koon muuttuessa"
+
+#~ msgid "R_eset"
+#~ msgstr "_Nollaa"
+
+#~ msgid ""
+#~ "<b>Note:</b> These options may cause some applications to behave "
+#~ "incorrectly.  They are only here to allow you to work around certain "
+#~ "applications and operating systems that expect different terminal "
+#~ "behavior."
+#~ msgstr ""
+#~ "<b>Huomautus:</b> Nämä valinnat saattavat saada jotkin sovellukset "
+#~ "toimimaan väärin. Ne ovat olemassa vain, jotta voit käyttää ohjelmia ja "
+#~ "käyttöjärjestelmiä, jotka odottavat erilaista päätteen käyttäytymistä."
+
+#~ msgid "_Find"
+#~ msgstr "_Etsi"
 
 #~ msgid "Output options:"
 #~ msgstr "Tulostevalitsimet:"
@@ -2431,9 +2437,6 @@ msgstr "_Sulje ikkuna"
 #~ "<b>Note:</b> Terminal applications have these colors available to them."
 #~ msgstr "<b>Huomautus:</b> Päätesovellukset voivat käyttää näitä värejä."
 
-#~ msgid "Search"
-#~ msgstr "Etsi"
-
 #~ msgid "New Terminal in New Tab"
 #~ msgstr "Uusi pääte uuteen välilehteen"
 
@@ -2466,9 +2469,6 @@ msgstr "_Sulje ikkuna"
 
 #~ msgid "Open _Terminal"
 #~ msgstr "Avaa _pääte"
-
-#~ msgid "_Search"
-#~ msgstr "_Etsi"
 
 #~ msgid "Open Ta_b"
 #~ msgstr "Avaa _välilehti"
