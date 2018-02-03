@@ -6,7 +6,7 @@
     <revision pkgversion="3.8" date="2013-03-03" status="candidate"/>
     <revision pkgversion="3.12" date="2014-09-08" status="candidate"/>
     <link type="guide" xref="index#preferences"/>
-    <link type="guide" xref="pref"/>
+    <link type="guide" xref="pref#manage-profiles"/>
 
     <credit type="author copyright">
       <name>Sindhu S</name>
@@ -26,7 +26,7 @@
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>Create, edit and delete profiles.</desc>
+    <desc>Create, rename and delete profiles.</desc>
   </info>
 
   <title>Manage profiles</title>
@@ -62,34 +62,11 @@
     </item>
   </list>
 
-  <p>The default profile is loaded when a new terminal is opened unless you
-  have selected another profile. Any changes that you make to the settings will
-  be stored in the currently used profile.</p>
-
-  <section id="set-default" style="task">
-    <title>Set a default profile</title>
-
-    <p>The default profile is a collection of profile settings applied on the
-    launch of every <app>Terminal</app> tab or window.</p>
-
-    <steps>
-      <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Preferences</gui>
-        <gui style="tab">Profiles</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Select the profile to be set as default from the <gui>Profile used
-        when launching a new terminal</gui> drop down list.</p>
-      </item>
-    </steps>
-
-  </section>
-
   <section id="select-profile" style="task">
     <title>Select a profile</title>
 
-    <p>You can change the profile in your current <app>Terminal</app> tab or
+    <p>If you have two or more profiles defined, you can change the profile in
+    your current <app>Terminal</app> tab or
     window by selecting a profile from <guiseq><gui style="menu">Terminal</gui>
     <gui style="menuitem">Change Profile</gui></guiseq>.</p>
 
@@ -98,38 +75,27 @@
   <section id="new-profile" style="task">
     <title>Create a new profile</title>
 
-    <p>Any changes to a new profile are saved automatically. To create a new
-    profile:</p>
+    <p>To create a new profile with the default settings of
+    <app>Terminal</app>:</p>
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">File</gui>
-        <gui style="menuitem">New Profile</gui></guiseq>.</p>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Enter a name for the new profile next to
-        <gui style="input">Profile name</gui>.</p>
+        <p>In the sidebar, click on the <gui style="button">+</gui> button
+        next to the <gui>Profiles</gui> label.</p>
       </item>
       <item>
-        <p>Select <link xref="app-fonts">font</link>,
-        <link xref="app-cursor">cursor shape</link> and
-        <link xref="app-terminal-sizes">window size</link> in the
-        <gui style="tab">General</gui> tab.</p>
+        <p>Enter a name for the new profile. You can change this name later.</p>
       </item>
       <item>
-        <p>Set your preferred behavior for the
-        <link xref="pref-custom-exit"><cmd>exit</cmd> command</link>.
-        You can also set a
-        <link xref="pref-custom-command">custom shell</link> in the
-        <gui style="tab">Command</gui> tab.</p>
+        <p>Click <gui style="button">Create</gui> to create the new profile.</p>
       </item>
       <item>
-        <p>Set your preferred <link xref="app-colors">theme and colors</link>
-        in the <gui style="tab">Colors</gui> tab.</p>
-      </item>
-      <item>
-        <p>Set your <link xref="pref-scrolling">scrolling preference</link> in
-        the <gui style="tab">Scrolling</gui> tab.</p>
+        <p>Set your desired <link xref="#edit-profile">profile
+        preferences</link>. These will be saved automatically.</p>
       </item>
     </steps>
 
@@ -143,45 +109,28 @@
 
     <steps>
       <item>
-        <p>Select the profile that you wish to edit from
-        <guiseq><gui style="menu">Terminal</gui>
-        <gui style="menuitem">Change Profile</gui>
-        <gui style="menuitem"><var>Profile name</var></gui></guiseq> where
-        <var>Profile name</var> is the name of the profile that you wish to
-        edit. Alternatively, you can select <guiseq>
-        <gui style="menu">File</gui>
-        <gui style="menuitem">New Profile</gui></guiseq> to clone the profile
-        that you are currently using.</p>
-      </item>
-      <item>
-        <p>Set your desired <link xref="#edit-profile">profile
-        preferences</link>. These will be saved automatically. If you do not
-        update the <gui>Profile name</gui> on the tab <gui style="tab">General
-        </gui>, the new profile will not overwrite the profile that it is based
-        on.</p>
-      </item>
-    </steps>
-
-    <p>Alternatively, you can create a copy of the existing profile first and
-    then edit the profile:</p>
-
-    <steps>
-      <item>
         <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Preferences</gui>
-        <gui style="tab">Profiles</gui></guiseq>.</p>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Select your desired profile.</p>
+        <p>In the sidebar select the profile on which your new profile should
+        be based.</p>
       </item>
       <item>
-        <p>Click <gui style="button">Clone</gui>.</p>
+        <p>Click on the arrow next to the profile name.</p>
+      </item>
+      <item>
+        <p>Select <gui style="menuitem">Clone…</gui>.</p>
+      </item>
+      <item>
+        <p>Enter a name for the new profile. You can change this name later.</p>
+      </item>
+      <item>
+        <p>Click <gui style="button">Clone</gui> to create the new profile.</p>
       </item>
       <item>
         <p>Set your desired <link xref="#edit-profile">profile
-        preferences</link>. These will be saved automatically. If you do not
-        update the profile name, the new profile will not overwrite the profile
-        that it is based on.</p>
+        preferences</link>. These will be saved automatically.</p>
       </item>
     </steps>
 
@@ -206,9 +155,20 @@
       default profile</link> then edit the copy to create a custom profile.</p>
     </note>
 
-    <p>You can make changes to existing profiles. To edit a profile, select
-    <guiseq><gui style="menu">Edit</gui>
-    <gui style="menuitem">Profile Preferences</gui></guiseq>.</p>
+    <p>You can make changes to existing profiles. To edit a profile:</p>
+
+    <steps>
+      <item>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Your current profile is selected in the sidebar. If you wish to edit
+        a different profile, click on its name.</p>
+      </item>
+    </steps>
+
+    <p>Once the desired profile is selected, you can:</p>
 
     <steps>
       <item>
@@ -232,12 +192,6 @@
       </item>
     </steps>
 
-    <note style="important">
-      <p>To make sure you are editing the desired profile, select the profile
-      from <guiseq><gui style="menu">Terminal</gui>
-      <gui style="menuitem">Change Profile</gui></guiseq>.</p>
-    </note>
-
   </section>
 
   <section id="rename-profile" style="task">
@@ -248,45 +202,91 @@
     <steps>
       <item>
         <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Preferences</gui>
-        <gui style="tab">Profiles</gui></guiseq>.</p>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
       </item>
       <item>
         <p>Select the profile you wish to rename.</p>
       </item>
       <item>
-        <p>Click <gui style="button">Edit</gui>. This will open the
-        profile preferences dialog for the selected profile.</p>
+        <p>Click on the arrow next to the profile name.</p>
       </item>
       <item>
-        <p>In the text box for <gui>Profile name</gui>, type the new profile
-        name.</p>
+        <p>Select <gui style="menuitem">Rename…</gui>.</p>
       </item>
       <item>
-        <p>Click <gui style="button">Close</gui> to return.</p>
+        <p>Enter the new profile name.</p>
+      </item>
+      <item>
+        <p>Click <gui style="button">Rename</gui> to rename.</p>
       </item>
     </steps>
 
   </section>
 
   <section id="delete-profile" style="task">
-    <title>Delete a Profile</title>
+    <title>Delete a profile</title>
   
     <p>To delete a profile:</p>
 
     <steps>
       <item>
         <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Preferences</gui>
-        <gui style="tab">Profiles</gui></guiseq>.</p>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Select the profile you wish to delete. </p>
+        <p>Select the profile you wish to delete.</p>
       </item>
       <item>
-        <p>Click <gui style="button">Delete</gui>.</p>
+        <p>Click on the arrow next to the profile name.</p>
+      </item>
+      <item>
+        <p>Select <gui style="menuitem">Delete…</gui>.</p>
+      </item>
+      <item>
+        <p>Click <gui style="button">Delete</gui> to confirm.</p>
       </item>
     </steps>
+
+    <note style="tip">
+      <p>The default profile cannot be deleted. If you wish to delete
+      that profile, first set another profile as <link
+      xref="#set-default">default</link>.</p>
+    </note>
+
+  </section>
+
+  <p>The default profile is loaded when a new terminal is opened unless you
+  have selected another profile. Any changes that you make to the settings will
+  be stored in the currently selected profile.</p>
+
+  <section id="set-default" style="task">
+    <title>Set a default profile</title>
+
+    <p>The default profile is used when <app>Terminal</app> could not
+    otherwise decide which profile to use. For example, <app>Terminal</app> is
+    started up freshly and opens its first terminal window. In contrast, when
+    you use a menu entry or keyboard shortcut of <app>Terminal</app> to open a
+    new terminal, the profile of the existing terminal is used.</p>
+
+    <steps>
+      <item>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
+        <gui style="menuitem">Preferences</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Select the profile you wish to set as the default.</p>
+      </item>
+      <item>
+        <p>Click on the arrow next to the profile name.</p>
+      </item>
+      <item>
+        <p>Select <gui style="menuitem">Set as default</gui>.</p>
+      </item>
+    </steps>
+
+    <note>
+      <p>The default profile is marked with a check mark symbol.</p>
+    </note>
 
   </section>
 
