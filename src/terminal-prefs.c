@@ -27,6 +27,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "profile-editor.h"
 #include "terminal-prefs.h"
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -36,20 +37,9 @@
 #include "terminal-profiles-list.h"
 #include "terminal-libgsystem.h"
 
-typedef struct {
-  TerminalSettingsList *profiles_list;
-  GtkWidget *dialog;
-  GtkWindow *parent;
+PrefData *the_pref_data = NULL;  /* global */
 
-  GtkTreeView *manage_profiles_list;
-  GtkWidget *manage_profiles_new_button;
-  GtkWidget *manage_profiles_edit_button;
-  GtkWidget *manage_profiles_clone_button;
-  GtkWidget *manage_profiles_delete_button;
-  GtkWidget *profiles_default_combo;
-} PrefData;
-
-static GtkWidget *prefs_dialog = NULL;
+/* Bottom */
 
 static void
 prefs_dialog_help_button_clicked_cb (GtkWidget *button,
@@ -65,373 +55,658 @@ prefs_dialog_close_button_clicked_cb (GtkWidget *button,
   gtk_widget_destroy (data->dialog);
 }
 
-/* Profiles tab */
+/* Sidebar */
 
-enum
+static inline GSimpleAction *
+lookup_action (GtkWindow *window,
+               const char *name)
 {
-  COL_PROFILE,
-  NUM_PROFILE_COLUMNS
-};
+  GAction *action;
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (window), name);
+  g_return_val_if_fail (action != NULL, NULL);
+
+  return G_SIMPLE_ACTION (action);
+}
+
+/* Update the sidebar (visibility of icons, sensitivity of menu entries) to reflect the default and the selected profiles. */
+static void
+listbox_update (GtkListBox *box)
+{
+  int i;
+  GtkListBoxRow *row;
+  GSettings *profile;
+  gs_unref_object GSettings *default_profile;
+  GtkStack *stack;
+  GtkMenuButton *button;
+
+  default_profile = terminal_settings_list_ref_default_child (the_pref_data->profiles_list);
+
+  /* GTK+ doesn't seem to like if a popover is assigned to multiple buttons at once
+   * (not even temporarily), so make sure to remove it from the previous button first. */
+  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != NULL; i++) {
+    button = g_object_get_data (G_OBJECT (row), "popover-button");
+    gtk_menu_button_set_popover (button, NULL);
+  }
+
+  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != NULL; i++) {
+    profile = g_object_get_data (G_OBJECT (row), "gsettings");
+
+    gboolean is_selected_profile = (profile != NULL && profile == the_pref_data->selected_profile);
+    gboolean is_default_profile = (profile != NULL && profile == default_profile);
+
+    stack = g_object_get_data (G_OBJECT (row), "home-stack");
+    gtk_stack_set_visible_child_name (stack, is_default_profile ? "home" : "placeholder");
+
+    stack = g_object_get_data (G_OBJECT (row), "popover-stack");
+    gtk_stack_set_visible_child_name (stack, is_selected_profile ? "button" : "placeholder");
+    if (is_selected_profile) {
+      g_simple_action_set_enabled (lookup_action (GTK_WINDOW (the_pref_data->dialog), "delete"), !is_default_profile);
+      g_simple_action_set_enabled (lookup_action (GTK_WINDOW (the_pref_data->dialog), "set-as-default"), !is_default_profile);
+
+      GtkPopover *popover_menu = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-menu"));
+      button = g_object_get_data (G_OBJECT (row), "popover-button");
+      gtk_menu_button_set_popover (button, GTK_WIDGET (popover_menu));
+      gtk_popover_set_relative_to (popover_menu, GTK_WIDGET (button));
+    }
+  }
+}
 
 static void
-profile_cell_data_func (GtkTreeViewColumn *tree_column,
-                        GtkCellRenderer *cell,
-                        GtkTreeModel *tree_model,
-                        GtkTreeIter *iter,
-                        PrefData *data)
+update_window_title (void)
 {
-  gs_unref_object GSettings *profile;
-  gs_free char *text;
-  GValue value = { 0, };
+  GtkListBoxRow *row = the_pref_data->selected_list_box_row;
+  if (row == NULL)
+    return;
 
-  gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
-  text = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+  GSettings *profile = g_object_get_data (G_OBJECT (row), "gsettings");
+  GtkLabel *label = g_object_get_data (G_OBJECT (row), "label");
+  const char *text = gtk_label_get_text (label);
+  gs_free char *subtitle;
+  gs_free char *title;
 
-  g_value_init (&value, G_TYPE_STRING);
-  if (text[0])
-    g_value_set_string (&value, text);
-  else
-    g_value_set_static_string (&value, _("Unnamed"));
+  if (profile == NULL) {
+    subtitle = g_strdup (text);
+  } else {
+    subtitle = g_strdup_printf (_("Profile “%s”"), text);
+  }
 
-  g_object_set_property (G_OBJECT (cell), "text", &value);
-  g_value_unset (&value);
+  title = g_strdup_printf (_("Preferences – %s"), subtitle);
+  gtk_window_set_title (GTK_WINDOW (the_pref_data->dialog), title);
 }
 
-static int
-profile_sort_func (GtkTreeModel *model,
-                   GtkTreeIter *a,
-                   GtkTreeIter *b,
-                   gpointer user_data)
+/* A new entry is selected in the sidebar */
+static void
+listbox_row_selected_cb (GtkListBox *box,
+                         GtkListBoxRow *row,
+                         GtkStack *stack)
 {
-  gs_unref_object GSettings *profile_a;
-  gs_unref_object GSettings *profile_b;
+  profile_prefs_unload ();
 
-  gtk_tree_model_get (model, a, (int) COL_PROFILE, &profile_a, (int) -1);
-  gtk_tree_model_get (model, b, (int) COL_PROFILE, &profile_b, (int) -1);
+  /* row can be NULL intermittently during a profile meta operations */
+  g_free (the_pref_data->selected_profile_uuid);
+  if (row != NULL) {
+    the_pref_data->selected_profile = g_object_get_data (G_OBJECT (row), "gsettings");
+    the_pref_data->selected_profile_uuid = g_strdup (g_object_get_data (G_OBJECT (row), "uuid"));
+  } else {
+    the_pref_data->selected_profile = NULL;
+    the_pref_data->selected_profile_uuid = NULL;
+  }
+  the_pref_data->selected_list_box_row = row;
 
-  return terminal_profiles_compare (profile_a, profile_b);
-}
+  listbox_update (box);
 
-static /* ref */ GtkTreeModel *
-profile_liststore_new (PrefData *data,
-                       GSettings *selected_profile,
-                       GtkTreeIter *selected_profile_iter,
-                       gboolean *selected_profile_iter_set)
-{
-  GtkListStore *store;
-  GtkTreeIter iter;
-  GList *list, *l;
-
-  G_STATIC_ASSERT (NUM_PROFILE_COLUMNS == 1);
-  store = gtk_list_store_new (NUM_PROFILE_COLUMNS, G_TYPE_SETTINGS);
-
-  if (selected_profile_iter)
-    *selected_profile_iter_set = FALSE;
-
-  list = terminal_settings_list_ref_children (data->profiles_list);
-  for (l = list; l != NULL; l = l->next)
-    {
-      GSettings *profile = (GSettings *) l->data;
-
-      gtk_list_store_insert_with_values (store, &iter, 0,
-                                         (int) COL_PROFILE, profile,
-                                         (int) -1);
-
-      if (selected_profile_iter && profile == selected_profile)
-        {
-          *selected_profile_iter = iter;
-          *selected_profile_iter_set = TRUE;
-        }
+  if (row != NULL) {
+    if (the_pref_data->selected_profile != NULL) {
+      profile_prefs_load (the_pref_data->selected_profile_uuid, the_pref_data->selected_profile);
     }
 
-  g_list_free_full (list, (GDestroyNotify) g_object_unref);
+    char *stack_child_name = g_object_get_data (G_OBJECT (row), "stack_child_name");
+    gtk_stack_set_visible_child_name (stack, stack_child_name);
+  }
 
-  /* Now turn on sorting */
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
-                                   COL_PROFILE,
-                                   profile_sort_func,
-                                   NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        COL_PROFILE, GTK_SORT_ASCENDING);
-
-  return GTK_TREE_MODEL (store);
+  update_window_title ();
 }
 
-static /* ref */ GSettings*
-profile_combo_box_ref_selected (GtkComboBox *combo)
-{
-  GSettings *profile;
-  GtkTreeIter iter;
-
-  if (gtk_combo_box_get_active_iter (combo, &iter))
-    gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
-                        (int) COL_PROFILE, &profile, (int) -1);
-  else
-    profile = NULL;
-
-  return profile;
-}
-
+/* A profile's name changed, perhaps externally */
 static void
-profile_combo_box_refill (PrefData *data)
+profile_name_changed_cb (GtkLabel      *label,
+                         GParamSpec    *pspec,
+                         GtkListBoxRow *row)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (data->profiles_default_combo);
-  GtkTreeIter iter;
-  gboolean iter_set;
-  gs_unref_object GSettings *selected_profile;
-  gs_unref_object GtkTreeModel *model;
+  gtk_list_box_row_changed (row);  /* trigger re-sorting */
 
-  selected_profile = profile_combo_box_ref_selected (combo);
-
-  model = profile_liststore_new (data,
-                                 selected_profile,
-                                 &iter,
-                                 &iter_set);
-  gtk_combo_box_set_model (combo, model);
-
-  if (iter_set)
-    gtk_combo_box_set_active_iter (combo, &iter);
+  if (row == the_pref_data->selected_list_box_row)
+    update_window_title ();
 }
 
-static GtkWidget*
-profile_combo_box_new (PrefData *data)
+/* Select a profile in the sidebar by UUID */
+static gboolean
+listbox_select_profile (const char *uuid)
 {
-  GtkWidget *combo_widget;
-  GtkComboBox *combo;
-  GtkCellRenderer *renderer;
-  GtkTreeIter iter;
-  gboolean iter_set;
-  gs_unref_object GSettings *default_profile;
-  gs_unref_object GtkTreeModel *model;
-
-  combo_widget = gtk_combo_box_new ();
-  combo = GTK_COMBO_BOX (combo_widget);
-  terminal_util_set_atk_name_description (combo_widget, NULL, _("Click button to choose profile"));
-
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), renderer,
-                                      (GtkCellLayoutDataFunc) profile_cell_data_func,
-                                      data, NULL);
-
-  default_profile = terminal_settings_list_ref_default_child (data->profiles_list);
-  model = profile_liststore_new (data,
-                                 default_profile,
-                                 &iter,
-                                 &iter_set);
-  gtk_combo_box_set_model (combo, model);
-
-  if (iter_set)
-    gtk_combo_box_set_active_iter (combo, &iter);
-
-  gtk_widget_show (combo_widget);
-  return combo_widget;
+  GtkListBoxRow *row;
+  for (int i = 0; (row = gtk_list_box_get_row_at_index (the_pref_data->listbox, i)) != NULL; i++) {
+    const char *rowuuid = g_object_get_data (G_OBJECT (row), "uuid");
+    if (g_strcmp0 (rowuuid, uuid) == 0) {
+      g_signal_emit_by_name (row, "activate");
+      return TRUE;
+    }
+  }
+  return FALSE;
 }
 
+/* Create a new profile now, select it, update the UI. */
 static void
-profile_combo_box_changed_cb (GtkWidget *widget,
-                              PrefData *data)
+profile_new_now (const char *name)
 {
-  gs_unref_object GSettings *profile;
+  gs_free char *uuid = terminal_app_new_profile (terminal_app_get (), NULL, name);
+
+  listbox_select_profile (uuid);
+}
+
+/* Clone the selected profile now, select it, update the UI. */
+static void
+profile_clone_now (const char *name)
+{
+  if (the_pref_data->selected_profile == NULL)
+    return;
+
+  gs_free char *uuid = terminal_app_new_profile (terminal_app_get (), the_pref_data->selected_profile, name);
+
+  listbox_select_profile (uuid);
+}
+
+/* Rename the selected profile now, update the UI. */
+static void
+profile_rename_now (const char *name)
+{
+  if (the_pref_data->selected_profile == NULL)
+    return;
+
+  /* This will automatically trigger a call to profile_name_changed_cb(). */
+  g_settings_set_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, name);
+}
+
+/* Delete the selected profile now, update the UI. */
+static void
+profile_delete_now (const char *dummy)
+{
+  if (the_pref_data->selected_profile == NULL)
+    return;
+
+  /* Prepare to select the next one, or if there's no such then the previous one. */
+  int index = gtk_list_box_row_get_index (the_pref_data->selected_list_box_row);
+  GtkListBoxRow *new_selected_row = gtk_list_box_get_row_at_index (the_pref_data->listbox, index + 1);
+  if (new_selected_row == NULL)
+    new_selected_row = gtk_list_box_get_row_at_index (the_pref_data->listbox, index - 1);
+  GSettings *new_selected_profile = g_object_get_data (G_OBJECT (new_selected_row), "gsettings");
   gs_free char *uuid = NULL;
+  if (new_selected_profile != NULL)
+    uuid = terminal_settings_list_dup_uuid_from_child (the_pref_data->profiles_list, new_selected_profile);
 
-  profile = profile_combo_box_ref_selected (GTK_COMBO_BOX (data->profiles_default_combo));
-  if (!profile)
+  terminal_app_remove_profile (terminal_app_get (), the_pref_data->selected_profile);
+
+  listbox_select_profile (uuid);
+}
+
+/* "Set as default" selected. Do it now without asking for confirmation. */
+static void
+profile_set_as_default_cb (GSimpleAction *simple,
+                           GVariant      *parameter,
+                           gpointer       user_data)
+{
+  if (the_pref_data->selected_profile_uuid == NULL)
     return;
 
-  uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
-  terminal_settings_list_set_default_child (data->profiles_list, uuid);
+  /* This will automatically trigger a call to listbox_update() via "default-changed". */
+  terminal_settings_list_set_default_child (the_pref_data->profiles_list, the_pref_data->selected_profile_uuid);
 }
 
-static GSettings *
-profile_list_ref_selected (PrefData *data)
+
+static void
+popover_dialog_cancel_clicked_cb (GtkButton *button,
+                                  gpointer user_data)
 {
-  GtkTreeSelection *selection;
-  GtkTreeIter iter;
-  GtkTreeModel *model;
-  GSettings *selected_profile;
+  GtkPopover *popover_dialog = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-dialog"));
 
-  selection = gtk_tree_view_get_selection (data->manage_profiles_list);
-  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return NULL;
-
-  model = gtk_tree_view_get_model (data->manage_profiles_list);
-  gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
-  return selected_profile;
+#if GTK_CHECK_VERSION (3, 22, 0)
+  gtk_popover_popdown (popover_dialog);
+#else
+  gtk_widget_hide (GTK_WIDGET (popover_dialog));
+#endif
 }
 
 static void
-profile_list_treeview_refill (PrefData *data)
+popover_dialog_ok_clicked_cb (GtkButton *button,
+                              void (*fn) (const char *))
 {
-  GtkTreeView *tree_view = data->manage_profiles_list;
-  GtkTreeIter iter;
-  gboolean iter_set;
-  gs_unref_object GSettings *selected_profile;
-  gs_unref_object GtkTreeModel *model;
+  GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
+  const char *name = gtk_entry_get_text (entry);
 
-  selected_profile = profile_list_ref_selected (data);
-  model = profile_liststore_new (data,
-                                 selected_profile,
-                                 &iter,
-                                 &iter_set);
-  gtk_tree_view_set_model (tree_view, model);
+  /* Perform what we came for */
+  (*fn) (name);
 
-  if (!iter_set)
-    iter_set = gtk_tree_model_get_iter_first (model, &iter);
-
-  if (iter_set)
-    gtk_tree_selection_select_iter (gtk_tree_view_get_selection (tree_view), &iter);
+  /* Hide/popdown the popover */
+  popover_dialog_cancel_clicked_cb (button, NULL);
 }
 
 static void
-profile_list_row_activated_cb (GtkTreeView *tree_view,
-                               GtkTreePath *path,
-                               GtkTreeViewColumn *column,
-                               PrefData *data)
+popover_dialog_closed_cb (GtkPopover *popover,
+                          gpointer   user_data)
 {
-  gs_unref_object GSettings *selected_profile;
 
-  selected_profile = profile_list_ref_selected (data);
-  if (selected_profile == NULL)
+  GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
+  gtk_entry_set_text (entry, "");
+
+  GtkButton *ok = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-ok"));
+  GtkButton *cancel = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-cancel"));
+
+  g_signal_handlers_disconnect_matched (ok, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+                                        G_CALLBACK (popover_dialog_ok_clicked_cb), NULL);
+  g_signal_handlers_disconnect_matched (cancel, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+                                        G_CALLBACK (popover_dialog_cancel_clicked_cb), NULL);
+  g_signal_handlers_disconnect_matched (popover, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
+                                        G_CALLBACK (popover_dialog_closed_cb), NULL);
+}
+
+
+/* Updates the OK button's sensitivity (insensitive if entry field is empty or whitespace only).
+ * The entry's initial value and OK's initial sensitivity have to match in the .ui file. */
+static void
+popover_dialog_notify_text_cb (GtkEntry   *entry,
+                               GParamSpec *pspec,
+                               GtkWidget  *ok)
+{
+  gs_free char *text = g_strchomp (g_strdup (gtk_entry_get_text (entry)));
+  gtk_widget_set_sensitive (ok, text[0] != '\0');
+}
+
+
+/* Common dialog for entering new profile name, or confirming deletion */
+static void
+profile_popup_dialog (GtkWidget *relative_to,
+                      const char *header,
+                      const char *body,
+                      const char *entry_text,
+                      const char *ok_text,
+                      void (*fn) (const char *))
+{
+  GtkLabel *label1 = GTK_LABEL (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-label1"));
+  gtk_label_set_text (label1, header);
+
+  GtkLabel *label2 = GTK_LABEL (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-label2"));
+  gtk_label_set_text (label2, body);
+
+  GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
+  if (entry_text != NULL) {
+    gtk_entry_set_text (entry, entry_text);
+    gtk_widget_show (GTK_WIDGET (entry));
+  } else {
+    gtk_entry_set_text (entry, ".");  /* to make the OK button sensitive */
+    gtk_widget_hide (GTK_WIDGET (entry));
+  }
+
+  GtkButton *ok = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-ok"));
+  gtk_button_set_label (ok, ok_text);
+  GtkButton *cancel = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-cancel"));
+  GtkPopover *popover_dialog = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-dialog"));
+
+  g_signal_connect (ok, "clicked", G_CALLBACK (popover_dialog_ok_clicked_cb), fn);
+  g_signal_connect (cancel, "clicked", G_CALLBACK (popover_dialog_cancel_clicked_cb), NULL);
+  g_signal_connect (popover_dialog, "closed", G_CALLBACK (popover_dialog_closed_cb), NULL);
+
+  gtk_popover_set_relative_to (popover_dialog, relative_to);
+  gtk_popover_set_position (popover_dialog, GTK_POS_BOTTOM);
+  gtk_popover_set_default_widget (popover_dialog, GTK_WIDGET (ok));
+
+#if GTK_CHECK_VERSION (3, 22, 0)
+  gtk_popover_popup (popover_dialog);
+#else
+  gtk_widget_show (GTK_WIDGET (popover_dialog));
+#endif
+
+  gtk_widget_grab_focus (entry_text != NULL ? GTK_WIDGET (entry) : GTK_WIDGET (cancel));
+}
+
+/* "New" selected, ask for profile name */
+static void
+profile_new_cb (GtkButton *button,
+                gpointer   user_data)
+{
+  profile_popup_dialog (GTK_WIDGET (the_pref_data->new_profile_button),
+                        _("New Profile"),
+                        _("Enter name for new profile with default settings:"),
+                        "",
+                        _("Create"),
+                        profile_new_now);
+}
+
+/* "Clone" selected, ask for profile name */
+static void
+profile_clone_cb (GSimpleAction *simple,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  gs_free char *name = g_settings_get_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+
+  gs_free char *label = g_strdup_printf (_("Enter name for new profile based on “%s”:"), name);
+  gs_free char *clone_name = g_strdup_printf (_("%s (Copy)"), name);
+
+  profile_popup_dialog (GTK_WIDGET (the_pref_data->selected_list_box_row),
+                        _("Clone Profile"),
+                        label,
+                        clone_name,
+                        _("Clone"),
+                        profile_clone_now);
+}
+
+/* "Rename" selected, ask for new name */
+static void
+profile_rename_cb (GSimpleAction *simple,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  if (the_pref_data->selected_profile == NULL)
     return;
 
-  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL);
+  gs_free char *name = g_settings_get_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+
+  gs_free char *label = g_strdup_printf (_("Enter new name for profile “%s”:"), name);
+
+  profile_popup_dialog (GTK_WIDGET (the_pref_data->selected_list_box_row),
+                        _("Rename Profile"),
+                        label,
+                        name,
+                        _("Rename"),
+                        profile_rename_now);
 }
 
-static GtkTreeView *
-profile_list_treeview_new (PrefData *data)
-{
-  GtkWidget *tree_view;
-  GtkTreeSelection *selection;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-
-  tree_view = gtk_tree_view_new ();
-  terminal_util_set_atk_name_description (tree_view, _("Profile list"), NULL);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
-  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
-                               GTK_SELECTION_BROWSE);
-
-  column = gtk_tree_view_column_new ();
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), renderer, TRUE);
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), renderer,
-                                      (GtkCellLayoutDataFunc) profile_cell_data_func,
-                                      data, NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
-                               GTK_TREE_VIEW_COLUMN (column));
-
-  g_signal_connect (tree_view, "row-activated",
-                    G_CALLBACK (profile_list_row_activated_cb), data);
-
-  return GTK_TREE_VIEW (tree_view);
-}
-
+/* "Delete" selected, ask for confirmation */
 static void
-profile_list_delete_confirm_response_cb (GtkWidget *dialog,
-                                         int response,
-                                         PrefData *data)
+profile_delete_cb (GSimpleAction *simple,
+                   GVariant      *parameter,
+                   gpointer       user_data)
 {
-  GSettings *profile;
-
-  profile = (GSettings *) g_object_get_data (G_OBJECT (dialog), "profile");
-  g_assert (profile != NULL);
-
-  if (response == GTK_RESPONSE_ACCEPT)
-    terminal_app_remove_profile (terminal_app_get (), profile);
-
-  gtk_widget_destroy (dialog);
-}
-
-static void
-profile_list_delete_button_clicked_cb (GtkWidget *button,
-                                       PrefData *data)
-{
-  GtkWidget *dialog;
-  gs_unref_object GSettings *selected_profile;
-  gs_free char *name = NULL;
-
-  selected_profile = profile_list_ref_selected (data);
-  if (selected_profile == NULL)
+  if (the_pref_data->selected_profile == NULL)
     return;
 
-  name = g_settings_get_string (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
-  dialog = gtk_message_dialog_new (GTK_WINDOW (data->dialog),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   _("Delete profile “%s”?"),
-                                   name);
+  gs_free char *name = g_settings_get_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
 
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("_Cancel"),
-                          GTK_RESPONSE_REJECT,
-                          _("_Delete"),
-                          GTK_RESPONSE_ACCEPT,
-                          NULL);
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                           GTK_RESPONSE_ACCEPT,
-                                           GTK_RESPONSE_REJECT,
-                                           -1);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                   GTK_RESPONSE_ACCEPT);
+  gs_free char *label = g_strdup_printf (_("Really delete profile “%s”?"), name);
 
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile"));
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-  g_object_set_data_full (G_OBJECT (dialog), "profile", g_object_ref (selected_profile), g_object_unref);
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (profile_list_delete_confirm_response_cb),
-                    data);
-
-  gtk_window_present (GTK_WINDOW (dialog));
+  profile_popup_dialog (GTK_WIDGET (the_pref_data->selected_list_box_row),
+                        _("Delete Profile"),
+                        label,
+                        NULL,
+                        _("Delete"),
+                        profile_delete_now);
 }
 
-static void
-profile_list_new_button_clicked_cb (GtkWidget *button,
-                                    PrefData *data)
+#if !GTK_CHECK_VERSION (3, 22, 27)
+/* Avoid crash on PageUp and PageDown: bugs 791549 & 770703 */
+static gboolean
+listbox_key_press_event_cb (GtkListBox  *box,
+                            GdkEventKey *event,
+                            gpointer     user_data)
 {
-  terminal_app_new_profile (terminal_app_get (), NULL);
+  switch (event->keyval) {
+  case GDK_KEY_Page_Up:
+  case GDK_KEY_Page_Down:
+  case GDK_KEY_KP_Page_Up:
+  case GDK_KEY_KP_Page_Down:
+    return TRUE;
+  default:
+    return FALSE;
+  }
+}
+#endif
+
+/* Create a (non-header) row of the sidebar, either a global or a profile entry. */
+static GtkListBoxRow *
+listbox_create_row (const char *name,
+                    const char *stack_child_name,
+                    const char *uuid,
+                    GSettings  *gsettings,
+                    gpointer    sort_order)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (gtk_list_box_row_new ());
+
+  g_object_set_data_full (G_OBJECT (row), "stack_child_name", g_strdup (stack_child_name), g_free);
+  g_object_set_data_full (G_OBJECT (row), "uuid", g_strdup (uuid), g_free);
+  g_object_set_data (G_OBJECT (row), "gsettings", gsettings);
+  g_object_set_data (G_OBJECT (row), "sort_order", sort_order);
+
+  GtkBox *hbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  gtk_widget_set_margin_start (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_end (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_top (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (hbox), 6);
+
+  GtkLabel *label = GTK_LABEL (gtk_label_new (name));
+  if (gsettings != NULL) {
+    g_signal_connect (label, "notify::label", G_CALLBACK (profile_name_changed_cb), row);
+    g_settings_bind (gsettings,
+                     TERMINAL_PROFILE_VISIBLE_NAME_KEY,
+                     label,
+                     "label",
+                     G_SETTINGS_BIND_GET);
+  }
+  gtk_label_set_xalign (label, 0);
+  gtk_box_pack_start (hbox, GTK_WIDGET (label), TRUE, TRUE, 0);
+  g_object_set_data (G_OBJECT (row), "label", label);
+
+  /* Always add the "default" symbol and the "menu" button, even on rows of global prefs.
+   * Use GtkStack to possible achieve visibility:hidden on it.
+   * This is so that all listbox rows have the same dimensions, and the width doesn't change
+   * as you switch the default profile. */
+
+  GtkStack *popover_stack = GTK_STACK (gtk_stack_new ());
+  gtk_widget_set_margin_start (GTK_WIDGET (popover_stack), 6);
+  GtkMenuButton *popover_button = GTK_MENU_BUTTON (gtk_menu_button_new ());
+  gtk_button_set_relief (GTK_BUTTON (popover_button), GTK_RELIEF_NONE);
+  gtk_stack_add_named (popover_stack, GTK_WIDGET (popover_button), "button");
+  GtkLabel *popover_label = GTK_LABEL (gtk_label_new (""));
+  gtk_stack_add_named (popover_stack, GTK_WIDGET (popover_label), "placeholder");
+  g_object_set_data (G_OBJECT (row), "popover-stack", popover_stack);
+  g_object_set_data (G_OBJECT (row), "popover-button", popover_button);
+
+  gtk_box_pack_end (hbox, GTK_WIDGET (popover_stack), FALSE, FALSE, 0);
+
+  GtkStack *home_stack = GTK_STACK (gtk_stack_new ());
+  gtk_widget_set_margin_start (GTK_WIDGET (home_stack), 12);
+  GtkImage *home_image = GTK_IMAGE (gtk_image_new_from_icon_name ("emblem-default-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_set_tooltip_text (GTK_WIDGET (home_image), _("This is the default profile"));
+  gtk_stack_add_named (home_stack, GTK_WIDGET (home_image), "home");
+  GtkLabel *home_label = GTK_LABEL (gtk_label_new (""));
+  gtk_stack_add_named (home_stack, GTK_WIDGET (home_label), "placeholder");
+  g_object_set_data (G_OBJECT (row), "home-stack", home_stack);
+
+  gtk_box_pack_end (hbox, GTK_WIDGET (home_stack), FALSE, FALSE, 0);
+
+  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (hbox));
+
+  gtk_widget_show_all (GTK_WIDGET (row));
+
+  gtk_stack_set_visible_child_name (popover_stack, "placeholder");
+  gtk_stack_set_visible_child_name (home_stack, "placeholder");
+
+  return row;
 }
 
+/* Add all the non-profile rows to the sidebar */
 static void
-profile_list_clone_button_clicked_cb (GtkWidget *button,
-                                      PrefData *data)
+listbox_add_all_globals (PrefData *data)
 {
-  gs_unref_object GSettings *selected_profile;
+  GtkListBoxRow *row;
 
-  selected_profile = profile_list_ref_selected (data);
-  if (selected_profile == NULL)
+  row = listbox_create_row (_("General"),
+                            "general-prefs",
+                            NULL, NULL, (gpointer) 0);
+  gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
+
+  row = listbox_create_row (_("Shortcuts"),
+                            "shortcut-prefs",
+                            NULL, NULL, (gpointer) 1);
+  gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
+}
+
+/* Remove all the profile rows from the sidebar */
+static void
+listbox_remove_all_profiles (PrefData *data)
+{
+  int i = 0;
+
+  data->selected_profile = NULL;
+  g_free (data->selected_profile_uuid);
+  data->selected_profile_uuid = NULL;
+  profile_prefs_unload ();
+
+  GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (the_pref_data->listbox), 0);
+  g_signal_emit_by_name (row, "activate");
+
+  while ((row = gtk_list_box_get_row_at_index (data->listbox, i)) != NULL) {
+    if (g_object_get_data (G_OBJECT (row), "gsettings") != NULL) {
+      gtk_widget_destroy (GTK_WIDGET (row));
+    } else {
+      i++;
+    }
+  }
+}
+
+/* Add all the profiles to the sidebar */
+static void
+listbox_add_all_profiles (PrefData *data)
+{
+  GList *list, *l;
+  GtkListBoxRow *row;
+
+  list = terminal_settings_list_ref_children (data->profiles_list);
+
+  for (l = list; l != NULL; l = l->next) {
+    GSettings *profile = (GSettings *) l->data;
+    gs_free gchar *text = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+    gs_free gchar *uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
+
+    row = listbox_create_row (NULL,
+                              "profile-prefs",
+                              uuid,
+                              profile,
+                              (gpointer) 42);
+    gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
+  }
+
+  listbox_update (data->listbox);  /* FIXME: This is not needed but I don't know why :-) */
+}
+
+/* Re-add all the profiles to the sidebar.
+ * This is called when a profile is added or removed, and also when the list of profiles is
+ * modified externally.
+ * Try to keep the selected profile, whenever possible.
+ * When the list is modified externally, the terminal_settings_list_*() methods seem to preserve
+ * the GSettings object for every profile that remains in the list. There's no guarantee however
+ * that a newly created GSettings can't receive the same address that a ceased one used to have.
+ * So don't rely on GSettings* to keep track of the selected profile, use the UUID instead. */
+static void
+listbox_readd_profiles (PrefData *data)
+{
+  gs_free char *uuid = g_strdup (data->selected_profile_uuid);
+
+  listbox_remove_all_profiles (data);
+  listbox_add_all_profiles (data);
+
+  if (uuid != NULL)
+    listbox_select_profile (uuid);
+}
+
+/* Create a header row ("Global" or "Profiles +") */
+static GtkWidget *
+listboxrow_create_header (const char *text,
+                          gboolean visible_button)
+{
+  GtkBox *hbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
+  gtk_widget_set_margin_start (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_end (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_top (GTK_WIDGET (hbox), 6);
+  gtk_widget_set_margin_bottom (GTK_WIDGET (hbox), 6);
+
+  GtkLabel *label = GTK_LABEL (gtk_label_new (NULL));
+  gs_free char *markup = g_markup_printf_escaped ("<b>%s</b>", text);
+  gtk_label_set_markup (label, markup);
+  gtk_label_set_xalign (label, 0);
+  gtk_box_pack_start (hbox, GTK_WIDGET (label), TRUE, TRUE, 0);
+
+  /* Always add a "new profile" button. Use GtkStack to possible achieve visibility:hidden on it.
+   * This is so that both header rows have the same dimensions. */
+
+  GtkStack *stack = GTK_STACK (gtk_stack_new ());
+  GtkButton *button = GTK_BUTTON (gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_button_set_relief (button, GTK_RELIEF_NONE);
+  gtk_stack_add_named (stack, GTK_WIDGET (button), "button");
+  GtkLabel *labelx = GTK_LABEL (gtk_label_new (""));
+  gtk_stack_add_named (stack, GTK_WIDGET (labelx), "placeholder");
+
+  gtk_box_pack_end (hbox, GTK_WIDGET (stack), FALSE, FALSE, 0);
+
+  gtk_widget_show_all (GTK_WIDGET (hbox));
+
+  if (visible_button) {
+    gtk_stack_set_visible_child_name (stack, "button");
+    g_signal_connect (button, "clicked", G_CALLBACK (profile_new_cb), NULL);
+    the_pref_data->new_profile_button = GTK_WIDGET (button);
+  } else {
+    gtk_stack_set_visible_child_name (stack, "placeholder");
+  }
+
+  return GTK_WIDGET (hbox);
+}
+
+/* Manage the creation or removal of the header row ("Global" or "Profiles +") */
+static void
+listboxrow_update_header (GtkListBoxRow *row,
+                          GtkListBoxRow *before,
+                          gpointer       user_data)
+{
+  if (before == NULL) {
+    if (gtk_list_box_row_get_header (row) == NULL) {
+      gtk_list_box_row_set_header (row, listboxrow_create_header (_("Global"), FALSE));
+    }
     return;
+  }
 
-  terminal_app_new_profile (terminal_app_get (), selected_profile);
+  GSettings *profile = g_object_get_data (G_OBJECT (row), "gsettings");
+  if (profile != NULL) {
+    GSettings *profile_before = g_object_get_data (G_OBJECT (before), "gsettings");
+    if (profile_before != NULL) {
+      gtk_list_box_row_set_header (row, NULL);
+    } else {
+      if (gtk_list_box_row_get_header (row) == NULL) {
+        gtk_list_box_row_set_header (row, listboxrow_create_header (_("Profiles"), TRUE));
+      }
+    }
+  }
 }
 
-static void
-profile_list_edit_button_clicked_cb (GtkWidget *button,
-                                     PrefData *data)
+/* Sort callback for rows of the sidebar (global and profile ones).
+ * Global ones are kept at the top in fixed order. This is implemented via sort_order
+ * which is an integer disguised as a pointer for ease of implementation.
+ * Profile ones are sorted lexicographically. */
+static gint
+listboxrow_compare_cb (GtkListBoxRow *row1,
+                       GtkListBoxRow *row2,
+                       gpointer       user_data)
 {
-  gs_unref_object GSettings *selected_profile;
+  gpointer sort_order_1 = g_object_get_data (G_OBJECT (row1), "sort_order");
+  gpointer sort_order_2 = g_object_get_data (G_OBJECT (row2), "sort_order");
 
-  selected_profile = profile_list_ref_selected (data);
-  if (selected_profile == NULL)
-    return;
+  if (sort_order_1 != sort_order_2)
+    return sort_order_1 < sort_order_2 ? -1 : 1;
 
-  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL);
-}
+  GtkLabel *label1 = g_object_get_data (G_OBJECT (row1), "label");
+  const char *text1 = gtk_label_get_text (label1);
+  GtkLabel *label2 = g_object_get_data (G_OBJECT (row2), "label");
+  const char *text2 = gtk_label_get_text (label2);
 
-static void
-profile_list_selection_changed_cb (GtkTreeSelection *selection,
-                                   PrefData *data)
-{
-  gboolean selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
-
-  gtk_widget_set_sensitive (data->manage_profiles_edit_button, selected);
-  gtk_widget_set_sensitive (data->manage_profiles_clone_button, selected);
-  gtk_widget_set_sensitive (data->manage_profiles_delete_button, selected);
+  return g_utf8_collate (text1, text2);
 }
 
 /* Keybindings tab */
@@ -444,45 +719,56 @@ shortcuts_button_toggled_cb (GtkWidget *widget,
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 }
 
-/* Encodings tab */
-
 /* misc */
 
 static void
 prefs_dialog_destroy_cb (GtkWidget *widget,
                          PrefData *data)
 {
-  g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_combo_box_refill), data);
-  g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_list_treeview_refill), data);
-
   /* Don't run this handler again */
   g_signal_handlers_disconnect_by_func (widget, G_CALLBACK (prefs_dialog_destroy_cb), data);
+
+  g_signal_handlers_disconnect_by_func (data->profiles_list,
+                                        G_CALLBACK (listbox_readd_profiles), data);
+  g_signal_handlers_disconnect_by_func (data->profiles_list,
+                                        G_CALLBACK (listbox_update), data->listbox);
+
+  profile_prefs_destroy ();
+
+  g_object_unref (data->builder);
+  g_free (data->selected_profile_uuid);
   g_free (data);
 }
 
 void
-terminal_prefs_show_preferences (const char *page)
+terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
 {
   TerminalApp *app = terminal_app_get ();
   PrefData *data;
   GtkWidget *dialog, *tree_view;
   GtkWidget *show_menubar_button, *disable_mnemonics_button, *disable_menu_accel_button;
   GtkWidget *disable_shortcuts_button;
-  GtkWidget *tree_view_container, *new_button, *edit_button, *clone_button, *remove_button;
   GtkWidget *theme_variant_label, *theme_variant_combo;
   GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
-  GtkWidget *default_hbox, *default_label;
   GtkWidget *close_button, *help_button;
-  GtkTreeSelection *selection;
   GSettings *settings;
 
-  if (prefs_dialog != NULL)
+  const GActionEntry action_entries[] = {
+    { "clone",          profile_clone_cb,          NULL, NULL, NULL },
+    { "rename",         profile_rename_cb,         NULL, NULL, NULL },
+    { "delete",         profile_delete_cb,         NULL, NULL, NULL },
+    { "set-as-default", profile_set_as_default_cb, NULL, NULL, NULL },
+  };
+
+  if (the_pref_data != NULL)
     goto done;
 
-  data = g_new0 (PrefData, 1);
+  the_pref_data = g_new0 (PrefData, 1);
+  data = the_pref_data;
   data->profiles_list = terminal_app_get_profiles_list (app);
 
-  terminal_util_load_widgets_resource ("/org/gnome/terminal/ui/preferences.ui",
+  /* FIXME this method is only used from here. Inline it here instead. */
+  data->builder = terminal_util_load_widgets_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
                                        "close-button", &close_button,
@@ -496,13 +782,8 @@ terminal_prefs_show_preferences (const char *page)
                                        "disable-shortcuts-checkbutton", &disable_shortcuts_button,
                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
                                        "accelerators-treeview", &tree_view,
-                                       "profiles-treeview-container", &tree_view_container,
-                                       "new-profile-button", &new_button,
-                                       "edit-profile-button", &edit_button,
-                                       "clone-profile-button", &clone_button,
-                                       "delete-profile-button", &remove_button,
-                                       "default-profile-hbox", &default_hbox,
-                                       "default-profile-label", &default_label,
+                                       "the-stack", &data->stack,
+                                       "the-listbox", &data->listbox,
                                        NULL);
 
   data->dialog = dialog;
@@ -513,7 +794,34 @@ terminal_prefs_show_preferences (const char *page)
 
   settings = terminal_app_get_global_settings (app);
 
-  /* General tab */
+  g_action_map_add_action_entries (G_ACTION_MAP (dialog),
+                                   action_entries, G_N_ELEMENTS (action_entries),
+                                   data);
+
+  /* Sidebar */
+
+  gtk_list_box_set_header_func (GTK_LIST_BOX (data->listbox),
+                                listboxrow_update_header,
+                                NULL,
+                                NULL);
+  g_signal_connect (data->listbox, "row-selected", G_CALLBACK (listbox_row_selected_cb), data->stack);
+  gtk_list_box_set_sort_func (data->listbox, listboxrow_compare_cb, NULL, NULL);
+#if !GTK_CHECK_VERSION (3, 22, 27)
+  g_signal_connect (data->listbox, "key-press-event", G_CALLBACK (listbox_key_press_event_cb), NULL);
+#endif
+
+  listbox_add_all_globals (data);
+  listbox_add_all_profiles (data);
+  g_signal_connect_swapped (data->profiles_list, "children-changed",
+                            G_CALLBACK (listbox_readd_profiles), data);
+  g_signal_connect_swapped (data->profiles_list, "default-changed",
+                            G_CALLBACK (listbox_update), data->listbox);
+
+  GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
+  GtkButton *ok = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-ok"));
+  g_signal_connect (entry, "notify::text", G_CALLBACK (popover_dialog_notify_text_cb), ok);
+
+  /* General page */
 
   gboolean shell_shows_menubar;
   g_object_get (gtk_settings_get_default (),
@@ -551,16 +859,9 @@ terminal_prefs_show_preferences (const char *page)
   gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
 #endif
 
-  /* Keybindings tab */
-
   g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
                    disable_mnemonics_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
-                   disable_shortcuts_button,
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (settings,
@@ -569,66 +870,41 @@ terminal_prefs_show_preferences (const char *page)
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
+  /* Shortcuts page */
+
+  g_settings_bind (settings,
+                   TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
+                   disable_shortcuts_button,
+                   "active",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   g_signal_connect (disable_shortcuts_button, "toggled",
                     G_CALLBACK (shortcuts_button_toggled_cb), tree_view);
 
   terminal_accels_fill_treeview (tree_view, disable_shortcuts_button);
 
-  /* Profiles tab */
+  /* Profile page */
 
-  data->manage_profiles_new_button = GTK_WIDGET (new_button);
-  data->manage_profiles_edit_button = GTK_WIDGET (edit_button);
-  data->manage_profiles_clone_button = GTK_WIDGET (clone_button);
-  data->manage_profiles_delete_button  = GTK_WIDGET (remove_button);
-
-  data->manage_profiles_list = profile_list_treeview_new (data);
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data->manage_profiles_list));
-  g_signal_connect (selection, "changed", G_CALLBACK (profile_list_selection_changed_cb), data);
-
-  profile_list_treeview_refill (data);
-  g_signal_connect_swapped (data->profiles_list, "children-changed",
-                            G_CALLBACK (profile_list_treeview_refill), data);
-
-  gtk_container_add (GTK_CONTAINER (tree_view_container), GTK_WIDGET (data->manage_profiles_list));
-  gtk_widget_show (GTK_WIDGET (data->manage_profiles_list));
-
-  g_signal_connect (new_button, "clicked",
-                    G_CALLBACK (profile_list_new_button_clicked_cb),
-                    data);
-  g_signal_connect (edit_button, "clicked",
-                    G_CALLBACK (profile_list_edit_button_clicked_cb),
-                    data);
-  g_signal_connect (clone_button, "clicked",
-                    G_CALLBACK (profile_list_clone_button_clicked_cb),
-                    data);
-  g_signal_connect (remove_button, "clicked",
-                    G_CALLBACK (profile_list_delete_button_clicked_cb),
-                    data);
-
-  data->profiles_default_combo = profile_combo_box_new (data);
-  g_signal_connect_swapped (data->profiles_list, "children-changed",
-                            G_CALLBACK (profile_combo_box_refill), data);
-  g_signal_connect (data->profiles_default_combo, "changed",
-                    G_CALLBACK (profile_combo_box_changed_cb), data);
-
-  gtk_box_pack_start (GTK_BOX (default_hbox), data->profiles_default_combo, FALSE, FALSE, 0);
-  gtk_widget_show (data->profiles_default_combo);
-
-  // FIXMEchpe
-  gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), data->profiles_default_combo);
+  profile_prefs_init ();
 
   /* misc */
 
   g_signal_connect (close_button, "clicked", G_CALLBACK (prefs_dialog_close_button_clicked_cb), data);
   g_signal_connect (help_button, "clicked", G_CALLBACK (prefs_dialog_help_button_clicked_cb), data);
   g_signal_connect (dialog, "destroy", G_CALLBACK (prefs_dialog_destroy_cb), data);
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
 
-  prefs_dialog = dialog;
-  g_object_add_weak_pointer (G_OBJECT (dialog), (gpointer *) &prefs_dialog);
+  g_object_add_weak_pointer (G_OBJECT (dialog), (gpointer *) &the_pref_data);
 
 done:
-  terminal_util_dialog_focus_widget (prefs_dialog, page);
+  if (profile != NULL) {
+    gs_free char *uuid = terminal_settings_list_dup_uuid_from_child (the_pref_data->profiles_list, profile);
+    listbox_select_profile (uuid);
+  } else {
+    GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (the_pref_data->listbox), 0);
+    g_signal_emit_by_name (row, "activate");
+  }
 
-  gtk_window_present (GTK_WINDOW (prefs_dialog));
+  terminal_util_dialog_focus_widget (the_pref_data->builder, widget_name);
+
+  gtk_window_present (GTK_WINDOW (the_pref_data->dialog));
 }

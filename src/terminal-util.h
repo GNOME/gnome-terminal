@@ -51,16 +51,16 @@ char *terminal_util_concat_uris (char **uris,
 
 char *terminal_util_get_licence_text (void);
 
-void terminal_util_load_widgets_resource (const char *path,
-                                          const char *main_object_name,
-                                          const char *object_name,
-                                          ...);
+GtkBuilder *terminal_util_load_widgets_resource (const char *path,
+                                                 const char *main_object_name,
+                                                 const char *object_name,
+                                                 ...);
 
 void terminal_util_load_objects_resource (const char *path,
                                           const char *object_name,
                                           ...);
 
-void terminal_util_dialog_focus_widget (GtkWidget *dialog,
+void terminal_util_dialog_focus_widget (GtkBuilder *builder,
                                         const char *widget_name);
 
 gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);

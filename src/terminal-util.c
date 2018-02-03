@@ -407,13 +407,13 @@ main_object_destroy_cb (GtkWidget *widget)
   g_object_set_data (G_OBJECT (widget), "builder", NULL);
 }
 
-void
+GtkBuilder *
 terminal_util_load_widgets_resource (const char *path,
                                      const char *main_object_name,
                                      const char *object_name,
                                      ...)
 {
-  gs_unref_object GtkBuilder *builder;
+  GtkBuilder *builder;
   GError *error = NULL;
   va_list args;
 
@@ -453,6 +453,7 @@ terminal_util_load_widgets_resource (const char *path,
       gtk_widget_set_margin_bottom (action_area, 5);
     }
   }
+  return builder;
 }
 
 void
@@ -494,16 +495,14 @@ terminal_util_dialog_response_on_delete (GtkWindow *widget)
 }
 
 void
-terminal_util_dialog_focus_widget (GtkWidget *dialog,
+terminal_util_dialog_focus_widget (GtkBuilder *builder,
                                    const char *widget_name)
 {
-  GtkBuilder *builder;
   GtkWidget *widget, *page, *page_parent;
 
   if (widget_name == NULL)
     return;
 
-  builder = g_object_get_data (G_OBJECT (dialog), "builder");
   widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
   if (widget == NULL)
     return;

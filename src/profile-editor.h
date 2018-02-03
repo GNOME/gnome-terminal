@@ -23,8 +23,14 @@
 
 G_BEGIN_DECLS
 
-void terminal_profile_edit (GSettings  *profile,
-                            const char *widget_name);
+void profile_prefs_init (void);
+
+void profile_prefs_destroy (void);
+
+void profile_prefs_unload (void);
+
+void profile_prefs_load (const char *uuid,
+                         GSettings *profile);
 
 G_END_DECLS
 

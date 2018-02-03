@@ -20,9 +20,35 @@
 
 #include <gtk/gtk.h>
 
+#include "terminal-profiles-list.h"
+
 G_BEGIN_DECLS
 
-void terminal_prefs_show_preferences (const char *page);
+/* FIXME move back to the .c file if profile-editor.c is also merged there,
+ * also remove the terminal-profiles-list.h incude above. */
+/* FIXME PrefData is a very bad name, rename to PrefsDialog maybe? */
+
+/* Everything about a preferences dialog */
+typedef struct {
+  TerminalSettingsList *profiles_list;
+
+  GSettings *selected_profile;
+  GtkListBoxRow *selected_list_box_row;
+  char *selected_profile_uuid;  /* a copy thereof, to survive changes to profiles_list */
+
+  GtkBuilder *builder;
+  GtkWidget *dialog;
+  GtkListBox *listbox;
+  GtkWidget *new_profile_button;
+  GtkWidget *stack;
+
+  GArray *profile_signals;
+  GArray *profile_bindings;
+} PrefData;
+
+extern PrefData *the_pref_data;  /* global */
+
+void terminal_prefs_show_preferences (GSettings *profile, const char *widget_name);
 
 G_END_DECLS
 

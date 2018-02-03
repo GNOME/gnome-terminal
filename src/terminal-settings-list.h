@@ -51,10 +51,12 @@ gboolean terminal_settings_list_has_child (TerminalSettingsList *list,
 GSettings *terminal_settings_list_ref_child (TerminalSettingsList *list,
                                              const char *uuid);
 
-char *terminal_settings_list_add_child (TerminalSettingsList *list);
+char *terminal_settings_list_add_child (TerminalSettingsList *list,
+                                        const char *name);
 
 char *terminal_settings_list_clone_child (TerminalSettingsList *list,
-                                          const char *uuid);
+                                          const char *uuid,
+                                          const char *name);
 
 void terminal_settings_list_remove_child (TerminalSettingsList *list,
                                           const char *uuid);

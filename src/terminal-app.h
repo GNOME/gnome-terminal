@@ -56,12 +56,13 @@ GdkAtom *terminal_app_get_clipboard_targets (TerminalApp *app,
                                              GtkClipboard *clipboard,
                                              int *n_targets);
 
-void terminal_app_edit_profile (TerminalApp *app,
-                                GSettings   *profile,
-                                const char  *widget_name);
+void terminal_app_edit_preferences (TerminalApp *app,
+                                    GSettings   *profile,
+                                    const char  *widget_name);
 
-void terminal_app_new_profile (TerminalApp *app,
-                               GSettings   *default_base_profile);
+char *terminal_app_new_profile (TerminalApp *app,
+                                GSettings   *default_base_profile,
+                                const char  *name);
 
 void terminal_app_remove_profile (TerminalApp *app,
                                   GSettings *profile);
@@ -93,8 +94,6 @@ void terminal_app_register_screen (TerminalApp *app,
 
 void terminal_app_unregister_screen (TerminalApp *app,
                                      TerminalScreen *screen);
-
-void terminal_app_edit_preferences (TerminalApp *app);
 
 TerminalSettingsList *terminal_app_get_profiles_list (TerminalApp *app);
 

@@ -310,30 +310,23 @@ app_load_css (GApplication *application)
   add_css_provider (application, TRUE);
 }
 
-void
+char *
 terminal_app_new_profile (TerminalApp *app,
-                          GSettings   *base_profile)
+                          GSettings   *base_profile,
+                          const char  *name)
 {
-  gs_unref_object GSettings *profile = NULL;
-  gs_free char *uuid;
+  char *uuid;
 
   if (base_profile) {
     gs_free char *base_uuid;
 
     base_uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, base_profile);
-    uuid = terminal_settings_list_clone_child (app->profiles_list, base_uuid);
+    uuid = terminal_settings_list_clone_child (app->profiles_list, base_uuid, name);
   } else {
-    uuid = terminal_settings_list_add_child (app->profiles_list);
+    uuid = terminal_settings_list_add_child (app->profiles_list, name);
   }
 
-  if (uuid == NULL)
-    return;
-
-  profile = terminal_settings_list_ref_child (app->profiles_list, uuid);
-  if (profile == NULL)
-    return;
-
-  terminal_profile_edit (profile, "profile-name-entry");
+  return uuid;
 }
 
 void
@@ -625,7 +618,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = user_data;
 
-  terminal_app_edit_preferences (app);
+  terminal_app_edit_preferences (app, NULL, NULL);
 }
 
 static void
@@ -1093,17 +1086,11 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
 }
 
 void
-terminal_app_edit_profile (TerminalApp     *app,
-                           GSettings       *profile,
-                           const char      *widget_name)
+terminal_app_edit_preferences (TerminalApp     *app,
+                               GSettings       *profile,
+                               const char      *widget_name)
 {
-  terminal_profile_edit (profile, widget_name);
-}
-
-void
-terminal_app_edit_preferences (TerminalApp *app)
-{
-  terminal_prefs_show_preferences ("general");
+  terminal_prefs_show_preferences (profile, widget_name);
 }
 
 /**

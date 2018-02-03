@@ -386,7 +386,7 @@ migrate_profile (TerminalSettingsList *list,
     settings = terminal_settings_list_ref_default_child (list);
     is_default = TRUE;
   } else {
-    child_name = terminal_settings_list_add_child (list);
+    child_name = terminal_settings_list_add_child (list, NULL);
     settings = terminal_settings_list_ref_child (list, child_name);
     g_free (child_name);
     is_default = FALSE;
@@ -539,7 +539,6 @@ migrate_accels (GSettings *global_settings,
   static const const struct { const char *gconf_key; const char *settings_key; } const data[] = {
     { "new_tab",          "new-tab"            },
     { "new_window",       "new-window"         },
-    { "new_profile",      "new-profile"        },
     { "close_tab",        "close-tab"          },
     { "close_window",     "close-window"       },
     { "copy",             "copy"               },

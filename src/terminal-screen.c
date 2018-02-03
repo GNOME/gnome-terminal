@@ -1253,7 +1253,7 @@ get_child_environment (TerminalScreen *screen,
 
 enum {
   RESPONSE_RELAUNCH,
-  RESPONSE_EDIT_PROFILE
+  RESPONSE_EDIT_PREFERENCES
 };
 
 static void
@@ -1272,10 +1272,10 @@ info_bar_response_cb (GtkWidget *info_bar,
       gtk_widget_destroy (info_bar);
       _terminal_screen_launch_child_on_idle (screen);
       break;
-    case RESPONSE_EDIT_PROFILE:
-      terminal_app_edit_profile (terminal_app_get (),
-                                 terminal_screen_get_profile (screen),
-                                 "custom-command-entry");
+    case RESPONSE_EDIT_PREFERENCES:
+      terminal_app_edit_preferences (terminal_app_get (),
+                                     terminal_screen_get_profile (screen),
+                                     "custom-command-entry");
       break;
     default:
       gtk_widget_destroy (info_bar);
@@ -1389,7 +1389,7 @@ spawn_result_cb (VteTerminal *terminal,
 
     vte_terminal_set_pty (terminal, NULL);
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
-                                      _("_Profile Preferences"), RESPONSE_EDIT_PROFILE,
+                                      _("_Preferences"), RESPONSE_EDIT_PREFERENCES,
                                       _("_Relaunch"), RESPONSE_RELAUNCH,
                                       NULL);
     terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),

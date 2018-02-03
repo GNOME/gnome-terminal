@@ -63,7 +63,6 @@
 #define KEY_HELP                "help"
 #define KEY_MOVE_TAB_LEFT       "move-tab-left"
 #define KEY_MOVE_TAB_RIGHT      "move-tab-right"
-#define KEY_NEW_PROFILE         "new-profile"
 #define KEY_NEW_TAB             "new-tab"
 #define KEY_NEW_WINDOW          "new-window"
 #define KEY_NEXT_TAB            "next-tab"
@@ -71,7 +70,6 @@
 #define KEY_PREFERENCES         "preferences"
 #define KEY_PREV_TAB            "prev-tab"
 #define KEY_PRINT               "print"
-#define KEY_PROFILE_PREFERENCES "profile-preferences"
 #define KEY_READ_ONLY           "read-only"
 #define KEY_RESET_AND_CLEAR     "reset-and-clear"
 #define KEY_RESET               "reset"
@@ -125,7 +123,6 @@ typedef struct
 static KeyEntry file_entries[] = {
   ENTRY (N_("New Tab"),       KEY_NEW_TAB,       "new-terminal",  "(ss)",  "('tab','current')"   ),
   ENTRY (N_("New Window"),    KEY_NEW_WINDOW,    "new-terminal",  "(ss)",  "('window','current')"),
-  ENTRY (N_("New Profile"),   KEY_NEW_PROFILE,   "new-profile",   NULL,    NULL                  ),
 #ifdef ENABLE_SAVE
   ENTRY (N_("Save Contents"), KEY_SAVE_CONTENTS, "save-contents", NULL,    NULL                  ),
 #endif
@@ -145,7 +142,6 @@ static KeyEntry edit_entries[] = {
   ENTRY (N_("Paste"),               KEY_PASTE,               "paste-text",   NULL, NULL      ),
   ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   NULL, NULL      ),
   ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "edit-preferences",  NULL, NULL      ),
-  ENTRY (N_("Profile Preferences"), KEY_PROFILE_PREFERENCES, "edit-profile", NULL, NULL      ),
 };
 
 static KeyEntry search_entries[] = {

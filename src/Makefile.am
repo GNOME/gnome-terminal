@@ -365,7 +365,6 @@ EXTRA_DIST = \
 	nautilus.symbols \
 	search-popover.ui \
 	preferences.ui \
-	profile-preferences.ui \
 	terminal.common.css \
 	$(about_DATA) \
 	$(builder_DATA) \

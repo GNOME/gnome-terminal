@@ -413,18 +413,6 @@ action_new_terminal_cb (GSimpleAction *action,
     gtk_window_present (GTK_WINDOW (window));
 }
 
-static void
-action_new_profile_cb (GSimpleAction *action,
-                       GVariant *parameter,
-                       gpointer user_data)
-{
-  TerminalWindow *window = user_data;
-  TerminalWindowPrivate *priv = window->priv;
-
-  terminal_app_new_profile (terminal_app_get (),
-                            terminal_screen_get_profile (priv->active_screen));
-}
-
 #ifdef ENABLE_SAVE
 
 static void
@@ -970,20 +958,12 @@ action_edit_preferences_cb (GSimpleAction *action,
                             GVariant *parameter,
                             gpointer user_data)
 {
-  terminal_app_edit_preferences (terminal_app_get ());
-}
-
-static void
-action_edit_profile_cb (GSimpleAction *action,
-                        GVariant *parameter,
-                        gpointer user_data)
-{
   TerminalWindow *window = user_data;
   TerminalWindowPrivate *priv = window->priv;
 
-  terminal_app_edit_profile (terminal_app_get (),
-                             terminal_screen_get_profile (priv->active_screen),
-                             NULL);
+  terminal_app_edit_preferences (terminal_app_get (),
+                                 terminal_screen_get_profile (priv->active_screen),
+                                 NULL);
 }
 
 static void
@@ -1828,19 +1808,12 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     gs_unref_object GMenu *submenu5 = g_menu_new ();
     g_menu_append_section (submenu5, NULL, profiles_menu);
 
-    gs_unref_object GMenu *section51 = g_menu_new ();
-    g_menu_append (section51, _("_Profile Preferences"), "win.edit-profile");
-    g_menu_append_section (submenu5, NULL, G_MENU_MODEL (section51));
-
     gs_unref_object GMenuItem *item5 = g_menu_item_new (_("P_rofiles"), NULL);
     g_menu_item_set_submenu (item5, G_MENU_MODEL (submenu5));
     g_menu_append_item (section5, item5);
-  } else {
-    /* If there's only a single profile, put the Profile Preferences item in the
-     * context menu itself.
-     */
-    g_menu_append (section5, _("_Profile Preferences"), "win.edit-profile");
   }
+
+  g_menu_append (section5, _("_Preferences"), "win.edit-preferences");
 
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section5));
 
@@ -2124,7 +2097,6 @@ terminal_window_init (TerminalWindow *window)
     { "copy",                action_copy_cb,             "s",    NULL, NULL },
     { "copy-hyperlink",      action_copy_hyperlink_cb,   NULL,   NULL, NULL },
     { "copy-match",          action_copy_match_cb,       NULL,   NULL, NULL },
-    { "edit-profile",        action_edit_profile_cb,     NULL,   NULL, NULL },
     { "edit-preferences",    action_edit_preferences_cb, NULL,   NULL, NULL },
     { "find",                action_find_cb,             NULL,   NULL, NULL },
     { "find-backward",       action_find_backward_cb,    NULL,   NULL, NULL },
@@ -2133,7 +2105,6 @@ terminal_window_init (TerminalWindow *window)
     { "help",                action_help_cb,             NULL,   NULL, NULL },
     { "inspector",           action_inspector_cb,        NULL,   NULL, NULL },
     { "leave-fullscreen",    action_leave_fullscreen_cb, NULL,   NULL, NULL },
-    { "new-profile",         action_new_profile_cb,      NULL,   NULL, NULL },
     { "new-terminal",        action_new_terminal_cb,     "(ss)", NULL, NULL },
     { "open-match",          action_open_match_cb,       NULL,   NULL, NULL },
     { "open-hyperlink",      action_open_hyperlink_cb,   NULL,   NULL, NULL },
