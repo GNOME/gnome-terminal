@@ -859,11 +859,15 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
 #endif
 
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
-                   disable_mnemonics_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  if (shell_shows_menubar) {
+    gtk_widget_set_visible (disable_mnemonics_button, FALSE);
+  } else {
+    g_settings_bind (settings,
+                     TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
+                     disable_mnemonics_button,
+                     "active",
+                     G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  }
   g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                    disable_menu_accel_button,

@@ -1381,6 +1381,23 @@ enable_menubar_accel_changed_cb (GSettings *settings,
 #endif
 }
 
+/* The menubar is shown by the app, and the use of mnemonics (e.g. Alt+F for File) is toggled.
+ * The mnemonic modifier is per window, so it doesn't affect the Find or Preferences windows.
+ * If the menubar is shown by the shell, a non-mnemonic variant of the menu is loaded instead
+ * in terminal-app.c. See over there for further details. */
+static void
+enable_mnemonics_changed_cb (GSettings *settings,
+                             const char *key,
+                             TerminalWindow *window)
+{
+  gboolean enabled = g_settings_get_boolean (settings, key);
+
+  if (enabled)
+    gtk_window_set_mnemonic_modifier (GTK_WINDOW (window), GDK_MOD1_MASK);
+  else
+    gtk_window_set_mnemonic_modifier (GTK_WINDOW (window), GDK_MODIFIER_MASK & ~GDK_RELEASE_MASK);
+}
+
 static void
 app_setting_notify_destroy_cb (GtkSettings *gtk_settings)
 {
@@ -2041,12 +2058,6 @@ terminal_window_screen_update (TerminalWindow *window,
                           (GDestroyNotify) app_setting_notify_destroy_cb);
 
   g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
-                   gtk_settings,
-                   "gtk-enable-mnemonics",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
                    gtk_settings,
                    "gtk-enable-accels",
@@ -2232,6 +2243,11 @@ terminal_window_init (TerminalWindow *window)
 
   g_simple_action_set_enabled (lookup_action (window, "leave-fullscreen"), FALSE);
 
+  GSettings *global_settings = terminal_app_get_global_settings (app);
+  enable_mnemonics_changed_cb (global_settings, TERMINAL_SETTING_ENABLE_MNEMONICS_KEY, window);
+  g_signal_connect (global_settings, "changed::" TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
+                    G_CALLBACK (enable_mnemonics_changed_cb), window);
+
   /* Hide "menubar-visible" when the menubar is shown by the shell */
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                 "gtk-shell-shows-menubar", &shell_shows_menubar,
@@ -2336,6 +2352,13 @@ terminal_window_dispose (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app = terminal_app_get ();
+
+  if (!priv->disposed) {
+    GSettings *global_settings = terminal_app_get_global_settings (app);
+    g_signal_handlers_disconnect_by_func (global_settings,
+                                          G_CALLBACK (enable_mnemonics_changed_cb),
+                                          window);
+  }
 
   priv->disposed = TRUE;
 

@@ -689,13 +689,30 @@ terminal_app_startup (GApplication *application)
 
   app_load_css (application);
 
+  /* Figure out whether the shell shows appmenu/menubar */
+  gboolean shell_shows_appmenu, shell_shows_menubar;
+  g_object_get (gtk_settings_get_default (),
+                "gtk-shell-shows-app-menu", &shell_shows_appmenu,
+                "gtk-shell-shows-menubar", &shell_shows_menubar,
+                NULL);
+
   /* App menu */
   GMenu *appmenu_new_terminal_section = gtk_application_get_menu_by_id (gtk_application,
                                                                         "new-terminal-section");
   fill_new_terminal_section (appmenu_new_terminal_section, NULL, 0); /* no submenu */
 
   /* Menubar */
-  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/menubar.ui",
+  /* If the menubar is shown by the shell, omit mnemonics for the submenus. This is because Alt+F etc.
+   * are more important to be usable in the terminal, the menu cannot be replaced runtime (to toggle
+   * between mnemonic and non-mnemonic versions), gtk-enable-mnemonics or gtk_window_set_mnemonic_modifier()
+   * don't effect the menubar either, so there wouldn't be a way to disable Alt+F for File etc. otherwise.
+   * Furthermore, the menu would even grab mnemonics from the File and Preferences windows.
+   * In Unity, Alt+F10 opens the menubar, this should be good enough for keyboard navigation.
+   * If the menubar is shown by the app, toggling mnemonics is handled in terminal-window.c using
+   * gtk_window_set_mnemonic_modifier().
+   * See bug 792978 for details. */
+  terminal_util_load_objects_resource (shell_shows_menubar ? "/org/gnome/terminal/ui/menubar-without-mnemonics.ui"
+                                                           : "/org/gnome/terminal/ui/menubar-with-mnemonics.ui",
                                        "menubar", &app->menubar,
                                        "new-terminal-section", &app->menubar_new_terminal_section,
                                        "set-profile-section", &app->menubar_set_profile_section,
@@ -710,12 +727,7 @@ terminal_app_startup (GApplication *application)
   /* Install the encodings submenu */
   terminal_encodings_append_menu (app->menubar_set_encoding_submenu);
 
-  /* If the shell wants to show the appmenu/menubar, make it available */
-  gboolean shell_shows_appmenu, shell_shows_menubar;
-  g_object_get (gtk_settings_get_default (),
-                "gtk-shell-shows-app-menu", &shell_shows_appmenu,
-                "gtk-shell-shows-menubar", &shell_shows_menubar,
-                NULL);
+  /* Show/hide the appmenu/menubar as appropriate */
   if (!shell_shows_appmenu)
     gtk_application_set_app_menu (GTK_APPLICATION (app), NULL);
   if (shell_shows_menubar)

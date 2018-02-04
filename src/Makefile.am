@@ -30,6 +30,8 @@ gnome_terminal_server_built = \
 	terminal-gdbus-generated.h \
 	terminal-resources.c \
 	terminal-resources.h \
+	terminal-menubar-with-mnemonics.ui \
+	terminal-menubar-without-mnemonics.ui \
 	$(NULL)
 BUILT_SOURCES += $(gnome_terminal_server_built)
 
@@ -166,6 +168,12 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 			--c-generate-object-manager \
 			--generate-c-code terminal-gdbus-generated \
 			$<
+
+terminal-menubar-with-mnemonics.ui: terminal-menubar.ui.in
+	sed -e 's|<WITH_MNEMONIC>||g' -e 's|</WITH_MNEMONIC>||g' -e 's|<WITHOUT_MNEMONIC>|<!-- |g' -e 's|</WITHOUT_MNEMONIC>| -->|g' $< > $@
+
+terminal-menubar-without-mnemonics.ui: terminal-menubar.ui.in
+	sed -e 's|<WITH_MNEMONIC>|<!-- |g' -e 's|</WITH_MNEMONIC>| -->|g' -e 's|<WITHOUT_MNEMONIC>||g' -e 's|</WITHOUT_MNEMONIC>||g' $< > $@
 
 terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
 	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
@@ -354,7 +362,7 @@ CLEANFILES = \
 EXTRA_DIST = \
 	terminal.about \
 	terminal-appmenu.ui \
-	terminal-menubar.ui \
+	terminal-menubar.ui.in \
 	terminal-notebook-menu.ui \
 	terminal-window.ui \
 	terminal.gresource.xml \
