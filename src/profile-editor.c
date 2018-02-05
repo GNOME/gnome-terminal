@@ -582,6 +582,14 @@ reset_compat_defaults_cb (GtkWidget *button,
  */
 
 static void
+set_input_hints(GtkWidget *entry)
+{
+#if GTK_CHECK_VERSION (3, 22, 20)
+  gtk_entry_set_input_hints (GTK_ENTRY (entry), GTK_INPUT_HINT_NO_EMOJI);
+#endif
+}
+
+static void
 init_color_scheme_menu (GtkWidget *widget)
 {
   GtkCellRenderer *renderer;
@@ -1049,18 +1057,18 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             (GSettingsBindSetMapping) rgba_to_s,
                                             NULL, NULL);
 
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "cell-height-scale-spinbutton"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
-                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
-                                                               (gtk_builder_get_object
-                                                                (builder,
-                                                                 "cell-height-scale-spinbutton"))),
+                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "cell-width-scale-spinbutton"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY,
-                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
-                                                               (gtk_builder_get_object
-                                                                (builder,
-                                                                 "cell-width-scale-spinbutton"))),
+                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
                                gtk_builder_get_object (builder,
                                                        "cursor-colors-checkbutton"),
@@ -1163,21 +1171,25 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
                                             vte_text_blink_mode_get_type, NULL);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
-                               gtk_builder_get_object (builder, "custom-command-entry"),
+                               w,
                                "text", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "default-size-columns-spinbutton"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY,
-                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
-                                                               (gtk_builder_get_object
-                                                                (builder,
-                                                                 "default-size-columns-spinbutton"))),
+                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "default-size-rows-spinbutton"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY,
-                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
-                                                               (gtk_builder_get_object
-                                                                (builder,
-                                                                 "default-size-rows-spinbutton"))),
+                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_DELETE_BINDING_KEY,
                                             gtk_builder_get_object (builder,
                                                                     "delete-binding-combobox"),
@@ -1217,12 +1229,13 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                gtk_builder_get_object (builder,
                                                        "login-shell-checkbutton"),
                                "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "scrollback-lines-spinbutton"));
+  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
-                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON
-                                                               (gtk_builder_get_object
-                                                                (builder,
-                                                                 "scrollback-lines-spinbutton"))),
+                               gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
                                gtk_builder_get_object (builder,
                                                        "scrollback-limited-checkbutton"),
