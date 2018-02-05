@@ -727,8 +727,10 @@ terminal_app_startup (GApplication *application)
   /* Install the encodings submenu */
   terminal_encodings_append_menu (app->menubar_set_encoding_submenu);
 
-  /* Show/hide the appmenu/menubar as appropriate */
-  if (!shell_shows_appmenu)
+  /* Show/hide the appmenu/menubar as appropriate:
+   * If the shell wants to show the menubar, make it available.
+   * If the shell wants to show both the appmenu and the menubar, there's no need for the appmenu. */
+  if (shell_shows_appmenu && shell_shows_menubar)
     gtk_application_set_app_menu (GTK_APPLICATION (app), NULL);
   if (shell_shows_menubar)
     gtk_application_set_menubar (GTK_APPLICATION (app), app->menubar);
