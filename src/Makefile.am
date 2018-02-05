@@ -175,8 +175,8 @@ terminal-menubar-with-mnemonics.ui: terminal-menubar.ui.in
 terminal-menubar-without-mnemonics.ui: terminal-menubar.ui.in
 	sed -e 's|<WITH_MNEMONIC>|<!-- |g' -e 's|</WITH_MNEMONIC>| -->|g' -e 's|<WITHOUT_MNEMONIC>||g' -e 's|</WITHOUT_MNEMONIC>||g' $< > $@
 
-terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
-	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
+terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) --sourcedir $(builddir) $(srcdir)/terminal.gresource.xml)
+	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(builddir) --sourcedir $(srcdir) --generate --c-name terminal $<
 
 # Checks
 
