@@ -52,7 +52,8 @@ option_app_id_cb (const gchar *option_name,
                     gpointer     data,
                     GError     **error)
 {
-  if (!g_application_id_is_valid (value)) {
+  if (!g_application_id_is_valid (value) ||
+      !g_dbus_is_name (value)) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                  "\"%s\" is not a valid application ID", value);
     return FALSE;
