@@ -309,7 +309,14 @@ handle_show_preferences (const char *service_name)
   /* For reasons (!?), the org.gtk.Actions interface's object path
    * is derived from the service name, i.e. for service name
    * "foo.bar.baz" the object path is "/foo/bar/baz".
+   * This means that without the name (like when given only the unique name),
+   * we cannot activate the action.
    */
+  if (g_dbus_is_unique_name(service_name)) {
+    terminal_printerr ("Cannot call this function from within gnome-terminal.\n");
+    return;
+  }
+
   object_path = g_strdelimit (g_strdup_printf (".%s", service_name), ".", '/');
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sava{sv})"));
