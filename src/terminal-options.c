@@ -1003,7 +1003,7 @@ terminal_options_parse (int *argcp,
     if (g_dbus_is_unique_name (server_unique_name))
       options->server_unique_name = g_strdup (server_unique_name);
     else
-      terminal_printerr ("# Warning: %s set but \"%s\" is not a unique D-Bus name.\n",
+      terminal_printerr ("Warning: %s set but \"%s\" is not a unique D-Bus name.\n",
                          TERMINAL_ENV_SERVICE_NAME,
                          server_unique_name);
   }
@@ -1013,7 +1013,7 @@ terminal_options_parse (int *argcp,
     if (g_variant_is_object_path (parent_screen_object_path))
       options->parent_screen_object_path = g_strdup (parent_screen_object_path);
     else
-      terminal_printerr ("# Warning: %s set but \"%s\" is not a valid D-Bus object path.\n",
+      terminal_printerr ("Warning: %s set but \"%s\" is not a valid D-Bus object path.\n",
                          TERMINAL_ENV_SCREEN,
                          parent_screen_object_path);
   }
