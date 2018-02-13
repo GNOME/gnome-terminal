@@ -194,8 +194,8 @@ initial_window_free (InitialWindow *iw)
 }
 
 static void
-apply_defaults (TerminalOptions *options,
-                InitialWindow *iw)
+apply_window_defaults (TerminalOptions *options,
+                       InitialWindow *iw)
 {
   if (options->default_role)
     {
@@ -218,18 +218,28 @@ apply_defaults (TerminalOptions *options,
   iw->start_maximized |= options->default_maximize;
 }
 
+static void
+apply_tab_defaults (TerminalOptions *options,
+                    InitialTab *it)
+{
+  it->wait = options->default_wait;
+}
+
 static InitialWindow*
 add_new_window (TerminalOptions *options,
                 char *profile /* adopts */,
                 gboolean implicit_if_first_window)
 {
   InitialWindow *iw;
+  InitialTab *it;
 
   iw = initial_window_new (0);
   iw->implicit_first_window = (options->initial_windows == NULL) && implicit_if_first_window;
-  iw->tabs = g_list_prepend (NULL, initial_tab_new (profile));
-  apply_defaults (options, iw);
+  apply_window_defaults (options, iw);
 
+  it = initial_tab_new (profile);
+  iw->tabs = g_list_prepend (NULL, it);
+  apply_tab_defaults (options, it);
 
   options->initial_windows = g_list_append (options->initial_windows, iw);
   return iw;
@@ -766,16 +776,17 @@ option_wait_cb (const gchar *option_name,
 {
   TerminalOptions *options = data;
 
-  if (options->any_wait) {
-    g_set_error_literal (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
-                         _("Can only use --wait once"));
-    return FALSE;
-  }
+  if (options->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (options);
 
-  options->any_wait = TRUE;
-
-  InitialTab *it = ensure_top_tab (options);
-  it->wait = TRUE;
+      g_free (it->working_dir);
+      it->wait = TRUE;
+    }
+  else
+    {
+      options->default_wait = TRUE;
+    }
 
   return TRUE;
 }
@@ -993,7 +1004,6 @@ terminal_options_parse (int *argcp,
   options->default_title = NULL;
   options->zoom = 1.0;
   options->zoom_set = FALSE;
-  options->any_wait = FALSE;
 
   options->default_working_dir = g_get_current_dir ();
 
@@ -1074,6 +1084,23 @@ terminal_options_parse (int *argcp,
   if (display != NULL)
     options->display_name = g_strdup (gdk_display_get_name (display));
 
+  /* Sanity check */
+  guint wait = 0;
+  for (GList *lw = options->initial_windows;  lw != NULL; lw = lw->next) {
+    InitialWindow *iw = lw->data;
+    for (GList *lt = iw->tabs; lt != NULL; lt = lt->next) {
+      InitialTab *it = lt->data;
+      if (it->wait)
+        wait++;
+    }
+  }
+
+  if (wait > 1) {
+    g_set_error_literal (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                         _("Can only use --wait once"));
+    return FALSE;
+  }
+
   return options;
 }
 
@@ -1140,7 +1167,7 @@ terminal_options_merge_config (TerminalOptions *options,
 
       iw = initial_window_new (source_tag);
       initial_windows = g_list_append (initial_windows, iw);
-      apply_defaults (options, iw);
+      apply_window_defaults (options, iw);
 
       active_terminal = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB, NULL);
       iw->role = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ROLE, NULL);

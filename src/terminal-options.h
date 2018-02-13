@@ -79,6 +79,7 @@ typedef struct
   gboolean default_window_menubar_state;
   gboolean default_fullscreen;
   gboolean default_maximize;
+  gboolean default_wait;
   char    *default_role;
   char    *default_geometry;
   char    *default_working_dir;
@@ -95,7 +96,6 @@ typedef struct
   char *sm_config_prefix;
 
   guint zoom_set : 1;
-  guint any_wait : 1;
 } TerminalOptions;
 
 typedef struct
