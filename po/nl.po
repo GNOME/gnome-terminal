@@ -16,15 +16,15 @@
 # Wouter Bolsterlee <wbolster@gnome.org>, 2006‒2013.
 # Erwin Poeze <donnut@outlook.com>, 2013, 2014.
 # Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2014.
-# Justin van Steijn <justin50@live.nl>, 2016.
-# Nathan Follens <nthn@unseen.is>, 2016-2017.
+# Justin van Steijn <jvs@fsfe.org>, 2016, 2017, 2018.
+# Nathan Follens <nthn@unseen.is>, 2016-2018.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2017-09-07 03:21+0000\n"
-"PO-Revision-Date: 2017-09-08 11:37+0200\n"
+"POT-Creation-Date: 2018-02-06 18:24+0000\n"
+"PO-Revision-Date: 2018-02-08 19:31+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -32,13 +32,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:161
-#: ../src/terminal-accels.c:237 ../src/terminal.c:384
-#: ../src/terminal-tab-label.c:81 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2734 ../src/terminal-window.c:3093
+#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
+#: ../src/terminal-accels.c:226 ../src/terminal.c:542
+#: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
+#: ../src/terminal-window.c:1929 ../src/terminal-window.c:2189
+#: ../src/terminal-window.c:2479
 msgid "Terminal"
 msgstr "Terminalvenster"
 
@@ -53,7 +54,7 @@ msgid ""
 "environment which can be used to run programs available on your system."
 msgstr ""
 "Gnome Terminal is een terminal-emulator die toegang geeft tot een Unix-"
-"shellomgeving waarin programma's uitgevoerd kunnen worden die op uw systeem "
+"shellomgeving waarin programma’s uitgevoerd kunnen worden die op uw systeem "
 "beschikbaar zijn."
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:4
@@ -87,237 +88,12 @@ msgid "shell;prompt;command;commandline;cmd;"
 msgstr ""
 "shell;prompt;command;commando;opdrachtregel;cli;commandline;terminal;cmd;"
 
-#: ../src/gterminal.vala:29
-msgid "Suppress output"
-msgstr "Uitvoer onderdrukken"
-
-#: ../src/gterminal.vala:31
-msgid "Verbose output"
-msgstr "Uitgebreide uitvoer"
-
-#: ../src/gterminal.vala:43
-msgid "Output options:"
-msgstr "Uitvoeropties:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:44
-msgid "Show output options"
-msgstr "Uitvoeropties tonen"
-
-#: ../src/gterminal.vala:85
-#, c-format
-msgid "“%s” is not a valid application ID"
-msgstr "‘%s’ is geen geldig toepassings-ID"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:102
-msgid "Server application ID"
-msgstr "Servertoepassings-ID"
-
-#: ../src/gterminal.vala:102
-msgid "ID"
-msgstr "ID"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:104
-msgid "Show completions"
-msgstr "Aanvullingen tonen"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:111
-msgid "Global options:"
-msgstr "Algemene instellingen:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:112
-msgid "Show global options"
-msgstr "Algemene instellingen tonen"
-
-#: ../src/gterminal.vala:135 ../src/gterminal.vala:156
-msgid "FD passing of stdin is not supported"
-msgstr "Doorgeven van FD van stdin wordt niet ondersteund"
-
-#: ../src/gterminal.vala:136 ../src/gterminal.vala:157
-msgid "FD passing of stdout is not supported"
-msgstr "Doorgeven van FD van stdout wordt niet ondersteund"
-
-#: ../src/gterminal.vala:137 ../src/gterminal.vala:158
-msgid "FD passing of stderr is not supported"
-msgstr "Doorgeven van FD van stderr wordt niet ondersteund"
-
-#: ../src/gterminal.vala:149
-#, c-format
-msgid "Invalid argument “%s” to --fd option"
-msgstr "Ongeldig argument ‘%s’ bij --fd optie"
-
-#: ../src/gterminal.vala:162
-#, c-format
-msgid "Cannot pass FD %d twice"
-msgstr "FD %d kan niet twee keer worden doorgegeven"
-
-#: ../src/gterminal.vala:185
-msgid "Forward stdin"
-msgstr "stdin doorsturen"
-
-#: ../src/gterminal.vala:187
-msgid "Forward stdout"
-msgstr "stdout doorsturen"
-
-#: ../src/gterminal.vala:189
-msgid "Forward stderr"
-msgstr "stderr doorsturen"
-
-#: ../src/gterminal.vala:191
-msgid "Forward file descriptor"
-msgstr "Bestandsdescriptor doorsturen"
-
-#: ../src/gterminal.vala:191
-msgid "FD"
-msgstr "BD"
-
-#: ../src/gterminal.vala:198
-msgid "Exec options:"
-msgstr "Exec-instellingen:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:199
-msgid "Show exec options"
-msgstr "Exec-instellingen tonen"
-
-#: ../src/gterminal.vala:218
-msgid "Maximise the window"
-msgstr "Het venster maximaliseren"
-
-#: ../src/gterminal.vala:220 ../src/terminal-options.c:1162
-msgid "Full-screen the window"
-msgstr "volledig scherm instellen"
-
-#: ../src/gterminal.vala:222 ../src/terminal-options.c:1171
-msgid ""
-"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
-msgstr ""
-"venstergrootte instellen; bijvoorbeeld 80x24 of 80x24+200+200 (KOLOMMENxRIJEN"
-"+X+Y)"
-
-#: ../src/gterminal.vala:223 ../src/terminal-options.c:1172
-msgid "GEOMETRY"
-msgstr "GEOMETRIE"
-
-#: ../src/gterminal.vala:225 ../src/terminal-options.c:1180
-msgid "Set the window role"
-msgstr "vensterrol instellen"
-
-#: ../src/gterminal.vala:225 ../src/terminal-options.c:1181
-msgid "ROLE"
-msgstr "ROL"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:232
-msgid "Window options:"
-msgstr "Vensteropties:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:233
-msgid "Show window options"
-msgstr "Vensteropties tonen"
-
-#: ../src/gterminal.vala:251
-#, c-format
-msgid "May only use option %s once"
-msgstr "Optie %s mag slechts eenmaal gebruikt worden"
-
-#: ../src/gterminal.vala:264 ../src/terminal-options.c:731
-#, c-format
-msgid "“%s” is not a valid zoom factor"
-msgstr "‘%s’ is geen geldige zoomfactor"
-
-#: ../src/gterminal.vala:268
-#, c-format
-msgid "Zoom value “%s” is outside allowed range"
-msgstr "Zoomwaarde ‘%s’ valt buiten het toegestane bereik"
-
-#: ../src/gterminal.vala:277 ../src/terminal-options.c:1211
-msgid "Use the given profile instead of the default profile"
-msgstr "opgegeven profiel gebruiken in plaats van het standaardprofiel"
-
-#: ../src/gterminal.vala:278
-msgid "UUID"
-msgstr "UUID"
-
-#: ../src/gterminal.vala:280 ../src/terminal-options.c:1229
-msgid "Set the working directory"
-msgstr "werkmap van het terminalvenster instellen"
-
-#: ../src/gterminal.vala:280 ../src/terminal-options.c:1230
-msgid "DIRNAME"
-msgstr "MAPNAAM"
-
-# Typo in msgid: ‘terminalx’ i.p.v. ‘terminal’ (Wouter Bolsterlee)
-#: ../src/gterminal.vala:282 ../src/terminal-options.c:1238
-msgid "Set the terminal’s zoom factor (1.0 = normal size)"
-msgstr "Zoomfactor van terminalvenster instellen (1.0 is normale grootte)"
-
-#: ../src/gterminal.vala:283 ../src/terminal-options.c:1239
-msgid "ZOOM"
-msgstr "ZOOM"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:290
-msgid "Terminal options:"
-msgstr "Terminalinstellingen:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:291 ../src/terminal-options.c:1346
-msgid "Show terminal options"
-msgstr "Terminalinstellingen tonen"
-
-#: ../src/gterminal.vala:304
-msgid "Wait until the child exits"
-msgstr "Wachten totdat kindproces afsluit"
-
-#: ../src/gterminal.vala:311
-msgid "Processing options:"
-msgstr "Procesinstellingen:"
-
-# terminal/terminalvenster
-#: ../src/gterminal.vala:312
-msgid "Show processing options"
-msgstr "Procesinstellingen tonen"
-
-#: ../src/gterminal.vala:479 ../src/gterminal.vala:576
-#: ../src/gterminal.vala:599 ../src/gterminal.vala:658
-#: ../src/gterminal.vala:685 ../src/gterminal.vala:707
-msgid "Missing argument"
-msgstr "Ontbrekend argument"
-
-#: ../src/gterminal.vala:499
-#, c-format
-msgid "Unknown command “%s”"
-msgstr "Onbekende opdracht ‘%s’"
-
-#: ../src/gterminal.vala:526
-#, c-format
-msgid "“%s” needs the command to run as arguments after “--”"
-msgstr "Voor ‘%s’ moet de opdracht worden uitgevoerd als argumenten na ‘--’"
-
-#: ../src/gterminal.vala:529
-msgid "Extraneous arguments after “--”"
-msgstr "Vreemde argumenten na ‘--’"
-
-#: ../src/gterminal.vala:744
-msgid "GTerminal"
-msgstr "GTerminal"
-
-#: ../src/gterminal.vala:760
-#, c-format
-msgid "Error processing arguments: %s\n"
-msgstr "Fout bij verwerking van argumenten: %s\n"
-
-#: ../src/migration.c:403
+#. Cursor blink mode
+#: ../src/migration.c:403 ../src/preferences.ui.h:19
 msgid "Default"
 msgstr "Standaard"
 
-#: ../src/migration.c:403 ../src/terminal-prefs.c:99
+#: ../src/migration.c:403
 msgid "Unnamed"
 msgstr "Naamloos"
 
@@ -325,7 +101,7 @@ msgstr "Naamloos"
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
 msgctxt "visible-name"
 msgid "'Unnamed'"
-msgstr "'Naamloos'"
+msgstr "‘Naamloos’"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:3
 msgid "Human-readable name of the profile"
@@ -388,18 +164,34 @@ msgstr ""
 "tekst weergegeven worden."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:13
+msgid ""
+"Scale factor for the cell height to increase line spacing. (Does not "
+"increase the font’s height.)"
+msgstr ""
+"Schaalfactor voor de celhoogte om regelafstand te vergroten. (Vergroot de "
+"hoogte van het lettertype niet.)"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:14
+msgid ""
+"Scale factor for the cell width to increase letter spacing. (Does not "
+"increase the font’s width.)"
+msgstr ""
+"Schaalfactor voor de celbreedte om letterafstand te vergroten. (Vergroot de "
+"breedte van het lettertype niet.)"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
 msgstr "Of aangepaste cursorkleuren worden gebruikt"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:14
+#: ../src/org.gnome.Terminal.gschema.xml.h:16
 msgid "If true, use the cursor colors from the profile."
 msgstr "Indien ingeschakeld worden de cursorkleuren van het profiel gebruikt."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Cursor background color"
 msgstr "Achtergrondkleur van cursor"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:16
+#: ../src/org.gnome.Terminal.gschema.xml.h:18
 msgid ""
 "Custom color of the background of the terminal’s cursor, as a color "
 "specification (can be HTML-style hex digits, or a color name such as “red”). "
@@ -410,11 +202,11 @@ msgstr ""
 "de naam van een kleur zoals ‘red’). Dit wordt genegeerd als cursor-colors-"
 "set is uitgeschakeld."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:17
+#: ../src/org.gnome.Terminal.gschema.xml.h:19
 msgid "Cursor foreground colour"
 msgstr "Voorgrondkleur van cursor"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:18
+#: ../src/org.gnome.Terminal.gschema.xml.h:20
 msgid ""
 "Custom color for the foreground of the text character at the terminal’s "
 "cursor position, as a color specification (can be HTML-style hex digits, or "
@@ -425,19 +217,19 @@ msgstr ""
 "hexadecimaal getal zijn, of de naam van een kleur zoals ‘red’). Dit wordt "
 "genegeerd als cursor-colors-set is uitgeschakeld."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:19
+#: ../src/org.gnome.Terminal.gschema.xml.h:21
 msgid "Whether to use custom highlight colors"
 msgstr "Of aangepaste markeringskleuren worden gebruikt"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:20
+#: ../src/org.gnome.Terminal.gschema.xml.h:22
 msgid "If true, use the highlight colors from the profile."
 msgstr "Indien ingeschakeld worden de markeerkleuren van het profiel gebruikt."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:21
+#: ../src/org.gnome.Terminal.gschema.xml.h:23
 msgid "Highlight background color"
 msgstr "Markeringsachtergrondkleur"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:22
+#: ../src/org.gnome.Terminal.gschema.xml.h:24
 msgid ""
 "Custom color of the background of the terminal’s highlight, as a color "
 "specification (can be HTML-style hex digits, or a color name such as “red”). "
@@ -448,11 +240,11 @@ msgstr ""
 "getal zijn, of de naam van een kleur zoals ‘red’). Dit wordt genegeerd als "
 "highlight-colors-set is uitgeschakeld."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:23
+#: ../src/org.gnome.Terminal.gschema.xml.h:25
 msgid "Highlight foreground colour"
 msgstr "Markeringsvoorgrondkleur"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:24
+#: ../src/org.gnome.Terminal.gschema.xml.h:26
 msgid ""
 "Custom color for the foreground of the text character at the terminal’s "
 "highlight position, as a color specification (can be HTML-style hex digits, "
@@ -464,21 +256,33 @@ msgstr ""
 "achtig hexadecimaal getal zijn, of de naam van een kleur zoals ‘red’). Dit "
 "wordt genegeerd als highlight-colors-set is uitgeschakeld."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:25
+#: ../src/org.gnome.Terminal.gschema.xml.h:27
 msgid "Whether to allow bold text"
 msgstr "Toestaan van vetgedrukte tekst"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:26
+#: ../src/org.gnome.Terminal.gschema.xml.h:28
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Indien ingeschakeld hebben toepassingen de mogelijkheid om tekst vetgedrukt "
 "te maken."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:27
+#: ../src/org.gnome.Terminal.gschema.xml.h:29
+msgid "Whether bold is also bright"
+msgstr "Vetgedrukt is ook fel"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
+msgid ""
+"If true, setting bold on the first 8 colors also switches to their bright "
+"variants."
+msgstr ""
+"Indien ingeschakeld zijn de eerste 8 kleuren ook fel wanneer zij op "
+"vetgedrukt worden ingesteld."
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether to ring the terminal bell"
 msgstr "Gebruiken van de terminalbel"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:28
+#: ../src/org.gnome.Terminal.gschema.xml.h:32
 msgid ""
 "List of ASCII punctuation characters that are not to be treated as part of a "
 "word when doing word-wise selection"
@@ -486,19 +290,19 @@ msgstr ""
 "Lijst van ASCII leestekens die niet als onderdeel van een woord worden "
 "gezien bij word-wise selectie"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Tonen van de menubalk in nieuwe tabbladen/vensters toestaan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid "True if the menubar should be shown in new window"
 msgstr "Ingeschakeld als de menubalk in nieuwe vensters getoond moet worden"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Aantal kolommen (standaard)"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -506,11 +310,11 @@ msgstr ""
 "Het aantal kolommen in nieuw geopende terminalvensters. Dit heeft geen "
 "effect als ‘use_custom_default_size’ uitgeschakeld is."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "Default number of rows"
 msgstr "Aantal rijen (standaard)"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -518,15 +322,15 @@ msgstr ""
 "Het aantal rijen in nieuw geopende terminalvensters. Dit heeft geen effect "
 "als ‘use_custom_default_size’ uitgeschakeld is."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "When to show the scrollbar"
 msgstr "Schuifbalk tonen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Number of lines to keep in scrollback"
 msgstr "Aantal regels dat teruggeschoven moet kunnen worden"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -537,11 +341,11 @@ msgstr ""
 "weggegooid. Als ‘scrollback_unlimited’ ingeschakeld is, wordt deze waarde "
 "genegeerd."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Onbeperkt maken van het aantal terug te schuiven regels"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -552,29 +356,29 @@ msgstr ""
 "kunnen hebben dat de harde schijf volloopt als er heel veel uitvoer in een "
 "terminalvenster is."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Naar beneden schuiven bij het indrukken van een toets"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr ""
 "Ingeschakeld springt bij indrukken van een toets de schuifbalk naar beneden."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Naar beneden schuiven bij nieuwe uitvoer"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr "Ingeschakeld zal de terminal naar onderen schuiven bij nieuwe uitvoer."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "What to do with the terminal when the child command exits"
 msgstr "Wat te doen met de terminal als de sub-opdracht wordt beëindigd"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -583,11 +387,11 @@ msgstr ""
 "opdracht opnieuw uit te voeren, en ‘hold’ om het terminalvenster geopend te "
 "houden zonder dat er een opdracht wordt uitgevoerd."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Of de opdracht in de terminal als aanmeld-shell uitgevoerd moet worden"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -595,11 +399,11 @@ msgstr ""
 "Ingeschakeld zal de opdracht in het terminalvenster gestart worden als een "
 "aanmeld-shell (argv[0] zal voorafgegaan worden door een streepje)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Uitvoeren van een aangepaste opdracht in plaats van de shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -607,11 +411,11 @@ msgstr ""
 "Ingeschakeld zal de waarde van ‘custom_command’ uitgevoerd worden in plaats "
 "van de shell."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "Whether to blink the cursor"
 msgstr "Laten knipperen van de cursor"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -619,53 +423,62 @@ msgstr ""
 "De mogelijke waarden zijn ‘system’ om de algemene instellingen te gebruiken, "
 "dan wel ‘on’ of ‘off’ om dit expliciet in te stellen."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "The cursor appearance"
 msgstr "Cursoruiterlijk"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
+msgid ""
+"Possible values are “always” or “never” allow blinking text, or only when "
+"the terminal is “focused” or “unfocused”."
+msgstr ""
+"Mogelijke waarden zijn altijd (‘always’) of nooit (‘never’) knipperende "
+"tekst toestaan, of alleen wanneer de terminal is gefocust (‘focused’) of "
+"niet gefocust (‘unfocused’)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Custom command to use instead of the shell"
 msgstr "Aangepaste opdracht uitvoeren in plaats van de shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Gebruik deze opdracht in plaats van de shell als use_custom_command is "
 "ingeschakeld."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Palette for terminal applications"
 msgstr "Palet voor terminaltoepassingen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "A Pango font name and size"
 msgstr "Pango-lettertypenaam en -grootte"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "The code sequence the Backspace key generates"
 msgstr "De code-reeks geproduceerd door de Backspace-toets"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "The code sequence the Delete key generates"
 msgstr "De code-reeks geproduceerd door de Delete-toets"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Gebruik van themakleuren voor de terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Whether to use the system monospace font"
 msgstr "Gebruik van systeem-lettertype met een vaste breedte"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Opnieuw afbreken van regels bij het aanpassen van de venstergrootte"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Which encoding to use"
 msgstr "De te gebruiken codering"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -673,136 +486,146 @@ msgstr ""
 "Of tekens van onduidelijke breedte smal of breed zijn wanneer UTF-8-codering "
 "wordt gebruikt"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Sneltoets om een nieuw tabblad te openen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Keyboard shortcut to open a new window"
 msgstr "Sneltoets om een nieuw venster te openen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
-msgid "Keyboard shortcut to create a new profile"
-msgstr "Sneltoets om een nieuw profiel aan te maken"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr ""
 "Sneltoets om de inhoud van het huidige tabblad op te slaan in een bestand"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
+msgid ""
+"Keyboard shortcut to export the current tab contents to file in various "
+"formats"
+msgstr ""
+"Sneltoets om de inhoud van het huidige tabblad te exporteren naar meerdere "
+"bestandsformaten"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
+msgid "Keyboard shortcut to print the current tab contents to printer or file"
+msgstr ""
+"Sneltoets om de inhoud van het huidige tabblad te printen naar een printer "
+"of een bestand"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to close a tab"
 msgstr "Sneltoets voor het sluiten van een tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to close a window"
 msgstr "Sneltoets om een venster te sluiten"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to copy text"
 msgstr "Sneltoets om tekst te kopiëren"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Sneltoets om tekst te kopiëren als HTML"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to paste text"
 msgstr "Sneltoets om tekst te plakken"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to select all text"
 msgstr "Sneltoets om alle tekst te selecteren"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Sneltoets om het Voorkeuren-venster te openen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
-msgid "Keyboard shortcut to open the current profile’s Preferences dialog"
-msgstr "Sneltoets om het Voorkeuren-venster van het huidige profiel te openen"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Sneltoets om naar volledig-schermmodus te schakelen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Sneltoets om de zichtbaarheid van de menubalk in te stellen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Sneltoets om de ‘alleen-lezen’-status in/uit te schakelen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Sneltoets om het terminalvenster te herstellen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Sneltoets om het terminalvenster te herstellen en te wissen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Sneltoets om het zoekvenster te openen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Sneltoets om de volgende zoekterm te vinden"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "Sneltoets om de vorige zoekterm te vinden"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Sneltoets om oplichten van zoekresultaten op te heffen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Sneltoets om te wisselen naar het vorige tabblad"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Sneltoets om te wisselen naar het volgende tabblad"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Sneltoets om het huidige tabblad naar links te verplaatsen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Sneltoets om het huidige tabblad naar rechts te verplaatsen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Sneltoets om het huidige tabblad los te koppelen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Sneltoets om naar het genummerde tabblad te gaan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
+msgid "Keyboard shortcut to switch to the last tab"
+msgstr "Sneltoets om te wisselen naar het laatste tabblad"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to launch help"
 msgstr "Sneltoets om hulp in te schakelen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font larger"
 msgstr "Sneltoets om het lettertype te vergroten"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Sneltoets om het lettertype te verkleinen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Sneltoets om het lettertype de standaardgrootte te geven"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid "Whether the menubar has access keys"
 msgstr "Gebruik menubalk-sneltoetsen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -812,11 +635,11 @@ msgstr ""
 "conflicteren met bepaalde toepassingen die in de terminal draaien. Vandaar "
 "de mogelijkheid om deze sneltoetsen uit te schakelen."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid "Whether shortcuts are enabled"
 msgstr "Of sneltoetsen ingeschakeld zijn"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -825,11 +648,11 @@ msgstr ""
 "toepassingen die in de terminal draaien. Vandaar de mogelijkheid om deze "
 "sneltoetsen uit te schakelen."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Standaard GTK-sneltoets voor menubalktoegang inschakelen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -839,43 +662,31 @@ msgstr ""
 "worden via gtkrc (gtk-menu-bar-accel = ‘watdanook’). Deze optie maakt het "
 "mogelijk om de standaard sneltoets uit te schakelen."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether the shell integration is enabled"
 msgstr "Inschakelen shell-integratie"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
-msgid "List of available encodings"
-msgstr "Lijst met beschikbare coderingen"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
-msgid ""
-"A subset of possible encodings are presented in the Encoding submenu. This "
-"is a list of encodings to appear there."
-msgstr ""
-"Een deel van de mogelijke coderingen zijn beschikbaar in het submenu "
-"Coderingen. Dit is een lijst met coderingen die daar worden getoond."
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Vragen om bevestiging bij het sluiten van terminalvensters"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to show the menubar in new windows"
 msgstr "Tonen van de menubalk in nieuwe vensters"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Openen nieuwe terminalvensters als vensters of tabbladen"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "When to show the tabs bar"
 msgstr "Of de tabbladenbalk weergegeven wordt"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "The position of the tab bar"
 msgstr "De positie van de tabbladbalk"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:113
 msgid "Which theme variant to use"
 msgstr "Welke thema-variant wordt gebruikt"
 
@@ -904,457 +715,496 @@ msgctxt "theme variant"
 msgid "Dark"
 msgstr "Donker"
 
-#: ../src/preferences.ui.h:8 ../src/terminal-accels.c:173
-msgid "Preferences"
-msgstr "Voorkeuren"
-
-#: ../src/preferences.ui.h:9
-msgid "Show _menubar by default in new terminals"
-msgstr "_Menubalk standaard in nieuwe terminalvensters tonen"
-
-#: ../src/preferences.ui.h:10
-msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
-msgstr ""
-"Menusneltoetsen _inschakelen (zoals Alt+b om het Bestandmenu te openen)"
-
-#: ../src/preferences.ui.h:11
-msgid "Enable the _menu accelerator key (F10 by default)"
-msgstr "M_enu-toegangstoets inschakelen (standaard F10)"
-
-#: ../src/preferences.ui.h:12
-msgid "Theme _variant:"
-msgstr "Thema_variant:"
-
-#: ../src/preferences.ui.h:13
-msgid "Open _new terminals in:"
-msgstr "_Nieuwe terminalvensters openen in:"
-
-#: ../src/preferences.ui.h:14 ../src/profile-preferences.ui.h:61
-msgid "General"
-msgstr "Algemeen"
-
-#: ../src/preferences.ui.h:15
-msgid "_Enable shortcuts"
-msgstr "Sneltoetsen i_nschakelen"
-
-#: ../src/preferences.ui.h:16
-msgid "Shortcuts"
-msgstr "Sneltoetsen"
-
-#: ../src/preferences.ui.h:17
-msgid "_Clone"
-msgstr "_Dupliceren"
-
-#: ../src/preferences.ui.h:18
-msgid "_Profile used when launching a new terminal:"
-msgstr "Gebruikt _profiel bij starten van een nieuwe terminal:"
-
-#: ../src/preferences.ui.h:19
-msgid "Profiles"
-msgstr "Profielen"
-
-#: ../src/preferences.ui.h:20
-msgid "E_ncodings shown in menu:"
-msgstr "Coderi_ngen die in menu worden getoond:"
-
-#: ../src/preferences.ui.h:21
-msgid "Encodings"
-msgstr "Coderingen"
-
-#: ../src/profile-editor.c:49
-msgid "Black on light yellow"
-msgstr "Zwart op lichtgeel"
-
-#: ../src/profile-editor.c:53
-msgid "Black on white"
-msgstr "Zwart op wit"
-
-#: ../src/profile-editor.c:57
-msgid "Gray on black"
-msgstr "Grijs op zwart"
-
-#: ../src/profile-editor.c:61
-msgid "Green on black"
-msgstr "Groen op zwart"
-
-#: ../src/profile-editor.c:65
-msgid "White on black"
-msgstr "Wit op zwart"
-
-#. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
-#: ../src/profile-editor.c:70
-msgid "Solarized light"
-msgstr "Gesolariseerd helder"
-
-#. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
-#: ../src/profile-editor.c:75
-msgid "Solarized dark"
-msgstr "Gesolariseerd donker"
-
-#: ../src/profile-editor.c:437
-#, c-format
-msgid "Error parsing command: %s"
-msgstr "Fout bij inlezen opdracht: %s"
-
-#. This is the name of a colour scheme
-#: ../src/profile-editor.c:478 ../src/profile-preferences.ui.h:36
-msgid "Custom"
-msgstr "Aangepast"
-
-#: ../src/profile-editor.c:637
-#, c-format
-msgid "Editing Profile “%s”"
-msgstr "Profiel ‘%s’ bewerken"
-
-#: ../src/profile-editor.c:895
-#, c-format
-msgid "Choose Palette Color %u"
-msgstr "Paletkleur %u kiezen"
-
-#: ../src/profile-editor.c:899
-#, c-format
-msgid "Palette entry %u"
-msgstr "Palet-item %u"
-
 #. ambiguous-width characers are
-#: ../src/profile-preferences.ui.h:2
+#: ../src/preferences.ui.h:9
 msgid "Narrow"
 msgstr "Smal"
 
 #. ambiguous-width characers are
-#: ../src/profile-preferences.ui.h:4
+#: ../src/preferences.ui.h:11
 msgid "Wide"
 msgstr "Breed"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:6
+#: ../src/preferences.ui.h:13
 msgid "Block"
 msgstr "Blok"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:8
+#: ../src/preferences.ui.h:15
 msgid "I-Beam"
 msgstr "I-profiel"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:10
+#: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Onderstrepen"
 
+#. Cursor blink mode
+#: ../src/preferences.ui.h:21
+msgid "Enabled"
+msgstr "Ingeschakeld"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:23
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#. Text blink mode
+#: ../src/preferences.ui.h:25
+msgid "Never"
+msgstr "Nooit"
+
+#. Text blink mode
+#: ../src/preferences.ui.h:27
+msgid "When focused"
+msgstr "Bij focus"
+
+#. Text blink mode
+#: ../src/preferences.ui.h:29
+msgid "When unfocused"
+msgstr "Bij geen focus"
+
+#. Text blink mode
+#: ../src/preferences.ui.h:31
+msgid "Always"
+msgstr "Altijd"
+
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:12
+#: ../src/preferences.ui.h:33
 msgid "Replace initial title"
 msgstr "Begintitel vervangen"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:14
+#: ../src/preferences.ui.h:35
 msgid "Append initial title"
 msgstr "Na begintitel plaatsen"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:16
+#: ../src/preferences.ui.h:37
 msgid "Prepend initial title"
 msgstr "Voor begintitel plaatsen"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:18
+#: ../src/preferences.ui.h:39
 msgid "Keep initial title"
 msgstr "Begintitel behouden"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:20
+#: ../src/preferences.ui.h:41
 msgid "Exit the terminal"
 msgstr "Terminal afsluiten"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:22
+#: ../src/preferences.ui.h:43
 msgid "Restart the command"
 msgstr "Opdracht herstarten"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:24
+#: ../src/preferences.ui.h:45
 msgid "Hold the terminal open"
 msgstr "Terminal openhouden"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:26
+#: ../src/preferences.ui.h:47
 msgid "Tango"
 msgstr "Tango"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:28
+#: ../src/preferences.ui.h:49
 msgid "Linux console"
 msgstr "Linux-console"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:30
+#: ../src/preferences.ui.h:51
 msgid "XTerm"
 msgstr "XTerm"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:32
+#: ../src/preferences.ui.h:53
 msgid "Rxvt"
 msgstr "Rxvt"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:34
+#: ../src/preferences.ui.h:55
 msgid "Solarized"
 msgstr "Solarized"
 
+#. This is the name of a colour scheme
+#: ../src/preferences.ui.h:57 ../src/profile-editor.c:606
+msgid "Custom"
+msgstr "Aangepast"
+
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:38
+#: ../src/preferences.ui.h:59
 msgid "Automatic"
 msgstr "Automatisch"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:40
+#: ../src/preferences.ui.h:61
 msgid "Control-H"
 msgstr "Control-H"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:42
+#: ../src/preferences.ui.h:63
 msgid "ASCII DEL"
 msgstr "Ascii DEL"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:44
+#: ../src/preferences.ui.h:65
 msgid "Escape sequence"
 msgstr "Escape-reeks"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:46
+#: ../src/preferences.ui.h:67
 msgid "TTY Erase"
 msgstr "TTY wissen"
 
-#: ../src/profile-preferences.ui.h:47
-msgid "Profile Editor"
-msgstr "Profiel-editor"
+#: ../src/preferences.ui.h:68
+msgid "_Show menubar by default in new terminals"
+msgstr "Menubalk _standaard in nieuwe terminalvensters tonen"
 
-#: ../src/profile-preferences.ui.h:48
-msgid "_Profile name:"
-msgstr "_Profielnaam:"
+#: ../src/preferences.ui.h:69
+msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
+msgstr ""
+"Menusneltoetsen _inschakelen (zoals Alt+b om het Bestandmenu te openen)"
 
-#: ../src/profile-preferences.ui.h:49
-msgid "Profile ID:"
-msgstr "Profiel-ID:"
+#: ../src/preferences.ui.h:70
+msgid "Enable the _menu accelerator key (F10 by default)"
+msgstr "M_enu-toegangstoets inschakelen (standaard F10)"
 
-#: ../src/profile-preferences.ui.h:50
+#: ../src/preferences.ui.h:71
+msgid "Theme _variant:"
+msgstr "Thema_variant:"
+
+#: ../src/preferences.ui.h:72
+msgid "Open _new terminals in:"
+msgstr "_Nieuwe terminalvensters openen in:"
+
+#: ../src/preferences.ui.h:73
+msgid "_Enable shortcuts"
+msgstr "Sneltoetsen i_nschakelen"
+
+#: ../src/preferences.ui.h:74
+msgid "Text Appearance"
+msgstr "Tekstopmaak"
+
+#: ../src/preferences.ui.h:75
 msgid "Initial terminal si_ze:"
 msgstr "Oorspronkelijke _afmeting van de terminal:"
 
-#: ../src/profile-preferences.ui.h:51
+#: ../src/preferences.ui.h:76
 msgid "columns"
 msgstr "kolommen"
 
-#: ../src/profile-preferences.ui.h:52
+#: ../src/preferences.ui.h:77
 msgid "rows"
 msgstr "rijen"
 
-#: ../src/profile-preferences.ui.h:53
-msgid "Cursor _shape:"
-msgstr "_Cursorvorm"
-
-#: ../src/profile-preferences.ui.h:54
-msgid "Terminal _bell"
-msgstr "_Terminalbel"
-
-#: ../src/profile-preferences.ui.h:55
-msgid "Text Appearance"
-msgstr "Tekstuiterlijk"
-
-#: ../src/profile-preferences.ui.h:56
-msgid "_Allow bold text"
-msgstr "_Vetgedrukte tekst toestaan"
-
-#: ../src/profile-preferences.ui.h:57
-msgid "_Rewrap on resize"
-msgstr "_Regels opnieuw afbreken bij grootteverandering"
-
-#: ../src/profile-preferences.ui.h:58
-msgid "_Custom font:"
-msgstr "Aangepast l_ettertype:"
-
-#: ../src/profile-preferences.ui.h:59
-msgid "Choose A Terminal Font"
-msgstr "Kies een terminalvenster-lettertype"
-
-#: ../src/profile-preferences.ui.h:60
+#: ../src/preferences.ui.h:78
 msgid "Rese_t"
 msgstr "Her_stellen"
 
-#: ../src/profile-preferences.ui.h:62
-msgid "_Run command as a login shell"
-msgstr "Opdracht _uitvoeren als een aanmeld-shell"
+#: ../src/preferences.ui.h:79
+msgid "Custom _font:"
+msgstr "Aangepast l_ettertype:"
 
-#: ../src/profile-preferences.ui.h:63
-msgid "Ru_n a custom command instead of my shell"
-msgstr "Aangepaste opdracht _uitvoeren in plaats van mijn shell"
+#: ../src/preferences.ui.h:80
+msgid "Choose A Terminal Font"
+msgstr "Kies een terminalvenster-lettertype"
 
-#: ../src/profile-preferences.ui.h:64
-msgid "Custom co_mmand:"
-msgstr "Aangepaste _opdracht:"
+#: ../src/preferences.ui.h:81
+msgid "Cell spaci_ng:"
+msgstr "Cel_ruimte:"
 
-#: ../src/profile-preferences.ui.h:65
-msgid "When command _exits:"
-msgstr "Als opdracht _eindigt:"
+#: ../src/preferences.ui.h:82
+msgid "Allow b_linking text:"
+msgstr "_Knipperende tekst toestaan:"
 
-#: ../src/profile-preferences.ui.h:66
-msgid "Command"
-msgstr "Opdracht"
+#: ../src/preferences.ui.h:83
+msgid "Cursor"
+msgstr "Cursor"
 
-#: ../src/profile-preferences.ui.h:67
-msgid "Text and Background Color"
-msgstr "Tekst- en achtergrondkleur"
+#: ../src/preferences.ui.h:84
+msgid "Cursor _shape:"
+msgstr "_Cursorvorm:"
 
-#: ../src/profile-preferences.ui.h:68
-msgid "_Use colors from system theme"
-msgstr "Kleuren van het s_ysteemthema gebruiken"
+#: ../src/preferences.ui.h:85
+msgid "Cursor blin_king:"
+msgstr "Cursor_knippering:"
 
-#: ../src/profile-preferences.ui.h:69
-msgid "Built-in sche_mes:"
-msgstr "_Ingebouwde schema's:"
+#: ../src/preferences.ui.h:86
+msgid "Sound"
+msgstr "Geluid"
 
-#: ../src/profile-preferences.ui.h:70
+#: ../src/preferences.ui.h:87
+msgid "Terminal _bell"
+msgstr "_Terminalbel"
+
+#: ../src/preferences.ui.h:88
+msgid "Profile ID:"
+msgstr "Profiel-ID:"
+
+#: ../src/preferences.ui.h:89
 msgid "Text"
 msgstr "Tekst"
 
-#: ../src/profile-preferences.ui.h:71
+#: ../src/preferences.ui.h:90
+msgid "Text and Background Color"
+msgstr "Tekst- en achtergrondkleur"
+
+#: ../src/preferences.ui.h:91
+msgid "_Use colors from system theme"
+msgstr "Kleuren van het s_ysteemthema gebruiken"
+
+#: ../src/preferences.ui.h:92
+msgid "Built-in sche_mes:"
+msgstr "_Ingebouwde schema’s:"
+
+#: ../src/preferences.ui.h:93
 msgid "Background"
 msgstr "Achtergrond"
 
-#: ../src/profile-preferences.ui.h:72
+#: ../src/preferences.ui.h:94
 msgid "_Default color:"
 msgstr "_Standaardkleur:"
 
-#: ../src/profile-preferences.ui.h:73
+#: ../src/preferences.ui.h:95
 msgid "Choose Terminal Text Color"
 msgstr "Tekstkleur terminalvenster kiezen"
 
-#: ../src/profile-preferences.ui.h:74
+#: ../src/preferences.ui.h:96
 msgid "Choose Terminal Background Color"
 msgstr "Achtergrondkleur terminalvenster kiezen"
 
-#: ../src/profile-preferences.ui.h:75
-msgid "Choose Terminal Bold Text Color"
-msgstr "Tekstkleur vetgedrukte tekst in terminalvenster kiezen"
-
-#: ../src/profile-preferences.ui.h:76
-msgid "Choose Terminal Underlined Text Color"
-msgstr "Tekstkleur onderstreepte tekst in terminalvenster kiezen"
-
-#: ../src/profile-preferences.ui.h:77
-msgid "Cu_rsor color:"
-msgstr "_Cursorkleur:"
-
-#: ../src/profile-preferences.ui.h:78
-msgid "Choose Terminal Cursor Foreground Color"
-msgstr "Voorgrondkleur cursor in terminalvenster kiezen"
-
-#: ../src/profile-preferences.ui.h:79
-msgid "Choose Terminal Cursor Background Color"
-msgstr "Achtergrondkleur cursor in terminalvenster kiezen"
-
-#: ../src/profile-preferences.ui.h:80
-msgid "_Underline color:"
-msgstr "_Onderstreepkleur:"
-
-#: ../src/profile-preferences.ui.h:81
+#: ../src/preferences.ui.h:97
 msgid "Bo_ld color:"
 msgstr "_Vetgedruktkleur:"
 
-#: ../src/profile-preferences.ui.h:82
+#: ../src/preferences.ui.h:98
+msgid "Choose Terminal Bold Text Color"
+msgstr "Tekstkleur vetgedrukte tekst in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:99
+msgid "_Underline color:"
+msgstr "_Onderstreepkleur:"
+
+#: ../src/preferences.ui.h:100
+msgid "Choose Terminal Underlined Text Color"
+msgstr "Tekstkleur onderstreepte tekst in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:101
+msgid "Cu_rsor color:"
+msgstr "_Cursorkleur:"
+
+#: ../src/preferences.ui.h:102
+msgid "Choose Terminal Cursor Foreground Color"
+msgstr "Voorgrondkleur cursor in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:103
+msgid "Choose Terminal Cursor Background Color"
+msgstr "Achtergrondkleur cursor in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:104
 msgid "_Highlight color:"
 msgstr "_Markeringskleur:"
 
-#: ../src/profile-preferences.ui.h:83
+#: ../src/preferences.ui.h:105
+msgid "Choose Terminal Highlight Foreground Color"
+msgstr "Voorgrondkleur markering in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:106
+msgid "Choose Terminal Highlight Background Color"
+msgstr "Achtergrondkleur markering in terminalvenster kiezen"
+
+#: ../src/preferences.ui.h:107
 msgid "Palette"
 msgstr "Palet"
 
-#: ../src/profile-preferences.ui.h:84
+#: ../src/preferences.ui.h:108
 msgid "Built-in _schemes:"
-msgstr "Ingebouwde _schema's:"
+msgstr "Ingebouwde _schema’s:"
 
-#: ../src/profile-preferences.ui.h:85
-msgid "<b>Note:</b> Terminal applications have these colors available to them."
-msgstr "<b>Opmerking:</b> terminaltoepassingen beschikken over deze kleuren."
-
-#: ../src/profile-preferences.ui.h:86
+#: ../src/preferences.ui.h:109
 msgid "Color p_alette:"
 msgstr "Kleuren_palet:"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/preferences.ui.h:110
+msgid "Show _bold text in bright colors"
+msgstr "_Vetgedrukte tekst in felle kleuren tonen"
+
+#: ../src/preferences.ui.h:111
 msgid "Colors"
 msgstr "Kleuren"
 
-#: ../src/profile-preferences.ui.h:88
-msgid "Scroll on _keystroke"
-msgstr "Schuiven _bij een toetsaanslag"
-
-#: ../src/profile-preferences.ui.h:89
-msgid "Scroll on _output"
-msgstr "S_chuiven bij nieuwe uitvoer"
-
-#: ../src/profile-preferences.ui.h:90
-msgid "_Limit scrollback to:"
-msgstr "_Terugschuiven beperken tot:"
-
-#: ../src/profile-preferences.ui.h:91
-msgid "lines"
-msgstr "regels"
-
-#: ../src/profile-preferences.ui.h:92
+#: ../src/preferences.ui.h:112
 msgid "_Show scrollbar"
 msgstr "_Schuifbalk tonen"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/preferences.ui.h:113
+msgid "Scroll on _output"
+msgstr "S_chuiven bij nieuwe uitvoer"
+
+#: ../src/preferences.ui.h:114
+msgid "Scroll on _keystroke"
+msgstr "Schuiven _bij een toetsaanslag"
+
+#: ../src/preferences.ui.h:115
+msgid "_Limit scrollback to:"
+msgstr "_Terugschuiven beperken tot:"
+
+#: ../src/preferences.ui.h:116
+msgid "lines"
+msgstr "regels"
+
+#: ../src/preferences.ui.h:117
 msgid "Scrolling"
 msgstr "Schuiven"
 
-#: ../src/profile-preferences.ui.h:94
-msgid ""
-"<b>Note:</b> These options may cause some applications to behave "
-"incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior."
-msgstr ""
-"<b>Opmerking:</b> Door deze opties kunnen sommige toepassingen zich onjuist "
-"gedragen. Ze zijn mogelijk bruikbaar in geval bepaalde toepassingen of "
-"besturingssystemen een ander terminalgedrag verwachten."
+#: ../src/preferences.ui.h:118
+msgid "_Run command as a login shell"
+msgstr "Opdracht _uitvoeren als een aanmeld-shell"
 
-#: ../src/profile-preferences.ui.h:95
-msgid "_Delete key generates:"
-msgstr "_Delete-toets genereert:"
+#: ../src/preferences.ui.h:119
+msgid "Ru_n a custom command instead of my shell"
+msgstr "Aangepaste opdracht _uitvoeren in plaats van mijn shell"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/preferences.ui.h:120
+msgid "Custom co_mmand:"
+msgstr "Aangepaste _opdracht:"
+
+#: ../src/preferences.ui.h:121
+msgid "When command _exits:"
+msgstr "Als opdracht _eindigt:"
+
+#: ../src/preferences.ui.h:122
+msgid "Command"
+msgstr "Opdracht"
+
+#: ../src/preferences.ui.h:123
 msgid "_Backspace key generates:"
 msgstr "_Backspace-toets genereert:"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/preferences.ui.h:124
+msgid "_Delete key generates:"
+msgstr "_Delete-toets genereert:"
+
+#: ../src/preferences.ui.h:125
 msgid "_Encoding:"
 msgstr "_Codering:"
 
-#: ../src/profile-preferences.ui.h:98
+#: ../src/preferences.ui.h:126
 msgid "Ambiguous-_width characters:"
 msgstr "Tekens met onduidelijke _breedte:"
 
-#: ../src/profile-preferences.ui.h:99
+#: ../src/preferences.ui.h:127
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Compatibiliteitsopties terugzetten naar standaardinstellingen"
 
-#: ../src/profile-preferences.ui.h:100
+#: ../src/preferences.ui.h:128
 msgid "Compatibility"
 msgstr "Compatibiliteit"
 
-#: ../src/search-popover.ui.h:1
-msgid "Search"
+#: ../src/preferences.ui.h:129
+msgid "Clone…"
+msgstr "Dupliceren…"
+
+#: ../src/preferences.ui.h:130
+msgid "Rename…"
+msgstr "Hernoemen…"
+
+#: ../src/preferences.ui.h:131
+msgid "Delete…"
+msgstr "Verwijderen…"
+
+#: ../src/preferences.ui.h:132
+msgid "Set as default"
+msgstr "Standaard instellen"
+
+#: ../src/preferences.ui.h:133
+msgid "label"
+msgstr "label"
+
+#: ../src/preferences.ui.h:134
+msgid "Cancel"
+msgstr "Afbreken"
+
+#: ../src/profile-editor.c:158
+msgid "Black on light yellow"
+msgstr "Zwart op lichtgeel"
+
+#: ../src/profile-editor.c:162
+msgid "Black on white"
+msgstr "Zwart op wit"
+
+#: ../src/profile-editor.c:166
+msgid "Gray on black"
+msgstr "Grijs op zwart"
+
+#: ../src/profile-editor.c:170
+msgid "Green on black"
+msgstr "Groen op zwart"
+
+#: ../src/profile-editor.c:174
+msgid "White on black"
+msgstr "Wit op zwart"
+
+#. Translators: "Tango" is the name of a colour scheme, "light" can be translated
+#: ../src/profile-editor.c:179
+msgid "Tango light"
+msgstr "Tango (licht)"
+
+#. Translators: "Tango" is the name of a colour scheme, "dark" can be translated
+#: ../src/profile-editor.c:184
+msgid "Tango dark"
+msgstr "Tango (donker)"
+
+#. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
+#: ../src/profile-editor.c:189
+msgid "Solarized light"
+msgstr "Gesolariseerd helder"
+
+#. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
+#: ../src/profile-editor.c:194
+msgid "Solarized dark"
+msgstr "Gesolariseerd donker"
+
+#: ../src/profile-editor.c:549
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Fout bij inlezen opdracht: %s"
+
+#. Translators: Appears as: [numeric entry] × width
+#: ../src/profile-editor.c:899
+msgid "width"
+msgstr "breedte"
+
+#. Translators: Appears as: [numeric entry] × height
+#: ../src/profile-editor.c:904
+msgid "height"
+msgstr "hoogte"
+
+#: ../src/profile-editor.c:956
+#, c-format
+msgid "Choose Palette Color %u"
+msgstr "Paletkleur %u kiezen"
+
+#: ../src/profile-editor.c:960
+#, c-format
+msgid "Palette entry %u"
+msgstr "Palet-item %u"
+
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+msgid "Find"
 msgstr "Zoeken"
 
 #: ../src/search-popover.ui.h:2
-msgid "Search for previous occurrence"
-msgstr "Vorige aanwezigheid van zoekterm zoeken"
+msgid "Find previous occurrence"
+msgstr "Naar vorige gevonden zoekterm"
 
 #: ../src/search-popover.ui.h:3
-msgid "Search for next occurrence"
-msgstr "Volgende aanwezigheid van zoekterm zoeken"
+msgid "Find next occurrence"
+msgstr "Naar volgende gevonden zoekterm"
 
 # terminal/terminalvenster
 #: ../src/search-popover.ui.h:4
@@ -1377,380 +1227,591 @@ msgstr "Als _reguliere expressie gebruiken"
 msgid "_Wrap around"
 msgstr "Doorgaan na document_einde"
 
-#: ../src/terminal-accels.c:158
-msgid "New Terminal in New Tab"
-msgstr "Nieuwe terminal in nieuw tabblad"
+#: ../src/terminal-accels.c:124
+msgid "New Tab"
+msgstr "Nieuw tabblad"
 
-#: ../src/terminal-accels.c:159
-msgid "New Terminal in New Window"
-msgstr "Nieuwe terminal in nieuw venster"
+#: ../src/terminal-accels.c:125
+msgid "New Window"
+msgstr "Nieuw venster"
 
-#: ../src/terminal-accels.c:160
-msgid "New Profile"
-msgstr "Nieuw profiel"
-
-#: ../src/terminal-accels.c:162
+#: ../src/terminal-accels.c:127
 msgid "Save Contents"
 msgstr "Inhoud opslaan"
 
-#: ../src/terminal-accels.c:164
-msgid "Close Terminal"
-msgstr "Terminalvenster sluiten"
+#: ../src/terminal-accels.c:130
+msgid "Export"
+msgstr "Exporteren"
 
-#: ../src/terminal-accels.c:165
-msgid "Close All Terminals"
-msgstr "Alle terminalvensters sluiten"
+#: ../src/terminal-accels.c:133
+msgid "Print"
+msgstr "Afdrukken"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:135
+msgid "Close Tab"
+msgstr "Tabblad sluiten"
+
+#: ../src/terminal-accels.c:136
+msgid "Close Window"
+msgstr "Venster sluiten"
+
+#: ../src/terminal-accels.c:140
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:141
 msgid "Copy as HTML"
 msgstr "Kopiëren als HTML"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:142
 msgid "Paste"
 msgstr "Plakken"
 
-#: ../src/terminal-accels.c:172 ../src/terminal-window.c:2548
+#: ../src/terminal-accels.c:143
 msgid "Select All"
 msgstr "Alles selecteren"
 
-#: ../src/terminal-accels.c:174
-msgid "Profile Preferences"
-msgstr "Profielvoorkeuren"
+#: ../src/terminal-accels.c:144
+msgid "Preferences"
+msgstr "Voorkeuren"
 
-#: ../src/terminal-accels.c:178 ../src/terminal-accels.c:236
-msgid "Find"
-msgstr "Zoeken"
-
-#: ../src/terminal-accels.c:179
+#: ../src/terminal-accels.c:149
 msgid "Find Next"
 msgstr "Volgende zoeken"
 
-#: ../src/terminal-accels.c:180
+#: ../src/terminal-accels.c:150
 msgid "Find Previous"
 msgstr "Vorige zoeken"
 
-#: ../src/terminal-accels.c:181
-msgid "Clear Find Highlight"
-msgstr "Oplichten opheffen"
+#: ../src/terminal-accels.c:151
+msgid "Clear Highlight"
+msgstr "Oplichten uitzetten"
 
-#: ../src/terminal-accels.c:185
-msgid "Hide and Show toolbar"
+#: ../src/terminal-accels.c:155
+msgid "Hide and Show Menubar"
 msgstr "Menubalk tonen en verbergen"
 
-#: ../src/terminal-accels.c:186
+#: ../src/terminal-accels.c:156
 msgid "Full Screen"
 msgstr "Volledig scherm"
 
-#. View menu
-#: ../src/terminal-accels.c:187 ../src/terminal-window.c:2559
+#: ../src/terminal-accels.c:157
 msgid "Zoom In"
 msgstr "Inzoomen"
 
-#: ../src/terminal-accels.c:188 ../src/terminal-window.c:2562
+#: ../src/terminal-accels.c:158
 msgid "Zoom Out"
 msgstr "Uitzoomen"
 
-#: ../src/terminal-accels.c:189 ../src/terminal-window.c:2565
+#: ../src/terminal-accels.c:159
 msgid "Normal Size"
 msgstr "Normale grootte"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:163
 msgid "Read-Only"
 msgstr "Alleen-lezen"
 
-#: ../src/terminal-accels.c:194
+#: ../src/terminal-accels.c:164
 msgid "Reset"
 msgstr "Herstellen"
 
-#: ../src/terminal-accels.c:195
+#: ../src/terminal-accels.c:165
 msgid "Reset and Clear"
 msgstr "Herstellen en wissen"
 
-#: ../src/terminal-accels.c:199
-msgid "Switch to Previous Terminal"
-msgstr "Naar vorige terminalvenster wisselen"
+#: ../src/terminal-accels.c:169
+msgid "Switch to Previous Tab"
+msgstr "Naar vorige tabblad wisselen"
 
-#: ../src/terminal-accels.c:200
-msgid "Switch to Next Terminal"
-msgstr "Naar volgende terminalvenster wisselen"
+#: ../src/terminal-accels.c:170
+msgid "Switch to Next Tab"
+msgstr "Naar volgende tabblad wisselen"
 
-#: ../src/terminal-accels.c:201
-msgid "Move Terminal to the Left"
-msgstr "Terminalvenster naar links verplaatsen"
+#: ../src/terminal-accels.c:171
+msgid "Move Tab to the Left"
+msgstr "Tabblad naar links verplaatsen"
 
-#: ../src/terminal-accels.c:202
-msgid "Move Terminal to the Right"
-msgstr "Terminalvenster naar rechts verplaatsen"
+#: ../src/terminal-accels.c:172
+msgid "Move Tab to the Right"
+msgstr "Tabblad naar rechts verplaatsen"
 
-#: ../src/terminal-accels.c:203
-msgid "Detach Terminal"
-msgstr "Terminalvenster loskoppelen"
+#: ../src/terminal-accels.c:173
+msgid "Detach Tab"
+msgstr "Tabblad loskoppelen"
 
-#: ../src/terminal-accels.c:226
+#: ../src/terminal-accels.c:209
+msgid "Switch to Last Tab"
+msgstr "Naar laatste tabblad wisselen"
+
+#: ../src/terminal-accels.c:213
 msgid "Contents"
 msgstr "Inhoud"
 
-#: ../src/terminal-accels.c:233
+#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Bestand"
 
-#: ../src/terminal-accels.c:234
+#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Bewerken"
 
-#: ../src/terminal-accels.c:235
+#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Beeld"
 
-#: ../src/terminal-accels.c:238
+#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+msgid "Search"
+msgstr "Zoeken"
+
+#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Tabbladen"
 
-#: ../src/terminal-accels.c:239
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Hulp"
 
-#: ../src/terminal-accels.c:336
+#: ../src/terminal-accels.c:327
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Naar tabblad %u wisselen"
 
-#: ../src/terminal-accels.c:544
+#: ../src/terminal-accels.c:535
 msgid "_Action"
 msgstr "_Actie"
 
-#: ../src/terminal-accels.c:563
+#: ../src/terminal-accels.c:554
 msgid "Shortcut _Key"
 msgstr "_Sneltoets"
 
-#: ../src/terminal-app.c:753
-msgid "User Defined"
-msgstr "Gebruikergedefinieerd"
+#: ../src/terminal-app.c:491 ../src/terminal-window.c:1840
+msgid "New _Terminal"
+msgstr "_Nieuw terminalvenster"
 
-#: ../src/terminal.c:380
+#: ../src/terminal-app.c:493 ../src/terminal-window.c:1849
+msgid "New _Tab"
+msgstr "Nieuw tab_blad"
+
+#: ../src/terminal-app.c:494 ../src/terminal-window.c:1845
+msgid "New _Window"
+msgstr "Nieuw _venster"
+
+#: ../src/terminal-app.c:543
+msgid "Change _Profile"
+msgstr "_Profiel wijzigen"
+
+#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1386
+#: ../src/terminal-window.c:1833
+msgid "_Preferences"
+msgstr "_Voorkeuren"
+
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "_Hulp"
+
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "I_nfo"
+
+#: ../src/terminal-appmenu.ui.h:4
+msgid "_Quit"
+msgstr "_Afsluiten"
+
+#: ../src/terminal.c:538
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Argumenten ontleden is mislukt: %s\n"
 
-#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
-#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:101
-#: ../src/terminal-encoding.c:112
-msgid "Western"
-msgstr "Westers"
-
-#: ../src/terminal-encoding.c:53 ../src/terminal-encoding.c:80
-#: ../src/terminal-encoding.c:91 ../src/terminal-encoding.c:110
-msgid "Central European"
-msgstr "Centraal-Europees"
-
-#: ../src/terminal-encoding.c:54
-msgid "South European"
-msgstr "Zuid-Europees"
-
-#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:63
-#: ../src/terminal-encoding.c:117
-msgid "Baltic"
-msgstr "Baltisch"
-
-#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:81
-#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:88
-#: ../src/terminal-encoding.c:93 ../src/terminal-encoding.c:111
-msgid "Cyrillic"
-msgstr "Cyrillisch"
-
-#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:84
-#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
-msgid "Arabic"
-msgstr "Arabisch"
-
-#: ../src/terminal-encoding.c:58 ../src/terminal-encoding.c:96
-#: ../src/terminal-encoding.c:113
-msgid "Greek"
-msgstr "Grieks"
-
-#: ../src/terminal-encoding.c:59
-msgid "Hebrew Visual"
-msgstr "Hebreeuws visueel"
-
-#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:83
-#: ../src/terminal-encoding.c:99 ../src/terminal-encoding.c:115
-msgid "Hebrew"
-msgstr "Hebreeuws"
-
-#: ../src/terminal-encoding.c:61 ../src/terminal-encoding.c:82
-#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:114
-msgid "Turkish"
-msgstr "Turks"
-
-#: ../src/terminal-encoding.c:62
-msgid "Nordic"
-msgstr "Noors"
-
-#: ../src/terminal-encoding.c:64
-msgid "Celtic"
-msgstr "Keltisch"
-
-#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:102
-msgid "Romanian"
-msgstr "Roemeens"
-
-#. These encodings do NOT pass-through ASCII, so are always rejected.
-#. * FIXME: why are they in this table; or rather why do we need
-#. * the ASCII pass-through requirement?
-#.
-#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:124
-#: ../src/terminal-encoding.c:125 ../src/terminal-encoding.c:126
-#: ../src/terminal-encoding.c:127
-msgid "Unicode"
-msgstr "Unicode"
-
-#: ../src/terminal-encoding.c:68
+#: ../src/terminal-encoding.c:66
 msgid "Armenian"
 msgstr "Armeens"
 
-#: ../src/terminal-encoding.c:69 ../src/terminal-encoding.c:70
-#: ../src/terminal-encoding.c:74
+#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:68
+#: ../src/terminal-encoding.c:72
 msgid "Chinese Traditional"
 msgstr "Traditioneel Chinees"
 
-#: ../src/terminal-encoding.c:71
+#: ../src/terminal-encoding.c:69
 msgid "Cyrillic/Russian"
 msgstr "Cyrillisch/Russisch"
 
-#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
-#: ../src/terminal-encoding.c:105
+#: ../src/terminal-encoding.c:70 ../src/terminal-encoding.c:83
+#: ../src/terminal-encoding.c:119
 msgid "Japanese"
 msgstr "Japans"
 
-#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:86
-#: ../src/terminal-encoding.c:108 ../src/terminal-encoding.c:128
+#. { "UCS-4",       N_("Unicode"),             GROUP_UNICODE },
+#: ../src/terminal-encoding.c:71 ../src/terminal-encoding.c:84
+#: ../src/terminal-encoding.c:124
 msgid "Korean"
 msgstr "Koreaans"
 
-#: ../src/terminal-encoding.c:75 ../src/terminal-encoding.c:76
-#: ../src/terminal-encoding.c:77
+#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:74
+#: ../src/terminal-encoding.c:75
 msgid "Chinese Simplified"
 msgstr "Vereenvoudigd Chinees"
 
-#: ../src/terminal-encoding.c:78
+#: ../src/terminal-encoding.c:76
 msgid "Georgian"
 msgstr "Georgisch"
 
-#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:104
+#: ../src/terminal-encoding.c:77 ../src/terminal-encoding.c:85
+#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:115
+#: ../src/terminal-encoding.c:132
+msgid "Western"
+msgstr "Westers"
+
+#: ../src/terminal-encoding.c:78 ../src/terminal-encoding.c:91
+#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:130
+msgid "Central European"
+msgstr "Centraal-Europees"
+
+#. { "JOHAB",      N_("Korean"),              GROUP_CJKV },
+#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:94
+#: ../src/terminal-encoding.c:100 ../src/terminal-encoding.c:102
+#: ../src/terminal-encoding.c:104 ../src/terminal-encoding.c:131
+msgid "Cyrillic"
+msgstr "Cyrillisch"
+
+#: ../src/terminal-encoding.c:80 ../src/terminal-encoding.c:99
+#: ../src/terminal-encoding.c:117 ../src/terminal-encoding.c:134
+msgid "Turkish"
+msgstr "Turks"
+
+#: ../src/terminal-encoding.c:81 ../src/terminal-encoding.c:98
+#: ../src/terminal-encoding.c:113 ../src/terminal-encoding.c:135
+msgid "Hebrew"
+msgstr "Hebreeuws"
+
+#: ../src/terminal-encoding.c:82 ../src/terminal-encoding.c:95
+#: ../src/terminal-encoding.c:105 ../src/terminal-encoding.c:136
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: ../src/terminal-encoding.c:86
+msgid "Nordic"
+msgstr "Noors"
+
+#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:93
+#: ../src/terminal-encoding.c:137
+msgid "Baltic"
+msgstr "Baltisch"
+
+#: ../src/terminal-encoding.c:88
+msgid "Celtic"
+msgstr "Keltisch"
+
+#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
+msgid "Romanian"
+msgstr "Roemeens"
+
+#: ../src/terminal-encoding.c:92
+msgid "South European"
+msgstr "Zuid-Europees"
+
+#: ../src/terminal-encoding.c:96 ../src/terminal-encoding.c:110
+#: ../src/terminal-encoding.c:133
+msgid "Greek"
+msgstr "Grieks"
+
+#: ../src/terminal-encoding.c:97
+msgid "Hebrew Visual"
+msgstr "Hebreeuws visueel"
+
+#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:118
 msgid "Cyrillic/Ukrainian"
 msgstr "Cyrillisch/Oekraïens"
 
-#: ../src/terminal-encoding.c:92
+#: ../src/terminal-encoding.c:107
 msgid "Croatian"
 msgstr "Kroatisch"
 
-#: ../src/terminal-encoding.c:94
+#: ../src/terminal-encoding.c:108
 msgid "Hindi"
 msgstr "Hindi"
 
-#: ../src/terminal-encoding.c:95
+#: ../src/terminal-encoding.c:109
 msgid "Persian"
 msgstr "Perzisch"
 
-#: ../src/terminal-encoding.c:97
+#: ../src/terminal-encoding.c:111
 msgid "Gujarati"
 msgstr "Gujarati"
 
-#: ../src/terminal-encoding.c:98
+#: ../src/terminal-encoding.c:112
 msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
-#: ../src/terminal-encoding.c:100
+#: ../src/terminal-encoding.c:114
 msgid "Icelandic"
 msgstr "IJslands"
 
-#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:109
-#: ../src/terminal-encoding.c:118
+#. This is TCVN-5712-1, not TCVN-5773:1993 which would be CJKV
+#: ../src/terminal-encoding.c:121 ../src/terminal-encoding.c:129
+#: ../src/terminal-encoding.c:138
 msgid "Vietnamese"
 msgstr "Vietnamees"
 
-#: ../src/terminal-encoding.c:107
+#: ../src/terminal-encoding.c:122
 msgid "Thai"
 msgstr "Thais"
 
-#: ../src/terminal-menus.ui.h:1
-msgid "_New Terminal"
-msgstr "_Nieuw terminalvenster"
+#. { "UTF-16",      N_("Unicode"),             GROUP_UNICODE },
+#. { "UTF-32",      N_("Unicode"),             GROUP_UNICODE },
+#. { "UTF-7",       N_("Unicode"),             GROUP_UNICODE },
+#: ../src/terminal-encoding.c:128 ../src/terminal-encoding.c:145
+msgid "Unicode"
+msgstr "Unicode"
 
-#: ../src/terminal-menus.ui.h:2
-msgid "_Preferences"
-msgstr "_Voorkeuren"
+#: ../src/terminal-encoding.c:146
+msgid "Legacy CJK Encodings"
+msgstr "Uitgefaseerde CJK-coderingen"
 
-#: ../src/terminal-menus.ui.h:3 ../src/terminal-window.c:2507
-msgid "_Help"
-msgstr "_Hulp"
+#: ../src/terminal-encoding.c:147
+msgid "Obsolete Encodings"
+msgstr "Verouderde coderingen"
 
-#: ../src/terminal-menus.ui.h:4 ../src/terminal-window.c:2627
-msgid "_About"
-msgstr "I_nfo"
+#: ../src/terminal-menubar.ui.in.h:1
+msgid "_File"
+msgstr "_Bestand"
 
-#: ../src/terminal-menus.ui.h:5
-msgid "_Quit"
-msgstr "_Afsluiten"
+#: ../src/terminal-menubar.ui.in.h:3
+msgid "_Save Contents…"
+msgstr "Inhoud op_slaan…"
 
-#: ../src/terminal-nautilus.c:601
+#: ../src/terminal-menubar.ui.in.h:4
+msgid "_Export…"
+msgstr "_Exporteren…"
+
+#: ../src/terminal-menubar.ui.in.h:5
+msgid "_Print…"
+msgstr "Af_drukken…"
+
+#: ../src/terminal-menubar.ui.in.h:6
+msgid "C_lose Tab"
+msgstr "Tabblad _sluiten"
+
+#: ../src/terminal-menubar.ui.in.h:7
+msgid "_Close Window"
+msgstr "Venster sl_uiten"
+
+#: ../src/terminal-menubar.ui.in.h:8
+msgid "_Edit"
+msgstr "Be_werken"
+
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1811
+msgid "_Copy"
+msgstr "_Kopiëren"
+
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1812
+msgid "Copy as _HTML"
+msgstr "Kopiëren als _HTML"
+
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1813
+msgid "_Paste"
+msgstr "_Plakken"
+
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1815
+msgid "Paste as _Filenames"
+msgstr "Als _bestandsnamen plakken"
+
+#: ../src/terminal-menubar.ui.in.h:14
+msgid "Select _All"
+msgstr "_Alles selecteren"
+
+#: ../src/terminal-menubar.ui.in.h:15
+msgid "P_references"
+msgstr "Voo_rkeuren"
+
+#: ../src/terminal-menubar.ui.in.h:16
+msgid "_View"
+msgstr "Beel_d"
+
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1861
+msgid "Show _Menubar"
+msgstr "_Menubalk tonen"
+
+#: ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "_Volledig scherm"
+
+#: ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "_Inzoomen"
+
+#: ../src/terminal-menubar.ui.in.h:21
+msgid "_Normal Size"
+msgstr "_Normale grootte"
+
+#: ../src/terminal-menubar.ui.in.h:22
+msgid "Zoom _Out"
+msgstr "_Uitzoomen"
+
+#: ../src/terminal-menubar.ui.in.h:23
+msgid "_Search"
+msgstr "_Zoeken"
+
+#: ../src/terminal-menubar.ui.in.h:25
+msgid "_Find…"
+msgstr "_Zoeken…"
+
+#: ../src/terminal-menubar.ui.in.h:26
+msgid "Find _Next"
+msgstr "_Volgende zoeken"
+
+#: ../src/terminal-menubar.ui.in.h:27
+msgid "Find _Previous"
+msgstr "Vo_rige zoeken"
+
+#: ../src/terminal-menubar.ui.in.h:28
+msgid "_Clear Highlight"
+msgstr "Oplichten _uitzetten"
+
+#: ../src/terminal-menubar.ui.in.h:29
+msgid "_Terminal"
+msgstr "_Terminal"
+
+#: ../src/terminal-menubar.ui.in.h:31
+msgid "Set _Title…"
+msgstr "Titel _instellen…"
+
+#: ../src/terminal-menubar.ui.in.h:32
+msgid "Set _Character Encoding"
+msgstr "Te_kenset instellen"
+
+#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1821
+msgid "Read-_Only"
+msgstr "_Alleen-lezen"
+
+# was herinitialiseren, maar resetten is beter (de reset-knop zit ook op computer)
+# dus mensen (en zeker terminal-gebruikers) weten wat dat is
+#: ../src/terminal-menubar.ui.in.h:34
+msgid "_Reset"
+msgstr "_Herstellen"
+
+#: ../src/terminal-menubar.ui.in.h:35
+msgid "Reset and C_lear"
+msgstr "Herstellen en _wissen"
+
+#: ../src/terminal-menubar.ui.in.h:36
+msgid "_1. 80×24"
+msgstr "_1. 80×24"
+
+#: ../src/terminal-menubar.ui.in.h:37
+msgid "_2. 80×43"
+msgstr "_2. 80×43"
+
+#: ../src/terminal-menubar.ui.in.h:38
+msgid "_3. 132×24"
+msgstr "_3. 132×24"
+
+#: ../src/terminal-menubar.ui.in.h:39
+msgid "_4. 132×43"
+msgstr "_4. 132×43"
+
+# _b is al voor _Bestand (Wouter Bolsterlee)
+#: ../src/terminal-menubar.ui.in.h:40
+msgid "Ta_bs"
+msgstr "T_abbladen"
+
+#: ../src/terminal-menubar.ui.in.h:42
+msgid "_Previous Tab"
+msgstr "Vo_rig tabblad"
+
+#: ../src/terminal-menubar.ui.in.h:43
+msgid "_Next Tab"
+msgstr "_Volgend tabblad"
+
+#: ../src/terminal-menubar.ui.in.h:44
+msgid "Move Tab _Left"
+msgstr "Tabblad naar _links verplaatsen"
+
+#: ../src/terminal-menubar.ui.in.h:45
+msgid "Move Tab _Right"
+msgstr "Tabblad naar _rechts verplaatsen"
+
+#: ../src/terminal-menubar.ui.in.h:46
+msgid "_Detach Tab"
+msgstr "Tabblad _loskoppelen"
+
+#: ../src/terminal-menubar.ui.in.h:49
+msgid "_Contents"
+msgstr "In_houd"
+
+#: ../src/terminal-menubar.ui.in.h:51
+msgid "_Inspector"
+msgstr "_Controleur"
+
+#: ../src/terminal-nautilus.c:592
 msgid "Open in _Remote Terminal"
 msgstr "Op afstand in _terminal openen"
 
-#: ../src/terminal-nautilus.c:603
+#: ../src/terminal-nautilus.c:594
 msgid "Open in _Local Terminal"
 msgstr "In lokale _terminal openen"
 
-#: ../src/terminal-nautilus.c:607 ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
 msgid "Open the currently selected folder in a terminal"
 msgstr "De geselecteerde map in een terminal openen"
 
-#: ../src/terminal-nautilus.c:609 ../src/terminal-nautilus.c:620
-#: ../src/terminal-nautilus.c:630
+#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
+#: ../src/terminal-nautilus.c:621
 msgid "Open the currently open folder in a terminal"
 msgstr "De huidige open map in een terminal openen"
 
-#: ../src/terminal-nautilus.c:615 ../src/terminal-nautilus.c:629
+#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
 msgid "Open in T_erminal"
 msgstr "In _terminal openen"
 
-#: ../src/terminal-nautilus.c:626
+#: ../src/terminal-nautilus.c:617
 msgid "Open T_erminal"
 msgstr "_Terminal openen"
 
-#: ../src/terminal-nautilus.c:627
+#: ../src/terminal-nautilus.c:618
 msgid "Open a terminal"
 msgstr "Een terminal openen"
 
-#: ../src/terminal-nautilus.c:645 ../src/terminal-nautilus.c:658
+#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
 msgid "Open in _Midnight Commander"
 msgstr "In _Midnight Commander openen"
 
-#: ../src/terminal-nautilus.c:647
+#: ../src/terminal-nautilus.c:638
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
 msgstr "De geselecteerde map openen met Midnight Commander (bestandsbeheerder)"
 
-#: ../src/terminal-nautilus.c:649 ../src/terminal-nautilus.c:659
+#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
 msgstr "De huidige open map openen met Midnight Commander (bestandsbeheerder)"
 
-#: ../src/terminal-nautilus.c:655
+#: ../src/terminal-nautilus.c:646
 msgid "Open _Midnight Commander"
 msgstr "_Midnight Commander openen"
 
-#: ../src/terminal-nautilus.c:656
+#: ../src/terminal-nautilus.c:647
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Midnight Commander (bestandsbeheerder) openen"
 
-#: ../src/terminal-options.c:223
+#: ../src/terminal-notebook-menu.ui.h:1
+msgid "Move Terminal _Left"
+msgstr "Terminalvenster naar _links verplaatsen"
+
+#: ../src/terminal-notebook-menu.ui.h:2
+msgid "Move Terminal _Right"
+msgstr "Terminalvenster naar _rechts verplaatsen"
+
+#: ../src/terminal-notebook-menu.ui.h:3
+msgid "_Detach Terminal"
+msgstr "Terminalvenster _loskoppelen"
+
+#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3354
+msgid "C_lose Terminal"
+msgstr "Terminal sl_uiten"
+
+#: ../src/terminal-options.c:274
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1760,7 +1821,7 @@ msgstr ""
 "kunnen worden verwijderd."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:234
+#: ../src/terminal-options.c:285
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1769,47 +1830,51 @@ msgstr ""
 "Gebruik ‘%s’ om de opties te beëindigen, en plaats de uit te voeren opdracht "
 "erachter."
 
-#: ../src/terminal-options.c:244 ../src/terminal-options.c:257
+#: ../src/terminal-options.c:295 ../src/terminal-options.c:308
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr ""
 "Optie ‘%s’ wordt niet langer in deze versie van Gnome Terminal ondersteund."
 
-# terminal/terminalvenster
-#: ../src/terminal-options.c:269 ../src/terminal-util.c:239
-msgid "GNOME Terminal"
-msgstr "Gnome Terminal"
-
-#: ../src/terminal-options.c:270 ../src/terminal-util.c:226
-#, c-format
-msgid "Using VTE version %u.%u.%u"
-msgstr "VTE versie %u.%u.%u wordt gebruikt"
-
-#: ../src/terminal-options.c:316
+#: ../src/terminal-options.c:380
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Argument van ‘%s’ is geen geldige opdracht: %s"
 
-#: ../src/terminal-options.c:484
+#: ../src/terminal-options.c:553
 msgid "Two roles given for one window"
 msgstr "Twee rollen voor één venster opgegeven"
 
-#: ../src/terminal-options.c:505 ../src/terminal-options.c:538
+#: ../src/terminal-options.c:574 ../src/terminal-options.c:607
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "‘%s’ optie is tweemaal voor hetzelfde venster opgegeven\n"
 
-#: ../src/terminal-options.c:738
+#: ../src/terminal-options.c:771
+msgid "Can only use --wait once"
+msgstr "Optie --wait mag slechts eenmaal gebruikt worden"
+
+#: ../src/terminal-options.c:825
+#, c-format
+msgid "Cannot pass FD %d twice"
+msgstr "FD %d kan niet twee keer worden doorgegeven"
+
+#: ../src/terminal-options.c:887
+#, c-format
+msgid "“%s” is not a valid zoom factor"
+msgstr "‘%s’ is geen geldige zoomfactor"
+
+#: ../src/terminal-options.c:894
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Zoomfactor ‘%g’ is te klein, gebruik %g\n"
 
-#: ../src/terminal-options.c:746
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Zoomfactor ‘%g’ is te groot, gebruik %g\n"
 
-#: ../src/terminal-options.c:784
+#: ../src/terminal-options.c:940
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1818,15 +1883,15 @@ msgstr ""
 "Optie ‘%s’ vereist het opgeven van de opdracht om het restant van de "
 "opdrachtregel uit te voeren"
 
-#: ../src/terminal-options.c:922
+#: ../src/terminal-options.c:1108
 msgid "Not a valid terminal config file."
 msgstr "Terminalconfiguratiebestand is ongeldig."
 
-#: ../src/terminal-options.c:935
+#: ../src/terminal-options.c:1121
 msgid "Incompatible terminal config file version."
 msgstr "Versie van terminalconfiguratiebestand is incompatibel."
 
-#: ../src/terminal-options.c:1081
+#: ../src/terminal-options.c:1277
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1834,74 +1899,143 @@ msgstr ""
 "Niet bij de activatie-naamserver registreren, een actieve terminal niet "
 "opnieuw gebruiken"
 
-#: ../src/terminal-options.c:1090
+#: ../src/terminal-options.c:1286
 msgid "Load a terminal configuration file"
 msgstr "Terminalconfiguratiebestand laden"
 
-#: ../src/terminal-options.c:1091
+#: ../src/terminal-options.c:1287
 msgid "FILE"
 msgstr "BESTAND"
 
-#: ../src/terminal-options.c:1101
+#: ../src/terminal-options.c:1303
 msgid "Show preferences window"
 msgstr "Voorkeurenvenster tonen"
 
-#: ../src/terminal-options.c:1113
+#: ../src/terminal-options.c:1312
+msgid "Print environment variables to interact with the terminal"
+msgstr "Omgevingswaarden printen die betrekking hebben op de terminal"
+
+#: ../src/terminal-options.c:1330
+msgid "Increase diagnostic verbosity"
+msgstr "Hoeveelheid diagnostische informatie vergroten"
+
+#: ../src/terminal-options.c:1339
+msgid "Suppress output"
+msgstr "Uitvoer onderdrukken"
+
+#: ../src/terminal-options.c:1352
 msgid "Open a new window containing a tab with the default profile"
 msgstr "nieuw venster openen met een tabblad voorzien van het standaardprofiel"
 
-#: ../src/terminal-options.c:1122
+#: ../src/terminal-options.c:1361
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "nieuw tabblad openen in het laatst geopende venster met het standaardprofiel"
 
-#: ../src/terminal-options.c:1135
+#: ../src/terminal-options.c:1374
 msgid "Turn on the menubar"
 msgstr "menubalk tonen"
 
-#: ../src/terminal-options.c:1144
+#: ../src/terminal-options.c:1383
 msgid "Turn off the menubar"
 msgstr "menubalk verbergen"
 
-#: ../src/terminal-options.c:1153
+#: ../src/terminal-options.c:1392
 msgid "Maximize the window"
 msgstr "venster maximaliseren"
 
-#: ../src/terminal-options.c:1189
+#: ../src/terminal-options.c:1401
+msgid "Full-screen the window"
+msgstr "volledig scherm instellen"
+
+#: ../src/terminal-options.c:1410
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+msgstr ""
+"venstergrootte instellen; bijvoorbeeld 80x24 of 80x24+200+200 (KOLOMMENxRIJEN"
+"+X+Y)"
+
+#: ../src/terminal-options.c:1411
+msgid "GEOMETRY"
+msgstr "GEOMETRIE"
+
+#: ../src/terminal-options.c:1419
+msgid "Set the window role"
+msgstr "vensterrol instellen"
+
+#: ../src/terminal-options.c:1420
+msgid "ROLE"
+msgstr "ROL"
+
+#: ../src/terminal-options.c:1428
 msgid "Set the last specified tab as the active one in its window"
 msgstr "laatst gespecificeerd tabblad activeren in zijn venster"
 
-#: ../src/terminal-options.c:1202
+#: ../src/terminal-options.c:1441
 msgid "Execute the argument to this option inside the terminal"
 msgstr "argument bij deze optie in de terminal uitvoeren"
 
-#: ../src/terminal-options.c:1212
+#: ../src/terminal-options.c:1450
+msgid "Use the given profile instead of the default profile"
+msgstr "opgegeven profiel gebruiken in plaats van het standaardprofiel"
+
+#: ../src/terminal-options.c:1451
 msgid "PROFILE-NAME"
 msgstr "PROFIELNAAM"
 
-#: ../src/terminal-options.c:1220
+#: ../src/terminal-options.c:1459
 msgid "Set the initial terminal title"
 msgstr "Initiële titel van terminalvenster instellen"
 
-#: ../src/terminal-options.c:1221
+#: ../src/terminal-options.c:1460
 msgid "TITLE"
 msgstr "TITEL"
 
-#: ../src/terminal-options.c:1326
+#: ../src/terminal-options.c:1468
+msgid "Set the working directory"
+msgstr "werkmap van het terminalvenster instellen"
+
+#: ../src/terminal-options.c:1469
+msgid "DIRNAME"
+msgstr "MAPNAAM"
+
+#: ../src/terminal-options.c:1477
+msgid "Wait until the child exits"
+msgstr "Wachten totdat kindproces afsluit"
+
+#: ../src/terminal-options.c:1486
+msgid "Forward file descriptor"
+msgstr "Bestandsdescriptor doorsturen"
+
+#. FD = file descriptor
+#: ../src/terminal-options.c:1488
+msgid "FD"
+msgstr "BD"
+
+# Typo in msgid: ‘terminalx’ i.p.v. ‘terminal’ (Wouter Bolsterlee)
+#: ../src/terminal-options.c:1496
+msgid "Set the terminal’s zoom factor (1.0 = normal size)"
+msgstr "Zoomfactor van terminalvenster instellen (1.0 is normale grootte)"
+
+#: ../src/terminal-options.c:1497
+msgid "ZOOM"
+msgstr "ZOOM"
+
+#: ../src/terminal-options.c:1584
 msgid "COMMAND"
 msgstr "OPDRACHT"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1334
+#: ../src/terminal-options.c:1592
 msgid "GNOME Terminal Emulator"
 msgstr "Gnome terminal-emulator"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1335
+#: ../src/terminal-options.c:1593
 msgid "Show GNOME Terminal options"
 msgstr "Gnome terminal-opties tonen"
 
-#: ../src/terminal-options.c:1345
+#: ../src/terminal-options.c:1603
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1909,7 +2043,12 @@ msgstr ""
 "Opties om nieuwe vensters of tabbladen te openen; deze kunnen meerdere malen "
 "worden opgegeven:"
 
-#: ../src/terminal-options.c:1354
+# terminal/terminalvenster
+#: ../src/terminal-options.c:1604
+msgid "Show terminal options"
+msgstr "Terminalinstellingen tonen"
+
+#: ../src/terminal-options.c:1612
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1918,11 +2057,11 @@ msgstr ""
 "argument, dan verandert de standaardinstelling voor alle vensters:"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1355
+#: ../src/terminal-options.c:1613
 msgid "Show per-window options"
 msgstr "vensteropties tonen"
 
-#: ../src/terminal-options.c:1363
+#: ../src/terminal-options.c:1621
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1931,72 +2070,121 @@ msgstr ""
 "tab’-argument, dan verandert de standaardinstelling voor alle terminals:"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1364
+#: ../src/terminal-options.c:1622
 msgid "Show per-terminal options"
 msgstr "individuele-terminalopties tonen"
 
-#: ../src/terminal-prefs.c:214
-msgid "Click button to choose profile"
-msgstr "Klik op de knop om een profiel te kiezen"
-
-#: ../src/terminal-prefs.c:315
-msgid "Profile list"
-msgstr "Profielenlijst"
-
-#: ../src/terminal-prefs.c:370
+#: ../src/terminal-prefs.c:131
 #, c-format
-msgid "Delete profile “%s”?"
-msgstr "Profiel ‘%s’ verwijderen?"
+msgid "Profile “%s”"
+msgstr "Profiel ‘%s’"
 
-#: ../src/terminal-prefs.c:374 ../src/terminal-window.c:549
-msgid "_Cancel"
-msgstr "_Annuleren"
+#: ../src/terminal-prefs.c:134
+#, c-format
+msgid "Preferences – %s"
+msgstr "Voorkeuren – %s"
 
-#: ../src/terminal-prefs.c:376
-msgid "_Delete"
-msgstr "_Verwijderen"
+#: ../src/terminal-prefs.c:377
+msgid "New Profile"
+msgstr "Nieuw profiel"
 
-#: ../src/terminal-prefs.c:386
+#: ../src/terminal-prefs.c:378
+msgid "Enter name for new profile with default settings:"
+msgstr "Voer een naam in voor nieuw profiel met standaardinstellingen:"
+
+#: ../src/terminal-prefs.c:380
+msgid "Create"
+msgstr "Aanmaken"
+
+#: ../src/terminal-prefs.c:392
+#, c-format
+msgid "Enter name for new profile based on “%s”:"
+msgstr "Voer een naam in voor nieuw profiel gebaseerd op ‘%s’:"
+
+#: ../src/terminal-prefs.c:393
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (kopiëren)"
+
+#: ../src/terminal-prefs.c:396
+msgid "Clone Profile"
+msgstr "Profiel dupliceren"
+
+#: ../src/terminal-prefs.c:399
+msgid "Clone"
+msgstr "Dupliceren"
+
+#: ../src/terminal-prefs.c:414
+#, c-format
+msgid "Enter new name for profile “%s”:"
+msgstr "Voer een nieuwe naam in voor profiel ‘%s’:"
+
+#: ../src/terminal-prefs.c:417
+msgid "Rename Profile"
+msgstr "Profiel hernoemen"
+
+#: ../src/terminal-prefs.c:420
+msgid "Rename"
+msgstr "Hernoemen"
+
+#: ../src/terminal-prefs.c:435
+#, c-format
+msgid "Really delete profile “%s”?"
+msgstr "Profiel ‘%s’ echt verwijderen?"
+
+#: ../src/terminal-prefs.c:438
 msgid "Delete Profile"
 msgstr "Profiel verwijderen"
 
-#: ../src/terminal-prefs.c:711
-msgid "Show"
-msgstr "Tonen"
+#: ../src/terminal-prefs.c:441
+msgid "Delete"
+msgstr "Verwijderen"
 
-#: ../src/terminal-prefs.c:722
-msgid "_Encoding"
-msgstr "_Codering"
+#: ../src/terminal-prefs.c:518
+msgid "This is the default profile"
+msgstr "Dit is het standaardprofiel"
 
-#: ../src/terminal-screen.c:1161
+#: ../src/terminal-prefs.c:542
+msgid "General"
+msgstr "Algemeen"
+
+#: ../src/terminal-prefs.c:547
+msgid "Shortcuts"
+msgstr "Sneltoetsen"
+
+#: ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Algemeen"
+
+#: ../src/terminal-prefs.c:683
+msgid "Profiles"
+msgstr "Profielen"
+
+#: ../src/terminal-screen.c:1172
 msgid "No command supplied nor shell requested"
 msgstr "Geen opdracht opgegeven en ook niet om een shell gevraagd"
 
-#: ../src/terminal-screen.c:1378 ../src/terminal-window.c:2554
-msgid "_Profile Preferences"
-msgstr "_Profielvoorkeuren"
-
-#: ../src/terminal-screen.c:1379 ../src/terminal-screen.c:1728
+#: ../src/terminal-screen.c:1387 ../src/terminal-screen.c:1717
 msgid "_Relaunch"
 msgstr "_Opnieuw starten"
 
-#: ../src/terminal-screen.c:1382
+#: ../src/terminal-screen.c:1390
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Er is een fout opgetreden bij het aanmaken van het kindproces voor deze "
 "terminal"
 
-#: ../src/terminal-screen.c:1732
+#: ../src/terminal-screen.c:1721
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Het kindproces eindigde normaal met status %d."
 
-#: ../src/terminal-screen.c:1735
+#: ../src/terminal-screen.c:1724
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Het kindproces werd beëindigd door signaal %d."
 
-#: ../src/terminal-screen.c:1738
+#: ../src/terminal-screen.c:1727
 msgid "The child process was aborted."
 msgstr "Het kindproces werd beëindigd."
 
@@ -2004,26 +2192,32 @@ msgstr "Het kindproces werd beëindigd."
 msgid "Close tab"
 msgstr "Tabblad sluiten"
 
-#: ../src/terminal-tabs-menu.c:198
-msgid "Switch to this tab"
-msgstr "Dit tabblad activeren"
-
-#: ../src/terminal-util.c:154
+#: ../src/terminal-util.c:150
 msgid "There was an error displaying help"
 msgstr "Tonen van de hulpweergave is mislukt"
 
 # Vrij vertaald (Wouter Bolsterlee)
-#: ../src/terminal-util.c:210
+#: ../src/terminal-util.c:207
 msgid "Contributors:"
 msgstr "Bijdragen:"
 
+#: ../src/terminal-util.c:223
+#, c-format
+msgid "Using VTE version %u.%u.%u"
+msgstr "VTE versie %u.%u.%u wordt gebruikt"
+
 # de Gnome-werkomgeving/voor Gnome
 # terminal-emulator/terminalvenster
-#: ../src/terminal-util.c:232
+#: ../src/terminal-util.c:229
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Een terminal-emulator voor Gnome"
 
-#: ../src/terminal-util.c:249
+# terminal/terminalvenster
+#: ../src/terminal-util.c:236
+msgid "GNOME Terminal"
+msgstr "Gnome Terminal"
+
+#: ../src/terminal-util.c:246
 msgid "translator-credits"
 msgstr ""
 "Wouter Bolsterlee\n"
@@ -2039,12 +2233,12 @@ msgstr ""
 "\n"
 "Meer info over Gnome-NL http://nl.gnome.org/"
 
-#: ../src/terminal-util.c:325
+#: ../src/terminal-util.c:321
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Adres ‘%s’ openen is mislukt"
 
-#: ../src/terminal-util.c:394
+#: ../src/terminal-util.c:390
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2056,7 +2250,7 @@ msgstr ""
 "gepubliceerd door de Free Software Foundation; ofwel versie 3 van deze "
 "licentie of (zo u wilt) een latere versie."
 
-#: ../src/terminal-util.c:398
+#: ../src/terminal-util.c:394
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2068,7 +2262,7 @@ msgstr ""
 "VERKOOPBAARHEID of GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General "
 "Public License voor meer details."
 
-#: ../src/terminal-util.c:402
+#: ../src/terminal-util.c:398
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2077,256 +2271,75 @@ msgstr ""
 "samen met dit programma; indien dit niet zo is, kijk dan op <http://www.gnu."
 "org/licenses/>."
 
-#: ../src/terminal-util.c:1181
+#: ../src/terminal-util.c:1149
 msgid "“file” scheme with remote hostname not supported"
 msgstr "‘file’-schema met externe hostnaam wordt niet ondersteund"
 
-#: ../src/terminal-window.c:524
+#: ../src/terminal-window.c:460
 msgid "Could not save contents"
 msgstr "Inhoud opslaan is mislukt"
 
-#: ../src/terminal-window.c:546
+#: ../src/terminal-window.c:480
 msgid "Save as…"
 msgstr "Opslaan als…"
 
-#: ../src/terminal-window.c:550
+#: ../src/terminal-window.c:483
+msgid "_Cancel"
+msgstr "_Annuleren"
+
+#: ../src/terminal-window.c:484
 msgid "_Save"
 msgstr "_Opslaan"
 
-#. Translators: This is the label of a menu item to choose a profile.
-#. * _%u is used as the accelerator (with u between 1 and 9), and
-#. * the %s is the name of the terminal profile.
-#.
-#: ../src/terminal-window.c:1286
-#, c-format
-msgid "_%u. %s"
-msgstr "_%u. %s"
+#: ../src/terminal-window.c:1768
+msgid "Open _Hyperlink"
+msgstr "Verwijzing o_penen"
 
-#. Translators: This is the label of a menu item to choose a profile.
-#. * _%c is used as the accelerator (it will be a character between A and Z),
-#. * and the %s is the name of the terminal profile.
-#.
-#: ../src/terminal-window.c:1292
-#, c-format
-msgid "_%c. %s"
-msgstr "_%c. %s"
+#: ../src/terminal-window.c:1769
+msgid "Copy Hyperlink _Address"
+msgstr "Verwijzingsadres _kopiëren"
 
-#. Toplevel
-#: ../src/terminal-window.c:2500
-msgid "_File"
-msgstr "_Bestand"
-
-#. File menu
-#: ../src/terminal-window.c:2501 ../src/terminal-window.c:2513
-#: ../src/terminal-window.c:2519 ../src/terminal-window.c:2675
-msgid "Open _Terminal"
-msgstr "_Terminal openen"
-
-#: ../src/terminal-window.c:2502
-msgid "_Edit"
-msgstr "Be_werken"
-
-#: ../src/terminal-window.c:2503
-msgid "_View"
-msgstr "Beel_d"
-
-#: ../src/terminal-window.c:2504
-msgid "_Search"
-msgstr "_Zoeken"
-
-#: ../src/terminal-window.c:2505
-msgid "_Terminal"
-msgstr "_Terminal"
-
-# _b is al voor _Bestand (Wouter Bolsterlee)
-#: ../src/terminal-window.c:2506
-msgid "Ta_bs"
-msgstr "T_abbladen"
-
-#: ../src/terminal-window.c:2516
-msgid "Open Ta_b"
-msgstr "_Nieuw tabblad"
-
-#: ../src/terminal-window.c:2522
-msgid "New _Profile"
-msgstr "Nieuw _profiel"
-
-#: ../src/terminal-window.c:2525
-msgid "_Save Contents"
-msgstr "Inhoud op_slaan"
-
-#: ../src/terminal-window.c:2528 ../src/terminal-window.c:3953
-msgid "C_lose Terminal"
-msgstr "Terminal sl_uiten"
-
-#: ../src/terminal-window.c:2531
-msgid "_Close All Terminals"
-msgstr "A_lle terminalvensters sluiten"
-
-#. Edit menu
-#: ../src/terminal-window.c:2536 ../src/terminal-window.c:2663
-msgid "_Copy"
-msgstr "_Kopiëren"
-
-#: ../src/terminal-window.c:2539 ../src/terminal-window.c:2666
-msgid "Copy as _HTML"
-msgstr "Kopiëren als _HTML"
-
-#: ../src/terminal-window.c:2542 ../src/terminal-window.c:2669
-msgid "_Paste"
-msgstr "_Plakken"
-
-#: ../src/terminal-window.c:2545 ../src/terminal-window.c:2672
-msgid "Paste _Filenames"
-msgstr "_Bestandsnamen plakken"
-
-#: ../src/terminal-window.c:2551
-msgid "Pre_ferences"
-msgstr "_Voorkeuren"
-
-#. Search menu
-#: ../src/terminal-window.c:2570
-msgid "_Find…"
-msgstr "_Zoeken…"
-
-#: ../src/terminal-window.c:2573
-msgid "Find Ne_xt"
-msgstr "V_olgende zoeken"
-
-#: ../src/terminal-window.c:2576
-msgid "Find Pre_vious"
-msgstr "Vo_rige zoeken"
-
-#: ../src/terminal-window.c:2579
-msgid "_Clear Highlight"
-msgstr "Oplichten _uitzetten"
-
-#: ../src/terminal-window.c:2583
-msgid "Go to _Line…"
-msgstr "Naar _regel springen…"
-
-#: ../src/terminal-window.c:2586
-msgid "_Incremental Search…"
-msgstr "_Incrementeel zoeken…"
-
-#. Terminal menu
-#: ../src/terminal-window.c:2592
-msgid "Change _Profile"
-msgstr "_Profiel wijzigen"
-
-#: ../src/terminal-window.c:2593
-msgid "Set _Character Encoding"
-msgstr "Te_kenset instellen"
-
-# was herinitialiseren, maar resetten is beter (de reset-knop zit ook op computer)
-# dus mensen (en zeker terminal-gebruikers) weten wat dat is
-#: ../src/terminal-window.c:2594
-msgid "_Reset"
-msgstr "_Herstellen"
-
-#: ../src/terminal-window.c:2597
-msgid "Reset and C_lear"
-msgstr "Herstellen en _wissen"
-
-#. Terminal/Encodings menu
-#: ../src/terminal-window.c:2602
-msgid "_Add or Remove…"
-msgstr "_Toevoegen of verwijderen…"
-
-#. Tabs menu
-#: ../src/terminal-window.c:2607
-msgid "_Previous Terminal"
-msgstr "Vo_rig terminalvenster"
-
-#: ../src/terminal-window.c:2610
-msgid "_Next Terminal"
-msgstr "_Volgende terminalvenster"
-
-#: ../src/terminal-window.c:2613
-msgid "Move Terminal _Left"
-msgstr "Terminalvenster naar _links verplaatsen"
-
-#: ../src/terminal-window.c:2616
-msgid "Move Terminal _Right"
-msgstr "Terminalvenster naar _rechts verplaatsen"
-
-#: ../src/terminal-window.c:2619
-msgid "_Detach Terminal"
-msgstr "Terminalvenster _loskoppelen"
-
-#. Help menu
-#: ../src/terminal-window.c:2624
-msgid "_Contents"
-msgstr "In_houd"
-
-#: ../src/terminal-window.c:2630
-msgid "_Inspector"
-msgstr "_Controleur"
-
-#. Popup menu
-#: ../src/terminal-window.c:2635
-msgid "_Open Hyperlink"
-msgstr "Verwijzing _openen"
-
-#: ../src/terminal-window.c:2638
-msgid "_Copy Hyperlink Address"
-msgstr "Verwijzing _kopiëren"
-
-#: ../src/terminal-window.c:2641
-msgid "_Send Mail To…"
+#: ../src/terminal-window.c:1779
+msgid "Send Mail _To…"
 msgstr "_E-mail verzenden naar…"
 
-#: ../src/terminal-window.c:2644
-msgid "_Copy E-mail Address"
+#: ../src/terminal-window.c:1780
+msgid "Copy Mail _Address"
 msgstr "E-mailadres _kopiëren"
 
-#: ../src/terminal-window.c:2647
-msgid "C_all To…"
+#: ../src/terminal-window.c:1783
+msgid "Call _To…"
 msgstr "B_ellen naar…"
 
-#: ../src/terminal-window.c:2650
-msgid "_Copy Call Address"
+#: ../src/terminal-window.c:1784
+msgid "Copy Call _Address "
 msgstr "Telefoonnummer _kopiëren"
 
-#: ../src/terminal-window.c:2653
+#: ../src/terminal-window.c:1789
 msgid "_Open Link"
 msgstr "Verwijzing _openen"
 
-#: ../src/terminal-window.c:2656
-msgid "_Copy Link Address"
+#: ../src/terminal-window.c:1790
+msgid "Copy _Link"
 msgstr "Verwijzing _kopiëren"
 
-#: ../src/terminal-window.c:2662
+#: ../src/terminal-window.c:1828
 msgid "P_rofiles"
 msgstr "P_rofielen"
 
-#: ../src/terminal-window.c:2678
+#: ../src/terminal-window.c:1863
 msgid "L_eave Full Screen"
 msgstr "_Volledig scherm verlaten"
 
-#. View Menu
-#: ../src/terminal-window.c:2686
-msgid "Show _Menubar"
-msgstr "_Menubalk tonen"
-
-#: ../src/terminal-window.c:2690
-msgid "_Full Screen"
-msgstr "_Volledig scherm"
-
-#. Terminal menu
-#: ../src/terminal-window.c:2695
-msgid "Read-_Only"
-msgstr "_Alleen-lezen"
-
-#: ../src/terminal-window.c:3940
+#: ../src/terminal-window.c:3341
 msgid "Close this window?"
 msgstr "Venster sluiten?"
 
-#: ../src/terminal-window.c:3940
+#: ../src/terminal-window.c:3341
 msgid "Close this terminal?"
 msgstr "Terminal sluiten?"
 
-#: ../src/terminal-window.c:3944
+#: ../src/terminal-window.c:3345
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2334,7 +2347,7 @@ msgstr ""
 "In enkele terminals draaien nog actieve processen. Bij het sluiten van het "
 "venster zullen deze afgebroken worden."
 
-#: ../src/terminal-window.c:3948
+#: ../src/terminal-window.c:3349
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2342,6 +2355,243 @@ msgstr ""
 "In dit terminalvenster is nog een proces actief. Bij het sluiten van het "
 "venster zal dit afgebroken worden."
 
-#: ../src/terminal-window.c:3953
+#: ../src/terminal-window.c:3354
 msgid "C_lose Window"
 msgstr "Venster sl_uiten"
+
+#~ msgid "Keyboard shortcut to create a new profile"
+#~ msgstr "Sneltoets om een nieuw profiel aan te maken"
+
+#~ msgid "Keyboard shortcut to open the current profile’s Preferences dialog"
+#~ msgstr ""
+#~ "Sneltoets om het Voorkeuren-venster van het huidige profiel te openen"
+
+#~ msgid "_Profile used when launching a new terminal:"
+#~ msgstr "Gebruikt _profiel bij starten van een nieuwe terminal:"
+
+#~ msgid "Profile Editor"
+#~ msgstr "Profiel-editor"
+
+#~ msgid "_Profile name:"
+#~ msgstr "_Profielnaam:"
+
+#~ msgid "_Rewrap on resize"
+#~ msgstr "_Regels opnieuw afbreken bij grootteverandering"
+
+#~ msgid "R_eset"
+#~ msgstr "_Herstellen"
+
+#~ msgid ""
+#~ "<b>Note:</b> Terminal applications have these colors available to them."
+#~ msgstr ""
+#~ "<b>Opmerking:</b> terminaltoepassingen beschikken over deze kleuren."
+
+#~ msgid ""
+#~ "<b>Note:</b> These options may cause some applications to behave "
+#~ "incorrectly.  They are only here to allow you to work around certain "
+#~ "applications and operating systems that expect different terminal "
+#~ "behavior."
+#~ msgstr ""
+#~ "<b>Opmerking:</b> Door deze opties kunnen sommige toepassingen zich "
+#~ "onjuist gedragen. Ze zijn mogelijk bruikbaar in geval bepaalde "
+#~ "toepassingen of besturingssystemen een ander terminalgedrag verwachten."
+
+#~ msgid "Profile Preferences"
+#~ msgstr "Profielvoorkeuren"
+
+#~ msgid "New _Profile…"
+#~ msgstr "Nieuw _profiel…"
+
+#~ msgid "Pr_ofile Preferences…"
+#~ msgstr "P_rofielvoorkeuren…"
+
+#~ msgid "_Find"
+#~ msgstr "_Zoeken"
+
+#~ msgid "Click button to choose profile"
+#~ msgstr "Klik op de knop om een profiel te kiezen"
+
+#~ msgid "Profile list"
+#~ msgstr "Profielenlijst"
+
+#~ msgid "_Profile Preferences"
+#~ msgstr "_Profielvoorkeuren"
+
+#~ msgid "_Profile Preferences…"
+#~ msgstr "_Profielvoorkeuren…"
+
+#~ msgid "Verbose output"
+#~ msgstr "Uitgebreide uitvoer"
+
+#~ msgid "Output options:"
+#~ msgstr "Uitvoeropties:"
+
+# terminal/terminalvenster
+#~ msgid "Show output options"
+#~ msgstr "Uitvoeropties tonen"
+
+#~ msgid "“%s” is not a valid application ID"
+#~ msgstr "‘%s’ is geen geldig toepassings-ID"
+
+# terminal/terminalvenster
+#~ msgid "Server application ID"
+#~ msgstr "Servertoepassings-ID"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+# terminal/terminalvenster
+#~ msgid "Show completions"
+#~ msgstr "Aanvullingen tonen"
+
+# terminal/terminalvenster
+#~ msgid "Global options:"
+#~ msgstr "Algemene instellingen:"
+
+# terminal/terminalvenster
+#~ msgid "Show global options"
+#~ msgstr "Algemene instellingen tonen"
+
+#~ msgid "FD passing of stdin is not supported"
+#~ msgstr "Doorgeven van FD van stdin wordt niet ondersteund"
+
+#~ msgid "FD passing of stdout is not supported"
+#~ msgstr "Doorgeven van FD van stdout wordt niet ondersteund"
+
+#~ msgid "FD passing of stderr is not supported"
+#~ msgstr "Doorgeven van FD van stderr wordt niet ondersteund"
+
+#~ msgid "Invalid argument “%s” to --fd option"
+#~ msgstr "Ongeldig argument ‘%s’ bij --fd optie"
+
+#~ msgid "Forward stdin"
+#~ msgstr "stdin doorsturen"
+
+#~ msgid "Forward stdout"
+#~ msgstr "stdout doorsturen"
+
+#~ msgid "Forward stderr"
+#~ msgstr "stderr doorsturen"
+
+#~ msgid "Exec options:"
+#~ msgstr "Exec-instellingen:"
+
+# terminal/terminalvenster
+#~ msgid "Show exec options"
+#~ msgstr "Exec-instellingen tonen"
+
+#~ msgid "Maximise the window"
+#~ msgstr "Het venster maximaliseren"
+
+# terminal/terminalvenster
+#~ msgid "Window options:"
+#~ msgstr "Vensteropties:"
+
+# terminal/terminalvenster
+#~ msgid "Show window options"
+#~ msgstr "Vensteropties tonen"
+
+#~ msgid "Zoom value “%s” is outside allowed range"
+#~ msgstr "Zoomwaarde ‘%s’ valt buiten het toegestane bereik"
+
+#~ msgid "UUID"
+#~ msgstr "UUID"
+
+# terminal/terminalvenster
+#~ msgid "Terminal options:"
+#~ msgstr "Terminalinstellingen:"
+
+#~ msgid "Processing options:"
+#~ msgstr "Procesinstellingen:"
+
+# terminal/terminalvenster
+#~ msgid "Show processing options"
+#~ msgstr "Procesinstellingen tonen"
+
+#~ msgid "Missing argument"
+#~ msgstr "Ontbrekend argument"
+
+#~ msgid "Unknown command “%s”"
+#~ msgstr "Onbekende opdracht ‘%s’"
+
+#~ msgid "“%s” needs the command to run as arguments after “--”"
+#~ msgstr "Voor ‘%s’ moet de opdracht worden uitgevoerd als argumenten na ‘--’"
+
+#~ msgid "Extraneous arguments after “--”"
+#~ msgstr "Vreemde argumenten na ‘--’"
+
+#~ msgid "GTerminal"
+#~ msgstr "GTerminal"
+
+#~ msgid "Error processing arguments: %s\n"
+#~ msgstr "Fout bij verwerking van argumenten: %s\n"
+
+#~ msgid "List of available encodings"
+#~ msgstr "Lijst met beschikbare coderingen"
+
+#~ msgid ""
+#~ "A subset of possible encodings are presented in the Encoding submenu. "
+#~ "This is a list of encodings to appear there."
+#~ msgstr ""
+#~ "Een deel van de mogelijke coderingen zijn beschikbaar in het submenu "
+#~ "Coderingen. Dit is een lijst met coderingen die daar worden getoond."
+
+#~ msgid "E_ncodings shown in menu:"
+#~ msgstr "Coderi_ngen die in menu worden getoond:"
+
+#~ msgid "New Terminal in New Tab"
+#~ msgstr "Nieuwe terminal in nieuw tabblad"
+
+#~ msgid "New Terminal in New Window"
+#~ msgstr "Nieuwe terminal in nieuw venster"
+
+#~ msgid "Close Terminal"
+#~ msgstr "Terminalvenster sluiten"
+
+#~ msgid "Close All Terminals"
+#~ msgstr "Alle terminalvensters sluiten"
+
+#~ msgid "Clear Find Highlight"
+#~ msgstr "Oplichten opheffen"
+
+#~ msgid "User Defined"
+#~ msgstr "Gebruikergedefinieerd"
+
+#~ msgid "Show"
+#~ msgstr "Tonen"
+
+#~ msgid "_Encoding"
+#~ msgstr "_Codering"
+
+#~ msgid "_%u. %s"
+#~ msgstr "_%u. %s"
+
+#~ msgid "_%c. %s"
+#~ msgstr "_%c. %s"
+
+#~ msgid "Open _Terminal"
+#~ msgstr "_Terminal openen"
+
+#~ msgid "Open Ta_b"
+#~ msgstr "_Nieuw tabblad"
+
+#~ msgid "_Close All Terminals"
+#~ msgstr "A_lle terminalvensters sluiten"
+
+#~ msgid "Pre_ferences"
+#~ msgstr "_Voorkeuren"
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "V_olgende zoeken"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "Vo_rige zoeken"
+
+#~ msgid "Go to _Line…"
+#~ msgstr "Naar _regel springen…"
+
+#~ msgid "_Incremental Search…"
+#~ msgstr "_Incrementeel zoeken…"
+
+#~ msgid "_Add or Remove…"
+#~ msgstr "_Toevoegen of verwijderen…"
