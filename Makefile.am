@@ -43,6 +43,8 @@ endif
 check-local: desktop-file-validate
 
 EXTRA_DIST = 			\
+	COPYING                 \
+	COPYING.GFDL            \
 	$(appdata_in_files)	\
 	ChangeLog.pre-2-23	\
 	ChangeLog.README	\
