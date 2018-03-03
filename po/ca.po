@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-18 16:14+0000\n"
+"POT-Creation-Date: 2018-03-02 11:24+0000\n"
 "PO-Revision-Date: 2018-01-21 09:12+0100\n"
 "Last-Translator: Francesc Famadas <kiski97@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -156,12 +156,14 @@ msgid ""
 "Scale factor for the cell height to increase line spacing. (Does not "
 "increase the font’s height.)"
 msgstr ""
+"Factor d'escalat per l'alçada de la cel·la per a incrementar l'interlineat (no incrementa l'alçada del tipus de lletra)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Scale factor for the cell width to increase letter spacing. (Does not "
 "increase the font’s width.)"
 msgstr ""
+"Factor d'escalat per l'amplada de la cel·la per a incrementar l'interlineat (no incrementa l'amplada del tipus de lletra)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
@@ -421,6 +423,8 @@ msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
 msgstr ""
+"Els valors possibles pel parpelleig del text són «always» (sempre) o «never» (mai), "
+"o nomes quan el terminal està «focused» (té el focus) o «unfocused» (perd el focus)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Custom command to use instead of the shell"
@@ -487,18 +491,14 @@ msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "La drecera per desar els continguts de la pestanya actual a un fitxer"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:72
-#, fuzzy
-#| msgid "Keyboard shortcut to save the current tab contents to file"
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
-msgstr "La drecera per desar els continguts de la pestanya actual a un fitxer"
+msgstr "La drecera per exportar els continguts de la pestanya actual a un fitxer en diversos formats"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:73
-#, fuzzy
-#| msgid "Keyboard shortcut to save the current tab contents to file"
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
-msgstr "La drecera per desar els continguts de la pestanya actual a un fitxer"
+msgstr "La drecera per imprimir els continguts de la pestanya actual a una impressora o fitxer"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to close a tab"
@@ -589,10 +589,8 @@ msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "La drecera per canviar a la pestanya numerada"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:96
-#, fuzzy
-#| msgid "Keyboard shortcut to switch to the next tab"
 msgid "Keyboard shortcut to switch to the last tab"
-msgstr "La drecera per canviar a la pestanya següent"
+msgstr "La drecera per canviar a l'última pestanya"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to launch help"
@@ -852,10 +850,8 @@ msgid "TTY Erase"
 msgstr "Esborrat TTY"
 
 #: ../src/preferences.ui.h:68
-#, fuzzy
-#| msgid "Show _menubar by default in new terminals"
 msgid "_Show menubar by default in new terminals"
-msgstr "Mostra la barra del _menú per defecte"
+msgstr "_Mostra la barra del menú per defecte en terminals nous"
 
 #: ../src/preferences.ui.h:69
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
@@ -908,7 +904,7 @@ msgstr "Trieu un tipus de lletra de terminal"
 
 #: ../src/preferences.ui.h:81
 msgid "Cell spaci_ng:"
-msgstr "E_spaiat de la cel·la"
+msgstr "E_spaiat de la cel·la:"
 
 #: ../src/preferences.ui.h:82
 msgid "Allow b_linking text:"
@@ -1024,7 +1020,7 @@ msgstr "_Paleta de colors:"
 
 #: ../src/preferences.ui.h:110
 msgid "Show _bold text in bright colors"
-msgstr ""
+msgstr "M_ostra el text en negreta en colors brillants"
 
 #: ../src/preferences.ui.h:111
 msgid "Colors"
@@ -1519,7 +1515,7 @@ msgstr "Croat"
 
 #: ../src/terminal-encoding.c:108
 msgid "Hindi"
-msgstr "Hindú"
+msgstr "Hindi"
 
 #: ../src/terminal-encoding.c:109
 msgid "Persian"
@@ -1875,10 +1871,8 @@ msgstr ""
 "línia d'ordres"
 
 #: ../src/terminal-options.c:1100
-#, fuzzy
-#| msgid "May only use option %s once"
 msgid "Can only use --wait once"
-msgstr "Potser només s'utilitzarà l'opció %s una vegada"
+msgstr "Només es pot usar «--wait» un cop"
 
 #: ../src/terminal-options.c:1135
 msgid "Not a valid terminal config file."
@@ -1910,11 +1904,11 @@ msgstr "Mostra la finestra d'opcions"
 
 #: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
-msgstr ""
+msgstr "Imprimeix variables d'entorn per a interaccionar amb el terminal"
 
 #: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
-msgstr ""
+msgstr "Incrementa el nivell de detall del diagnòstic"
 
 #: ../src/terminal-options.c:1366
 msgid "Suppress output"
@@ -2068,6 +2062,7 @@ msgid "Show per-terminal options"
 msgstr "Mostra les opcions individuals per terminal"
 
 #: ../src/terminal-prefs.c:131
+#, c-format
 msgid "Profile “%s”"
 msgstr "Perfil «%s»"
 
@@ -2082,7 +2077,7 @@ msgstr "Perfil nou"
 
 #: ../src/terminal-prefs.c:378
 msgid "Enter name for new profile with default settings:"
-msgstr ""
+msgstr "Introduïu el nom del perfil nou amb els paràmetres per defecte:"
 
 #: ../src/terminal-prefs.c:380
 msgid "Create"
@@ -2091,7 +2086,7 @@ msgstr "Crea"
 #: ../src/terminal-prefs.c:392
 #, c-format
 msgid "Enter name for new profile based on “%s”:"
-msgstr ""
+msgstr "Introduïu el nom del perfil nou basat amb «%s»:"
 
 #: ../src/terminal-prefs.c:393
 #, c-format
@@ -2107,28 +2102,22 @@ msgid "Clone"
 msgstr "Clona"
 
 #: ../src/terminal-prefs.c:414
-#, fuzzy, c-format
-#| msgid "Delete profile “%s”?"
+#, c-format
 msgid "Enter new name for profile “%s”:"
-msgstr "Voleu suprimir el perfil «%s»?"
+msgstr "Introduïu el nom nou pel perfil «%s»:"
 
 #: ../src/terminal-prefs.c:417
-#, fuzzy
-#| msgid "New Profile"
 msgid "Rename Profile"
-msgstr "Perfil nou"
+msgstr "Canvia el nom al perfil"
 
 #: ../src/terminal-prefs.c:420
-#, fuzzy
-#| msgid "Vietnamese"
 msgid "Rename"
-msgstr "Vietnamita"
+msgstr "Canvia el nom"
 
 #: ../src/terminal-prefs.c:435
-#, fuzzy, c-format
-#| msgid "Delete profile “%s”?"
+#, c-format
 msgid "Really delete profile “%s”?"
-msgstr "Voleu suprimir el perfil «%s»?"
+msgstr "Segur que voleu suprimir el perfil «%s»?"
 
 #: ../src/terminal-prefs.c:438
 msgid "Delete Profile"
@@ -2139,10 +2128,8 @@ msgid "Delete"
 msgstr "Suprimeix"
 
 #: ../src/terminal-prefs.c:518
-#, fuzzy
-#| msgid "Use the given profile instead of the default profile"
 msgid "This is the default profile"
-msgstr "Utilitza el perfil especificat en lloc del predeterminat"
+msgstr "Aquest és el perfil predeterminat"
 
 #: ../src/terminal-prefs.c:542
 msgid "General"
@@ -2155,7 +2142,7 @@ msgstr "Dreceres"
 
 #: ../src/terminal-prefs.c:671
 msgid "Global"
-msgstr ""
+msgstr "Global"
 
 #: ../src/terminal-prefs.c:683
 msgid "Profiles"
@@ -2346,266 +2333,3 @@ msgstr ""
 #: ../src/terminal-window.c:3353
 msgid "C_lose Window"
 msgstr "Tanca la _finestra"
-
-#~ msgid "Keyboard shortcut to create a new profile"
-#~ msgstr "La drecera per crear un perfil nou"
-
-#~ msgid "Keyboard shortcut to open the current profile’s Preferences dialog"
-#~ msgstr "La drecera per obrir el diàleg de preferències del perfil actual"
-
-#~ msgid "_Profile used when launching a new terminal:"
-#~ msgstr "Perfil _emprat quan es llanci un terminal nou:"
-
-#~ msgid "Profile Editor"
-#~ msgstr "Editor de perfils"
-
-#~ msgid "_Profile name:"
-#~ msgstr "Nom del _perfil:"
-
-#~ msgid "_Rewrap on resize"
-#~ msgstr "_Reajusta en redimensionar"
-
-#~ msgid "R_eset"
-#~ msgstr "_Reinicia"
-
-#~ msgid "Profile Preferences"
-#~ msgstr "Preferències del perfil"
-
-#~ msgid "New _Profile"
-#~ msgstr "_Perfil nou"
-
-#, fuzzy
-#~| msgid "Profile Preferences"
-#~ msgid "Pr_ofile Preferences"
-#~ msgstr "Preferències del perfil"
-
-#, fuzzy
-#~| msgid "Find"
-#~ msgid "_Find"
-#~ msgstr "Cerca"
-
-#~ msgid "Click button to choose profile"
-#~ msgstr "Feu clic per triar el perfil"
-
-#~ msgid "Profile list"
-#~ msgstr "Llista de perfils"
-
-#~ msgid "_Profile Preferences"
-#~ msgstr "_Preferències del perfil"
-
-#~ msgid "Verbose output"
-#~ msgstr "Sortida detallada"
-
-#~ msgid "Output options:"
-#~ msgstr "Opcions de sortida:"
-
-#~ msgid "Show output options"
-#~ msgstr "Mostra les opcions de sortida"
-
-#~ msgid "“%s” is not a valid application ID"
-#~ msgstr "«%s» no és un identificador d'aplicació vàlid"
-
-#~ msgid "Server application ID"
-#~ msgstr "Identificador de l'aplicació de servidor"
-
-#~ msgid "ID"
-#~ msgstr "Identificador"
-
-#~ msgid "Show completions"
-#~ msgstr "Mostra les complecions"
-
-#~ msgid "Global options:"
-#~ msgstr "Opcions globals:"
-
-#~ msgid "Show global options"
-#~ msgstr "Mostra les opcions globals"
-
-#~ msgid "FD passing of stdin is not supported"
-#~ msgstr "No es permet passar el descriptor de fitxer de l'entrada estàndard"
-
-#~ msgid "FD passing of stdout is not supported"
-#~ msgstr "No es permet passar el descriptor de fitxer de la sortida estàndard"
-
-#~ msgid "FD passing of stderr is not supported"
-#~ msgstr "No es permet passar el descriptor de fitxer de la sortida d'errades"
-
-#~ msgid "Invalid argument “%s” to --fd option"
-#~ msgstr "L'argument «%s» per l'opció «--fd» no és vàlid"
-
-#~ msgid "Forward stdin"
-#~ msgstr "Redirecciona l'entrada estàndard (stdin)"
-
-#~ msgid "Forward stdout"
-#~ msgstr "Redirecciona la sortida estàndard (stdout)"
-
-#~ msgid "Forward stderr"
-#~ msgstr "Redirecciona la sortida d'errors (stderr)"
-
-#~ msgid "Exec options:"
-#~ msgstr "Opcions d'execució:"
-
-#~ msgid "Show exec options"
-#~ msgstr "Mostra les opcions d'execució"
-
-#~ msgid "Maximise the window"
-#~ msgstr "Maximitza la finestra"
-
-#~ msgid "Window options:"
-#~ msgstr "Opcions de la finestra:"
-
-#~ msgid "Show window options"
-#~ msgstr "Mostra les opcions de la finestra"
-
-#~ msgid "Zoom value “%s” is outside allowed range"
-#~ msgstr "El valor d'ampliació «%s» està fora del rang permès"
-
-#~ msgid "UUID"
-#~ msgstr "UUID"
-
-#~ msgid "Terminal options:"
-#~ msgstr "Opcions del terminal:"
-
-#~ msgid "Processing options:"
-#~ msgstr "Opcions de processament:"
-
-#~ msgid "Show processing options"
-#~ msgstr "Mostra les opcions de processament"
-
-#~ msgid "Missing argument"
-#~ msgstr "Manca l'argument"
-
-#~ msgid "Unknown command “%s”"
-#~ msgstr "Es desconeix l'ordre «%s»"
-
-#~ msgid "“%s” needs the command to run as arguments after “--”"
-#~ msgstr "«%s» necessita l'ordre a executar com a argument després de «--»"
-
-#~ msgid "Extraneous arguments after “--”"
-#~ msgstr "Arguments estranys després de «--»"
-
-#~ msgid "GTerminal"
-#~ msgstr "GTerminal"
-
-#~ msgid "Error processing arguments: %s\n"
-#~ msgstr "S'ha produït un error en processar els arguments: %s\n"
-
-#~ msgid "List of available encodings"
-#~ msgstr "Llista de codificacions disponibles"
-
-#~ msgid ""
-#~ "A subset of possible encodings are presented in the Encoding submenu. "
-#~ "This is a list of encodings to appear there."
-#~ msgstr ""
-#~ "En el submenú Codificacions es mostra un subconjunt de les codificacions "
-#~ "possibles. Aquesta és la llista de codificacions que apareixen allí."
-
-#~ msgid "E_ncodings shown in menu:"
-#~ msgstr "Codificacio_ns mostrades al menú:"
-
-#~ msgid ""
-#~ "<b>Note:</b> Terminal applications have these colors available to them."
-#~ msgstr ""
-#~ "<b>Nota:</b> aquests colors estan disponibles a les aplicacions del "
-#~ "terminal."
-
-#~ msgid ""
-#~ "<b>Note:</b> These options may cause some applications to behave "
-#~ "incorrectly.  They are only here to allow you to work around certain "
-#~ "applications and operating systems that expect different terminal "
-#~ "behavior."
-#~ msgstr ""
-#~ "<b>Nota:</b> aquestes opcions poden fer que algunes aplicacions no "
-#~ "funcionin correctament. Només hi són per permetre-us solucionar aspectes "
-#~ "de certes aplicacions i sistemes operatius que esperen un comportament "
-#~ "diferent del terminal."
-
-#~ msgid "New Terminal in New Tab"
-#~ msgstr "Terminal nou a una pestanya nova"
-
-#~ msgid "New Terminal in New Window"
-#~ msgstr "Terminal nou a una finestra nova"
-
-#~ msgid "Close Terminal"
-#~ msgstr "Tanca el terminal"
-
-#~ msgid "Close All Terminals"
-#~ msgstr "Tanca tots els terminals"
-
-#~ msgid "Clear Find Highlight"
-#~ msgstr "Neteja el realçat de cerca"
-
-#~ msgid "User Defined"
-#~ msgstr "Definit per l'usuari"
-
-#~ msgid "Show"
-#~ msgstr "Mostra"
-
-#~ msgid "_Encoding"
-#~ msgstr "_Codificació"
-
-#~ msgid "_%u. %s"
-#~ msgstr "_%u. %s"
-
-#~ msgid "_%c. %s"
-#~ msgstr "_%c. %s"
-
-#~ msgid "Open _Terminal"
-#~ msgstr "Obre un _terminal"
-
-#~ msgid "Open Ta_b"
-#~ msgstr "Obre una _pestanya"
-
-#~ msgid "_Close All Terminals"
-#~ msgstr "_Tanca tots els terminals"
-
-#~ msgid "Pre_ferences"
-#~ msgstr "Pre_ferències"
-
-#~ msgid "Find Ne_xt"
-#~ msgstr "Cerca el _següent"
-
-#~ msgid "Find Pre_vious"
-#~ msgstr "Cerca l'_anterior"
-
-#~ msgid "Go to _Line…"
-#~ msgstr "Vés a la _línia..."
-
-#~ msgid "_Incremental Search…"
-#~ msgstr "Cerca _incremental..."
-
-#
-#~ msgid "_Add or Remove…"
-#~ msgstr "_Afegeix o suprimeix…"
-
-#~ msgid "_Same as text color"
-#~ msgstr "El matei_x que el color del text"
-
-#~ msgid "_Search for:"
-#~ msgstr "_Cerca: "
-
-#~ msgid "Search _backwards"
-#~ msgstr "Cerca cap en_rere"
-
-#~ msgid "Whether to update login records when launching terminal command"
-#~ msgstr ""
-#~ "Si s'ha d'actualitzar el registre d'entrada quan s'executa l'ordre del "
-#~ "terminal"
-
-#~ msgid ""
-#~ "If true, the system login records utmp and wtmp will be updated when the "
-#~ "command inside the terminal is launched."
-#~ msgstr ""
-#~ "Si és «True» (cert) s'actualitzarà els registres d'entrada quan l'ordre "
-#~ "dins del terminal s'executi."
-
-#~ msgid "_Update login records when command is launched"
-#~ msgstr "_Actualitza els registres d'entrada quan s'executi l'ordre"
-
-#~ msgid "Unknown completion request for \"%s\""
-#~ msgstr "Es desconeix la sol·licitud de compleció per «%s»"
-
-#~ msgid "Missing command"
-#~ msgstr "Manca l'ordre"
-
-#~ msgid "Whether to use a dark theme variant"
-#~ msgstr "Si s'ha d'utilitzar la variant de tema fosc"
