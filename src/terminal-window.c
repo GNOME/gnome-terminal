@@ -1202,6 +1202,7 @@ action_find_clear_cb (GSimpleAction *action,
     return;
 
   vte_terminal_search_set_regex (VTE_TERMINAL (priv->active_screen), NULL, 0);
+  vte_terminal_unselect_all (VTE_TERMINAL (priv->active_screen));
 }
 
 static void
