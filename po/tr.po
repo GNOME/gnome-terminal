@@ -9,6 +9,7 @@
 # Gökhan Gurbetoğlu <ggurbet@gmail.com>, 2015.
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2016.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
+# Burak Kahraman <burakkaankhrmn@gmail.com>, 2018.
 # Emin Tufan Çetin <etcetin@gmail.com>, 2017, 2018.
 #
 msgid ""
@@ -16,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-01-13 23:45+0000\n"
-"PO-Revision-Date: 2018-01-21 15:31+0300\n"
+"POT-Creation-Date: 2018-03-05 12:58+0000\n"
+"PO-Revision-Date: 2018-03-10 10:50+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -28,10 +29,11 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.7\n"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:158
-#: ../src/terminal-accels.c:230 ../src/terminal.c:542
-#: ../src/terminal-tab-label.c:81 ../src/terminal-window.c:1939
-#: ../src/terminal-window.c:2207 ../src/terminal-window.c:2485
+#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
+#: ../src/terminal-accels.c:226 ../src/terminal.c:549
+#: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
+#: ../src/terminal-window.c:1929 ../src/terminal-window.c:2189
+#: ../src/terminal-window.c:2479
 msgid "Terminal"
 msgstr "Uçbirim"
 
@@ -78,11 +80,11 @@ msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;kabuk;istem;komut;komut satırı;cmd;"
 
 #. Cursor blink mode
-#: ../src/migration.c:403 ../src/profile-preferences.ui.h:12
+#: ../src/migration.c:403 ../src/preferences.ui.h:19
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: ../src/migration.c:403 ../src/terminal-prefs.c:94
+#: ../src/migration.c:403
 msgid "Unnamed"
 msgstr "Adsız"
 
@@ -476,15 +478,11 @@ msgid "Keyboard shortcut to open a new window"
 msgstr "Yeni bir pencere açmak için kullanılan klavye kısayolu"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:71
-msgid "Keyboard shortcut to create a new profile"
-msgstr "Yeni bir profil oluşturmak için kullanılan klavye kısayolu"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr ""
 "Geçerli sekmenin içeriğini dosyaya kaydetmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
@@ -492,131 +490,125 @@ msgstr ""
 "Geçerli sekmenin içeriğini çeşitli biçemlerde dosyaya kaydetmek için "
 "kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr ""
 "Geçerli sekmenin içeriğini yazıcı veya dosyaya yazdırmak için kullanılan "
 "klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to close a tab"
 msgstr "Sekmeyi kapatmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to close a window"
 msgstr "Pencereyi kapatmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to copy text"
 msgstr "Metni kopyalamak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Metni HTML olarak kopyalamak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to paste text"
 msgstr "Metin yapıştırmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to select all text"
 msgstr "Tüm metni seçmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Tercihler iletişim penceresini açmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
-msgid "Keyboard shortcut to open the current profile’s Preferences dialog"
-msgstr ""
-"Geçerli profilin Tercihler iletişim penceresini açmak için kullanılan klavye "
-"kısayolu"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Tam ekran kipi için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Menü çubuğu için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Salt-okunur durumunu değiştirmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Uçbirimi sıfırlamak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Ekranı sıfırlamak ve silmek için klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Arama iletişim penceresini açmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Arama teriminin bulunduğu bir sonraki yeri bulmak için klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "Arama teriminin bulunduğu bir önceki yeri bulmak için klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Bulma vurgulamasını temizleyen klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Önceki sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Sonraki sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Geçerli sekmeyi sola taşımak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Geçerli sekmeyi sağa taşımak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Geçerli sekmeyi ayırmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Numaralı sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Son sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to launch help"
 msgstr "Yardımı başlatmak için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font larger"
 msgstr "Yazı tipini büyütmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Yazı tipini küçültmek için kullanılan klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Yazı tipini olağan boyutuna getirmek için klavye kısayolu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid "Whether the menubar has access keys"
 msgstr "Menü çubuğunun ulaşma tuşunun olup olmayacağı"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -626,11 +618,11 @@ msgstr ""
 "uçbirim içinde çalışan başka uygulamaları etkileyebilecekleri için "
 "kapatılabilirler."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid "Whether shortcuts are enabled"
 msgstr "Kısayolların etkin olup olmayacağı"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -638,11 +630,11 @@ msgstr ""
 "Kısayolların etkinleştirilip etkinleştirilmeyeceği.  Bu tuşlar uçbirim "
 "içinde çalışan başka uygulamaları etkileyebilecekleri için kapatılabilirler."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Menü çubuğunun standart ulaşım için GTK kısayolun etkinliği"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -652,31 +644,31 @@ msgstr ""
 "menu-accel = \"whatever\") özelleştirilebilir. Bu özellik standart menü "
 "çubuğu hızlandırıcısının kapatılmasını mümkün kılar."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether the shell integration is enabled"
 msgstr "Kabuk tümleşmesinin etkinleştirilip etkinleştirilmediği"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Bir uçbirimi kapatmadan önce onay istenip istenmeyeceği"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to show the menubar in new windows"
 msgstr "Yeni pencerelerde menu çubuğunun gösterilip gösterilmeyeceği"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Yeni uçbirimlerin pencere ya da sekme olarak açılması"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "When to show the tabs bar"
 msgstr "Sekmeler çubuğunun ne zaman gösterileceği"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:114
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "The position of the tab bar"
 msgstr "Sekme çubuğunun konumu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:115
+#: ../src/org.gnome.Terminal.gschema.xml.h:113
 msgid "Which theme variant to use"
 msgstr "Hangi tema değişkeni kullanılacak"
 
@@ -705,506 +697,482 @@ msgctxt "theme variant"
 msgid "Dark"
 msgstr "Karanlık"
 
-#: ../src/preferences.ui.h:8 ../src/terminal-accels.c:147
-msgid "Preferences"
-msgstr "Tercihler"
-
-#: ../src/preferences.ui.h:9
-msgid "Show _menubar by default in new terminals"
-msgstr "_Menü çubuğunu yeni uçbirimlerde öntanımlı olarak göster"
-
-#: ../src/preferences.ui.h:10
-msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
-msgstr "_Belleticileri (örneğin Dosya menüsünü açmak için Alt+D) etkinleştir"
-
-#: ../src/preferences.ui.h:11
-msgid "Enable the _menu accelerator key (F10 by default)"
-msgstr "_Menü hızlandırma tuşunu (öntanımlı F10) etkinleştir"
-
-#: ../src/preferences.ui.h:12
-msgid "Theme _variant:"
-msgstr "Tema _değişkeni:"
-
-#: ../src/preferences.ui.h:13
-msgid "Open _new terminals in:"
-msgstr "Yeni _uçbirimleri şurada aç:"
-
-#: ../src/preferences.ui.h:14 ../src/profile-preferences.ui.h:78
-msgid "General"
-msgstr "Genel"
-
-#: ../src/preferences.ui.h:15
-msgid "_Enable shortcuts"
-msgstr "Kısayolları _etkinleştir"
-
-#: ../src/preferences.ui.h:16
-msgid "Shortcuts"
-msgstr "Kısayollar"
-
-#: ../src/preferences.ui.h:17
-msgid "_Clone"
-msgstr "_Kopya Oluştur"
-
-#: ../src/preferences.ui.h:18
-msgid "_Profile used when launching a new terminal:"
-msgstr "_Yeni bir uçbirim başlatıldığı zaman kullanılacak profil:"
-
-#: ../src/preferences.ui.h:19
-msgid "Profiles"
-msgstr "Profiller"
-
-#: ../src/profile-editor.c:51
-msgid "Black on light yellow"
-msgstr "Açık sarı üzerine siyah"
-
-#: ../src/profile-editor.c:55
-msgid "Black on white"
-msgstr "Beyaz üzerine siyah"
-
-#: ../src/profile-editor.c:59
-msgid "Gray on black"
-msgstr "Siyah üzerine gri"
-
-#: ../src/profile-editor.c:63
-msgid "Green on black"
-msgstr "Siyah üzerine yeşil"
-
-#: ../src/profile-editor.c:67
-msgid "White on black"
-msgstr "Siyah üzerine beyaz"
-
-#. Translators: "Tango" is the name of a colour scheme, "light" can be translated
-#: ../src/profile-editor.c:72
-#| msgid "Tango"
-msgid "Tango light"
-msgstr "Tango aydınlık"
-
-#. Translators: "Tango" is the name of a colour scheme, "dark" can be translated
-#: ../src/profile-editor.c:77
-#| msgid "Tango"
-msgid "Tango dark"
-msgstr "Tango karanlık"
-
-#. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
-#: ../src/profile-editor.c:82
-msgid "Solarized light"
-msgstr "Solarized açık"
-
-#. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
-#: ../src/profile-editor.c:87
-msgid "Solarized dark"
-msgstr "Solarized koyu"
-
-#: ../src/profile-editor.c:447
-#, c-format
-msgid "Error parsing command: %s"
-msgstr "Komut ayrıştırılırken hata: %s"
-
-#. This is the name of a colour scheme
-#: ../src/profile-editor.c:496 ../src/profile-preferences.ui.h:50
-msgid "Custom"
-msgstr "Özel"
-
-#: ../src/profile-editor.c:636
-#, c-format
-msgid "Editing Profile “%s”"
-msgstr "“%s“ Profili Düzenleniyor"
-
-#. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:885
-msgid "width"
-msgstr "genişlik"
-
-#. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:890
-#| msgctxt "theme variant"
-#| msgid "Light"
-msgid "height"
-msgstr "yükseklik"
-
-#: ../src/profile-editor.c:913
-#, c-format
-msgid "Choose Palette Color %u"
-msgstr "Palet Rengini Seç %u"
-
-#: ../src/profile-editor.c:917
-#, c-format
-msgid "Palette entry %u"
-msgstr "Palet girdisi %u"
-
 #. ambiguous-width characers are
-#: ../src/profile-preferences.ui.h:2
+#: ../src/preferences.ui.h:9
 msgid "Narrow"
 msgstr "Dar"
 
 #. ambiguous-width characers are
-#: ../src/profile-preferences.ui.h:4
+#: ../src/preferences.ui.h:11
 msgid "Wide"
 msgstr "Geniş"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:6
+#: ../src/preferences.ui.h:13
 msgid "Block"
 msgstr "Blok"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:8
+#: ../src/preferences.ui.h:15
 msgid "I-Beam"
 msgstr "I-Beam"
 
 #. Cursor shape
-#: ../src/profile-preferences.ui.h:10
+#: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Alt Çizgi"
 
 #. Cursor blink mode
-#: ../src/profile-preferences.ui.h:14
+#: ../src/preferences.ui.h:21
 msgid "Enabled"
 msgstr "Etkin"
 
 #. Cursor blink mode
-#: ../src/profile-preferences.ui.h:16
+#: ../src/preferences.ui.h:23
 msgid "Disabled"
 msgstr "Devre dışı"
 
 #. Text blink mode
-#: ../src/profile-preferences.ui.h:18
+#: ../src/preferences.ui.h:25
 msgid "Never"
 msgstr "Asla"
 
 #. Text blink mode
-#: ../src/profile-preferences.ui.h:20
+#: ../src/preferences.ui.h:27
 msgid "When focused"
 msgstr "Odaktayken"
 
 #. Text blink mode
-#: ../src/profile-preferences.ui.h:22
+#: ../src/preferences.ui.h:29
 msgid "When unfocused"
 msgstr "Odak dışı olduğunda"
 
 #. Text blink mode
-#: ../src/profile-preferences.ui.h:24
+#: ../src/preferences.ui.h:31
 msgid "Always"
 msgstr "Her zaman"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:26
+#: ../src/preferences.ui.h:33
 msgid "Replace initial title"
 msgstr "İlk başlığı yer değiştir"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:28
+#: ../src/preferences.ui.h:35
 msgid "Append initial title"
 msgstr "İlk başlığa ekle"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:30
+#: ../src/preferences.ui.h:37
 msgid "Prepend initial title"
 msgstr "İlk başlığın başına ekle"
 
 #. When terminal commands set their own titles
-#: ../src/profile-preferences.ui.h:32
+#: ../src/preferences.ui.h:39
 msgid "Keep initial title"
 msgstr "İlk başlığı koru"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:34
+#: ../src/preferences.ui.h:41
 msgid "Exit the terminal"
 msgstr "Uçbirimden çık"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:36
+#: ../src/preferences.ui.h:43
 msgid "Restart the command"
 msgstr "Komutu yeniden başlat"
 
 #. When command exits
-#: ../src/profile-preferences.ui.h:38
+#: ../src/preferences.ui.h:45
 msgid "Hold the terminal open"
 msgstr "Uçbirimi açık tut"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:40
+#: ../src/preferences.ui.h:47
 msgid "Tango"
 msgstr "Tango"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:42
+#: ../src/preferences.ui.h:49
 msgid "Linux console"
 msgstr "Linux konsolu"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:44
+#: ../src/preferences.ui.h:51
 msgid "XTerm"
 msgstr "XTerm"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:46
+#: ../src/preferences.ui.h:53
 msgid "Rxvt"
 msgstr "Rxvt"
 
 #. This is the name of a colour scheme
-#: ../src/profile-preferences.ui.h:48
+#: ../src/preferences.ui.h:55
 msgid "Solarized"
 msgstr "Solarized"
 
+#. This is the name of a colour scheme
+#: ../src/preferences.ui.h:57 ../src/profile-editor.c:606
+msgid "Custom"
+msgstr "Özel"
+
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:52
+#: ../src/preferences.ui.h:59
 msgid "Automatic"
 msgstr "Kendiliğinden"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:54
+#: ../src/preferences.ui.h:61
 msgid "Control-H"
 msgstr "Kontrol-H"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:56
+#: ../src/preferences.ui.h:63
 msgid "ASCII DEL"
 msgstr "ASCII DEL"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:58
+#: ../src/preferences.ui.h:65
 msgid "Escape sequence"
 msgstr "Kaçış dizisi"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:60
+#: ../src/preferences.ui.h:67
 msgid "TTY Erase"
 msgstr "TTY Sil"
 
-#: ../src/profile-preferences.ui.h:61
-msgid "Profile Editor"
-msgstr "Profil Düzenleyici"
+#: ../src/preferences.ui.h:68
+msgid "_Show menubar by default in new terminals"
+msgstr "_Menü çubuğunu yeni uçbirimlerde öntanımlı olarak göster "
 
-#: ../src/profile-preferences.ui.h:62
-msgid "_Profile name:"
-msgstr "_Profil adı:"
+#: ../src/preferences.ui.h:69
+msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
+msgstr "_Belleticileri (örneğin Dosya menüsünü açmak için Alt+D) etkinleştir"
 
-#: ../src/profile-preferences.ui.h:63
-msgid "Profile ID:"
-msgstr "Profil kimliği:"
+#: ../src/preferences.ui.h:70
+msgid "Enable the _menu accelerator key (F10 by default)"
+msgstr "_Menü hızlandırma tuşunu (öntanımlı F10) etkinleştir"
 
-#: ../src/profile-preferences.ui.h:64
-msgid "Initial terminal si_ze:"
-msgstr "İlk u_çbirim boyutu:"
+#: ../src/preferences.ui.h:71
+msgid "Theme _variant:"
+msgstr "Tema _değişkeni:"
 
-#: ../src/profile-preferences.ui.h:65
-msgid "columns"
-msgstr "sütun"
+#: ../src/preferences.ui.h:72
+msgid "Open _new terminals in:"
+msgstr "Yeni _uçbirimleri şurada aç:"
 
-#: ../src/profile-preferences.ui.h:66
-msgid "rows"
-msgstr "satır"
+#: ../src/preferences.ui.h:73
+msgid "_Enable shortcuts"
+msgstr "Kısayolları _etkinleştir"
 
-#: ../src/profile-preferences.ui.h:67
-msgid "Rese_t"
-msgstr "_Sıfırla"
-
-#: ../src/profile-preferences.ui.h:68
-msgid "Cursor _shape:"
-msgstr "İmleç ş_ekli:"
-
-#: ../src/profile-preferences.ui.h:69
-msgid "Cursor blin_king:"
-msgstr "İmleç yanıp sön_mesi:"
-
-#: ../src/profile-preferences.ui.h:70
-msgid "Terminal _bell"
-msgstr "Uçbirim _zili"
-
-#: ../src/profile-preferences.ui.h:71
+#: ../src/preferences.ui.h:74
 msgid "Text Appearance"
 msgstr "Metin Görünümü"
 
-#: ../src/profile-preferences.ui.h:72
-msgid "Allow b_linking text:"
-msgstr "_Yanıp sönen metne izin ver:"
+#: ../src/preferences.ui.h:75
+msgid "Initial terminal si_ze:"
+msgstr "İlk u_çbirim boyutu:"
 
-#: ../src/profile-preferences.ui.h:73
-msgid "_Rewrap on resize"
-msgstr "_Yeniden boyutlandırmada yeniden sar"
+#: ../src/preferences.ui.h:76
+msgid "columns"
+msgstr "sütun"
 
-#: ../src/profile-preferences.ui.h:74
-msgid "_Custom font:"
-msgstr "_Özel yazı tipi:"
+#: ../src/preferences.ui.h:77
+msgid "rows"
+msgstr "satır"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/preferences.ui.h:78
+msgid "Rese_t"
+msgstr "_Sıfırla"
+
+#: ../src/preferences.ui.h:79
+#| msgid "_Custom font:"
+msgid "Custom _font:"
+msgstr "Özel _yazı tipi:"
+
+#: ../src/preferences.ui.h:80
 msgid "Choose A Terminal Font"
 msgstr "Bir Uçbirim Yazı Tipini Seçin"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/preferences.ui.h:81
 msgid "Cell spaci_ng:"
 msgstr "Hücre boşl_uğu:"
 
-#: ../src/profile-preferences.ui.h:77
-#| msgid "Reset"
-msgid "R_eset"
-msgstr "S_ıfırla"
+#: ../src/preferences.ui.h:82
+msgid "Allow b_linking text:"
+msgstr "_Yanıp sönen metne izin ver:"
 
-#: ../src/profile-preferences.ui.h:79
-msgid "_Run command as a login shell"
-msgstr "_Giriş kabuğu yerine komut çalıştır"
+#: ../src/preferences.ui.h:83
+msgid "Cursor"
+msgstr "İmleç"
 
-#: ../src/profile-preferences.ui.h:80
-msgid "Ru_n a custom command instead of my shell"
-msgstr "_Kabuk yerine özel bir komut çalıştır"
+#: ../src/preferences.ui.h:84
+msgid "Cursor _shape:"
+msgstr "İmleç ş_ekli:"
 
-#: ../src/profile-preferences.ui.h:81
-msgid "Custom co_mmand:"
-msgstr "Özel _komut:"
+#: ../src/preferences.ui.h:85
+msgid "Cursor blin_king:"
+msgstr "İmleç yanıp sön_mesi:"
 
-#: ../src/profile-preferences.ui.h:82
-msgid "When command _exits:"
-msgstr "_Komut sona erdiğinde:"
+#: ../src/preferences.ui.h:86
+msgid "Sound"
+msgstr "Ses"
 
-#: ../src/profile-preferences.ui.h:83
-msgid "Command"
-msgstr "Komut"
+#: ../src/preferences.ui.h:87
+msgid "Terminal _bell"
+msgstr "Uçbirim _zili"
 
-#: ../src/profile-preferences.ui.h:84
-msgid "Text and Background Color"
-msgstr "Metin ve Arka Plan Rengi"
+#: ../src/preferences.ui.h:88
+msgid "Profile ID:"
+msgstr "Profil kimliği:"
 
-#: ../src/profile-preferences.ui.h:85
-msgid "_Use colors from system theme"
-msgstr "_Sistem temasının renklerini kullan"
-
-#: ../src/profile-preferences.ui.h:86
-msgid "Built-in sche_mes:"
-msgstr "Yapısal ş_emalar:"
-
-#: ../src/profile-preferences.ui.h:87
+#: ../src/preferences.ui.h:89
 msgid "Text"
 msgstr "Metin"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/preferences.ui.h:90
+msgid "Text and Background Color"
+msgstr "Metin ve Arka Plan Rengi"
+
+#: ../src/preferences.ui.h:91
+msgid "_Use colors from system theme"
+msgstr "_Sistem temasının renklerini kullan"
+
+#: ../src/preferences.ui.h:92
+msgid "Built-in sche_mes:"
+msgstr "Yapısal ş_emalar:"
+
+#: ../src/preferences.ui.h:93
 msgid "Background"
 msgstr "Arka plan"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/preferences.ui.h:94
 msgid "_Default color:"
 msgstr "_Öntanımlı renk:"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/preferences.ui.h:95
 msgid "Choose Terminal Text Color"
 msgstr "Uçbirim Metin Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/preferences.ui.h:96
 msgid "Choose Terminal Background Color"
 msgstr "Uçbirim Arka Plan Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/preferences.ui.h:97
 msgid "Bo_ld color:"
 msgstr "Ka_lın renk:"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/preferences.ui.h:98
 msgid "Choose Terminal Bold Text Color"
 msgstr "Uçbirim Kalın Metin Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/preferences.ui.h:99
 msgid "_Underline color:"
 msgstr "_Alt çizgi rengi:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/preferences.ui.h:100
 msgid "Choose Terminal Underlined Text Color"
 msgstr "Uçbirim Altı Çizili Metin Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/preferences.ui.h:101
 msgid "Cu_rsor color:"
 msgstr "_İmleç rengi:"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/preferences.ui.h:102
 msgid "Choose Terminal Cursor Foreground Color"
 msgstr "Uçbirim İmleç Ön Plan Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:98
+#: ../src/preferences.ui.h:103
 msgid "Choose Terminal Cursor Background Color"
 msgstr "Uçbirim İmleç Arka Plan Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:99
+#: ../src/preferences.ui.h:104
 msgid "_Highlight color:"
 msgstr "_Vurgu rengi:"
 
-#: ../src/profile-preferences.ui.h:100
-#| msgid "Choose Terminal Cursor Foreground Color"
+#: ../src/preferences.ui.h:105
 msgid "Choose Terminal Highlight Foreground Color"
 msgstr "Uçbirim Vurgu Ön Plan Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:101
-#| msgid "Choose Terminal Background Color"
+#: ../src/preferences.ui.h:106
 msgid "Choose Terminal Highlight Background Color"
 msgstr "Uçbirim Vurgu Arka Plan Rengini Seçin"
 
-#: ../src/profile-preferences.ui.h:102
+#: ../src/preferences.ui.h:107
 msgid "Palette"
 msgstr "Palet"
 
-#: ../src/profile-preferences.ui.h:103
+#: ../src/preferences.ui.h:108
 msgid "Built-in _schemes:"
 msgstr "_Yapısal şemalar:"
 
-#: ../src/profile-preferences.ui.h:104
+#: ../src/preferences.ui.h:109
 msgid "Color p_alette:"
 msgstr "Renk _paleti:"
 
-#: ../src/profile-preferences.ui.h:105
+#: ../src/preferences.ui.h:110
 msgid "Show _bold text in bright colors"
 msgstr "_Kalın metni parlak renklerde göster"
 
-#: ../src/profile-preferences.ui.h:106
+#: ../src/preferences.ui.h:111
 msgid "Colors"
 msgstr "Renkler"
 
-#: ../src/profile-preferences.ui.h:107
+#: ../src/preferences.ui.h:112
 msgid "_Show scrollbar"
 msgstr "Kaydırma çubuğunu gö_ster"
 
-#: ../src/profile-preferences.ui.h:108
+#: ../src/preferences.ui.h:113
 msgid "Scroll on _output"
 msgstr "Çı_ktı olduğunda kaydır"
 
-#: ../src/profile-preferences.ui.h:109
+#: ../src/preferences.ui.h:114
 msgid "Scroll on _keystroke"
 msgstr "Tuş darbesi ile _kaydır"
 
-#: ../src/profile-preferences.ui.h:110
+#: ../src/preferences.ui.h:115
 msgid "_Limit scrollback to:"
 msgstr "Geriye kaydırmayı şu sayıyla sınır_la:"
 
-#: ../src/profile-preferences.ui.h:111
+#: ../src/preferences.ui.h:116
 msgid "lines"
 msgstr "satır"
 
-#: ../src/profile-preferences.ui.h:112
+#: ../src/preferences.ui.h:117
 msgid "Scrolling"
 msgstr "Kaydırma"
 
-#: ../src/profile-preferences.ui.h:113
+#: ../src/preferences.ui.h:118
+msgid "_Run command as a login shell"
+msgstr "_Giriş kabuğu yerine komut çalıştır"
+
+#: ../src/preferences.ui.h:119
+msgid "Ru_n a custom command instead of my shell"
+msgstr "_Kabuk yerine özel bir komut çalıştır"
+
+#: ../src/preferences.ui.h:120
+msgid "Custom co_mmand:"
+msgstr "Özel _komut:"
+
+#: ../src/preferences.ui.h:121
+msgid "When command _exits:"
+msgstr "_Komut sona erdiğinde:"
+
+#: ../src/preferences.ui.h:122
+msgid "Command"
+msgstr "Komut"
+
+#: ../src/preferences.ui.h:123
 msgid "_Backspace key generates:"
 msgstr "_Geri Silme tuşunun oluşturacağı:"
 
-#: ../src/profile-preferences.ui.h:114
+#: ../src/preferences.ui.h:124
 msgid "_Delete key generates:"
 msgstr "_Silme tuşunun oluşturacağı:"
 
-#: ../src/profile-preferences.ui.h:115
+#: ../src/preferences.ui.h:125
 msgid "_Encoding:"
 msgstr "_Kodlama:"
 
-#: ../src/profile-preferences.ui.h:116
+#: ../src/preferences.ui.h:126
 msgid "Ambiguous-_width characters:"
 msgstr "Belirsiz-_genişlikli karakterler:"
 
-#: ../src/profile-preferences.ui.h:117
+#: ../src/preferences.ui.h:127
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Uyumluluk Tercihlerini Öntanımlı Değerlere Getir"
 
-#: ../src/profile-preferences.ui.h:118
+#: ../src/preferences.ui.h:128
 msgid "Compatibility"
 msgstr "Uyumluluk"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:152
-#: ../src/terminal-accels.c:229
+#: ../src/preferences.ui.h:129
+msgid "Clone…"
+msgstr "Klonla…"
+
+#: ../src/preferences.ui.h:130
+msgid "Rename…"
+msgstr "Yeniden adlandır…"
+
+#: ../src/preferences.ui.h:131
+msgid "Delete…"
+msgstr "Sil…"
+
+#: ../src/preferences.ui.h:132
+msgid "Set as default"
+msgstr "Öntanımlı olarak ayarla"
+
+#: ../src/preferences.ui.h:133
+msgid "Cancel"
+msgstr "İptal"
+
+#: ../src/profile-editor.c:158
+msgid "Black on light yellow"
+msgstr "Açık sarı üzerine siyah"
+
+#: ../src/profile-editor.c:162
+msgid "Black on white"
+msgstr "Beyaz üzerine siyah"
+
+#: ../src/profile-editor.c:166
+msgid "Gray on black"
+msgstr "Siyah üzerine gri"
+
+#: ../src/profile-editor.c:170
+msgid "Green on black"
+msgstr "Siyah üzerine yeşil"
+
+#: ../src/profile-editor.c:174
+msgid "White on black"
+msgstr "Siyah üzerine beyaz"
+
+#. Translators: "Tango" is the name of a colour scheme, "light" can be translated
+#: ../src/profile-editor.c:179
+msgid "Tango light"
+msgstr "Tango aydınlık"
+
+#. Translators: "Tango" is the name of a colour scheme, "dark" can be translated
+#: ../src/profile-editor.c:184
+msgid "Tango dark"
+msgstr "Tango karanlık"
+
+#. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
+#: ../src/profile-editor.c:189
+msgid "Solarized light"
+msgstr "Solarized açık"
+
+#. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
+#: ../src/profile-editor.c:194
+msgid "Solarized dark"
+msgstr "Solarized koyu"
+
+#: ../src/profile-editor.c:549
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Komut ayrıştırılırken hata: %s"
+
+#. Translators: Appears as: [numeric entry] × width
+#: ../src/profile-editor.c:899
+msgid "width"
+msgstr "genişlik"
+
+#. Translators: Appears as: [numeric entry] × height
+#: ../src/profile-editor.c:904
+msgid "height"
+msgstr "yükseklik"
+
+#: ../src/profile-editor.c:956
+#, c-format
+msgid "Choose Palette Color %u"
+msgstr "Palet Rengini Seç %u"
+
+#: ../src/profile-editor.c:960
+#, c-format
+msgid "Palette entry %u"
+msgstr "Palet girdisi %u"
+
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
 msgid "Find"
 msgstr "Bul"
 
@@ -1236,188 +1204,189 @@ msgstr "Düzenli ifade olarak eşleşti_r"
 msgid "_Wrap around"
 msgstr "_Böl"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:124
 msgid "New Tab"
 msgstr "Yeni Sekme"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:125
 msgid "New Window"
 msgstr "Yeni Pencere"
 
-#: ../src/terminal-accels.c:128
-msgid "New Profile"
-msgstr "Yeni Profil"
-
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:127
 msgid "Save Contents"
 msgstr "İçeriği Kaydet"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:130
 msgid "Export"
 msgstr "Dışa Aktar"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:133
 msgid "Print"
 msgstr "Yazdır"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:135
 msgid "Close Tab"
 msgstr "Sekmeyi Kapat"
 
-#: ../src/terminal-accels.c:139
+#: ../src/terminal-accels.c:136
 msgid "Close Window"
 msgstr "Pencereyi Kapat"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:140
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ../src/terminal-accels.c:144
+#: ../src/terminal-accels.c:141
 msgid "Copy as HTML"
-msgstr "HTML olarak kopyala"
+msgstr "HTML Olarak Kopyala"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:142
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:143
 msgid "Select All"
 msgstr "Tümünü Seç"
 
-#: ../src/terminal-accels.c:148
-msgid "Profile Preferences"
-msgstr "Profil Tercihleri"
+#: ../src/terminal-accels.c:144
+msgid "Preferences"
+msgstr "Tercihler"
 
-#: ../src/terminal-accels.c:153
+#: ../src/terminal-accels.c:149
 msgid "Find Next"
 msgstr "Sonrakini Bul"
 
-#: ../src/terminal-accels.c:154
+#: ../src/terminal-accels.c:150
 msgid "Find Previous"
 msgstr "Öncekini Bul"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:151
 msgid "Clear Highlight"
 msgstr "Vurgulamayı Kaldır"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:155
 msgid "Hide and Show Menubar"
 msgstr "Menü Çubuğunu Gizle ve Göster"
 
-#: ../src/terminal-accels.c:160
+#: ../src/terminal-accels.c:156
 msgid "Full Screen"
 msgstr "Tam Ekran"
 
-#: ../src/terminal-accels.c:161
+#: ../src/terminal-accels.c:157
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: ../src/terminal-accels.c:162
+#: ../src/terminal-accels.c:158
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:159
 msgid "Normal Size"
 msgstr "Olağan Boyut"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:163
 msgid "Read-Only"
 msgstr "Salt Okunur"
 
-#: ../src/terminal-accels.c:168
+#: ../src/terminal-accels.c:164
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:165
 msgid "Reset and Clear"
 msgstr "Sıfırla ve Temizle"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:169
 msgid "Switch to Previous Tab"
 msgstr "Önceki Sekmeye Geç"
 
-#: ../src/terminal-accels.c:174
+#: ../src/terminal-accels.c:170
 msgid "Switch to Next Tab"
 msgstr "Sonraki Sekmeye Geç"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:171
 msgid "Move Tab to the Left"
 msgstr "Sekmeyi Sola Taşı"
 
-#: ../src/terminal-accels.c:176
+#: ../src/terminal-accels.c:172
 msgid "Move Tab to the Right"
 msgstr "Sekmeyi Sağa Taşı"
 
-#: ../src/terminal-accels.c:177
+#: ../src/terminal-accels.c:173
 msgid "Detach Tab"
 msgstr "Sekmeyi Ayır"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:209
 msgid "Switch to Last Tab"
 msgstr "Son Sekmeye Geç"
 
-#: ../src/terminal-accels.c:217
+#: ../src/terminal-accels.c:213
 msgid "Contents"
 msgstr "İçerik"
 
-#: ../src/terminal-accels.c:226
+#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Dosya"
 
-#: ../src/terminal-accels.c:227
+#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Düzenle"
 
-#: ../src/terminal-accels.c:228
+#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Görünüm"
 
-#: ../src/terminal-accels.c:231
+#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+msgid "Search"
+msgstr "Ara"
+
+#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: ../src/terminal-accels.c:232
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Yardım"
 
-#: ../src/terminal-accels.c:331
+#: ../src/terminal-accels.c:327
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "%u. Sekmeye Geç"
 
-#: ../src/terminal-accels.c:539
+#: ../src/terminal-accels.c:535
 msgid "_Action"
 msgstr "_Eylem"
 
-#: ../src/terminal-accels.c:558
+#: ../src/terminal-accels.c:554
 msgid "Shortcut _Key"
 msgstr "Kısayol _Tuşu"
 
-#: ../src/terminal-app.c:498 ../src/terminal-window.c:1850
+#: ../src/terminal-app.c:491 ../src/terminal-window.c:1840
 msgid "New _Terminal"
 msgstr "Yeni _Uçbirim"
 
-#: ../src/terminal-app.c:500 ../src/terminal-window.c:1859
+#: ../src/terminal-app.c:493 ../src/terminal-window.c:1849
 msgid "New _Tab"
 msgstr "Yeni _Sekme"
 
-#: ../src/terminal-app.c:501 ../src/terminal-window.c:1855
+#: ../src/terminal-app.c:494 ../src/terminal-window.c:1845
 msgid "New _Window"
 msgstr "Yeni Pe_ncere"
 
-#: ../src/terminal-app.c:550
+#: ../src/terminal-app.c:543
 msgid "Change _Profile"
 msgstr "_Profil Değiştir"
 
-#: ../src/terminal-appmenu.ui.h:1
+#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1386
+#: ../src/terminal-window.c:1833
 msgid "_Preferences"
 msgstr "_Tercihler"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.h:43
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
 msgid "_Help"
 msgstr "_Yardım"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.h:45
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
 msgid "_About"
 msgstr "_Hakkında"
 
@@ -1425,7 +1394,7 @@ msgstr "_Hakkında"
 msgid "_Quit"
 msgstr "_Çıkış"
 
-#: ../src/terminal.c:538
+#: ../src/terminal.c:545
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Bağımsız değişkenler ayrıştırılamadı: %s\n"
@@ -1579,182 +1548,171 @@ msgstr "Eski CJK Kodlamaları"
 msgid "Obsolete Encodings"
 msgstr "Artık Kullanılmayan Kodlamalar"
 
-#: ../src/terminal-menubar.ui.h:1
+#: ../src/terminal-menubar.ui.in.h:1
 msgid "_File"
 msgstr "_Dosya"
 
-#: ../src/terminal-menubar.ui.h:2
-#| msgid "New Profile"
-msgid "New _Profile"
-msgstr "Yeni _Profil"
-
-#: ../src/terminal-menubar.ui.h:3
+#: ../src/terminal-menubar.ui.in.h:3
 msgid "_Save Contents…"
 msgstr "İçeriği _Kaydet…"
 
-#: ../src/terminal-menubar.ui.h:4
+#: ../src/terminal-menubar.ui.in.h:4
 msgid "_Export…"
 msgstr "Dışa Ak_tar…"
 
-#: ../src/terminal-menubar.ui.h:5
+#: ../src/terminal-menubar.ui.in.h:5
 msgid "_Print…"
 msgstr "_Yazdır…"
 
-#: ../src/terminal-menubar.ui.h:6
+#: ../src/terminal-menubar.ui.in.h:6
 msgid "C_lose Tab"
 msgstr "Sek_meyi Kapat"
 
-#: ../src/terminal-menubar.ui.h:7
+#: ../src/terminal-menubar.ui.in.h:7
 msgid "_Close Window"
 msgstr "Pence_reyi Kapat"
 
-#: ../src/terminal-menubar.ui.h:8
+#: ../src/terminal-menubar.ui.in.h:8
 msgid "_Edit"
 msgstr "Dü_zenle"
 
-#: ../src/terminal-menubar.ui.h:9 ../src/terminal-window.c:1814
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1811
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: ../src/terminal-menubar.ui.h:10 ../src/terminal-window.c:1815
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1812
 msgid "Copy as _HTML"
 msgstr "_HTML olarak kopyala"
 
-#: ../src/terminal-menubar.ui.h:11 ../src/terminal-window.c:1816
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1813
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: ../src/terminal-menubar.ui.h:12 ../src/terminal-window.c:1818
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1815
 msgid "Paste as _Filenames"
 msgstr "_Dosya Adları olarak Yapıştır"
 
-#: ../src/terminal-menubar.ui.h:13
+#: ../src/terminal-menubar.ui.in.h:14
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: ../src/terminal-menubar.ui.h:14
-#| msgid "Preferences"
+#: ../src/terminal-menubar.ui.in.h:15
 msgid "P_references"
 msgstr "Te_rcihler"
 
-#: ../src/terminal-menubar.ui.h:15
-#| msgid "Profile Preferences"
-msgid "Pr_ofile Preferences"
-msgstr "Pr_ofil Tercihleri"
-
-#: ../src/terminal-menubar.ui.h:16
+#: ../src/terminal-menubar.ui.in.h:16
 msgid "_View"
 msgstr "_Görünüm"
 
-#: ../src/terminal-menubar.ui.h:17 ../src/terminal-window.c:1871
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1861
 msgid "Show _Menubar"
 msgstr "_Menü Çubuğunu Göster"
 
-#: ../src/terminal-menubar.ui.h:18
+#: ../src/terminal-menubar.ui.in.h:19
 msgid "_Full Screen"
 msgstr "_Tam Ekran"
 
-#: ../src/terminal-menubar.ui.h:19
+#: ../src/terminal-menubar.ui.in.h:20
 msgid "Zoom _In"
 msgstr "_Yakınlaştır"
 
-#: ../src/terminal-menubar.ui.h:20
+#: ../src/terminal-menubar.ui.in.h:21
 msgid "_Normal Size"
 msgstr "_Olağan Boyut"
 
-#: ../src/terminal-menubar.ui.h:21
+#: ../src/terminal-menubar.ui.in.h:22
 msgid "Zoom _Out"
 msgstr "_Uzaklaştır"
 
-#: ../src/terminal-menubar.ui.h:22
-msgid "_Find"
-msgstr "_Bul"
+#: ../src/terminal-menubar.ui.in.h:23
+msgid "_Search"
+msgstr "_Ara"
 
-#: ../src/terminal-menubar.ui.h:23
+#: ../src/terminal-menubar.ui.in.h:25
 msgid "_Find…"
 msgstr "_Bul…"
 
-#: ../src/terminal-menubar.ui.h:24
+#: ../src/terminal-menubar.ui.in.h:26
 msgid "Find _Next"
 msgstr "_Sonrakini Bul"
 
-#: ../src/terminal-menubar.ui.h:25
+#: ../src/terminal-menubar.ui.in.h:27
 msgid "Find _Previous"
 msgstr "_Öncekini Bul"
 
-#: ../src/terminal-menubar.ui.h:26
+#: ../src/terminal-menubar.ui.in.h:28
 msgid "_Clear Highlight"
 msgstr "Vurgulamayı _Kaldır"
 
-#: ../src/terminal-menubar.ui.h:27
+#: ../src/terminal-menubar.ui.in.h:29
 msgid "_Terminal"
 msgstr "_Uçbirim"
 
-#: ../src/terminal-menubar.ui.h:28
+#: ../src/terminal-menubar.ui.in.h:31
 msgid "Set _Title…"
 msgstr "Ba_şlığı Ayarla…"
 
-#: ../src/terminal-menubar.ui.h:29
+#: ../src/terminal-menubar.ui.in.h:32
 msgid "Set _Character Encoding"
 msgstr "_Karakter Kodlamasını Ayarla"
 
-#: ../src/terminal-menubar.ui.h:30 ../src/terminal-window.c:1824
+#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1821
 msgid "Read-_Only"
 msgstr "Salt-_Okunur"
 
-#: ../src/terminal-menubar.ui.h:31
+#: ../src/terminal-menubar.ui.in.h:34
 msgid "_Reset"
 msgstr "_Sıfırla"
 
-#: ../src/terminal-menubar.ui.h:32
+#: ../src/terminal-menubar.ui.in.h:35
 msgid "Reset and C_lear"
 msgstr "Sıfırla ve _Temizle"
 
-#: ../src/terminal-menubar.ui.h:33
+#: ../src/terminal-menubar.ui.in.h:36
 msgid "_1. 80×24"
 msgstr "_1. 80×24"
 
-#: ../src/terminal-menubar.ui.h:34
+#: ../src/terminal-menubar.ui.in.h:37
 msgid "_2. 80×43"
 msgstr "_2. 80×43"
 
-#: ../src/terminal-menubar.ui.h:35
+#: ../src/terminal-menubar.ui.in.h:38
 msgid "_3. 132×24"
 msgstr "_3. 132×24"
 
-#: ../src/terminal-menubar.ui.h:36
+#: ../src/terminal-menubar.ui.in.h:39
 msgid "_4. 132×43"
 msgstr "_4. 132×43"
 
-#: ../src/terminal-menubar.ui.h:37
+#: ../src/terminal-menubar.ui.in.h:40
 msgid "Ta_bs"
 msgstr "_Sekmeler"
 
-#: ../src/terminal-menubar.ui.h:38
+#: ../src/terminal-menubar.ui.in.h:42
 msgid "_Previous Tab"
 msgstr "_Önceki Sekme"
 
-#: ../src/terminal-menubar.ui.h:39
+#: ../src/terminal-menubar.ui.in.h:43
 msgid "_Next Tab"
 msgstr "So_nraki Sekme"
 
-#: ../src/terminal-menubar.ui.h:40
+#: ../src/terminal-menubar.ui.in.h:44
 msgid "Move Tab _Left"
 msgstr "Sekmeyi _Sola Taşı"
 
-#: ../src/terminal-menubar.ui.h:41
+#: ../src/terminal-menubar.ui.in.h:45
 msgid "Move Tab _Right"
 msgstr "Sekmeyi Sa_ğa Taşı"
 
-#: ../src/terminal-menubar.ui.h:42
+#: ../src/terminal-menubar.ui.in.h:46
 msgid "_Detach Tab"
 msgstr "Sekmeyi _Ayır"
 
-#: ../src/terminal-menubar.ui.h:44
+#: ../src/terminal-menubar.ui.in.h:49
 msgid "_Contents"
 msgstr "İç_erik"
 
-#: ../src/terminal-menubar.ui.h:46
+#: ../src/terminal-menubar.ui.in.h:51
 msgid "_Inspector"
 msgstr "_İnceleyici"
 
@@ -1826,11 +1784,11 @@ msgstr "Uçbirimi Sa_ğa Taşı"
 msgid "_Detach Terminal"
 msgstr "Uçbirimi _Ayır"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3360
+#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3354
 msgid "C_lose Terminal"
 msgstr "_Uçbirimi Kapat"
 
-#: ../src/terminal-options.c:274
+#: ../src/terminal-options.c:284
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1840,7 +1798,7 @@ msgstr ""
 "kaldırılmış olabilir."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:285
+#: ../src/terminal-options.c:295
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1849,50 +1807,46 @@ msgstr ""
 "Seçenekleri sonlandırmak için “%s”i kullan ve çalıştırmak için komut "
 "satırını ondan sonra koy."
 
-#: ../src/terminal-options.c:295 ../src/terminal-options.c:308
+#: ../src/terminal-options.c:305 ../src/terminal-options.c:318
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "“%s” seçeneği gnome-terminal’in bu sürümünde artık desteklenmiyor."
 
-#: ../src/terminal-options.c:380
+#: ../src/terminal-options.c:390
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "“%s” için olan parametre geçerli bir komut değil: %s"
 
-#: ../src/terminal-options.c:553
+#: ../src/terminal-options.c:563
 msgid "Two roles given for one window"
 msgstr "Bir pencere için iki rol verildi"
 
-#: ../src/terminal-options.c:574 ../src/terminal-options.c:607
+#: ../src/terminal-options.c:584 ../src/terminal-options.c:617
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "“%s” seçeneği aynı pencere için iki kere verilmiş\n"
 
-#: ../src/terminal-options.c:771
-msgid "Can only use --wait once"
-msgstr "--wait yalnızca bir kez kullanılabilir"
-
-#: ../src/terminal-options.c:825
+#: ../src/terminal-options.c:836
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "FD %d iki kere geçilemez"
 
-#: ../src/terminal-options.c:887
+#: ../src/terminal-options.c:898
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "“%s” geçerli bir yakınlaştırma çarpanı değil"
 
-#: ../src/terminal-options.c:894
+#: ../src/terminal-options.c:905
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "“%g” yaklaştırma çarpanı çok küçük, %g kullanılıyor\n"
 
-#: ../src/terminal-options.c:902
+#: ../src/terminal-options.c:913
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "“%g” yaklaştırma çarpanı çok büyük, %g kullanılıyor\n"
 
-#: ../src/terminal-options.c:940
+#: ../src/terminal-options.c:951
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1901,154 +1855,158 @@ msgstr ""
 "“%s” seçeneği için komut satırının geri kalanında çalıştırılacak komutu "
 "belirtmeniz gerekiyor"
 
-#: ../src/terminal-options.c:1108
+#: ../src/terminal-options.c:1100
+msgid "Can only use --wait once"
+msgstr "--wait yalnızca bir kez kullanılabilir"
+
+#: ../src/terminal-options.c:1135
 msgid "Not a valid terminal config file."
 msgstr "Geçerli bir uçbirim yapılandırma dosyasını."
 
-#: ../src/terminal-options.c:1121
+#: ../src/terminal-options.c:1148
 msgid "Incompatible terminal config file version."
 msgstr "Uçbirim yapılandırma dosyası sürümü uyumsuz."
 
-#: ../src/terminal-options.c:1277
+#: ../src/terminal-options.c:1304
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Aktivasyon ad sunucusuna kaydolma, aktif bir uçbirimi bir daha kullanma"
 
-#: ../src/terminal-options.c:1286
+#: ../src/terminal-options.c:1313
 msgid "Load a terminal configuration file"
 msgstr "Bir uçbirim yapılandırma dosyası yükle"
 
-#: ../src/terminal-options.c:1287
+#: ../src/terminal-options.c:1314
 msgid "FILE"
 msgstr "DOSYA"
 
-#: ../src/terminal-options.c:1303
+#: ../src/terminal-options.c:1330
 msgid "Show preferences window"
 msgstr "Seçenekler penceresini göster"
 
-#: ../src/terminal-options.c:1312
+#: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
 msgstr "Uçbirimle etkileşmek için çevre değişkenlerini yazdır"
 
-#: ../src/terminal-options.c:1330
+#: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
 msgstr "Tanılama ayrıntı düzeyini arttır"
 
-#: ../src/terminal-options.c:1339
+#: ../src/terminal-options.c:1366
 msgid "Suppress output"
 msgstr "Çıktıyı gösterme"
 
-#: ../src/terminal-options.c:1352
+#: ../src/terminal-options.c:1379
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Öntanımlı profille bir sekme içeren yeni uçbirim penceresi aç."
 
-#: ../src/terminal-options.c:1361
+#: ../src/terminal-options.c:1388
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Öntanımlı profille en son açılan uçbirim penceresinde bir sekme aç."
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1401
 msgid "Turn on the menubar"
 msgstr "Menü çubuğunu aç"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1410
 msgid "Turn off the menubar"
 msgstr "Menü çubuğunu kapat"
 
-#: ../src/terminal-options.c:1392
+#: ../src/terminal-options.c:1419
 msgid "Maximize the window"
 msgstr "Pencereyi büyüt"
 
-#: ../src/terminal-options.c:1401
+#: ../src/terminal-options.c:1428
 msgid "Full-screen the window"
 msgstr "Tam ekran pencere"
 
-#: ../src/terminal-options.c:1410
+#: ../src/terminal-options.c:1437
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Pencere boyutunu ayarlayın; örneğin: 80x24 ya da 80x24+200+200 (SÜTUNxSATIR+X"
 "+Y)"
 
-#: ../src/terminal-options.c:1411
+#: ../src/terminal-options.c:1438
 msgid "GEOMETRY"
 msgstr "GEOMETRİ"
 
-#: ../src/terminal-options.c:1419
+#: ../src/terminal-options.c:1446
 msgid "Set the window role"
 msgstr "Pencere rolünü ata"
 
-#: ../src/terminal-options.c:1420
+#: ../src/terminal-options.c:1447
 msgid "ROLE"
 msgstr "ROL"
 
-#: ../src/terminal-options.c:1428
+#: ../src/terminal-options.c:1455
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Kendi penceresinde aktif olan sekmeyi ayarlayın"
 
-#: ../src/terminal-options.c:1441
+#: ../src/terminal-options.c:1468
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Bu seçenek için parametreleri uçbirim içerisinde çalıştır."
 
-#: ../src/terminal-options.c:1450
+#: ../src/terminal-options.c:1477
 msgid "Use the given profile instead of the default profile"
 msgstr "Öntanımlı profil yerine verilen profil kullan"
 
-#: ../src/terminal-options.c:1451
+#: ../src/terminal-options.c:1478
 msgid "PROFILE-NAME"
 msgstr "PROFİL-ADI"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1486
 msgid "Set the initial terminal title"
 msgstr "İlk uçbirim başlığını ayarla"
 
-#: ../src/terminal-options.c:1460
+#: ../src/terminal-options.c:1487
 msgid "TITLE"
 msgstr "BAŞLIK"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1495
 msgid "Set the working directory"
 msgstr "Çalışma dizinini ayarla"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1496
 msgid "DIRNAME"
 msgstr "DİZİNADI"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1504
 msgid "Wait until the child exits"
 msgstr "Çocuk çıkış yapana kadar bekleyin"
 
-#: ../src/terminal-options.c:1486
+#: ../src/terminal-options.c:1513
 msgid "Forward file descriptor"
 msgstr "Dosya tanımlayıcısı ilet"
 
 #. FD = file descriptor
-#: ../src/terminal-options.c:1488
+#: ../src/terminal-options.c:1515
 msgid "FD"
 msgstr "FD"
 
-#: ../src/terminal-options.c:1496
+#: ../src/terminal-options.c:1523
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Uçbirim’in yakınlaştırma çarpanını ayarla (1.0 = olağan boyut)"
 
-#: ../src/terminal-options.c:1497
+#: ../src/terminal-options.c:1524
 msgid "ZOOM"
 msgstr "YAKINLAŞTIRMA"
 
-#: ../src/terminal-options.c:1584
+#: ../src/terminal-options.c:1611
 msgid "COMMAND"
 msgstr "KOMUT"
 
-#: ../src/terminal-options.c:1592
+#: ../src/terminal-options.c:1619
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Uçbirimi Emülatörü"
 
-#: ../src/terminal-options.c:1593
+#: ../src/terminal-options.c:1620
 msgid "Show GNOME Terminal options"
 msgstr "GNOME Uçbirimi seçeneklerini göster"
 
-#: ../src/terminal-options.c:1603
+#: ../src/terminal-options.c:1630
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2056,11 +2014,11 @@ msgstr ""
 "Yeni pencereler veya uçbirim sekmeleri açmak için seçenekler; birden fazla "
 "belirtilen olabilir:"
 
-#: ../src/terminal-options.c:1604
+#: ../src/terminal-options.c:1631
 msgid "Show terminal options"
 msgstr "Uçbirimi seçeneklerini göster"
 
-#: ../src/terminal-options.c:1612
+#: ../src/terminal-options.c:1639
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2068,11 +2026,11 @@ msgstr ""
 "Pencere seçenekleri; eğer ilk önce --window veya --tab argümanı "
 "kullanıldıysa, tüm pencereleri için öntanımlı ayarlar:"
 
-#: ../src/terminal-options.c:1613
+#: ../src/terminal-options.c:1640
 msgid "Show per-window options"
 msgstr "Pencere başına seçenekleri göster"
 
-#: ../src/terminal-options.c:1621
+#: ../src/terminal-options.c:1648
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2080,66 +2038,119 @@ msgstr ""
 "Uçbirim seçenekleri; eğer ilk önce --window veya --tab argümanı "
 "kullanıldıysa, tüm uçbirimler için öntanımlı ayarlar:"
 
-#: ../src/terminal-options.c:1622
+#: ../src/terminal-options.c:1649
 msgid "Show per-terminal options"
 msgstr "Uçbirim başına seçenekleri göster"
 
-#: ../src/terminal-prefs.c:209
-msgid "Click button to choose profile"
-msgstr "Profil seçmek için düğmeye tıklayın"
-
-#: ../src/terminal-prefs.c:310
-msgid "Profile list"
-msgstr "Profil listesi"
-
-#: ../src/terminal-prefs.c:365
+#: ../src/terminal-prefs.c:131
 #, c-format
-msgid "Delete profile “%s”?"
-msgstr "“%s“ profili silinsin mi?"
+msgid "Profile “%s”"
+msgstr "“%s” Profili"
 
-#: ../src/terminal-prefs.c:369 ../src/terminal-window.c:495
-msgid "_Cancel"
-msgstr "_İptal"
+#: ../src/terminal-prefs.c:134
+#, c-format
+msgid "Preferences – %s"
+msgstr "Tercihler – %s"
 
-#: ../src/terminal-prefs.c:371
-msgid "_Delete"
-msgstr "_Sil"
+#: ../src/terminal-prefs.c:377
+msgid "New Profile"
+msgstr "Yeni Profil"
 
-#: ../src/terminal-prefs.c:381
+#: ../src/terminal-prefs.c:378
+msgid "Enter name for new profile with default settings:"
+msgstr "Öntanımlı ayarlardaki yeni profil için ad giriniz:"
+
+#: ../src/terminal-prefs.c:380
+msgid "Create"
+msgstr "Oluştur"
+
+#: ../src/terminal-prefs.c:392
+#, c-format
+msgid "Enter name for new profile based on “%s”:"
+msgstr "“%s” tabanlı yeni profil için ad giriniz:"
+
+#: ../src/terminal-prefs.c:393
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (Kopya)"
+
+#: ../src/terminal-prefs.c:396
+msgid "Clone Profile"
+msgstr "Profili Kopyala"
+
+#: ../src/terminal-prefs.c:399
+msgid "Clone"
+msgstr "Klonla"
+
+#: ../src/terminal-prefs.c:414
+#, c-format
+msgid "Enter new name for profile “%s”:"
+msgstr "“%s“ profili için yeni ad giriniz:"
+
+#: ../src/terminal-prefs.c:417
+msgid "Rename Profile"
+msgstr "Profili yeniden adlandır"
+
+#: ../src/terminal-prefs.c:420
+msgid "Rename"
+msgstr "Yeniden adlandır"
+
+#: ../src/terminal-prefs.c:435
+#, c-format
+msgid "Really delete profile “%s”?"
+msgstr "“%s“ profili gerçekten silinsin mi?"
+
+#: ../src/terminal-prefs.c:438
 msgid "Delete Profile"
 msgstr "Profil Sil"
 
+#: ../src/terminal-prefs.c:441
+msgid "Delete"
+msgstr "Sil"
+
+#: ../src/terminal-prefs.c:518
+msgid "This is the default profile"
+msgstr "Bu öntanımlı profildir"
+
+#: ../src/terminal-prefs.c:542
+msgid "General"
+msgstr "Genel"
+
+#: ../src/terminal-prefs.c:547
+msgid "Shortcuts"
+msgstr "Kısayollar"
+
+#: ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Genel"
+
+#: ../src/terminal-prefs.c:683
+msgid "Profiles"
+msgstr "Profiller"
+
 #: ../src/terminal-screen.c:1172
 msgid "No command supplied nor shell requested"
-msgstr "Ne bir komut sağlandı ne de kabuk talep edildi"
+msgstr "Ne bir komut sağlandı ne de kabuk istendi"
 
-#. If there's only a single profile, put the Profile Preferences item in the
-#. * context menu itself.
-#.
-#: ../src/terminal-screen.c:1392 ../src/terminal-window.c:1832
-#: ../src/terminal-window.c:1842
-msgid "_Profile Preferences"
-msgstr "_Profil Tercihleri"
-
-#: ../src/terminal-screen.c:1393 ../src/terminal-screen.c:1723
+#: ../src/terminal-screen.c:1387 ../src/terminal-screen.c:1717
 msgid "_Relaunch"
 msgstr "_Yeniden başlat"
 
-#: ../src/terminal-screen.c:1396
+#: ../src/terminal-screen.c:1390
 msgid "There was an error creating the child process for this terminal"
 msgstr "Bu uçbirim için oğul işlem yaratırken bir hata oluştu"
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1721
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Çocuk süreç %d durum kodu ile olağan biçimde çıkış yaptı."
 
-#: ../src/terminal-screen.c:1730
+#: ../src/terminal-screen.c:1724
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Çocuk süreç %d sinyaliyle iptal edildi."
 
-#: ../src/terminal-screen.c:1733
+#: ../src/terminal-screen.c:1727
 msgid "The child process was aborted."
 msgstr "Çocuk süreç iptal edildi."
 
@@ -2151,35 +2162,35 @@ msgstr "Sekmeyi kapat"
 msgid "There was an error displaying help"
 msgstr "Yardım gösterilirken hata oluştu"
 
-#: ../src/terminal-util.c:206
+#: ../src/terminal-util.c:207
 msgid "Contributors:"
 msgstr "Katkıda Bulunanlar:"
 
-#: ../src/terminal-util.c:222
+#: ../src/terminal-util.c:223
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "VTE sürüm %u.%u.%u kullanılıyor"
 
-#: ../src/terminal-util.c:228
+#: ../src/terminal-util.c:229
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME masaüstü için bir uçbirim emülatörü"
 
-#: ../src/terminal-util.c:235
+#: ../src/terminal-util.c:236
 msgid "GNOME Terminal"
 msgstr "GNOME Uçbirimi"
 
-#: ../src/terminal-util.c:245
+#: ../src/terminal-util.c:246
 msgid "translator-credits"
 msgstr ""
 "Barış Çiçek <baris@teamforce.name.tr>\n"
 "Muhammet Kara <muhammetk@gmail.com>"
 
-#: ../src/terminal-util.c:320
+#: ../src/terminal-util.c:321
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "“%s“ adresi açılamadı"
 
-#: ../src/terminal-util.c:389
+#: ../src/terminal-util.c:390
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2191,7 +2202,7 @@ msgstr ""
 "sonraki sürümlerinin koşulları altında dağıtabilir ve/veya "
 "değiştirebilirsiniz."
 
-#: ../src/terminal-util.c:393
+#: ../src/terminal-util.c:394
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2202,7 +2213,7 @@ msgstr ""
 "GARANTİSİ YOKTUR; hatta SATILABİLİRLİK ya da BİR AMACA HİZMET gibi garantisi "
 "de yoktur. Daha fazla ayrıntı için GNU Genel Kamu Lisansı’na bakın."
 
-#: ../src/terminal-util.c:397
+#: ../src/terminal-util.c:398
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2214,67 +2225,71 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Uzak anamakine adıyla “file” şeması desteklenmiyor"
 
-#: ../src/terminal-window.c:472
+#: ../src/terminal-window.c:460
 msgid "Could not save contents"
 msgstr "İçerik kaydedilemedi"
 
-#: ../src/terminal-window.c:492
+#: ../src/terminal-window.c:480
 msgid "Save as…"
 msgstr "Farklı kaydet…"
 
-#: ../src/terminal-window.c:496
+#: ../src/terminal-window.c:483
+msgid "_Cancel"
+msgstr "_İptal"
+
+#: ../src/terminal-window.c:484
 msgid "_Save"
 msgstr "_Kaydet"
 
-#: ../src/terminal-window.c:1771
+#: ../src/terminal-window.c:1768
 msgid "Open _Hyperlink"
 msgstr "K_öprüyü Aç"
 
-#: ../src/terminal-window.c:1772
+#: ../src/terminal-window.c:1769
 msgid "Copy Hyperlink _Address"
 msgstr "Köprü _Adresini Kopyala"
 
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:1779
 msgid "Send Mail _To…"
 msgstr "_Posta Gönder…"
 
-#: ../src/terminal-window.c:1783
+#: ../src/terminal-window.c:1780
 msgid "Copy Mail _Address"
 msgstr "_Posta Adresini Kopyala"
 
-#: ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1783
 msgid "Call _To…"
 msgstr "_Çağrı…"
 
-#: ../src/terminal-window.c:1787
+#: ../src/terminal-window.c:1784
 msgid "Copy Call _Address "
 msgstr "Çağrı _Adresini Kopyala"
 
-#: ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:1789
 msgid "_Open Link"
 msgstr "Bağlantıyı _Aç"
 
-#: ../src/terminal-window.c:1793
+#: ../src/terminal-window.c:1790
 msgid "Copy _Link"
 msgstr "Ba_ğlantıyı Kopyala"
 
-#: ../src/terminal-window.c:1835
+#: ../src/terminal-window.c:1828
 msgid "P_rofiles"
 msgstr "P_rofiller"
 
-#: ../src/terminal-window.c:1873
+#: ../src/terminal-window.c:1863
 msgid "L_eave Full Screen"
 msgstr "Tam Ekranı T_erket"
 
-#: ../src/terminal-window.c:3347
+#: ../src/terminal-window.c:3341
 msgid "Close this window?"
 msgstr "Bu pencereyi kapatılsın mı?"
 
-#: ../src/terminal-window.c:3347
+#: ../src/terminal-window.c:3341
 msgid "Close this terminal?"
 msgstr "Bu uçbirim kapatılsın mı?"
 
-#: ../src/terminal-window.c:3351
+#: ../src/terminal-window.c:3345
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2282,16 +2297,66 @@ msgstr ""
 "Hala bu pencerede bazı uçbirimlerde çalışan süreçler var. Pencereyi kapatmak "
 "tümünü sonlandırır."
 
-#: ../src/terminal-window.c:3355
+#: ../src/terminal-window.c:3349
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Hala bir süreç bu uçbirimde çalışıyor. Uçbirimi kapatmak onu sonlandıracak."
 
-#: ../src/terminal-window.c:3360
+#: ../src/terminal-window.c:3354
 msgid "C_lose Window"
 msgstr "_Pencereyi Kapat"
+
+#~ msgid "label"
+#~ msgstr "etiket"
+
+#~ msgid "Keyboard shortcut to create a new profile"
+#~ msgstr "Yeni bir profil oluşturmak için kullanılan klavye kısayolu"
+
+#~ msgid "Keyboard shortcut to open the current profile’s Preferences dialog"
+#~ msgstr ""
+#~ "Geçerli profilin Tercihler iletişim penceresini açmak için kullanılan "
+#~ "klavye kısayolu"
+
+#~ msgid "_Profile used when launching a new terminal:"
+#~ msgstr "_Yeni bir uçbirim başlatıldığı zaman kullanılacak profil:"
+
+#~ msgid "Profile Editor"
+#~ msgstr "Profil Düzenleyici"
+
+#~ msgid "_Profile name:"
+#~ msgstr "_Profil adı:"
+
+#~ msgid "_Rewrap on resize"
+#~ msgstr "_Yeniden boyutlandırmada yeniden sar"
+
+#~| msgid "Reset"
+#~ msgid "R_eset"
+#~ msgstr "S_ıfırla"
+
+#~ msgid "Profile Preferences"
+#~ msgstr "Profil Tercihleri"
+
+#~| msgid "New Profile"
+#~ msgid "New _Profile"
+#~ msgstr "Yeni _Profil"
+
+#~| msgid "Profile Preferences"
+#~ msgid "Pr_ofile Preferences"
+#~ msgstr "Pr_ofil Tercihleri"
+
+#~ msgid "_Find"
+#~ msgstr "_Bul"
+
+#~ msgid "Click button to choose profile"
+#~ msgstr "Profil seçmek için düğmeye tıklayın"
+
+#~ msgid "Profile list"
+#~ msgstr "Profil listesi"
+
+#~ msgid "_Profile Preferences"
+#~ msgstr "_Profil Tercihleri"
 
 #~ msgid ""
 #~ "<b>Note:</b> Terminal applications have these colors available to them."
@@ -2311,17 +2376,11 @@ msgstr "_Pencereyi Kapat"
 #~ msgid "New _Profile…"
 #~ msgstr "Yeni _Profil…"
 
-#~ msgid "P_references…"
-#~ msgstr "Te_rcihler…"
-
 #~ msgid "Pr_ofile Preferences…"
 #~ msgstr "Pr_ofil Tercihleri…"
 
 #~ msgid "_Profile Preferences…"
 #~ msgstr "_Profil Tercihleri…"
-
-#~ msgid "Search"
-#~ msgstr "Ara"
 
 #~ msgid "Verbose output"
 #~ msgstr "Ayrıntılı çıktı"
@@ -2466,9 +2525,6 @@ msgstr "_Pencereyi Kapat"
 
 #~ msgid "Open _Terminal"
 #~ msgstr "_Uçbirim Aç"
-
-#~ msgid "_Search"
-#~ msgstr "_Ara"
 
 #~ msgid "Open Ta_b"
 #~ msgstr "_Sekme Aç"
