@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-06 18:24+0000\n"
-"PO-Revision-Date: 2018-02-08 19:31+0100\n"
+"POT-Creation-Date: 2018-03-12 20:57+0000\n"
+"PO-Revision-Date: 2018-03-13 20:19+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
 #: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:542
+#: ../src/terminal-accels.c:226 ../src/terminal.c:549
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
 #: ../src/terminal-window.c:1929 ../src/terminal-window.c:2189
 #: ../src/terminal-window.c:2479
@@ -99,7 +99,6 @@ msgstr "Naamloos"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
-#, fuzzy
 msgctxt "visible-name"
 msgid "'Unnamed'"
 msgstr "'Naamloos'"
@@ -1123,10 +1122,6 @@ msgid "Set as default"
 msgstr "Standaard instellen"
 
 #: ../src/preferences.ui.h:133
-msgid "label"
-msgstr "label"
-
-#: ../src/preferences.ui.h:134
 msgid "Cancel"
 msgstr "Afbreken"
 
@@ -1418,7 +1413,7 @@ msgstr "I_nfo"
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: ../src/terminal.c:538
+#: ../src/terminal.c:545
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Argumenten ontleden is mislukt: %s\n"
@@ -1812,7 +1807,7 @@ msgstr "Terminalvenster _loskoppelen"
 msgid "C_lose Terminal"
 msgstr "Terminal sl_uiten"
 
-#: ../src/terminal-options.c:274
+#: ../src/terminal-options.c:284
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1822,7 +1817,7 @@ msgstr ""
 "kunnen worden verwijderd."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:285
+#: ../src/terminal-options.c:295
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1831,51 +1826,47 @@ msgstr ""
 "Gebruik ‘%s’ om de opties te beëindigen, en plaats de uit te voeren opdracht "
 "erachter."
 
-#: ../src/terminal-options.c:295 ../src/terminal-options.c:308
+#: ../src/terminal-options.c:305 ../src/terminal-options.c:318
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr ""
 "Optie ‘%s’ wordt niet langer in deze versie van Gnome Terminal ondersteund."
 
-#: ../src/terminal-options.c:380
+#: ../src/terminal-options.c:390
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Argument van ‘%s’ is geen geldige opdracht: %s"
 
-#: ../src/terminal-options.c:553
+#: ../src/terminal-options.c:563
 msgid "Two roles given for one window"
 msgstr "Twee rollen voor één venster opgegeven"
 
-#: ../src/terminal-options.c:574 ../src/terminal-options.c:607
+#: ../src/terminal-options.c:584 ../src/terminal-options.c:617
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "‘%s’ optie is tweemaal voor hetzelfde venster opgegeven\n"
 
-#: ../src/terminal-options.c:771
-msgid "Can only use --wait once"
-msgstr "Optie --wait mag slechts eenmaal gebruikt worden"
-
-#: ../src/terminal-options.c:825
+#: ../src/terminal-options.c:836
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "FD %d kan niet twee keer worden doorgegeven"
 
-#: ../src/terminal-options.c:887
+#: ../src/terminal-options.c:898
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "‘%s’ is geen geldige zoomfactor"
 
-#: ../src/terminal-options.c:894
+#: ../src/terminal-options.c:905
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Zoomfactor ‘%g’ is te klein, gebruik %g\n"
 
-#: ../src/terminal-options.c:902
+#: ../src/terminal-options.c:913
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Zoomfactor ‘%g’ is te groot, gebruik %g\n"
 
-#: ../src/terminal-options.c:940
+#: ../src/terminal-options.c:951
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1884,15 +1875,19 @@ msgstr ""
 "Optie ‘%s’ vereist het opgeven van de opdracht om het restant van de "
 "opdrachtregel uit te voeren"
 
-#: ../src/terminal-options.c:1108
+#: ../src/terminal-options.c:1100
+msgid "Can only use --wait once"
+msgstr "Optie --wait mag slechts eenmaal gebruikt worden"
+
+#: ../src/terminal-options.c:1135
 msgid "Not a valid terminal config file."
 msgstr "Terminalconfiguratiebestand is ongeldig."
 
-#: ../src/terminal-options.c:1121
+#: ../src/terminal-options.c:1148
 msgid "Incompatible terminal config file version."
 msgstr "Versie van terminalconfiguratiebestand is incompatibel."
 
-#: ../src/terminal-options.c:1277
+#: ../src/terminal-options.c:1304
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1900,143 +1895,143 @@ msgstr ""
 "Niet bij de activatie-naamserver registreren, een actieve terminal niet "
 "opnieuw gebruiken"
 
-#: ../src/terminal-options.c:1286
+#: ../src/terminal-options.c:1313
 msgid "Load a terminal configuration file"
 msgstr "Terminalconfiguratiebestand laden"
 
-#: ../src/terminal-options.c:1287
+#: ../src/terminal-options.c:1314
 msgid "FILE"
 msgstr "BESTAND"
 
-#: ../src/terminal-options.c:1303
+#: ../src/terminal-options.c:1330
 msgid "Show preferences window"
 msgstr "Voorkeurenvenster tonen"
 
-#: ../src/terminal-options.c:1312
+#: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
 msgstr "Omgevingswaarden printen die betrekking hebben op de terminal"
 
-#: ../src/terminal-options.c:1330
+#: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
 msgstr "Hoeveelheid diagnostische informatie vergroten"
 
-#: ../src/terminal-options.c:1339
+#: ../src/terminal-options.c:1366
 msgid "Suppress output"
 msgstr "Uitvoer onderdrukken"
 
-#: ../src/terminal-options.c:1352
+#: ../src/terminal-options.c:1379
 msgid "Open a new window containing a tab with the default profile"
 msgstr "nieuw venster openen met een tabblad voorzien van het standaardprofiel"
 
-#: ../src/terminal-options.c:1361
+#: ../src/terminal-options.c:1388
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "nieuw tabblad openen in het laatst geopende venster met het standaardprofiel"
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1401
 msgid "Turn on the menubar"
 msgstr "menubalk tonen"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1410
 msgid "Turn off the menubar"
 msgstr "menubalk verbergen"
 
-#: ../src/terminal-options.c:1392
+#: ../src/terminal-options.c:1419
 msgid "Maximize the window"
 msgstr "venster maximaliseren"
 
-#: ../src/terminal-options.c:1401
+#: ../src/terminal-options.c:1428
 msgid "Full-screen the window"
 msgstr "volledig scherm instellen"
 
-#: ../src/terminal-options.c:1410
+#: ../src/terminal-options.c:1437
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "venstergrootte instellen; bijvoorbeeld 80x24 of 80x24+200+200 (KOLOMMENxRIJEN"
 "+X+Y)"
 
-#: ../src/terminal-options.c:1411
+#: ../src/terminal-options.c:1438
 msgid "GEOMETRY"
 msgstr "GEOMETRIE"
 
-#: ../src/terminal-options.c:1419
+#: ../src/terminal-options.c:1446
 msgid "Set the window role"
 msgstr "vensterrol instellen"
 
-#: ../src/terminal-options.c:1420
+#: ../src/terminal-options.c:1447
 msgid "ROLE"
 msgstr "ROL"
 
-#: ../src/terminal-options.c:1428
+#: ../src/terminal-options.c:1455
 msgid "Set the last specified tab as the active one in its window"
 msgstr "laatst gespecificeerd tabblad activeren in zijn venster"
 
-#: ../src/terminal-options.c:1441
+#: ../src/terminal-options.c:1468
 msgid "Execute the argument to this option inside the terminal"
 msgstr "argument bij deze optie in de terminal uitvoeren"
 
-#: ../src/terminal-options.c:1450
+#: ../src/terminal-options.c:1477
 msgid "Use the given profile instead of the default profile"
 msgstr "opgegeven profiel gebruiken in plaats van het standaardprofiel"
 
-#: ../src/terminal-options.c:1451
+#: ../src/terminal-options.c:1478
 msgid "PROFILE-NAME"
 msgstr "PROFIELNAAM"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1486
 msgid "Set the initial terminal title"
 msgstr "Initiële titel van terminalvenster instellen"
 
-#: ../src/terminal-options.c:1460
+#: ../src/terminal-options.c:1487
 msgid "TITLE"
 msgstr "TITEL"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1495
 msgid "Set the working directory"
 msgstr "werkmap van het terminalvenster instellen"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1496
 msgid "DIRNAME"
 msgstr "MAPNAAM"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1504
 msgid "Wait until the child exits"
 msgstr "Wachten totdat kindproces afsluit"
 
-#: ../src/terminal-options.c:1486
+#: ../src/terminal-options.c:1513
 msgid "Forward file descriptor"
 msgstr "Bestandsdescriptor doorsturen"
 
 #. FD = file descriptor
-#: ../src/terminal-options.c:1488
+#: ../src/terminal-options.c:1515
 msgid "FD"
 msgstr "BD"
 
 # Typo in msgid: ‘terminalx’ i.p.v. ‘terminal’ (Wouter Bolsterlee)
-#: ../src/terminal-options.c:1496
+#: ../src/terminal-options.c:1523
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Zoomfactor van terminalvenster instellen (1.0 is normale grootte)"
 
-#: ../src/terminal-options.c:1497
+#: ../src/terminal-options.c:1524
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ../src/terminal-options.c:1584
+#: ../src/terminal-options.c:1611
 msgid "COMMAND"
 msgstr "OPDRACHT"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1592
+#: ../src/terminal-options.c:1619
 msgid "GNOME Terminal Emulator"
 msgstr "Gnome terminal-emulator"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1593
+#: ../src/terminal-options.c:1620
 msgid "Show GNOME Terminal options"
 msgstr "Gnome terminal-opties tonen"
 
-#: ../src/terminal-options.c:1603
+#: ../src/terminal-options.c:1630
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2045,11 +2040,11 @@ msgstr ""
 "worden opgegeven:"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1604
+#: ../src/terminal-options.c:1631
 msgid "Show terminal options"
 msgstr "Terminalinstellingen tonen"
 
-#: ../src/terminal-options.c:1612
+#: ../src/terminal-options.c:1639
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2058,11 +2053,11 @@ msgstr ""
 "argument, dan verandert de standaardinstelling voor alle vensters:"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1613
+#: ../src/terminal-options.c:1640
 msgid "Show per-window options"
 msgstr "vensteropties tonen"
 
-#: ../src/terminal-options.c:1621
+#: ../src/terminal-options.c:1648
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2071,7 +2066,7 @@ msgstr ""
 "tab’-argument, dan verandert de standaardinstelling voor alle terminals:"
 
 # terminal/terminalvenster
-#: ../src/terminal-options.c:1622
+#: ../src/terminal-options.c:1649
 msgid "Show per-terminal options"
 msgstr "individuele-terminalopties tonen"
 
@@ -2359,6 +2354,9 @@ msgstr ""
 #: ../src/terminal-window.c:3354
 msgid "C_lose Window"
 msgstr "Venster sl_uiten"
+
+#~ msgid "label"
+#~ msgstr "label"
 
 #~ msgid "Keyboard shortcut to create a new profile"
 #~ msgstr "Sneltoets om een nieuw profiel aan te maken"
