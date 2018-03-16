@@ -373,11 +373,9 @@ action_new_terminal_cb (GSimpleAction *action,
     GdkEvent *event = gtk_get_current_event ();
     if (event != NULL) {
       GdkModifierType modifiers;
-      guint button;
 
       if ((gdk_event_get_state (event, &modifiers) &&
-           (modifiers & gtk_accelerator_get_default_mod_mask () & GDK_CONTROL_MASK)) ||
-          (gdk_event_get_button (event, &button) && (button == GDK_BUTTON_SECONDARY))) {
+           (modifiers & gtk_accelerator_get_default_mod_mask () & GDK_CONTROL_MASK))) {
         /* Invert */
         if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
           mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
