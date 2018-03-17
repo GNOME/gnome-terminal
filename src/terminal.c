@@ -524,7 +524,7 @@ main (int argc, char **argv)
   g_log_set_writer_func (terminal_log_writer, NULL, NULL);
 #endif
 
-  g_set_prgname ("gterminalclient");
+  g_set_prgname ("gnome-terminal");
 
   setlocale (LC_ALL, "");
 
