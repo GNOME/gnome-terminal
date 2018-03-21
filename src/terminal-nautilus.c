@@ -141,22 +141,12 @@ get_terminal_file_info_from_uri (const char *uri)
 static inline gboolean
 desktop_opens_home_dir (TerminalNautilus *nautilus)
 {
-#if 0
-  return  _client_get_bool (gconf_client,
-                                "/apps/nautilus-open-terminal/desktop_opens_home_dir",
-                                NULL);
-#endif
   return TRUE;
 }
 
 static inline gboolean
 display_mc_item (TerminalNautilus *nautilus)
 {
-#if 0
-  return gconf_client_get_bool (gconf_client,
-                                "/apps/nautilus-open-terminal/display_mc_item",
-                                NULL);
-#endif
   return FALSE;
 }
 

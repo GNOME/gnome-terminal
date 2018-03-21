@@ -37,7 +37,7 @@
  * There are two sources of keybindings changes, from GSettings and from
  * the accel map (happens with in-place menu editing).
  *
- * When a keybinding gconf key changes, we propagate that into the
+ * When a keybinding gsettings key changes, we propagate that into the
  * accel map.
  * When the accel map changes, we queue a sync to GSettings.
  *

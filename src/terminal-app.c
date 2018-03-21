@@ -199,63 +199,6 @@ terminal_app_init_debug (void)
 
 /* Helper functions */
 
-static void
-maybe_migrate_settings (TerminalApp *app)
-{
-#ifdef ENABLE_MIGRATION
-  const char * const argv[] = { 
-    TERM_LIBEXECDIR "/gnome-terminal-migration",
-#ifdef ENABLE_DEBUG
-    "--verbose", 
-#endif
-    NULL 
-  };
-  int status;
-  gs_free_error GError *error = NULL;
-#endif /* ENABLE_MIGRATION */
-  guint version;
-
-  version = g_settings_get_uint (terminal_app_get_global_settings (app), TERMINAL_SETTING_SCHEMA_VERSION);
-  if (version >= TERMINAL_SCHEMA_VERSION) {
-     _terminal_debug_print (TERMINAL_DEBUG_SERVER | TERMINAL_DEBUG_PROFILE,
-                            "Schema version is %u, already migrated.\n", version);
-    return;
-  }
-
-#ifdef ENABLE_MIGRATION
-  /* Only do migration if the settings backend is dconf */
-  GType type = G_OBJECT_TYPE (g_settings_backend_get_default ());
-  if (!g_type_is_a (type, g_type_from_name ("DConfSettingsBackend"))) {
-    _terminal_debug_print (TERMINAL_DEBUG_SERVER | TERMINAL_DEBUG_PROFILE,
-                           "Not migration settings to %s\n", g_type_name (type));
-    goto done;
-  }
-
-  if (!g_spawn_sync (NULL /* our home directory */,
-                     (char **) argv,
-                     NULL /* envv */,
-                     0,
-                     NULL, NULL,
-                     NULL, NULL,
-                     &status,
-                     &error)) {
-    g_printerr ("Failed to migrate settings: %s\n", error->message);
-    return;
-  }
-
-  if (WIFEXITED (status)) {
-    if (WEXITSTATUS (status) != 0)
-      g_printerr ("Profile migrator exited with status %d\n", WEXITSTATUS (status));
-  } else {
-    g_printerr ("Profile migrator exited abnormally.\n");
-  }
-done:
-#endif /* ENABLE_MIGRATION */
-  g_settings_set_uint (terminal_app_get_global_settings (app),
-                       TERMINAL_SETTING_SCHEMA_VERSION,
-                       TERMINAL_SCHEMA_VERSION);
-}
-
 static gboolean
 load_css_from_resource (GApplication *application,
                         GtkCssProvider *provider,
@@ -780,9 +723,6 @@ terminal_app_init (TerminalApp *app)
 
   if (!gdk_display_supports_selection_notification (display))
     g_printerr ("Display does not support owner-change; copy/paste will be broken!\n");
-
-  /* Check if we need to migrate from gconf to dconf */
-  maybe_migrate_settings (app);
 
   /* Get the profiles */
   app->profiles_list = terminal_profiles_list_new ();
