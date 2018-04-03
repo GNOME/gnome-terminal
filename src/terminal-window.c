@@ -325,7 +325,6 @@ context_menu_new (GMenuModel *menu,
   popup_menu = gtk_menu_new_from_model (menu);
   gtk_style_context_add_class (gtk_widget_get_style_context (popup_menu),
                                GTK_STYLE_CLASS_CONTEXT_MENU);
-  gtk_menu_set_screen (GTK_MENU (popup_menu), gtk_widget_get_screen (widget));
   gtk_menu_attach_to_widget (GTK_MENU (popup_menu), widget,
                              (GtkMenuDetachFunc)popup_menu_detach_cb);
 
