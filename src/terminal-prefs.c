@@ -466,14 +466,15 @@ static GtkListBoxRow *
 listbox_create_row (const char *name,
                     const char *stack_child_name,
                     const char *uuid,
-                    GSettings  *gsettings,
+                    GSettings  *gsettings /* adopted */,
                     gpointer    sort_order)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (gtk_list_box_row_new ());
 
   g_object_set_data_full (G_OBJECT (row), "stack_child_name", g_strdup (stack_child_name), g_free);
   g_object_set_data_full (G_OBJECT (row), "uuid", g_strdup (uuid), g_free);
-  g_object_set_data (G_OBJECT (row), "gsettings", gsettings);
+  if (gsettings != NULL)
+    g_object_set_data_full (G_OBJECT (row), "gsettings", gsettings, (GDestroyNotify)g_object_unref);
   g_object_set_data (G_OBJECT (row), "sort_order", sort_order);
 
   GtkBox *hbox = GTK_BOX (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0));
@@ -590,7 +591,7 @@ listbox_add_all_profiles (PrefData *data)
     row = listbox_create_row (NULL,
                               "profile-prefs",
                               uuid,
-                              profile,
+                              profile /* adopts */,
                               (gpointer) 42);
     gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
   }
