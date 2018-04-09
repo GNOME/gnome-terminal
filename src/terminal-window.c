@@ -1988,7 +1988,6 @@ terminal_window_screen_update (TerminalWindow *window,
 {
   GSettings *settings;
   GtkSettings *gtk_settings;
-  char *value;
 
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
@@ -2006,8 +2005,9 @@ terminal_window_screen_update (TerminalWindow *window,
                    "gtk-enable-accels",
                    G_SETTINGS_BIND_GET);
 
-  g_object_get (gtk_settings, "gtk-menu-bar-accel", &value, NULL);
 #if !GTK_CHECK_VERSION (3, 20, 0)
+  char *value;
+  g_object_get (gtk_settings, "gtk-menu-bar-accel", &value, NULL);
   g_object_set_data_full (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel",
                           value, (GDestroyNotify) g_free);
 #endif
