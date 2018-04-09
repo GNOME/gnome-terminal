@@ -429,7 +429,7 @@ menu_append_numbered (GMenu *menu,
                       const char *label,
                       int num,
                       const char *action_name,
-                      GVariant *target)
+                      GVariant *target /* floating, consumed */)
 {
   gs_free_gstring GString *str;
   gs_unref_object GMenuItem *item;
@@ -499,12 +499,11 @@ static GMenu *
 set_profile_submenu_new (ProfileData *data,
                          guint n_profiles)
 {
-  GMenu *menu = g_menu_new ();
-
   /* No submenu if there's only one profile */
   if (n_profiles <= 1)
     return NULL;
 
+  GMenu *menu = g_menu_new ();
   for (guint i = 0; i < n_profiles; i++) {
     menu_append_numbered (menu, data[i].label, i + 1,
                           "win.profile",
