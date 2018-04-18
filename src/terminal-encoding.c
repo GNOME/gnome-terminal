@@ -230,7 +230,7 @@ terminal_encodings_list_store_new (int column_id,
 
   for (guint i = 0; i < G_N_ELEMENTS (encodings); i++) {
     gs_free char *name = g_strdup_printf ("%s " EM_DASH " %s",
-                                          encodings[i].name, encodings[i].charset);
+                                          _(encodings[i].name), encodings[i].charset);
 
     GtkTreeIter iter;
     gtk_list_store_insert_with_values (store, &iter, -1,
