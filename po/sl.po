@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-04-05 23:21+0000\n"
-"PO-Revision-Date: 2018-04-09 21:54+0200\n"
+"POT-Creation-Date: 2018-04-18 20:03+0000\n"
+"PO-Revision-Date: 2018-04-23 20:39+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -72,15 +72,6 @@ msgstr ""
 #: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "lupina;ukazna vrstica;ukaz;cmd;command;terminal;"
-
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Privzeto"
-
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Neimenovan"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
@@ -149,12 +140,16 @@ msgid ""
 "Scale factor for the cell height to increase line spacing. (Does not "
 "increase the font’s height.)"
 msgstr ""
+"Določilo merila za višino celice za povečanje razmika med vrsticami (ne "
+"poveča višine pisave)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Scale factor for the cell width to increase letter spacing. (Does not "
 "increase the font’s width.)"
 msgstr ""
+"Določilo merila za širino celice za povečanje razmika med črkami (ne poveča "
+"širine pisave)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
@@ -248,6 +243,8 @@ msgid ""
 "If true, setting bold on the first 8 colors also switches to their bright "
 "variants."
 msgstr ""
+"Izbrana možnost določa, da določitev poudarjanja na prvih 8 barvah preklopi "
+"tudi poudarjanje svetlejših različic."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether to ring the terminal bell"
@@ -709,6 +706,11 @@ msgstr "Navpičnica"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Podčrtano"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Privzeto"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -1348,19 +1350,19 @@ msgstr "_Dejanje"
 msgid "Shortcut _Key"
 msgstr "_Tipkovna bližnjica"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1783
+#: ../src/terminal-app.c:434 ../src/terminal-window.c:1783
 msgid "New _Terminal"
 msgstr "Novo okno _terminala"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1792
+#: ../src/terminal-app.c:436 ../src/terminal-window.c:1792
 msgid "New _Tab"
 msgstr "Nov _zavihek"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1788
+#: ../src/terminal-app.c:437 ../src/terminal-window.c:1788
 msgid "New _Window"
 msgstr "Novo _okno"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:485
 msgid "Change _Profile"
 msgstr "Zamenjaj _profil"
 
@@ -1635,7 +1637,7 @@ msgstr "_Počisti poudarjanje"
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
 msgid "Set _Title…"
 msgstr "Določi _naziv okna ..."
 
@@ -1703,58 +1705,33 @@ msgstr "_Vsebina"
 msgid "_Inspector"
 msgstr "_Nadzornik"
 
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Odpri v _oddaljenem terminalu"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Odpri v _krajevnem terminalu"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Odpri trenutno izbrano mapo v terminalu"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Odpri trenutno odprto mapo v terminalu"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Odpri _v terminalu"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Odpri _terminal"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Odpri okno terminala"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Odpri s programom _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr "Odpri trenutno izbrano mapo v terminalu s programom Midnight Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr "Odpri trenutno odprto mapo v terminalu s programom Midnight Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Odpri program _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "V terminalu odpri program Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1768,7 +1745,7 @@ msgstr "Premakni terminal _desno"
 msgid "_Detach Terminal"
 msgstr "_Odpni terminal"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3288
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3288
 msgid "C_lose Terminal"
 msgstr "_Zapri terminal"
 
@@ -2092,23 +2069,23 @@ msgstr "Izbriši profil"
 msgid "Delete"
 msgstr "Izbriši"
 
-#: ../src/terminal-prefs.c:518
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "To je privzet profil"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Splošno"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Tipkovne bližnjice"
 
-#: ../src/terminal-prefs.c:671
+#: ../src/terminal-prefs.c:672
 msgid "Global"
 msgstr "Splošno"
 
-#: ../src/terminal-prefs.c:683
+#: ../src/terminal-prefs.c:684
 msgid "Profiles"
 msgstr "Profili"
 
@@ -2291,6 +2268,30 @@ msgstr ""
 #: ../src/terminal-window.c:3288
 msgid "C_lose Window"
 msgstr "_Zapri okno"
+
+#~ msgid "Unnamed"
+#~ msgstr "Neimenovan"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Odpri s programom _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Odpri trenutno izbrano mapo v terminalu s programom Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Odpri trenutno odprto mapo v terminalu s programom Midnight Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Odpri program _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "V terminalu odpri program Midnight Commander"
 
 #~ msgid "Verbose output"
 #~ msgstr "Podroben izpis"
