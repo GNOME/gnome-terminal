@@ -41,27 +41,25 @@
 
 static int verbosity = 1;
 
-/* @freeme is a workaround for Clang; see gnome-terminal bug 790318. */
-static char * G_GNUC_FORMAT (2)
-format_as_comment (char** freeme, const char *format)
-{
-  return *freeme = g_strdup_printf ("# %s", format);
-}
-
 void
 terminal_fprintf (FILE* fp,
                   int verbosity_level,
                   const char* format,
                   ...)
 {
-        if (verbosity < verbosity_level)
-                return;
+  if (verbosity < verbosity_level)
+    return;
 
-        gs_free char* freeme;
-        va_list args;
-        va_start(args, format);
-        g_vfprintf(fp, format_as_comment(&freeme, format), args);
-        va_end(args);
+  va_list args;
+  va_start(args, format);
+  gs_free char *str = g_strdup_vprintf(format, args);
+  va_end(args);
+
+  gs_strfreev char **lines = g_strsplit_set(str, "\n\r", -1);
+  for (gsize i = 0; lines[i]; ++i) {
+    if (lines[i][0] != '\0')
+      g_fprintf(fp, "# %s\n", lines[i]);
+  }
 }
 
 #if GLIB_CHECK_VERSION (2, 50, 0)
