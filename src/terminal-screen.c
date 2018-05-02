@@ -108,8 +108,6 @@ enum
 enum {
   PROP_0,
   PROP_PROFILE,
-  PROP_ICON_TITLE,
-  PROP_ICON_TITLE_SET,
   PROP_TITLE,
   PROP_INITIAL_ENVIRONMENT
 };
@@ -148,8 +146,6 @@ static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
-                                                       TerminalScreen *screen);
-static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
 
 static void update_color_scheme                      (TerminalScreen *screen);
@@ -397,9 +393,6 @@ terminal_screen_init (TerminalScreen *screen)
   g_signal_connect (screen, "window-title-changed",
                     G_CALLBACK (terminal_screen_window_title_changed),
                     screen);
-  g_signal_connect (screen, "icon-title-changed",
-                    G_CALLBACK (terminal_screen_icon_title_changed),
-                    screen);
 
   app = terminal_app_get ();
   g_signal_connect (terminal_app_get_desktop_interface_settings (app), "changed::" MONOSPACE_FONT_KEY_NAME,
@@ -426,12 +419,6 @@ terminal_screen_get_property (GObject *object,
     {
       case PROP_PROFILE:
         g_value_set_object (value, terminal_screen_get_profile (screen));
-        break;
-      case PROP_ICON_TITLE:
-        g_value_set_string (value, terminal_screen_get_icon_title (screen));
-        break;
-      case PROP_ICON_TITLE_SET:
-        g_value_set_boolean (value, terminal_screen_get_icon_title_set (screen));
         break;
       case PROP_INITIAL_ENVIRONMENT:
         g_value_set_boxed (value, terminal_screen_get_initial_environment (screen));
@@ -461,8 +448,6 @@ terminal_screen_set_property (GObject *object,
       case PROP_INITIAL_ENVIRONMENT:
         terminal_screen_set_initial_environment (screen, g_value_get_boxed (value));
         break;
-      case PROP_ICON_TITLE:
-      case PROP_ICON_TITLE_SET:
       case PROP_TITLE:
         /* not writable */
       default:
@@ -540,20 +525,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
      g_param_spec_object ("profile", NULL, NULL,
                           G_TYPE_SETTINGS,
                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ICON_TITLE,
-     g_param_spec_string ("icon-title", NULL, NULL,
-                          NULL,
-                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ICON_TITLE_SET,
-     g_param_spec_boolean ("icon-title-set", NULL, NULL,
-                           FALSE,
-                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
@@ -760,18 +731,6 @@ const char*
 terminal_screen_get_title (TerminalScreen *screen)
 {
   return vte_terminal_get_window_title (VTE_TERMINAL (screen));
-}
-
-const char*
-terminal_screen_get_icon_title (TerminalScreen *screen)
-{
-  return vte_terminal_get_icon_title (VTE_TERMINAL (screen));
-}
-
-gboolean
-terminal_screen_get_icon_title_set (TerminalScreen *screen)
-{
-  return vte_terminal_get_icon_title (VTE_TERMINAL (screen)) != NULL;
 }
 
 static void
@@ -1674,14 +1633,6 @@ terminal_screen_window_title_changed (VteTerminal *vte_terminal,
                                       TerminalScreen *screen)
 {
   g_object_notify (G_OBJECT (screen), "title");
-}
-
-static void
-terminal_screen_icon_title_changed (VteTerminal *vte_terminal,
-                                    TerminalScreen *screen)
-{
-  g_object_notify (G_OBJECT (screen), "icon-title");
-  g_object_notify (G_OBJECT (screen), "icon-title-set");
 }
 
 static void
