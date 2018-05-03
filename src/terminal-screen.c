@@ -87,13 +87,17 @@ struct _TerminalScreenPrivate
   GSettings *profile; /* never NULL */
   guint profile_changed_id;
   guint profile_forgotten_id;
+  char *cooked_title;
+  char *current_cmdline;
   char *initial_working_directory;
   char **initial_env;
   char **override_command;
   gboolean shell;
+  gboolean show_foreground_process;
   int child_pid;
   GSList *match_tags;
   guint launch_child_source_id;
+  guint shell_preexec_source_id;
 };
 
 enum
@@ -145,10 +149,16 @@ static gboolean terminal_screen_do_exec (TerminalScreen *screen,
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
+static void terminal_screen_shell_precmd (VteTerminal *terminal);
+
+static void terminal_screen_shell_preexec (VteTerminal *terminal);
+
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
 
 static void update_color_scheme                      (TerminalScreen *screen);
+
+static void terminal_screen_cook_title (TerminalScreen *screen);
 
 static char* terminal_screen_check_hyperlink   (TerminalScreen            *screen,
                                                 GdkEvent                  *event);
@@ -477,6 +487,8 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->popup_menu = terminal_screen_popup_menu;
 
   terminal_class->child_exited = terminal_screen_child_exited;
+  terminal_class->shell_precmd = terminal_screen_shell_precmd;
+  terminal_class->shell_preexec = terminal_screen_shell_preexec;
 
   signals[PROFILE_SET] =
     g_signal_new (I_("profile-set"),
@@ -584,6 +596,12 @@ terminal_screen_dispose (GObject *object)
       priv->launch_child_source_id = 0;
     }
 
+  if (priv->shell_preexec_source_id != 0)
+    {
+      g_source_remove (priv->shell_preexec_source_id);
+      priv->shell_preexec_source_id = 0;
+    }
+
   if (priv->registered) {
     terminal_app_unregister_screen (terminal_app_get (), screen);
     priv->registered = FALSE;
@@ -604,6 +622,7 @@ terminal_screen_finalize (GObject *object)
 
   terminal_screen_set_profile (screen, NULL);
 
+  g_free (priv->current_cmdline);
   g_free (priv->initial_working_directory);
   g_strfreev (priv->override_command);
   g_strfreev (priv->initial_env);
@@ -730,7 +749,30 @@ terminal_screen_exec (TerminalScreen *screen,
 const char*
 terminal_screen_get_title (TerminalScreen *screen)
 {
-  return vte_terminal_get_window_title (VTE_TERMINAL (screen));
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (priv->show_foreground_process && priv->cooked_title != NULL)
+    return priv->cooked_title;
+  else
+    return vte_terminal_get_window_title (VTE_TERMINAL (screen));
+}
+
+static void
+terminal_screen_cook_title (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  const char *window_title;
+
+  g_clear_pointer (&priv->cooked_title, g_free);
+
+  if (priv->current_cmdline == NULL)
+    goto out;
+
+  window_title = vte_terminal_get_window_title (VTE_TERMINAL (screen));
+  priv->cooked_title = g_strdup_printf (_("%s — %s"), window_title, priv->current_cmdline);
+
+ out:
+  g_object_notify (G_OBJECT (screen), "title");
 }
 
 static void
@@ -793,6 +835,13 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_PALETTE_KEY))
     update_color_scheme (screen);
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SHOW_FOREGROUND_PROCESS_IN_TITLE))
+    {
+      priv->show_foreground_process = g_settings_get_boolean (profile,
+                                                              TERMINAL_PROFILE_SHOW_FOREGROUND_PROCESS_IN_TITLE);
+      g_object_notify (G_OBJECT (screen), "title");
+    }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_AUDIBLE_BELL_KEY))
       vte_terminal_set_audible_bell (vte_terminal, g_settings_get_boolean (profile, TERMINAL_PROFILE_AUDIBLE_BELL_KEY));
@@ -1632,7 +1681,16 @@ static void
 terminal_screen_window_title_changed (VteTerminal *vte_terminal,
                                       TerminalScreen *screen)
 {
-  g_object_notify (G_OBJECT (screen), "title");
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (priv->shell_preexec_source_id != 0)
+    {
+      g_source_remove (priv->shell_preexec_source_id);
+      priv->shell_preexec_source_id = 0;
+    }
+
+  g_clear_pointer (&priv->current_cmdline, g_free);
+  terminal_screen_cook_title (screen);
 }
 
 static void
@@ -1692,6 +1750,55 @@ terminal_screen_child_exited (VteTerminal *terminal,
     default:
       break;
     }
+}
+
+static void
+terminal_screen_shell_precmd (VteTerminal *terminal)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (terminal);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (priv->shell_preexec_source_id != 0)
+    {
+      g_source_remove (priv->shell_preexec_source_id);
+      priv->shell_preexec_source_id = 0;
+    }
+
+  g_clear_pointer (&priv->current_cmdline, g_free);
+  terminal_screen_cook_title (screen);
+}
+
+static gboolean
+terminal_screen_shell_preexec_cb (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  gboolean retval = G_SOURCE_CONTINUE;
+  gs_free char *cmdline = NULL;
+
+  g_return_val_if_fail (priv->current_cmdline == NULL, G_SOURCE_REMOVE);
+
+  if (!terminal_screen_has_foreground_process (screen, NULL, &cmdline))
+    goto out;
+
+  priv->current_cmdline = g_steal_pointer (&cmdline);
+  terminal_screen_cook_title (screen);
+
+  priv->shell_preexec_source_id = 0;
+  retval = G_SOURCE_REMOVE;
+
+ out:
+  return retval;
+}
+
+static void
+terminal_screen_shell_preexec (VteTerminal *terminal)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (terminal);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  g_return_if_fail (priv->shell_preexec_source_id == 0);
+
+  priv->shell_preexec_source_id = g_timeout_add (200, (GSourceFunc) terminal_screen_shell_preexec_cb, screen);
 }
 
 static void
