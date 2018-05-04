@@ -383,77 +383,6 @@ terminal_notebook_grab_focus (GtkWidget *widget)
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
-/* Tab scrolling was removed from GtkNotebook in gtk 3, so reimplement it here */
-static gboolean
-terminal_notebook_scroll_event (GtkWidget      *widget,
-                                GdkEventScroll *event)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  gboolean (* scroll_event) (GtkWidget *, GdkEventScroll *) =
-    GTK_WIDGET_CLASS (terminal_notebook_parent_class)->scroll_event;
-  GtkWidget *child, *event_widget, *action_widget;
-
-  if ((event->state & gtk_accelerator_get_default_mod_mask ()) != 0)
-    goto chain_up;
-
-  child = gtk_notebook_get_nth_page (notebook, gtk_notebook_get_current_page (notebook));
-  if (child == NULL)
-    goto chain_up;
-
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
-
-  /* Ignore scroll events from the content of the page */
-  if (event_widget == NULL ||
-      event_widget == child ||
-      gtk_widget_is_ancestor (event_widget, child))
-    goto chain_up;
-
-  /* And also from the action widgets */
-  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_START);
-  if (event_widget == action_widget ||
-      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
-    goto chain_up;
-  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_END);
-  if (event_widget == action_widget ||
-      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
-    goto chain_up;
-
-  switch (event->direction) {
-    case GDK_SCROLL_RIGHT:
-    case GDK_SCROLL_DOWN:
-      gtk_notebook_next_page (notebook);
-      return TRUE;
-    case GDK_SCROLL_LEFT:
-    case GDK_SCROLL_UP:
-      gtk_notebook_prev_page (notebook);
-      return TRUE;
-    case GDK_SCROLL_SMOOTH:
-      switch (gtk_notebook_get_tab_pos (notebook)) {
-        case GTK_POS_LEFT:
-        case GTK_POS_RIGHT:
-          if (event->delta_y > 0)
-            gtk_notebook_next_page (notebook);
-          else if (event->delta_y < 0)
-            gtk_notebook_prev_page (notebook);
-          break;
-        case GTK_POS_TOP:
-        case GTK_POS_BOTTOM:
-          if (event->delta_x > 0)
-            gtk_notebook_next_page (notebook);
-          else if (event->delta_x < 0)
-            gtk_notebook_prev_page (notebook);
-          break;
-      }
-      return TRUE;
-  }
-
-chain_up:
-  if (scroll_event)
-    return scroll_event (widget, event);
-
-  return FALSE;
-}
-
 /* GObjectClass impl */
 
 static void
@@ -557,7 +486,6 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTIVE_SCREEN, "active-screen");
 
   widget_class->grab_focus = terminal_notebook_grab_focus;
-  widget_class->scroll_event = terminal_notebook_scroll_event;
 
   notebook_class->switch_page = terminal_notebook_switch_page;
   notebook_class->create_window = terminal_notebook_create_window;
