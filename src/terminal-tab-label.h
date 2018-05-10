@@ -59,6 +59,10 @@ GtkWidget *     terminal_tab_label_new        (TerminalScreen *screen);
 void            terminal_tab_label_set_bold   (TerminalTabLabel *tab_label,
                                                gboolean bold);
 
+void            terminal_tab_label_set_icon   (TerminalTabLabel *tab_label,
+                                               const char *icon_name,
+                                               const char *tooltip);
+
 TerminalScreen *terminal_tab_label_get_screen (TerminalTabLabel *tab_label);
 
 G_END_DECLS

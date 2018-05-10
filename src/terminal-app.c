@@ -594,6 +594,31 @@ app_menu_quit_cb (GSimpleAction *action,
     gtk_widget_destroy (GTK_WIDGET (window));
 }
 
+/* Other action callbacks */
+
+static void
+action_activate_tab_cb (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer       user_data)
+{
+  GtkApplication *application = user_data;
+  GtkWidget *toplevel;
+  TerminalScreen *screen;
+  const char *uuid;
+
+  g_variant_get (parameter, "&s", &uuid);
+  screen = terminal_app_get_screen_by_uuid (TERMINAL_APP (application), uuid);
+  if (screen == NULL)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+  if (!gtk_widget_is_toplevel (toplevel))
+    return;
+
+  terminal_window_switch_screen (TERMINAL_WINDOW (toplevel), screen);
+  gtk_window_present (GTK_WINDOW (toplevel));
+}
+
 /* Class implementation */
 
 G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
@@ -618,6 +643,10 @@ terminal_app_startup (GApplication *application)
     { "quit",        app_menu_quit_cb,          NULL, NULL, NULL }
   };
 
+  const GActionEntry other_actions[] = {
+    { "activate-tab",   action_activate_tab_cb, "s",  NULL, NULL }
+  };
+
   g_application_set_resource_base_path (application, TERMINAL_RESOURCES_PATH_PREFIX);
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
@@ -627,6 +656,9 @@ terminal_app_startup (GApplication *application)
 
   g_action_map_add_action_entries (G_ACTION_MAP (application),
                                    action_entries, G_N_ELEMENTS (action_entries),
+                                   application);
+  g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                   other_actions, G_N_ELEMENTS (other_actions),
                                    application);
 
   app_load_css (application);

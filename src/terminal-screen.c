@@ -55,6 +55,7 @@
 #include "terminal-marshal.h"
 #include "terminal-schemas.h"
 #include "terminal-screen-container.h"
+#include "terminal-tab-label.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
 #include "terminal-info-bar.h"
@@ -146,6 +147,8 @@ static void terminal_screen_system_font_changed_cb (GSettings *,
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
+static gboolean terminal_screen_focus_in (GtkWidget *widget,
+                                          GdkEventFocus *event);
 static gboolean terminal_screen_do_exec (TerminalScreen *screen,
                                          FDSetupData    *data,
                                          GError **error);
@@ -485,6 +488,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->get_property = terminal_screen_get_property;
   object_class->set_property = terminal_screen_set_property;
 
+  widget_class->focus_in_event = terminal_screen_focus_in;
   widget_class->realize = terminal_screen_realize;
   widget_class->style_updated = terminal_screen_style_updated;
   widget_class->drag_data_received = terminal_screen_drag_data_received;
@@ -590,6 +594,10 @@ terminal_screen_dispose (GObject *object)
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
   GtkSettings *settings;
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+  g_application_withdraw_notification (G_APPLICATION (app), priv->uuid);
 
   settings = gtk_widget_get_settings (GTK_WIDGET (screen));
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
@@ -1663,6 +1671,43 @@ terminal_screen_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
+static gboolean
+terminal_screen_focus_in (GtkWidget     *widget,
+                          GdkEventFocus *event)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalApp *app;
+  TerminalWindow *window;
+
+  window = terminal_screen_get_window (screen);
+  if (window != NULL)
+    {
+      TerminalScreenContainer *screen_container;
+
+      screen_container = terminal_screen_container_get_from_screen (screen);
+      if (screen_container != NULL)
+        {
+          GtkWidget *mdi_container;
+
+          mdi_container = terminal_window_get_mdi_container (window);
+          /* FIXME: add interface method to retrieve tab label */
+          if (GTK_IS_NOTEBOOK (mdi_container))
+            {
+              GtkWidget *tab_label;
+
+              tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (mdi_container), GTK_WIDGET (screen_container));
+              terminal_tab_label_set_bold (TERMINAL_TAB_LABEL (tab_label), FALSE);
+              terminal_tab_label_set_icon (TERMINAL_TAB_LABEL (tab_label), NULL, NULL);
+            }
+        }
+    }
+
+  app = terminal_app_get ();
+  g_application_withdraw_notification (G_APPLICATION (app), screen->priv->uuid);
+
+  return GTK_WIDGET_CLASS (terminal_screen_parent_class)->focus_in_event (widget, event);
+}
+
 /**
  * terminal_screen_get_current_dir:
  * @screen:
@@ -1821,6 +1866,57 @@ terminal_screen_contents_changed (VteTerminal *terminal)
 }
 
 static void
+terminal_screen_show_notification (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  TerminalWindow *window;
+
+  window = terminal_screen_get_window (screen);
+  if (window == NULL)
+    return;
+
+  if (gtk_window_is_active (GTK_WINDOW (window)))
+    {
+      GtkWidget *mdi_container;
+      TerminalScreenContainer *screen_container;
+
+      if (screen == terminal_window_get_active (window))
+        return;
+
+      screen_container = terminal_screen_container_get_from_screen (screen);
+      if (screen_container == NULL)
+        return;
+
+      mdi_container = terminal_window_get_mdi_container (window);
+      /* FIXME: add interface method to retrieve tab label */
+      if (GTK_IS_NOTEBOOK (mdi_container))
+        {
+          GtkWidget *tab_label;
+
+          tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (mdi_container), GTK_WIDGET (screen_container));
+          terminal_tab_label_set_bold (TERMINAL_TAB_LABEL (tab_label), TRUE);
+          terminal_tab_label_set_icon (TERMINAL_TAB_LABEL (tab_label),
+                                       "dialog-information-symbolic",
+                                       _("Command completed"));
+        }
+    }
+  else
+    {
+      gs_unref_object GNotification *notification = NULL;
+      TerminalApp *app;
+      gs_free char *detailed_action = NULL;
+
+      notification = g_notification_new (_("Command completed"));
+      g_notification_set_body (notification, priv->current_cmdline);
+      detailed_action = g_strdup_printf ("app.activate-tab::%s", priv->uuid);
+      g_notification_set_default_action (notification, detailed_action);
+
+      app = terminal_app_get ();
+      g_application_send_notification (G_APPLICATION (app), priv->uuid, notification);
+    }
+}
+
+static void
 terminal_screen_shell_precmd (VteTerminal *terminal)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
@@ -1840,6 +1936,9 @@ terminal_screen_shell_precmd (VteTerminal *terminal)
       g_source_remove (priv->shell_preexec_source_id);
       priv->shell_preexec_source_id = 0;
     }
+
+  if (priv->current_cmdline != NULL)
+    terminal_screen_show_notification (screen);
 
   g_clear_pointer (&priv->current_cmdline, g_free);
   terminal_screen_cook_title (screen);

@@ -34,6 +34,7 @@
 struct _TerminalTabLabelPrivate
 {
   TerminalScreen *screen;
+  GtkWidget *icon;
   GtkWidget *label;
   GtkWidget *close_button;
   gboolean bold;
@@ -179,7 +180,7 @@ terminal_tab_label_constructed (GObject *object)
 {
   TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
   TerminalTabLabelPrivate *priv = tab_label->priv;
-  GtkWidget *hbox, *label, *close_button;
+  GtkWidget *hbox, *icon, *label, *close_button;
 
   G_OBJECT_CLASS (terminal_tab_label_parent_class)->constructed (object);
 
@@ -188,6 +189,10 @@ terminal_tab_label_constructed (GObject *object)
   g_assert (priv->screen != NULL);
   
   gtk_box_set_spacing (GTK_BOX (hbox), SPACING);
+
+  priv->icon = icon = gtk_image_new ();
+  gtk_widget_set_no_show_all (icon, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
   priv->label = label = gtk_label_new (NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
@@ -374,6 +379,29 @@ terminal_tab_label_set_bold (TerminalTabLabel *tab_label,
 
   if (free_list)
     pango_attr_list_unref (attr_list);
+}
+
+/**
+ * terminal_tab_label_set_icon:
+ * @tab_label: a #TerminalTabLabel
+ * @icon_name: (allow-none): an icon name
+ * @tooltip: (allow-none): text to be used as tooltip
+ *
+ * Shows an icon at the beginning of @tab_label. If @icon_name is
+ * %NULL, then the icon will be hidden.
+ */
+void
+terminal_tab_label_set_icon (TerminalTabLabel *tab_label,
+                             const char *icon_name,
+                             const char *tooltip)
+{
+  TerminalTabLabelPrivate *priv = tab_label->priv;
+
+  g_return_if_fail (TERMINAL_IS_TAB_LABEL (tab_label));
+
+  gtk_widget_set_visible (priv->icon, icon_name != NULL);
+  gtk_image_set_from_icon_name (GTK_IMAGE (priv->icon), icon_name, GTK_ICON_SIZE_MENU);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (priv->icon), tooltip);
 }
 
 /**
