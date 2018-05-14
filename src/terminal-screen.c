@@ -92,10 +92,13 @@ struct _TerminalScreenPrivate
   char *initial_working_directory;
   char **initial_env;
   char **override_command;
+  gboolean between_preexec_and_precmd;
   gboolean shell;
   gboolean show_foreground_process;
+  gboolean title_owned_by_foreground_process;
   int child_pid;
   GSList *match_tags;
+  guint contents_changed_source_id;
   guint launch_child_source_id;
   guint shell_preexec_source_id;
 };
@@ -148,6 +151,8 @@ static gboolean terminal_screen_do_exec (TerminalScreen *screen,
                                          GError **error);
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
+
+static void terminal_screen_contents_changed (VteTerminal *terminal);
 
 static void terminal_screen_shell_precmd (VteTerminal *terminal);
 
@@ -487,6 +492,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->popup_menu = terminal_screen_popup_menu;
 
   terminal_class->child_exited = terminal_screen_child_exited;
+  terminal_class->contents_changed = terminal_screen_contents_changed;
   terminal_class->shell_precmd = terminal_screen_shell_precmd;
   terminal_class->shell_preexec = terminal_screen_shell_preexec;
 
@@ -589,6 +595,12 @@ terminal_screen_dispose (GObject *object)
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL, NULL,
                                         screen);
+
+  if (priv->contents_changed_source_id != 0)
+    {
+      g_source_remove (priv->contents_changed_source_id);
+      priv->contents_changed_source_id = 0;
+    }
 
   if (priv->launch_child_source_id != 0)
     {
@@ -1683,6 +1695,15 @@ terminal_screen_window_title_changed (VteTerminal *vte_terminal,
 {
   TerminalScreenPrivate *priv = screen->priv;
 
+  if (priv->between_preexec_and_precmd)
+    priv->title_owned_by_foreground_process = TRUE;
+
+  if (priv->contents_changed_source_id != 0)
+    {
+      g_source_remove (priv->contents_changed_source_id);
+      priv->contents_changed_source_id = 0;
+    }
+
   if (priv->shell_preexec_source_id != 0)
     {
       g_source_remove (priv->shell_preexec_source_id);
@@ -1752,11 +1773,67 @@ terminal_screen_child_exited (VteTerminal *terminal,
     }
 }
 
+static gboolean
+terminal_screen_contents_changed_cb (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  gs_free char *cmdline = NULL;
+
+  g_return_val_if_fail (priv->between_preexec_and_precmd, G_SOURCE_REMOVE);
+  g_return_val_if_fail (!priv->title_owned_by_foreground_process, G_SOURCE_REMOVE);
+  g_return_val_if_fail (priv->shell_preexec_source_id == 0, G_SOURCE_REMOVE);
+
+  /* A foreground process is guaranteed to be present. */
+  terminal_screen_has_foreground_process (screen, NULL, &cmdline);
+
+  if (g_strcmp0 (priv->current_cmdline, cmdline) == 0)
+    goto out;
+
+  priv->current_cmdline = g_steal_pointer (&cmdline);
+  terminal_screen_cook_title (screen);
+
+ out:
+  priv->contents_changed_source_id = 0;
+  return G_SOURCE_REMOVE;
+}
+
+static void
+terminal_screen_contents_changed (VteTerminal *terminal)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (terminal);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (!priv->between_preexec_and_precmd)
+    return;
+
+  if (priv->title_owned_by_foreground_process)
+    return;
+
+  if (priv->shell_preexec_source_id != 0)
+    return;
+
+  if (priv->contents_changed_source_id != 0)
+    return;
+
+  priv->contents_changed_source_id = g_timeout_add (500,
+                                                    (GSourceFunc) terminal_screen_contents_changed_cb,
+                                                    screen);
+}
+
 static void
 terminal_screen_shell_precmd (VteTerminal *terminal)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
+
+  priv->between_preexec_and_precmd = FALSE;
+  priv->title_owned_by_foreground_process = FALSE;
+
+  if (priv->contents_changed_source_id != 0)
+    {
+      g_source_remove (priv->contents_changed_source_id);
+      priv->contents_changed_source_id = 0;
+    }
 
   if (priv->shell_preexec_source_id != 0)
     {
@@ -1796,7 +1873,11 @@ terminal_screen_shell_preexec (VteTerminal *terminal)
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
 
+  g_return_if_fail (priv->contents_changed_source_id == 0);
   g_return_if_fail (priv->shell_preexec_source_id == 0);
+
+  priv->between_preexec_and_precmd = TRUE;
+  priv->title_owned_by_foreground_process = FALSE;
 
   priv->shell_preexec_source_id = g_timeout_add (200, (GSourceFunc) terminal_screen_shell_preexec_cb, screen);
 }
