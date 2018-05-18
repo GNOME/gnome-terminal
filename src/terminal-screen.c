@@ -2258,7 +2258,35 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
 #else
   g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
   if (!g_file_get_contents (filename, &data_buf, &len, NULL))
-    return TRUE;
+    {
+      int j;
+
+      for (j = 0; j < 20; j++)
+        {
+          pid_t pgid;
+          pid_t pid;
+
+          pid = (pid_t) (fgpid + 1 + j);
+          pgid = getpgid (pid);
+          if (pgid != fgpid)
+            {
+              pid = (pid_t) (2 + j);
+              pgid = getpgid (pid);
+              if (pgid != fgpid)
+                continue;
+            }
+
+          g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", (int) pid);
+
+          g_clear_pointer (&data_buf, g_free);
+          if (g_file_get_contents (filename, &data_buf, &len, NULL))
+            break;
+        }
+
+      if (j == 20)
+        return TRUE;
+    }
+
   data = data_buf;
 #endif
 
