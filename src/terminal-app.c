@@ -632,6 +632,29 @@ terminal_app_activate (GApplication *application)
 }
 
 static void
+terminal_app_shutdown (GApplication *application)
+{
+  TerminalApp *app = TERMINAL_APP (application);
+  GList *l;
+  gs_free_list GList *windows = NULL;
+
+  windows = gtk_application_get_windows (GTK_APPLICATION (app));
+
+  /* Destroying a window removes it from the Application's list of
+   * windows, so we can't use the same list while destroying them.
+   */
+  windows = g_list_copy (windows);
+
+  for (l = windows; l != NULL; l = l->next)
+    {
+      TerminalWindow *window = TERMINAL_WINDOW (l->data);
+      gtk_widget_destroy (GTK_WIDGET (window));
+    }
+
+  G_APPLICATION_CLASS (terminal_app_parent_class)->shutdown (application);
+}
+
+static void
 terminal_app_startup (GApplication *application)
 {
   TerminalApp *app = TERMINAL_APP (application);
@@ -874,6 +897,7 @@ terminal_app_class_init (TerminalAppClass *klass)
   object_class->finalize = terminal_app_finalize;
 
   g_application_class->activate = terminal_app_activate;
+  g_application_class->shutdown = terminal_app_shutdown;
   g_application_class->startup = terminal_app_startup;
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
@@ -898,6 +922,7 @@ terminal_app_new (const char *app_id)
   return g_object_new (TERMINAL_TYPE_APP,
                        "application-id", app_id ? app_id : TERMINAL_APPLICATION_ID,
                        "flags", flags,
+                       "register-session", TRUE,
                        NULL);
 }
 
