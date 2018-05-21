@@ -596,6 +596,7 @@ terminal_screen_dispose (GObject *object)
   GtkSettings *settings;
   TerminalApp *app;
 
+  g_message ("terminal_screen_dispose: %s", priv->uuid);
   app = terminal_app_get ();
   g_application_withdraw_notification (G_APPLICATION (app), priv->uuid);
 
@@ -1740,6 +1741,8 @@ terminal_screen_window_title_changed (VteTerminal *vte_terminal,
 {
   TerminalScreenPrivate *priv = screen->priv;
 
+  g_message ("terminal_screen_window_title_changed");
+
   if (priv->between_preexec_and_precmd)
     priv->title_owned_by_foreground_process = TRUE;
 
@@ -1830,6 +1833,7 @@ terminal_screen_contents_changed_cb (TerminalScreen *screen)
 
   /* A foreground process is guaranteed to be present. */
   terminal_screen_has_foreground_process (screen, NULL, &cmdline);
+  g_message ("terminal_screen_contents_changed_cb: %s", cmdline);
 
   if (g_strcmp0 (priv->current_cmdline, cmdline) == 0)
     goto out;
@@ -1912,6 +1916,7 @@ terminal_screen_show_notification (TerminalScreen *screen)
       g_notification_set_default_action (notification, detailed_action);
 
       app = terminal_app_get ();
+      g_message ("terminal_screen_show_notification: %s", priv->uuid);
       g_application_send_notification (G_APPLICATION (app), priv->uuid, notification);
     }
 }
@@ -1921,6 +1926,8 @@ terminal_screen_shell_precmd (VteTerminal *terminal)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
+
+  g_message ("terminal_screen_shell_precmd");
 
   priv->between_preexec_and_precmd = FALSE;
   priv->title_owned_by_foreground_process = FALSE;
@@ -1963,6 +1970,7 @@ terminal_screen_shell_preexec_cb (TerminalScreen *screen)
   retval = G_SOURCE_REMOVE;
 
  out:
+  g_message ("terminal_screen_shell_preexec_cb: %s, %d", priv->current_cmdline, retval);
   return retval;
 }
 
@@ -1974,6 +1982,8 @@ terminal_screen_shell_preexec (VteTerminal *terminal)
 
   g_return_if_fail (priv->contents_changed_source_id == 0);
   g_return_if_fail (priv->shell_preexec_source_id == 0);
+
+  g_message ("terminal_screen_shell_preexec");
 
   priv->between_preexec_and_precmd = TRUE;
   priv->title_owned_by_foreground_process = FALSE;
@@ -2355,6 +2365,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
       return TRUE;
   data = ((char**)data_buf)[0];
 #else
+  g_message ("terminal_screen_has_foreground_process: fgpid: %d", fgpid);
   g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
   if (!g_file_get_contents (filename, &data_buf, &len, NULL))
     {
@@ -2375,6 +2386,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
                 continue;
             }
 
+          g_message ("terminal_screen_has_foreground_process: looking for group member: pid: %d", pid);
           g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", (int) pid);
 
           g_clear_pointer (&data_buf, g_free);
@@ -2390,10 +2402,12 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
 #endif
 
   basename = g_path_get_basename (data);
+  g_message ("terminal_screen_has_foreground_process: basename: %s", basename);
   if (!basename)
     return TRUE;
 
   name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+  g_message ("terminal_screen_has_foreground_process: name: %s", name);
   if (!name)
     return TRUE;
 
@@ -2412,6 +2426,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
     }
 
   command = g_filename_to_utf8 (data, -1, NULL, NULL, NULL);
+  g_message ("terminal_screen_has_foreground_process: command: %s", command);
   if (!command)
     return TRUE;
 

@@ -2284,6 +2284,8 @@ terminal_window_dispose (GObject *object)
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app = terminal_app_get ();
 
+  g_message ("terminal_window_dispose: %p", window);
+
   if (!priv->disposed) {
     GSettings *global_settings = terminal_app_get_global_settings (app);
     g_signal_handlers_disconnect_by_func (global_settings,
@@ -2318,6 +2320,8 @@ terminal_window_finalize (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
+
+  g_message ("terminal_window_finalize: %p", window);
 
   if (priv->confirm_close_dialog)
     gtk_dialog_response (GTK_DIALOG (priv->confirm_close_dialog),

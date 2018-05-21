@@ -175,10 +175,14 @@ int
 main (int argc,
       char *argv[])
 {
-  gs_unref_object GApplication *app = NULL;
+  GApplication *app = NULL;
   int r = init_server (argc, argv, &app);
   if (r != 0)
     return r;
 
-  return g_application_run (app, 0, NULL);
+  int ret_val = g_application_run (app, 0, NULL);
+
+  g_message ("unreffing app: %u", ((GObject *) app)->ref_count);
+  g_object_unref (app);
+  return ret_val;
 }

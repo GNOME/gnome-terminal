@@ -648,6 +648,7 @@ terminal_app_shutdown (GApplication *application)
   for (l = windows; l != NULL; l = l->next)
     {
       TerminalWindow *window = TERMINAL_WINDOW (l->data);
+      g_message ("destroying window: %p, %u", window, ((GObject *) window)->ref_count);
       gtk_widget_destroy (GTK_WIDGET (window));
     }
 
@@ -792,6 +793,7 @@ terminal_app_finalize (GObject *object)
 {
   TerminalApp *app = TERMINAL_APP (object);
 
+  g_message ("terminal_app_finalize");
   g_signal_handlers_disconnect_by_func (app->clipboard,
                                         G_CALLBACK (clipboard_owner_change_cb),
                                         app);
@@ -889,10 +891,25 @@ terminal_app_dbus_unregister (GApplication    *application,
 }
 
 static void
+terminal_app_window_added (GtkApplication *application, GtkWindow *window)
+{
+  g_message ("window added: %p", window);
+  GTK_APPLICATION_CLASS (terminal_app_parent_class)->window_added (application, window);
+}
+
+static void
+terminal_app_window_removed (GtkApplication *application, GtkWindow *window)
+{
+  g_message ("window removed: %p", window);
+  GTK_APPLICATION_CLASS (terminal_app_parent_class)->window_removed (application, window);
+}
+
+static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *g_application_class = G_APPLICATION_CLASS (klass);
+  GtkApplicationClass *gtk_application_class = GTK_APPLICATION_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
 
@@ -901,6 +918,9 @@ terminal_app_class_init (TerminalAppClass *klass)
   g_application_class->startup = terminal_app_startup;
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
+
+  gtk_application_class->window_added = terminal_app_window_added;
+  gtk_application_class->window_removed = terminal_app_window_removed;
 
   signals[CLIPBOARD_TARGETS_CHANGED] =
     g_signal_new (I_("clipboard-targets-changed"),
