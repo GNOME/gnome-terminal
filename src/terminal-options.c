@@ -1277,7 +1277,7 @@ terminal_options_free (TerminalOptions *options)
 
   g_clear_object (&options->profiles_list);
 
-  g_slice_free (TerminalOptions, options);
+  g_free (options);
 }
 
 static GOptionContext *
