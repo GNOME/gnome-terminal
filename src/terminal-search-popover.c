@@ -310,6 +310,8 @@ update_regex (TerminalSearchPopover *popover)
     priv->regex = NULL;
   }
 
+  priv->regex_caseless = caseless;
+
   update_sensitivity (popover);
 
   g_object_notify_by_pspec (G_OBJECT (popover), pspecs[PROP_REGEX]);
@@ -350,7 +352,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   GtkWidget *widget = GTK_WIDGET (popover);
 
   priv->regex_pattern = 0;
-  priv->regex_caseless = FALSE;
+  priv->regex_caseless = TRUE;
 
   gtk_widget_init_template (widget);
 
