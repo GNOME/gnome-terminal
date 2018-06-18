@@ -477,7 +477,7 @@ append_new_terminal_item (GMenu *section,
     g_menu_item_set_link (item, G_MENU_LINK_SUBMENU, G_MENU_MODEL (submenu));
   } else {
     g_menu_item_set_action_and_target (item, "win.new-terminal",
-                                       "(ss)", target, "default");
+                                       "(ss)", target, "current");
   }
   g_menu_append_item (section, item);
 }
