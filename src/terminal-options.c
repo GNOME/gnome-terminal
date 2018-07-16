@@ -184,8 +184,7 @@ initial_window_new (guint source_tag)
 static void
 initial_window_free (InitialWindow *iw)
 {
-  g_list_foreach (iw->tabs, (GFunc) initial_tab_free, NULL);
-  g_list_free (iw->tabs);
+  g_list_free_full (iw->tabs, (GDestroyNotify) initial_tab_free);
   g_free (iw->geometry);
   g_free (iw->role);
   g_slice_free (InitialWindow, iw);
@@ -1216,8 +1215,7 @@ terminal_options_merge_config (TerminalOptions *options,
 
   if (have_error)
     {
-      g_list_foreach (initial_windows, (GFunc) initial_window_free, NULL);
-      g_list_free (initial_windows);
+      g_list_free_full (initial_windows, (GDestroyNotify) initial_window_free);
       return FALSE;
     }
 
@@ -1254,8 +1252,7 @@ terminal_options_ensure_window (TerminalOptions *options)
 void
 terminal_options_free (TerminalOptions *options)
 {
-  g_list_foreach (options->initial_windows, (GFunc) initial_window_free, NULL);
-  g_list_free (options->initial_windows);
+  g_list_free_full (options->initial_windows, (GDestroyNotify) initial_window_free);
 
   g_free (options->default_role);
   g_free (options->default_geometry);
