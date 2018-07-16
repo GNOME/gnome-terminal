@@ -62,7 +62,7 @@ typedef struct {
 } EncodingEntry;
 
 /* These MUST be sorted by charset so that bsearch can work! */
-static const EncodingEntry const encodings[] = {
+static const EncodingEntry encodings[] = {
   { "ARMSCII-8",      N_("Armenian"),            GROUP_OBSOLETE },
   { "BIG5",           N_("Chinese Traditional"), GROUP_CJKV },
   { "BIG5-HKSCS",     N_("Chinese Traditional"), GROUP_CJKV },
