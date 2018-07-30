@@ -532,13 +532,6 @@ main (int argc, char **argv)
 
   _terminal_debug_init ();
 
-  /* Make a NULL-terminated copy since we may need it later */
-  gs_free char **argv_copy = g_new (char *, argc + 1);
-  int i;
-  for (i = 0; i < argc; ++i)
-    argv_copy [i] = argv [i];
-  argv_copy [i] = NULL;
-
   gs_free_error GError *error = NULL;
   gs_free_options TerminalOptions *options = terminal_options_parse (&argc, &argv, &error);
   if (options == NULL) {
