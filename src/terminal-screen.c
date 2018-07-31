@@ -2084,8 +2084,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (!process_name && !cmdline)
     return TRUE;
 
-  if (process_name)
-    gs_transfer_out_value (process_name, &name);
+  gs_transfer_out_value (process_name, &name);
 
   if (len > 0 && data[len - 1] == '\0')
     len--;
@@ -2099,8 +2098,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (!command)
     return TRUE;
 
-  if (cmdline)
-    gs_transfer_out_value (cmdline, &command);
+  gs_transfer_out_value (cmdline, &command);
 
   return TRUE;
 }
