@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-help\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-08 12:58+0000\n"
-"PO-Revision-Date: 2018-08-09 12:40+0200\n"
+"POT-Creation-Date: 2018-08-09 10:49+0000\n"
+"PO-Revision-Date: 2018-08-10 13:53+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -3179,19 +3179,16 @@ msgstr "Líneas de desplazamiento hacia atrás"
 msgid ""
 "You can limit the number of lines of terminal output which are remembered."
 msgstr ""
+"Puede limitar el número de lineas de salida de la terminal que se recuerdan."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:127
-#, fuzzy
-#| msgid ""
-#| "Check <gui>Limit scrollback to</gui> and enter a number of lines which is "
-#| "greater than 0 to limit scrollback."
 msgid ""
 "Check <gui>Limit scrollback to</gui> and enter a number of lines to limit "
 "scrollback."
 msgstr ""
-"Marque la opción <gui>Limitar desplazamiento a</gui> e introduzca el número "
-"de líneas superior a 0 para limitar el desplazamiento."
+"Marque la opción <gui>Limitar desplazamiento hacia atrás a</gui> e "
+"introduzca el número de líneas para limitar el desplazamiento hacia atrás."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:131
@@ -3204,10 +3201,8 @@ msgstr ""
 
 #. (itstool) path: section/p
 #: C/pref-scrolling.page:136
-#, fuzzy
-#| msgid "You can disable the scrollbar:"
 msgid "You can choose to have unlimited scrollback."
-msgstr "Puede desactivar la barra lateral:"
+msgstr "Puede elegir tener desplazamiento hacia atrás ilimitado."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:151
@@ -3223,6 +3218,12 @@ msgid ""
 "such, do not show up in the directory listing. The occupied disk space is "
 "freed up as soon as the corresponding terminal closes."
 msgstr ""
+"Los datos del desplazamiento hacia atrás se almacenan en archivos "
+"comprimidos y cifrados en el disco, en la ubicación predeterminada del "
+"sistema para los archivos temporales (generalmente <file>/tmp</file>). Estos "
+"archivos se desvinculan inmediatamente después de su creación y como tales, "
+"no aparecen en la lista del directorio. El espacio en disco ocupado se "
+"libera tan pronto como se cierra la terminal correspondiente."
 
 #. (itstool) path: note/p
 #: C/pref-scrolling.page:165
@@ -3231,6 +3232,9 @@ msgid ""
 "files. If in doubt, monitor disk usage for example with the command <cmd>du /"
 "tmp</cmd>."
 msgstr ""
+"Asegúrese de tener suficiente espacio en disco disponible para estos "
+"archivos temporales. En caso de duda, monitorice el uso del disco por "
+"ejemplo con el comando <cmd>du /tmp</cmd>."
 
 #. (itstool) path: note/p
 #: C/pref-scrolling.page:171
@@ -3238,6 +3242,10 @@ msgid ""
 "A giant scrollback buffer makes resizing the terminal window slower. As a "
 "rule of thumb, resizing gets noticeably slow at around 1 million lines."
 msgstr ""
+"Un búfer de desplazamiento hacia atrás enorme hace que el cambio de tamaño "
+"de la ventana de la terminal sea más lento. Como regla general, el "
+"redimensionamiento se vuelve notablemente lento en alrededor de 1 millón de "
+"líneas."
 
 #. (itstool) path: credit/years
 #: C/pref-tab-window.page:15
@@ -3258,16 +3266,12 @@ msgstr "Ventanas y pestañas"
 
 #. (itstool) path: page/p
 #: C/pref-tab-window.page:30
-#, fuzzy
-#| msgid ""
-#| "You can chose whether to open a new tab or a new <app>Terminal</app> "
-#| "window when you use <gui style=\"menuitem\">Open Terminal</gui>."
 msgid ""
 "You can choose whether to open a new tab or a new <app>Terminal</app> window "
 "when you use <gui style=\"menuitem\">New Terminal</gui>."
 msgstr ""
 "Puede elegir abrir una pestaña nueva o una ventana nueva de la "
-"<app>Terminal</app> cuando use la opción <gui style=\"menuitem\">Abrir "
+"<app>Terminal</app> al usar la opción <gui style=\"menuitem\">Nueva "
 "terminal</gui>."
 
 #. (itstool) path: item/p
@@ -3374,10 +3378,8 @@ msgstr ""
 
 #. (itstool) path: page/title
 #: C/prob-reset.page:27
-#, fuzzy
-#| msgid "Reset your <app>Terminal</app> output"
 msgid "Reset your <app>Terminal</app> state"
-msgstr "Reiniciar la salida de la <app>Terminal</app>"
+msgstr "Reiniciar el estado de su <app>Terminal</app>"
 
 #. (itstool) path: page/p
 #: C/prob-reset.page:29
@@ -3423,12 +3425,6 @@ msgstr "Reiniciar y limpiar"
 
 #. (itstool) path: section/p
 #: C/prob-reset.page:54
-#, fuzzy
-#| msgid ""
-#| "In addition to resetting your <app>Terminal</app>, <gui style=\"menuitem"
-#| "\">Reset and Clear</gui> clears the visible <app>Terminal</app> screen "
-#| "space of all terminal output. To <gui style=\"menuitem\">Reset and Clear</"
-#| "gui> your <app>Terminal</app>:"
 msgid ""
 "In addition to resetting your <app>Terminal</app>, <gui style=\"menuitem"
 "\">Reset and Clear</gui> clears the visible <app>Terminal</app> screen space "
@@ -3436,9 +3432,10 @@ msgid ""
 "gui> your <app>Terminal</app>:"
 msgstr ""
 "Además de reiniciar su <app>Terminal</app>, <gui style=\"menuitem"
-"\">Reiniciar y limpiar</gui> limpia la salida de la parte visible del "
-"espacio de la <app>Terminal</app>. Para <gui style=\"menuitem\">Reiniciar y "
-"limpiar</gui> su <app>Terminal</app>:"
+"\">Reiniciar y limpiar</gui> limpia la parte visible del espacio de la "
+"pantalla de la <app>Terminal</app> y el contenido del desplazamiento hacia "
+"atrás. Para <gui style=\"menuitem\">Reiniciar y limpiar</gui> su "
+"<app>Terminal</app>:"
 
 #. (itstool) path: item/p
 #: C/prob-reset.page:61
@@ -3451,16 +3448,12 @@ msgstr ""
 
 #. (itstool) path: note/p
 #: C/prob-reset.page:69
-#, fuzzy
-#| msgid ""
-#| "<gui>Reset and clear</gui> provides the similar functionality than the "
-#| "terminal command <cmd>reset</cmd>."
 msgid ""
 "<gui>Reset and Clear</gui> provides similar functionality as the terminal "
 "command <cmd>reset</cmd>."
 msgstr ""
 "<gui>Reiniciar y limpiar</gui> proporciona una funcionalidad similar a la "
-"del comando <cmd>reset</cmd>."
+"del comando de la terminal <cmd>reset</cmd>."
 
 #. (itstool) path: info/desc
 #: C/txt-copy-paste.page:28
@@ -3488,22 +3481,16 @@ msgstr "<gui>Copiar</gui>"
 
 #. (itstool) path: item/p
 #: C/txt-copy-paste.page:40
-#, fuzzy
-#| msgid ""
-#| "Highlight the text portions you wish to copy, then select <guiseq><gui "
-#| "style=\"menu\">Edit</gui> <gui style=\"menuitem\">Copy</gui></guiseq>. "
-#| "Alternatively, you can press <keyseq><key>Ctrl</key><key>Shift</"
-#| "key><key>C</key></keyseq>."
 msgid ""
 "Highlight the text portions you wish to copy, then select <guiseq><gui style="
 "\"menu\">Edit</gui> <gui style=\"menuitem\">Copy</gui></guiseq>. "
 "Alternatively, you can press <keyseq><key>Shift</key><key>Ctrl</key><key>C</"
 "key></keyseq>."
 msgstr ""
-"Resalte los fragmentos de texto que quiere copiar y seleccione <guiseq><gui "
-"style=\"menu\">Editar</gui> <gui style=\"menuitem\">Copiar</gui></guiseq>. "
-"Alternativamente, puede pulsar <keyseq><key>Ctrl</key><key>Mayús</"
-"key><key>C</key></keyseq>."
+"Resalte los fragmentos de texto que quiere copiar y luego seleccione "
+"<guiseq><gui style=\"menu\">Editar</gui> <gui style=\"menuitem\">Copiar</"
+"gui></guiseq>. Alternativamente, puede pulsar <keyseq><key>Mayús</"
+"key><key>Ctrl</key><key>C</key></keyseq>."
 
 #. (itstool) path: item/title
 #: C/txt-copy-paste.page:46
@@ -3512,21 +3499,14 @@ msgstr "<gui>Copiar como HTML</gui>"
 
 #. (itstool) path: item/p
 #: C/txt-copy-paste.page:47
-#, fuzzy
-#| msgid ""
-#| "Highlight the text portions you wish to copy, then select <guiseq><gui "
-#| "style=\"menu\">Edit</gui> <gui style=\"menuitem\">Copy</gui></guiseq>. "
-#| "Alternatively, you can press <keyseq><key>Ctrl</key><key>Shift</"
-#| "key><key>C</key></keyseq>."
 msgid ""
 "Highlight the text portions you wish to copy with color and font attributes, "
 "then select <guiseq><gui style=\"menu\">Edit</gui> <gui style=\"menuitem"
 "\">Copy as HTML</gui></guiseq>."
 msgstr ""
-"Resalte los fragmentos de texto que quiere copiar y seleccione <guiseq><gui "
-"style=\"menu\">Editar</gui> <gui style=\"menuitem\">Copiar</gui></guiseq>. "
-"Alternativamente, puede pulsar <keyseq><key>Ctrl</key><key>Mayús</"
-"key><key>C</key></keyseq>."
+"Resalte los fragmentos de texto que quiere copiar con atributos de color y "
+"tipografía y luego seleccione <guiseq><gui style=\"menu\">Editar</gui> <gui "
+"style=\"menuitem\">Copiar como HTML</gui></guiseq>."
 
 #. (itstool) path: item/title
 #: C/txt-copy-paste.page:52
@@ -3535,19 +3515,14 @@ msgstr "<gui>Pegar</gui>"
 
 #. (itstool) path: item/p
 #: C/txt-copy-paste.page:53
-#, fuzzy
-#| msgid ""
-#| "Right click in the <app>Terminal</app> and select <gui style=\"menuitem"
-#| "\">Paste</gui>. Alternatively, you can press <keyseq><key>Ctrl</"
-#| "key><key>Shift</key><key>V</key></keyseq>."
 msgid ""
 "Right click in the <app>Terminal</app> and select <gui style=\"menuitem"
 "\">Paste</gui>. Alternatively, you can press <keyseq><key>Shift</"
 "key><key>Ctrl</key><key>V</key></keyseq>."
 msgstr ""
 "Pulse con el botón derecho en la <app>Terminal</app> y seleccione <gui style="
-"\"menuitem\">Pegar</gui>. Alternativamente, puede pulsar <keyseq><key>Ctrl</"
-"key><key>Mayús</key><key>V</key></keyseq>."
+"\"menuitem\">Pegar</gui>. Alternativamente, puede pulsar <keyseq><key>Mayús</"
+"key><key>Ctrl</key><key>V</key></keyseq>."
 
 #. (itstool) path: note/p
 #: C/txt-copy-paste.page:61
@@ -3683,10 +3658,8 @@ msgstr "Seleccione <gui style=\"menuitem\">Enviar correo a…</gui>."
 
 #. (itstool) path: info/desc
 #: C/txt-save-text.page:27
-#, fuzzy
-#| msgid "Search the <app>Terminal</app> output."
 msgid "Save <app>Terminal</app> output to a file."
-msgstr "Buscar en la salida de la <app>Terminal</app>."
+msgstr "Guarde la salida de la <app>Terminal</app> en un archivo."
 
 #. (itstool) path: page/title
 #: C/txt-save-text.page:31
@@ -3700,6 +3673,9 @@ msgid ""
 "text file. This may be useful if you have to submit the terminal output as "
 "debugging information."
 msgstr ""
+"Puede guardar toda la salida de una pestaña o ventana de la <app>Terminal</"
+"app> en un archivo de texto. Esto puede ser útil si tiene que enviar la "
+"salida del terminal como información de depuración."
 
 #. (itstool) path: item/p
 #: C/txt-save-text.page:39
@@ -3714,7 +3690,7 @@ msgstr "Seleccione <gui style=\"menuitem\">Guardar contenido…</gui>."
 #. (itstool) path: item/p
 #: C/txt-save-text.page:45
 msgid "Choose your desired directory and enter a filename."
-msgstr ""
+msgstr "Elija la carpeta que quiera e introduzca el nombre de archivo."
 
 #. (itstool) path: item/p
 #: C/txt-save-text.page:48
@@ -3728,6 +3704,9 @@ msgid ""
 "example <input>.txt</input>. This may be useful if you plan to view the file "
 "when using another operating system."
 msgstr ""
+"Opcionalmente, puede introducir una extensión de archivo junto con el nombre "
+"del archivo, por ejemplo <input>.txt</input>. Esto puede ser útil si planea "
+"ver el archivo usando otro sistema operativo."
 
 #. (itstool) path: info/desc
 #: C/txt-search.page:27
@@ -3759,6 +3738,9 @@ msgid ""
 "Type in the search keyword and press <key>Enter</key> to search backwards. "
 "Alternatively, click on the arrows according to the desired search direction."
 msgstr ""
+"Escriba la palabra clave de búsqueda y pulse <key>Intro</key> para buscar "
+"hacia atrás. Alternativamente, pulse en las flechas según la dirección de "
+"búsqueda que quiera."
 
 #. (itstool) path: page/p
 #: C/txt-search.page:47
@@ -3788,13 +3770,6 @@ msgstr "<gui style=\"checkbox\">Coincidir sólo con la palabra entera</gui>"
 
 #. (itstool) path: item/p
 #: C/txt-search.page:58
-#, fuzzy
-#| msgid ""
-#| "<app>Terminal</app> will look for the entire keyword and will ignore "
-#| "results that partially match your search keyword. For example, if you "
-#| "have searched for \"gnome\", <app>Terminal</app> will show only results "
-#| "that match this keyword exactly and omit results such as \"gnome-terminal"
-#| "\"."
 msgid ""
 "<app>Terminal</app> will look for the entire keyword and will ignore results "
 "that partially match your search keyword. For example, if you have searched "
@@ -3802,9 +3777,9 @@ msgid ""
 "keyword exactly and omit results such as “bobcat”."
 msgstr ""
 "La <app>Terminal</app> buscará la palabra completa e ignorará los resultados "
-"que coincidan con ella parcialmente. Por ejemplo, si busca la palabra "
-"«gnome», la <app>Terminal</app> sólo mostrará los resultados que coincidan "
-"con esta palabra exactamente y omitirá los resultados como «gnome-terminal»."
+"que coincidan con ella parcialmente. Por ejemplo, si busca la palabra «cat», "
+"la <app>Terminal</app> sólo mostrará los resultados que coincidan con esta "
+"palabra exactamente y omitirá resultados como «bobcat»."
 
 #. (itstool) path: item/title
 #: C/txt-search.page:65
@@ -3829,18 +3804,13 @@ msgstr "<gui style=\"checkbox\">Volver al principio</gui>"
 
 #. (itstool) path: item/p
 #: C/txt-search.page:72
-#, fuzzy
-#| msgid ""
-#| "<app>Terminal</app> searches from your current location in the scrollback "
-#| "to the end of available terminal output and then restarts the search from "
-#| "the top."
 msgid ""
 "<app>Terminal</app> searches from your current location in the scrollback to "
 "the end of available terminal output and then restarts the search."
 msgstr ""
-"La <app>Terminal</app> busca desde su ubicación actual en el desplazamiento "
-"hacia atrás hasta el final de la salida de la terminal disponible y luego "
-"vuelve a buscar desde el principio."
+"La <app>Terminal</app> busca desde su ubicación actual, en el desplazamiento "
+"hacia atrás, hasta el final de la salida disponible de la terminal y luego "
+"reinicia la búsqueda."
 
 #. (itstool) path: note/p
 #: C/txt-search.page:79
