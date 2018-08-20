@@ -1098,6 +1098,7 @@ terminal_options_parse (int *argcp,
     return FALSE;
   }
 
+  options->wait = wait != 0;
   return options;
 }
 

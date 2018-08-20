@@ -65,14 +65,37 @@ receiver_child_exited_cb (TerminalReceiver *receiver,
     g_main_loop_quit (data->loop);
 }
 
+static void
+factory_name_owner_notify_cb (TerminalFactory *factory,
+                              GParamSpec *pspec,
+                              RunData *data)
+{
+  /* Name owner change to NULL can only mean that the server
+   * went away before it could send out our child-exited signal.
+   * Assume the server was killed and thus our child process
+   * too, and return with the corresponding exit code.
+   */
+  if (g_dbus_proxy_get_name_owner(G_DBUS_PROXY (factory)) != NULL)
+    return;
+
+  data->status = W_EXITCODE(0, SIGKILL);
+
+  if (g_main_loop_is_running (data->loop))
+    g_main_loop_quit (data->loop);
+}
+
 static int
-run_receiver (TerminalReceiver *receiver)
+run_receiver (TerminalFactory *factory,
+              TerminalReceiver *receiver)
 {
   RunData data = { g_main_loop_new (NULL, FALSE), 0 };
-  gulong id = g_signal_connect (receiver, "child-exited",
-                                G_CALLBACK (receiver_child_exited_cb), &data);
+  gulong receiver_exited_id = g_signal_connect (receiver, "child-exited",
+                                                G_CALLBACK (receiver_child_exited_cb), &data);
+  gulong factory_notify_id = g_signal_connect (factory, "notify::g-name-owner",
+                                               G_CALLBACK (factory_name_owner_notify_cb), &data);
   g_main_loop_run (data.loop);
-  g_signal_handler_disconnect (receiver, id);
+  g_signal_handler_disconnect (receiver, receiver_exited_id);
+  g_signal_handler_disconnect (factory, factory_notify_id);
   g_main_loop_unref (data.loop);
 
   /* Mangle the exit status */
@@ -197,6 +220,7 @@ handle_exec_error (const char *service_name,
 static gboolean
 factory_proxy_new_for_service_name (const char *service_name,
                                     gboolean ping_server,
+                                    gboolean connect_signals,
                                     TerminalFactory **factory_ptr,
                                     char **service_name_ptr,
                                     GError **error)
@@ -208,7 +232,7 @@ factory_proxy_new_for_service_name (const char *service_name,
   gs_unref_object TerminalFactory *factory =
     terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                              G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
-                                             G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                             connect_signals ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
                                              service_name,
                                              TERMINAL_FACTORY_OBJECT_PATH,
                                              NULL /* cancellable */,
@@ -268,6 +292,7 @@ factory_proxy_new (TerminalOptions *options,
     gs_free_error GError *err = NULL;
     if (factory_proxy_new_for_service_name (options->server_unique_name,
                                             TRUE,
+                                            options->wait,
                                             factory_ptr,
                                             service_name_ptr,
                                             &err)) {
@@ -287,6 +312,7 @@ factory_proxy_new (TerminalOptions *options,
 
   return factory_proxy_new_for_service_name (service_name,
                                              FALSE,
+                                             options->wait,
                                              factory_ptr,
                                              service_name_ptr,
                                              error);
@@ -564,7 +590,7 @@ main (int argc, char **argv)
     return exit_code;
 
   if (receiver != NULL) {
-    exit_code = run_receiver (receiver);
+    exit_code = run_receiver (factory, receiver);
     g_object_unref (receiver);
   } else
     exit_code = EXIT_SUCCESS;

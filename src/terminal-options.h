@@ -96,6 +96,7 @@ typedef struct
   char *sm_config_prefix;
 
   guint zoom_set : 1;
+  guint wait : 1;
 } TerminalOptions;
 
 typedef struct
