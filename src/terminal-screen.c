@@ -589,12 +589,17 @@ terminal_screen_dispose (GObject *object)
       priv->launch_child_source_id = 0;
     }
 
+  G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
+
+  /* Unregister *after* chaining up to the parent's dispose,
+   * since that will terminate the child process if there still
+   * is any, and we need to get the dbus signal out
+   * from the TerminalReceiver.
+   */
   if (priv->registered) {
     terminal_app_unregister_screen (terminal_app_get (), screen);
     priv->registered = FALSE;
   }
-
-  G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 }
 
 static void
