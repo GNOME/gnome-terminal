@@ -573,6 +573,11 @@ terminal_screen_dispose (GObject *object)
   TerminalScreenPrivate *priv = screen->priv;
   GtkSettings *settings;
 
+  /* Unset child PID so that when an eventual child-exited signal arrives,
+   * we don't emit "close".
+   */
+  priv->child_pid = -1;
+
   settings = gtk_widget_get_settings (GTK_WIDGET (screen));
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL, NULL,
@@ -1641,6 +1646,10 @@ terminal_screen_child_exited (VteTerminal *terminal,
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
   TerminalExitAction action;
+
+  /* Don't do anything if we don't have a child */
+  if (priv->child_pid == -1)
+    return;
 
   /* No need to chain up to VteTerminalClass::child_exited since it's NULL */
 
