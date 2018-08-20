@@ -180,5 +180,9 @@ main (int argc,
   if (r != 0)
     return r;
 
+  /* Note that this flushes the D-Bus connection just before quitting,
+   * thus ensuring that all pending signal emissions (e.g. child-exited)
+   * are delivered.
+   */
   return g_application_run (app, 0, NULL);
 }
