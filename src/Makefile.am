@@ -95,6 +95,7 @@ nodist_gnome_terminal_server_SOURCES = $(gnome_terminal_server_built)
 
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
+	-DVTE_DISABLE_DEPRECATION_WARNINGS \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	$(AM_CPPFLAGS)
 
