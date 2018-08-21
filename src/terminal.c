@@ -319,7 +319,8 @@ factory_proxy_new (TerminalOptions *options,
 }
 
 static void
-handle_show_preferences (const char *service_name)
+handle_show_preferences (TerminalOptions *options,
+                         const char *service_name)
 {
   gs_free_error GError *error = NULL;
   gs_unref_object GDBusConnection *bus = NULL;
@@ -350,6 +351,9 @@ handle_show_preferences (const char *service_name)
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("av"));
   g_variant_builder_close (&builder);
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+  if (options->startup_id)
+    g_variant_builder_add (&builder, "{sv}",
+                           "desktop-startup-id", g_variant_new_string (options->startup_id));
   g_variant_builder_close (&builder);
 
   if (!g_dbus_connection_call_sync (bus,
@@ -395,7 +399,7 @@ handle_options (TerminalOptions *options,
   g_get_charset (&encoding);
 
   if (options->show_preferences) {
-    handle_show_preferences (service_name);
+    handle_show_preferences (options, service_name);
   } else {
     /* Make sure we open at least one window */
     terminal_options_ensure_window (options);
