@@ -993,7 +993,11 @@ terminal_options_parse (int *argcp,
   options->execute = FALSE;
 
   const char *startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
+  if (startup_id && startup_id[0] &&
+      g_utf8_validate (startup_id, -1, NULL))
+    options->startup_id = g_strdup (startup_id);
+  else
+    options->startup_id = NULL;
   options->display_name = NULL;
   options->initial_windows = NULL;
   options->default_role = NULL;
