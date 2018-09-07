@@ -65,6 +65,10 @@
 #define GTK_DEBUG_ENABLE_INSPECTOR_KEY          "enable-inspector-keybinding"
 #define GTK_DEBUG_ENABLE_INSPECTOR_TYPE         G_VARIANT_TYPE_BOOLEAN
 
+#ifdef DISUNIFY_NEW_TERMINAL_SECTION
+#error Use a gsettings override instead
+#endif
+
 /*
  * Session state is stored entirely in the RestartCommand command line.
  *
@@ -109,6 +113,8 @@ struct _TerminalApp
   GtkClipboard *clipboard;
   GdkAtom *clipboard_targets;
   int n_clipboard_targets;
+
+  gboolean unified_menu;
 };
 
 enum
@@ -426,16 +432,17 @@ append_new_terminal_item (GMenu *section,
 }
 
 static void
-fill_new_terminal_section (GMenu *section,
+fill_new_terminal_section (TerminalApp *app,
+                           GMenu *section,
                            ProfileData *profiles,
                            guint n_profiles)
 {
-#ifndef DISUNIFY_NEW_TERMINAL_SECTION
-  append_new_terminal_item (section, _("New _Terminal"), "default", profiles, n_profiles);
-#else
-  append_new_terminal_item (section, _("New _Tab"), "tab", profiles, n_profiles);
-  append_new_terminal_item (section, _("New _Window"), "window", profiles, n_profiles);
-#endif
+  if (terminal_app_get_menu_unified (app)) {
+    append_new_terminal_item (section, _("New _Terminal"), "default", profiles, n_profiles);
+  } else {
+    append_new_terminal_item (section, _("New _Tab"), "tab", profiles, n_profiles);
+    append_new_terminal_item (section, _("New _Window"), "window", profiles, n_profiles);
+  }
 }
 
 static GMenu *
@@ -477,7 +484,7 @@ terminal_app_update_profile_menus (TerminalApp *app)
   ProfileData *profiles = (ProfileData*) array->data;
   guint n_profiles = array->len;
 
-  fill_new_terminal_section (app->menubar_new_terminal_section, profiles, n_profiles);
+  fill_new_terminal_section (app, app->menubar_new_terminal_section, profiles, n_profiles);
 
   app->set_profile_menu = set_profile_submenu_new (profiles, n_profiles);
 
@@ -641,7 +648,7 @@ terminal_app_startup (GApplication *application)
   /* App menu */
   GMenu *appmenu_new_terminal_section = gtk_application_get_menu_by_id (gtk_application,
                                                                         "new-terminal-section");
-  fill_new_terminal_section (appmenu_new_terminal_section, NULL, 0); /* no submenu */
+  fill_new_terminal_section (app, appmenu_new_terminal_section, NULL, 0); /* no submenu */
 
   /* Menubar */
   /* If the menubar is shown by the shell, omit mnemonics for the submenus. This is because Alt+F etc.
@@ -702,6 +709,11 @@ terminal_app_init (TerminalApp *app)
   app->gtk_debug_settings = terminal_g_settings_new (GTK_DEBUG_SETTING_SCHEMA,
                                                      GTK_DEBUG_ENABLE_INSPECTOR_KEY,
                                                      GTK_DEBUG_ENABLE_INSPECTOR_TYPE);
+
+  /* This is an internal setting that exists only for distributions
+   * to override, so we cache it on startup and don't react to changes.
+   */
+  app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU);
 
 #if GTK_CHECK_VERSION (3, 19, 0)
   GtkSettings *gtk_settings = gtk_settings_get_default ();
@@ -1151,4 +1163,12 @@ terminal_app_get_object_manager (TerminalApp *app)
 {
   g_warn_if_fail (app->object_manager != NULL);
   return app->object_manager;
+}
+
+gboolean
+terminal_app_get_menu_unified (TerminalApp *app)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), TRUE);
+
+  return app->unified_menu;
 }

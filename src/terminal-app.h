@@ -103,6 +103,8 @@ GMenuModel *terminal_app_get_menubar (TerminalApp *app);
 
 GMenuModel *terminal_app_get_profile_section (TerminalApp *app);
 
+gboolean terminal_app_get_menu_unified (TerminalApp *app);
+
 /* GSettings */
 
 GSettings *terminal_app_get_global_settings (TerminalApp *app);

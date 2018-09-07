@@ -1771,21 +1771,21 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
 
   /* New Terminal section */
   gs_unref_object GMenu *section6 = g_menu_new ();
-#ifndef DISUNIFY_NEW_TERMINAL_SECTION
-  gs_unref_object GMenuItem *item6 = g_menu_item_new (_("New _Terminal"), NULL);
-  g_menu_item_set_action_and_target (item6, "win.new-terminal",
-                                     "(ss)", "default", "current");
-  g_menu_append_item (section6, item6);
-#else
-  gs_unref_object GMenuItem *item61 = g_menu_item_new (_("New _Window"), NULL);
-  g_menu_item_set_action_and_target (item61, "win.new-terminal",
-                                     "(ss)", "window", "current");
-  g_menu_append_item (section6, item61);
-  gs_unref_object GMenuItem *item62 = g_menu_item_new (_("New _Tab"), NULL);
-  g_menu_item_set_action_and_target (item62, "win.new-terminal",
-                                     "(ss)", "tab", "current");
-  g_menu_append_item (section6, item62);
-#endif
+  if (terminal_app_get_menu_unified (app)) {
+    gs_unref_object GMenuItem *item6 = g_menu_item_new (_("New _Terminal"), NULL);
+    g_menu_item_set_action_and_target (item6, "win.new-terminal",
+                                       "(ss)", "default", "current");
+    g_menu_append_item (section6, item6);
+  } else {
+    gs_unref_object GMenuItem *item61 = g_menu_item_new (_("New _Window"), NULL);
+    g_menu_item_set_action_and_target (item61, "win.new-terminal",
+                                       "(ss)", "window", "current");
+    g_menu_append_item (section6, item61);
+    gs_unref_object GMenuItem *item62 = g_menu_item_new (_("New _Tab"), NULL);
+    g_menu_item_set_action_and_target (item62, "win.new-terminal",
+                                       "(ss)", "tab", "current");
+    g_menu_append_item (section6, item62);
+  }
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section6));
 
   /* Window section */
