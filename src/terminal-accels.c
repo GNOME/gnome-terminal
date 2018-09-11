@@ -152,11 +152,11 @@ static KeyEntry search_entries[] = {
 };
 
 static KeyEntry view_entries[] = {
-  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "show-menubar", NULL, NULL),
-  ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",   NULL, NULL),
-  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",      NULL, NULL),
-  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",     NULL, NULL),
-  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom-normal",  NULL, NULL)
+  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "menubar-visible", NULL, NULL),
+  ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",      NULL, NULL),
+  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",         NULL, NULL),
+  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",        NULL, NULL),
+  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom-normal",     NULL, NULL)
 };
 
 static KeyEntry terminal_entries[] = {
