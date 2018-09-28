@@ -585,7 +585,6 @@ listbox_add_all_profiles (PrefData *data)
 
   for (l = list; l != NULL; l = l->next) {
     GSettings *profile = (GSettings *) l->data;
-    gs_free gchar *text = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
     gs_free gchar *uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
 
     row = listbox_create_row (NULL,
