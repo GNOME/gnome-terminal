@@ -849,16 +849,16 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   gtk_widget_set_visible (theme_variant_combo, FALSE);
 #endif /* GTK+ 3.19 */
 
-#ifndef DISUNIFY_NEW_TERMINAL_SECTION
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
-                   new_terminal_mode_combo,
-                   "active-id",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-#else
-  gtk_widget_set_visible (new_terminal_mode_label, FALSE);
-  gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
-#endif
+  if (terminal_app_get_menu_unified (app)) {
+    g_settings_bind (settings,
+                     TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
+                     new_terminal_mode_combo,
+                     "active-id",
+                     G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  } else {
+    gtk_widget_set_visible (new_terminal_mode_label, FALSE);
+    gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
+  }
 
   if (shell_shows_menubar) {
     gtk_widget_set_visible (disable_mnemonics_button, FALSE);
