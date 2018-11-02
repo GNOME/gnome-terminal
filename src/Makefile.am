@@ -53,6 +53,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-encoding.h \
 	terminal-gdbus.c \
 	terminal-gdbus.h \
+	terminal-headerbar.c \
+	terminal-headerbar.h \
 	terminal-icon-button.h \
 	terminal-icon-button.c \
 	terminal-info-bar.c \
@@ -325,6 +327,7 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	terminal.about \
+	terminal-headerbar.ui \
 	terminal-menubar.ui.in \
 	terminal-notebook-menu.ui \
 	terminal-window.ui \

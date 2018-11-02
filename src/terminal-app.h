@@ -105,6 +105,8 @@ GMenuModel *terminal_app_get_profile_section (TerminalApp *app);
 
 gboolean terminal_app_get_menu_unified (TerminalApp *app);
 
+gboolean terminal_app_get_use_headerbar (TerminalApp *app);
+
 /* GSettings */
 
 GSettings *terminal_app_get_global_settings (TerminalApp *app);

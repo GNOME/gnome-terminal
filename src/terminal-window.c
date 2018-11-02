@@ -32,6 +32,7 @@
 #include "terminal-debug.h"
 #include "terminal-enums.h"
 #include "terminal-encoding.h"
+#include "terminal-headerbar.h"
 #include "terminal-icon-button.h"
 #include "terminal-intl.h"
 #include "terminal-mdi-container.h"
@@ -2094,6 +2095,7 @@ terminal_window_init (TerminalWindow *window)
   uuid_t u;
   char uuidstr[37], role[64];
   gboolean shell_shows_menubar;
+  gboolean use_headerbar;
   GSimpleAction *action;
 
   app = terminal_app_get ();
@@ -2116,6 +2118,14 @@ terminal_window_init (TerminalWindow *window)
       g_signal_connect_after (window, "size-allocate", G_CALLBACK (terminal_window_size_allocate_cb), NULL);
     }
 #endif
+
+  use_headerbar = terminal_app_get_use_headerbar (app);
+  if (use_headerbar) {
+    GtkWidget *headerbar;
+
+    headerbar = terminal_headerbar_new ();
+    gtk_window_set_titlebar (GTK_WINDOW (window), headerbar);
+  }
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
 
@@ -2191,8 +2201,8 @@ terminal_window_init (TerminalWindow *window)
                         priv->menubar,
                         FALSE, FALSE, 0);
 
-    terminal_window_set_menubar_visible (window, TRUE);
-    priv->use_default_menubar_visibility = TRUE;
+    terminal_window_set_menubar_visible (window, !use_headerbar);
+    priv->use_default_menubar_visibility = !use_headerbar;
   }
 
   /* Maybe make Inspector available */
