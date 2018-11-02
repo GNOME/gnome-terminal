@@ -558,7 +558,8 @@ clipboard_owner_change_cb (GtkClipboard *clipboard,
                                  app);
 }
 
-/* App menu callbacks */
+/* Callbacks from former app menu.
+ * The preferences one is still used with the "--preferences" cmdline option. */
 
 static void
 app_menu_preferences_cb (GSimpleAction *action,
@@ -617,7 +618,6 @@ static void
 terminal_app_startup (GApplication *application)
 {
   TerminalApp *app = TERMINAL_APP (application);
-  GtkApplication *gtk_application = GTK_APPLICATION (application);
   const GActionEntry action_entries[] = {
     { "preferences", app_menu_preferences_cb,   NULL, NULL, NULL },
     { "help",        app_menu_help_cb,          NULL, NULL, NULL },
@@ -638,17 +638,11 @@ terminal_app_startup (GApplication *application)
 
   app_load_css (application);
 
-  /* Figure out whether the shell shows appmenu/menubar */
-  gboolean shell_shows_appmenu, shell_shows_menubar;
+  /* Figure out whether the shell shows the menubar */
+  gboolean shell_shows_menubar;
   g_object_get (gtk_settings_get_default (),
-                "gtk-shell-shows-app-menu", &shell_shows_appmenu,
                 "gtk-shell-shows-menubar", &shell_shows_menubar,
                 NULL);
-
-  /* App menu */
-  GMenu *appmenu_new_terminal_section = gtk_application_get_menu_by_id (gtk_application,
-                                                                        "new-terminal-section");
-  fill_new_terminal_section (app, appmenu_new_terminal_section, NULL, 0); /* no submenu */
 
   /* Menubar */
   /* If the menubar is shown by the shell, omit mnemonics for the submenus. This is because Alt+F etc.
@@ -676,11 +670,7 @@ terminal_app_startup (GApplication *application)
   /* Install the encodings submenu */
   terminal_encodings_append_menu (app->menubar_set_encoding_submenu);
 
-  /* Show/hide the appmenu/menubar as appropriate:
-   * If the shell wants to show the menubar, make it available.
-   * If the shell wants to show both the appmenu and the menubar, there's no need for the appmenu. */
-  if (shell_shows_appmenu && shell_shows_menubar)
-    gtk_application_set_app_menu (GTK_APPLICATION (app), NULL);
+  /* Show/hide the menubar as appropriate: If the shell wants to show the menubar, make it available. */
   if (shell_shows_menubar)
     gtk_application_set_menubar (GTK_APPLICATION (app), app->menubar);
 
