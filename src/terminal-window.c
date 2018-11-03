@@ -1514,12 +1514,14 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
   if (screen == NULL)
     return;
 
-  double zoom = vte_terminal_get_font_scale (VTE_TERMINAL (screen));
-
+  double v;
+  double zoom = v = vte_terminal_get_font_scale (VTE_TERMINAL (screen));
   g_simple_action_set_enabled (lookup_action (window, "zoom-in"),
-                               find_larger_zoom_factor (&zoom));
+                               find_larger_zoom_factor (&v));
+
+  v = zoom;
   g_simple_action_set_enabled (lookup_action (window, "zoom-out"),
-                               find_smaller_zoom_factor (&zoom));
+                               find_smaller_zoom_factor (&v));
 }
 
 static void
