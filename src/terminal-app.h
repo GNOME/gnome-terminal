@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
+#define GNOME_TERMINAL_ICON_NAME "org.gnome.Terminal"
 
 #define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal"
 

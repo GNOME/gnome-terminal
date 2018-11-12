@@ -303,6 +303,8 @@ AC_DEFINE_UNQUOTED([GDK_VERSION_MAX_ALLOWED],[G_ENCODE_VERSION($(echo $GTK_MAX_A
 AC_CONFIG_FILES([
 Makefile
 org.gnome.Terminal.desktop.in
+data/Makefile
+data/icons/Makefile
 src/Makefile
 src/terminal-version.h
 help/Makefile
