@@ -17,28 +17,29 @@
 # Alain Lojewski <allomervan@gmail.com>, 2012-2014.
 # Jean-Baptiste Holcroft <jean-baptiste@holcroft.fr>, 2017
 # Guillaume Bernard <associations@guillaume-bernard.fr>, 2018
+# Charles Monzat <charles.monzat@numericable.fr>, 2018.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-25 07:34+0000\n"
-"PO-Revision-Date: 2018-02-26 12:37+0100\n"
-"Last-Translator: Guillaume Bernard <associations@guillaume-bernard.fr>\n"
-"Language-Team: French <traduc@traduc.org>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
+"POT-Creation-Date: 2018-09-02 18:00+0000\n"
+"PO-Revision-Date: 2018-11-23 17:24+0100\n"
+"Last-Translator: Charles Monzat <charles.monzat@numericable.fr>\n"
+"Language-Team: français <gnomefr@traduc.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: Poedit 2.0.3\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 3.30.0\n"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
 #: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:549
+#: ../src/terminal-accels.c:226 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1928 ../src/terminal-window.c:2188
-#: ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:1864 ../src/terminal-window.c:2120
+#: ../src/terminal-window.c:2410
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -85,14 +86,13 @@ msgstr ""
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;prompt;commande;ligne de commande;cmd;"
 
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Par défaut"
+#: ../org.gnome.Terminal.desktop.in.in.h:4 ../src/terminal-accels.c:125
+msgid "New Window"
+msgstr "Nouvelle fenêtre"
 
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Sans nom"
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:144
+msgid "Preferences"
+msgstr "Préférences"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
@@ -166,16 +166,16 @@ msgid ""
 "Scale factor for the cell height to increase line spacing. (Does not "
 "increase the font’s height.)"
 msgstr ""
-"Facteur d’échelle pour la hauteur de la cellule afin d'augmenter "
-"l'interligne. (N’augmente pas la hauteur de la police.)"
+"Facteur d’échelle pour la hauteur de la cellule afin d’augmenter "
+"l’interligne. (N’augmente pas la hauteur de la police.)"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Scale factor for the cell width to increase letter spacing. (Does not "
 "increase the font’s width.)"
 msgstr ""
-"Facteur d’échelle pour la largeur de la cellule afin d'augmenter "
-"l'espacement des caractères. (N’augmente pas la largeur de la police.)"
+"Facteur d’échelle pour la largeur de la cellule afin d’augmenter "
+"l’espacement des caractères. (N’augmente pas la largeur de la police.)"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
@@ -187,7 +187,7 @@ msgstr "Si vrai, utiliser les couleurs de curseur provenant du profil."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Cursor background color"
-msgstr "Couleur d’arrière-plan du curseur"
+msgstr "Couleur d’arrière-plan du curseur"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:18
 msgid ""
@@ -307,7 +307,7 @@ msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
 msgstr ""
-"Nombre de colonnes dans une fenêtre du terminal nouvellement créée.Aucun "
+"Nombre de colonnes dans une fenêtre du terminal nouvellement créée. Aucun "
 "effet si use_custom_default_size n’est pas activé."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:37
@@ -319,8 +319,8 @@ msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
 msgstr ""
-"Nombre de lignes dans une fenêtre du terminal nouvellement créée.Aucun effet "
-"si use_custom_default_size n’est pas activé."
+"Nombre de lignes dans une fenêtre du terminal nouvellement créée. Aucun "
+"effet si use_custom_default_size n’est pas activé."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "When to show the scrollbar"
@@ -440,9 +440,9 @@ msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
 msgstr ""
-"Les valeurs possibles pour autoriser le texte clignotant sont « always » "
-"(toujours), « never » (jamais), « focused » (lorsque le terminal a le focus) "
-"ou « unfocused » (lorsqu’il ne l’a pas)."
+"Les valeurs possibles pour autoriser le texte clignotant sont "
+"« always » (toujours), « never » (jamais), « focused » (lorsque le terminal "
+"a le focus) ou « unfocused » (lorsqu’il ne l’a pas)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Custom command to use instead of the shell"
@@ -492,7 +492,7 @@ msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr ""
-"Indique si les caractères de larguer ambigüe sont fins ou larges quand le "
+"Indique si les caractères de largeur ambigüe sont fins ou larges quand le "
 "codage UTF-8 est utilisé"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:69
@@ -557,7 +557,7 @@ msgstr "Raccourci clavier pour basculer en mode plein écran"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
-msgstr "Raccourci clavier pour modifier la visibilité de la barre de menu"
+msgstr "Raccourci clavier pour modifier la visibilité de la barre de menus"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to toggle the read-only state"
@@ -693,7 +693,7 @@ msgstr ""
 #: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "Whether to open new terminals as windows or tabs"
 msgstr ""
-"Indique s’il faut ouvrir les nouveaux terminaux dans des fenêtrs ou des "
+"Indique s’il faut ouvrir les nouveaux terminaux dans des fenêtres ou des "
 "onglets"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:111
@@ -757,6 +757,11 @@ msgstr "Barre verticale"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Souligné"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Par défaut"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -880,7 +885,7 @@ msgstr "Effacement TTY"
 
 #: ../src/preferences.ui.h:68
 msgid "_Show menubar by default in new terminals"
-msgstr "_Afficher la barre de menu par défaut dans les nouveaux terminaux"
+msgstr "_Afficher la barre de menus par défaut dans les nouveaux terminaux"
 
 #: ../src/preferences.ui.h:69
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
@@ -1188,21 +1193,21 @@ msgid "Error parsing command: %s"
 msgstr "Erreur à l’analyse de la commande : %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:899
+#: ../src/profile-editor.c:828
 msgid "width"
 msgstr "largeur"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:904
+#: ../src/profile-editor.c:833
 msgid "height"
 msgstr "hauteur"
 
-#: ../src/profile-editor.c:956
+#: ../src/profile-editor.c:885
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Choisissez la couleur de palette %u"
 
-#: ../src/profile-editor.c:960
+#: ../src/profile-editor.c:889
 #, c-format
 msgid "Palette entry %u"
 msgstr "Entrée de palette %u"
@@ -1243,10 +1248,6 @@ msgstr "Rec_herche circulaire"
 msgid "New Tab"
 msgstr "Nouvel onglet"
 
-#: ../src/terminal-accels.c:125
-msgid "New Window"
-msgstr "Nouvelle fenêtre"
-
 #: ../src/terminal-accels.c:127
 msgid "Save Contents"
 msgstr "Enregistrer le contenu"
@@ -1283,10 +1284,6 @@ msgstr "Coller"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: ../src/terminal-accels.c:144
-msgid "Preferences"
-msgstr "Préférences"
-
 #: ../src/terminal-accels.c:149
 msgid "Find Next"
 msgstr "Rechercher le suivant"
@@ -1301,7 +1298,7 @@ msgstr "Effacer les surbrillances"
 
 #: ../src/terminal-accels.c:155
 msgid "Hide and Show Menubar"
-msgstr "Masquer et afficher la barre de menu"
+msgstr "Masquer et afficher la barre de menus"
 
 #: ../src/terminal-accels.c:156
 msgid "Full Screen"
@@ -1396,24 +1393,24 @@ msgstr "_Action"
 msgid "Shortcut _Key"
 msgstr "_Raccourci clavier"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1839
+#: ../src/terminal-app.c:434 ../src/terminal-window.c:1775
 msgid "New _Terminal"
 msgstr "Nouveau _terminal"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1848
+#: ../src/terminal-app.c:436 ../src/terminal-window.c:1784
 msgid "New _Tab"
 msgstr "Nouvel _onglet"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1844
+#: ../src/terminal-app.c:437 ../src/terminal-window.c:1780
 msgid "New _Window"
 msgstr "Nouvelle _fenêtre"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:485
 msgid "Change _Profile"
 msgstr "_Changer de profil"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1386
-#: ../src/terminal-window.c:1832
+#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1768
 msgid "_Preferences"
 msgstr "_Préférences"
 
@@ -1429,7 +1426,7 @@ msgstr "À _propos"
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../src/terminal.c:545
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Impossible d’analyser les paramètres : %s\n"
@@ -1611,19 +1608,19 @@ msgstr "_Fermer la fenêtre"
 msgid "_Edit"
 msgstr "É_dition"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1810
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1746
 msgid "_Copy"
 msgstr "Co_pier"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1811
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1747
 msgid "Copy as _HTML"
 msgstr "Copier comme _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1812
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1748
 msgid "_Paste"
 msgstr "C_oller"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1814
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1750
 msgid "Paste as _Filenames"
 msgstr "Coller comme des noms de _fichiers"
 
@@ -1639,9 +1636,9 @@ msgstr "_Préférences"
 msgid "_View"
 msgstr "_Affichage"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1860
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1796
 msgid "Show _Menubar"
-msgstr "Afficher la barre de _menu"
+msgstr "Afficher la barre de _menus"
 
 #: ../src/terminal-menubar.ui.in.h:19
 msgid "_Full Screen"
@@ -1683,7 +1680,7 @@ msgstr "Effa_cer les surbrillances"
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
 msgid "Set _Title…"
 msgstr "Définir le _titre…"
 
@@ -1691,7 +1688,7 @@ msgstr "Définir le _titre…"
 msgid "Set _Character Encoding"
 msgstr "_Définir le codage des caractères"
 
-#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1820
+#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1756
 msgid "Read-_Only"
 msgstr "Lecture-_seule"
 
@@ -1751,62 +1748,33 @@ msgstr "_Sommaire"
 msgid "_Inspector"
 msgstr "_Inspecteur"
 
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Ouvrir dans un terminal _distant"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Ouvrir dans un terminal _local"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Ouvrir le dossier actuellement sélectionné dans un terminal"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Ouvrir le dossier actuellement ouvert dans un terminal"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Ouvrir dans un _terminal"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Ouvrir un t_erminal"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Ouvrir un terminal"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Ouvrir dans _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Ouvrir le dossier actuellement sélectionné dans le terminal du gestionnaire "
-"de fichiers Midnight Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Ouvrir le dossier actuellement ouvert dans le terminal du gestionnaire de "
-"fichiers Midnight Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Ouvrir _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "Ouvrir le terminal du gestionnaire de fichiers Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1820,11 +1788,11 @@ msgstr "Déplacer le terminal vers la _droite"
 msgid "_Detach Terminal"
 msgstr "_Détacher le terminal"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3353
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3210
 msgid "C_lose Terminal"
 msgstr "Fe_rmer le terminal"
 
-#: ../src/terminal-options.c:284
+#: ../src/terminal-options.c:281
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1834,7 +1802,7 @@ msgstr ""
 "version de gnome-terminal."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:295
+#: ../src/terminal-options.c:292
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1843,48 +1811,48 @@ msgstr ""
 "Utilisez « %s » pour marquer la fin des options et placez la ligne de "
 "commande à exécuter ensuite."
 
-#: ../src/terminal-options.c:305 ../src/terminal-options.c:318
+#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr ""
 "L’option « %s » n’est plus prise en charge dans cette version de gnome-"
 "terminal."
 
-#: ../src/terminal-options.c:390
+#: ../src/terminal-options.c:387
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Le paramètre de « %s » n’est pas une commande valide : %s"
 
-#: ../src/terminal-options.c:563
+#: ../src/terminal-options.c:560
 msgid "Two roles given for one window"
 msgstr "Deux rôles ont été attribués à la même fenêtre"
 
-#: ../src/terminal-options.c:584 ../src/terminal-options.c:617
+#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "l’option « %s » a été attribuée deux fois à la même fenêtre\n"
 
-#: ../src/terminal-options.c:836
+#: ../src/terminal-options.c:833
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Impossible de passer le descripteur de fichier %d deux fois"
 
-#: ../src/terminal-options.c:898
+#: ../src/terminal-options.c:895
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "« %s » n’est pas un facteur de zoom valide"
 
-#: ../src/terminal-options.c:905
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Le facteur de zoom « %g » est trop petit, utilisation de %g\n"
 
-#: ../src/terminal-options.c:913
+#: ../src/terminal-options.c:910
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Le facteur de zoom « %g » est trop grand, utilisation de %g\n"
 
-#: ../src/terminal-options.c:951
+#: ../src/terminal-options.c:948
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1893,15 +1861,15 @@ msgstr ""
 "L’option « %s » nécessite d’indiquer la commande à lancer à la suite de la "
 "ligne de commande"
 
-#: ../src/terminal-options.c:1100
+#: ../src/terminal-options.c:1101
 msgid "Can only use --wait once"
 msgstr "L’option --wait ne peut être utilisée qu’une fois"
 
-#: ../src/terminal-options.c:1135
+#: ../src/terminal-options.c:1137
 msgid "Not a valid terminal config file."
 msgstr "Fichier de configuration pour le terminal incorrect."
 
-#: ../src/terminal-options.c:1148
+#: ../src/terminal-options.c:1150
 msgid "Incompatible terminal config file version."
 msgstr "Version de fichier de configuration pour le terminal incompatible."
 
@@ -1927,11 +1895,11 @@ msgstr "Afficher la fenêtre de préférences"
 
 #: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
-msgstr "Afficher les variables d'environnement pour interagir avec le terminal"
+msgstr "Afficher les variables d’environnement pour interagir avec le terminal"
 
 #: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
-msgstr "Augmenter la verbosité du diagnostique"
+msgstr "Augmenter la verbosité du diagnostic"
 
 #: ../src/terminal-options.c:1366
 msgid "Suppress output"
@@ -1950,11 +1918,11 @@ msgstr ""
 
 #: ../src/terminal-options.c:1401
 msgid "Turn on the menubar"
-msgstr "Afficher la barre de menu"
+msgstr "Afficher la barre de menus"
 
 #: ../src/terminal-options.c:1410
 msgid "Turn off the menubar"
-msgstr "Masquer la barre de menu"
+msgstr "Masquer la barre de menus"
 
 #: ../src/terminal-options.c:1419
 msgid "Maximize the window"
@@ -2154,50 +2122,50 @@ msgstr "Supprimer le profil"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../src/terminal-prefs.c:518
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "Ce profil est celui par défaut"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Général"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Raccourcis"
 
-#: ../src/terminal-prefs.c:671
+#: ../src/terminal-prefs.c:672
 msgid "Global"
 msgstr "Général"
 
-#: ../src/terminal-prefs.c:683
+#: ../src/terminal-prefs.c:684
 msgid "Profiles"
 msgstr "Profils"
 
-#: ../src/terminal-screen.c:1172
+#: ../src/terminal-screen.c:1140
 msgid "No command supplied nor shell requested"
 msgstr "Aucune commande fournie ni shell demandé"
 
-#: ../src/terminal-screen.c:1387 ../src/terminal-screen.c:1717
+#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
 msgid "_Relaunch"
 msgstr "_Relancer"
 
-#: ../src/terminal-screen.c:1390
+#: ../src/terminal-screen.c:1358
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Il y a eu une erreur lors de la création du processus fils pour ce terminal"
 
-#: ../src/terminal-screen.c:1721
+#: ../src/terminal-screen.c:1685
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Le processus fils a quitté normalement avec le statut %d."
 
-#: ../src/terminal-screen.c:1724
+#: ../src/terminal-screen.c:1688
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Le processus fils a été abandonné par le signal %d."
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1691
 msgid "The child process was aborted."
 msgstr "Le processus fils a été abandonné."
 
@@ -2254,7 +2222,7 @@ msgid ""
 msgstr ""
 "Terminal de GNOME est un logiciel libre : vous pouvez le redistribuer et/ou "
 "le modifier selon les termes de la Licence Publique Générale GNU publiée par "
-"la Free Software Foundation, soit la version 3 de la license, soit (à votre "
+"la Free Software Foundation, soit la version 3 de la licence, soit (à votre "
 "discrétion) toute version ultérieure."
 
 #: ../src/terminal-util.c:394
@@ -2266,7 +2234,7 @@ msgid ""
 msgstr ""
 "Terminal de GNOME est distribué dans l’espoir qu’il puisse vous être utile, "
 "mais SANS AUCUNE GARANTIE ; sans même de garantie de VALEUR MARCHANDE ou "
-"d’ADÉQUATION A UN BESOIN PARTICULIER. Consultez la Licence Publique Générale "
+"d’ADÉQUATION À UN BESOIN PARTICULIER. Consultez la Licence Publique Générale "
 "GNU pour plus de détails."
 
 #: ../src/terminal-util.c:398
@@ -2283,71 +2251,71 @@ msgid "“file” scheme with remote hostname not supported"
 msgstr ""
 "Le protocole « file » avec un nom d’hôte distant n’est pas pris en charge"
 
-#: ../src/terminal-window.c:460
+#: ../src/terminal-window.c:449
 msgid "Could not save contents"
 msgstr "Impossible d’enregistrer le contenu"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:469
 msgid "Save as…"
 msgstr "Enregistrer sous…"
 
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:472
 msgid "_Cancel"
 msgstr "A_nnuler"
 
-#: ../src/terminal-window.c:484
+#: ../src/terminal-window.c:473
 msgid "_Save"
 msgstr "_Enregistrer"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1703
 msgid "Open _Hyperlink"
 msgstr "Ouvrir le lien _hypertexte"
 
-#: ../src/terminal-window.c:1768
+#: ../src/terminal-window.c:1704
 msgid "Copy Hyperlink _Address"
 msgstr "Copier l’_adresse du lien hypertexte"
 
-#: ../src/terminal-window.c:1778
+#: ../src/terminal-window.c:1714
 msgid "Send Mail _To…"
 msgstr "Envoyer un courriel _à…"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1715
 msgid "Copy Mail _Address"
 msgstr "Copier l’_adresse de courriel"
 
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:1718
 msgid "Call _To…"
 msgstr "A_ppeler…"
 
-#: ../src/terminal-window.c:1783
+#: ../src/terminal-window.c:1719
 msgid "Copy Call _Address "
 msgstr "_Copier les coordonnées d’appel "
 
-#: ../src/terminal-window.c:1788
+#: ../src/terminal-window.c:1724
 msgid "_Open Link"
 msgstr "_Ouvrir le lien"
 
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1725
 msgid "Copy _Link"
 msgstr "Copier l’adresse du _lien"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1763
 msgid "P_rofiles"
 msgstr "P_rofils"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1798
 msgid "L_eave Full Screen"
 msgstr "_Quitter le plein écran"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3197
 msgid "Close this window?"
 msgstr "Fermer cette fenêtre ?"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3197
 msgid "Close this terminal?"
 msgstr "Fermer ce terminal ?"
 
-#: ../src/terminal-window.c:3344
+#: ../src/terminal-window.c:3201
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2355,16 +2323,42 @@ msgstr ""
 "Il y a des processus actifs dans certains terminaux de cette fenêtre. Fermer "
 "la fenêtre les interrompra tous."
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3205
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Il y a un processus actif dans ce terminal. Fermer le terminal l’interrompra."
 
-#: ../src/terminal-window.c:3353
+#: ../src/terminal-window.c:3210
 msgid "C_lose Window"
 msgstr "Fermer _la fenêtre"
+
+#~ msgid "Unnamed"
+#~ msgstr "Sans nom"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Ouvrir dans _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Ouvrir le dossier actuellement sélectionné dans le terminal du "
+#~ "gestionnaire de fichiers Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Ouvrir le dossier actuellement ouvert dans le terminal du gestionnaire de "
+#~ "fichiers Midnight Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Ouvrir _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "Ouvrir le terminal du gestionnaire de fichiers Midnight Commander"
 
 #~ msgid "Verbose output"
 #~ msgstr "Détailler la sortie"
