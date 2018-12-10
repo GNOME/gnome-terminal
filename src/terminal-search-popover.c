@@ -384,7 +384,8 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_prev_button);
   G_GNUC_END_IGNORE_DEPRECATIONS
 #else
-  gtk_window_set_default (GTK_WINDOW (popover), priv->search_prev_button);
+  GtkWindow *window = GTK_WINDOW (popover);
+  gtk_window_set_default (window, priv->search_prev_button);
 #endif
 
 #if GTK_CHECK_VERSION (3, 16, 0)
@@ -411,6 +412,20 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   g_signal_connect (priv->wrap_around_checkbutton, "toggled", G_CALLBACK (wrap_around_toggled_cb), popover);
 
   g_signal_connect (popover, "key-press-event", G_CALLBACK (key_press_cb), NULL);
+
+  if (terminal_app_get_use_headerbar (terminal_app_get ())) {
+    GtkWidget *headerbar;
+
+    headerbar = g_object_new (GTK_TYPE_HEADER_BAR,
+                              "title", gtk_window_get_title (window),
+                              "has-subtitle", FALSE,
+                              "show-close-button", TRUE,
+                              "visible", TRUE,
+                              NULL);
+    gtk_style_context_add_class (gtk_widget_get_style_context (headerbar),
+                                 "default-decoration");
+    gtk_window_set_titlebar (window, headerbar);
+  }
 }
 
 static void
