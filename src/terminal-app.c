@@ -821,7 +821,7 @@ terminal_app_init (TerminalApp *app)
   app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   gs_unref_object GSettings *settings = g_settings_get_child (app->global_settings, "keybindings");
-  terminal_accels_init (G_APPLICATION (app), settings);
+  terminal_accels_init (G_APPLICATION (app), settings, app->use_headerbar);
 }
 
 static void

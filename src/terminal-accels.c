@@ -60,6 +60,7 @@
 #define KEY_FIND_PREV           "find-previous"
 #define KEY_FIND_NEXT           "find-next"
 #define KEY_FULL_SCREEN         "full-screen"
+#define KEY_HEADER_MENU         "header-menu"
 #define KEY_HELP                "help"
 #define KEY_MOVE_TAB_LEFT       "move-tab-left"
 #define KEY_MOVE_TAB_RIGHT      "move-tab-right"
@@ -111,6 +112,7 @@ typedef struct
   KeyEntry *key_entry;
   guint n_elements;
   const char *user_visible_name;
+  gboolean headerbar_only;
 } KeyEntryList;
 
 #define ENTRY_FULL(name, key, action, type, parameter, shadow_name) \
@@ -213,19 +215,24 @@ static KeyEntry help_entries[] = {
   ENTRY (N_("Contents"), KEY_HELP, "help", NULL, NULL)
 };
 
+static KeyEntry global_entries[] = {
+  ENTRY (N_("Show Primary Menu"), KEY_HEADER_MENU, "header-menu", NULL, NULL),
+};
+
 #undef ENTRY_FULL
 #undef ENTRY
 #undef ENTRY_MDI
 
 static KeyEntryList all_entries[] =
 {
-  { file_entries, G_N_ELEMENTS (file_entries), N_("File") },
-  { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
-  { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
-  { search_entries, G_N_ELEMENTS (search_entries), N_("Search") },
-  { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
-  { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
-  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
+  { file_entries,     G_N_ELEMENTS (file_entries),     N_("File"),     FALSE },
+  { edit_entries,     G_N_ELEMENTS (edit_entries),     N_("Edit"),     FALSE },
+  { view_entries,     G_N_ELEMENTS (view_entries),     N_("View"),     FALSE },
+  { search_entries,   G_N_ELEMENTS (search_entries),   N_("Search"),   FALSE },
+  { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal"), FALSE },
+  { tabs_entries,     G_N_ELEMENTS (tabs_entries),     N_("Tabs"),     FALSE },
+  { help_entries,     G_N_ELEMENTS (help_entries),     N_("Help"),     FALSE },
+  { global_entries,   G_N_ELEMENTS (global_entries),   N_("Global"),   TRUE  },
 };
 
 enum
@@ -305,9 +312,37 @@ key_changed_cb (GSettings *settings,
   }
 }
 
+static void
+add_accel_entries (GApplication*application,
+                   KeyEntry *entries,
+                   guint n_entries)
+{
+  guint j;
+
+  for (j = 0; j < n_entries; ++j) {
+    KeyEntry *key_entry = &entries[j];
+    if (key_entry->action_parameter) {
+      GError *err = NULL;
+      key_entry->parameter = g_variant_parse (key_entry->action_parameter_type,
+                                              key_entry->action_parameter,
+                                              NULL, NULL, &err);
+      g_assert_no_error (err);
+
+      g_assert (key_entry->parameter != NULL);
+    }
+
+    g_hash_table_insert (settings_key_to_entry,
+                         (gpointer) key_entry->settings_key,
+                         key_entry);
+
+    key_changed_cb (keybinding_settings, key_entry->settings_key, application);
+  }
+}
+
 void
 terminal_accels_init (GApplication *application,
-                      GSettings *settings)
+                      GSettings *settings,
+                      gboolean use_headerbar)
 {
   guint i, j;
 
@@ -328,30 +363,12 @@ terminal_accels_init (GApplication *application,
       tabs_entries[i].user_visible_name = g_intern_string (name);
     }
 
-  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
-    {
-      for (j = 0; j < all_entries[i].n_elements; ++j)
-	{
-	  KeyEntry *key_entry;
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i) {
+    if (!use_headerbar && all_entries[i].headerbar_only)
+      continue;
 
-	  key_entry = &(all_entries[i].key_entry[j]);
-          if (key_entry->action_parameter) {
-            GError *err = NULL;
-            key_entry->parameter = g_variant_parse (key_entry->action_parameter_type,
-                                                    key_entry->action_parameter,
-                                                    NULL, NULL, &err);
-            g_assert_no_error (err);
-
-            g_assert (key_entry->parameter != NULL);
-          }
-
-          g_hash_table_insert (settings_key_to_entry,
-                               (gpointer) key_entry->settings_key,
-                               key_entry);
-
-          key_changed_cb (keybinding_settings, key_entry->settings_key, application);
-	}
-    }
+    add_accel_entries (application, all_entries[i].key_entry, all_entries[i].n_elements);
+  }
 
   g_signal_connect (keybinding_settings, "changed", G_CALLBACK (key_changed_cb), application);
 }

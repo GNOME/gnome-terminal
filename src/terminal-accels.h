@@ -24,8 +24,9 @@
 G_BEGIN_DECLS
 
 void terminal_accels_init (GApplication *application,
-                           GSettings *settings);
- 
+                           GSettings *settings,
+                           gboolean use_headerbar);
+
 void terminal_accels_shutdown (void);
 
 void terminal_accels_fill_treeview (GtkWidget *treeview,

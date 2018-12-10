@@ -2100,6 +2100,7 @@ terminal_window_init (TerminalWindow *window)
     /* Actions with state */
     { "active-tab",          action_active_tab_set_cb,   "i",  "@i 0",    action_active_tab_state_cb      },
     { "encoding",            NULL /* changes state */,   "s",  "'UTF-8'", action_encoding_state_cb        },
+    { "header-menu",         NULL /* toggles state */,   NULL, "false",   NULL },
     { "fullscreen",          NULL /* toggles state */,   NULL, "false",   action_fullscreen_state_cb      },
     { "menubar-visible",     NULL /* toggles state */,   NULL, "true",    action_menubar_visible_state_cb },
     { "profile",             NULL /* changes state */,   "s",  "''",      action_profile_state_cb         },
