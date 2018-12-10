@@ -751,6 +751,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   GtkWidget *theme_variant_label, *theme_variant_combo;
   GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
   GtkWidget *close_button, *help_button;
+  GtkWidget *content_box;
   GSettings *settings;
 
   const GActionEntry action_entries[] = {
@@ -771,6 +772,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   data->builder = terminal_util_load_widgets_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
+                                       "dialogue-content-box", &content_box,
                                        "close-button", &close_button,
                                        "help-button", &help_button,
                                        "default-show-menubar-checkbutton", &show_menubar_button,
@@ -891,6 +893,32 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   /* Profile page */
 
   profile_prefs_init ();
+
+  /* Move action widgets to titlebar when headerbar is used */
+  if (terminal_app_get_use_headerbar (app)) {
+    GtkWidget *headerbar;
+    GtkWidget *bbox;
+
+    headerbar = g_object_new (GTK_TYPE_HEADER_BAR,
+                              "show-close-button", TRUE,
+                              NULL);
+    bbox = gtk_widget_get_parent (help_button);
+
+    gtk_container_remove (GTK_CONTAINER (bbox), g_object_ref (help_button));
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (headerbar), help_button);
+    g_object_unref (help_button);
+
+    gtk_style_context_add_class (gtk_widget_get_style_context (help_button),
+                                 "text-button");
+
+    gtk_widget_show (headerbar);
+    gtk_widget_hide (bbox);
+
+    gtk_window_set_titlebar (GTK_WINDOW (dialog), headerbar);
+
+    /* Remove extra spacing around the content */
+    g_object_set (G_OBJECT (content_box), "margin", 0, NULL);
+  }
 
   /* misc */
 
