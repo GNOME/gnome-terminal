@@ -705,7 +705,12 @@ terminal_app_init (TerminalApp *app)
    * to override, so we cache them on startup and don't react to changes.
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
-  app->use_headerbar = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_HEADERBAR_KEY);
+
+  const char *env = g_getenv("GNOME_TERMINAL_HEADERBAR");
+  if (env != NULL)
+    app->use_headerbar = g_strcmp0 (env, "1") == 0;
+  else
+    app->use_headerbar = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_HEADERBAR_KEY);
 
 #if GTK_CHECK_VERSION (3, 19, 0)
   GtkSettings *gtk_settings = gtk_settings_get_default ();
