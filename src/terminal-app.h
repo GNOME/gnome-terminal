@@ -101,6 +101,8 @@ TerminalSettingsList *terminal_app_get_profiles_list (TerminalApp *app);
 
 GMenuModel *terminal_app_get_menubar (TerminalApp *app);
 
+GMenuModel *terminal_app_get_headermenu (TerminalApp *app);
+
 GMenuModel *terminal_app_get_profile_section (TerminalApp *app);
 
 gboolean terminal_app_get_menu_unified (TerminalApp *app);

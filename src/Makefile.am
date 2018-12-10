@@ -328,6 +328,7 @@ CLEANFILES = \
 EXTRA_DIST = \
 	terminal.about \
 	terminal-headerbar.ui \
+	terminal-headermenu.ui \
 	terminal-menubar.ui.in \
 	terminal-notebook-menu.ui \
 	terminal-window.ui \

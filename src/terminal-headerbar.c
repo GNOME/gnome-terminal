@@ -20,6 +20,7 @@
 #include <glib/gi18n.h>
 
 #include "terminal-headerbar.h"
+#include "terminal-app.h"
 #include "terminal-libgsystem.h"
 
 typedef struct _TerminalHeaderbarPrivate TerminalHeaderbarPrivate;
@@ -36,7 +37,7 @@ struct _TerminalHeaderbarClass
 
 struct _TerminalHeaderbarPrivate
 {
-  gpointer dummy;
+  GtkWidget *menubutton;
 };
 
 enum {
@@ -60,10 +61,14 @@ G_DEFINE_TYPE_WITH_PRIVATE (TerminalHeaderbar, terminal_headerbar, GTK_TYPE_HEAD
 static void
 terminal_headerbar_init (TerminalHeaderbar *headerbar)
 {
-  //  TerminalHeaderbarPrivate *priv = PRIV (headerbar);
+  TerminalHeaderbarPrivate *priv = PRIV (headerbar);
   GtkWidget *widget = GTK_WIDGET (headerbar);
+  TerminalApp *app = terminal_app_get ();
 
   gtk_widget_init_template (widget);
+
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->menubutton),
+                                  terminal_app_get_headermenu (app));
 }
 
 static void
@@ -118,6 +123,7 @@ terminal_headerbar_class_init (TerminalHeaderbarClass *klass)
   /* g_object_class_install_properties (gobject_class, G_N_ELEMENTS (pspecs), pspecs); */
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/headerbar.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalHeaderbar, menubutton);
 }
 
 /* public API */

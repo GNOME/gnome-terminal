@@ -108,6 +108,8 @@ struct _TerminalApp
   GMenu *menubar_new_terminal_section;
   GMenu *menubar_set_profile_section;
   GMenu *menubar_set_encoding_submenu;
+
+  GMenuModel *headermenu;
   GMenu *set_profile_menu;
 
   GtkClipboard *clipboard;
@@ -527,6 +529,14 @@ terminal_app_create_menubar (TerminalApp *app,
   return app->menubar;
 }
 
+static void
+terminal_app_create_headermenu (TerminalApp *app)
+{
+  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/headerbar-menu.ui",
+                                       "headermenu", &app->headermenu,
+                                       NULL);
+}
+
 /* Clipboard */
 
 static void
@@ -779,6 +789,7 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->menubar_new_terminal_section);
   g_clear_object (&app->menubar_set_profile_section);
   g_clear_object (&app->menubar_set_encoding_submenu);
+  g_clear_object (&app->headermenu);
   g_clear_object (&app->set_profile_menu);
 
   terminal_accels_shutdown ();
@@ -1090,6 +1101,21 @@ GMenuModel *
 terminal_app_get_menubar (TerminalApp *app)
 {
   return app->menubar;
+}
+
+/**
+ * terminal_app_get_headermenu:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the main window headerbar menu bar as a #GMenuModel
+ */
+GMenuModel *
+terminal_app_get_headermenu (TerminalApp *app)
+{
+  if (app->headermenu == NULL)
+    terminal_app_create_headermenu (app);
+
+  return app->headermenu;
 }
 
 /**
