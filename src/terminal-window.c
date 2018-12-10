@@ -1876,7 +1876,8 @@ notebook_update_tabs_menu_cb (GtkMenuButton *button,
 }
 
 static void
-terminal_window_fill_notebook_action_box (TerminalWindow *window)
+terminal_window_fill_notebook_action_box (TerminalWindow *window,
+                                          gboolean add_new_tab_button)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *box, *new_tab_button, *tabs_menu_button;
@@ -1884,11 +1885,14 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window)
   box = terminal_notebook_get_action_box (TERMINAL_NOTEBOOK (priv->mdi_container), GTK_PACK_END);
 
   /* Create the NewTerminal button */
-  new_tab_button = terminal_icon_button_new ("tab-new-symbolic");
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (new_tab_button), "win.new-terminal");
-  gtk_actionable_set_action_target (GTK_ACTIONABLE (new_tab_button), "(ss)", "tab", "current");
-  gtk_box_pack_start (GTK_BOX (box), new_tab_button, FALSE, FALSE, 0);
-  gtk_widget_show (new_tab_button);
+  if (add_new_tab_button)
+    {
+      new_tab_button = terminal_icon_button_new ("tab-new-symbolic");
+      gtk_actionable_set_action_name (GTK_ACTIONABLE (new_tab_button), "win.new-terminal");
+      gtk_actionable_set_action_target (GTK_ACTIONABLE (new_tab_button), "(ss)", "tab", "current");
+      gtk_box_pack_start (GTK_BOX (box), new_tab_button, FALSE, FALSE, 0);
+      gtk_widget_show (new_tab_button);
+    }
 
   /* Create Tabs menu button */
   tabs_menu_button = terminal_menu_button_new ();
@@ -2224,7 +2228,7 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (app, "clipboard-targets-changed",
                     G_CALLBACK (clipboard_targets_changed_cb), window);
 
-  terminal_window_fill_notebook_action_box (window);
+  terminal_window_fill_notebook_action_box (window, !use_headerbar);
 
   /* We have to explicitly call this, since screen-changed is NOT
    * emitted for the toplevel the first time!
