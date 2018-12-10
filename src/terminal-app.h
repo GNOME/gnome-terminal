@@ -111,6 +111,8 @@ gboolean terminal_app_get_menu_unified (TerminalApp *app);
 
 gboolean terminal_app_get_use_headerbar (TerminalApp *app);
 
+gboolean terminal_app_get_dialog_use_headerbar (TerminalApp *app);
+
 /* GSettings */
 
 GSettings *terminal_app_get_global_settings (TerminalApp *app);

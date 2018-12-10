@@ -1294,3 +1294,16 @@ terminal_app_get_use_headerbar (TerminalApp *app)
 
   return app->use_headerbar;
 }
+
+gboolean
+terminal_app_get_dialog_use_headerbar (TerminalApp *app)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), FALSE);
+
+  gboolean dialog_use_header;
+  g_object_get (gtk_settings_get_default (),
+                "gtk-dialogs-use-header", &dialog_use_header,
+                NULL);
+
+  return dialog_use_header && app->use_headerbar;
+}

@@ -895,7 +895,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   profile_prefs_init ();
 
   /* Move action widgets to titlebar when headerbar is used */
-  if (terminal_app_get_use_headerbar (app)) {
+  if (terminal_app_get_dialog_use_headerbar (app)) {
     GtkWidget *headerbar;
     GtkWidget *bbox;
 

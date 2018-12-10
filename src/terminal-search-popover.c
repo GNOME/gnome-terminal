@@ -413,7 +413,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
 
   g_signal_connect (popover, "key-press-event", G_CALLBACK (key_press_cb), NULL);
 
-  if (terminal_app_get_use_headerbar (terminal_app_get ())) {
+  if (terminal_app_get_dialog_use_headerbar (terminal_app_get ())) {
     GtkWidget *headerbar;
 
     headerbar = g_object_new (GTK_TYPE_HEADER_BAR,
