@@ -1049,6 +1049,17 @@ action_copy_hyperlink_cb (GSimpleAction *action,
 }
 
 static void
+action_enter_fullscreen_cb (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  TerminalWindow *window = user_data;
+
+  g_action_group_change_action_state (G_ACTION_GROUP (window), "fullscreen",
+                                      g_variant_new_boolean (TRUE));
+}
+
+static void
 action_leave_fullscreen_cb (GSimpleAction *action,
                             GVariant      *parameter,
                             gpointer       user_data)
@@ -2047,6 +2058,7 @@ terminal_window_init (TerminalWindow *window)
     { "copy-hyperlink",      action_copy_hyperlink_cb,   NULL,   NULL, NULL },
     { "copy-match",          action_copy_match_cb,       NULL,   NULL, NULL },
     { "edit-preferences",    action_edit_preferences_cb, NULL,   NULL, NULL },
+    { "enter-fullscreen",    action_enter_fullscreen_cb, NULL,   NULL, NULL },
     { "find",                action_find_cb,             NULL,   NULL, NULL },
     { "find-backward",       action_find_backward_cb,    NULL,   NULL, NULL },
     { "find-clear",          action_find_clear_cb,       NULL,   NULL, NULL },

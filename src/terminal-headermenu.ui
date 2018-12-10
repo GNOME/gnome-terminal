@@ -18,12 +18,83 @@
 <interface>
   <menu id="headermenu">
     <section>
+      <attribute name="display-hint">horizontal-buttons</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Zoom _Out</attribute>
+        <attribute name="verb-icon">zoom-out-symbolic</attribute>
+        <attribute name="action">win.zoom-out</attribute>
+      </item>
+      <item>
+        <attribute name="label">100%</attribute>
+        <attribute name="action">win.zoom-normal</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zoom _In</attribute>
+        <attribute name="verb-icon">zoom-in-symbolic</attribute>
+        <attribute name="action">win.zoom-in</attribute>
+      </item>
+    </section>
+    <section>
       <item>
         <attribute name="label" translatable="yes">New _Window</attribute>
         <attribute name="action">win.new-terminal</attribute>
         <attribute name="target" type="(ss)">('window', 'current')</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">_Full Screen</attribute>
+        <attribute name="action">win.enter-fullscreen</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Read-_Only</attribute>
+        <attribute name="action">win.read-only</attribute>
+      </item>
       <section id="set-profile-section" />
+      <submenu>
+        <attribute name="label" translatable="yes">_Advanced</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Reset</attribute>
+            <attribute name="action">win.reset</attribute>
+            <attribute name="target" type="b">false</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Reset and C_lear</attribute>
+            <attribute name="action">win.reset</attribute>
+            <attribute name="target" type="b">true</attribute>
+          </item>
+        </section>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_1. 80×24</attribute>
+            <attribute name="action">win.size-to</attribute>
+            <attribute name="target" type="(uu)">(80, 24)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_2. 80×43</attribute>
+            <attribute name="action">win.size-to</attribute>
+            <attribute name="target" type="(uu)">(80, 43)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_3. 132×24</attribute>
+            <attribute name="action">win.size-to</attribute>
+            <attribute name="target" type="(uu)">(132, 24)</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_4. 132×43</attribute>
+            <attribute name="action">win.size-to</attribute>
+            <attribute name="target" type="(uu)">(132, 43)</attribute>
+          </item>
+        </section>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">_Inspector</attribute>
+            <attribute name="action">win.inspector</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
     <section>
       <item>
