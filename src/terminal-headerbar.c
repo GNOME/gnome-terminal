@@ -37,6 +37,7 @@ struct _TerminalHeaderbarClass
 
 struct _TerminalHeaderbarPrivate
 {
+  GtkWidget *profilebutton;
   GtkWidget *menubutton;
 };
 
@@ -56,19 +57,45 @@ G_DEFINE_TYPE_WITH_PRIVATE (TerminalHeaderbar, terminal_headerbar, GTK_TYPE_HEAD
 
 #define PRIV(obj) ((TerminalHeaderbarPrivate *) terminal_headerbar_get_instance_private ((TerminalHeaderbar *)(obj)))
 
+static void
+profilemenu_items_changed_cb (GMenuModel *menu,
+                              guint       position G_GNUC_UNUSED,
+                              guint       removed G_GNUC_UNUSED,
+                              guint       added G_GNUC_UNUSED,
+                              gpointer    user_data)
+{
+  TerminalHeaderbar *headerbar = user_data;
+  TerminalHeaderbarPrivate *priv = PRIV (headerbar);
+
+  if (g_menu_model_get_n_items (menu) > 0)
+    gtk_widget_show (priv->profilebutton);
+  else
+    gtk_widget_hide (priv->profilebutton);
+}
+
 /* Class implementation */
 
 static void
 terminal_headerbar_init (TerminalHeaderbar *headerbar)
 {
+
   TerminalHeaderbarPrivate *priv = PRIV (headerbar);
   GtkWidget *widget = GTK_WIDGET (headerbar);
   TerminalApp *app = terminal_app_get ();
+  GMenuModel *profilemenu;
 
   gtk_widget_init_template (widget);
 
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->menubutton),
                                   terminal_app_get_headermenu (app));
+
+  profilemenu = terminal_app_get_profilemenu (app);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->profilebutton),
+                                  profilemenu);
+
+  g_signal_connect (profilemenu, "items-changed",
+                    G_CALLBACK (profilemenu_items_changed_cb), headerbar);
+  profilemenu_items_changed_cb (profilemenu, 0, 0, 0, headerbar);
 }
 
 static void
@@ -124,6 +151,7 @@ terminal_headerbar_class_init (TerminalHeaderbarClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/headerbar.ui");
   gtk_widget_class_bind_template_child_private (widget_class, TerminalHeaderbar, menubutton);
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalHeaderbar, profilebutton);
 }
 
 /* public API */

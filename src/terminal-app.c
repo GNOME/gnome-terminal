@@ -109,7 +109,11 @@ struct _TerminalApp
   GMenu *menubar_set_profile_section;
   GMenu *menubar_set_encoding_submenu;
 
+  GMenuModel *profilemenu;
   GMenuModel *headermenu;
+  GMenu *headermenu_set_profile_section;
+  GMenu *headermenu_set_encoding_submenu;
+
   GMenu *set_profile_menu;
 
   GtkClipboard *clipboard;
@@ -435,6 +439,27 @@ append_new_terminal_item (GMenu *section,
 }
 
 static void
+fill_header_new_terminal_menu (GMenuModel *menu,
+                               ProfileData *data,
+                               guint n_profiles)
+{
+  gs_unref_object GMenu *section = NULL;
+
+  if (n_profiles <= 1)
+    return;
+
+  section = g_menu_new ();
+
+  for (guint i = 0; i < n_profiles; i++) {
+    menu_append_numbered (section, data[i].label, i + 1,
+                          "win.new-terminal",
+                          g_variant_new ("(ss)", "default", data[i].uuid));
+  }
+
+  g_menu_append_section (G_MENU (menu), _("New Terminal"), G_MENU_MODEL (section));
+}
+
+static void
 fill_new_terminal_section (TerminalApp *app,
                            GMenu *section,
                            ProfileData *profiles,
@@ -497,6 +522,19 @@ terminal_app_update_profile_menus (TerminalApp *app)
                              G_MENU_MODEL (app->set_profile_menu));
     }
   }
+
+  if (app->profilemenu != NULL) {
+    g_menu_remove_all (G_MENU (app->profilemenu));
+    fill_header_new_terminal_menu (app->profilemenu, profiles, n_profiles);
+  }
+
+  if (app->headermenu != NULL) {
+    g_menu_remove_all (G_MENU (app->headermenu_set_profile_section));
+    if (app->set_profile_menu != NULL) {
+      g_menu_append_submenu (app->headermenu_set_profile_section, _("_Profile"),
+                             G_MENU_MODEL (app->set_profile_menu));
+    }
+  }
 }
 
 static GMenuModel *
@@ -534,7 +572,28 @@ terminal_app_create_headermenu (TerminalApp *app)
 {
   terminal_util_load_objects_resource ("/org/gnome/terminal/ui/headerbar-menu.ui",
                                        "headermenu", &app->headermenu,
+                                       "set-profile-section", &app->headermenu_set_profile_section,
+#if 0
+                                       "set-encoding-submenu", &app->headermenu_set_encoding_submenu,
+#endif
                                        NULL);
+
+#if 0
+  /* Install the encodings submenu */
+  terminal_encodings_append_menu (app->headermenu_set_encoding_submenu);
+#endif
+
+  /* Install profile sections */
+  terminal_app_update_profile_menus (app);
+}
+
+static void
+terminal_app_create_profilemenu (TerminalApp *app)
+{
+  app->profilemenu = G_MENU_MODEL (g_menu_new ());
+
+  /* Install profile sections */
+  terminal_app_update_profile_menus (app);
 }
 
 /* Clipboard */
@@ -789,7 +848,10 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->menubar_new_terminal_section);
   g_clear_object (&app->menubar_set_profile_section);
   g_clear_object (&app->menubar_set_encoding_submenu);
+  g_clear_object (&app->profilemenu);
   g_clear_object (&app->headermenu);
+  g_clear_object (&app->headermenu_set_profile_section);
+  g_clear_object (&app->headermenu_set_encoding_submenu);
   g_clear_object (&app->set_profile_menu);
 
   terminal_accels_shutdown ();
@@ -1116,6 +1178,21 @@ terminal_app_get_headermenu (TerminalApp *app)
     terminal_app_create_headermenu (app);
 
   return app->headermenu;
+}
+
+/**
+ * terminal_app_get_profilemenu:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the main window headerbar profile menu as a #GMenuModel
+ */
+GMenuModel *
+terminal_app_get_profilemenu (TerminalApp *app)
+{
+  if (app->profilemenu == NULL)
+    terminal_app_create_profilemenu (app);
+
+  return app->profilemenu;
 }
 
 /**

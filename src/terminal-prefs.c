@@ -848,7 +848,8 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   gtk_widget_set_visible (theme_variant_combo, FALSE);
 #endif /* GTK+ 3.19 */
 
-  if (terminal_app_get_menu_unified (app)) {
+  if (terminal_app_get_menu_unified (app) ||
+      terminal_app_get_use_headerbar (app)) {
     g_settings_bind (settings,
                      TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
                      new_terminal_mode_combo,
