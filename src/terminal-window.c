@@ -345,6 +345,7 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalSettingsList *profiles_list;
   gs_unref_object GSettings *profile = NULL;
   gs_free char *new_working_directory = NULL;
+  gboolean can_toggle = FALSE;
 
   g_assert (TERMINAL_IS_WINDOW (window));
 
@@ -358,10 +359,16 @@ action_new_terminal_cb (GSimpleAction *action,
     mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
   else if (g_str_equal (mode_str, "window"))
     mode = TERMINAL_NEW_TERMINAL_MODE_WINDOW;
-  else {
+  else if (g_str_equal (mode_str, "tab-default")) {
+    mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
+    can_toggle = TRUE;
+  } else {
     mode = g_settings_get_enum (terminal_app_get_global_settings (app),
                                 TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY);
+    can_toggle = TRUE;
+  }
 
+  if (can_toggle) {
     GdkEvent *event = gtk_get_current_event ();
     if (event != NULL) {
       GdkModifierType modifiers;
