@@ -751,7 +751,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   GtkWidget *theme_variant_label, *theme_variant_combo;
   GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
   GtkWidget *close_button, *help_button;
-  GtkWidget *content_box;
+  GtkWidget *content_box, *general_frame, *keybindings_frame;
   GSettings *settings;
 
   const GActionEntry action_entries[] = {
@@ -773,6 +773,8 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
                                        "dialogue-content-box", &content_box,
+                                       "general-frame", &general_frame,
+                                       "keybindings-frame", &keybindings_frame,
                                        "close-button", &close_button,
                                        "help-button", &help_button,
                                        "default-show-menubar-checkbutton", &show_menubar_button,
@@ -916,8 +918,10 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
 
     gtk_window_set_titlebar (GTK_WINDOW (dialog), headerbar);
 
-    /* Remove extra spacing around the content */
+    /* Remove extra spacing around the content, and extra frames */
     g_object_set (G_OBJECT (content_box), "margin", 0, NULL);
+    gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
+    gtk_frame_set_shadow_type (GTK_FRAME (keybindings_frame), GTK_SHADOW_NONE);
   }
 
   /* misc */
