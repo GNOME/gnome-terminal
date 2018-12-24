@@ -5,10 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.18.x\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-03 23:58+0000\n"
-"PO-Revision-Date: 2018-02-04 16:38+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
+"POT-Creation-Date: 2018-12-10 21:01+0000\n"
+"PO-Revision-Date: 2018-12-24 13:31+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <massimo.furlani@libero.it>\n"
 "Language: fur\n"
@@ -16,18 +15,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2\n"
 
+#. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:146
-#: ../src/terminal-accels.c:226 ../src/terminal.c:542
-#: ../src/terminal-tab-label.c:81 ../src/terminal-window.c:1912
-#: ../src/terminal-window.c:2178 ../src/terminal-window.c:2456
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
+#: ../src/terminal-accels.c:232 ../src/terminal.c:572
+#: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
+#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
+#: ../src/terminal-window.c:2446
 msgid "Terminal"
 msgstr "Terminâl"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:2
-#: ../org.gnome.Terminal.desktop.in.in.h:2
+#: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "Use the command line"
 msgstr "Dopre la rie di comant"
 
@@ -63,18 +64,17 @@ msgstr ""
 "Vierç terminâl al è un plugin par l'aplicazion File che al zonte un element "
 "tal menù di contest, par vierzi un terminâl te cartele atualmentri sfueade."
 
-#: ../org.gnome.Terminal.desktop.in.in.h:3
+#: ../org.gnome.Terminal.desktop.in.in.h:4
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;prompt;terminâl;comant;riedicomant;cmd;"
 
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Predefinît"
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:127
+msgid "New Window"
+msgstr "Gnûf barcon"
 
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Cence non"
+#: ../org.gnome.Terminal.desktop.in.in.h:6 ../src/terminal-accels.c:146
+msgid "Preferences"
+msgstr "Preferencis"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
@@ -266,19 +266,10 @@ msgstr ""
 "peraule cuant che si eseguìs la selezion pe peraule"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
-msgid "Whether to show menubar in new windows/tabs"
-msgstr ""
-"Indiche se mostrâ la sbare dai menù intai gnûfs barcons/schedis dal terminâl"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
-msgid "True if the menubar should be shown in new window"
-msgstr "Vêr se la sbare dai menù e à di jessi visualizade intal gnûf barcon"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Numar predefinît di colonis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -286,11 +277,11 @@ msgstr ""
 "Numar di colonis intun gnûf barcon dal terminâl. Nol à efiet se "
 "use_custom_default_size nol è abilitât."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of rows"
 msgstr "Numar predefinît di riis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -298,15 +289,15 @@ msgstr ""
 "Numar di riis intun gnûf barcon dal terminâl. Nol à efiet se "
 "use_custom_default_size nol è abilitât."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "When to show the scrollbar"
 msgstr "Cuant mostrâ la sbare di scoriment"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid "Number of lines to keep in scrollback"
 msgstr "Numar di ries di mantignî par scori denant-daûr"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -316,12 +307,12 @@ msgstr ""
 "chest numar di riis, lis riis in plui a vegnaran scartadis. Se "
 "scrollback_unlimited al è metût VÊR, chest valôr al ven ignorât."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr ""
 "Indiche se un numar ilimitât di riis al à di jessi mantignût tal scori indaûr"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -331,30 +322,30 @@ msgstr ""
 "riis e ven archiviade in maniere temporanie tal disc, chest al podarès causâ "
 "il superament dal spazi disponibil se al è une vore di output tal terminâl."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Indiche se fâ cori viers il bas cuant che al ven scliçât un tast"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Se VÊR, fracant un boton al môf la sbare di scoriment viers la fin."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Indiche se fâ cori viers il bas cuant che al ven fûr gnûf output"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr ""
 "Se VÊR, ogni volte che al saltarà fûr un gnûf output il terminâl al corarà "
 "viers la fin."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "What to do with the terminal when the child command exits"
 msgstr "Ce fâ cul terminâl cuant che il procès fi al finis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -363,11 +354,11 @@ msgstr ""
 "inviâ il comant e “hold” par tignî il terminâl viert cence comants in "
 "esecuzion jenfri."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Indiche se inviâ il comant tal terminâl come shell di login"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -375,11 +366,11 @@ msgstr ""
 "Se VÊR, il comant tal terminâl al vegnarà inviât come shell di login. "
 "(argv[0] al varâ un tratut denant)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Indiche se eseguî un comant personalizât invezit da shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -387,11 +378,11 @@ msgstr ""
 "Se VÊR, al vegnarà doprât il valôr de impostazion custom_command invezit di "
 "inviâ une shell."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to blink the cursor"
 msgstr "Indiche se il cursôr al à di lampâ"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -399,11 +390,11 @@ msgstr ""
 "I pussibii valôrs a son “system”, par doprâ lis impostazions globâi di "
 "lampament dal cursôr, o “on” o “off” par stabilî in mût esplicit."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "The cursor appearance"
 msgstr "L'aspiet dal cursôr"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -412,49 +403,49 @@ msgstr ""
 "dome cuant che il terminâl al è focalizât “focused” o cence metude a fûc "
 "“unfocused”."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Custom command to use instead of the shell"
 msgstr "Comant personalizât di doprâ invezir da shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "Eseguìs chest comant al puest de shell se use_custom_command al è VÊR."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Palette for terminal applications"
 msgstr "Taule di colôrs pes aplicazions dal terminâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "A Pango font name and size"
 msgstr "Non e dimension di un caratar Pango"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The code sequence the Backspace key generates"
 msgstr "La secuence di codiç gjenerade dal boton Backspace"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "The code sequence the Delete key generates"
 msgstr "La secuence di codiç gjenerade dal boton Canc"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Indiche se doprâ i colôrs dal teme pal widget dal terminâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Whether to use the system monospace font"
 msgstr "Indiche se doprâ il caratar di sisteme a spazi fis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr ""
 "Indiche se tornâ a adatâ in automatic i contignûts dal terminâl al modificâ "
 "de dimension dal barcon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Which encoding to use"
 msgstr "Codifiche di doprâ"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -462,19 +453,19 @@ msgstr ""
 "Indiche se i caratars a largjece ambigue a son strets o estês cuant che si "
 "dopre la codifiche UTF-8"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Scurte di tastiere par vierzi une gnove schede"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to open a new window"
 msgstr "Scurte di tastiere par vierzi un gnûf barcon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Scurte di tastiere par salvâ i contignûts de schede atuâl intun file"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
@@ -482,126 +473,130 @@ msgstr ""
 "Scurte di tastiere par espuartâ i contignûts de schede atuâl intun file in "
 "varis formâts"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr ""
 "Scurte di tastiere par stampâ i contignûts de schede atuâl cuntune stampant "
 "o suntun file"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Scurte di tastiere par sierâ une schede"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Scurte di tastiere par sierâ un barcon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Scurte di tastiere par copiâ il test"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Scurte di tastiere par copiâ il test come HTML"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to paste text"
 msgstr "Scurte di tastiere par tacâ il test"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to select all text"
 msgstr "Scurte di tastiere par selezionâ dut il test"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Scurte di tastiere par vierzi il dialic des preferencis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Scurte di tastiere par passâ a plen visôr"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr ""
 "Scurte di tastiere par ativâ/disativâ la visualizazion de sbare dai menù"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Scurte di tastiere par passâ al stât dome-leture"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Scurte di tastiere par ripristinâ il terminâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Scurte di tastiere par ripristinâ e netâ il terminâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Scurte di tastiere par vierzi il dialic di ricercje"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Scurte di tastiere par cjatâ la presince sucessive dal tiermin cirût"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "Scurte di tastiere par cjatâ la presince precedent dal tiermin cirût"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Scurte di tastiere par netâ l'evidenziadure dai risultâts de ricercje"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Scurte di tastiere par passâ a la schede precedent"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Scurte di tastiere par passâ ae schede sucessive"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Scurte di tastiere par spostâ la schede atuâl a çampe"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Scurte di tastiere par spostâ la schede atuâl a drete"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Scurte di tastiere par stacâ la schede atuâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Scurte di tastiere par passâ ae schede numerade"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Scurte di tastiere par passâ ae ultime schede"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to launch help"
 msgstr "Scurte di tastiere par vierzi la guide"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to make font larger"
 msgstr "Scurte di tastiere par aumentâ la dimension dal caratar"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Scurte di tastiere par ridusi la dimension dal caratar"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Scurte di tastiere par impuestâ il caratar ae dimension normâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
+msgid "Keyboard shortcut to show the primary menu"
+msgstr "Scurte di tastiere par mostrâ il menù primari"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Whether the menubar has access keys"
 msgstr "Indiche se te sbare dai menù a son tascj aceleradôrs"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -611,11 +606,11 @@ msgstr ""
 "interferî cun cualchi aplicazion che e je stade inviade dal terminâl, cussì "
 "si puedin disabilitâlis."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Whether shortcuts are enabled"
 msgstr "Indiche se lis scurtis a son abilitadis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -623,13 +618,13 @@ msgstr ""
 "Indiche se lis scurtis a son abilitadis. Chestis a podaressin interferî cun "
 "cualchi aplicazion inviade dal terminâl, cussì al è pussibil disabilitâlis."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Indiche se la scurte predefinide di GTK par acedi ae sbare dai menù e je "
 "abilitade"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -639,31 +634,31 @@ msgstr ""
 "jessi personalizât cun gtkrc (gtk-menu-bar-accel = \"whatever\"). Cun cheste "
 "opzion si pues disabilitâ l'aceleradôr predefinît par la sbare di menù."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the shell integration is enabled"
 msgstr "Indiche se la integrazion de shell e je abilitade"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Indiche se domandâ conferme prime di sierâ un terminâl"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to show the menubar in new windows"
 msgstr "Indiche se mostrâ la sbare dai menù intai gnûfs barcons"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Indiche se vierzi i gnûfs terminâi come barcons o schedis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "When to show the tabs bar"
 msgstr "Cuant mostrâ la sbare di scoriment"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "The position of the tab bar"
 msgstr "La posizion de sbare des schedis"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Which theme variant to use"
 msgstr "Cuale variant dal teme di doprâ"
 
@@ -716,6 +711,11 @@ msgstr "Tratut verticâl"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Tratut bas"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Predefinît"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -808,7 +808,7 @@ msgid "Solarized"
 msgstr "Solarized"
 
 #. This is the name of a colour scheme
-#: ../src/preferences.ui.h:57 ../src/profile-editor.c:598
+#: ../src/preferences.ui.h:57 ../src/profile-editor.c:606
 msgid "Custom"
 msgstr "Personalizât"
 
@@ -1098,10 +1098,6 @@ msgid "Set as default"
 msgstr "Met come predefinît"
 
 #: ../src/preferences.ui.h:133
-msgid "label"
-msgstr "etichete"
-
-#: ../src/preferences.ui.h:134
 msgid "Cancel"
 msgstr "Anule"
 
@@ -1151,26 +1147,26 @@ msgid "Error parsing command: %s"
 msgstr "Erôr tal analizâ il comant: %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:891
+#: ../src/profile-editor.c:828
 msgid "width"
 msgstr "largjece"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:896
+#: ../src/profile-editor.c:833
 msgid "height"
 msgstr "altece"
 
-#: ../src/profile-editor.c:948
+#: ../src/profile-editor.c:885
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Sielte colôr %u de taule di colôrs"
 
-#: ../src/profile-editor.c:952
+#: ../src/profile-editor.c:889
 #, c-format
 msgid "Palette entry %u"
 msgstr "Element %u de taule di colôrs"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:150
 msgid "Find"
 msgstr "Cjate"
 
@@ -1202,197 +1198,189 @@ msgstr "Corispuindince come espressions _regolârs"
 msgid "_Wrap around"
 msgstr "_Torne tache dal inizi"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:126
 msgid "New Tab"
 msgstr "Gnove schede"
 
-#: ../src/terminal-accels.c:125
-msgid "New Window"
-msgstr "Gnûf barcon"
-
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:129
 msgid "Save Contents"
 msgstr "Salve contignûts"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:132
 msgid "Export"
 msgstr "Espuarte"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:135
 msgid "Print"
 msgstr "Stampe"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:137
 msgid "Close Tab"
 msgstr "Siere schede"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:138
 msgid "Close Window"
 msgstr "Siere barcon"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:142
 msgid "Copy"
 msgstr "Copie"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:143
 msgid "Copy as HTML"
 msgstr "Copie come HTML"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:144
 msgid "Paste"
 msgstr "Tache"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:145
 msgid "Select All"
 msgstr "Selezione dut"
 
-#: ../src/terminal-accels.c:144
-msgid "Preferences"
-msgstr "Preferencis"
-
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:151
 msgid "Find Next"
 msgstr "Cjate prossim"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:152
 msgid "Find Previous"
 msgstr "Cjate precedent"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:153
 msgid "Clear Highlight"
 msgstr "Nete evidenziazion"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:157
 msgid "Hide and Show Menubar"
 msgstr "Plate e mostre la sbare dal menù"
 
-#: ../src/terminal-accels.c:156
+#: ../src/terminal-accels.c:158
 msgid "Full Screen"
 msgstr "A plen visôr"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:159
 msgid "Zoom In"
 msgstr "Aumente ingrandiment"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:160
 msgid "Zoom Out"
 msgstr "Ridûs ingrandiment"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:161
 msgid "Normal Size"
 msgstr "Dimension normâl"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:165
 msgid "Read-Only"
 msgstr "Nome-leture"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:166
 msgid "Reset"
 msgstr "Ripristine"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:167
 msgid "Reset and Clear"
 msgstr "Ripristine e nete"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "Passe ae schede precedente"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:172
 msgid "Switch to Next Tab"
 msgstr "Passe ae prossime schede"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Sposte la schede a çampe"
 
-#: ../src/terminal-accels.c:172
+#: ../src/terminal-accels.c:174
 msgid "Move Tab to the Right"
 msgstr "Sposte la schede a diestre"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:175
 msgid "Detach Tab"
 msgstr "Distache la schede"
 
-#: ../src/terminal-accels.c:209
+#: ../src/terminal-accels.c:211
 msgid "Switch to Last Tab"
 msgstr "Passe ae ultime schede"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:215
 msgid "Contents"
 msgstr "Somari"
 
-#: ../src/terminal-accels.c:222
+#: ../src/terminal-accels.c:219
+msgid "Show Primary Menu"
+msgstr "Mostre menù primari"
+
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "File"
 
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:229 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Modifiche"
 
-#: ../src/terminal-accels.c:224
+#: ../src/terminal-accels.c:230 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Visualize"
 
-#: ../src/terminal-accels.c:225
+#: ../src/terminal-accels.c:231 ../src/terminal-menubar.ui.in.h:24
 msgid "Search"
 msgstr "Cîr"
 
-#: ../src/terminal-accels.c:227
+#: ../src/terminal-accels.c:233 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Schedis"
 
-#: ../src/terminal-accels.c:228
+#: ../src/terminal-accels.c:234 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Jutori"
 
-#: ../src/terminal-accels.c:327
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Globâl"
+
+#: ../src/terminal-accels.c:362
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Passe ae schede %u"
 
-#: ../src/terminal-accels.c:535
+#: ../src/terminal-accels.c:552
 msgid "_Action"
 msgstr "_Azion"
 
-#: ../src/terminal-accels.c:554
+#: ../src/terminal-accels.c:571
 msgid "Shortcut _Key"
 msgstr "Boton s_curte"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1823
+#: ../src/terminal-app.c:459
+msgid "New Terminal"
+msgstr "Gnûf terminâl"
+
+#: ../src/terminal-app.c:469 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "Gnûf _terminâl"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1832
+#: ../src/terminal-app.c:471 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "Gnove _schede"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1828
+#: ../src/terminal-app.c:472 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "Gnûf _barcon"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:521
 msgid "Change _Profile"
 msgstr "Cambie _profîl"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1392
-#: ../src/terminal-window.c:1816
-msgid "_Preferences"
-msgstr "_Preferencis"
+#: ../src/terminal-app.c:534
+msgid "_Profile"
+msgstr "_Profîl"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.h:41
-msgid "_Help"
-msgstr "_Jutori"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.h:43
-msgid "_About"
-msgstr "I_nformazions"
-
-#: ../src/terminal-appmenu.ui.h:4
-msgid "_Quit"
-msgstr "_Jes"
-
-#: ../src/terminal.c:538
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Analisi dai argoments falide: %s\n"
@@ -1546,230 +1534,219 @@ msgstr "Codifichis CJK vecje maniere"
 msgid "Obsolete Encodings"
 msgstr "Codifichis sorpassadis"
 
-#: ../src/terminal-menubar.ui.h:1
-msgid "_File"
-msgstr "_File"
-
-#: ../src/terminal-menubar.ui.h:2
-msgid "_Save Contents…"
-msgstr "_Salve contignûts…"
-
-#: ../src/terminal-menubar.ui.h:3
-msgid "_Export…"
-msgstr "_Espuarte…"
-
-#: ../src/terminal-menubar.ui.h:4
-msgid "_Print…"
-msgstr "Stam_pe…"
-
-#: ../src/terminal-menubar.ui.h:5
-msgid "C_lose Tab"
-msgstr "S_iere schede"
-
-#: ../src/terminal-menubar.ui.h:6
-msgid "_Close Window"
-msgstr "_Siere barcon"
-
-#: ../src/terminal-menubar.ui.h:7
-msgid "_Edit"
-msgstr "_Modifiche"
-
-#: ../src/terminal-menubar.ui.h:8 ../src/terminal-window.c:1794
-msgid "_Copy"
-msgstr "_Copie"
-
-#: ../src/terminal-menubar.ui.h:9 ../src/terminal-window.c:1795
-msgid "Copy as _HTML"
-msgstr "Copie come _HTML"
-
-#: ../src/terminal-menubar.ui.h:10 ../src/terminal-window.c:1796
-msgid "_Paste"
-msgstr "_Tache"
-
-#: ../src/terminal-menubar.ui.h:11 ../src/terminal-window.c:1798
-msgid "Paste as _Filenames"
-msgstr "Tache come nons di _file"
-
-#: ../src/terminal-menubar.ui.h:12
-msgid "Select _All"
-msgstr "Selezione _dut"
-
-#: ../src/terminal-menubar.ui.h:13
-msgid "P_references"
-msgstr "P_referencis"
-
-#: ../src/terminal-menubar.ui.h:14
-msgid "_View"
-msgstr "_Visualize"
-
-#: ../src/terminal-menubar.ui.h:15 ../src/terminal-window.c:1844
-msgid "Show _Menubar"
-msgstr "Mostre sba_re di menù"
-
-#: ../src/terminal-menubar.ui.h:16
-msgid "_Full Screen"
-msgstr "_Plen visôr"
-
-#: ../src/terminal-menubar.ui.h:17
-msgid "Zoom _In"
-msgstr "Aumente _ingrandiment"
-
-#: ../src/terminal-menubar.ui.h:18
-msgid "_Normal Size"
-msgstr "Dimension _normâl"
-
-#: ../src/terminal-menubar.ui.h:19
+#: ../src/terminal-headermenu.ui.h:1 ../src/terminal-menubar.ui.in.h:22
 msgid "Zoom _Out"
 msgstr "_Diminuis Ingrandiment"
 
-#: ../src/terminal-menubar.ui.h:20
-msgid "_Search"
-msgstr "_Cîr"
+#: ../src/terminal-headermenu.ui.h:2 ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "Aumente _ingrandiment"
 
-#: ../src/terminal-menubar.ui.h:21
-msgid "_Find…"
-msgstr "_Cjate…"
+#: ../src/terminal-headermenu.ui.h:4 ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "_Plen visôr"
 
-#: ../src/terminal-menubar.ui.h:22
-msgid "Find _Next"
-msgstr "Cjate s_ucessîf"
-
-#: ../src/terminal-menubar.ui.h:23
-msgid "Find _Previous"
-msgstr "Cjate _precedent"
-
-#: ../src/terminal-menubar.ui.h:24
-msgid "_Clear Highlight"
-msgstr "Ne_te evidenziadure"
-
-#: ../src/terminal-menubar.ui.h:25
-msgid "_Terminal"
-msgstr "_Terminâl"
-
-#: ../src/terminal-menubar.ui.h:26
-msgid "Set _Title…"
-msgstr "Stabilìs _titul…"
-
-#: ../src/terminal-menubar.ui.h:27
-msgid "Set _Character Encoding"
-msgstr "Impueste _codifiche dai caratars"
-
-#: ../src/terminal-menubar.ui.h:28 ../src/terminal-window.c:1804
+#: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
+#: ../src/terminal-window.c:1777
 msgid "Read-_Only"
 msgstr "N_ome leture"
 
-#: ../src/terminal-menubar.ui.h:29
+#: ../src/terminal-headermenu.ui.h:6
+msgid "_Advanced"
+msgstr "_Avanzadis"
+
+#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
 msgid "_Reset"
 msgstr "_Ripristine"
 
-#: ../src/terminal-menubar.ui.h:30
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
 msgid "Reset and C_lear"
 msgstr "Ripristine e _nete"
 
-#: ../src/terminal-menubar.ui.h:31
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
 msgid "_1. 80×24"
 msgstr "_1. 80×24"
 
-#: ../src/terminal-menubar.ui.h:32
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
 msgid "_2. 80×43"
 msgstr "_2. 80×43"
 
-#: ../src/terminal-menubar.ui.h:33
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
 msgid "_3. 132×24"
 msgstr "_3. 132×24"
 
-#: ../src/terminal-menubar.ui.h:34
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
 msgid "_4. 132×43"
 msgstr "_4. 132×43"
 
-#: ../src/terminal-menubar.ui.h:35
-msgid "Ta_bs"
-msgstr "Sc_hedis"
-
-#: ../src/terminal-menubar.ui.h:36
-msgid "_Previous Tab"
-msgstr "Schede _precedente"
-
-#: ../src/terminal-menubar.ui.h:37
-msgid "_Next Tab"
-msgstr "Schede di _dopo"
-
-#: ../src/terminal-menubar.ui.h:38
-msgid "Move Tab _Left"
-msgstr "Sposte schede a ç_ampe"
-
-#: ../src/terminal-menubar.ui.h:39
-msgid "Move Tab _Right"
-msgstr "Sposte schede a _diestre"
-
-#: ../src/terminal-menubar.ui.h:40
-msgid "_Detach Tab"
-msgstr "_Distache schede"
-
-#: ../src/terminal-menubar.ui.h:42
-msgid "_Contents"
-msgstr "_Somari"
-
-#: ../src/terminal-menubar.ui.h:44
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
 msgid "_Inspector"
 msgstr "_Inspector"
 
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1789
+msgid "_Preferences"
+msgstr "_Preferencis"
+
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "_Jutori"
+
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "I_nformazions"
+
+#: ../src/terminal-menubar.ui.in.h:1
+msgid "_File"
+msgstr "_File"
+
+#: ../src/terminal-menubar.ui.in.h:3
+msgid "_Save Contents…"
+msgstr "_Salve contignûts…"
+
+#: ../src/terminal-menubar.ui.in.h:4
+msgid "_Export…"
+msgstr "_Espuarte…"
+
+#: ../src/terminal-menubar.ui.in.h:5
+msgid "_Print…"
+msgstr "Stam_pe…"
+
+#: ../src/terminal-menubar.ui.in.h:6
+msgid "C_lose Tab"
+msgstr "S_iere schede"
+
+#: ../src/terminal-menubar.ui.in.h:7
+msgid "_Close Window"
+msgstr "_Siere barcon"
+
+#: ../src/terminal-menubar.ui.in.h:8
+msgid "_Edit"
+msgstr "_Modifiche"
+
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
+msgid "_Copy"
+msgstr "_Copie"
+
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
+msgid "Copy as _HTML"
+msgstr "Copie come _HTML"
+
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
+msgid "_Paste"
+msgstr "_Tache"
+
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
+msgid "Paste as _Filenames"
+msgstr "Tache come nons di _file"
+
+#: ../src/terminal-menubar.ui.in.h:14
+msgid "Select _All"
+msgstr "Selezione _dut"
+
+#: ../src/terminal-menubar.ui.in.h:15
+msgid "P_references"
+msgstr "P_referencis"
+
+#: ../src/terminal-menubar.ui.in.h:16
+msgid "_View"
+msgstr "_Visualize"
+
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
+msgid "Show _Menubar"
+msgstr "Mostre sba_re di menù"
+
+#: ../src/terminal-menubar.ui.in.h:21
+msgid "_Normal Size"
+msgstr "Dimension _normâl"
+
+#: ../src/terminal-menubar.ui.in.h:23
+msgid "_Search"
+msgstr "_Cîr"
+
+#: ../src/terminal-menubar.ui.in.h:25
+msgid "_Find…"
+msgstr "_Cjate…"
+
+#: ../src/terminal-menubar.ui.in.h:26
+msgid "Find _Next"
+msgstr "Cjate s_ucessîf"
+
+#: ../src/terminal-menubar.ui.in.h:27
+msgid "Find _Previous"
+msgstr "Cjate _precedent"
+
+#: ../src/terminal-menubar.ui.in.h:28
+msgid "_Clear Highlight"
+msgstr "Ne_te evidenziadure"
+
+#: ../src/terminal-menubar.ui.in.h:29
+msgid "_Terminal"
+msgstr "_Terminâl"
+
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
+msgid "Set _Title…"
+msgstr "Stabilìs _titul…"
+
+#: ../src/terminal-menubar.ui.in.h:32
+msgid "Set _Character Encoding"
+msgstr "Impueste _codifiche dai caratars"
+
+#: ../src/terminal-menubar.ui.in.h:40
+msgid "Ta_bs"
+msgstr "Sc_hedis"
+
+#: ../src/terminal-menubar.ui.in.h:42
+msgid "_Previous Tab"
+msgstr "Schede _precedente"
+
+#: ../src/terminal-menubar.ui.in.h:43
+msgid "_Next Tab"
+msgstr "Schede di _dopo"
+
+#: ../src/terminal-menubar.ui.in.h:44
+msgid "Move Tab _Left"
+msgstr "Sposte schede a ç_ampe"
+
+#: ../src/terminal-menubar.ui.in.h:45
+msgid "Move Tab _Right"
+msgstr "Sposte schede a _diestre"
+
+#: ../src/terminal-menubar.ui.in.h:46
+msgid "_Detach Tab"
+msgstr "_Distache schede"
+
+#: ../src/terminal-menubar.ui.in.h:49
+msgid "_Contents"
+msgstr "_Somari"
+
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Vierç tal terminâl _rimot"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Vierç tal terminâl _locâl"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Vierç la cartele atualmentri selezionade intun terminâl"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Vierç la cartele atualmentri in ûs intun terminâl"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Vierç tal _terminâl"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Vierç t_erminâl"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Vierç un terminâl"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Vierç in _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Vierç la cartele atualmentri selezionade tal gjestôr di file da terminâl "
-"Midnight Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Vierç la cartele atualmentri in ûs tal gjestôr di file da terminâl Midnight "
-"Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Vierç _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "Vierç il gjestôr di file da terminâl Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1783,11 +1760,11 @@ msgstr "Sposte terminâl a _diestre"
 msgid "_Detach Terminal"
 msgstr "St_ache terminâl"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3331
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
 msgid "C_lose Terminal"
 msgstr "_Siere terminâl"
 
-#: ../src/terminal-options.c:274
+#: ../src/terminal-options.c:281
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1797,58 +1774,54 @@ msgstr ""
 "prossime version di Terminâl di GNOME."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:285
+#: ../src/terminal-options.c:292
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
 "it."
 msgstr "Dopre “%s” par terminâ lis opzions e met daspò il comant di eseguî."
 
-#: ../src/terminal-options.c:295 ../src/terminal-options.c:308
+#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr ""
 "La opzion “%s” no je plui disponibile in cheste version di Terminâl di GNOME."
 
-#: ../src/terminal-options.c:380
+#: ../src/terminal-options.c:387
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "L'argoment par “%s” nol è un comant valit: %s"
 
-#: ../src/terminal-options.c:553
+#: ../src/terminal-options.c:560
 msgid "Two roles given for one window"
 msgstr "A son stâts specificâts doi rûi pal stes barcon"
 
-#: ../src/terminal-options.c:574 ../src/terminal-options.c:607
+#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "Opzion “%s” dade dôs voltis pal stes barcon\n"
 
-#: ../src/terminal-options.c:771
-msgid "Can only use --wait once"
-msgstr "Si pues doprâ --wait dome une volte"
-
-#: ../src/terminal-options.c:825
+#: ../src/terminal-options.c:833
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Impussibil passâ FD %d dôs voltis"
 
-#: ../src/terminal-options.c:887
+#: ../src/terminal-options.c:895
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "“%s” nol è fatôr di ingrandiment valit"
 
-#: ../src/terminal-options.c:894
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Il fatôr di ingrandiment “%g” al è masse bas, al vegnarà doprât %g\n"
 
-#: ../src/terminal-options.c:902
+#: ../src/terminal-options.c:910
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Il fatôr di ingrandiment “%g” al è masse alt, al vegnarà doprât %g\n"
 
-#: ../src/terminal-options.c:940
+#: ../src/terminal-options.c:948
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1857,154 +1830,158 @@ msgstr ""
 "La opzion “%s” e domande di specificâ un comant di eseguî sul rest de rie di "
 "comant"
 
-#: ../src/terminal-options.c:1108
+#: ../src/terminal-options.c:1101
+msgid "Can only use --wait once"
+msgstr "Si pues doprâ --wait dome une volte"
+
+#: ../src/terminal-options.c:1137
 msgid "Not a valid terminal config file."
 msgstr "Nol è un file di configuarzion dal terminâl valit."
 
-#: ../src/terminal-options.c:1121
+#: ../src/terminal-options.c:1150
 msgid "Incompatible terminal config file version."
 msgstr "Version dal file di configurazion dal terminâl no compatibil."
 
-#: ../src/terminal-options.c:1277
+#: ../src/terminal-options.c:1304
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr "Nol regjistre cun l'activation nameserver, nol dopre un terminâl atîf"
 
-#: ../src/terminal-options.c:1286
+#: ../src/terminal-options.c:1313
 msgid "Load a terminal configuration file"
 msgstr "Cjarie un file di configurazion dal terminal"
 
-#: ../src/terminal-options.c:1287
+#: ../src/terminal-options.c:1314
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/terminal-options.c:1303
+#: ../src/terminal-options.c:1330
 msgid "Show preferences window"
 msgstr "Al mostre il barcon des preferencis"
 
-#: ../src/terminal-options.c:1312
+#: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
 msgstr "Stampe variabilis di ambient par interagjî cul terminâl"
 
-#: ../src/terminal-options.c:1330
+#: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
 msgstr "Aumente la lungjece dai detais diagnostics"
 
-#: ../src/terminal-options.c:1339
+#: ../src/terminal-options.c:1366
 msgid "Suppress output"
 msgstr "Soprimi output"
 
-#: ../src/terminal-options.c:1352
+#: ../src/terminal-options.c:1379
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Vierç un gnûf barcon cun dentri une schede cun il profîl predefinît"
 
-#: ../src/terminal-options.c:1361
+#: ../src/terminal-options.c:1388
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Vierç une gnove schede tal ultin barcon viert cun il profîl predefinît"
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1401
 msgid "Turn on the menubar"
 msgstr "Abilite la sbare dai menù"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1410
 msgid "Turn off the menubar"
 msgstr "Disabilite la sbare dai menù"
 
-#: ../src/terminal-options.c:1392
+#: ../src/terminal-options.c:1419
 msgid "Maximize the window"
 msgstr "Slargje il barcon"
 
-#: ../src/terminal-options.c:1401
+#: ../src/terminal-options.c:1428
 msgid "Full-screen the window"
 msgstr "Puarte il barcon a plen visôr"
 
-#: ../src/terminal-options.c:1410
+#: ../src/terminal-options.c:1437
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Impueste la dimension dal barcon; par esempli: 80x24, o 80x24+200+200 "
 "(COLONISxRIIS+X+Y)"
 
-#: ../src/terminal-options.c:1411
+#: ../src/terminal-options.c:1438
 msgid "GEOMETRY"
 msgstr "GEOMETRIE"
 
-#: ../src/terminal-options.c:1419
+#: ../src/terminal-options.c:1446
 msgid "Set the window role"
 msgstr "Impueste il rûl dal barcon"
 
-#: ../src/terminal-options.c:1420
+#: ../src/terminal-options.c:1447
 msgid "ROLE"
 msgstr "RÛL"
 
-#: ../src/terminal-options.c:1428
+#: ../src/terminal-options.c:1455
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Impueste la ultime schede specificade come ative tal sô barcon"
 
-#: ../src/terminal-options.c:1441
+#: ../src/terminal-options.c:1468
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Al eseguìs l'argoment di cheste opzion tal terminâl"
 
-#: ../src/terminal-options.c:1450
+#: ../src/terminal-options.c:1477
 msgid "Use the given profile instead of the default profile"
 msgstr "Dopre il profîl furnît al puest di chel predefinît"
 
-#: ../src/terminal-options.c:1451
+#: ../src/terminal-options.c:1478
 msgid "PROFILE-NAME"
 msgstr "NON_PROFÎL"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1486
 msgid "Set the initial terminal title"
 msgstr "Impueste il titul iniziâl dal terminâl"
 
-#: ../src/terminal-options.c:1460
+#: ../src/terminal-options.c:1487
 msgid "TITLE"
 msgstr "TITUL"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1495
 msgid "Set the working directory"
 msgstr "Impueste la cartele di lavôr"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1496
 msgid "DIRNAME"
 msgstr "NON_DIRECTORY"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1504
 msgid "Wait until the child exits"
 msgstr "Spiete fintremai che il fi al jessi"
 
-#: ../src/terminal-options.c:1486
+#: ../src/terminal-options.c:1513
 msgid "Forward file descriptor"
 msgstr "Mande indenant il descritôr di file"
 
 #. FD = file descriptor
-#: ../src/terminal-options.c:1488
+#: ../src/terminal-options.c:1515
 msgid "FD"
 msgstr "FD"
 
-#: ../src/terminal-options.c:1496
+#: ../src/terminal-options.c:1523
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr ""
 "Stabilìs il fatôr di ingrandiment dal terminâl (1.0 = dimension normâl)"
 
-#: ../src/terminal-options.c:1497
+#: ../src/terminal-options.c:1524
 msgid "ZOOM"
 msgstr "INGRANDIMENT"
 
-#: ../src/terminal-options.c:1584
+#: ../src/terminal-options.c:1611
 msgid "COMMAND"
 msgstr "COMANT"
 
-#: ../src/terminal-options.c:1592
+#: ../src/terminal-options.c:1619
 msgid "GNOME Terminal Emulator"
 msgstr "Emuladôr di Terminâl di GNOME"
 
-#: ../src/terminal-options.c:1593
+#: ../src/terminal-options.c:1620
 msgid "Show GNOME Terminal options"
 msgstr "Mostre lis opzions dal Terminâl di GNOME"
 
-#: ../src/terminal-options.c:1603
+#: ../src/terminal-options.c:1630
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2012,11 +1989,11 @@ msgstr ""
 "Opzions par vierzi gnûfs barcons o schedis di terminâl; al è pussibil "
 "specificâ plui di une di chestis:"
 
-#: ../src/terminal-options.c:1604
+#: ../src/terminal-options.c:1631
 msgid "Show terminal options"
 msgstr "Mostre lis opzions dal terminâl"
 
-#: ../src/terminal-options.c:1612
+#: ../src/terminal-options.c:1639
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2024,11 +2001,11 @@ msgstr ""
 "Opzions dal barcon; se doprât prime dal argoment --window o --tab, al "
 "impueste i valôrs predefinîts par ducj i barcons:"
 
-#: ../src/terminal-options.c:1613
+#: ../src/terminal-options.c:1640
 msgid "Show per-window options"
 msgstr "Al mostre lis opzions par ogni barcon"
 
-#: ../src/terminal-options.c:1621
+#: ../src/terminal-options.c:1648
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2036,7 +2013,7 @@ msgstr ""
 "Opzions dal terminâl. Se doprât prime dal argoment --window o --tab, al "
 "impueste i valôrs predefinîts par ducj i terminâi:"
 
-#: ../src/terminal-options.c:1622
+#: ../src/terminal-options.c:1649
 msgid "Show per-terminal options"
 msgstr "Mostre lis opzions par ogni terminâl"
 
@@ -2106,49 +2083,45 @@ msgstr "Elimine il profîl"
 msgid "Delete"
 msgstr "Elimine"
 
-#: ../src/terminal-prefs.c:518
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "Chest al è il profîl predefinît"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Gjenerâl"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Scurtis"
-
-#: ../src/terminal-prefs.c:671
-msgid "Global"
-msgstr "Globâl"
 
 #: ../src/terminal-prefs.c:683
 msgid "Profiles"
 msgstr "Profîi"
 
-#: ../src/terminal-screen.c:1172
+#: ../src/terminal-screen.c:1140
 msgid "No command supplied nor shell requested"
 msgstr "Nol è stât furnît nissun comant o richieste di shell"
 
-#: ../src/terminal-screen.c:1393 ../src/terminal-screen.c:1723
+#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
 msgid "_Relaunch"
 msgstr "_Torne invie"
 
-#: ../src/terminal-screen.c:1396
+#: ../src/terminal-screen.c:1358
 msgid "There was an error creating the child process for this terminal"
 msgstr "Erôr tal creâ il procès fi par chest terminâl"
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1685
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Il procès fi al è jessût normalmentri cul stât %d."
 
-#: ../src/terminal-screen.c:1730
+#: ../src/terminal-screen.c:1688
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Il procès fi al è stât interot dal segnâl %d."
 
-#: ../src/terminal-screen.c:1733
+#: ../src/terminal-screen.c:1691
 msgid "The child process was aborted."
 msgstr "Il procès fi al è stât interot."
 
@@ -2160,24 +2133,24 @@ msgstr "Siere schede"
 msgid "There was an error displaying help"
 msgstr "Erôr tal mostrâ la guide"
 
-#: ../src/terminal-util.c:206
+#: ../src/terminal-util.c:207
 msgid "Contributors:"
 msgstr "Contribûts di:"
 
-#: ../src/terminal-util.c:222
+#: ../src/terminal-util.c:223
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Version VTE in ûs %u.%u.%u"
 
-#: ../src/terminal-util.c:228
+#: ../src/terminal-util.c:229
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emuladôr di terminâl par GNOME"
 
-#: ../src/terminal-util.c:235
+#: ../src/terminal-util.c:236
 msgid "GNOME Terminal"
 msgstr "Terminâl di GNOME"
 
-#: ../src/terminal-util.c:245
+#: ../src/terminal-util.c:246
 msgid "translator-credits"
 msgstr ""
 "Massimo Furlani <massimo.furlani@libero.it>\n"
@@ -2185,12 +2158,12 @@ msgstr ""
 "Agata Furlani <agata.furlani@libero.it>\n"
 "Fabio Tomat <f.t.public@gmail.com>"
 
-#: ../src/terminal-util.c:320
+#: ../src/terminal-util.c:321
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Impussibil vierzi la direzion “%s”"
 
-#: ../src/terminal-util.c:389
+#: ../src/terminal-util.c:390
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2201,7 +2174,7 @@ msgstr ""
 "o modificâlu secont i tiermins de GNU General Public License, publicade da "
 "Free Software Corporation, version 3 o (a tô sielte) sucessive."
 
-#: ../src/terminal-util.c:393
+#: ../src/terminal-util.c:394
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2213,7 +2186,7 @@ msgstr ""
 "IDONEITÂT A UNE FINALITÂT PARTICOLÂR. Consultâ la licence GNU General Public "
 "License par vê plui detais."
 
-#: ../src/terminal-util.c:397
+#: ../src/terminal-util.c:398
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2222,75 +2195,75 @@ msgstr ""
 "General Public License, in câs diviers consultâ la pagjine <http://www.gnu."
 "org/licenses/>."
 
-#: ../src/terminal-util.c:1148
+#: ../src/terminal-util.c:1149
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Scheme “file” cun non host rimot no supuartât"
 
-#: ../src/terminal-window.c:460
+#: ../src/terminal-window.c:457
 msgid "Could not save contents"
 msgstr "Impussibil salvâ i contignûts"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:477
 msgid "Save as…"
 msgstr "Salve come…"
 
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:480
 msgid "_Cancel"
 msgstr "A_nule"
 
-#: ../src/terminal-window.c:484
+#: ../src/terminal-window.c:481
 msgid "_Save"
 msgstr "_Salve"
 
-#: ../src/terminal-window.c:1751
+#: ../src/terminal-window.c:1724
 msgid "Open _Hyperlink"
 msgstr "Vierç colegament _ipertestuâl"
 
-#: ../src/terminal-window.c:1752
+#: ../src/terminal-window.c:1725
 msgid "Copy Hyperlink _Address"
 msgstr "Copie di_rezion colegament ipertestuâl"
 
-#: ../src/terminal-window.c:1762
+#: ../src/terminal-window.c:1735
 msgid "Send Mail _To…"
 msgstr "In_vie e-mail a…"
 
-#: ../src/terminal-window.c:1763
+#: ../src/terminal-window.c:1736
 msgid "Copy Mail _Address"
 msgstr "Copie direzion _e-mail"
 
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:1739
 msgid "Call _To…"
 msgstr "Clamade _a…"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1740
 msgid "Copy Call _Address "
 msgstr "Copie _recapit di clamade "
 
-#: ../src/terminal-window.c:1772
+#: ../src/terminal-window.c:1745
 msgid "_Open Link"
 msgstr "_Vierç leam"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:1746
 msgid "Copy _Link"
 msgstr "Copie _direzion"
 
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1784
 msgid "P_rofiles"
 msgstr "P_rofîi"
 
-#: ../src/terminal-window.c:1846
+#: ../src/terminal-window.c:1819
 msgid "L_eave Full Screen"
 msgstr "Barcon nor_mâl"
 
-#: ../src/terminal-window.c:3318
+#: ../src/terminal-window.c:3233
 msgid "Close this window?"
 msgstr "Sierâ chest barcon?"
 
-#: ../src/terminal-window.c:3318
+#: ../src/terminal-window.c:3233
 msgid "Close this terminal?"
 msgstr "Sierâ chest terminâl?"
 
-#: ../src/terminal-window.c:3322
+#: ../src/terminal-window.c:3237
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2298,7 +2271,7 @@ msgstr ""
 "A son ancjemò procès che a zirin in cualchi terminâl tal barcon. Sierant il "
 "barcon tu terminarâs ducj i procès."
 
-#: ../src/terminal-window.c:3326
+#: ../src/terminal-window.c:3241
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2306,9 +2279,49 @@ msgstr ""
 "Al è ancjemò un procès che al zire in chest terminâl. Sierant il terminâl al "
 "vegnarà interot il procès."
 
-#: ../src/terminal-window.c:3331
+#: ../src/terminal-window.c:3246
 msgid "C_lose Window"
 msgstr "_Siere barcon"
+
+#~ msgid "Unnamed"
+#~ msgstr "Cence non"
+
+#~ msgid "Whether to show menubar in new windows/tabs"
+#~ msgstr ""
+#~ "Indiche se mostrâ la sbare dai menù intai gnûfs barcons/schedis dal "
+#~ "terminâl"
+
+#~ msgid "True if the menubar should be shown in new window"
+#~ msgstr "Vêr se la sbare dai menù e à di jessi visualizade intal gnûf barcon"
+
+#~ msgid "label"
+#~ msgstr "etichete"
+
+#~ msgid "_Quit"
+#~ msgstr "_Jes"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Vierç in _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Vierç la cartele atualmentri selezionade tal gjestôr di file da terminâl "
+#~ "Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Vierç la cartele atualmentri in ûs tal gjestôr di file da terminâl "
+#~ "Midnight Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Vierç _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "Vierç il gjestôr di file da terminâl Midnight Commander"
 
 #~ msgid "Keyboard shortcut to create a new profile"
 #~ msgstr "Scurte di tastiere par creâ un gnûf profîl"
@@ -3485,9 +3498,6 @@ msgstr "_Siere barcon"
 
 #~ msgid "C_urrent Profile..."
 #~ msgstr "Profîl _curint..."
-
-#~ msgid "Show Menu_bar"
-#~ msgstr "Mostre ba_re di menu"
 
 #~ msgid "_Set Title..."
 #~ msgstr "_Imposte titul..."
