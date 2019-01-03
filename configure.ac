@@ -252,6 +252,7 @@ CC_CHECK_FLAGS_APPEND([WARN_CFLAGS],[CFLAGS],[ \
   -Wundef \
   -Wuninitialized \
   -Wunsafe-loop-optimizations \
+  -Wvla \
   -Wwrite-strings \
   -Wformat-signedness \
   -fno-common \
