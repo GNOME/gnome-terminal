@@ -7,13 +7,13 @@
 # Michael MORONI, <haikara90@gmail.com >, 2009.
 # Daniel PUENTES <blatberk@openmailbox.org>, 2015.
 # Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>, 2010, 2011, 2015, 2018.
-# Carmen Bianca BAKKER <carmen@carmenbianca.eu>, 2018.
+# Carmen Bianca BAKKER <carmen@carmenbianca.eu>, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2018-10-29 23:05+0000\n"
-"PO-Revision-Date: 2018-11-20 12:34+0100\n"
+"POT-Creation-Date: 2018-12-10 21:01+0000\n"
+"PO-Revision-Date: 2019-01-14 11:34+0100\n"
 "Last-Translator: Carmen Bianca Bakker <carmen@carmenbianca.eu>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
 "Language: eo\n"
@@ -25,17 +25,18 @@ msgstr ""
 "X-DamnedLies-Scope: partial\n"
 "X-Project-Style: gnome\n"
 
+#. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:572
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
+#: ../src/terminal-accels.c:232 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1864 ../src/terminal-window.c:2120
-#: ../src/terminal-window.c:2410
+#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
+#: ../src/terminal-window.c:2446
 msgid "Terminal"
 msgstr "Terminalo"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:2
-#: ../org.gnome.Terminal.desktop.in.in.h:2
+#: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "Use the command line"
 msgstr "Uzi la komandolinion"
 
@@ -71,15 +72,15 @@ msgstr ""
 "Malfermi Terminalon estas kromprogramo por la Dosieroj-aplikaĵo, kiu aldonas "
 "menueron en la kunteksta menuo por malfermi terminalon en la nuna dosierujo."
 
-#: ../org.gnome.Terminal.desktop.in.in.h:3
+#: ../org.gnome.Terminal.desktop.in.in.h:4
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "ŝelo;invito;komando;komandlinio;kmd;cmd;"
 
-#: ../org.gnome.Terminal.desktop.in.in.h:4 ../src/terminal-accels.c:125
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Nova fenestro"
 
-#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:144
+#: ../org.gnome.Terminal.desktop.in.in.h:6 ../src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Agordoj"
 
@@ -146,9 +147,25 @@ msgstr ""
 "Se vera, grasa teksto estos bildigita uzante la saman koloron, kiel normala "
 "teksto."
 
+#: ../src/org.gnome.Terminal.gschema.xml.h:13
+msgid ""
+"Scale factor for the cell height to increase line spacing. (Does not "
+"increase the font’s height.)"
+msgstr ""
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:14
+msgid ""
+"Scale factor for the cell width to increase letter spacing. (Does not "
+"increase the font’s width.)"
+msgstr ""
+
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
 msgstr "Ĉu uzi proprajn tajpmontrilajn kolorojn"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:16
+msgid "If true, use the cursor colors from the profile."
+msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Cursor background color"
@@ -182,6 +199,10 @@ msgstr ""
 #: ../src/org.gnome.Terminal.gschema.xml.h:21
 msgid "Whether to use custom highlight colors"
 msgstr "Ĉu uzi proprajn emfazajn kolorojn"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:22
+msgid "If true, use the highlight colors from the profile."
+msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:23
 msgid "Highlight background color"
@@ -220,11 +241,17 @@ msgstr "Ĉu permesi grasan tekston"
 #: ../src/org.gnome.Terminal.gschema.xml.h:28
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
-"Se vero, permesi al aplikaĵoj ŝanĝi la terminalan tekston al grasa teksto."
+"Se vera, permesi al aplikaĵoj ŝanĝi la terminalan tekston al grasa teksto."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:29
 msgid "Whether bold is also bright"
 msgstr "Ĉu grasa teksto ankaŭ estas hela"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
+msgid ""
+"If true, setting bold on the first 8 colors also switches to their bright "
+"variants."
+msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether to ring the terminal bell"
@@ -239,18 +266,10 @@ msgstr ""
 "dum inteligenta-elekto de vortoj"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Ĉu montri la menubreton en novaj fenestroj/langetoj"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
-msgid "True if the menubar should be shown in new window"
-msgstr "Vero se la menubreto estus montrata en nova fenestro"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Defaŭlta nombro da kolumnoj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -258,11 +277,11 @@ msgstr ""
 "Nombro da kolumnoj en novaj terminalaj fenestroj. Ne efikas se "
 "use_custom_default_size estas malŝaltita."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of rows"
 msgstr "Implicita nombro da vicoj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -270,15 +289,15 @@ msgstr ""
 "Nombro da vicoj en novaj terminalaj fenestroj. Ne efikas se "
 "use_custom_default_size estas malŝaltita."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "When to show the scrollbar"
 msgstr "Kiam montri la rulumskalon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid "Number of lines to keep in scrollback"
 msgstr "Nombro da entenotaj linioj je rulumo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -288,42 +307,42 @@ msgstr ""
 "ĝis tiu maksimumo da linioj; la linioj preterpasitaj la limon ne estos "
 "montritaj. Se scrollback_unlimited estas vero, tiu ĉi valoro ne efikos."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Ĉu oni devos konservi senliman nombron da linioj, rilate al rulumo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
 "space if there is a lot of output to the terminal."
 msgstr ""
-"Se vero, nombro da linioj de malsupren-rulumo ne estos limigita. La historio "
+"Se vera, nombro da linioj de malsupren-rulumo ne estos limigita. La historio "
 "de malsupren-rulumo oni konservos kelktempe, povante manki diskospaco, se la "
 "terminala eligo estas tro multa."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Ĉu rulumi malsupren se klavo estas premita"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Se vero, preminte klavon rulumi malsupren."
+msgstr "Se vera, preminte klavon rulumi malsupren."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Ĉu rulumi malsupren se aperas nova eligo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr "Se vera, ĉu rulumi malsupren kiam nova eligo aperas."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "What to do with the terminal when the child command exits"
 msgstr "Kion fari kun la terminalo kiam la ida komando eliras"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -332,35 +351,35 @@ msgstr ""
 "restartigi la komandon, kaj “hold” por teni la terminalon malfermata sen "
 "rulanta komando."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Ĉu lanĉi la komandon en terminalo kiel ensalutan ŝelon"
+msgstr "Ĉu lanĉi la komandon en terminalo kiel saluta ŝelo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
 msgstr ""
-"Se vero, la komando ene de la terminalo estos lanĉita kiel ensalutan ŝelon "
+"Se vera, la komando ene de la terminalo estos lanĉita kiel saluta ŝelo "
 "(argv[0] havos antaŭ dividstrekon)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Ĉu ruli propran komandon anstataŭ la ŝelo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
-"Se vero, oni uzos la valoron de la propra_komando agordo anstataŭ ruli kiel "
+"Se vera, oni uzos la valoron de la propra_komando agordo anstataŭ ruli kiel "
 "ŝelo."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to blink the cursor"
 msgstr "Ĉu pulsi la tajpmontrilon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -369,52 +388,58 @@ msgstr ""
 "tajpmontrila pulsado, aŭ “on” (ŝaltita) aŭ “off” (malŝaltita) por agordi "
 "reĝimon rekte."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "The cursor appearance"
 msgstr "La tajpmontrila aspekto"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
+msgid ""
+"Possible values are “always” or “never” allow blinking text, or only when "
+"the terminal is “focused” or “unfocused”."
+msgstr ""
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Custom command to use instead of the shell"
 msgstr "Propra komando uzota anstataŭ la ŝelo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Ruli tiun ĉi komandon anstataŭ la ŝelo, se uzi_propran_komandon estas vera."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Palette for terminal applications"
 msgstr "Paletro por terminalaj aplikaĵoj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "A Pango font name and size"
 msgstr "Pango-tiparnomo kaj grando"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The code sequence the Backspace key generates"
 msgstr "La koda sekvenco, kiun la retropaŝoklavo generas"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "The code sequence the Delete key generates"
 msgstr "La koda sekvenco, kiun la forigoklavo generas"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Ĉu uzi la kolorojn de la etoso por la terminala fenestraĵo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Whether to use the system monospace font"
 msgstr "Ĉu uzi la sisteman egallarĝan tiparon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Ĉu revolvi la terminalan enhavon je fenestra regrandigo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Which encoding to use"
 msgstr "Uzota kodoprezento"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -422,169 +447,173 @@ msgstr ""
 "Ĉu karakteroj de ambigua larĝo estas mallarĝaj aŭ larĝaj, kiam UTF-8 estas "
 "uzata"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to open a new tab"
-msgstr "Klavbombino por malfermi novan langeton"
+msgstr "Klavkombino por malfermi novan langeton"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
+msgid "Keyboard shortcut to open a new window"
+msgstr "Klavkombino por malfermi novan fenestron"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "Klavkombino por konservi la enhavon de la aktuala langeto al dosiero"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:70
-msgid "Keyboard shortcut to open a new window"
-msgstr "Klavbombino por malfermi novan fenestron"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
-msgid "Keyboard shortcut to save the current tab contents to file"
-msgstr "Klavbombino por konservi la enhavon de la aktuala langeto al dosiero"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr ""
-"Klavbombino por elporti la enhavon de la aktuala langeto al dosiero per "
+"Klavkombino por elporti la enhavon de la aktuala langeto al dosiero per "
 "diversaj formoj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr ""
-"Klavbombino por presi la enhavon de la aktuala langeto al presilo aŭ dosiero"
+"Klavkombino por presi la enhavon de la aktuala langeto al presilo aŭ dosiero"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
+msgid "Keyboard shortcut to close a tab"
+msgstr "Klavkombino por fermi langeton"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
+msgid "Keyboard shortcut to close a window"
+msgstr "Klavkombino por fermi fenestron"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:74
-msgid "Keyboard shortcut to close a tab"
-msgstr "Klavbombino por fermi langeton"
+msgid "Keyboard shortcut to copy text"
+msgstr "Klavkombino por kopii tekston"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:75
-msgid "Keyboard shortcut to close a window"
-msgstr "Klavbombino por fermi fenestron"
+msgid "Keyboard shortcut to copy text as HTML"
+msgstr "Klavkombino por kopii tekston kiel HTML"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:76
-msgid "Keyboard shortcut to copy text"
-msgstr "Klavbombino por kopii tekston"
+msgid "Keyboard shortcut to paste text"
+msgstr "Klavkombino por alglui tekston"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:77
-msgid "Keyboard shortcut to copy text as HTML"
-msgstr "Klavbombino por kopii tekston kiel HTML"
+msgid "Keyboard shortcut to select all text"
+msgstr "Klavkombino por elekti ĉiun tekston"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:78
-msgid "Keyboard shortcut to paste text"
-msgstr "Klavbombino por alglui tekston"
+msgid "Keyboard shortcut to open the Preferences dialog"
+msgstr "Klavkombino por malfermi la agordan dialogon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:79
-msgid "Keyboard shortcut to select all text"
-msgstr "Klavbombino por elekti ĉiun tekston"
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr "Klavkombino por baskuligi tutekranan reĝimon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:80
-msgid "Keyboard shortcut to open the Preferences dialog"
-msgstr "Klavbombino por malfermi la agordan dialogon"
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "Klavkombino por baskuligi la videblon de la menubreto"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:81
-msgid "Keyboard shortcut to toggle full screen mode"
-msgstr "Klavbombino por baskuligi tutekranan reĝimon"
+msgid "Keyboard shortcut to toggle the read-only state"
+msgstr "Klavkombino por baskuligi nurlegan staton"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:82
-msgid "Keyboard shortcut to toggle the visibility of the menubar"
-msgstr "Klavbombino por baskuligi la videblon de la menubreto"
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "Klavkombino por rekomencigi la terminalon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:83
-msgid "Keyboard shortcut to toggle the read-only state"
-msgstr "Klavbombino por baskuligi nurlegan staton"
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr "Klavkombino por rekomencigi kaj vakigi la terminalon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:84
-msgid "Keyboard shortcut to reset the terminal"
-msgstr "Klavbombino por rekomencigi la terminalon"
+msgid "Keyboard shortcut to open the search dialog"
+msgstr "Klavkombino por malfermi la serĉa dialogujo"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:85
-msgid "Keyboard shortcut to reset and clear the terminal"
-msgstr "Klavbombino por rekomencigi kaj vakigi la terminalon"
+msgid "Keyboard shortcut to find the next occurrence of the search term"
+msgstr "Klavkombino por trovi la sekvantan aperon de la serĉata termino"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:86
-msgid "Keyboard shortcut to open the search dialog"
-msgstr "Klavbombino por malfermi la serĉa dialogujo"
+msgid "Keyboard shortcut to find the previous occurrence of the search term"
+msgstr "Klavkombino por serĉi la antaŭan aperon de la serĉata termino"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:87
-msgid "Keyboard shortcut to find the next occurrence of the search term"
-msgstr "Klavbombino por trovi la sekvantan aperon de la serĉata termino"
+msgid "Keyboard shortcut to clear the find highlighting"
+msgstr "Klavkombino por vakigi la serĉan markon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:88
-msgid "Keyboard shortcut to find the previous occurrence of the search term"
-msgstr "Klavbombino por serĉi la antaŭan aperon de la serĉata termino"
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "Klavkombino por ŝanĝi al la antaŭa langeto"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:89
-msgid "Keyboard shortcut to clear the find highlighting"
-msgstr "Klavbombino por vakigi la serĉan markon"
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "Klavkombino por ŝanĝi al la sekva langeto"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:90
-msgid "Keyboard shortcut to switch to the previous tab"
-msgstr "Klavbombino por ŝanĝi al la antaŭa langeto"
+msgid "Keyboard shortcut to move the current tab to the left"
+msgstr "Klavkombino por movi la aktualan langeton maldekstren"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:91
-msgid "Keyboard shortcut to switch to the next tab"
-msgstr "Klavbombino por ŝanĝi al la sekva langeto"
+msgid "Keyboard shortcut to move the current tab to the right"
+msgstr "Klavkombino por movi la aktualan langeton dekstren"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:92
-msgid "Keyboard shortcut to move the current tab to the left"
-msgstr "Klavbombino por movi la aktualan langeton maldekstren"
+msgid "Keyboard shortcut to detach current tab"
+msgstr "Klavkombino por malligi la aktualan langeton"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:93
-msgid "Keyboard shortcut to move the current tab to the right"
-msgstr "Klavbombino por movi la aktualan langeton dekstren"
+msgid "Keyboard shortcut to switch to the numbered tab"
+msgstr "Klavkombino por ŝanĝi al la nombrita langeto"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:94
-msgid "Keyboard shortcut to detach current tab"
-msgstr "Klavbombino por malligi la aktualan langeton"
+msgid "Keyboard shortcut to switch to the last tab"
+msgstr "Klavkombino por ŝanĝi al la lasta langeto"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:95
-msgid "Keyboard shortcut to switch to the numbered tab"
-msgstr "Klavbombino por ŝanĝi al la nombrita langeto"
+msgid "Keyboard shortcut to launch help"
+msgstr "Klavkombino por lanĉi helpon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:96
-msgid "Keyboard shortcut to switch to the last tab"
-msgstr "Klavbombino por ŝanĝi al la lasta langeto"
+msgid "Keyboard shortcut to make font larger"
+msgstr "Klavkombino por pligrandigi tiparon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:97
-msgid "Keyboard shortcut to launch help"
-msgstr "Klavbombino por lanĉi helpon"
+msgid "Keyboard shortcut to make font smaller"
+msgstr "Klavkombino por malpligrandigi tiparon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:98
-msgid "Keyboard shortcut to make font larger"
-msgstr "Klavbombino por pligrandigi tiparon"
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "Klavkombino por regrandigi tiparon al normala grandomnnpppp"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:99
-msgid "Keyboard shortcut to make font smaller"
-msgstr "Klavbombino por malpligrandigi tiparon"
+msgid "Keyboard shortcut to show the primary menu"
+msgstr "Klavkombino por montri la ĉefan menuon"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:100
-msgid "Keyboard shortcut to make font normal-size"
-msgstr "Klavbombino por regrandigi tiparon al normala grandomnnpppp"
+msgid "Whether the menubar has access keys"
+msgstr "Ĉu la menubreto havas klavkombinojn"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:101
-msgid "Whether the menubar has access keys"
-msgstr "Ĉu la menubreto havas klavbombinojn"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
 "off."
 msgstr ""
-"Ĉu permesi Alt+litero klavbombinojn por la menubreto. Ili povas interferi "
+"Ĉu permesi Alt+litero klavkombinojn por la menubreto. Ili povas interferi "
 "kun aplikaĵoj rulantaj en la terminalo por ke ili estas ĉesigeblaj."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Whether shortcuts are enabled"
-msgstr "Ĉu klavbombinoj estas ŝaltitaj"
+msgstr "Ĉu klavkombinoj estas ŝaltitaj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
 msgstr ""
-"Ĉu ŝalti la klavbombinojn. Ili povas interferi kun aplikaĵoj rulantaj en "
+"Ĉu ŝalti la klavkombinojn. Ili povas interferi kun aplikaĵoj rulantaj en "
 "terminalo por ke ili estas ĉesigeblaj."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Ĉu ŝalti la norman GTK-klavbombinon por menubreto"
+msgstr "Ĉu ŝalti la norman GTK-klavkombinon por menubreto"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -594,31 +623,31 @@ msgstr ""
 "atingilon pere de gtkrc (gtk-menu-bar-accel = \"io ajn\"). Tiu ĉi opcio "
 "permesas malŝalti la norman menuo-atingilon."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the shell integration is enabled"
 msgstr "Ĉu la ŝela integrado estas ŝaltita"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Ĉu peti konfirmon antaŭ fermi terminalon"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to show the menubar in new windows"
 msgstr "Ĉu montri la menubreton en novaj fenestroj"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Ĉu malfermi novajn terminalojn kiel fenestrojn aŭ lagetojn"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "When to show the tabs bar"
 msgstr "Kiam montri la langetobreton"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "The position of the tab bar"
 msgstr "Pozicio de la langetobreto"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Which theme variant to use"
 msgstr "Uzota haŭtvarianton"
 
@@ -660,7 +689,7 @@ msgstr "Larĝa"
 #. Cursor shape
 #: ../src/preferences.ui.h:13
 msgid "Block"
-msgstr "Bloki"
+msgstr "Bloko"
 
 #. Cursor shape
 #: ../src/preferences.ui.h:15
@@ -770,12 +799,12 @@ msgstr "Solarized"
 #. This is the name of a colour scheme
 #: ../src/preferences.ui.h:57 ../src/profile-editor.c:606
 msgid "Custom"
-msgstr "Propre"
+msgstr "Propra"
 
 #. This refers to the Delete keybinding option
 #: ../src/preferences.ui.h:59
 msgid "Automatic"
-msgstr "Aŭtomate"
+msgstr "Aŭtomata"
 
 #. This refers to the Delete keybinding option
 #: ../src/preferences.ui.h:61
@@ -819,7 +848,7 @@ msgstr "Malfermi _novajn terminalojn en:"
 
 #: ../src/preferences.ui.h:73
 msgid "_Enable shortcuts"
-msgstr "Ŝ_alti klavbombinojn"
+msgstr "Ŝ_alti klavkombinojn"
 
 #: ../src/preferences.ui.h:74
 msgid "Text Appearance"
@@ -891,7 +920,7 @@ msgstr "Koloro de teksto kaj fono"
 
 #: ../src/preferences.ui.h:91
 msgid "_Use colors from system theme"
-msgstr "_Uzi koloroj de la sistem-etoso"
+msgstr "_Uzi kolorojn de la sistemhaŭto"
 
 #: ../src/preferences.ui.h:92
 msgid "Built-in sche_mes:"
@@ -999,7 +1028,7 @@ msgstr "Rulumado"
 
 #: ../src/preferences.ui.h:118
 msgid "_Run command as a login shell"
-msgstr "_Ruli komandon kiel ensalutan ŝelon"
+msgstr "_Ruli komandon kiel saluta ŝelo"
 
 #: ../src/preferences.ui.h:119
 msgid "Ru_n a custom command instead of my shell"
@@ -1126,7 +1155,7 @@ msgstr "Elekti kolorpaletron %u"
 msgid "Palette entry %u"
 msgstr "Paletro-enigo %u"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:150
 msgid "Find"
 msgstr "Serĉi"
 
@@ -1158,187 +1187,187 @@ msgstr "Kongrui kiel _regula esprimo"
 msgid "_Wrap around"
 msgstr "Ĉirkaŭ_flui"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:126
 msgid "New Tab"
 msgstr "Nova langeto"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:129
 msgid "Save Contents"
 msgstr "Konservi enhavoj"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:132
 msgid "Export"
 msgstr "Elporti"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:135
 msgid "Print"
 msgstr "Presi"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:137
 msgid "Close Tab"
 msgstr "Fermi la langeton"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:138
 msgid "Close Window"
 msgstr "Fermi la fenestron"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:142
 msgid "Copy"
 msgstr "Kopii"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:143
 msgid "Copy as HTML"
 msgstr "Kopii kiel HTML"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:144
 msgid "Paste"
 msgstr "Alglui"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:145
 msgid "Select All"
 msgstr "Elekti ĉion"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:151
 msgid "Find Next"
 msgstr "Serĉi la sekvan"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:152
 msgid "Find Previous"
 msgstr "Serĉi la antaŭan"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:153
 msgid "Clear Highlight"
 msgstr "Vakigi emfazon"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:157
 msgid "Hide and Show Menubar"
 msgstr "Kaŝi kaj montri menubreton"
 
-#: ../src/terminal-accels.c:156
+#: ../src/terminal-accels.c:158
 msgid "Full Screen"
 msgstr "Tutekrane"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:159
 msgid "Zoom In"
 msgstr "Enzomi"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:160
 msgid "Zoom Out"
 msgstr "Elzomi"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:161
 msgid "Normal Size"
 msgstr "Normala grando"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:165
 msgid "Read-Only"
 msgstr "Nurlega"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:166
 msgid "Reset"
 msgstr "Reagordi"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:167
 msgid "Reset and Clear"
 msgstr "Reagordi kaj vakigi"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "Sanĝi al antaŭa langeto"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:172
 msgid "Switch to Next Tab"
 msgstr "Ŝanĝi al sekva langeto"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Move langeton maldekstren"
 
-#: ../src/terminal-accels.c:172
+#: ../src/terminal-accels.c:174
 msgid "Move Tab to the Right"
 msgstr "Move langeton dekstren"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:175
 msgid "Detach Tab"
 msgstr "Malfiksi langeton"
 
-#: ../src/terminal-accels.c:209
+#: ../src/terminal-accels.c:211
 msgid "Switch to Last Tab"
 msgstr "Ŝanĝi al lasta langeto"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:215
 msgid "Contents"
 msgstr "Enhavoj"
 
-#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
+#: ../src/terminal-accels.c:219
+msgid "Show Primary Menu"
+msgstr "Montri ĉefan menuon"
+
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Dosiero"
 
-#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
+#: ../src/terminal-accels.c:229 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Redakti"
 
-#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
+#: ../src/terminal-accels.c:230 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Vido"
 
-#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+#: ../src/terminal-accels.c:231 ../src/terminal-menubar.ui.in.h:24
 msgid "Search"
 msgstr "Serĉi"
 
-#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
+#: ../src/terminal-accels.c:233 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Langetoj"
 
-#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
+#: ../src/terminal-accels.c:234 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Helpo"
 
-#: ../src/terminal-accels.c:327
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Malloka"
+
+#: ../src/terminal-accels.c:362
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Ŝanĝi al langeto %u"
 
-#: ../src/terminal-accels.c:535
+#: ../src/terminal-accels.c:552
 msgid "_Action"
 msgstr "_Ago"
 
-#: ../src/terminal-accels.c:554
+#: ../src/terminal-accels.c:571
 msgid "Shortcut _Key"
 msgstr "Klavkombin_klavo"
 
-#: ../src/terminal-app.c:441 ../src/terminal-window.c:1775
+#: ../src/terminal-app.c:459
+msgid "New Terminal"
+msgstr "Nova terminalo"
+
+#: ../src/terminal-app.c:469 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "Nova _terminalo"
 
-#: ../src/terminal-app.c:443 ../src/terminal-window.c:1784
+#: ../src/terminal-app.c:471 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "_Nova langeto"
 
-#: ../src/terminal-app.c:444 ../src/terminal-window.c:1780
+#: ../src/terminal-app.c:472 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "Nova _fenestro"
 
-#: ../src/terminal-app.c:492
+#: ../src/terminal-app.c:521
 msgid "Change _Profile"
 msgstr "Ŝanĝi _profilon"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1354
-#: ../src/terminal-window.c:1768
-msgid "_Preferences"
-msgstr "_Agordoj"
-
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
-msgid "_Help"
-msgstr "_Helpo"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
-msgid "_About"
-msgstr "_Pri"
-
-#: ../src/terminal-appmenu.ui.h:4
-msgid "_Quit"
-msgstr "_Forlasi"
+#: ../src/terminal-app.c:534
+msgid "_Profile"
+msgstr "_Profilo"
 
 #: ../src/terminal.c:568
 #, c-format
@@ -1494,6 +1523,68 @@ msgstr "Malnovaj CJK kodoprezentoj"
 msgid "Obsolete Encodings"
 msgstr "Malaktualaj kodoprezentoj"
 
+#: ../src/terminal-headermenu.ui.h:1 ../src/terminal-menubar.ui.in.h:22
+msgid "Zoom _Out"
+msgstr "Malz_omi"
+
+#: ../src/terminal-headermenu.ui.h:2 ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "Zom_i"
+
+#: ../src/terminal-headermenu.ui.h:4 ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "_Tutekrano"
+
+#: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
+#: ../src/terminal-window.c:1777
+msgid "Read-_Only"
+msgstr "_Nurlega"
+
+#: ../src/terminal-headermenu.ui.h:6
+msgid "_Advanced"
+msgstr "_Altnivela"
+
+#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
+msgid "_Reset"
+msgstr "_Reagordi"
+
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
+msgid "Reset and C_lear"
+msgstr "Reŝarĝi kaj _vakigi"
+
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
+msgid "_1. 80×24"
+msgstr "_1. 80×24"
+
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
+msgid "_2. 80×43"
+msgstr "_2. 80×43"
+
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
+msgid "_3. 132×24"
+msgstr "_3. 132×24"
+
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
+msgid "_4. 132×43"
+msgstr "_4. 132×43"
+
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
+msgid "_Inspector"
+msgstr "_Inspektanto"
+
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1789
+msgid "_Preferences"
+msgstr "_Agordoj"
+
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "_Helpo"
+
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "_Pri"
+
 #: ../src/terminal-menubar.ui.in.h:1
 msgid "_File"
 msgstr "_Dosiero"
@@ -1522,19 +1613,19 @@ msgstr "_Fermi la fenestron"
 msgid "_Edit"
 msgstr "R_edakti"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1746
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
 msgid "_Copy"
 msgstr "_Kopii"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1747
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
 msgid "Copy as _HTML"
 msgstr "Kopii kiel _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1748
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
 msgid "_Paste"
 msgstr "Al_glui"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1750
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
 msgid "Paste as _Filenames"
 msgstr "Alglui kiel _dosiernomoj"
 
@@ -1550,25 +1641,13 @@ msgstr "_Agordoj"
 msgid "_View"
 msgstr "_Vido"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1796
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
 msgid "Show _Menubar"
 msgstr "Montri _menubreton"
-
-#: ../src/terminal-menubar.ui.in.h:19
-msgid "_Full Screen"
-msgstr "_Tutekrano"
-
-#: ../src/terminal-menubar.ui.in.h:20
-msgid "Zoom _In"
-msgstr "Zom_i"
 
 #: ../src/terminal-menubar.ui.in.h:21
 msgid "_Normal Size"
 msgstr "_Norma grando"
-
-#: ../src/terminal-menubar.ui.in.h:22
-msgid "Zoom _Out"
-msgstr "Malz_omi"
 
 #: ../src/terminal-menubar.ui.in.h:23
 msgid "_Search"
@@ -1602,34 +1681,6 @@ msgstr "Agordi _titolon…"
 msgid "Set _Character Encoding"
 msgstr "Agordi _signaran kodoprezenton"
 
-#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1756
-msgid "Read-_Only"
-msgstr "_Nurlega"
-
-#: ../src/terminal-menubar.ui.in.h:34
-msgid "_Reset"
-msgstr "_Reagordi"
-
-#: ../src/terminal-menubar.ui.in.h:35
-msgid "Reset and C_lear"
-msgstr "Reŝarĝi kaj _vakigi"
-
-#: ../src/terminal-menubar.ui.in.h:36
-msgid "_1. 80×24"
-msgstr "_1. 80×24"
-
-#: ../src/terminal-menubar.ui.in.h:37
-msgid "_2. 80×43"
-msgstr "_2. 80×43"
-
-#: ../src/terminal-menubar.ui.in.h:38
-msgid "_3. 132×24"
-msgstr "_3. 132×24"
-
-#: ../src/terminal-menubar.ui.in.h:39
-msgid "_4. 132×43"
-msgstr "_4. 132×43"
-
 #: ../src/terminal-menubar.ui.in.h:40
 msgid "Ta_bs"
 msgstr "_Langetoj"
@@ -1657,10 +1708,6 @@ msgstr "Mal_fiksi langeton"
 #: ../src/terminal-menubar.ui.in.h:49
 msgid "_Contents"
 msgstr "_Enhavoj"
-
-#: ../src/terminal-menubar.ui.in.h:51
-msgid "_Inspector"
-msgstr "_Inspektanto"
 
 #: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
@@ -1702,7 +1749,7 @@ msgstr "Movi terminalon _dekstren"
 msgid "_Detach Terminal"
 msgstr "Mal_fiksi terminalon"
 
-#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3210
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
 msgid "C_lose Terminal"
 msgstr "_Fermi la terminalon"
 
@@ -2032,17 +2079,13 @@ msgstr "Ĉi tiu estas la implicita profilo"
 
 #: ../src/terminal-prefs.c:543
 msgid "General"
-msgstr "Ĝenerale"
+msgstr "Ĝenerala"
 
 #: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
-msgstr "Klavbombinoj"
+msgstr "Klavkombinoj"
 
-#: ../src/terminal-prefs.c:672
-msgid "Global"
-msgstr "Malloka"
-
-#: ../src/terminal-prefs.c:684
+#: ../src/terminal-prefs.c:683
 msgid "Profiles"
 msgstr "Profiloj"
 
@@ -2149,71 +2192,71 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr "“dosiero”-skemo kun defora gastignomo ne estas subtenita"
 
-#: ../src/terminal-window.c:449
+#: ../src/terminal-window.c:457
 msgid "Could not save contents"
 msgstr "Ne eblis konservi enhavojn"
 
-#: ../src/terminal-window.c:469
+#: ../src/terminal-window.c:477
 msgid "Save as…"
 msgstr "Konservi kiel…"
 
-#: ../src/terminal-window.c:472
+#: ../src/terminal-window.c:480
 msgid "_Cancel"
 msgstr "_Nuligi"
 
-#: ../src/terminal-window.c:473
+#: ../src/terminal-window.c:481
 msgid "_Save"
 msgstr "_Konservi"
 
-#: ../src/terminal-window.c:1703
+#: ../src/terminal-window.c:1724
 msgid "Open _Hyperlink"
 msgstr "Malfermi _ligilon"
 
-#: ../src/terminal-window.c:1704
+#: ../src/terminal-window.c:1725
 msgid "Copy Hyperlink _Address"
 msgstr "Kopii ligilan _adreson"
 
-#: ../src/terminal-window.c:1714
+#: ../src/terminal-window.c:1735
 msgid "Send Mail _To…"
 msgstr "Sendi retpoŝton _al…"
 
-#: ../src/terminal-window.c:1715
+#: ../src/terminal-window.c:1736
 msgid "Copy Mail _Address"
 msgstr "Kopii retpoŝtan _adreson"
 
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:1739
 msgid "Call _To…"
 msgstr "Voki _al…"
 
-#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1740
 msgid "Copy Call _Address "
 msgstr "Kopii vokan _adreson "
 
-#: ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:1745
 msgid "_Open Link"
 msgstr "_Malfermi la ligilon"
 
-#: ../src/terminal-window.c:1725
+#: ../src/terminal-window.c:1746
 msgid "Copy _Link"
 msgstr "Kopii _ligilon"
 
-#: ../src/terminal-window.c:1763
+#: ../src/terminal-window.c:1784
 msgid "P_rofiles"
 msgstr "P_rofiloj"
 
-#: ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1819
 msgid "L_eave Full Screen"
 msgstr "_Forlasi tutekranan reĝimon"
 
-#: ../src/terminal-window.c:3197
+#: ../src/terminal-window.c:3233
 msgid "Close this window?"
 msgstr "Ĉu fermi tiun fenestron?"
 
-#: ../src/terminal-window.c:3197
+#: ../src/terminal-window.c:3233
 msgid "Close this terminal?"
 msgstr "Ĉu fermi tiun terminalon?"
 
-#: ../src/terminal-window.c:3201
+#: ../src/terminal-window.c:3237
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2221,16 +2264,25 @@ msgstr ""
 "Ankoraŭ rulas procezoj en kelkaj terminaloj de la fenestro. Ferminte la "
 "fenestron, oni mortigos ĝin."
 
-#: ../src/terminal-window.c:3205
+#: ../src/terminal-window.c:3241
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Ankoraŭ rulas procezo en terminalo. Ferminte la terminalon, oni mortigos ĝin."
 
-#: ../src/terminal-window.c:3210
+#: ../src/terminal-window.c:3246
 msgid "C_lose Window"
 msgstr "_Fermi la fenestron"
+
+#~ msgid "Whether to show menubar in new windows/tabs"
+#~ msgstr "Ĉu montri la menubreton en novaj fenestroj/langetoj"
+
+#~ msgid "True if the menubar should be shown in new window"
+#~ msgstr "Vero se la menubreto estus montrata en nova fenestro"
+
+#~ msgid "_Quit"
+#~ msgstr "_Forlasi"
 
 #~ msgid "_Search for:"
 #~ msgstr "_Serĉi por:"
