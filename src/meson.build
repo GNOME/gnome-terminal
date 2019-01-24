@@ -123,7 +123,7 @@ mnemonics_conf = {
 }
 
 resource_data += configure_file(
-  input: menubar + '.ui.meson',
+  input: menubar + '.ui.in',
   output: menubar + '-with-mnemonics.ui',
   configuration: mnemonics_conf,
 )
@@ -136,7 +136,7 @@ mnemonics_conf = {
 }
 
 resource_data += configure_file(
-  input: menubar + '.ui.meson',
+  input: menubar + '.ui.in',
   output: menubar + '-without-mnemonics.ui',
   configuration: mnemonics_conf,
 )

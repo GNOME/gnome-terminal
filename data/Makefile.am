@@ -1,3 +1,0 @@
-NULL =
-
-SUBDIRS = icons
