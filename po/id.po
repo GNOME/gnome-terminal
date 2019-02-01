@@ -8,11 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-05 20:24+0000\n"
-"PO-Revision-Date: 2018-02-06 11:05+0700\n"
-"Last-Translator: Kukuh Syafaat <syafaatkukuh@gmail.com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
+"POT-Creation-Date: 2018-12-10 21:01+0000\n"
+"PO-Revision-Date: 2019-01-06 20:40+0700\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -22,17 +21,18 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.0.6\n"
 
+#. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:542
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
+#: ../src/terminal-accels.c:232 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1929 ../src/terminal-window.c:2189
-#: ../src/terminal-window.c:2479
+#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
+#: ../src/terminal-window.c:2446
 msgid "Terminal"
 msgstr "Terminal"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:2
-#: ../org.gnome.Terminal.desktop.in.in.h:2
+#: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "Use the command line"
 msgstr "Menggunakan baris perintah"
 
@@ -70,18 +70,17 @@ msgstr ""
 "butir menu ke menu konteks untuk membuka sebuah terminal dalam direktori "
 "yang saat ini sedang diramban."
 
-#: ../org.gnome.Terminal.desktop.in.in.h:3
+#: ../org.gnome.Terminal.desktop.in.in.h:4
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;prompt;perintah;baris perintah;cmd;"
 
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Baku"
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:127
+msgid "New Window"
+msgstr "Jendela Baru"
 
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Tanpa nama"
+#: ../org.gnome.Terminal.desktop.in.in.h:6 ../src/terminal-accels.c:146
+msgid "Preferences"
+msgstr "Preferensi"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
@@ -270,18 +269,10 @@ msgstr ""
 "sebuah kata ketika melakukan pemilihan kata"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Penampilan daftar menu pada jendela/tab baru"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
-msgid "True if the menubar should be shown in new window"
-msgstr "True apabila bilah menu mesti ditampilkan pada jendela baru"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Cacah kolom bawaan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -289,11 +280,11 @@ msgstr ""
 "Cacah kolom pada jendela terminal yang baru dibuat. Tidak berpengaruh bila "
 "use_custom_default_size tidak diaktifkan."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of rows"
 msgstr "Cacah baris bawaan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -301,15 +292,15 @@ msgstr ""
 "Cacah baris pada jendela terminal yang baru dibuat. Tidak berpengaruh bila "
 "use_custom_default_size tidak diaktifkan."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "When to show the scrollbar"
 msgstr "Kapan menampilkan bilah penggulir"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid "Number of lines to keep in scrollback"
 msgstr "Cacah baris yang disisakan pada saat menggulung layar ke belakang"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -320,11 +311,11 @@ msgstr ""
 "tidak cukup akan dibuang. Bila nilai scrollback_unlimited true, nilai ini "
 "diabaikan."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Apakah sejumlah tak terbatas baris gulung mundur mesti dipertahankan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -334,31 +325,31 @@ msgstr ""
 "mundur disimpan sementara di cakram, sehingga ini bisa menyebabkan sistem "
 "kehabisan ruang cakram bila ada banyak keluaran ke terminal."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Menggulung layar hingga ke bawah saat tombol ditekan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr ""
 "Bila true, scrollbar akan dikembalikan ke bawah bila ada tombol ditekan."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Menggulung layar ke bawah saat ada keluaran baru"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr ""
 "Bila true, semua tampilan keluaran dari terminal akan digulung ke bawah."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "What to do with the terminal when the child command exits"
 msgstr ""
 "Apa yang dilakukan terminal saat perintah yang dikerjakan sudah selesai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -367,13 +358,13 @@ msgstr ""
 "untuk memulai ulang perintah, dan \"hold\" untuk mempertahankan terminal "
 "terbuka tanpa perintah yang dijalankan di dalamnya."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Menentukan apakah perintah yang dijalankan dalam terminal dijalankan melalui "
 "shell login"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -381,11 +372,11 @@ msgstr ""
 "Bila true, perintah dalam terminal akan dijalankan sebagai shell login. "
 "(argv[0] akan memiliki tanda minus di depannya)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Peluncuran perintah tertentu dan bukan shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -393,11 +384,11 @@ msgstr ""
 "Bila true, nilai konfigurasi custom_command akan digunakan pada shell yang "
 "dijalankan."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to blink the cursor"
 msgstr "Menentukan apakah kursor harus berkedip"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -405,60 +396,60 @@ msgstr ""
 "Nilai yang mungkin adalah \"system\" untuk memakai pengaturan kedipan kursor "
 "global, atau \"on\" atau \"off\" untuk menata mode secara eksplisit."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "The cursor appearance"
 msgstr "Penampilan kursor"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
 msgstr ""
-"Nilai yang mungkin adalah \"selalu\" atau \"tak pernah\" mengizinkan teks "
-"berkedip, atau hanya bila terminal \"terfokus\" atau \"tidak fokus\"."
+"Nilai yang mungkin adalah \"always\" atau \"never\" mengizinkan teks "
+"berkedip, atau hanya bila terminal \"focused\" atau \"unfocused\"."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Custom command to use instead of the shell"
 msgstr "Jalankan perintah tertentu dan bukan shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Jalankan perintah ini tanpa shell apabila use_custom_command bernilai true."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Palette for terminal applications"
 msgstr "Palet untuk aplikasi terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "A Pango font name and size"
 msgstr "Ukuran dan nama fonta pango"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The code sequence the Backspace key generates"
 msgstr "Urutan kode yang dibangkitkan oleh tombol Backspace"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "The code sequence the Delete key generates"
 msgstr "Urutan kode yang dibangkitkan oleh tombol Delete"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Penggunaan warna dari tema sistem untuk widget terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Whether to use the system monospace font"
 msgstr "Apakah menggunakan fonta lebar tetap sistem"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Apakah melipat ulang isi terminal saat ukuran jendela diubah"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Which encoding to use"
 msgstr "Pengkodean mana yang akan dipakai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -466,144 +457,148 @@ msgstr ""
 "Apakah karakter lebar ambigu itu sempit atau lebar ketika memakai enkoding "
 "UTF-8"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Tombol pintas untuk membuka tab baru"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to open a new window"
 msgstr "Tombol pintas untuk membuka jendela baru"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Tombol pintas untuk menyimpan isi tab kini ke berkas"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr ""
 "Tombol pintas untuk menyimpan isi tab kini ke berkas dalam berbagai format"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr "Tombol pintas untuk menyimpan isi tab kini ke pencetak atau berkas"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Tombol pintas untuk menutup tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Tombol pintas untuk menutup jendela"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Tombol pintas untuk menyalin teks"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Tombol pintas untuk menyalin teks sebagai HTML"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to paste text"
 msgstr "Tombol pintas untuk menempelkan teks"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to select all text"
 msgstr "Tombol pintas untuk memilih semua teks"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Tombol pintas untuk membuka dialog Preferensi"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Tombol pintas untuk menjungkitkan mode layar penuh"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Tombol pintas untuk menjungkitkan kenampakan bilah menu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Tombol pintas untuk menjungkitkan mode hanya-baca"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Tombol pintas untuk menata ulang terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Tombol pintas untuk menata ulang dan membersihkan layar terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Tombol pintas untuk membuka dialog pencarian"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr ""
 "Tombol pintas untuk menemukan kemunculan berikutnya dari kata yang dicari"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr ""
 "Tombol pintas untuk menemukan kemunculan sebelumnya dari kata yang dicari"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Tombol pintas untuk membersihkan penyorotan pencarian"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Tombol pintas untuk berpindah ke tab sebelumnya"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Tombol pintas untuk berpindah ke tab berikutnya"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Tombol pintas untuk memindah tab kini ke kiri"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Tombol pintas untuk memindah tab kini ke kanan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Tombol pintas untuk melepas tab kini"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Tombol pintas untuk berpindah pada tab yang bernomor"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Tombol pintas untuk berpindah ke tab terakhir"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to launch help"
 msgstr "Tombol pintas untuk meluncurkan bantuan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to make font larger"
 msgstr "Tombol pintas untuk membuat fonta menjadi lebih besar"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Tombol pintas untuk membuat fonta menjadi lebih kecil"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Tombol pintas untuk membuat fonta menjadi berukuran normal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
+msgid "Keyboard shortcut to show the primary menu"
+msgstr "Tombol pintas untuk berpindah ke tab sebelumnyac"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Whether the menubar has access keys"
 msgstr "Menentukan apakah batang menu memiliki tombol akses"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -613,11 +608,11 @@ msgstr ""
 "+huruf. Ini mungkin dapat mengganggu aplikasi yang berjalan di dalam "
 "terminal sehingga mungkin mematikannya."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Whether shortcuts are enabled"
 msgstr "Apakah pintasan difungsikan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -625,13 +620,13 @@ msgstr ""
 "Apakah pintasan difungsikan. Ini mungkin dapat mengganggu aplikasi yang "
 "berjalan di dalam terminal sehingga mungkin mematikannya."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Menentukan apakah tombol singkat GTK standar untuk akses batang menu "
 "diaktifkan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -641,31 +636,31 @@ msgstr ""
 "diatur pula lewat berkas gtkrc (di bagian gtk-menu-bar-accel). Pilihan ini "
 "dapat digunakan untuk mematikan fungsi akselerator batang menu."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the shell integration is enabled"
 msgstr "Apakah integrasi shell difungsikan"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Apakah menanyakan konfirmasi sebelum menutup terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to show the menubar in new windows"
 msgstr "Apakah menampilkan bilah menu pada jendela baru"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Apakah membuka terminal baru sebagai jendela atau tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "When to show the tabs bar"
 msgstr "Kapan menampilkan bilah tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "The position of the tab bar"
 msgstr "Posisi dari bilah tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Which theme variant to use"
 msgstr "Varian tema mana yang akan dipakai"
 
@@ -718,6 +713,11 @@ msgstr "Batang-I"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Garis bawah"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Baku"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -1100,10 +1100,6 @@ msgid "Set as default"
 msgstr "Jadikan bawaan"
 
 #: ../src/preferences.ui.h:133
-msgid "label"
-msgstr "label"
-
-#: ../src/preferences.ui.h:134
 msgid "Cancel"
 msgstr "Batal"
 
@@ -1153,26 +1149,26 @@ msgid "Error parsing command: %s"
 msgstr "Galat ketika mengurai perintah: %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:899
+#: ../src/profile-editor.c:828
 msgid "width"
 msgstr "lebar"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:904
+#: ../src/profile-editor.c:833
 msgid "height"
 msgstr "tinggi"
 
-#: ../src/profile-editor.c:956
+#: ../src/profile-editor.c:885
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Pilih Warna Palet %u"
 
-#: ../src/profile-editor.c:960
+#: ../src/profile-editor.c:889
 #, c-format
 msgid "Palette entry %u"
 msgstr "Entri palet %u"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:150
 msgid "Find"
 msgstr "Cari"
 
@@ -1204,197 +1200,189 @@ msgstr "Sesuai ekspresi _reguler"
 msgid "_Wrap around"
 msgstr "_Lipat kata"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:126
 msgid "New Tab"
 msgstr "Tab Baru"
 
-#: ../src/terminal-accels.c:125
-msgid "New Window"
-msgstr "Jendela Baru"
-
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:129
 msgid "Save Contents"
 msgstr "Simpan Isi"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:132
 msgid "Export"
 msgstr "Ekspor"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:135
 msgid "Print"
 msgstr "Cetak"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:137
 msgid "Close Tab"
 msgstr "Tutup Tab"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:138
 msgid "Close Window"
 msgstr "Tutup Jendela"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:142
 msgid "Copy"
 msgstr "Salin"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:143
 msgid "Copy as HTML"
 msgstr "Salin sebagai HTML"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:144
 msgid "Paste"
 msgstr "Tempel"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:145
 msgid "Select All"
 msgstr "Pilih Semua"
 
-#: ../src/terminal-accels.c:144
-msgid "Preferences"
-msgstr "Preferensi"
-
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:151
 msgid "Find Next"
 msgstr "Cari Selanjutnya"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:152
 msgid "Find Previous"
 msgstr "Cari Sebelumnya"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:153
 msgid "Clear Highlight"
 msgstr "Bersihkan Sorotan"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:157
 msgid "Hide and Show Menubar"
 msgstr "Sembunyikan dan Tampilkan Bilah Menu"
 
-#: ../src/terminal-accels.c:156
+#: ../src/terminal-accels.c:158
 msgid "Full Screen"
 msgstr "Layar Penuh"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:159
 msgid "Zoom In"
 msgstr "Perbesar Tampilan"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:160
 msgid "Zoom Out"
 msgstr "Perkecil Tampilan"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:161
 msgid "Normal Size"
 msgstr "Ukuran Normal"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:165
 msgid "Read-Only"
 msgstr "Hanya-Baca"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:166
 msgid "Reset"
 msgstr "Atur Ulang"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:167
 msgid "Reset and Clear"
 msgstr "Atur Ulang dan Bersihkan"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "Bertukar ke Tab Sebelumnya"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:172
 msgid "Switch to Next Tab"
 msgstr "Bertukar ke Tab Selanjutnya"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Pindahkan Tab ke Kiri"
 
-#: ../src/terminal-accels.c:172
+#: ../src/terminal-accels.c:174
 msgid "Move Tab to the Right"
 msgstr "Pindahkan Tab ke Kanan"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:175
 msgid "Detach Tab"
 msgstr "Pisahkan Tab"
 
-#: ../src/terminal-accels.c:209
+#: ../src/terminal-accels.c:211
 msgid "Switch to Last Tab"
 msgstr "Bertukar ke Tab Terakhir"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:215
 msgid "Contents"
 msgstr "Isi"
 
-#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
+#: ../src/terminal-accels.c:219
+msgid "Show Primary Menu"
+msgstr "Tampilkan Menu Primer"
+
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Berkas"
 
-#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
+#: ../src/terminal-accels.c:229 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Sunting"
 
-#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
+#: ../src/terminal-accels.c:230 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Tampilan"
 
-#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+#: ../src/terminal-accels.c:231 ../src/terminal-menubar.ui.in.h:24
 msgid "Search"
 msgstr "Cari"
 
-#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
+#: ../src/terminal-accels.c:233 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Tab"
 
-#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
+#: ../src/terminal-accels.c:234 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Bantuan"
 
-#: ../src/terminal-accels.c:327
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Global"
+
+#: ../src/terminal-accels.c:362
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Pindah ke Tab %u"
 
-#: ../src/terminal-accels.c:535
+#: ../src/terminal-accels.c:552
 msgid "_Action"
 msgstr "_Aksi"
 
-#: ../src/terminal-accels.c:554
+#: ../src/terminal-accels.c:571
 msgid "Shortcut _Key"
 msgstr "_Tombol Pintas"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1840
+#: ../src/terminal-app.c:459
+msgid "New Terminal"
+msgstr "Terminal Baru"
+
+#: ../src/terminal-app.c:469 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "_Terminal Baru"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1849
+#: ../src/terminal-app.c:471 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "_Tab Baru"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1845
+#: ../src/terminal-app.c:472 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "_Jendela Baru"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:521
 msgid "Change _Profile"
 msgstr "Ubah _Profil"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1392
-#: ../src/terminal-window.c:1833
-msgid "_Preferences"
-msgstr "_Preferensi"
+#: ../src/terminal-app.c:534
+msgid "_Profile"
+msgstr "_Profil"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
-msgid "_Help"
-msgstr "Ba_ntuan"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
-msgid "_About"
-msgstr "Tent_ang"
-
-#: ../src/terminal-appmenu.ui.h:4
-msgid "_Quit"
-msgstr "_Keluar"
-
-#: ../src/terminal.c:538
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Gagal mengurai argumen: \"%s\"\n"
@@ -1548,6 +1536,68 @@ msgstr "Pengodean CJK Warisan"
 msgid "Obsolete Encodings"
 msgstr "Pengodean Usang"
 
+#: ../src/terminal-headermenu.ui.h:1 ../src/terminal-menubar.ui.in.h:22
+msgid "Zoom _Out"
+msgstr "Perkecil Tam_pilan"
+
+#: ../src/terminal-headermenu.ui.h:2 ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "Perbesar Tamp_ilan"
+
+#: ../src/terminal-headermenu.ui.h:4 ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "Layar _Penuh"
+
+#: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
+#: ../src/terminal-window.c:1777
+msgid "Read-_Only"
+msgstr "H_anya-Baca"
+
+#: ../src/terminal-headermenu.ui.h:6
+msgid "_Advanced"
+msgstr "Tingkat L_anjut"
+
+#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
+msgid "_Reset"
+msgstr "Atu_r Ulang"
+
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
+msgid "Reset and C_lear"
+msgstr "Atur U_lang dan Bersihkan"
+
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
+msgid "_1. 80×24"
+msgstr "_1. 80×24"
+
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
+msgid "_2. 80×43"
+msgstr "_2. 80×43"
+
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
+msgid "_3. 132×24"
+msgstr "_3. 132×24"
+
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
+msgid "_4. 132×43"
+msgstr "_4. 132×43"
+
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
+msgid "_Inspector"
+msgstr "Pemer_iksa"
+
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1789
+msgid "_Preferences"
+msgstr "_Preferensi"
+
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "Ba_ntuan"
+
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "Tent_ang"
+
 #: ../src/terminal-menubar.ui.in.h:1
 msgid "_File"
 msgstr "_Berkas"
@@ -1576,19 +1626,19 @@ msgstr "Tutup Jende_la"
 msgid "_Edit"
 msgstr "_Sunting"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1811
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
 msgid "_Copy"
 msgstr "_Salin"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1812
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
 msgid "Copy as _HTML"
 msgstr "Salin sebagai _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1813
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
 msgid "_Paste"
 msgstr "_Tempel"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1815
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
 msgid "Paste as _Filenames"
 msgstr "Tempel sebagai Nama _Berkas"
 
@@ -1604,25 +1654,13 @@ msgstr "P_referensi"
 msgid "_View"
 msgstr "_Tampilan"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1861
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
 msgid "Show _Menubar"
 msgstr "Tampilkan Bilah _Menu"
-
-#: ../src/terminal-menubar.ui.in.h:19
-msgid "_Full Screen"
-msgstr "Layar _Penuh"
-
-#: ../src/terminal-menubar.ui.in.h:20
-msgid "Zoom _In"
-msgstr "Perbesar Tamp_ilan"
 
 #: ../src/terminal-menubar.ui.in.h:21
 msgid "_Normal Size"
 msgstr "Ukuran _Normal"
-
-#: ../src/terminal-menubar.ui.in.h:22
-msgid "Zoom _Out"
-msgstr "Perkecil Tam_pilan"
 
 #: ../src/terminal-menubar.ui.in.h:23
 msgid "_Search"
@@ -1648,41 +1686,13 @@ msgstr "_Bersihkan Sorotan"
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
 msgid "Set _Title…"
 msgstr "A_tur Judul…"
 
 #: ../src/terminal-menubar.ui.in.h:32
 msgid "Set _Character Encoding"
 msgstr "Atur _Enkoding Karakter"
-
-#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1821
-msgid "Read-_Only"
-msgstr "H_anya-Baca"
-
-#: ../src/terminal-menubar.ui.in.h:34
-msgid "_Reset"
-msgstr "Atu_r Ulang"
-
-#: ../src/terminal-menubar.ui.in.h:35
-msgid "Reset and C_lear"
-msgstr "Atur U_lang dan Bersihkan"
-
-#: ../src/terminal-menubar.ui.in.h:36
-msgid "_1. 80×24"
-msgstr "_1. 80×24"
-
-#: ../src/terminal-menubar.ui.in.h:37
-msgid "_2. 80×43"
-msgstr "_2. 80×43"
-
-#: ../src/terminal-menubar.ui.in.h:38
-msgid "_3. 132×24"
-msgstr "_3. 132×24"
-
-#: ../src/terminal-menubar.ui.in.h:39
-msgid "_4. 132×43"
-msgstr "_4. 132×43"
 
 #: ../src/terminal-menubar.ui.in.h:40
 msgid "Ta_bs"
@@ -1712,66 +1722,33 @@ msgstr "_Pisahkan Tab"
 msgid "_Contents"
 msgstr "_Isi"
 
-#: ../src/terminal-menubar.ui.in.h:51
-msgid "_Inspector"
-msgstr "Pemer_iksa"
-
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Buka di Terminal _Remote"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Buka di Terminal _Lokal"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Buka folder yang kini dipilih dalam suatu terminal"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Buka folder yang kini terbuka dalam suatu terminal"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Buka dalam T_erminal"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Buka T_erminal"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Buka sebuah terminal"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Buka di _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Buka folder yang kini dipilih dalam manajer berkas terminal Midnight "
-"Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Buka folder yang kini terbuka dalam manajer berkas terminal Midnight "
-"Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Buka _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "Buka manajer berkas terminal Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1785,11 +1762,11 @@ msgstr "Pindahkan Terminal ke K_anan"
 msgid "_Detach Terminal"
 msgstr "_Pisahkan Terminal"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3354
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
 msgid "C_lose Terminal"
 msgstr "Tutup Termina_l"
 
-#: ../src/terminal-options.c:274
+#: ../src/terminal-options.c:281
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1799,7 +1776,7 @@ msgstr ""
 "terminal selanjutnya."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:285
+#: ../src/terminal-options.c:292
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1808,50 +1785,46 @@ msgstr ""
 "Gunakan “%s” untuk mengakhiri pilihan dan menempatkan baris perintah untuk "
 "mengeksekusi setelahnya."
 
-#: ../src/terminal-options.c:295 ../src/terminal-options.c:308
+#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "Opsi \"%s\" tidak didukung lagi dalam versi gnome-terminal ini."
 
-#: ../src/terminal-options.c:380
+#: ../src/terminal-options.c:387
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Argumen ke \"%s\" bukanlah perintah yang valid: %s"
 
-#: ../src/terminal-options.c:553
+#: ../src/terminal-options.c:560
 msgid "Two roles given for one window"
 msgstr "Ada dua peranan yang diberikan pada satu jendela"
 
-#: ../src/terminal-options.c:574 ../src/terminal-options.c:607
+#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "Opsi \"%s\" diberikan dua kali untuk jendela yang sama\n"
 
-#: ../src/terminal-options.c:771
-msgid "Can only use --wait once"
-msgstr "Hanya bisa memakai --wait sekali"
-
-#: ../src/terminal-options.c:825
+#: ../src/terminal-options.c:833
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Tak bisa menyodorkan FD %d dua kali"
 
-#: ../src/terminal-options.c:887
+#: ../src/terminal-options.c:895
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "\"%s\" bukanlah faktor perbesaran yang valid"
 
-#: ../src/terminal-options.c:894
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Faktor perbesaran \"%g\" terlalu kecil, gunakan %g\n"
 
-#: ../src/terminal-options.c:902
+#: ../src/terminal-options.c:910
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Faktor perbesaran \"%g\" terlalu besar, gunakan %g\n"
 
-#: ../src/terminal-options.c:940
+#: ../src/terminal-options.c:948
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1860,15 +1833,19 @@ msgstr ""
 "Pilihan \"%s\" mengharuskan adanya perintah yang dijalankan pada sisa baris "
 "perintah"
 
-#: ../src/terminal-options.c:1108
+#: ../src/terminal-options.c:1101
+msgid "Can only use --wait once"
+msgstr "Hanya bisa memakai --wait sekali"
+
+#: ../src/terminal-options.c:1137
 msgid "Not a valid terminal config file."
 msgstr "Bukan berkas konfigurasi terminal yang sah."
 
-#: ../src/terminal-options.c:1121
+#: ../src/terminal-options.c:1150
 msgid "Incompatible terminal config file version."
 msgstr "Versi berkas konfigurasi terminal tak cocok."
 
-#: ../src/terminal-options.c:1277
+#: ../src/terminal-options.c:1304
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1876,139 +1853,139 @@ msgstr ""
 "Jangan lakukan pencatatan pada server nama aktifasi dan jangan gunakan lagi "
 "terminal yang sedang aktif"
 
-#: ../src/terminal-options.c:1286
+#: ../src/terminal-options.c:1313
 msgid "Load a terminal configuration file"
 msgstr "Muat suatu berkas konfigurasi terminal"
 
-#: ../src/terminal-options.c:1287
+#: ../src/terminal-options.c:1314
 msgid "FILE"
 msgstr "BERKAS"
 
-#: ../src/terminal-options.c:1303
+#: ../src/terminal-options.c:1330
 msgid "Show preferences window"
 msgstr "Tampilkan jendela preferensi"
 
-#: ../src/terminal-options.c:1312
+#: ../src/terminal-options.c:1339
 msgid "Print environment variables to interact with the terminal"
 msgstr "Cetak variabel lingkungan untuk berinteraksi dengan terminal"
 
-#: ../src/terminal-options.c:1330
+#: ../src/terminal-options.c:1357
 msgid "Increase diagnostic verbosity"
 msgstr "Tingkatkan verbositas diagnostik"
 
-#: ../src/terminal-options.c:1339
+#: ../src/terminal-options.c:1366
 msgid "Suppress output"
 msgstr "Redam keluaran"
 
-#: ../src/terminal-options.c:1352
+#: ../src/terminal-options.c:1379
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Buka suatu jendela baru yang memuat satu tab dengan profil bawaan"
 
-#: ../src/terminal-options.c:1361
+#: ../src/terminal-options.c:1388
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Buka tab baru pada jendela yang dibuka terakhir dengan profil baku"
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1401
 msgid "Turn on the menubar"
 msgstr "Hidupkan bilah menu"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1410
 msgid "Turn off the menubar"
 msgstr "Matikan bilah menu"
 
-#: ../src/terminal-options.c:1392
+#: ../src/terminal-options.c:1419
 msgid "Maximize the window"
 msgstr "Maksimalkan jendela"
 
-#: ../src/terminal-options.c:1401
+#: ../src/terminal-options.c:1428
 msgid "Full-screen the window"
 msgstr "Membuat jendela sepenuh layar"
 
-#: ../src/terminal-options.c:1410
+#: ../src/terminal-options.c:1437
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Atur ukuran jendela; sebagai contoh: 80x24, atau 80x24+200+200 (KOLOMxBARIS+X"
 "+Y)"
 
-#: ../src/terminal-options.c:1411
+#: ../src/terminal-options.c:1438
 msgid "GEOMETRY"
 msgstr "GEOMETRI"
 
-#: ../src/terminal-options.c:1419
+#: ../src/terminal-options.c:1446
 msgid "Set the window role"
 msgstr "Tata peran jendela"
 
-#: ../src/terminal-options.c:1420
+#: ../src/terminal-options.c:1447
 msgid "ROLE"
 msgstr "PERAN"
 
-#: ../src/terminal-options.c:1428
+#: ../src/terminal-options.c:1455
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Tentukan tab terakhir yang aktif pada jendela"
 
-#: ../src/terminal-options.c:1441
+#: ../src/terminal-options.c:1468
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Jalankan argumen pilihan ini dalam terminal"
 
-#: ../src/terminal-options.c:1450
+#: ../src/terminal-options.c:1477
 msgid "Use the given profile instead of the default profile"
 msgstr "Gunakan profil yang diberikan sebagai ganti profil baku"
 
-#: ../src/terminal-options.c:1451
+#: ../src/terminal-options.c:1478
 msgid "PROFILE-NAME"
 msgstr "NAMA-PROFIL"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1486
 msgid "Set the initial terminal title"
 msgstr "Tata judul awal terminal"
 
-#: ../src/terminal-options.c:1460
+#: ../src/terminal-options.c:1487
 msgid "TITLE"
 msgstr "JUDUL"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1495
 msgid "Set the working directory"
 msgstr "Menentukan direktori kerja"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1496
 msgid "DIRNAME"
 msgstr "NAMA-DIREKTORI"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1504
 msgid "Wait until the child exits"
 msgstr "Tunggu sampai anak keluar"
 
-#: ../src/terminal-options.c:1486
+#: ../src/terminal-options.c:1513
 msgid "Forward file descriptor"
 msgstr "Teruskan deskriptor berkas"
 
 #. FD = file descriptor
-#: ../src/terminal-options.c:1488
+#: ../src/terminal-options.c:1515
 msgid "FD"
 msgstr "FD"
 
-#: ../src/terminal-options.c:1496
+#: ../src/terminal-options.c:1523
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Tentukan faktor perbesaran terminal (1.0 = ukuran normal)"
 
-#: ../src/terminal-options.c:1497
+#: ../src/terminal-options.c:1524
 msgid "ZOOM"
 msgstr "ZUM"
 
-#: ../src/terminal-options.c:1584
+#: ../src/terminal-options.c:1611
 msgid "COMMAND"
 msgstr "PERINTAH"
 
-#: ../src/terminal-options.c:1592
+#: ../src/terminal-options.c:1619
 msgid "GNOME Terminal Emulator"
 msgstr "Emulator Terminal GNOME"
 
-#: ../src/terminal-options.c:1593
+#: ../src/terminal-options.c:1620
 msgid "Show GNOME Terminal options"
 msgstr "Menampilkan opsi Terminal GNOME"
 
-#: ../src/terminal-options.c:1603
+#: ../src/terminal-options.c:1630
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2016,11 +1993,11 @@ msgstr ""
 "Pilihan bagi buka jendela baru atau tab terminal; lebih dari satu dari "
 "berikut boleh dinyatakan:"
 
-#: ../src/terminal-options.c:1604
+#: ../src/terminal-options.c:1631
 msgid "Show terminal options"
 msgstr "Tunjukkan opsi terminal"
 
-#: ../src/terminal-options.c:1612
+#: ../src/terminal-options.c:1639
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2028,11 +2005,11 @@ msgstr ""
 "Pilihan jendela; bila dipakai sebelum argumen --window atau --tab pertama, "
 "akan mengatur baku bagi semua jendela:"
 
-#: ../src/terminal-options.c:1613
+#: ../src/terminal-options.c:1640
 msgid "Show per-window options"
 msgstr "Tampilkan opsi per-jendela"
 
-#: ../src/terminal-options.c:1621
+#: ../src/terminal-options.c:1648
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2040,7 +2017,7 @@ msgstr ""
 "Pilihan terminal; bila dipakai sebelum argumen --window atau --tab, akan "
 "mengatur baku bagi semua terminal:"
 
-#: ../src/terminal-options.c:1622
+#: ../src/terminal-options.c:1649
 msgid "Show per-terminal options"
 msgstr "Tampilkan opsi per-terminal"
 
@@ -2110,49 +2087,45 @@ msgstr "Hapus Profil"
 msgid "Delete"
 msgstr "Hapus"
 
-#: ../src/terminal-prefs.c:518
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "Ini adalah profil bawaan"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Umum"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Pintas"
-
-#: ../src/terminal-prefs.c:671
-msgid "Global"
-msgstr "Global"
 
 #: ../src/terminal-prefs.c:683
 msgid "Profiles"
 msgstr "Profil"
 
-#: ../src/terminal-screen.c:1172
+#: ../src/terminal-screen.c:1140
 msgid "No command supplied nor shell requested"
 msgstr "Tak ada perintah yang diberikan maupun shell yang diminta"
 
-#: ../src/terminal-screen.c:1393 ../src/terminal-screen.c:1723
+#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
 msgid "_Relaunch"
 msgstr "Luncu_rkan Ulang"
 
-#: ../src/terminal-screen.c:1396
+#: ../src/terminal-screen.c:1358
 msgid "There was an error creating the child process for this terminal"
 msgstr "Terjadi galat ketika membuat proses anak terminal"
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1685
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Proses anak keluar secara normal dengan status %d."
 
-#: ../src/terminal-screen.c:1730
+#: ../src/terminal-screen.c:1688
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Proses anak digugurkan oleh sinyal %d."
 
-#: ../src/terminal-screen.c:1733
+#: ../src/terminal-screen.c:1691
 msgid "The child process was aborted."
 msgstr "Proses anak digugurkan."
 
@@ -2188,7 +2161,7 @@ msgstr ""
 "Ahmad Riza H Nst  <rizahnst@eriagempita.co.id>, 2006.\n"
 "Andika Triwidada <andika@gmail.com>, 2009, 2010, 2012-2016.\n"
 "Dirgita <dirgitadevina@yahoo.co.id>, 2010, 2011.\n"
-"Kukuh Syafaat <syafaatkukuh@gmail.com>, 2017, 2018."
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2018, 2019."
 
 #: ../src/terminal-util.c:321
 #, c-format
@@ -2230,71 +2203,71 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Skema \"berkas\" dengan nama host jauh tidak didukung"
 
-#: ../src/terminal-window.c:460
+#: ../src/terminal-window.c:457
 msgid "Could not save contents"
 msgstr "Tidak dapat menyimpan isi"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:477
 msgid "Save as…"
 msgstr "Simp_an sebagai…"
 
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:480
 msgid "_Cancel"
 msgstr "_Batal"
 
-#: ../src/terminal-window.c:484
+#: ../src/terminal-window.c:481
 msgid "_Save"
 msgstr "_Simpan"
 
-#: ../src/terminal-window.c:1768
+#: ../src/terminal-window.c:1724
 msgid "Open _Hyperlink"
 msgstr "_Buka Taut"
 
-#: ../src/terminal-window.c:1769
+#: ../src/terminal-window.c:1725
 msgid "Copy Hyperlink _Address"
 msgstr "Salin _Alamat Taut"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1735
 msgid "Send Mail _To…"
 msgstr "Kirim Sura_t Ke…"
 
-#: ../src/terminal-window.c:1780
+#: ../src/terminal-window.c:1736
 msgid "Copy Mail _Address"
 msgstr "Salin _Alamat Surel"
 
-#: ../src/terminal-window.c:1783
+#: ../src/terminal-window.c:1739
 msgid "Call _To…"
 msgstr "P_anggil Ke…"
 
-#: ../src/terminal-window.c:1784
+#: ../src/terminal-window.c:1740
 msgid "Copy Call _Address "
 msgstr "Salin _Alamat Panggil "
 
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1745
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
-#: ../src/terminal-window.c:1790
+#: ../src/terminal-window.c:1746
 msgid "Copy _Link"
 msgstr "Salin A_lamat Taut"
 
-#: ../src/terminal-window.c:1828
+#: ../src/terminal-window.c:1784
 msgid "P_rofiles"
 msgstr "P_rofil"
 
-#: ../src/terminal-window.c:1863
+#: ../src/terminal-window.c:1819
 msgid "L_eave Full Screen"
 msgstr "Tinggalkan Layar P_enuh"
 
-#: ../src/terminal-window.c:3341
+#: ../src/terminal-window.c:3233
 msgid "Close this window?"
 msgstr "Tutup jendela ini?"
 
-#: ../src/terminal-window.c:3341
+#: ../src/terminal-window.c:3233
 msgid "Close this terminal?"
 msgstr "Tutup terminal ini?"
 
-#: ../src/terminal-window.c:3345
+#: ../src/terminal-window.c:3237
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2302,7 +2275,7 @@ msgstr ""
 "Ada proses masih berjalan pada beberapa terminal di jendela ini. Menutup "
 "jendela akan menghentikan semuanya."
 
-#: ../src/terminal-window.c:3349
+#: ../src/terminal-window.c:3241
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2310,9 +2283,47 @@ msgstr ""
 "Masih ada proses berjalan pada terminal ini. Menutup terminal akan "
 "menghentikannya."
 
-#: ../src/terminal-window.c:3354
+#: ../src/terminal-window.c:3246
 msgid "C_lose Window"
 msgstr "Tutup Jende_la"
+
+#~ msgid "Unnamed"
+#~ msgstr "Tanpa nama"
+
+#~ msgid "Whether to show menubar in new windows/tabs"
+#~ msgstr "Penampilan daftar menu pada jendela/tab baru"
+
+#~ msgid "True if the menubar should be shown in new window"
+#~ msgstr "True apabila bilah menu mesti ditampilkan pada jendela baru"
+
+#~ msgid "label"
+#~ msgstr "label"
+
+#~ msgid "_Quit"
+#~ msgstr "_Keluar"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Buka di _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Buka folder yang kini dipilih dalam manajer berkas terminal Midnight "
+#~ "Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Buka folder yang kini terbuka dalam manajer berkas terminal Midnight "
+#~ "Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Buka _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "Buka manajer berkas terminal Midnight Commander"
 
 #~ msgid "Keyboard shortcut to create a new profile"
 #~ msgstr "Tombol pintas untuk membuat profil baru"
