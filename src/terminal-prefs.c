@@ -831,7 +831,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   g_object_get (gtk_settings_get_default (),
                 "gtk-shell-shows-menubar", &shell_shows_menubar,
                 NULL);
-  if (shell_shows_menubar) {
+  if (shell_shows_menubar || terminal_app_get_use_headerbar (app)) {
     gtk_widget_set_visible (show_menubar_button, FALSE);
   } else {
     g_settings_bind (settings,
