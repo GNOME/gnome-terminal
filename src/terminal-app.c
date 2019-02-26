@@ -213,6 +213,55 @@ terminal_app_init_debug (void)
 /* Helper functions */
 
 static gboolean
+strv_contains_gnome (char **strv)
+{
+  if (strv == NULL)
+    return FALSE;
+
+  for (int i = 0; strv[i] != NULL; i++) {
+    if (g_ascii_strcasecmp (strv[i], "gnome") == 0 ||
+        g_ascii_strcasecmp (strv[i], "gnome-classic") == 0)
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
+/*
+ * terminal_app_should_use_headerbar:
+ *
+ * Determines if the app should use headerbars. This is determined
+ * * If GNOME_TERMINAL_HEADERBAR env var is set, the app uses headerbars iff
+ *   the value is 1
+ * * Otherwise, if the pref is set, the pref value is used
+ * * Otherwise, if XDG_CURRENT_DESKTOP contains GNOME or GNOME-Classic,
+ *   headerbar is used
+ * * Otherwise, headerbar is not used.
+ */
+static gboolean
+terminal_app_should_use_headerbar (TerminalApp *app)
+{
+  const char *env = g_getenv("GNOME_TERMINAL_HEADERBAR");
+  if (env != NULL)
+    return g_strcmp0 (env, "1") == 0;
+
+  gboolean set, use;
+  g_settings_get (app->global_settings, TERMINAL_SETTING_HEADERBAR_KEY, "mb", &set, &use);
+  if (set)
+    return use;
+
+  const char *desktop = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (desktop == NULL)
+    return FALSE;
+
+  char **desktops = g_strsplit (desktop, G_SEARCHPATH_SEPARATOR_S, -1);
+  use = strv_contains_gnome (desktops);
+  g_strfreev (desktops);
+
+  return use;
+}
+
+static gboolean
 load_css_from_resource (GApplication *application,
                         GtkCssProvider *provider,
                         gboolean theme)
@@ -788,12 +837,7 @@ terminal_app_init (TerminalApp *app)
    * to override, so we cache them on startup and don't react to changes.
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
-
-  const char *env = g_getenv("GNOME_TERMINAL_HEADERBAR");
-  if (env != NULL)
-    app->use_headerbar = g_strcmp0 (env, "1") == 0;
-  else
-    app->use_headerbar = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_HEADERBAR_KEY);
+  app->use_headerbar = terminal_app_should_use_headerbar (app);
 
 #if GTK_CHECK_VERSION (3, 19, 0)
   GtkSettings *gtk_settings = gtk_settings_get_default ();
