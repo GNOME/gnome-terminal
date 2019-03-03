@@ -4,14 +4,13 @@
 #
 # Artis Trops <hornet@navigator.lv>, 2002.
 # Raivis Dejus <orvils@gmail.com>, 2006.
-# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-t"
-"erminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-18 16:14+0000\n"
-"PO-Revision-Date: 2018-03-07 21:29+0200\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
+"POT-Creation-Date: 2018-12-10 21:01+0000\n"
+"PO-Revision-Date: 2019-03-03 12:31+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -22,17 +21,18 @@ msgstr ""
 " 2);\n"
 "X-Generator: Lokalize 2.0\n"
 
+#. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:549
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
+#: ../src/terminal-accels.c:232 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1928 ../src/terminal-window.c:2188
-#: ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
+#: ../src/terminal-window.c:2446
 msgid "Terminal"
 msgstr "Terminālis"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:2
-#: ../org.gnome.Terminal.desktop.in.in.h:2
+#: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "Use the command line"
 msgstr "Izmantot komandrindu"
 
@@ -66,18 +66,17 @@ msgstr ""
 "“Atvērt termināli” ir spraudnis lietotnei “Datnes”, kas pievieno izvēlnes "
 "vienumu konteksta izvēlnei, kas atver termināli pārlūkotajā direktorijā."
 
-#: ../org.gnome.Terminal.desktop.in.in.h:3
+#: ../org.gnome.Terminal.desktop.in.in.h:4
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "čaula;uzvedne;komanda;komandrinda;cmd;"
 
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Noklusējuma"
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:127
+msgid "New Window"
+msgstr "Jauns logs"
 
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Nenosaukts"
+#: ../org.gnome.Terminal.desktop.in.in.h:6 ../src/terminal-accels.c:146
+msgid "Preferences"
+msgstr "Iestatījumi"
 
 #. Translators: Keep single quote please!
 #: ../src/org.gnome.Terminal.gschema.xml.h:2
@@ -147,16 +146,16 @@ msgid ""
 "Scale factor for the cell height to increase line spacing. (Does not "
 "increase the font’s height.)"
 msgstr ""
-"Mērogs šūnu augstumam, lai palielinātu rindu atstatumu (nepalielina fontu"
-" augstumu)."
+"Mērogs šūnu augstumam, lai palielinātu rindu atstatumu (nepalielina fontu "
+"augstumu)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Scale factor for the cell width to increase letter spacing. (Does not "
 "increase the font’s width.)"
 msgstr ""
-"Mērogs šūnu platumam, lai palielinātu burtu atstatumu (nepalielina fontu"
-" platumu)."
+"Mērogs šūnu platumam, lai palielinātu burtu atstatumu (nepalielina fontu "
+"platumu)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to use custom cursor colors"
@@ -242,7 +241,6 @@ msgstr ""
 "Ja patiess, lietotnēm atļauts terminālī tekstu pārveidot treknā rakstā."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:29
-#| msgid "Whether to allow bold text"
 msgid "Whether bold is also bright"
 msgstr "Vai treknraksts ir arī spilgts"
 
@@ -251,8 +249,8 @@ msgid ""
 "If true, setting bold on the first 8 colors also switches to their bright "
 "variants."
 msgstr ""
-"Ja patiess, iestatot treknrakstu pirmajām 8 krāsām arī pārslēdz to spilgtuma"
-" variantu."
+"Ja patiess, iestatot treknrakstu pirmajām 8 krāsām arī pārslēdz to spilgtuma "
+"variantu."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether to ring the terminal bell"
@@ -267,18 +265,10 @@ msgstr ""
 "vārda daļu, kad atlasa pa vārdiem"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Vai rādīt izvēļņu joslu jaunos logos/cilnēs"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
-msgid "True if the menubar should be shown in new window"
-msgstr "Patiess, ja izvēļņu joslai vajadzētu tikt rādītai jaunos logos"
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Noklusējuma kolonnu skaits"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -286,11 +276,11 @@ msgstr ""
 "Kolonnu skaits tikko izveidota termināļa logā. Nedarbojas, ja nav ieslēgts "
 "use_custom_default_size."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of rows"
 msgstr "Noklusējuma rindu skaits"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -298,15 +288,15 @@ msgstr ""
 "Rindu skaits tikko izveidota termināļa logā. Nedarbojas, ja nav ieslēgts "
 "use_custom_default_size."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "When to show the scrollbar"
 msgstr "Vai rādīt ritjoslu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid "Number of lines to keep in scrollback"
 msgstr "Rindu skaits, ko paturēt ritināšanas atmiņā"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -316,11 +306,11 @@ msgstr ""
 "daudz rindas. Tās rindas, kas neietilpst rindiņu atpakaļritināšanā, tiek "
 "izmestas. Ja scrollback_unlimited ir patiess, šī vērtība tiek ignorēta."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Vai ritināšanas atmiņā paturēt neierobežotu skaitu rindu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -330,32 +320,32 @@ msgstr ""
 "Atpakaļritināšanas vēsture tiks uz laiku saglabāta diskā, tāpēc tas var "
 "izraisīt diska vietas trūkumu, ja terminālī ir daudz izvades."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr ""
 "Vai aizritināt ritjoslu līdz lejai, kad tiek piespiests kāds tastatūras "
 "taustiņš"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Ja patiess, nospiežot taustiņu, novieto ritjoslu apakšā."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Vai aizritināt ritjoslu līdz lejai, kad parādās jauna izvade"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr ""
 "Ja patiess, katrreiz, kad kaut kas jauns tiks izvadīts termināļa logā, "
 "ritjosla aizritināsies līdz apakšai."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "What to do with the terminal when the child command exits"
 msgstr "Ko darīt ar termināli, kad bērna komanda beidz darbu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -364,11 +354,11 @@ msgstr ""
 "atkal palaistu komandu un “hold”, lai paturētu termināli atvēru bez nevienas "
 "aktīvas komandas."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Vai palaist komandu terminālī kā ierakstīšanās čaulu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -376,11 +366,11 @@ msgstr ""
 "Ja patiess, komanda terminālī tiks palaista kā ierakstīšanās čaula (argv[0] "
 "priekšā būs defise)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Vai palaist pielāgotu komandu manas čaulas vietā"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -388,11 +378,11 @@ msgstr ""
 "Ja patiess, paša_veidota_komandas vērtība tiks lietota strādājošas čaulas "
 "vietā."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to blink the cursor"
 msgstr "Vai kursoram ir jāmirgo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -400,62 +390,62 @@ msgstr ""
 "Iespējamās vērtības ir “system”, lai izmantotu globālos mirgošanas "
 "iestatījumus, vai arī “on” (ieslēgts) vai “off” (izslēgts)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "The cursor appearance"
 msgstr "Kursora izskats"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
 msgstr ""
-"Iespējamās vērtības ir “always” (vienmēr) vai “never” (nekad) atļaut"
-" mirgojošu tekstu, vai arī tikai, kad terminālis “focused” (fokusēts) vai"
-" “unfocused” (nefokusēts)."
+"Iespējamās vērtības ir “always” (vienmēr) vai “never” (nekad) atļaut "
+"mirgojošu tekstu, vai arī tikai, kad terminālis “focused” (fokusēts) vai "
+"“unfocused” (nefokusēts)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Custom command to use instead of the shell"
 msgstr "Pielāgotā komanda, kuru palaist manas čaulas vietā"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Izpildīt šo komandu čaulas komandas vietā, ja lieto use_custom_command ir "
 "patiess."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Palette for terminal applications"
 msgstr "Terminālo lietotņu palete"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "A Pango font name and size"
 msgstr "Pango fonta nosaukums un izmērs"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The code sequence the Backspace key generates"
 msgstr "Koda sekvence, ko rada atpakaļatkāpes (backspace) taustiņš"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "The code sequence the Delete key generates"
 msgstr "Koda sekvence, ko rada dzēšanas (delete) taustiņš"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Vai lietot pašreizējā motīva krāsas termināļa logdaļai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Whether to use the system monospace font"
 msgstr "Vai izmantot sistēmas vienplatuma fontu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Vai no jauna aplauzt termināļa saturu, kad maina loga izmēru"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Which encoding to use"
 msgstr "Kuru kodējumu izmantot"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -463,147 +453,149 @@ msgstr ""
 "Vai aptuvena platuma rakstzīmes ir šauras vai platas, kad izmanto UTF-8 "
 "kodējumu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Īsinājumtaustiņš jaunas cilnes atvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to open a new window"
 msgstr "Īsinājumtaustiņš jauna loga atvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Īsinājumtaustiņš, lai saglabātu pašreizējās cilnes saturu datnē"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
-#| msgid "Keyboard shortcut to save the current tab contents to file"
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr ""
-"Īsinājumtaustiņš, lai eksportētu pašreizējās cilnes saturu datnē dažādos"
-" formātos"
+"Īsinājumtaustiņš, lai eksportētu pašreizējās cilnes saturu datnē dažādos "
+"formātos"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
-#| msgid "Keyboard shortcut to save the current tab contents to file"
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr ""
 "Īsinājumtaustiņš, lai izdrukātu pašreizējās cilnes saturu printerī vai datnē"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Īsinājumtaustiņš cilnes aizvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Īsinājumtaustiņš loga aizvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Īsinājumtaustiņš teksta kopēšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Īsinājumtaustiņš teksta kopēšanai kā HTML"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to paste text"
 msgstr "Īsinājumtaustiņš teksta ielīmēšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to select all text"
 msgstr "Īsinājumtaustiņš visa teksta izvēlei"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Īsinājumtaustiņš iestatījumu dialoglodziņa atvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Tastatūras īsinājumtaustiņš pilnekrāna režīma pārslēgšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Tastatūras īsinājumtaustiņš izvēlnes joslas redzamības pārslēgšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Tastatūras īsinājumtaustiņš tikai-lasāms stāvokļa pārslēgšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Īsinājumtaustiņš termināļa atstatīšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Tastatūras īsinājumtaustiņš, lai atstatītu un atbrīvotu termināli"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Īsinājumtaustiņš meklēšanas dialoglodziņa atvēršanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Īsinājumtaustiņš, lai atrastu nākamo meklējamā teksta instanci"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "Īsinājumtaustiņš, lai atrastu iepriekšējo meklējamā teksta instanci"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Tastatūras īsinājumtaustiņš, lai attīrītu meklēšanas izcelšanu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Tastatūras īsinājumtaustiņš, lai pārslēgtos uz iepriekšējo cilni"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Tastatūras īsinājumtaustiņš, lai pārslēgtos uz nākamo cilni"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Īsinājumtaustiņš, lai pārvietotu pašreizējo cilni pa kreisi"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Īsinājumtaustiņš, lai pārvietotu pašreizējo cilni pa labi"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Īsinājumtaustiņš, lai atvienotu pašreizējo cilni"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Tastatūras īsinājumtaustiņš, lai pārslēgtos uz numurēto cilni"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
-#| msgid "Keyboard shortcut to switch to the next tab"
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Tastatūras īsinājumtaustiņš, lai pārslēgtos uz pēdējo cilni"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to launch help"
 msgstr "Īsinājumtaustiņš palīdzības parādīšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to make font larger"
 msgstr "Īsinājumtaustiņš fonta palielināšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Īsinājumtaustiņš fonta samazināšanai"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Tastatūras īsinājumtaustiņš, lai fontu pārtaisītu normālā izmērā"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#| msgid "Keyboard shortcut to switch to the previous tab"
+msgid "Keyboard shortcut to show the primary menu"
+msgstr "Tastatūras īsinājumtaustiņš, lai rādītu galveno izvēlni"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Whether the menubar has access keys"
 msgstr "Vai izvēļņu joslai ir pieejas taustiņi"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -613,11 +605,11 @@ msgstr ""
 "kombinācijas var traucēt lietotnēm, kuras darbojas terminālī, tāpēc ir "
 "iespēja tās atslēgt."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Whether shortcuts are enabled"
 msgstr "Vai ir ieslēgtas saīsnes"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -625,12 +617,12 @@ msgstr ""
 "Vai ir ieslēgtas saīsnes. Šāda veida taustiņu kombinācijas var traucēt "
 "lietotnēm, kuras darbojas terminālī, tāpēc ir iespēja tās atslēgt."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Vai standarta GTK saīsne, kas domāta izvēļņu joslas piekļuvei, ir ieslēgta"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -641,31 +633,31 @@ msgstr ""
 "accel = “jusu_taustins”). Šī opcija ļauj izslēgt standarta izvēlnes joslas "
 "īsinājumtaustiņu."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the shell integration is enabled"
 msgstr "Vai ir ieslēgta integrācija ar čaulu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Vai prasīt apstiprinājumu pirms tiek aizvērts termināļa logs"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to show the menubar in new windows"
 msgstr "Vai rādīt izvēļņu joslu jaunos logos"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Vai jaunos termināļus atvērt kā logus vai cilnes"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "When to show the tabs bar"
 msgstr "Kad rādīt ciļņu joslu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "The position of the tab bar"
 msgstr "Ciļņu joslas novietojums"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Which theme variant to use"
 msgstr "Kuru motīva variantu izmantot"
 
@@ -718,6 +710,11 @@ msgstr "I-Beam"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Pasvītrots"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Noklusējuma"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -840,7 +837,6 @@ msgid "TTY Erase"
 msgstr "TTY Erase"
 
 #: ../src/preferences.ui.h:68
-#| msgid "Show _menubar by default in new terminals"
 msgid "_Show menubar by default in new terminals"
 msgstr "Rādīt izvēlnes jo_slu pēc noklusējuma jaunos termināļos"
 
@@ -885,7 +881,6 @@ msgid "Rese_t"
 msgstr "A_tstatīt"
 
 #: ../src/preferences.ui.h:79
-#| msgid "_Custom font:"
 msgid "Custom _font:"
 msgstr "Pielāgots _fonts:"
 
@@ -898,12 +893,10 @@ msgid "Cell spaci_ng:"
 msgstr "Šū_nu atstatums:"
 
 #: ../src/preferences.ui.h:82
-#| msgid "_Allow bold text"
 msgid "Allow b_linking text:"
 msgstr "Atļaut _mirgojošu tekstu:"
 
 #: ../src/preferences.ui.h:83
-#| msgid "Cursor _shape:"
 msgid "Cursor"
 msgstr "Kursors"
 
@@ -992,12 +985,10 @@ msgid "_Highlight color:"
 msgstr "Iz_celšanas krāsa:"
 
 #: ../src/preferences.ui.h:105
-#| msgid "Choose Terminal Cursor Foreground Color"
 msgid "Choose Terminal Highlight Foreground Color"
 msgstr "Izvēlieties termināļa izcelšanas priekšplāna krāsu"
 
 #: ../src/preferences.ui.h:106
-#| msgid "Choose Terminal Background Color"
 msgid "Choose Terminal Highlight Background Color"
 msgstr "Izvēlieties termināļa izcelšanas fona krāsu"
 
@@ -1090,7 +1081,6 @@ msgid "Compatibility"
 msgstr "Savietojamība"
 
 #: ../src/preferences.ui.h:129
-#| msgid "_Clone"
 msgid "Clone…"
 msgstr "Klonēt…"
 
@@ -1099,7 +1089,6 @@ msgid "Rename…"
 msgstr "Pārdēvēt…"
 
 #: ../src/preferences.ui.h:131
-#| msgid "_Delete"
 msgid "Delete…"
 msgstr "Dzēst…"
 
@@ -1108,7 +1097,6 @@ msgid "Set as default"
 msgstr "Iestatīt kā noklusējuma"
 
 #: ../src/preferences.ui.h:133
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -1134,13 +1122,11 @@ msgstr "Balts uz melna"
 
 #. Translators: "Tango" is the name of a colour scheme, "light" can be translated
 #: ../src/profile-editor.c:179
-#| msgid "Tango"
 msgid "Tango light"
 msgstr "Tango gaišs"
 
 #. Translators: "Tango" is the name of a colour scheme, "dark" can be translated
 #: ../src/profile-editor.c:184
-#| msgid "Tango"
 msgid "Tango dark"
 msgstr "Tango tumšs"
 
@@ -1160,38 +1146,34 @@ msgid "Error parsing command: %s"
 msgstr "Kļūda, parsējot komandu — %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:899
+#: ../src/profile-editor.c:828
 msgid "width"
 msgstr "platums"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:904
-#| msgctxt "theme variant"
-#| msgid "Light"
+#: ../src/profile-editor.c:833
 msgid "height"
 msgstr "augstums"
 
-#: ../src/profile-editor.c:956
+#: ../src/profile-editor.c:885
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Izvēlieties paletes krāsu %u"
 
-#: ../src/profile-editor.c:960
+#: ../src/profile-editor.c:889
 #, c-format
 msgid "Palette entry %u"
 msgstr "Paletes ieraksts %u"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:150
 msgid "Find"
 msgstr "Meklēt"
 
 #: ../src/search-popover.ui.h:2
-#| msgid "Search for previous occurrence"
 msgid "Find previous occurrence"
 msgstr "Iet uz iepriekšējo meklēšanas rezultātu"
 
 #: ../src/search-popover.ui.h:3
-#| msgid "Search for next occurrence"
 msgid "Find next occurrence"
 msgstr "Iet uz nākamo meklēšanas rezultātu"
 
@@ -1215,211 +1197,192 @@ msgstr "Atbilst _regulārajai izteiksmei"
 msgid "_Wrap around"
 msgstr "_Apskatīt visu"
 
-#: ../src/terminal-accels.c:124
-#| msgid "_New Terminal"
+#: ../src/terminal-accels.c:126
 msgid "New Tab"
 msgstr "Jauna cilne"
 
-#: ../src/terminal-accels.c:125
-#| msgid "Window"
-msgid "New Window"
-msgstr "Jauns logs"
-
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:129
 msgid "Save Contents"
 msgstr "Saglabāt saturu"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:132
 msgid "Export"
 msgstr "Eksportēt"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:135
 msgid "Print"
 msgstr "Drukāt"
 
-#: ../src/terminal-accels.c:135
-#| msgid "Close tab"
+#: ../src/terminal-accels.c:137
 msgid "Close Tab"
 msgstr "Aizvērt cilni"
 
-#: ../src/terminal-accels.c:136
-#| msgid "C_lose Window"
+#: ../src/terminal-accels.c:138
 msgid "Close Window"
 msgstr "Aizvērt logu"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:142
 msgid "Copy"
 msgstr "Kopēt"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:143
 msgid "Copy as HTML"
 msgstr "Kopēt kā HTML"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:144
 msgid "Paste"
 msgstr "Ielīmēt"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:145
 msgid "Select All"
 msgstr "Izvēlēties visu"
 
-#: ../src/terminal-accels.c:144
-msgid "Preferences"
-msgstr "Iestatījumi"
-
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:151
 msgid "Find Next"
 msgstr "Meklēt nākamo"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:152
 msgid "Find Previous"
 msgstr "Meklēt iepriekšējo"
 
-#: ../src/terminal-accels.c:151
-#| msgid "_Clear Highlight"
+#: ../src/terminal-accels.c:153
 msgid "Clear Highlight"
 msgstr "Noņemt izcēlumu"
 
-#: ../src/terminal-accels.c:155
-#| msgid "Hide and Show toolbar"
+#: ../src/terminal-accels.c:157
 msgid "Hide and Show Menubar"
 msgstr "Slēpt un rādīt izvēļņu joslu"
 
-#: ../src/terminal-accels.c:156
+#: ../src/terminal-accels.c:158
 msgid "Full Screen"
 msgstr "Pilnekrāna"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:159
 msgid "Zoom In"
 msgstr "Tuvināt"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:160
 msgid "Zoom Out"
 msgstr "Tālināt"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:161
 msgid "Normal Size"
 msgstr "Normāls izmērs"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:165
 msgid "Read-Only"
 msgstr "Tikai lasāms"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:166
 msgid "Reset"
 msgstr "Pārstatīt"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:167
 msgid "Reset and Clear"
 msgstr "Pārstatīt un attīrīt"
 
-#: ../src/terminal-accels.c:169
-#| msgid "Switch to Previous Terminal"
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "Pārslēgties uz iepriekšējo cilni"
 
-#: ../src/terminal-accels.c:170
-#| msgid "Switch to Next Terminal"
+#: ../src/terminal-accels.c:172
 msgid "Switch to Next Tab"
 msgstr "Pārslēgties uz nākamo cilni"
 
-#: ../src/terminal-accels.c:171
-#| msgid "Move Terminal to the Left"
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Pārvietot cilni pa kreisi"
 
-#: ../src/terminal-accels.c:172
-#| msgid "Move Terminal to the Right"
+#: ../src/terminal-accels.c:174
 msgid "Move Tab to the Right"
 msgstr "Pārvietot cilni pa labi"
 
-#: ../src/terminal-accels.c:173
-#| msgid "Detach Terminal"
+#: ../src/terminal-accels.c:175
 msgid "Detach Tab"
 msgstr "Atvienot cilni"
 
-#: ../src/terminal-accels.c:209
-#| msgid "Switch to this tab"
+#: ../src/terminal-accels.c:211
 msgid "Switch to Last Tab"
 msgstr "Pārslēgties uz pēdējo cilni"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:215
 msgid "Contents"
 msgstr "Saturs"
 
-#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
+#: ../src/terminal-accels.c:219
+#| msgid "Show _Menubar"
+msgid "Show Primary Menu"
+msgstr "Rādīt galveno izvēlni"
+
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Datne"
 
-#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
+#: ../src/terminal-accels.c:229 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Rediģēt"
 
-#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
+#: ../src/terminal-accels.c:230 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Skats"
 
-#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+#: ../src/terminal-accels.c:231 ../src/terminal-menubar.ui.in.h:24
 msgid "Search"
 msgstr "Meklēt"
 
-#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
+#: ../src/terminal-accels.c:233 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Cilnes"
 
-#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
+#: ../src/terminal-accels.c:234 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Palīdzība"
 
-#: ../src/terminal-accels.c:327
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Globāls"
+
+#: ../src/terminal-accels.c:362
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Pārslēgties uz cilni %u"
 
-#: ../src/terminal-accels.c:535
+#: ../src/terminal-accels.c:552
 msgid "_Action"
 msgstr "D_arbība"
 
-#: ../src/terminal-accels.c:554
+#: ../src/terminal-accels.c:571
 msgid "Shortcut _Key"
 msgstr "Ī_sinājumtaustiņš"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1839
-#| msgid "_New Terminal"
+#: ../src/terminal-app.c:459
+#| msgid "New _Terminal"
+msgid "New Terminal"
+msgstr "Jauns terminālis"
+
+#: ../src/terminal-app.c:469 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "Jauns _terminālis"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1848
+#: ../src/terminal-app.c:471 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "Jauna _cilne"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1844
-#| msgid "Window"
+#: ../src/terminal-app.c:472 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "Jauns _logs"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:521
 msgid "Change _Profile"
 msgstr "Mainīt _profilu"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1386
-#: ../src/terminal-window.c:1832
-msgid "_Preferences"
-msgstr "_Iestatījumi"
+#: ../src/terminal-app.c:534
+#| msgid "Profiles"
+msgid "_Profile"
+msgstr "_Profils"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
-msgid "_Help"
-msgstr "_Palīdzība"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
-msgid "_About"
-msgstr "P_ar"
-
-#: ../src/terminal-appmenu.ui.h:4
-msgid "_Quit"
-msgstr "I_ziet"
-
-#: ../src/terminal.c:545
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Neizdevās parsēt parametrus — “%s”\n"
@@ -1566,21 +1529,81 @@ msgid "Unicode"
 msgstr "Unikods"
 
 #: ../src/terminal-encoding.c:146
-#| msgid "Encodings"
 msgid "Legacy CJK Encodings"
 msgstr "Mantojuma CJK kodējumi"
 
 #: ../src/terminal-encoding.c:147
-#| msgid "Encodings"
 msgid "Obsolete Encodings"
 msgstr "Novecojuši kodējumi"
+
+#: ../src/terminal-headermenu.ui.h:1 ../src/terminal-menubar.ui.in.h:22
+msgid "Zoom _Out"
+msgstr "_Tālināt"
+
+#: ../src/terminal-headermenu.ui.h:2 ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "Tuv_ināt"
+
+#: ../src/terminal-headermenu.ui.h:4 ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "_Pilnekrāns"
+
+#: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
+#: ../src/terminal-window.c:1777
+msgid "Read-_Only"
+msgstr "_Tikai lasāms"
+
+#: ../src/terminal-headermenu.ui.h:6
+#| msgid "_Cancel"
+msgid "_Advanced"
+msgstr "P_aplašināti"
+
+#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
+msgid "_Reset"
+msgstr "_Atstatīt"
+
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
+msgid "Reset and C_lear"
+msgstr "Atstatīt un _attīrīt"
+
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
+msgid "_1. 80×24"
+msgstr "_1. 80×24"
+
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
+msgid "_2. 80×43"
+msgstr "_2. 80×43"
+
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
+msgid "_3. 132×24"
+msgstr "_3. 132×24"
+
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
+msgid "_4. 132×43"
+msgstr "_4. 132×43"
+
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
+msgid "_Inspector"
+msgstr "_Inspektors"
+
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1789
+msgid "_Preferences"
+msgstr "_Iestatījumi"
+
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "_Palīdzība"
+
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "P_ar"
 
 #: ../src/terminal-menubar.ui.in.h:1
 msgid "_File"
 msgstr "_Datne"
 
 #: ../src/terminal-menubar.ui.in.h:3
-#| msgid "_Save Contents"
 msgid "_Save Contents…"
 msgstr "_Saglabāt saturu…"
 
@@ -1593,12 +1616,10 @@ msgid "_Print…"
 msgstr "_Drukāt…"
 
 #: ../src/terminal-menubar.ui.in.h:6
-#| msgid "Close tab"
 msgid "C_lose Tab"
 msgstr "Aizvērt ci_lni"
 
 #: ../src/terminal-menubar.ui.in.h:7
-#| msgid "C_lose Window"
 msgid "_Close Window"
 msgstr "_Aizvērt logu"
 
@@ -1606,30 +1627,27 @@ msgstr "_Aizvērt logu"
 msgid "_Edit"
 msgstr "R_ediģēt"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1810
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1811
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
 msgid "Copy as _HTML"
 msgstr "Kopēt kā _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1812
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1814
-#| msgid "Paste _Filenames"
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
 msgid "Paste as _Filenames"
 msgstr "Ielīmēt kā _datņu nosaukumus"
 
 #: ../src/terminal-menubar.ui.in.h:14
-#| msgid "Select All"
 msgid "Select _All"
 msgstr "Izvēlēties _visu"
 
 #: ../src/terminal-menubar.ui.in.h:15
-#| msgid "Preferences"
 msgid "P_references"
 msgstr "_Iestatījumi"
 
@@ -1637,28 +1655,13 @@ msgstr "_Iestatījumi"
 msgid "_View"
 msgstr "_Skats"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1860
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
 msgid "Show _Menubar"
 msgstr "Rādīt _izvēļņu joslu"
 
-#: ../src/terminal-menubar.ui.in.h:19
-msgid "_Full Screen"
-msgstr "_Pilnekrāns"
-
-#: ../src/terminal-menubar.ui.in.h:20
-#| msgid "Zoom In"
-msgid "Zoom _In"
-msgstr "Tuv_ināt"
-
 #: ../src/terminal-menubar.ui.in.h:21
-#| msgid "Normal Size"
 msgid "_Normal Size"
 msgstr "_Normāls izmērs"
-
-#: ../src/terminal-menubar.ui.in.h:22
-#| msgid "Zoom Out"
-msgid "Zoom _Out"
-msgstr "_Tālināt"
 
 #: ../src/terminal-menubar.ui.in.h:23
 msgid "_Search"
@@ -1669,12 +1672,10 @@ msgid "_Find…"
 msgstr "_Meklēt…"
 
 #: ../src/terminal-menubar.ui.in.h:26
-#| msgid "Find Next"
 msgid "Find _Next"
 msgstr "Meklēt _nākamo"
 
 #: ../src/terminal-menubar.ui.in.h:27
-#| msgid "Find Previous"
 msgid "Find _Previous"
 msgstr "Meklēt ie_priekšējo"
 
@@ -1686,7 +1687,7 @@ msgstr "_Noņemt izcēlumu"
 msgid "_Terminal"
 msgstr "_Terminālis"
 
-#: ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
 msgid "Set _Title…"
 msgstr "Ies_tatīt virsrakstu…"
 
@@ -1694,60 +1695,27 @@ msgstr "Ies_tatīt virsrakstu…"
 msgid "Set _Character Encoding"
 msgstr "Iestatīt _rakstzīmju kodējumu"
 
-#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1820
-msgid "Read-_Only"
-msgstr "_Tikai lasāms"
-
-#: ../src/terminal-menubar.ui.in.h:34
-msgid "_Reset"
-msgstr "_Atstatīt"
-
-#: ../src/terminal-menubar.ui.in.h:35
-msgid "Reset and C_lear"
-msgstr "Atstatīt un _attīrīt"
-
-#: ../src/terminal-menubar.ui.in.h:36
-msgid "_1. 80×24"
-msgstr "_1. 80×24"
-
-#: ../src/terminal-menubar.ui.in.h:37
-msgid "_2. 80×43"
-msgstr "_2. 80×43"
-
-#: ../src/terminal-menubar.ui.in.h:38
-msgid "_3. 132×24"
-msgstr "_3. 132×24"
-
-#: ../src/terminal-menubar.ui.in.h:39
-msgid "_4. 132×43"
-msgstr "_4. 132×43"
-
 #: ../src/terminal-menubar.ui.in.h:40
 msgid "Ta_bs"
 msgstr "Cil_nes"
 
 #: ../src/terminal-menubar.ui.in.h:42
-#| msgid "_Previous Terminal"
 msgid "_Previous Tab"
 msgstr "Ie_priekšējā cilne"
 
 #: ../src/terminal-menubar.ui.in.h:43
-#| msgid "_Next Terminal"
 msgid "_Next Tab"
 msgstr "_Nākamā cilne"
 
 #: ../src/terminal-menubar.ui.in.h:44
-#| msgid "Move Terminal _Left"
 msgid "Move Tab _Left"
 msgstr "Pārvietot cilni pa _kreisi"
 
 #: ../src/terminal-menubar.ui.in.h:45
-#| msgid "Move Terminal _Right"
 msgid "Move Tab _Right"
 msgstr "Pārvietot cilni pa _labi"
 
 #: ../src/terminal-menubar.ui.in.h:46
-#| msgid "_Detach Terminal"
 msgid "_Detach Tab"
 msgstr "_Atvienot cilni"
 
@@ -1755,63 +1723,33 @@ msgstr "_Atvienot cilni"
 msgid "_Contents"
 msgstr "_Saturs"
 
-#: ../src/terminal-menubar.ui.in.h:51
-msgid "_Inspector"
-msgstr "_Inspektors"
-
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Atvē_rt attālinātā terminālī"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Atvērt vietējā terminā_lī"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Atvērt izvēlēto mapi terminālī"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Atvērt pašlaik atvērto mapi terminālī"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Atvērt t_erminālī"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Atvērt t_ermināli"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Atvērt termināli"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Atvērt ar _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr "Atvērt izvēlēto mapi termināļa datņu pārvaldniekā Midnight Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Atvērt pašlaik atvērto mapi termināļa datņu pārvaldniekā Midnight Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Atvērt _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "Atvērt termināļa datņu pārvaldnieku Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1825,11 +1763,11 @@ msgstr "Pārvietot te_rmināli pa labi"
 msgid "_Detach Terminal"
 msgstr "_Atvienot termināli"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3353
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
 msgid "C_lose Terminal"
 msgstr "Aizvērt terminā_li"
 
-#: ../src/terminal-options.c:284
+#: ../src/terminal-options.c:281
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1839,7 +1777,7 @@ msgstr ""
 "versijā."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:295
+#: ../src/terminal-options.c:292
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1848,62 +1786,61 @@ msgstr ""
 "Izmanto “%s”, lai atdalītu opcijas un liec komandrindu, lai izpildītu pēc "
 "tās."
 
-#: ../src/terminal-options.c:305 ../src/terminal-options.c:318
+#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "Šī gnome-terminal versija vairs neatbalsta opciju “%s”."
 
-#: ../src/terminal-options.c:390
+#: ../src/terminal-options.c:387
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Parametrs pie “%s” nav derīga komanda — %s"
 
-#: ../src/terminal-options.c:563
+#: ../src/terminal-options.c:560
 msgid "Two roles given for one window"
 msgstr "Dotas divas lomas vienam logam"
 
-#: ../src/terminal-options.c:584 ../src/terminal-options.c:617
+#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "“%s” opcija dota divreiz tam pašam logam\n"
 
-#: ../src/terminal-options.c:836
+#: ../src/terminal-options.c:833
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Nevar divas reizes padot FD %d"
 
-#: ../src/terminal-options.c:898
+#: ../src/terminal-options.c:895
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "“%s” nav derīgs mērogs"
 
-#: ../src/terminal-options.c:905
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Mērogs “%g” ir pārāk mazs, izmanto %g\n"
 
-#: ../src/terminal-options.c:913
+#: ../src/terminal-options.c:910
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Mērogs “%g” ir pārāk liels, izmanto %g\n"
 
-#: ../src/terminal-options.c:951
+#: ../src/terminal-options.c:948
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
 "command line"
 msgstr "Opcijai “%s” ir jānorāda palaižamo komandu atlikušajā komandrindā"
 
-#: ../src/terminal-options.c:1100
-#| msgid "May only use option %s once"
+#: ../src/terminal-options.c:1101
 msgid "Can only use --wait once"
 msgstr "Opciju --wait var izmantot tikai vienu reizi"
 
-#: ../src/terminal-options.c:1135
+#: ../src/terminal-options.c:1137
 msgid "Not a valid terminal config file."
 msgstr "Nav derīga termināļa konfigurācijas datne."
 
-#: ../src/terminal-options.c:1148
+#: ../src/terminal-options.c:1150
 msgid "Incompatible terminal config file version."
 msgstr "Nesavietojama termināļa konfigurācijas datnes versija."
 
@@ -2084,13 +2021,11 @@ msgstr "Parādīt atsevišķa termināļa opcijas"
 
 #: ../src/terminal-prefs.c:131
 #, c-format
-#| msgid "Editing Profile “%s”"
 msgid "Profile “%s”"
 msgstr "Profils “%s”"
 
 #: ../src/terminal-prefs.c:134
 #, c-format
-#| msgid "Preferences"
 msgid "Preferences – %s"
 msgstr "Iestatījumi — %s"
 
@@ -2113,39 +2048,32 @@ msgstr "Ievadiet nosaukumu jaunajam profilam, kas balstās uz “%s”:"
 
 #: ../src/terminal-prefs.c:393
 #, c-format
-#| msgid "Copy"
 msgid "%s (Copy)"
 msgstr "%s (kopēt)"
 
 #: ../src/terminal-prefs.c:396
-#| msgid "Change _Profile"
 msgid "Clone Profile"
 msgstr "Klonēt profilu"
 
 #: ../src/terminal-prefs.c:399
-#| msgid "_Clone"
 msgid "Clone"
 msgstr "Klonēt"
 
 #: ../src/terminal-prefs.c:414
 #, c-format
-#| msgid "Delete profile “%s”?"
 msgid "Enter new name for profile “%s”:"
 msgstr "Ievadiet jaunu nosaukumu profilam “%s”:"
 
 #: ../src/terminal-prefs.c:417
-#| msgid "New Profile"
 msgid "Rename Profile"
 msgstr "Pārdēvēt profilu"
 
 #: ../src/terminal-prefs.c:420
-#| msgid "Vietnamese"
 msgid "Rename"
 msgstr "Pārdēvēt"
 
 #: ../src/terminal-prefs.c:435
 #, c-format
-#| msgid "Delete profile “%s”?"
 msgid "Really delete profile “%s”?"
 msgstr "Tiešām dzēst profilu “%s”?"
 
@@ -2154,54 +2082,48 @@ msgid "Delete Profile"
 msgstr "Dzēst profilu"
 
 #: ../src/terminal-prefs.c:441
-#| msgid "_Delete"
 msgid "Delete"
 msgstr "Dzēst"
 
-#: ../src/terminal-prefs.c:518
-#| msgid "Use the given profile instead of the default profile"
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "Šis ir noklusējuma profils"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Vispārīgi"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Īsinājumtaustiņi"
-
-#: ../src/terminal-prefs.c:671
-msgid "Global"
-msgstr "Globāls"
 
 #: ../src/terminal-prefs.c:683
 msgid "Profiles"
 msgstr "Profili"
 
-#: ../src/terminal-screen.c:1172
+#: ../src/terminal-screen.c:1140
 msgid "No command supplied nor shell requested"
 msgstr "Nav ne dota komanda, nedz pieprasīta čaula"
 
-#: ../src/terminal-screen.c:1387 ../src/terminal-screen.c:1717
+#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
 msgid "_Relaunch"
 msgstr "Palaist atkā_rtoti"
 
-#: ../src/terminal-screen.c:1390
+#: ../src/terminal-screen.c:1358
 msgid "There was an error creating the child process for this terminal"
 msgstr "Atgadījās kļūda, izveidojot bērnprocesu šim terminālim"
 
-#: ../src/terminal-screen.c:1721
+#: ../src/terminal-screen.c:1685
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Bērna process izgāja normāli ar statusu %d."
 
-#: ../src/terminal-screen.c:1724
+#: ../src/terminal-screen.c:1688
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Bērna process tika pārtraukts ar signālu %d."
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1691
 msgid "The child process was aborted."
 msgstr "Bērna process tika pārtraukts."
 
@@ -2275,94 +2197,121 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr "“file” shēma ar attālināto resursdatoru nav atbalstīta"
 
-#: ../src/terminal-window.c:460
+#: ../src/terminal-window.c:457
 msgid "Could not save contents"
 msgstr "Nevarēja saglabāt saturu"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:477
 msgid "Save as…"
 msgstr "Saglabāt kā…"
 
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:480
 msgid "_Cancel"
 msgstr "At_celt"
 
-#: ../src/terminal-window.c:484
+#: ../src/terminal-window.c:481
 msgid "_Save"
 msgstr "_Saglabāt"
 
-#: ../src/terminal-window.c:1767
-#| msgid "_Open Hyperlink"
+#: ../src/terminal-window.c:1724
 msgid "Open _Hyperlink"
 msgstr "Atvērt _hipersaiti"
 
-#: ../src/terminal-window.c:1768
-#| msgid "_Copy Hyperlink Address"
+#: ../src/terminal-window.c:1725
 msgid "Copy Hyperlink _Address"
 msgstr "Kopēt hipersaites _adresi"
 
-#: ../src/terminal-window.c:1778
-#| msgid "_Send Mail To…"
+#: ../src/terminal-window.c:1735
 msgid "Send Mail _To…"
 msgstr "Sū_tīt e-pastu…"
 
-#: ../src/terminal-window.c:1779
-#| msgid "_Copy E-mail Address"
+#: ../src/terminal-window.c:1736
 msgid "Copy Mail _Address"
 msgstr "Kopēt e-pasta _adresi"
 
-#: ../src/terminal-window.c:1782
-#| msgid "C_all To…"
+#: ../src/terminal-window.c:1739
 msgid "Call _To…"
 msgstr "Zvanī_t…"
 
-#: ../src/terminal-window.c:1783
-#| msgid "_Copy Call Address"
+#: ../src/terminal-window.c:1740
 msgid "Copy Call _Address "
 msgstr "Kopēt zvanīšanas _adresi "
 
-#: ../src/terminal-window.c:1788
+#: ../src/terminal-window.c:1745
 msgid "_Open Link"
 msgstr "_Atvērt saiti"
 
-#: ../src/terminal-window.c:1789
-#| msgid "_Copy Link Address"
+#: ../src/terminal-window.c:1746
 msgid "Copy _Link"
 msgstr "Kopēt _saiti"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1784
 msgid "P_rofiles"
 msgstr "P_rofili"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1819
 msgid "L_eave Full Screen"
 msgstr "Pamest piln_ekrānu"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3233
 msgid "Close this window?"
 msgstr "Aizvērt šo logu?"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3233
 msgid "Close this terminal?"
 msgstr "Aizvērt šo termināli?"
 
-#: ../src/terminal-window.c:3344
+#: ../src/terminal-window.c:3237
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "Šī loga termināļos vēl procesi, kuri darbojas. Loga aizvēršana tos nobeigs."
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3241
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Šajā terminālī vēl ir process, kas darbojas. Termināļa aizvēršana to nobeigs."
 
-#: ../src/terminal-window.c:3353
+#: ../src/terminal-window.c:3246
 msgid "C_lose Window"
 msgstr "Aizvērt _logu"
+
+#~ msgid "Unnamed"
+#~ msgstr "Nenosaukts"
+
+#~ msgid "Whether to show menubar in new windows/tabs"
+#~ msgstr "Vai rādīt izvēļņu joslu jaunos logos/cilnēs"
+
+#~ msgid "True if the menubar should be shown in new window"
+#~ msgstr "Patiess, ja izvēļņu joslai vajadzētu tikt rādītai jaunos logos"
+
+#~ msgid "_Quit"
+#~ msgstr "I_ziet"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Atvērt ar _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Atvērt izvēlēto mapi termināļa datņu pārvaldniekā Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Atvērt pašlaik atvērto mapi termināļa datņu pārvaldniekā Midnight "
+#~ "Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Atvērt _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "Atvērt termināļa datņu pārvaldnieku Midnight Commander"
 
 #~ msgid "Verbose output"
 #~ msgstr "Detalizēta izvade"
