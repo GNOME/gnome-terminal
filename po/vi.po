@@ -4,15 +4,14 @@
 # This file is distributed under the same license as the gnome-terminal package.
 # Nguyễn Thái Ngọc Duy <pclouds@vnlinux.org>, 2002-2004.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2009.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2014, 2015, 2016, 2017, 2018.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2014, 2015, 2016, 2017, 2018, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
-"Report-Msgid-Bugs-To: https://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2018-02-26 20:37+0000\n"
-"PO-Revision-Date: 2018-02-27 07:59+0700\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
+"POT-Creation-Date: 2019-02-28 20:09+0000\n"
+"PO-Revision-Date: 2019-03-03 13:31+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -23,17 +22,18 @@ msgstr ""
 "X-DamnedLies-Scope: partial\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
+#. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:147
-#: ../src/terminal-accels.c:226 ../src/terminal.c:549
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
+#: ../src/terminal-accels.c:232 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1928 ../src/terminal-window.c:2188
-#: ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
+#: ../src/terminal-window.c:2446
 msgid "Terminal"
 msgstr "Thiết bị cuối"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:2
-#: ../org.gnome.Terminal.desktop.in.in.h:2
+#: ../org.gnome.Terminal.desktop.in.in.h:3
 msgid "Use the command line"
 msgstr "Dùng dòng lệnh"
 
@@ -69,20 +69,19 @@ msgstr ""
 "một mục vào trình đơn ngữ cảnh để mở thiết bị cuối ở thư mục hiện đang được "
 "duyệt."
 
-#: ../org.gnome.Terminal.desktop.in.in.h:3
+#: ../org.gnome.Terminal.desktop.in.in.h:4
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr ""
 "shell;hệ vỏ;he vo;prompt;nhắc lệnh;nhac lenh;command;lệnh;lenh;commandline;"
 "dòng lệnh;dong lenh;cmd;"
 
-#. Cursor blink mode
-#: ../src/migration.c:403 ../src/preferences.ui.h:19
-msgid "Default"
-msgstr "Mặc định"
+#: ../org.gnome.Terminal.desktop.in.in.h:5 ../src/terminal-accels.c:127
+msgid "New Window"
+msgstr "Cửa sổ mới"
 
-#: ../src/migration.c:403
-msgid "Unnamed"
-msgstr "Không tên"
+#: ../org.gnome.Terminal.desktop.in.in.h:6 ../src/terminal-accels.c:146
+msgid "Preferences"
+msgstr "Tùy thích"
 
 # Cần dùng dấu nháy đơn. Xem: <https://mail.gnome.org/archives/gnome-i18n/2014-September/msg00155.html>
 #. Translators: Keep single quote please!
@@ -268,18 +267,10 @@ msgstr ""
 "của từ khi thực hiện phần word-wise"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Có nên hiển thị thanh trình đơn trong cửa sổ/tab mới hay không."
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
-msgid "True if the menubar should be shown in new window"
-msgstr "Đúng nếu thanh trình đơn nên hiển thị trong cửa sổ mới."
-
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of columns"
 msgstr "Số cột mặc định"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -287,11 +278,11 @@ msgstr ""
 "Số cột trong cửa sổ đầu cuối mới. Không hữu hiệu nếu use_custom_default_size "
 "được bật."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Default number of rows"
 msgstr "Số dòng mặc định"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -299,15 +290,15 @@ msgstr ""
 "Số các dòng trong cửa sổ đầu cuối mới. Không hữu hiệu nếu "
 "use_custom_default_size bật."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "When to show the scrollbar"
 msgstr "Khi nào hiển thị thanh cuộn"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid "Number of lines to keep in scrollback"
 msgstr "Số dòng cuộn ngược"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -317,11 +308,11 @@ msgstr ""
 "cuối một số dòng này. những dòng nằm ngoài sẽ bị hủy. Cẩn thận với thiết lập "
 "này; nó là hệ số chính xác định lượng bộ nhớ thiết bị cuối dùng."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Có hạn chế số dòng lưu trong tab cuộn không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -330,30 +321,30 @@ msgstr ""
 "Nếu chọn, đuờng cuộn sẽ luôn hiển thị. Lịch sử đường cuộn được lưu trong ổ "
 "cứng tạm nên hệ thống có thể làm đầy đĩa cứng nếu hiển thị quá nhiều."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Có nên cuộn đến đáy khi được nhấn phím hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Nếu chọn, thiết bị cuối sẽ cuộn đến đáy nhấn phím."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Có nên cuộn đến đáy khi có kết quả mới hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr ""
 "Nếu chọn, bất cứ khi nào có dữ liệu mới xuất ra thiết bị cuối, nó sẽ được "
 "cuộn xuống đáy."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "What to do with the terminal when the child command exits"
 msgstr "Làm gì với thiết bị cuối khi lệnh con kết thúc."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -362,12 +353,12 @@ msgstr ""
 "lại lệnh. và “hold” để giữ thiết bị cuối mở với không lệnh đang chạy bên "
 "trong."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Có nên thực hiện lệnh trong thiết bị cuối như là hệ vỏ đăng nhập hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -375,11 +366,11 @@ msgstr ""
 "Nếu chọn, lệnh trong thiết bị cuối sẽ được thực hiện như hệ vỏ đăng nhập. "
 "(argv[0] sẽ chứa dấu trừ ở đằng trước)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Co nên chạy lệnh tự chọn thay vì hệ vỏ hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -387,11 +378,11 @@ msgstr ""
 "Nếu chọn, giá trị của thiết lập “custom_command” (lệnh tự chọn) sẽ được dùng "
 "thay vì chạy hệ vỏ."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to blink the cursor"
 msgstr "Có nên nháy con trỏ hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -401,11 +392,11 @@ msgstr ""
 " * on\t\tbật chế độ\n"
 " * off\t\ttắt chế độ."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "The cursor appearance"
 msgstr "Hình thức con trỏ"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -413,51 +404,51 @@ msgstr ""
 "Các giá trị có thể là “always” hoặc “never” cho nháy chữ, hay chỉ khi thiết "
 "bị cuối được “focused” hay “unfocused”."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Custom command to use instead of the shell"
 msgstr "Chạy lệnh tự chọn để dùng thay vì hệ vo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Chạy lệnh này thay vì hệ vỏ, nếu “use_custom_command” (dùng lệnh tự chọn) "
 "đúng."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Palette for terminal applications"
 msgstr "Bảng màu dùng cho ứng dụng thiết bị cuối"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "A Pango font name and size"
 msgstr "Tên và kích thước phông chữ Pango"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The code sequence the Backspace key generates"
 msgstr "Mã mà Phím “Backspace” sẽ tạo ra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "The code sequence the Delete key generates"
 msgstr "Mã mà Phím “Delete” sẽ tạo ra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Có nên dùng màu từ sắc thái của ô điều khiển thiết bị cuối hay không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Whether to use the system monospace font"
 msgstr "Có nên dùng phông chữ hệ thống có độ rộng cố định hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr ""
 "Có ngắt dòng nội dung của thiết bị đầu cuối khi cửa sổ thay đổi kích thước "
 "hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Which encoding to use"
 msgstr "Loại bảng mã nào được dùng"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -465,19 +456,19 @@ msgstr ""
 "Cho ký tự có độ rộng chưa rõ ràng là rộng hay hẹp khi sử dụng bảng mã UTF-8 "
 "hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Phím tắt Mở tab mới"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to open a new window"
 msgstr "Phím tắt Mở cửa sổ mới"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Phím tắt dùng để lưu nội dung thẻ hiện tại thành tập tin"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
@@ -485,123 +476,127 @@ msgstr ""
 "Phím tắt dùng để cuất nội dung thẻ hiện tại thành tập tin ở các định dạng "
 "khác nhau"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr "Phím tắt dùng để in nội dung thẻ hiện tại ra máy in hoặc tập tin"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Phím tắt dùng để đóng tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Phím tắt dùng để đóng cửa sổ"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Phím tắt dùng để Chép văn bản"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Phím tắt dùng để chép văn bản dạng HTML"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to paste text"
 msgstr "Phím tắt dùng để Dán văn bản"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to select all text"
 msgstr "Phím tắt dùng để chọn toàn bộ văn bản"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Phím tắt dùng để mở hộp thoại tùy thích"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Phím tắt dùng để bật/tắt chế độ Toàn màn hình"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Phím tắt dùng để bật/tắt hiển thị thanh trình đơn"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Phím tắt dùng để bật/tắt trạng thái chỉ-đọc"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Phím tắt dùng để đặt lại thiết bị cuối"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Phím tắt đặt lại và xóa thiết bị cuối"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Phím tắt dùng để mở hộp thoại tìm kiếm"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Phím tắt để tìm từ khớp mấu xảy ra kế tiếp"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "Phím tắt để tìm từ khớp mấu xảy ra kế trước"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Phím tắt đùng để xóa tô sáng phần khớp mẫu"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to switch to the previous tab"
-msgstr "Phím tắt Chuyển sang thanh kế trước"
+msgstr "Phím tắt chuyển sang thanh kế trước"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to switch to the next tab"
-msgstr "Phím tắt Chuyển sang thanh kế tiếp"
+msgstr "Phím tắt chuyển sang thanh kế tiếp"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Phím tắt để di chuyển thanh hiện tại sang trái"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Phím tắt để di chuyển thanh hiện tại sang phải"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Phím tắt để tách rời thanh hiện tại ra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Phím tắt để chuyển sang thanh được đánh số"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Phím tắt chuyển sang thanh cuối"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to launch help"
 msgstr "Phím tắt để mở trợ giúp"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to make font larger"
 msgstr "Phím tắt phóng chữ to hơn"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Phím tắt thu chữ nhỏ đi"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Phím tắt để kích thước chữ về bình thường"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
+msgid "Keyboard shortcut to show the primary menu"
+msgstr "Phím tắt để hiển thị trình đơn chính"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Whether the menubar has access keys"
 msgstr "Có dùng các phím bấm để truy cập trình đơn không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -611,11 +606,11 @@ msgstr ""
 "thể gây trở ngại cho vài ứng dụng chạy trong thiết bị cuối, gần như chắc "
 "chắn là bạn nên tắt chức năng này."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Whether shortcuts are enabled"
 msgstr "Có bật phím tắt hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -623,11 +618,11 @@ msgstr ""
 "Có bật phím tắt hay không. Việc này có thể gây trở ngại cho vài ứng dụng "
 "chạy trong thiết bị cuối, gần như chắc chắn là bạn nên tắt chức năng này."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Có bật truy cập thanh trình đơn dựa trên phím tắt chuẩn GTK không."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -637,31 +632,31 @@ msgstr ""
 "Điều này có thể được điều chỉnh trong “gtkrc” (gtk-menu-bar-accel = “cái gì "
 "đó”). Tùy chọn này cho phép tắt phím tắt chuẩn để kích hoạt thanh trình đơn."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the shell integration is enabled"
 msgstr "Có bật hệ vỏ ghép hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Có hỏi để xác xác nhận khi đóng cửa sổ thiết bị cuối hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether to show the menubar in new windows"
 msgstr "Có nên hiển thị thanh trình đơn trong cửa sổ mới hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Có nên mở thiết bị cuối như là một thanh hay cửa số mới hay không"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "When to show the tabs bar"
 msgstr "Khi nào hiển thị các thanh tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "The position of the tab bar"
 msgstr "Vị trí của thanh tab"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Which theme variant to use"
 msgstr "Biến thể chủ đề nào được dùng"
 
@@ -714,6 +709,11 @@ msgstr "I-Beam"
 #: ../src/preferences.ui.h:17
 msgid "Underline"
 msgstr "Gạch chân"
+
+#. Cursor blink mode
+#: ../src/preferences.ui.h:19
+msgid "Default"
+msgstr "Mặc định"
 
 #. Cursor blink mode
 #: ../src/preferences.ui.h:21
@@ -1145,26 +1145,26 @@ msgid "Error parsing command: %s"
 msgstr "Gặp lỗi khi phân tích câu lệnh: %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:899
+#: ../src/profile-editor.c:828
 msgid "width"
 msgstr "rộng"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:904
+#: ../src/profile-editor.c:833
 msgid "height"
 msgstr "cao"
 
-#: ../src/profile-editor.c:956
+#: ../src/profile-editor.c:885
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Chọn màu bảng chọn %u"
 
-#: ../src/profile-editor.c:960
+#: ../src/profile-editor.c:889
 #, c-format
 msgid "Palette entry %u"
 msgstr "Mục bảng chọn %u"
 
-#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:148
+#: ../src/search-popover.ui.h:1 ../src/terminal-accels.c:150
 msgid "Find"
 msgstr "Tìm"
 
@@ -1196,197 +1196,189 @@ msgstr "Khớp bằng _biểu thức chính quy"
 msgid "_Wrap around"
 msgstr "_Cuộn"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:126
 msgid "New Tab"
 msgstr "Thanh mới"
 
-#: ../src/terminal-accels.c:125
-msgid "New Window"
-msgstr "Cửa sổ mới"
-
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:129
 msgid "Save Contents"
 msgstr "Lưu nội dung"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:132
 msgid "Export"
 msgstr "Xuất ra"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:135
 msgid "Print"
 msgstr "In"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:137
 msgid "Close Tab"
 msgstr "Đóng thanh"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:138
 msgid "Close Window"
 msgstr "Đóng cửa sổ"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:142
 msgid "Copy"
 msgstr "Chép"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:143
 msgid "Copy as HTML"
 msgstr "Chép dạng HTML"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:144
 msgid "Paste"
 msgstr "Dán"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:145
 msgid "Select All"
 msgstr "Chọn tất cả"
 
-#: ../src/terminal-accels.c:144
-msgid "Preferences"
-msgstr "Tùy thích"
-
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:151
 msgid "Find Next"
 msgstr "Tìm kế"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:152
 msgid "Find Previous"
 msgstr "Tìm trước"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:153
 msgid "Clear Highlight"
 msgstr "Xóa tô sáng"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:157
 msgid "Hide and Show Menubar"
 msgstr "Ẩn/hiện thanh trình đơn"
 
-#: ../src/terminal-accels.c:156
+#: ../src/terminal-accels.c:158
 msgid "Full Screen"
 msgstr "Toàn màn hình"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:159
 msgid "Zoom In"
 msgstr "Phóng to"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:160
 msgid "Zoom Out"
 msgstr "Thu nhỏ"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:161
 msgid "Normal Size"
 msgstr "Cỡ bình thường"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:165
 msgid "Read-Only"
 msgstr "Chỉ-đọc"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:166
 msgid "Reset"
 msgstr "Đặt lại"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:167
 msgid "Reset and Clear"
 msgstr "Đặt lại và xóa"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "Chuyển sang Thanh kế trước"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:172
 msgid "Switch to Next Tab"
 msgstr "Chuyển sang Thanh kế tiếp"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Chuyển Thanh sang Trái"
 
-#: ../src/terminal-accels.c:172
+#: ../src/terminal-accels.c:174
 msgid "Move Tab to the Right"
 msgstr "Chuyển Thanh sang Phải"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:175
 msgid "Detach Tab"
 msgstr "Tách rời Thanh"
 
-#: ../src/terminal-accels.c:209
+#: ../src/terminal-accels.c:211
 msgid "Switch to Last Tab"
 msgstr "Chuyển sang Thanh cuối"
 
-#: ../src/terminal-accels.c:213
+#: ../src/terminal-accels.c:215
 msgid "Contents"
 msgstr "Mục lục"
 
-#: ../src/terminal-accels.c:222 ../src/terminal-menubar.ui.in.h:2
+#: ../src/terminal-accels.c:219
+msgid "Show Primary Menu"
+msgstr "Hiện trình đơn chính"
+
+#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:2
 msgid "File"
 msgstr "Tập tin"
 
-#: ../src/terminal-accels.c:223 ../src/terminal-menubar.ui.in.h:9
+#: ../src/terminal-accels.c:229 ../src/terminal-menubar.ui.in.h:9
 msgid "Edit"
 msgstr "Sửa"
 
-#: ../src/terminal-accels.c:224 ../src/terminal-menubar.ui.in.h:17
+#: ../src/terminal-accels.c:230 ../src/terminal-menubar.ui.in.h:17
 msgid "View"
 msgstr "Trình bày"
 
-#: ../src/terminal-accels.c:225 ../src/terminal-menubar.ui.in.h:24
+#: ../src/terminal-accels.c:231 ../src/terminal-menubar.ui.in.h:24
 msgid "Search"
 msgstr "Tìm kiếm"
 
-#: ../src/terminal-accels.c:227 ../src/terminal-menubar.ui.in.h:41
+#: ../src/terminal-accels.c:233 ../src/terminal-menubar.ui.in.h:41
 msgid "Tabs"
 msgstr "Thanh"
 
-#: ../src/terminal-accels.c:228 ../src/terminal-menubar.ui.in.h:48
+#: ../src/terminal-accels.c:234 ../src/terminal-menubar.ui.in.h:48
 msgid "Help"
 msgstr "Trợ giúp"
 
-#: ../src/terminal-accels.c:327
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+msgid "Global"
+msgstr "Toàn cục"
+
+#: ../src/terminal-accels.c:362
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "Chuyển sang Thanh %u"
 
-#: ../src/terminal-accels.c:535
+#: ../src/terminal-accels.c:552
 msgid "_Action"
 msgstr "_Hành vi"
 
-#: ../src/terminal-accels.c:554
+#: ../src/terminal-accels.c:571
 msgid "Shortcut _Key"
 msgstr "_Phím tắt"
 
-#: ../src/terminal-app.c:491 ../src/terminal-window.c:1839
+#: ../src/terminal-app.c:508
+msgid "New Terminal"
+msgstr "Thiết bị cuối mới"
+
+#: ../src/terminal-app.c:518 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "Thiết bị cuối _mới"
 
-#: ../src/terminal-app.c:493 ../src/terminal-window.c:1848
+#: ../src/terminal-app.c:520 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "Thanh _mới"
 
-#: ../src/terminal-app.c:494 ../src/terminal-window.c:1844
+#: ../src/terminal-app.c:521 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "Cửa _sổ mới"
 
-#: ../src/terminal-app.c:543
+#: ../src/terminal-app.c:570
 msgid "Change _Profile"
 msgstr "Thay đổi _hồ sơ"
 
-#: ../src/terminal-appmenu.ui.h:1 ../src/terminal-screen.c:1386
-#: ../src/terminal-window.c:1832
-msgid "_Preferences"
-msgstr "Tù_y thích"
+#: ../src/terminal-app.c:583
+msgid "_Profile"
+msgstr "Hồ _sơ"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-menubar.ui.in.h:47
-msgid "_Help"
-msgstr "Trợ g_iúp"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-menubar.ui.in.h:50
-msgid "_About"
-msgstr "_Giới thiệu"
-
-#: ../src/terminal-appmenu.ui.h:4
-msgid "_Quit"
-msgstr "_Thoát"
-
-#: ../src/terminal.c:545
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Gặp lỗi khi phân tích cú pháp của các đối số : %s\n"
@@ -1540,6 +1532,68 @@ msgstr "Các bảng mã CJK cũ"
 msgid "Obsolete Encodings"
 msgstr "Các bảng mã đã lạc hậu"
 
+#: ../src/terminal-headermenu.ui.h:1 ../src/terminal-menubar.ui.in.h:22
+msgid "Zoom _Out"
+msgstr "Thu _nhỏ"
+
+#: ../src/terminal-headermenu.ui.h:2 ../src/terminal-menubar.ui.in.h:20
+msgid "Zoom _In"
+msgstr "Phóng t_o"
+
+#: ../src/terminal-headermenu.ui.h:4 ../src/terminal-menubar.ui.in.h:19
+msgid "_Full Screen"
+msgstr "T_oàn màn hình"
+
+#: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
+#: ../src/terminal-window.c:1777
+msgid "Read-_Only"
+msgstr "_Chỉ-đọc"
+
+#: ../src/terminal-headermenu.ui.h:6
+msgid "_Advanced"
+msgstr "Nâng c_ao"
+
+#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
+msgid "_Reset"
+msgstr "Đặt _lại"
+
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
+msgid "Reset and C_lear"
+msgstr "Đặt lại và _xóa"
+
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
+msgid "_1. 80×24"
+msgstr "_1. 80×24"
+
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
+msgid "_2. 80×43"
+msgstr "_2. 80×43"
+
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
+msgid "_3. 132×24"
+msgstr "_3. 132×24"
+
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
+msgid "_4. 132×43"
+msgstr "_4. 132×43"
+
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
+msgid "_Inspector"
+msgstr "_Bộ xem xét"
+
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-window.c:1789
+msgid "_Preferences"
+msgstr "Tù_y thích"
+
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+msgid "_Help"
+msgstr "Trợ g_iúp"
+
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+msgid "_About"
+msgstr "_Giới thiệu"
+
 #: ../src/terminal-menubar.ui.in.h:1
 msgid "_File"
 msgstr "Tậ_p tin"
@@ -1568,19 +1622,19 @@ msgstr "Đón_g cửa sổ"
 msgid "_Edit"
 msgstr "_Sửa"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1810
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
 msgid "_Copy"
 msgstr "_Sao chép"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1811
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
 msgid "Copy as _HTML"
 msgstr "Chép dạng _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1812
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
 msgid "_Paste"
 msgstr "_Dán"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1814
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
 msgid "Paste as _Filenames"
 msgstr "Dán _tên tập tin"
 
@@ -1596,25 +1650,13 @@ msgstr "_Tùy thích"
 msgid "_View"
 msgstr "Trình _bày"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1860
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
 msgid "Show _Menubar"
 msgstr "Hiện thanh t_rình đơn"
-
-#: ../src/terminal-menubar.ui.in.h:19
-msgid "_Full Screen"
-msgstr "T_oàn màn hình"
-
-#: ../src/terminal-menubar.ui.in.h:20
-msgid "Zoom _In"
-msgstr "Phóng t_o"
 
 #: ../src/terminal-menubar.ui.in.h:21
 msgid "_Normal Size"
 msgstr "Cỡ _thường"
-
-#: ../src/terminal-menubar.ui.in.h:22
-msgid "Zoom _Out"
-msgstr "Thu _nhỏ"
 
 #: ../src/terminal-menubar.ui.in.h:23
 msgid "_Search"
@@ -1640,41 +1682,13 @@ msgstr "_Xóa tô sáng"
 msgid "_Terminal"
 msgstr "_Thiết bị cuối"
 
-#: ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
 msgid "Set _Title…"
 msgstr "Đặt tự_a đề…"
 
 #: ../src/terminal-menubar.ui.in.h:32
 msgid "Set _Character Encoding"
 msgstr "Đặt _bảng mã"
-
-#: ../src/terminal-menubar.ui.in.h:33 ../src/terminal-window.c:1820
-msgid "Read-_Only"
-msgstr "_Chỉ-đọc"
-
-#: ../src/terminal-menubar.ui.in.h:34
-msgid "_Reset"
-msgstr "Đặt _lại"
-
-#: ../src/terminal-menubar.ui.in.h:35
-msgid "Reset and C_lear"
-msgstr "Đặt lại và _xóa"
-
-#: ../src/terminal-menubar.ui.in.h:36
-msgid "_1. 80×24"
-msgstr "_1. 80×24"
-
-#: ../src/terminal-menubar.ui.in.h:37
-msgid "_2. 80×43"
-msgstr "_2. 80×43"
-
-#: ../src/terminal-menubar.ui.in.h:38
-msgid "_3. 132×24"
-msgstr "_3. 132×24"
-
-#: ../src/terminal-menubar.ui.in.h:39
-msgid "_4. 132×43"
-msgstr "_4. 132×43"
 
 #: ../src/terminal-menubar.ui.in.h:40
 msgid "Ta_bs"
@@ -1704,64 +1718,33 @@ msgstr "Tách _rời thanh"
 msgid "_Contents"
 msgstr "Mụ_c lục"
 
-#: ../src/terminal-menubar.ui.in.h:51
-msgid "_Inspector"
-msgstr "_Bộ xem xét"
-
-#: ../src/terminal-nautilus.c:592
+#: ../src/terminal-nautilus.c:534
 msgid "Open in _Remote Terminal"
 msgstr "Mở Thiết bị cuối với máy _mạng"
 
-#: ../src/terminal-nautilus.c:594
+#: ../src/terminal-nautilus.c:536
 msgid "Open in _Local Terminal"
 msgstr "Mở Thiết bị cuối _nội bộ"
 
-#: ../src/terminal-nautilus.c:598 ../src/terminal-nautilus.c:609
+#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
 msgid "Open the currently selected folder in a terminal"
 msgstr "Mở thư mục được chọn hiện tại trong thiết bị cuối"
 
-#: ../src/terminal-nautilus.c:600 ../src/terminal-nautilus.c:611
-#: ../src/terminal-nautilus.c:621
+#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
 msgid "Open the currently open folder in a terminal"
 msgstr "Mở thư mục hiện tại trong thiết bị cuối"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:548
 msgid "Open in T_erminal"
 msgstr "Mở trong Thiết bị _cuối"
 
-#: ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:558
 msgid "Open T_erminal"
 msgstr "Mở Thiết bị _cuối"
 
-#: ../src/terminal-nautilus.c:618
+#: ../src/terminal-nautilus.c:559
 msgid "Open a terminal"
 msgstr "Mở thiết bị cuối"
-
-#: ../src/terminal-nautilus.c:636 ../src/terminal-nautilus.c:649
-msgid "Open in _Midnight Commander"
-msgstr "Mở trong _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:638
-msgid ""
-"Open the currently selected folder in the terminal file manager Midnight "
-"Commander"
-msgstr ""
-"Mở thư mục hiện tại được chọn trong bộ quản lý thiết bị cuối Midnight "
-"Commander"
-
-#: ../src/terminal-nautilus.c:640 ../src/terminal-nautilus.c:650
-msgid ""
-"Open the currently open folder in the terminal file manager Midnight "
-"Commander"
-msgstr "Mở thư mục hiện tại trong bộ quản lý thiết bị cuối Midnight Commander"
-
-#: ../src/terminal-nautilus.c:646
-msgid "Open _Midnight Commander"
-msgstr "Mở _Midnight Commander"
-
-#: ../src/terminal-nautilus.c:647
-msgid "Open the terminal file manager Midnight Commander"
-msgstr "Mở bộ quản lý thiết bị cuối Midnight Commander"
 
 #: ../src/terminal-notebook-menu.ui.h:1
 msgid "Move Terminal _Left"
@@ -1775,11 +1758,11 @@ msgstr "Rời Thiết bị cuối sang _Phải"
 msgid "_Detach Terminal"
 msgstr "Tách _rời Thiết bị cuối"
 
-#: ../src/terminal-notebook-menu.ui.h:4 ../src/terminal-window.c:3353
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
 msgid "C_lose Terminal"
 msgstr "Đón_g thiết bị cuối"
 
-#: ../src/terminal-options.c:284
+#: ../src/terminal-options.c:281
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1789,54 +1772,54 @@ msgstr ""
 "terminal sau."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:295
+#: ../src/terminal-options.c:292
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
 "it."
 msgstr "Dùng “%s” để chấm dứt tùy chọn và đặt dòng lệnh để thực thi sau nó."
 
-#: ../src/terminal-options.c:305 ../src/terminal-options.c:318
+#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr ""
 "Tùy chọn “%s” không còn được gnome-terminal hỗ trợ nữa kể từ phiên bản này."
 
-#: ../src/terminal-options.c:390
+#: ../src/terminal-options.c:387
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Đối số tới “%s” không phải là một lệnh hợp lệ: %s"
 
-#: ../src/terminal-options.c:563
+#: ../src/terminal-options.c:560
 msgid "Two roles given for one window"
 msgstr "Hai nhiệm vụ được trao cho cùng một cửa sổ"
 
-#: ../src/terminal-options.c:584 ../src/terminal-options.c:617
+#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "Tùy chọn “%s” được lập hai lần trên cùng cửa sổ\n"
 
-#: ../src/terminal-options.c:836
+#: ../src/terminal-options.c:833
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Không thể chuyển FD %d hai lần"
 
-#: ../src/terminal-options.c:898
+#: ../src/terminal-options.c:895
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "“%s” không phải là một hệ số thu phóng hợp lệ"
 
-#: ../src/terminal-options.c:905
+#: ../src/terminal-options.c:902
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Hệ số thu phóng “%g” quá nhỏ nên đang dùng “%g”.\n"
 
-#: ../src/terminal-options.c:913
+#: ../src/terminal-options.c:910
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Hệ số thu phóng “%g” quá lớn nên đang dùng “%g”.\n"
 
-#: ../src/terminal-options.c:951
+#: ../src/terminal-options.c:948
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1845,15 +1828,15 @@ msgstr ""
 "Tùy chọn “%s” yêu cầu xác định câu lệnh cần chạy trên phần còn lại của dòng "
 "lệnh"
 
-#: ../src/terminal-options.c:1100
+#: ../src/terminal-options.c:1101
 msgid "Can only use --wait once"
 msgstr "Chỉ được dùng --wait một lần"
 
-#: ../src/terminal-options.c:1135
+#: ../src/terminal-options.c:1137
 msgid "Not a valid terminal config file."
 msgstr "Không phải là một tập tin cấu hình thiết bị hợp lệ."
 
-#: ../src/terminal-options.c:1148
+#: ../src/terminal-options.c:1150
 msgid "Incompatible terminal config file version."
 msgstr "Phiên bản tập tin cấu hình thiết bị cuối không tương thích."
 
@@ -2097,49 +2080,45 @@ msgstr "Xóa hồ sơ"
 msgid "Delete"
 msgstr "Xóa"
 
-#: ../src/terminal-prefs.c:518
+#: ../src/terminal-prefs.c:519
 msgid "This is the default profile"
 msgstr "Đây là hồ sơ mặc định"
 
-#: ../src/terminal-prefs.c:542
+#: ../src/terminal-prefs.c:543
 msgid "General"
 msgstr "Chung"
 
-#: ../src/terminal-prefs.c:547
+#: ../src/terminal-prefs.c:548
 msgid "Shortcuts"
 msgstr "Phím tắt"
-
-#: ../src/terminal-prefs.c:671
-msgid "Global"
-msgstr "Toàn cục"
 
 #: ../src/terminal-prefs.c:683
 msgid "Profiles"
 msgstr "Hồ sơ"
 
-#: ../src/terminal-screen.c:1172
+#: ../src/terminal-screen.c:1140
 msgid "No command supplied nor shell requested"
 msgstr "Không có lệnh nào được cung cấp và cũng không yêu cầu hệ vỏ"
 
-#: ../src/terminal-screen.c:1387 ../src/terminal-screen.c:1717
+#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
 msgid "_Relaunch"
 msgstr "_Tải lại"
 
-#: ../src/terminal-screen.c:1390
+#: ../src/terminal-screen.c:1358
 msgid "There was an error creating the child process for this terminal"
 msgstr "Gặp lỗi khi tạo tiến trình con cho thiết bị cuối này."
 
-#: ../src/terminal-screen.c:1721
+#: ../src/terminal-screen.c:1685
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Tiến trình con thoát với trạng thái %d."
 
-#: ../src/terminal-screen.c:1724
+#: ../src/terminal-screen.c:1688
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Tiến trình con đã chấm dứt bởi tín hiệu %d."
 
-#: ../src/terminal-screen.c:1727
+#: ../src/terminal-screen.c:1691
 msgid "The child process was aborted."
 msgstr "Tiến trình con đã bị chấm dứt sớm."
 
@@ -2212,71 +2191,71 @@ msgstr ""
 msgid "“file” scheme with remote hostname not supported"
 msgstr "chưa hỗ trợ lược đồ “file” với tên máy mạng"
 
-#: ../src/terminal-window.c:460
+#: ../src/terminal-window.c:457
 msgid "Could not save contents"
 msgstr "Không thể lưu nội dung"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:477
 msgid "Save as…"
 msgstr "Ghi lại thành…"
 
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:480
 msgid "_Cancel"
 msgstr "T_hôi"
 
-#: ../src/terminal-window.c:484
+#: ../src/terminal-window.c:481
 msgid "_Save"
 msgstr "_Lưu"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1724
 msgid "Open _Hyperlink"
 msgstr "Mở _liên kết"
 
-#: ../src/terminal-window.c:1768
+#: ../src/terminal-window.c:1725
 msgid "Copy Hyperlink _Address"
 msgstr "_Chép địa chỉ liên kết"
 
-#: ../src/terminal-window.c:1778
+#: ../src/terminal-window.c:1735
 msgid "Send Mail _To…"
 msgstr "_Gửi thư cho…"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1736
 msgid "Copy Mail _Address"
 msgstr "_Chép địa chỉ thư"
 
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:1739
 msgid "Call _To…"
 msgstr "Gọ_i cho…"
 
-#: ../src/terminal-window.c:1783
+#: ../src/terminal-window.c:1740
 msgid "Copy Call _Address "
 msgstr "_Chép địa chỉ gọi"
 
-#: ../src/terminal-window.c:1788
+#: ../src/terminal-window.c:1745
 msgid "_Open Link"
 msgstr "_Mở liên kết"
 
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1746
 msgid "Copy _Link"
 msgstr "Chép địa chỉ liên _kết"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1784
 msgid "P_rofiles"
 msgstr "Hồ _sơ"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1819
 msgid "L_eave Full Screen"
 msgstr "_Thôi toàn màn hình"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3233
 msgid "Close this window?"
 msgstr "Đóng cửa sổ này?"
 
-#: ../src/terminal-window.c:3340
+#: ../src/terminal-window.c:3233
 msgid "Close this terminal?"
 msgstr "Đóng thiết bị cuối này?"
 
-#: ../src/terminal-window.c:3344
+#: ../src/terminal-window.c:3237
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2284,7 +2263,7 @@ msgstr ""
 "Vẫn còn có một số tiến trình đang chạy trong cửa sổ này. Đóng cửa sổ thì ép "
 "buộc kết thúc tất cả."
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3241
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2292,9 +2271,43 @@ msgstr ""
 "Vẫn còn có một tiến trình đang chạy trong cửa sổ này. Đóng cửa sổ thì sẽ ép "
 "buộc kết thúc nó."
 
-#: ../src/terminal-window.c:3353
+#: ../src/terminal-window.c:3246
 msgid "C_lose Window"
 msgstr "Đón_g cửa sổ"
+
+#~ msgid "Unnamed"
+#~ msgstr "Không tên"
+
+#~ msgid "Whether to show menubar in new windows/tabs"
+#~ msgstr "Có nên hiển thị thanh trình đơn trong cửa sổ/tab mới hay không."
+
+#~ msgid "True if the menubar should be shown in new window"
+#~ msgstr "Đúng nếu thanh trình đơn nên hiển thị trong cửa sổ mới."
+
+#~ msgid "_Quit"
+#~ msgstr "_Thoát"
+
+#~ msgid "Open in _Midnight Commander"
+#~ msgstr "Mở trong _Midnight Commander"
+
+#~ msgid ""
+#~ "Open the currently selected folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Mở thư mục hiện tại được chọn trong bộ quản lý thiết bị cuối Midnight "
+#~ "Commander"
+
+#~ msgid ""
+#~ "Open the currently open folder in the terminal file manager Midnight "
+#~ "Commander"
+#~ msgstr ""
+#~ "Mở thư mục hiện tại trong bộ quản lý thiết bị cuối Midnight Commander"
+
+#~ msgid "Open _Midnight Commander"
+#~ msgstr "Mở _Midnight Commander"
+
+#~ msgid "Open the terminal file manager Midnight Commander"
+#~ msgstr "Mở bộ quản lý thiết bị cuối Midnight Commander"
 
 #~ msgid "Verbose output"
 #~ msgstr "Kết xuất chi tiết"
