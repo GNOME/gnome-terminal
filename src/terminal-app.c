@@ -231,9 +231,7 @@ strv_contains_gnome (char **strv)
  * terminal_app_should_use_headerbar:
  *
  * Determines if the app should use headerbars. This is determined
- * * If GNOME_TERMINAL_HEADERBAR env var is set, the app uses headerbars iff
- *   the value is 1
- * * Otherwise, if the pref is set, the pref value is used
+ * * If the pref is set, the pref value is used
  * * Otherwise, if XDG_CURRENT_DESKTOP contains GNOME or GNOME-Classic,
  *   headerbar is used
  * * Otherwise, headerbar is not used.
@@ -241,10 +239,6 @@ strv_contains_gnome (char **strv)
 static gboolean
 terminal_app_should_use_headerbar (TerminalApp *app)
 {
-  const char *env = g_getenv("GNOME_TERMINAL_HEADERBAR");
-  if (env != NULL)
-    return g_strcmp0 (env, "1") == 0;
-
   gboolean set, use;
   g_settings_get (app->global_settings, TERMINAL_SETTING_HEADERBAR_KEY, "mb", &set, &use);
   if (set)
