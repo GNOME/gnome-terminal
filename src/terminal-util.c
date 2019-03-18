@@ -162,8 +162,8 @@ terminal_util_show_about (void)
     "Copyright © 2002–2004 Havoc Pennington\n"
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2018 Christian Persch\n"
-    "Copyright © 2013–2018 Egmont Koblinger";
+    "Copyright © 2007–2019 Christian Persch\n"
+    "Copyright © 2013–2019 Egmont Koblinger";
   char *licence_text;
   GKeyFile *key_file;
   GBytes *bytes;
