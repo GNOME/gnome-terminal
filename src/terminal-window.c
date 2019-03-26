@@ -1880,6 +1880,16 @@ notebook_update_tabs_menu_cb (GtkMenuButton *button,
     gs_unref_object GMenuItem *item;
     const char *title;
 
+    if (t->next == NULL) {
+      /* Last entry. If it has no dedicated shortcut "Switch to Tab N",
+       * display the accel of "Switch to Last Tab". */
+      GtkApplication *app = GTK_APPLICATION (g_application_get_default ());
+      gs_free gchar *detailed_action = g_strdup_printf("win.active-tab(%d)", i);
+      gs_strfreev gchar **accels = gtk_application_get_accels_for_action (app, detailed_action);
+      if (accels[0] == NULL)
+        i = -1;
+    }
+
     title = terminal_screen_get_title (screen);
 
     item = g_menu_item_new (title && title[0] ? title : _("Terminal"), NULL);
