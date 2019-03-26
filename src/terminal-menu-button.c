@@ -33,6 +33,9 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
+static void popup_menu_selection_done_cb (GtkMenu *menu,
+                                          GtkMenuButton *button);
+
 /* The menu button sets itself insensitive when it has no menu.
  * Work around this by using an empty menu.
  */
@@ -41,6 +44,24 @@ set_empty_menu (GtkMenuButton *button)
 {
   gs_unref_object GMenu *menu = g_menu_new ();
   gtk_menu_button_set_menu_model (button, G_MENU_MODEL (menu));
+}
+
+static void
+disconnect_popup_menu (GtkMenuButton *button)
+{
+  GtkMenu *popup_menu = gtk_menu_button_get_popup (button);
+
+  if (popup_menu)
+    g_signal_handlers_disconnect_by_func
+      (popup_menu, G_CALLBACK (popup_menu_selection_done_cb), button);
+}
+
+static void
+popup_menu_selection_done_cb (GtkMenu *menu,
+                              GtkMenuButton *button)
+{
+  disconnect_popup_menu (button);
+  set_empty_menu (button);
 }
 
 /* Class implementation */
@@ -69,17 +90,36 @@ terminal_menu_button_toggled (GtkToggleButton *button)
     g_signal_emit (button, signals[UPDATE_MENU], 0);
 
   GTK_TOGGLE_BUTTON_CLASS (terminal_menu_button_parent_class)->toggled (button);
+}
 
-  /* On deactivate, clear the menu */
-  if (!active)
-    set_empty_menu (GTK_MENU_BUTTON (button));
+static void
+terminal_menu_button_update_menu (TerminalMenuButton *button)
+{
+  GtkMenuButton *gtk_button = GTK_MENU_BUTTON (button);
+  GtkMenu *popup_menu = gtk_menu_button_get_popup (gtk_button);
+
+  if (popup_menu)
+    g_signal_connect (popup_menu, "selection-done",
+                      G_CALLBACK (popup_menu_selection_done_cb), button);
+}
+
+static void
+terminal_menu_button_dispose (GObject *object)
+{
+  disconnect_popup_menu (GTK_MENU_BUTTON (object));
+
+  G_OBJECT_CLASS (terminal_menu_button_parent_class)->dispose (object);
 }
 
 static void
 terminal_menu_button_class_init (TerminalMenuButtonClass *klass)
 {
-  GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
+  klass->update_menu = terminal_menu_button_update_menu;
 
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  object_class->dispose = terminal_menu_button_dispose;
+
+  GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
   toggle_button_class->toggled = terminal_menu_button_toggled;
 
   signals[UPDATE_MENU] =
