@@ -1,0 +1,55 @@
+image: fedora:rawhide
+stages:
+  - build
+  - test
+
+variables:
+  DEPENDENCIES: dbus-devel dconf-devel glib-devel gnome-shell
+                gsettings-desktop-schemas-devel gtk3-devel libX11-devel
+                nautilus-devel pcre2-devel uuid-devel vte291-devel
+                yelp-tools gettext intltool itstool meson
+                redhat-rpm-config glibc-devel gcc clang
+  OPTIONS: -Dnautilus_extension=true
+
+build-gcc:
+  stage: build
+  before_script:
+    - dnf update -y --nogpgcheck && dnf install -y --nogpgcheck $DEPENDENCIES
+  script:
+    - CC=gcc meson . _build $OPTIONS
+    - ninja -C _build
+
+build-clang:
+  stage: build
+  before_script:
+    - dnf update -y --nogpgcheck && dnf install -y --nogpgcheck $DEPENDENCIES
+  script:
+    - CC=clang meson . _build $OPTIONS
+    - ninja -C _build
+
+install:
+  stage: build
+  before_script:
+    - dnf update -y --nogpgcheck && dnf install -y --nogpgcheck $DEPENDENCIES
+  script:
+    - meson . _build $OPTIONS
+    - ninja -C _build
+    - ninja -C _build install
+
+test-gcc:
+  stage: test
+  before_script:
+    - dnf update -y --nogpgcheck && dnf install -y --nogpgcheck $DEPENDENCIES
+  script:
+    - CC=gcc meson . _build $OPTIONS
+    - ninja -C _build
+    - meson test -C _build --verbose --no-stdsplit
+
+test-clang:
+  stage: test
+  before_script:
+    - dnf update -y --nogpgcheck && dnf install -y --nogpgcheck $DEPENDENCIES
+  script:
+    - CC=clang meson . _build $OPTIONS
+    - ninja -C _build
+    - meson test -C _build --verbose --no-stdsplit
