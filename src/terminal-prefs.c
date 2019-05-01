@@ -595,6 +595,8 @@ listbox_add_all_profiles (PrefData *data)
     gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
   }
 
+  g_list_free(list); /* the items themselves were adopted into the model above */
+
   listbox_update (data->listbox);  /* FIXME: This is not needed but I don't know why :-) */
 }
 
