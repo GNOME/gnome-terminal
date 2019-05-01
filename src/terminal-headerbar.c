@@ -59,14 +59,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (TerminalHeaderbar, terminal_headerbar, GTK_TYPE_HEAD
 
 static void
 profilemenu_items_changed_cb (GMenuModel *menu,
-                              guint       position G_GNUC_UNUSED,
-                              guint       removed G_GNUC_UNUSED,
-                              guint       added G_GNUC_UNUSED,
-                              gpointer    user_data)
+                              int position G_GNUC_UNUSED,
+                              int removed G_GNUC_UNUSED,
+                              int added G_GNUC_UNUSED,
+                              TerminalHeaderbarPrivate *priv)
 {
-  TerminalHeaderbar *headerbar = user_data;
-  TerminalHeaderbarPrivate *priv = PRIV (headerbar);
-
   if (g_menu_model_get_n_items (menu) > 0)
     gtk_widget_show (priv->profilebutton);
   else
@@ -94,19 +91,23 @@ terminal_headerbar_init (TerminalHeaderbar *headerbar)
                                   profilemenu);
 
   g_signal_connect (profilemenu, "items-changed",
-                    G_CALLBACK (profilemenu_items_changed_cb), headerbar);
-  profilemenu_items_changed_cb (profilemenu, 0, 0, 0, headerbar);
+                    G_CALLBACK (profilemenu_items_changed_cb), priv);
+  profilemenu_items_changed_cb (profilemenu, 0, 0, 0, priv);
 }
 
 static void
-terminal_headerbar_finalize (GObject *object)
+terminal_headerbar_dispose (GObject *object)
 {
-#if 0
   TerminalHeaderbar *headerbar = TERMINAL_HEADERBAR (object);
   TerminalHeaderbarPrivate *priv = PRIV (headerbar);
-#endif
+  TerminalApp *app = terminal_app_get ();
 
-  G_OBJECT_CLASS (terminal_headerbar_parent_class)->finalize (object);
+  GMenuModel *profilemenu = terminal_app_get_profilemenu (app);
+  g_signal_handlers_disconnect_by_func (profilemenu,
+                                        G_CALLBACK (profilemenu_items_changed_cb),
+                                        priv);
+
+  G_OBJECT_CLASS (terminal_headerbar_parent_class)->dispose (object);
 }
 
 static void
@@ -143,7 +144,7 @@ terminal_headerbar_class_init (TerminalHeaderbarClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->finalize = terminal_headerbar_finalize;
+  gobject_class->dispose = terminal_headerbar_dispose;
   gobject_class->get_property = terminal_headerbar_get_property;
   gobject_class->set_property = terminal_headerbar_set_property;
 
