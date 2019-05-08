@@ -230,7 +230,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
       GError *error = NULL;
 
       (*regexes)[i] = vte_regex_new_for_match (regex_patterns[i].pattern, -1,
-                                               PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
+                                               PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_UCP | PCRE2_MULTILINE,
                                                &error);
       g_assert_no_error (error);
 

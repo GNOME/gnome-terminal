@@ -294,7 +294,7 @@ update_regex (TerminalSearchPopover *popover)
   if (search_text[0] != '\0') {
     guint32 compile_flags;
 
-    compile_flags = PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE;
+    compile_flags = PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_UCP | PCRE2_MULTILINE;
     if (caseless)
       compile_flags |= PCRE2_CASELESS;
 
