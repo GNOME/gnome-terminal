@@ -999,7 +999,7 @@ action_open_match_cb (GSimpleAction *action,
   if (info->url == NULL)
     return;
 
-  terminal_util_open_url (GTK_WIDGET (window), info->url, info->url_flavor,
+  terminal_util_open_url (GTK_WIDGET (window), info->url,
                           gtk_get_current_event_time ());
 }
 
@@ -1034,7 +1034,7 @@ action_open_hyperlink_cb (GSimpleAction *action,
   if (info->hyperlink == NULL)
     return;
 
-  terminal_util_open_url (GTK_WIDGET (window), info->hyperlink, FLAVOR_AS_IS,
+  terminal_util_open_url (GTK_WIDGET (window), info->hyperlink,
                           gtk_get_current_event_time ());
 }
 
@@ -1728,23 +1728,21 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   /* Matched link section */
   else if (info->url != NULL) {
     gs_unref_object GMenu *section2 = g_menu_new ();
+    gs_free char* scheme = g_uri_parse_scheme (info->url);
 
     const char *open_label = NULL, *copy_label = NULL;
-    switch (info->url_flavor) {
-    case FLAVOR_EMAIL:
+    if (scheme == NULL) {
+      /* Not a valid URI; do nothing. */
+    } else if (g_ascii_strcasecmp (scheme, "mailto") == 0) {
       open_label = _("Send Mail _To…");
       copy_label = _("Copy Mail _Address");
-      break;
-    case FLAVOR_VOIP_CALL:
+    } else if (g_ascii_strcasecmp (scheme, "sip") == 0 ||
+               g_ascii_strcasecmp (scheme, "sips") == 0) {
       open_label = _("Call _To…");
       copy_label = _("Copy Call _Address ");
-      break;
-    case FLAVOR_AS_IS:
-    case FLAVOR_DEFAULT_TO_HTTP:
-    default:
+    } else {
       open_label = _("_Open Link");
       copy_label = _("Copy _Link");
-      break;
     }
 
     g_menu_append (section2, open_label, "win.open-match");
@@ -1848,8 +1846,11 @@ screen_match_clicked_cb (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return FALSE;
 
+  if (url_flavor != FLAVOR_AS_IS)
+    return FALSE;
+
   gtk_widget_grab_focus (GTK_WIDGET (screen));
-  terminal_util_open_url (GTK_WIDGET (window), url, url_flavor,
+  terminal_util_open_url (GTK_WIDGET (window), url,
                           gtk_get_current_event_time ());
 
   return TRUE;

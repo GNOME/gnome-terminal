@@ -286,34 +286,12 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
 
 void
 terminal_util_open_url (GtkWidget *parent,
-                        const char *orig_url,
-                        TerminalURLFlavor flavor,
+                        const char *uri,
                         guint32 user_time)
 {
   gs_free_error GError *error = NULL;
-  gs_free char *uri = NULL;
 
-  g_return_if_fail (orig_url != NULL);
-
-  switch (flavor)
-    {
-    case FLAVOR_DEFAULT_TO_HTTP:
-      uri = g_strdup_printf ("http://%s", orig_url);
-      break;
-    case FLAVOR_EMAIL:
-      if (g_ascii_strncasecmp ("mailto:", orig_url, 7) != 0)
-	uri = g_strdup_printf ("mailto:%s", orig_url);
-      else
-	uri = g_strdup (orig_url);
-      break;
-    case FLAVOR_VOIP_CALL:
-    case FLAVOR_AS_IS:
-      uri = g_strdup (orig_url);
-      break;
-    default:
-      uri = NULL;
-      g_assert_not_reached ();
-    }
+  g_return_if_fail (uri != NULL);
 
   if (!open_url (GTK_WINDOW (parent), uri, user_time, &error))
     {

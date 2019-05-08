@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include "terminal-pcre2.h"
-#include "terminal-regex.h"
 #include "terminal-screen.h"
 
 #include <errno.h>
@@ -170,24 +169,12 @@ typedef struct {
   TerminalURLFlavor flavor;
 } TerminalRegexPattern;
 
-static const TerminalRegexPattern url_regex_patterns[] = {
-  { REGEX_URL_AS_IS, FLAVOR_AS_IS },
-  { REGEX_URL_HTTP,  FLAVOR_DEFAULT_TO_HTTP },
-  { REGEX_URL_FILE,  FLAVOR_AS_IS },
-  { REGEX_URL_VOIP,  FLAVOR_VOIP_CALL },
-  { REGEX_EMAIL,     FLAVOR_EMAIL },
-  { REGEX_NEWS_MAN,  FLAVOR_AS_IS },
-};
-
 static const TerminalRegexPattern extra_regex_patterns[] = {
   { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER },
 };
 
-static VteRegex **url_regexes;
 static VteRegex **extra_regexes;
-static TerminalURLFlavor *url_regex_flavors;
 static TerminalURLFlavor *extra_regex_flavors;
-static guint n_url_regexes;
 static guint n_extra_regexes;
 
 /* See bug #697024 */
@@ -344,7 +331,6 @@ terminal_screen_init (TerminalScreen *screen)
   GtkTargetList *target_list;
   GtkTargetEntry *targets;
   int n_targets;
-  guint i;
   uuid_t u;
   char uuidstr[37];
 
@@ -360,14 +346,13 @@ terminal_screen_init (TerminalScreen *screen)
 
   vte_terminal_set_allow_hyperlink (terminal, TRUE);
 
-  for (i = 0; i < n_url_regexes; ++i)
+  vte_terminal_match_add_builtins (terminal);
     {
       TagData *tag_data;
 
       tag_data = g_slice_new (TagData);
-      tag_data->flavor = url_regex_flavors[i];
-      tag_data->tag = vte_terminal_match_add_regex (terminal, url_regexes[i], 0);
-      vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
+      tag_data->flavor = FLAVOR_AS_IS;
+      tag_data->tag = VTE_BUILTIN_MATCH_TAG_URI;
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
@@ -542,8 +527,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
-  n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
-  precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
   precompile_regexes (extra_regex_patterns, n_extra_regexes, &extra_regexes, &extra_regex_flavors);
 
