@@ -91,6 +91,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-version.h \
 	terminal-window.c \
 	terminal-window.h \
+	profile-text-objects.c \
+	profile-text-objects.h \
 	$(NULL)
 
 nodist_gnome_terminal_server_SOURCES = $(gnome_terminal_server_built)

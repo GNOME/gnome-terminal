@@ -395,6 +395,19 @@
       <default>'narrow'</default>
       <summary>Whether ambiguous-width characters are narrow or wide when using UTF-8 encoding</summary>
     </key>
+
+    <key name="text-objects" type="a{s(ssi)}">
+      <default>{
+        'GNOME issues': (
+            '((?i)gnome|community|world)/([-+./a-z]+)#([[:digit:]]+)',
+            'https://gitlab.gnome.org/$1/$2/issues/$3', 0),
+        'freedesktop issues': (
+            '((?i)xorg|wayland|PulseAudio)/([-+./[:alnum:]]+)#([[:digit:]]+)',
+            'https://gitlab.freedesktop.org/$1/$2/issues/$3', 0)
+        }
+      </default>
+      <description>A list of tuples describing: name, match, rewrite, priority</description>
+    </key>
   </schema>
 
   <!-- Keybinding settings -->

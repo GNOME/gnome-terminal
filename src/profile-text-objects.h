@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002 Havoc Pennington
+ * Copyright © 2019 Rodolfo Granata
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,29 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_PROFILE_EDITOR_H
-#define TERMINAL_PROFILE_EDITOR_H
+#ifndef TEXT_OBJECTS_H
+#define TEXT_OBJECTS_H
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void profile_prefs_init (void);
-
-void profile_prefs_destroy (void);
-
-void profile_prefs_unload (void);
-
-void profile_prefs_load (const char *uuid,
-                         GSettings *profile);
-
-gulong
-profile_prefs_signal_connect (gpointer instance,
-                              const gchar *detailed_signal,
-                              GCallback c_handler,
-                              gpointer data);
+void profile_text_objects_init(void);
+void profile_text_objects_load(GSettings *profile);
 
 G_END_DECLS
 
-#endif /* TERMINAL_PROFILE_EDITOR_H */
+#endif /* TEXT_OBJECTS_H */

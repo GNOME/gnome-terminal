@@ -36,6 +36,7 @@
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
 #include "terminal-libgsystem.h"
+#include "profile-text-objects.h"
 
 
 /* Wrapper around g_signal_connect that maintains a list of the
@@ -55,7 +56,7 @@ profile_prefs_register_signal_handler (gpointer instance,
   g_array_append_val (the_pref_data->profile_signals, sig);
 }
 
-static gulong
+gulong
 profile_prefs_signal_connect (gpointer instance,
                               const gchar *detailed_signal,
                               GCallback c_handler,
@@ -834,6 +835,9 @@ profile_prefs_init (void)
   gtk_label_set_text ((GtkLabel *) gtk_builder_get_object (builder, "cell-height-scale-label"),
                       text);
   g_free (text);
+
+  /* Text-Objects: setup list */
+  profile_text_objects_init();
 }
 
 /* Called each time the user switches away from a profile, so it's no longer being edited */
@@ -1254,6 +1258,9 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                w,
                                "active-id",
                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  /* Text-Object options */
+  profile_text_objects_load(profile);
 }
 
 /* Called once per Preferences window, to destroy stuff that doesn't depend on the profile being edited */
