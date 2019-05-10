@@ -17,12 +17,15 @@
 
 #include "config.h"
 
+#include "terminal-debug.h"
+#include "terminal-libgsystem.h"
+#include "terminal-pcre2.h"
+#include "terminal-prefs.h"
 #include "profile-editor.h"
 #include "profile-text-objects.h"
-#include "terminal-libgsystem.h"
-#include "terminal-prefs.h"
 
 #include <glib/gi18n.h>
+
 
 enum {
   TEXT_OBJ_NAME = 0,
@@ -34,7 +37,7 @@ enum {
 
 /* setup the the profile editor's text-object tab */
 void
-profile_text_objects_init(void)
+profile_text_objects_editor_init(void)
 {
   GtkBuilder *builder = the_pref_data->builder;
   GtkTreeView *tree_view =
@@ -263,6 +266,17 @@ validate_text_object_cb (GtkEntry *entry, gpointer user_data)
     valid &= (end_ptr == text + strlen(text));
   }
 
+  /* Check that the 'match' field contains a valid regex */
+  GtkEntry *regex = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match"));
+  if (entry == regex) {
+    VteRegex *ok = vte_regex_new_for_match (
+        text, -1, PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE, NULL);
+    valid &= (ok != NULL);
+    if (ok) {
+      vte_regex_unref (ok);
+    }
+  }
+
   /* react to input being valid: set warning icon and toggle Save button */
   gtk_entry_set_icon_from_icon_name (
       entry,
@@ -321,7 +335,7 @@ profile_text_objects_bind(GSettings *profile)
 }
 
 void
-profile_text_objects_load(GSettings *profile)
+profile_text_objects_editor_load(GSettings *profile)
 {
   /* Create the model */
   GtkListStore *store = gtk_list_store_new (
@@ -356,4 +370,83 @@ profile_text_objects_load(GSettings *profile)
 
   /* bind buttons and actions */
   profile_text_objects_bind (profile);
+}
+
+static gint
+_handler_prio_compare(const UrlHandler *a, const UrlHandler *b) {
+  /* Higher priority objects first */
+  return (a->prio < b->prio) ? 1 : ((a->prio > b->prio) ? -1 : 0);
+}
+
+static void
+_free_url_handler(UrlHandler *uh) {
+  if (uh) {
+    g_free(uh->name);
+    g_free(uh->match);
+    g_free(uh->rewrite);
+    g_free(uh);
+  }
+}
+
+void profile_text_objects_free (GSList *handlers) {
+  g_slist_free_full(handlers, (GDestroyNotify)_free_url_handler);
+}
+
+/**
+ * terminal_util_load_url_handlers:
+ *
+ * Load text-object conf from GSettings
+ */
+GSList *
+profile_text_objects_load (GSettings *profile)
+{
+  GError *error = NULL;
+  GSList *handlers = NULL;
+  GVariantIter viter;
+  gchar *name, *match, *rewrite;
+  gint prio;
+
+  /* Load text-objects config from profile gsettings */
+  gs_unref_variant GVariant *text_objects =
+    g_settings_get_value(profile, "text-objects");
+  /* populate the text-object table */
+  g_variant_iter_init (&viter, text_objects);
+  while (g_variant_iter_next (&viter, "{s(ssi)}", &name, &match, &rewrite, &prio)) {
+    UrlHandler *uh = g_new0(UrlHandler, 1);
+    /* adopted: uh members take ownership of strings */
+    uh->name = name;
+    uh->match = match;
+    uh->rewrite = rewrite;
+    uh->prio = prio;
+    uh->regex = vte_regex_new_for_match (uh->match, -1,
+                                         PCRE2_UTF | PCRE2_NO_UTF_CHECK |
+                                         PCRE2_MULTILINE, &error);
+    if (error != NULL) {
+      _terminal_debug_print (
+          TERMINAL_DEBUG_TEXT_OBJECTS,
+          "Text-Objects: error compiling regex [%s]\n", name);
+      g_clear_error(&error);
+      _free_url_handler(uh);
+      continue;
+    }
+    if (!vte_regex_jit (uh->regex, PCRE2_JIT_COMPLETE, &error) ||
+        !vte_regex_jit (uh->regex, PCRE2_JIT_PARTIAL_SOFT, &error)) {
+      _terminal_debug_print (
+          TERMINAL_DEBUG_TEXT_OBJECTS,
+          "Text-Objects: failed to JIT regex for [%s]: '%s' %s\n",
+          name, (char*)uh->match, error->message);
+      g_clear_error (&error);
+      _free_url_handler(uh);
+      continue;
+    }
+    _terminal_debug_print (
+        TERMINAL_DEBUG_TEXT_OBJECTS,
+        "Text-Objects: loaded [%s]: %s -> %s\n", name, uh->match, uh->rewrite);
+    /* when vte checks for matches (vte_terminal_match_check_event)
+     * they're returned in order of calling vte_terminal_match_add_regex */
+    handlers =
+      g_slist_insert_sorted(handlers, uh, (GCompareFunc)_handler_prio_compare);
+  }
+
+  return handlers;
 }

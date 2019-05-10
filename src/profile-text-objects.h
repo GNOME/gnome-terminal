@@ -20,11 +20,25 @@
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
+#include <vte/vte.h>
 
 G_BEGIN_DECLS
 
-void profile_text_objects_init(void);
-void profile_text_objects_load(GSettings *profile);
+typedef struct
+{
+  char *name;
+  char *match;
+  char *rewrite;
+  gint prio;
+  VteRegex *regex;
+  int tag;
+} UrlHandler;
+
+void profile_text_objects_editor_init (void);
+void profile_text_objects_editor_load (GSettings *profile);
+
+GSList *profile_text_objects_load (GSettings *profile);
+void profile_text_objects_free (GSList*);
 
 G_END_DECLS
 

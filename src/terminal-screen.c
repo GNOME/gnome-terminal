@@ -59,6 +59,7 @@
 #include "terminal-window.h"
 #include "terminal-info-bar.h"
 #include "terminal-libgsystem.h"
+#include "profile-text-objects.h"
 
 #include "eggshell.h"
 
@@ -77,6 +78,7 @@ typedef struct
 {
   int tag;
   TerminalURLFlavor flavor;
+  UrlHandler *url_handler;
 } TagData;
 
 struct _TerminalScreenPrivate
@@ -94,6 +96,7 @@ struct _TerminalScreenPrivate
   int child_pid;
   GSList *match_tags;
   guint launch_child_source_id;
+  GSList *custom_url_handlers;
 };
 
 enum
@@ -155,9 +158,10 @@ static char* terminal_screen_check_hyperlink   (TerminalScreen            *scree
 static void terminal_screen_check_extra (TerminalScreen *screen,
                                          GdkEvent       *event,
                                          char           **number_info);
-static char* terminal_screen_check_match       (TerminalScreen            *screen,
-                                                GdkEvent                  *event,
-                                                int                  *flavor);
+static char* terminal_screen_check_match (TerminalScreen *screen,
+                                          GdkEvent       *event,
+                                          int            *flavor,
+                                          UrlHandler     **uhandler);
 
 static void terminal_screen_set_override_command (TerminalScreen  *screen,
                                                   char           **argv,
@@ -487,7 +491,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, G_TYPE_SETTINGS);
-  
+
   signals[SHOW_POPUP_MENU] =
     g_signal_new (I_("show-popup-menu"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -508,7 +512,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   _terminal_marshal_BOOLEAN__STRING_INT_UINT,
                   G_TYPE_BOOLEAN,
                   3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_UINT);
-  
+
   signals[CLOSE_SCREEN] =
     g_signal_new (I_("close-screen"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -699,7 +703,7 @@ terminal_screen_new (GSettings       *profile,
   return screen;
 }
 
-gboolean 
+gboolean
 terminal_screen_exec (TerminalScreen *screen,
                       char          **argv,
                       char          **envv,
@@ -824,7 +828,7 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING_KEY))
   vte_terminal_set_backspace_binding (vte_terminal,
                                       g_settings_get_enum (profile, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY));
-  
+
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_DELETE_BINDING_KEY))
   vte_terminal_set_delete_binding (vte_terminal,
                                    g_settings_get_enum (profile, TERMINAL_PROFILE_DELETE_BINDING_KEY));
@@ -858,6 +862,40 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       g_settings_get (profile, TERMINAL_PROFILE_WORD_CHAR_EXCEPTIONS_KEY, "ms", &word_char_exceptions);
       vte_terminal_set_word_char_exceptions (vte_terminal, word_char_exceptions);
     }
+
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+
+  /* remove old text-object handlers if any */
+  if (priv->custom_url_handlers) {
+    GSList *next = priv->custom_url_handlers;
+    while (next != NULL)
+      {
+        UrlHandler *uh = (UrlHandler*)next->data;
+        next = g_slist_next(next);
+        vte_terminal_match_remove (terminal, uh->tag);
+      }
+    profile_text_objects_free (priv->custom_url_handlers);
+  }
+
+  /* connect new text-object handlers */
+  priv->custom_url_handlers = profile_text_objects_load (profile);
+  if (priv->custom_url_handlers) {
+    GSList *next = priv->custom_url_handlers;
+    while (next != NULL)
+      {
+        UrlHandler *uh = (UrlHandler*)next->data;
+        next = g_slist_next(next);
+        TagData *tag_data;
+        tag_data = g_slice_new (TagData);
+        tag_data->flavor = FLAVOR_CUSTOM_URI;
+        tag_data->tag = vte_terminal_match_add_regex (terminal, uh->regex, 0);
+        uh->tag = tag_data->tag;
+        tag_data->url_handler = uh;
+        vte_terminal_match_set_cursor_type (terminal,
+                                            tag_data->tag, URL_MATCH_CURSOR);
+        priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
+      }
+  }
 
   g_object_thaw_notify (object);
 }
@@ -1538,6 +1576,7 @@ terminal_screen_button_press (GtkWidget      *widget,
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
   gs_free char *hyperlink = NULL;
   gs_free char *url = NULL;
+  UrlHandler *uhandler = NULL;
   int url_flavor = 0;
   gs_free char *number_info = NULL;
   guint state;
@@ -1545,9 +1584,6 @@ terminal_screen_button_press (GtkWidget      *widget,
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   hyperlink = terminal_screen_check_hyperlink (screen, (GdkEvent*)event);
-  url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
-  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
-
   if (hyperlink != NULL &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
@@ -1562,6 +1598,22 @@ terminal_screen_button_press (GtkWidget      *widget,
       if (handled)
         return TRUE; /* don't do anything else such as select with the click */
     }
+
+  url = terminal_screen_check_match (screen, (GdkEvent*)event,
+                                     &url_flavor, &uhandler);
+  /* try re-writing the URL if its a custom flavor */
+  if (url_flavor == FLAVOR_CUSTOM_URI && uhandler != NULL) {
+    gchar *urltmp = vte_regex_substitute (
+        uhandler->regex,
+        url,
+        uhandler->rewrite,
+        PCRE2_SUBSTITUTE_EXTENDED,
+        NULL);
+    if (urltmp != NULL) {
+      g_free(url);
+      url = urltmp;
+    }
+  }
 
   if (url != NULL &&
       (event->button == 1 || event->button == 2) &&
@@ -1578,6 +1630,7 @@ terminal_screen_button_press (GtkWidget      *widget,
         return TRUE; /* don't do anything else such as select with the click */
     }
 
+  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
   if (event->type == GDK_BUTTON_PRESS && event->button == 3)
     {
       if (!(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)))
@@ -1618,7 +1671,7 @@ terminal_screen_button_press (GtkWidget      *widget,
  * Tries to determine the current working directory of the foreground process
  * in @screen's PTY, falling back to the current working directory of the
  * primary child.
- * 
+ *
  * Returns: a newly allocated string containing the current working directory,
  *   or %NULL on failure
  */
@@ -1663,9 +1716,9 @@ terminal_screen_child_exited (VteTerminal *terminal,
                          screen);
 
   priv->child_pid = -1;
-  
+
   action = g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY);
-  
+
   switch (action)
     {
     case TERMINAL_EXIT_CLOSE:
@@ -1737,8 +1790,8 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       {
         GdkAtom atom = GDK_POINTER_TO_ATOM (tmp->data);
 
-        g_print ("Target: %s\n", gdk_atom_name (atom));        
-        
+        g_print ("Target: %s\n", gdk_atom_name (atom));
+
         tmp = tmp->next;
       }
 
@@ -1801,7 +1854,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         char *utf8_data, *newline, *text;
         char *uris[2];
         gsize len;
-        
+
         /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
          *
          * The data contains the URL, a \n, then the
@@ -1838,7 +1891,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         char *utf8_data, *newline, *text;
         char *uris[2];
         gsize len;
-        
+
         /* The data contains the URL, a \n, then the
          * title of the web page.
          */
@@ -1942,7 +1995,8 @@ terminal_screen_check_hyperlink (TerminalScreen *screen,
 static char*
 terminal_screen_check_match (TerminalScreen *screen,
                              GdkEvent       *event,
-                             int       *flavor)
+                             int            *flavor,
+                             UrlHandler     **uhandler)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSList *tags;
@@ -1957,6 +2011,8 @@ terminal_screen_check_match (TerminalScreen *screen,
 	{
 	  if (flavor)
 	    *flavor = tag_data->flavor;
+	  if (uhandler != NULL)
+	    *uhandler = tag_data->url_handler;
 	  return match;
 	}
     }
@@ -2016,7 +2072,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
  *
  * Checks whether there's a foreground process running in
  * this terminal.
- * 
+ *
  * Returns: %TRUE iff there's a foreground process running in @screen
  */
 gboolean

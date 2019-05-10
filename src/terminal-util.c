@@ -51,17 +51,17 @@
  * @message_format: printf() style format string
  *
  * Create a #GtkMessageDialog window with the message, and present it, handling its buttons.
- * If @weap_ptr is not #NULL, only create the dialog if <literal>*weap_ptr</literal> is #NULL 
- * (and in that * case, set @weap_ptr to be a weak pointer to the new dialog), otherwise just 
+ * If @weap_ptr is not #NULL, only create the dialog if <literal>*weap_ptr</literal> is #NULL
+ * (and in that * case, set @weap_ptr to be a weak pointer to the new dialog), otherwise just
  * present <literal>*weak_ptr</literal>. Note that in this last case, the message <emph>will</emph>
  * be changed.
  */
 void
-terminal_util_show_error_dialog (GtkWindow *transient_parent, 
+terminal_util_show_error_dialog (GtkWindow *transient_parent,
                                  GtkWidget **weak_ptr,
                                  GError *error,
-                                 const char *message_format, 
-                                 ...) 
+                                 const char *message_format,
+                                 ...)
 {
   gs_free char *message;
   va_list args;
@@ -97,10 +97,10 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
         }
 
       gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-      
+
       gtk_widget_show_all (dialog);
     }
-  else 
+  else
     {
       g_return_if_fail (GTK_IS_MESSAGE_DIALOG (*weak_ptr));
 
@@ -264,7 +264,7 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
                                         const char *desc)
 {
   AtkObject *obj;
-  
+
   obj = gtk_widget_get_accessible (widget);
 
   if (obj == NULL)
@@ -306,6 +306,7 @@ terminal_util_open_url (GtkWidget *parent,
       else
 	uri = g_strdup (orig_url);
       break;
+    case FLAVOR_CUSTOM_URI:
     case FLAVOR_VOIP_CALL:
     case FLAVOR_AS_IS:
       uri = g_strdup (orig_url);

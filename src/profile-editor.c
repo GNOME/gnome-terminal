@@ -837,7 +837,7 @@ profile_prefs_init (void)
   g_free (text);
 
   /* Text-Objects: setup list */
-  profile_text_objects_init();
+  profile_text_objects_editor_init ();
 }
 
 /* Called each time the user switches away from a profile, so it's no longer being edited */
@@ -1260,7 +1260,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   /* Text-Object options */
-  profile_text_objects_load(profile);
+  profile_text_objects_editor_load (profile);
 }
 
 /* Called once per Preferences window, to destroy stuff that doesn't depend on the profile being edited */
