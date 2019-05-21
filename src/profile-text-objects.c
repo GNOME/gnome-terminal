@@ -152,6 +152,24 @@ edit_text_object_hide_cb (GtkButton *button, gpointer user_data)
 #endif
 }
 
+/* search the profile's text-objects by rule-name to check if we're
+ * adding a new text-object or we're replacing an existing one */
+static gboolean
+check_existing_text_object (
+    GtkTreeModel *store, GtkTreeIter *list_iter, const gchar *rule_name)
+{
+  gboolean more_rows = gtk_tree_model_get_iter_first (store, list_iter);
+  while (more_rows) {
+    gs_free gchar *_name;
+    gtk_tree_model_get (store, list_iter, TEXT_OBJ_NAME, &_name, -1);
+    if (g_strcmp0 (rule_name, _name) == 0) {
+      return TRUE;
+    }
+    more_rows = gtk_tree_model_iter_next ((GtkTreeModel *) store, list_iter);
+  }
+  return FALSE;
+}
+
 /* callback for saving contents to text-object editor dialog */
 static void
 edit_text_object_save_cb (GtkButton *button, GSettings *profile)
@@ -169,30 +187,13 @@ edit_text_object_save_cb (GtkButton *button, GSettings *profile)
       GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")));
   gint64 prio = g_ascii_strtoll (sprio, NULL, 10);
 
+  GtkTreeIter list_iter;
   GtkTreeView *tree_view =
     (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
   GtkListStore *store = (GtkListStore *) gtk_tree_view_get_model(tree_view);
 
-  /* search the profile's text-objects by rule-name to check if we're
-   * adding a new text-object or we're replacing an existing one */
-  GtkTreeIter list_iter;
-  gboolean more_rows =
-    gtk_tree_model_get_iter_first ((GtkTreeModel *) store, &list_iter);
-  gboolean existing = FALSE;
-  while (more_rows && !existing) {
-    gs_free gchar *_name;
-    gtk_tree_model_get ((GtkTreeModel *) store, &list_iter,
-                        TEXT_OBJ_NAME, &_name, -1);
-    existing = (g_strcmp0 (name, _name) == 0);
-    /* found an existing text-object with the same rule-name, we'll replace it */
-    if (existing) {
-      break;
-    }
-    more_rows = gtk_tree_model_iter_next ((GtkTreeModel *) store, &list_iter);
-  }
-
   /* if no existing rule found we'll append a new one */
-  if (!existing) {
+  if (!check_existing_text_object ((GtkTreeModel *) store, &list_iter, name)) {
     gtk_list_store_append (store, &list_iter);
   }
 
@@ -203,7 +204,6 @@ edit_text_object_save_cb (GtkButton *button, GSettings *profile)
       TEXT_OBJ_REWRITE, rewrite,
       TEXT_OBJ_PRIO, prio,
       -1);
-
   profile_save_text_objects (profile, store);
 
   /* Hide the popover */
@@ -212,7 +212,7 @@ edit_text_object_save_cb (GtkButton *button, GSettings *profile)
 
 /* callback to pre-populate text-object edition dialog with current selection */
 static void
-toggle_text_object_buttons_cb (GtkTreeSelection *selection, gpointer user_data)
+selection_text_object_change_cb (GtkTreeSelection *selection, gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
   GtkTreeIter list_iter;
@@ -244,6 +244,11 @@ toggle_text_object_buttons_cb (GtkTreeSelection *selection, gpointer user_data)
         GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-rewrite")), rewrite);
     gtk_entry_set_text (
         GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")), sprio);
+    gtk_button_set_label (
+        GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "Edit");
+  } else {
+    gtk_button_set_label (
+        GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "New");
   }
 }
 
@@ -252,9 +257,10 @@ validate_text_object_cb (GtkEntry *entry, gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
   gboolean valid = TRUE;
+  GtkButton *save = GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-save"));
 
   /* check that all fields have some text */
-  const char *text = gtk_entry_get_text (entry);
+  const gchar *text = gtk_entry_get_text (entry);
   valid &= (strlen(text) > 0);
 
   /* Check that Priority/Rank is an integer */
@@ -277,12 +283,23 @@ validate_text_object_cb (GtkEntry *entry, gpointer user_data)
     }
   }
 
+  /* Adjust the label on the Save button depending if replacing or adding new item */
+  GtkEntry *rule = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name"));
+  if (entry == rule) {
+    GtkTreeIter list_iter;
+    GtkTreeModel *store = gtk_tree_view_get_model(
+        (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
+    const gchar *label = check_existing_text_object (store, &list_iter, text)
+      ?  "Replace" : "Create";
+    gtk_button_set_label (GTK_BUTTON (save), label);
+  }
+
   /* react to input being valid: set warning icon and toggle Save button */
   gtk_entry_set_icon_from_icon_name (
       entry,
       GTK_ENTRY_ICON_PRIMARY, valid ? NULL : "dialog-warning");
-  gtk_widget_set_sensitive (
-      (GtkWidget *) gtk_builder_get_object (builder, "txt-obj-edit-save"), valid);
+  gtk_widget_set_sensitive ((GtkWidget *) save, valid);
+
 }
 
 /* bind the text-object GUI elements to callbacks */
@@ -306,17 +323,15 @@ profile_text_objects_bind(GSettings *profile)
       gtk_builder_get_object (builder, "txt-obj-edit-save"),
       "clicked", G_CALLBACK (edit_text_object_save_cb), profile);
 
-  profile_prefs_signal_connect (
-      (GtkEntry *) gtk_builder_get_object (builder, "txt-obj-match"),
-      "changed", G_CALLBACK (validate_text_object_cb), NULL);
-
-  profile_prefs_signal_connect (
-      (GtkEntry *) gtk_builder_get_object (builder, "txt-obj-rewrite"),
-      "changed", G_CALLBACK (validate_text_object_cb), NULL);
-
-  profile_prefs_signal_connect (
-      (GtkEntry *) gtk_builder_get_object (builder, "txt-obj-prio"),
-      "changed", G_CALLBACK (validate_text_object_cb), NULL);
+  guint i;
+  const gchar *fields[] = {
+    "txt-obj-name", "txt-obj-match", "txt-obj-rewrite", "txt-obj-prio",
+  };
+  for (i = 0; i < G_N_ELEMENTS (fields); i++) {
+    profile_prefs_signal_connect (
+        (GtkEntry *) gtk_builder_get_object (builder, fields[i]),
+        "changed", G_CALLBACK (validate_text_object_cb), NULL);
+  }
 
   /* disable edit buttons if we can't write settings */
   if (g_settings_is_writable (profile, "text-objects")) {
@@ -325,7 +340,7 @@ profile_text_objects_bind(GSettings *profile)
         (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
     profile_prefs_signal_connect (
         selection,
-        "changed", G_CALLBACK (toggle_text_object_buttons_cb), NULL);
+        "changed", G_CALLBACK (selection_text_object_change_cb), NULL);
   } else {
     gtk_widget_set_sensitive (
         GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-remove-button")), FALSE);
