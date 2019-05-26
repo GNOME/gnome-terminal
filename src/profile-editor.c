@@ -38,7 +38,6 @@
 #include "terminal-libgsystem.h"
 #include "profile-text-objects.h"
 
-
 /* Wrapper around g_signal_connect that maintains a list of the
  * handlers installed, and can disconnect them all. */
 typedef struct {

@@ -865,36 +865,31 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
   VteTerminal *terminal = VTE_TERMINAL (screen);
 
-  /* remove old text-object handlers if any */
+  /* remove old text-object handlers, if any */
   if (priv->custom_url_handlers) {
-    GSList *next = priv->custom_url_handlers;
-    while (next != NULL)
-      {
-        UrlHandler *uh = (UrlHandler*)next->data;
-        next = g_slist_next(next);
-        vte_terminal_match_remove (terminal, uh->tag);
-      }
+    for (GSList *list = priv->custom_url_handlers; list != NULL; list = list->next) {
+      UrlHandler *uh = (UrlHandler*) list->data;
+
+      vte_terminal_match_remove (terminal, uh->tag);
+    }
+
     profile_text_objects_free (priv->custom_url_handlers);
   }
 
   /* connect new text-object handlers */
   priv->custom_url_handlers = profile_text_objects_load (profile);
   if (priv->custom_url_handlers) {
-    GSList *next = priv->custom_url_handlers;
-    while (next != NULL)
-      {
-        UrlHandler *uh = (UrlHandler*)next->data;
-        next = g_slist_next(next);
-        TagData *tag_data;
-        tag_data = g_slice_new (TagData);
-        tag_data->flavor = FLAVOR_CUSTOM_URI;
-        tag_data->tag = vte_terminal_match_add_regex (terminal, uh->regex, 0);
-        uh->tag = tag_data->tag;
-        tag_data->url_handler = uh;
-        vte_terminal_match_set_cursor_type (terminal,
-                                            tag_data->tag, URL_MATCH_CURSOR);
-        priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
-      }
+    for (GSList *list = priv->custom_url_handlers; list != NULL; list = list->next) {
+      UrlHandler *uh = (UrlHandler*) list->data;
+
+      TagData *tag_data = g_slice_new (TagData);
+      tag_data->flavor = FLAVOR_CUSTOM_URI;
+      tag_data->tag = vte_terminal_match_add_regex (terminal, uh->regex, 0);
+      uh->tag = tag_data->tag;
+      tag_data->url_handler = uh;
+      vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
+      priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
+    }
   }
 
   g_object_thaw_notify (object);
@@ -1602,17 +1597,19 @@ terminal_screen_button_press (GtkWidget      *widget,
   url = terminal_screen_check_match (screen, (GdkEvent*)event,
                                      &url_flavor, &uhandler);
   /* try re-writing the URL if its a custom flavor */
-  if (url_flavor == FLAVOR_CUSTOM_URI && uhandler != NULL) {
-    gchar *urltmp = vte_regex_substitute (
-        uhandler->regex,
-        url,
-        uhandler->rewrite,
-        PCRE2_SUBSTITUTE_EXTENDED,
-        NULL);
-    if (urltmp != NULL) {
-      g_free(url);
-      url = urltmp;
-    }
+  if (url != NULL &&
+      url_flavor == FLAVOR_CUSTOM_URI &&
+      uhandler != NULL) {
+    char *match = vte_regex_substitute (uhandler->regex,
+                                        url,
+                                        uhandler->rewrite,
+                                        PCRE2_SUBSTITUTE_EXTENDED,
+                                        NULL);
+    g_free (url);
+    if (match != NULL)
+      url = match;
+    else
+      url = NULL;
   }
 
   if (url != NULL &&

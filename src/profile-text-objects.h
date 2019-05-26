@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXT_OBJECTS_H
-#define TEXT_OBJECTS_H
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -29,8 +28,8 @@ typedef struct
   char *name;
   char *match;
   char *rewrite;
-  gint prio;
   VteRegex *regex;
+  int prio;
   int tag;
 } UrlHandler;
 
@@ -41,5 +40,3 @@ GSList *profile_text_objects_load (GSettings *profile);
 void profile_text_objects_free (GSList*);
 
 G_END_DECLS
-
-#endif /* TEXT_OBJECTS_H */

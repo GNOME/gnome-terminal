@@ -32,11 +32,10 @@ void profile_prefs_unload (void);
 void profile_prefs_load (const char *uuid,
                          GSettings *profile);
 
-gulong
-profile_prefs_signal_connect (gpointer instance,
-                              const gchar *detailed_signal,
-                              GCallback c_handler,
-                              gpointer data);
+gulong profile_prefs_signal_connect (gpointer instance,
+                                     const gchar *detailed_signal,
+                                     GCallback c_handler,
+                                     gpointer data);
 
 G_END_DECLS
 

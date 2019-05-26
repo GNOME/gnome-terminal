@@ -17,15 +17,17 @@
 
 #include "config.h"
 
+#include <errno.h>
+
+#include <glib.h>
+#include <glib/gi18n.h>
+
 #include "terminal-debug.h"
 #include "terminal-libgsystem.h"
 #include "terminal-pcre2.h"
 #include "terminal-prefs.h"
 #include "profile-editor.h"
 #include "profile-text-objects.h"
-
-#include <glib/gi18n.h>
-
 
 enum {
   TEXT_OBJ_NAME = 0,
@@ -37,11 +39,10 @@ enum {
 
 /* setup the the profile editor's text-object tab */
 void
-profile_text_objects_editor_init(void)
+profile_text_objects_editor_init (void)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  GtkTreeView *tree_view =
-    (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
+  GtkTreeView *tree_view = (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
   /* setup tree */
   GtkTreeSelection *select = gtk_tree_view_get_selection (tree_view);
   gtk_tree_selection_set_mode (select, GTK_SELECTION_SINGLE);
@@ -51,48 +52,60 @@ profile_text_objects_editor_init(void)
   GtkTreeViewColumn *column;
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (
-      _("Name"), renderer, "text", TEXT_OBJ_NAME, NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("Name"),
+                                                     renderer,
+                                                     "text", TEXT_OBJ_NAME,
+                                                     NULL);
   gtk_tree_view_append_column (tree_view, column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (
-      _("Regex Match"), renderer, "text", TEXT_OBJ_MATCH, NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("Regex Match"),
+                                                     renderer,
+                                                     "text", TEXT_OBJ_MATCH,
+                                                     NULL);
   gtk_tree_view_append_column (tree_view, column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (
-      _("URL Template"), renderer, "text", TEXT_OBJ_REWRITE, NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("URL Template"),
+                                                     renderer,
+                                                     "text", TEXT_OBJ_REWRITE,
+                                                     NULL);
   gtk_tree_view_append_column (tree_view, column);
 
   renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (
-      _("Rank"), renderer, "text", TEXT_OBJ_PRIO, NULL);
+  column = gtk_tree_view_column_new_with_attributes (_("Rank"),
+                                                     renderer,
+                                                     "text", TEXT_OBJ_PRIO,
+                                                     NULL);
   gtk_tree_view_append_column (tree_view, column);
 }
 
 static void
-profile_save_text_objects(GSettings *profile, GtkListStore *store) {
+profile_save_text_objects (GSettings *profile,
+                           GtkTreeModel *store)
+{
   /* setup gvariant dict */
   GVariantBuilder txt_objs;
   g_variant_builder_init (&txt_objs, G_VARIANT_TYPE ("a{s(ssi)}"));
 
   GtkTreeIter list_iter;
   /* iterate over the store and write values into variant */
-  gboolean more_rows =
-    gtk_tree_model_get_iter_first ((GtkTreeModel *) store, &list_iter);
+  gboolean more_rows =  gtk_tree_model_get_iter_first (store, &list_iter);
   while (more_rows) {
-    gs_free gchar *name, *match, *rewrite;
-    gint prio;
-    gtk_tree_model_get ((GtkTreeModel *) store, &list_iter,
-        TEXT_OBJ_NAME, &name,
-        TEXT_OBJ_MATCH, &match,
-        TEXT_OBJ_REWRITE, &rewrite,
-        TEXT_OBJ_PRIO, &prio,
-        -1);
+    gs_free char *name;
+    gs_free char *match;
+    gs_free char *rewrite;
+    int prio;
+
+    gtk_tree_model_get (store, &list_iter,
+                        TEXT_OBJ_NAME, &name,
+                        TEXT_OBJ_MATCH, &match,
+                        TEXT_OBJ_REWRITE, &rewrite,
+                        TEXT_OBJ_PRIO, &prio,
+                        -1);
     /* encode text-object into variant dict */
     g_variant_builder_add (&txt_objs, "{s(ssi)}", name, match, rewrite, prio);
-    more_rows = gtk_tree_model_iter_next ((GtkTreeModel *) store, &list_iter);
+    more_rows = gtk_tree_model_iter_next (store, &list_iter);
   }
 
   GVariant *text_objects = g_variant_builder_end (&txt_objs);
@@ -101,16 +114,16 @@ profile_save_text_objects(GSettings *profile, GtkListStore *store) {
 
 /* callback triggered for opening the dialog to edit/add a text-object */
 static void
-edit_text_object_cb (GtkWidget *button, gpointer user_data)
+edit_text_object_cb (GtkWidget *button,
+                     gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  GtkPopover *txtobj_dialog =
-    (GtkPopover *) gtk_builder_get_object (builder, "txt-obj-dialog");
+  GtkPopover *txtobj_dialog = (GtkPopover *) gtk_builder_get_object (builder, "txt-obj-dialog");
 
   gtk_popover_set_relative_to (txtobj_dialog, button);
   gtk_popover_set_position (txtobj_dialog, GTK_POS_BOTTOM);
   gtk_popover_set_default_widget (txtobj_dialog,
-      GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-edit-save")));
+                                  GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-edit-save")));
 
 #if GTK_CHECK_VERSION (3, 22, 0)
   gtk_popover_popup (txtobj_dialog);
@@ -121,29 +134,29 @@ edit_text_object_cb (GtkWidget *button, gpointer user_data)
 
 /* callback for removing a text-object in the profile editor */
 static void
-remove_text_object_cb (GtkWidget *button, GSettings *profile)
+remove_text_object_cb (GtkWidget *button,
+                       GSettings *profile)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  GtkTreeView *tree_view =
-    (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
+  GtkTreeView *tree_view = (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
   GtkTreeSelection *selection = gtk_tree_view_get_selection (tree_view);
 
   GtkTreeIter list_iter;
-  GtkListStore *store;
+  GtkTreeModel *store;
   /* check if there's an item selected */
-  if (gtk_tree_selection_get_selected (selection, (GtkTreeModel **) &store, &list_iter)) {
-    gtk_list_store_remove (store, &list_iter);
+  if (gtk_tree_selection_get_selected (selection, &store, &list_iter)) {
+    gtk_list_store_remove (GTK_LIST_STORE (store), &list_iter);
     profile_save_text_objects (profile, store);
   }
 }
 
 /* callback to hide the text-object editor dialog */
 static void
-edit_text_object_hide_cb (GtkButton *button, gpointer user_data)
+edit_text_object_hide_cb (GtkButton *button,
+                          gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  GtkPopover *txtobj_dialog =
-    (GtkPopover *) gtk_builder_get_object (builder, "txt-obj-dialog");
+  GtkPopover *txtobj_dialog = (GtkPopover *) gtk_builder_get_object (builder, "txt-obj-dialog");
 
 #if GTK_CHECK_VERSION (3, 22, 0)
   gtk_popover_popdown (txtobj_dialog);
@@ -155,55 +168,64 @@ edit_text_object_hide_cb (GtkButton *button, gpointer user_data)
 /* search the profile's text-objects by rule-name to check if we're
  * adding a new text-object or we're replacing an existing one */
 static gboolean
-check_existing_text_object (
-    GtkTreeModel *store, GtkTreeIter *list_iter, const gchar *rule_name)
+check_existing_text_object (GtkTreeModel *store,
+                            GtkTreeIter *list_iter,
+                            const gchar *rule_name)
 {
   gboolean more_rows = gtk_tree_model_get_iter_first (store, list_iter);
   while (more_rows) {
-    gs_free gchar *_name;
+    gs_free char *_name;
     gtk_tree_model_get (store, list_iter, TEXT_OBJ_NAME, &_name, -1);
+
     if (g_strcmp0 (rule_name, _name) == 0) {
       return TRUE;
     }
-    more_rows = gtk_tree_model_iter_next ((GtkTreeModel *) store, list_iter);
+
+    more_rows = gtk_tree_model_iter_next (store, list_iter);
   }
+
   return FALSE;
 }
 
 /* callback for saving contents to text-object editor dialog */
 static void
-edit_text_object_save_cb (GtkButton *button, GSettings *profile)
+edit_text_object_save_cb (GtkButton *button,
+                          GSettings *profile)
 {
   GtkBuilder *builder = the_pref_data->builder;
 
   /* get contents of the dialog text fields */
-  const char *name = gtk_entry_get_text (
-      GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name")));
-  const char *match = gtk_entry_get_text (
-      GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match")));
-  const char *rewrite = gtk_entry_get_text (
-      GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-rewrite")));
-  const char *sprio = gtk_entry_get_text (
-      GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")));
-  gint64 prio = g_ascii_strtoll (sprio, NULL, 10);
+  const char *name = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name")));
+  const char *match = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match")));
+  const char *rewrite = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-rewrite")));
+  const char *sprio = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")));
+
+  errno = 0;
+  char *end;
+  int prio;
+  gint64 v = g_ascii_strtoll (sprio, &end, 10);
+  if (errno || end == sprio || v < 0 || v > G_MAXINT)
+    /* parse error, assume prio=0 */
+    prio = 0;
+  else
+    prio = v;
 
   GtkTreeIter list_iter;
-  GtkTreeView *tree_view =
-    (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
-  GtkListStore *store = (GtkListStore *) gtk_tree_view_get_model(tree_view);
+  GtkTreeView *tree_view = (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
+  GtkTreeModel *store = gtk_tree_view_get_model (tree_view);
 
   /* if no existing rule found we'll append a new one */
-  if (!check_existing_text_object ((GtkTreeModel *) store, &list_iter, name)) {
-    gtk_list_store_append (store, &list_iter);
+  if (!check_existing_text_object (store, &list_iter, name)) {
+    gtk_list_store_append (GTK_LIST_STORE (store), &list_iter);
   }
 
   /* update/add the text-object */
-  gtk_list_store_set (store, &list_iter,
-      TEXT_OBJ_NAME, name,
-      TEXT_OBJ_MATCH, match,
-      TEXT_OBJ_REWRITE, rewrite,
-      TEXT_OBJ_PRIO, prio,
-      -1);
+  gtk_list_store_set (GTK_LIST_STORE (store), &list_iter,
+                      TEXT_OBJ_NAME, name,
+                      TEXT_OBJ_MATCH, match,
+                      TEXT_OBJ_REWRITE, rewrite,
+                      TEXT_OBJ_PRIO, prio,
+                      -1);
   profile_save_text_objects (profile, store);
 
   /* Hide the popover */
@@ -212,195 +234,197 @@ edit_text_object_save_cb (GtkButton *button, GSettings *profile)
 
 /* callback to pre-populate text-object edition dialog with current selection */
 static void
-selection_text_object_change_cb (GtkTreeSelection *selection, gpointer user_data)
+selection_text_object_change_cb (GtkTreeSelection *selection,
+                                 gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  GtkTreeIter list_iter;
-  GtkListStore *store;
+
   /* get active selection */
-  gboolean selected = gtk_tree_selection_get_selected (
-      selection, (GtkTreeModel **) &store, &list_iter);
+  GtkTreeModel *store;
+  GtkTreeIter list_iter;
+  gboolean selected = gtk_tree_selection_get_selected (selection, &store, &list_iter);
 
   /* disable the 'Remove' button if there's no active selection */
-  gtk_widget_set_sensitive (
-      GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-remove-button")), selected);
+  gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-remove-button")),
+                            selected);
 
   /* copy selected values into edit dialog for later use */
   if (selected) {
-    gs_free gchar *name, *match, *rewrite, *sprio;
-    gint prio;
-    gtk_tree_model_get ((GtkTreeModel *) store, &list_iter,
-        TEXT_OBJ_NAME, &name,
-        TEXT_OBJ_MATCH, &match,
-        TEXT_OBJ_REWRITE, &rewrite,
-        TEXT_OBJ_PRIO, &prio,
-        -1);
-    sprio = g_strdup_printf("%d", prio);
-    gtk_entry_set_text (
-        GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name")), name);
-    gtk_entry_set_text (
-        GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match")), match);
-    gtk_entry_set_text (
-        GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-rewrite")), rewrite);
-    gtk_entry_set_text (
-        GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")), sprio);
-    gtk_button_set_label (
-        GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "Edit");
+    gs_free char *name;
+    gs_free char *match;
+    gs_free char *rewrite;
+    gs_free char *sprio;
+    int prio;
+
+    gtk_tree_model_get (store, &list_iter,
+                        TEXT_OBJ_NAME, &name,
+                        TEXT_OBJ_MATCH, &match,
+                        TEXT_OBJ_REWRITE, &rewrite,
+                        TEXT_OBJ_PRIO, &prio,
+                        -1);
+
+    sprio = g_strdup_printf ("%Id", prio);
+    gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name")), name);
+    gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match")), match);
+    gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-rewrite")), rewrite);
+    gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio")), sprio);
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "Edit");
   } else {
-    gtk_button_set_label (
-        GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "New");
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-button")), "New");
   }
 }
 
 static void
-validate_text_object_cb (GtkEntry *entry, gpointer user_data)
+validate_text_object_cb (GtkEntry *entry,
+                         gpointer user_data)
 {
   GtkBuilder *builder = the_pref_data->builder;
   gboolean valid = TRUE;
   GtkButton *save = GTK_BUTTON (gtk_builder_get_object (builder, "txt-obj-edit-save"));
 
   /* check that all fields have some text */
-  const gchar *text = gtk_entry_get_text (entry);
+  const char *text = gtk_entry_get_text (entry);
   valid &= (strlen(text) > 0);
 
   /* Check that Priority/Rank is an integer */
-  GtkEntry *prio = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio"));
-  if (entry == prio) {
-    gchar *end_ptr = NULL;
-    g_ascii_strtoll (text, &end_ptr, 10);
-    /* check that end_ptr actually advanced */
-    valid &= (end_ptr == text + strlen(text));
+  GtkEntry *prio_entry = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-prio"));
+  if (entry == prio_entry) {
+    errno = 0;
+    char *end_ptr = NULL;
+    gint64 v = g_ascii_strtoll (text, &end_ptr, 10);
+    if (errno || end_ptr == text || v < 0 || v > G_MAXINT)
+      valid = FALSE;
   }
 
   /* Check that the 'match' field contains a valid regex */
-  GtkEntry *regex = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match"));
-  if (entry == regex) {
-    VteRegex *ok = vte_regex_new_for_match (
-        text, -1, PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE, NULL);
-    valid &= (ok != NULL);
-    if (ok) {
-      vte_regex_unref (ok);
-    }
+  GtkEntry *regex_entry = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-match"));
+  if (entry == regex_entry) {
+    VteRegex *regex = vte_regex_new_for_match (text, -1,
+                                               PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
+                                               NULL);
+    if (regex)
+      vte_regex_unref (regex);
+    else
+      valid = FALSE;
   }
 
   /* Adjust the label on the Save button depending if replacing or adding new item */
-  GtkEntry *rule = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name"));
-  if (entry == rule) {
+  GtkEntry *rule_entry = GTK_ENTRY (gtk_builder_get_object (builder, "txt-obj-name"));
+  if (entry == rule_entry) {
     GtkTreeIter list_iter;
-    GtkTreeModel *store = gtk_tree_view_get_model(
-        (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
-    const gchar *label = check_existing_text_object (store, &list_iter, text)
-      ?  "Replace" : "Create";
+    GtkTreeModel *store = gtk_tree_view_get_model ((GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
+    const char *label = check_existing_text_object (store, &list_iter, text) ?  "Replace" : "Create";
     gtk_button_set_label (GTK_BUTTON (save), label);
   }
 
   /* react to input being valid: set warning icon and toggle Save button */
-  gtk_entry_set_icon_from_icon_name (
-      entry,
-      GTK_ENTRY_ICON_PRIMARY, valid ? NULL : "dialog-warning");
-  gtk_widget_set_sensitive ((GtkWidget *) save, valid);
-
+  gtk_entry_set_icon_from_icon_name (entry,
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     valid ? NULL : "dialog-warning");
+  gtk_widget_set_sensitive (GTK_WIDGET (save), valid);
 }
 
 /* bind the text-object GUI elements to callbacks */
 static void
-profile_text_objects_bind(GSettings *profile)
+profile_text_objects_bind (GSettings *profile)
 {
   GtkBuilder *builder = the_pref_data->builder;
-  profile_prefs_signal_connect (
-      gtk_builder_get_object (builder, "txt-obj-remove-button"),
-      "clicked", G_CALLBACK (remove_text_object_cb), profile);
 
-  profile_prefs_signal_connect (
-      gtk_builder_get_object (builder, "txt-obj-edit-button"),
-      "clicked", G_CALLBACK (edit_text_object_cb), NULL);
+  profile_prefs_signal_connect (gtk_builder_get_object (builder, "txt-obj-remove-button"),
+                                "clicked", G_CALLBACK (remove_text_object_cb), profile);
 
-  profile_prefs_signal_connect (
-      gtk_builder_get_object (builder, "txt-obj-edit-cancel"),
-      "clicked", G_CALLBACK (edit_text_object_hide_cb), NULL);
+  profile_prefs_signal_connect (gtk_builder_get_object (builder, "txt-obj-edit-button"),
+                                "clicked", G_CALLBACK (edit_text_object_cb), NULL);
 
-  profile_prefs_signal_connect (
-      gtk_builder_get_object (builder, "txt-obj-edit-save"),
-      "clicked", G_CALLBACK (edit_text_object_save_cb), profile);
+  profile_prefs_signal_connect (gtk_builder_get_object (builder, "txt-obj-edit-cancel"),
+                                "clicked", G_CALLBACK (edit_text_object_hide_cb), NULL);
+
+  profile_prefs_signal_connect (gtk_builder_get_object (builder, "txt-obj-edit-save"),
+                                "clicked", G_CALLBACK (edit_text_object_save_cb), profile);
 
   guint i;
-  const gchar *fields[] = {
-    "txt-obj-name", "txt-obj-match", "txt-obj-rewrite", "txt-obj-prio",
+  const char *fields[] = {
+          "txt-obj-name",
+          "txt-obj-match",
+          "txt-obj-rewrite",
+          "txt-obj-prio",
   };
   for (i = 0; i < G_N_ELEMENTS (fields); i++) {
-    profile_prefs_signal_connect (
-        (GtkEntry *) gtk_builder_get_object (builder, fields[i]),
-        "changed", G_CALLBACK (validate_text_object_cb), NULL);
+    profile_prefs_signal_connect ((GtkEntry *) gtk_builder_get_object (builder, fields[i]),
+                                  "changed", G_CALLBACK (validate_text_object_cb), NULL);
   }
 
   /* disable edit buttons if we can't write settings */
   if (g_settings_is_writable (profile, "text-objects")) {
     /* react to selection changes in the text-object list */
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (
-        (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
-    profile_prefs_signal_connect (
-        selection,
-        "changed", G_CALLBACK (selection_text_object_change_cb), NULL);
+    GtkTreeSelection *selection = gtk_tree_view_get_selection ((GtkTreeView *) gtk_builder_get_object (builder, "text-object-list"));
+    profile_prefs_signal_connect (selection,
+                                  "changed", G_CALLBACK (selection_text_object_change_cb), NULL);
   } else {
-    gtk_widget_set_sensitive (
-        GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-remove-button")), FALSE);
-    gtk_widget_set_sensitive (
-        GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-edit-button")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-remove-button")), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (builder, "txt-obj-edit-button")), FALSE);
   }
 }
 
 void
-profile_text_objects_editor_load(GSettings *profile)
+profile_text_objects_editor_load (GSettings *profile)
 {
+  GtkBuilder *builder = the_pref_data->builder;
+
   /* Create the model */
-  GtkListStore *store = gtk_list_store_new (
-      TEXT_OBJ_N_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
+  gs_unref_object GtkListStore *store = gtk_list_store_new (TEXT_OBJ_N_COLS,
+                                                            G_TYPE_STRING,
+                                                            G_TYPE_STRING,
+                                                            G_TYPE_STRING,
+                                                            G_TYPE_INT);
 
   /* Load text-objects config from profile gsettings */
-  gs_unref_variant GVariant *text_objects =
-    g_settings_get_value(profile, "text-objects");
+  gs_unref_variant GVariant *text_objects = g_settings_get_value (profile, "text-objects");
 
   GVariantIter viter;
-  const gchar *name, *match, *rewrite;
-  gint prio;
+  const char *name, *match, *rewrite;
+  int prio;
 
   /* populate the text-object table */
   g_variant_iter_init (&viter, text_objects);
   while (g_variant_iter_next (&viter, "{&s(&s&si)}", &name, &match, &rewrite, &prio)) {
     GtkTreeIter list_iter;
+
     gtk_list_store_append (store, &list_iter);
     gtk_list_store_set (store, &list_iter,
-        TEXT_OBJ_NAME, name,
-        TEXT_OBJ_MATCH, match,
-        TEXT_OBJ_REWRITE, rewrite,
-        TEXT_OBJ_PRIO, prio,
-        -1);
+                        TEXT_OBJ_NAME, name,
+                        TEXT_OBJ_MATCH, match,
+                        TEXT_OBJ_REWRITE, rewrite,
+                        TEXT_OBJ_PRIO, prio,
+                        -1);
   }
 
   /* link the data to the view */
-  GtkBuilder *builder = the_pref_data->builder;
-  GtkTreeView *tree_view =
-    (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
-  gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL(store));
+  GtkTreeView *tree_view = (GtkTreeView *) gtk_builder_get_object (builder, "text-object-list");
+  gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (store));
 
   /* bind buttons and actions */
   profile_text_objects_bind (profile);
 }
 
-static gint
-_handler_prio_compare(const UrlHandler *a, const UrlHandler *b) {
+static int
+_handler_prio_compare (const UrlHandler *a,
+                       const UrlHandler *b) {
   /* Higher priority objects first */
   return (a->prio < b->prio) ? 1 : ((a->prio > b->prio) ? -1 : 0);
 }
 
 static void
-_free_url_handler(UrlHandler *uh) {
-  if (uh) {
-    g_free(uh->name);
-    g_free(uh->match);
-    g_free(uh->rewrite);
-    g_free(uh);
-  }
+_free_url_handler(UrlHandler *uh)
+{
+  if (uh == NULL)
+    return;
+
+  g_free(uh->name);
+  g_free(uh->match);
+  g_free(uh->rewrite);
+
+  g_free(uh);
 }
 
 void profile_text_objects_free (GSList *handlers) {
@@ -418,49 +442,51 @@ profile_text_objects_load (GSettings *profile)
   GError *error = NULL;
   GSList *handlers = NULL;
   GVariantIter viter;
-  gchar *name, *match, *rewrite;
-  gint prio;
+  char *name, *match, *rewrite;
+  int prio;
 
   /* Load text-objects config from profile gsettings */
-  gs_unref_variant GVariant *text_objects =
-    g_settings_get_value(profile, "text-objects");
+  gs_unref_variant GVariant *text_objects = g_settings_get_value (profile, "text-objects");
+
   /* populate the text-object table */
   g_variant_iter_init (&viter, text_objects);
   while (g_variant_iter_next (&viter, "{s(ssi)}", &name, &match, &rewrite, &prio)) {
     UrlHandler *uh = g_new0(UrlHandler, 1);
-    /* adopted: uh members take ownership of strings */
-    uh->name = name;
-    uh->match = match;
-    uh->rewrite = rewrite;
+
+    uh->name = name; /* adopts */
+    uh->match = match; /* adopts */
+    uh->rewrite = rewrite; /* adopts */
     uh->prio = prio;
+
     uh->regex = vte_regex_new_for_match (uh->match, -1,
-                                         PCRE2_UTF | PCRE2_NO_UTF_CHECK |
-                                         PCRE2_MULTILINE, &error);
+                                         PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
+                                         &error);
     if (error != NULL) {
-      _terminal_debug_print (
-          TERMINAL_DEBUG_TEXT_OBJECTS,
-          "Text-Objects: error compiling regex [%s]\n", name);
-      g_clear_error(&error);
-      _free_url_handler(uh);
-      continue;
-    }
-    if (!vte_regex_jit (uh->regex, PCRE2_JIT_COMPLETE, &error) ||
-        !vte_regex_jit (uh->regex, PCRE2_JIT_PARTIAL_SOFT, &error)) {
-      _terminal_debug_print (
-          TERMINAL_DEBUG_TEXT_OBJECTS,
-          "Text-Objects: failed to JIT regex for [%s]: '%s' %s\n",
-          name, (char*)uh->match, error->message);
+      _terminal_debug_print (TERMINAL_DEBUG_TEXT_OBJECTS,
+                             "Text-Objects: error compiling regex [%s]: %s\n", name,
+                             error->message);
       g_clear_error (&error);
       _free_url_handler(uh);
       continue;
     }
-    _terminal_debug_print (
-        TERMINAL_DEBUG_TEXT_OBJECTS,
-        "Text-Objects: loaded [%s]: %s -> %s\n", name, uh->match, uh->rewrite);
+
+    if (!vte_regex_jit (uh->regex, PCRE2_JIT_COMPLETE, &error) ||
+        !vte_regex_jit (uh->regex, PCRE2_JIT_PARTIAL_SOFT, &error)) {
+      _terminal_debug_print (TERMINAL_DEBUG_TEXT_OBJECTS,
+                             "Text-Objects: failed to JIT regex for [%s]: '%s' %s\n",
+                             name, uh->match, error->message);
+      g_clear_error (&error);
+      _free_url_handler(uh);
+      continue;
+    }
+
+    _terminal_debug_print (TERMINAL_DEBUG_TEXT_OBJECTS,
+                           "Text-Objects: loaded [%s]: %s -> %s\n",
+                           name, uh->match, uh->rewrite);
+
     /* when vte checks for matches (vte_terminal_match_check_event)
      * they're returned in order of calling vte_terminal_match_add_regex */
-    handlers =
-      g_slist_insert_sorted(handlers, uh, (GCompareFunc)_handler_prio_compare);
+    handlers = g_slist_insert_sorted (handlers, uh, (GCompareFunc) _handler_prio_compare);
   }
 
   return handlers;
