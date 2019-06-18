@@ -344,7 +344,10 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
   gs_unref_object GSettings *profile = NULL;
+  const char *container_name;
+  const char *container_runtime;
   gs_free char *new_working_directory = NULL;
+  gs_strfreev char **override_command = NULL;
   gboolean can_toggle = FALSE;
 
   g_assert (TERMINAL_IS_WINDOW (window));
@@ -399,9 +402,21 @@ action_new_terminal_cb (GSimpleAction *action,
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
     window = terminal_app_new_window (app, 0);
 
+  container_name = vte_terminal_get_current_container_name (VTE_TERMINAL (priv->active_screen));
+  container_runtime = vte_terminal_get_current_container_runtime (VTE_TERMINAL (priv->active_screen));
+  if (g_strcmp0 (container_runtime, "toolbox") == 0 && container_name != NULL && container_name[0] != '\0')
+    {
+      gs_free_error GError *error = NULL;
+      gs_free char *override_command_str = NULL;
+
+      override_command_str = g_strdup_printf ("toolbox enter --container %s", container_name);
+      if (!g_shell_parse_argv (override_command_str, NULL, &override_command, &error))
+        g_printerr ("Failed to parse '%s': %s\n", override_command_str, error->message);
+    }
+
   new_working_directory = terminal_screen_get_current_dir (priv->active_screen);
   terminal_app_new_terminal (app, window, profile, NULL /* use profile encoding */,
-                             NULL, NULL,
+                             override_command, NULL,
                              new_working_directory,
                              terminal_screen_get_initial_environment (priv->active_screen),
                              1.0);
