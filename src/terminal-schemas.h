@@ -49,6 +49,8 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY       "default-size-columns"
 #define TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY          "default-size-rows"
 #define TERMINAL_PROFILE_DELETE_BINDING_KEY             "delete-binding"
+#define TERMINAL_PROFILE_ENABLE_BIDI_KEY                "enable-bidi"
+#define TERMINAL_PROFILE_ENABLE_SHAPING_KEY             "enable-shaping"
 #define TERMINAL_PROFILE_ENCODING_KEY                   "encoding"
 #define TERMINAL_PROFILE_EXIT_ACTION_KEY                "exit-action"
 #define TERMINAL_PROFILE_FONT_KEY                       "font"
