@@ -2635,7 +2635,7 @@ terminal_window_update_size (TerminalWindow *window)
 
   if (gdk_window != NULL &&
       (gdk_window_get_state (gdk_window) &
-       (GDK_WINDOW_STATE_MAXIMIZED | WINDOW_STATE_TILED)))
+       (GDK_WINDOW_STATE_MAXIMIZED | WINDOW_STATE_TILED | GDK_WINDOW_STATE_FULLSCREEN)))
     {
       /* Don't adjust the size of maximized or tiled (snapped, half-maximized)
        * windows: if we do, there will be ugly gaps of up to 1 character cell
