@@ -225,6 +225,16 @@ static inline void gs_local_gstring_free (void *v) \
 #define gs_unref_settings_schema __attribute__ ((cleanup(gs_local_settings_schema_unref)))
 
 /**
+ * gs_unref_settings_schema_source:
+ *
+ * Call g_settings_schema_source_unref() on a variable location when it goes out of
+ * scope.  Note that unlike g_settings_schema_source_unref(), the variable may be
+ * %NULL.
+
+ */
+#define gs_unref_settings_schema_source __attribute__ ((cleanup(gs_local_settings_schema_source_unref)))
+
+/**
  * gs_unref_settings_schema_key:
  *
  * Call g_settings_schema_key_unref() on a variable location when it goes out of

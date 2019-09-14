@@ -293,7 +293,6 @@ clone_child (TerminalSettingsList *list,
   char *new_uuid;
   gs_free char *path;
   gs_free char *new_path;
-  char **keys;
   guint i;
   gs_unref_object DConfClient *client;
   DConfChangeset *changeset;
@@ -309,11 +308,15 @@ clone_child (TerminalSettingsList *list,
   client = dconf_client_new ();
   changeset = dconf_changeset_new ();
 
-  /* FIXME: this is beyond ugly. Need API on GSettingsSchema to list all the keys! */
-  {
-    gs_unref_object GSettings *dummy = g_settings_new_with_path (list->child_schema_id, "/foo/");
-    keys = g_settings_list_keys (dummy);
-  }
+  GSettingsSchemaSource *source = g_settings_schema_source_get_default (); /* unowned */
+  gs_unref_settings_schema GSettingsSchema* schema = g_settings_schema_source_lookup (source,
+                                                                                      list->child_schema_id,
+                                                                                      TRUE);
+   /* shouldn't really happen ever */
+  if (schema == NULL)
+    return new_uuid;
+
+  gs_strfreev char **keys = g_settings_schema_list_keys (schema);
 
   for (i = 0; keys[i]; i++) {
     gs_free char *rkey;
