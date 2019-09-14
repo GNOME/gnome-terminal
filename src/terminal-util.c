@@ -970,7 +970,8 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
-                           (GtkCallback) terminal_util_bind_mnemonic_label_sensitivity,
+                           /* See #96 for double casting. */
+                           (GtkCallback) (GCallback) terminal_util_bind_mnemonic_label_sensitivity,
                            NULL);
 }
 
