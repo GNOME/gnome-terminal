@@ -141,7 +141,10 @@ init_server (int argc,
    */
   const char *home_dir = g_get_home_dir ();
   if (home_dir == NULL || chdir (home_dir) < 0)
-    (void) chdir ("/");
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+    chdir ("/");
+#pragma GCC diagnostic pop
 
   g_set_prgname ("gnome-terminal-server");
   g_set_application_name (_("Terminal"));
