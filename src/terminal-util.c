@@ -993,14 +993,14 @@ add_separators (const char *in, const char *sep, int groupby)
   ret = out = g_malloc(outlen + 1);
 
   firstgrouplen = (inlen - 1) % groupby + 1;
-  strncpy(out, in, firstgrouplen);
+  memcpy(out, in, firstgrouplen);
   in += firstgrouplen;
   out += firstgrouplen;
 
   while (*in != '\0') {
-    strncpy(out, sep, seplen);
+    memcpy(out, sep, seplen);
     out += seplen;
-    strncpy(out, in, groupby);
+    memcpy(out, in, groupby);
     in += groupby;
     out += groupby;
   }
