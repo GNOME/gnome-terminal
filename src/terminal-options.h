@@ -182,12 +182,10 @@ void terminal_fprintf (FILE* fp,
 #define terminal_printerr(...) terminal_printerr_level(NORMAL, __VA_ARGS__)
 #define terminal_printerr_debug(...) terminal_printerr_level(DEBUG, __VA_ARGS__)
 
-#if GLIB_CHECK_VERSION (2, 50, 0)
 GLogWriterOutput terminal_log_writer (GLogLevelFlags log_level,
                                       const GLogField *fields,
                                       gsize n_fields,
                                       gpointer user_data);
-#endif
 
 G_END_DECLS
 

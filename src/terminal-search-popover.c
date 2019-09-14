@@ -210,7 +210,6 @@ perform_search (TerminalSearchPopover *popover,
   g_signal_emit (popover, signals[SEARCH], 0, backward);
 }
 
-#if GTK_CHECK_VERSION (3, 16, 0)
 static void
 previous_match_cb (GtkWidget *widget,
                   TerminalSearchPopover *popover)
@@ -224,7 +223,6 @@ next_match_cb (GtkWidget *widget,
 {
   perform_search (popover, FALSE);
 }
-#endif /* GTK+ 3.16 */
 
 static void
 close_clicked_cb (GtkWidget *widget,
@@ -379,7 +377,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
     gtk_entry_set_completion (GTK_ENTRY (priv->search_entry), completion);
   }
 
-#if 0 // GTK_CHECK_VERSION (3, 17, 2)
+#if 0
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_prev_button);
   G_GNUC_END_IGNORE_DEPRECATIONS
@@ -388,10 +386,8 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   gtk_window_set_default (window, priv->search_prev_button);
 #endif
 
-#if GTK_CHECK_VERSION (3, 16, 0)
   g_signal_connect (priv->search_entry, "previous-match", G_CALLBACK (previous_match_cb), popover);
   g_signal_connect (priv->search_entry, "next-match", G_CALLBACK (next_match_cb), popover);
-#endif
 
   g_signal_connect (priv->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), popover);
   g_signal_connect (priv->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), popover);

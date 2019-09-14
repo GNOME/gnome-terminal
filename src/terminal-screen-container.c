@@ -237,12 +237,8 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 }
 #endif
 
-#if GTK_CHECK_VERSION(3, 19, 5)
-{
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_css_name(widget_class, TERMINAL_SCREEN_CONTAINER_CSS_NAME);
-}
-#endif
 
   g_object_class_install_property
     (gobject_class,

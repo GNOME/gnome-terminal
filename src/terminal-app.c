@@ -354,7 +354,6 @@ terminal_app_remove_profile (TerminalApp *app,
   terminal_settings_list_remove_child (app->profiles_list, uuid);
 }
 
-#if GTK_CHECK_VERSION (3, 19, 0)
 static void
 terminal_app_theme_variant_changed_cb (GSettings   *settings,
                                        const char  *key,
@@ -371,7 +370,6 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
                   theme == TERMINAL_THEME_VARIANT_DARK,
                   NULL);
 }
-#endif /* GTK+ 3.19 */
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
@@ -833,7 +831,6 @@ terminal_app_init (TerminalApp *app)
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
   app->use_headerbar = terminal_app_should_use_headerbar (app);
 
-#if GTK_CHECK_VERSION (3, 19, 0)
   GtkSettings *gtk_settings = gtk_settings_get_default ();
   terminal_app_theme_variant_changed_cb (app->global_settings,
                                          TERMINAL_SETTING_THEME_VARIANT_KEY, gtk_settings);
@@ -841,7 +838,6 @@ terminal_app_init (TerminalApp *app)
                     "changed::" TERMINAL_SETTING_THEME_VARIANT_KEY,
                     G_CALLBACK (terminal_app_theme_variant_changed_cb),
                     gtk_settings);
-#endif /* GTK+ 3.19 */
 
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();

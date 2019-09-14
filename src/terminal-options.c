@@ -62,8 +62,6 @@ terminal_fprintf (FILE* fp,
   }
 }
 
-#if GLIB_CHECK_VERSION (2, 50, 0)
-
 /* Need to install a special log writer so we never output
  * anything without the '# ' prepended, in case --print-environment
  * is used.
@@ -81,8 +79,6 @@ terminal_log_writer (GLogLevelFlags log_level,
 
   return G_LOG_WRITER_HANDLED;
 }
-
-#endif /* GLIB 2.50 */
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 

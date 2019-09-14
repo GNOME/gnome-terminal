@@ -113,15 +113,11 @@ struct _TerminalWindowPrivate
 #endif
 
 /* See bug #789356 */
-#if GTK_CHECK_VERSION (3, 22, 23)
 #define WINDOW_STATE_TILED (GDK_WINDOW_STATE_TILED       | \
                             GDK_WINDOW_STATE_LEFT_TILED  | \
                             GDK_WINDOW_STATE_RIGHT_TILED | \
                             GDK_WINDOW_STATE_TOP_TILED   | \
                             GDK_WINDOW_STATE_BOTTOM_TILED)
-#else
-#define WINDOW_STATE_TILED (GDK_WINDOW_STATE_TILED)
-#endif
 
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
@@ -1371,22 +1367,10 @@ enable_menubar_accel_changed_cb (GSettings *settings,
                                  const char *key,
                                  GtkSettings *gtk_settings)
 {
-#if GTK_CHECK_VERSION (3, 20, 0)
   if (g_settings_get_boolean (settings, key))
     gtk_settings_reset_property (gtk_settings, "gtk-menu-bar-accel");
   else
     g_object_set (gtk_settings, "gtk-menu-bar-accel", NULL, NULL);
-#else
-  const char *saved_menubar_accel;
-
-  /* Now this is a bad hack on so many levels. */
-  saved_menubar_accel = g_object_get_data (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel");
-
-  if (g_settings_get_boolean (settings, key))
-    g_object_set (gtk_settings, "gtk-menu-bar-accel", saved_menubar_accel, NULL);
-  else
-    g_object_set (gtk_settings, "gtk-menu-bar-accel", NULL, NULL);
-#endif
 }
 
 /* The menubar is shown by the app, and the use of mnemonics (e.g. Alt+F for File) is toggled.
@@ -2028,12 +2012,6 @@ terminal_window_screen_update (TerminalWindow *window,
                    "gtk-enable-accels",
                    G_SETTINGS_BIND_GET);
 
-#if !GTK_CHECK_VERSION (3, 20, 0)
-  char *value;
-  g_object_get (gtk_settings, "gtk-menu-bar-accel", &value, NULL);
-  g_object_set_data_full (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel",
-                          value, (GDestroyNotify) g_free);
-#endif
   enable_menubar_accel_changed_cb (settings,
                                    TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                                    gtk_settings);
@@ -2298,8 +2276,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->screen_changed = terminal_window_screen_changed;
   widget_class->style_updated = terminal_window_style_updated;
 
-#if GTK_CHECK_VERSION (3, 14, 0)
-{
   GtkWindowClass *window_klass;
   GtkBindingSet *binding_set;
 
@@ -2308,19 +2284,12 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_binding_entry_skip (binding_set, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK);
   gtk_binding_entry_skip (binding_set, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK);
   g_type_class_unref (window_klass);
-}
-#endif
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/window.ui");
 
-#if GTK_CHECK_VERSION(3, 19, 5)
   gtk_widget_class_set_css_name(widget_class, TERMINAL_WINDOW_CSS_NAME);
-#else
-  if (gtk_check_version(3, 19, 5) == NULL)
-    g_printerr("gnome-terminal needs to be recompiled against a newer gtk+ version.\n");
-#endif
 }
 
 static void

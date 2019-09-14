@@ -550,9 +550,7 @@ main (int argc, char **argv)
 {
   int exit_code = EXIT_FAILURE;
 
-#if GLIB_CHECK_VERSION (2, 50, 0)
   g_log_set_writer_func (terminal_log_writer, NULL, NULL);
-#endif
 
   g_set_prgname ("gnome-terminal");
 

@@ -38,7 +38,7 @@ AM_GLIB_GNU_GETTEXT
 
 AX_PTHREAD([],[AC_MSG_ERROR([pthreads are required])])
 
-GLIB_REQUIRED=2.42.0
+GLIB_REQUIRED=2.50.0
 GLIB_MIN_REQUIRED=2.42
 GLIB_MAX_ALLOWED=2.50
 
@@ -60,7 +60,7 @@ AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
-       GTK_REQUIRED=3.12.0
+       GTK_REQUIRED=3.22.27
        GTK_MIN_REQUIRED=3.8
        GTK_MAX_ALLOWED=3.22
        VTE_API_VERSION=2.91
@@ -197,7 +197,7 @@ AC_ARG_WITH([nautilus-extension],
   [with_nautilus_extension=yes])
 
 if test "$with_nautilus_extension" = "yes"; then
-  NAUTILUS_REQUIRED=3.0.0
+  NAUTILUS_REQUIRED=3.28.0
 
   PKG_CHECK_MODULES([NAUTILUS],[
     libnautilus-extension >= $NAUTILUS_REQUIRED

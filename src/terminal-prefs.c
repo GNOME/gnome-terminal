@@ -269,11 +269,7 @@ popover_dialog_cancel_clicked_cb (GtkButton *button,
 {
   GtkPopover *popover_dialog = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-dialog"));
 
-#if GTK_CHECK_VERSION (3, 22, 0)
   gtk_popover_popdown (popover_dialog);
-#else
-  gtk_widget_hide (GTK_WIDGET (popover_dialog));
-#endif
 }
 
 static void
@@ -359,11 +355,7 @@ profile_popup_dialog (GtkWidget *relative_to,
   gtk_popover_set_position (popover_dialog, GTK_POS_BOTTOM);
   gtk_popover_set_default_widget (popover_dialog, GTK_WIDGET (ok));
 
-#if GTK_CHECK_VERSION (3, 22, 0)
   gtk_popover_popup (popover_dialog);
-#else
-  gtk_widget_show (GTK_WIDGET (popover_dialog));
-#endif
 
   gtk_widget_grab_focus (entry_text != NULL ? GTK_WIDGET (entry) : GTK_WIDGET (cancel));
 }
@@ -441,25 +433,6 @@ profile_delete_cb (GSimpleAction *simple,
                         _("Delete"),
                         profile_delete_now);
 }
-
-#if !GTK_CHECK_VERSION (3, 22, 27)
-/* Avoid crash on PageUp and PageDown: bugs 791549 & 770703 */
-static gboolean
-listbox_key_press_event_cb (GtkListBox  *box,
-                            GdkEventKey *event,
-                            gpointer     user_data)
-{
-  switch (event->keyval) {
-  case GDK_KEY_Page_Up:
-  case GDK_KEY_Page_Down:
-  case GDK_KEY_KP_Page_Up:
-  case GDK_KEY_KP_Page_Down:
-    return TRUE;
-  default:
-    return FALSE;
-  }
-}
-#endif
 
 /* Create a (non-header) row of the sidebar, either a global or a profile entry. */
 static GtkListBoxRow *
@@ -812,9 +785,6 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
                                 NULL);
   g_signal_connect (data->listbox, "row-selected", G_CALLBACK (listbox_row_selected_cb), data->stack);
   gtk_list_box_set_sort_func (data->listbox, listboxrow_compare_cb, NULL, NULL);
-#if !GTK_CHECK_VERSION (3, 22, 27)
-  g_signal_connect (data->listbox, "key-press-event", G_CALLBACK (listbox_key_press_event_cb), NULL);
-#endif
 
   listbox_add_all_globals (data);
   listbox_add_all_profiles (data);
@@ -843,16 +813,11 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
                      G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   }
 
-#if GTK_CHECK_VERSION (3, 19, 0)
   g_settings_bind (settings,
                    TERMINAL_SETTING_THEME_VARIANT_KEY,
                    theme_variant_combo,
                    "active-id",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-#else
-  gtk_widget_set_visible (theme_variant_label, FALSE);
-  gtk_widget_set_visible (theme_variant_combo, FALSE);
-#endif /* GTK+ 3.19 */
 
   if (terminal_app_get_menu_unified (app) ||
       terminal_app_get_use_headerbar (app)) {

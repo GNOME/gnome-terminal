@@ -77,9 +77,7 @@ update_tab_visibility (TerminalNotebook *notebook,
     show_tabs = new_n_pages > 1;
     break;
   case GTK_POLICY_NEVER:
-#if GTK_CHECK_VERSION (3, 16, 0)
   case GTK_POLICY_EXTERNAL:
-#endif
   default:
     show_tabs = FALSE;
     break;

@@ -24,8 +24,7 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include <libnautilus-extension/nautilus-menu-provider.h>
-#include <libnautilus-extension/nautilus-extension-types.h>
+#include <nautilus-extension.h>
 
 #include <errno.h>
 #include <fcntl.h>

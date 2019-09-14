@@ -582,14 +582,6 @@ reset_compat_defaults_cb (GtkWidget *button,
  */
 
 static void
-set_input_hints(GtkWidget *entry)
-{
-#if GTK_CHECK_VERSION (3, 22, 20)
-  gtk_entry_set_input_hints (GTK_ENTRY (entry), GTK_INPUT_HINT_NO_EMOJI);
-#endif
-}
-
-static void
 init_color_scheme_menu (GtkWidget *widget)
 {
   GtkCellRenderer *renderer;
@@ -754,47 +746,6 @@ bool_to_scrollbar_policy (const GValue *value,
   return g_variant_new_string (g_value_get_boolean (value) ? "always" : "never");
 }
 
-#if !GTK_CHECK_VERSION (3, 19, 8)
-
-/* ATTENTION: HACK HACK HACK!
- * GtkColorButton usability is broken. It always pops up the
- * GtkColorChooserDialog with show-editor=FALSE, which brings
- * up the dialogue in palette mode, when all we want is pick
- * a colour. Since there is no way to get to the colour
- * dialogue of the button, and the dialogue always sets
- * show-editor=FALSE in its map anyway, we need to override
- * the map implementation, set show-editor=TRUE and chain to
- * the parent's map. This is reasonably safe to do since that's
- * all the map functiondoes, and we can change this for _all_
- * colour chooser buttons, since they are used only in our
- * profile preferences dialogue.
- */
-
-static void
-fixup_color_chooser_dialog_map (GtkWidget *widget)
-{
-  g_object_set (GTK_COLOR_CHOOSER_DIALOG (widget), "show-editor", TRUE, NULL);
-
-  GTK_WIDGET_CLASS (g_type_class_peek_parent (GTK_COLOR_CHOOSER_DIALOG_GET_CLASS (widget)))->map (widget);
-}
-
-static void
-fixup_color_chooser_button (void)
-{
-  static gboolean done = FALSE;
-
-  if (!done) {
-    GtkColorChooserDialogClass *klass;
-    klass = g_type_class_ref (GTK_TYPE_COLOR_CHOOSER_DIALOG);
-    g_assert (klass != NULL);
-    GTK_WIDGET_CLASS (klass)->map = fixup_color_chooser_dialog_map;
-    g_type_class_unref (klass);
-    done = TRUE;
-  }
-}
-
-#endif /* GTK+ < 3.19.8 HACK */
-
 static gboolean
 monospace_filter (const PangoFontFamily *family,
                   const PangoFontFace   *face,
@@ -813,10 +764,6 @@ profile_prefs_init (void)
 
   the_pref_data->profile_signals = g_array_new (FALSE, FALSE, sizeof (ProfilePrefsSignal));
   the_pref_data->profile_bindings = g_array_new (FALSE, FALSE, sizeof (ProfilePrefsBinding));
-
-#if !GTK_CHECK_VERSION (3, 19, 8)
-  fixup_color_chooser_button ();
-#endif
 
   w = (GtkWidget *) gtk_builder_get_object (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
@@ -876,10 +823,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
       g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i);
       w = (GtkWidget *) gtk_builder_get_object (builder, name);
 
-#if GTK_CHECK_VERSION (3, 19, 8)
-      g_object_set (w, "show-editor", TRUE, NULL);
-#endif
-
       g_object_set_data (G_OBJECT (w), "palette-entry-index", GUINT_TO_POINTER (i));
 
       text = g_strdup_printf (_("Choose Palette Color %u"), i);
@@ -934,13 +877,10 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                 G_CALLBACK (reset_compat_defaults_cb),
                                 profile);
 
-  w = GTK_WIDGET (gtk_builder_get_object (builder, "background-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind_with_mapping (profile,
                                             TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
-                                            w,
+                                            gtk_builder_get_object (builder,
+                                                                    "background-colorpicker"),
                                             "rgba",
                                             G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                             (GSettingsBindGetMapping) s_to_rgba,
@@ -969,9 +909,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "bold-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                                w,
                                "sensitive",
@@ -987,13 +924,11 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             NULL, NULL);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cell-height-scale-spinbutton"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
                                gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cell-width-scale-spinbutton"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY,
                                gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
@@ -1004,9 +939,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cursor-foreground-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
                                w,
                                "sensitive",
@@ -1021,9 +953,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             NULL, NULL);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cursor-background-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
                                w,
                                "sensitive",
@@ -1043,9 +972,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "highlight-foreground-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
                                w,
                                "sensitive",
@@ -1060,9 +986,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             NULL, NULL);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "highlight-background-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-  g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
                                w,
                                "sensitive",
@@ -1101,20 +1024,17 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             (GSettingsBindSetMapping) enum_to_string,
                                             vte_text_blink_mode_get_type, NULL);
 
-  w = GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
-                               w,
+                               gtk_builder_get_object (builder,
+                                                       "custom-command-entry"),
                                "text", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "default-size-columns-spinbutton"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY,
                                gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "default-size-rows-spinbutton"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY,
                                gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
@@ -1141,13 +1061,10 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                w,
                                "font-name", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
-  w = GTK_WIDGET (gtk_builder_get_object (builder, "foreground-colorpicker"));
-#if GTK_CHECK_VERSION (3, 19, 8)
-      g_object_set (w, "show-editor", TRUE, NULL);
-#endif
   profile_prefs_settings_bind_with_mapping (profile,
                                             TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
-                                            w,
+                                            gtk_builder_get_object (builder,
+                                                                    "foreground-colorpicker"),
                                             "rgba",
                                             G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                             (GSettingsBindGetMapping) s_to_rgba,
@@ -1160,7 +1077,6 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "scrollback-lines-spinbutton"));
-  set_input_hints (w);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
                                gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (w)),
                                "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
