@@ -264,6 +264,7 @@ key_changed_cb (GSettings *settings,
                 gpointer user_data)
 {
   GtkApplication *application = user_data;
+  const gchar *accels[2] = { NULL, NULL };
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
@@ -283,6 +284,8 @@ key_changed_cb (GSettings *settings,
   gs_free char *detailed = g_action_print_detailed_name (key_entry->action_name,
                                                          key_entry->parameter);
   gs_unref_variant GVariant *shadow_parameter = g_variant_new_string (detailed);
+  gs_free char *shadow_detailed = g_action_print_detailed_name (key_entry->shadow_action_name,
+                                                                shadow_parameter);
 
   /* We want to always consume the action's accelerators, even if the corresponding
    * action is insensitive, so the corresponding shortcut key escape code isn't sent
@@ -294,22 +297,17 @@ key_changed_cb (GSettings *settings,
    */
 
   if (g_str_equal (value, "disabled")) {
-    gtk_application_remove_accelerator (application,
-                                        key_entry->action_name,
-                                        key_entry->parameter);
-    gtk_application_remove_accelerator (application,
-                                        key_entry->shadow_action_name,
-                                        shadow_parameter);
+    accels[0] = NULL;
   } else {
-    gtk_application_add_accelerator (application,
-                                     value,
-                                     key_entry->action_name,
-                                     key_entry->parameter);
-    gtk_application_add_accelerator (application,
-                                     value,
-                                     key_entry->shadow_action_name,
-                                     shadow_parameter);
+    accels[0] = value;
   }
+
+  gtk_application_set_accels_for_action (application,
+                                         detailed,
+                                         accels);
+  gtk_application_set_accels_for_action (application,
+                                         shadow_detailed,
+                                         accels);
 }
 
 static void

@@ -448,8 +448,8 @@ terminal_util_load_widgets_resource (const char *path,
     /* Fixup dialogue padding, #735242 */
     if (GTK_IS_DIALOG (main_object) &&
         (action_area = (GtkWidget *) gtk_builder_get_object (builder, "dialog-action-area"))) {
-      gtk_widget_set_margin_left   (action_area, 5);
-      gtk_widget_set_margin_right  (action_area, 5);
+      gtk_widget_set_margin_start  (action_area, 5);
+      gtk_widget_set_margin_end    (action_area, 5);
       gtk_widget_set_margin_top    (action_area, 5);
       gtk_widget_set_margin_bottom (action_area, 5);
     }

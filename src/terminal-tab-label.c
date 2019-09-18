@@ -192,7 +192,11 @@ terminal_tab_label_constructed (GObject *object)
   priv->label = label = gtk_label_new (NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_misc_set_padding (GTK_MISC (label), 0, 0);
+  gtk_widget_set_margin_start  (label, 0);
+  gtk_widget_set_margin_end    (label, 0);
+  gtk_widget_set_margin_top    (label, 0);
+  gtk_widget_set_margin_bottom (label, 0);
+
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
 

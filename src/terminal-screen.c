@@ -888,7 +888,9 @@ update_color_scheme (TerminalScreen *screen)
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &theme_fg);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &theme_bg);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   use_theme_colors = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY);
   if (use_theme_colors ||
