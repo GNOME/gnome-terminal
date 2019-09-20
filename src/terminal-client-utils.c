@@ -124,6 +124,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
   envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
   envv = g_environ_unsetenv (envv, "GNOME_DESKTOP_ICON");
   envv = g_environ_unsetenv (envv, "LINES");
+  envv = g_environ_unsetenv (envv, "NOTIFY_SOCKET");
   envv = g_environ_unsetenv (envv, "PWD");
   envv = g_environ_unsetenv (envv, "TERM");
   envv = g_environ_unsetenv (envv, "VTE_VERSION");
