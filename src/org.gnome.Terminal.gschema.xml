@@ -53,9 +53,15 @@
     <value nick='hold' value='2'/>
   </enum>
 
-   <enum id='org.gnome.Terminal.CJKWidth'>
+  <enum id='org.gnome.Terminal.CJKWidth'>
     <value nick='narrow' value='1'/>
     <value nick='wide'   value='2'/>
+  </enum>
+
+  <enum id="org.gnome.Terminal.PreserveWorkingDirectory">
+    <value nick="never"  value='0'/>
+    <value nick="safe"   value='1'/>
+    <value nick="always" value='2'/>
   </enum>
 
   <!-- From gtk+ -->
@@ -256,6 +262,13 @@
       <default>false</default>
       <summary>Whether to launch the command in the terminal as a login shell</summary>
       <description>If true, the command inside the terminal will be launched as a login shell (argv[0] will have a hyphen in front of it).</description>
+    </key>
+    <key name="preserve-working-directory" enum="org.gnome.Terminal.PreserveWorkingDirectory">
+      <default>'safe'</default>
+      <summary>Whether to preserve the working directory when opening a new terminal</summary>
+      <description>
+        Controls when opening a new terminal from a previous one carries over the working directory of the opening terminal to the new one.
+      </description>
     </key>
     <key name="use-custom-command" type="b">
       <default>false</default>

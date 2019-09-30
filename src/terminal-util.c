@@ -713,8 +713,15 @@ terminal_util_get_etc_shells (void)
   char *str, *nl, *end;
   GPtrArray *arr;
 
-  if (!g_file_get_contents ("/etc/shells", &contents, &len, &err) || len == 0)
-    return NULL;
+  if (!g_file_get_contents ("/etc/shells", &contents, &len, &err) || len == 0) {
+    /* Defaults as per man:getusershell(3) */
+    char *default_shells[3] = {
+      (char*) "/bin/sh",
+      (char*) "/bin/csh",
+      NULL
+    };
+    return g_strdupv (default_shells);
+  }
 
   arr = g_ptr_array_new ();
   str = contents;
@@ -1430,3 +1437,111 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
 
   save_cache_keyfile (keyfile, TERMINAL_PRINT_SETTINGS_FILENAME);
 }
+
+/* BEGIN code copied from glib
+ *
+ * Copyright (C) 1995-1998  Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * Code originally under LGPL2+; used and modified here under GPL3+
+ * Changes:
+ *   Remove win32 support.
+ *   Make @program nullable.
+ *   Use @path instead of getenv("PATH").
+ *   Use strchrnul
+ */
+
+/**
+ * terminal_util_find_program_in_path:
+ * @path: (type filename) (nullable): the search path (delimited by G_SEARCHPATH_SEPARATOR)
+ * @program: (type filename) (nullable): the programme to find in @path
+ *
+ * Like g_find_program_in_path(), but uses @path instead of the
+ * PATH environment variable as the search path.
+ *
+ * Returns: (type filename) (transfer full) (nullable): a newly allocated
+ *  string containing the full path to @program, or %NULL if @program
+ *  could not be found in @path.
+ */
+char *
+terminal_util_find_program_in_path (const char *path,
+                                    const char *program)
+{
+  const gchar *p;
+  gchar *name, *freeme;
+  gsize len;
+  gsize pathlen;
+
+  if (program == NULL)
+    return NULL;
+
+  /* If it is an absolute path, or a relative path including subdirectories,
+   * don't look in PATH.
+   */
+  if (g_path_is_absolute (program)
+      || strchr (program, G_DIR_SEPARATOR) != NULL
+      )
+    {
+      if (g_file_test (program, G_FILE_TEST_IS_EXECUTABLE) &&
+	  !g_file_test (program, G_FILE_TEST_IS_DIR))
+        return g_strdup (program);
+      else
+        return NULL;
+    }
+
+  if (path == NULL)
+    {
+      /* There is no 'PATH' in the environment.  The default
+       * search path in GNU libc is the current directory followed by
+       * the path 'confstr' returns for '_CS_PATH'.
+       */
+
+      /* In GLib we put . last, for security, and don't use the
+       * unportable confstr(); UNIX98 does not actually specify
+       * what to search if PATH is unset. POSIX may, dunno.
+       */
+
+      path = "/bin:/usr/bin:.";
+    }
+
+  len = strlen (program) + 1;
+  pathlen = strlen (path);
+  freeme = name = g_malloc (pathlen + len + 1);
+
+  /* Copy the file name at the top, including '\0'  */
+  memcpy (name + pathlen + 1, program, len);
+  name = name + pathlen;
+  /* And add the slash before the filename  */
+  *name = G_DIR_SEPARATOR;
+
+  p = path;
+  do
+    {
+      char *startp;
+
+      path = p;
+      p = strchrnul (path, G_SEARCHPATH_SEPARATOR);
+
+      if (p == path)
+        /* Two adjacent colons, or a colon at the beginning or the end
+         * of 'PATH' means to search the current directory.
+         */
+        startp = name + 1;
+      else
+        startp = memcpy (name - (p - path), path, p - path);
+
+      if (g_file_test (startp, G_FILE_TEST_IS_EXECUTABLE) &&
+	  !g_file_test (startp, G_FILE_TEST_IS_DIR))
+        {
+          gchar *ret;
+          ret = g_strdup (startp);
+          g_free (freeme);
+          return ret;
+        }
+    }
+  while (*p++ != '\0');
+
+  g_free (freeme);
+  return NULL;
+}
+
+/* END code copied from glib */

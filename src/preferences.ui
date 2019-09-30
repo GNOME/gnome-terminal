@@ -235,6 +235,28 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="preserve-working-directory-model">
+    <columns>
+      <!-- column-name label -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="Preserve working directory">Never</col>
+        <col id="1">never</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Preserve working directory">Shell only</col>
+        <col id="1">safe</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Preserve working directory">Always</col>
+        <col id="1">always</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkApplicationWindow" id="preferences-dialog">
     <property name="can_focus">False</property>
     <property name="show_menubar">False</property>
@@ -1902,6 +1924,40 @@
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="preserve-working-directory-checkbutton-label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">_Preserve working directory:</property>
+                                <property name="use_underline">True</property>
+                                <property name="justify">center</property>
+                                <property name="mnemonic_widget">preserve-working-directory-combobox</property>
+                                <property name="xalign">0</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="left_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="preserve-working-directory-combobox">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">preserve-working-directory-model</property>
+                                <property name="focus_on_click">False</property>
+                                <property name="halign">start</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="preserve-working-directory-renderer"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="top_attach">3</property>
+                                <property name="left_attach">1</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkLabel" id="exit-action-combobox-label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -1911,7 +1967,7 @@
                                 <property name="xalign">0</property>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">4</property>
                                 <property name="left_attach">0</property>
                               </packing>
                             </child>
@@ -1930,7 +1986,7 @@
                                 </child>
                               </object>
                               <packing>
-                                <property name="top_attach">3</property>
+                                <property name="top_attach">4</property>
                                 <property name="left_attach">1</property>
                               </packing>
                             </child>

@@ -1085,25 +1085,52 @@ terminal_screen_get_initial_environment (TerminalScreen *screen)
 }
 
 static gboolean
+should_preserve_cwd (TerminalPreserveWorkingDirectory preserve_cwd,
+                     const char *path,
+                     const char *arg0)
+{
+  switch (preserve_cwd) {
+  case TERMINAL_PRESERVE_WORKING_DIRECTORY_SAFE: {
+    gs_free char *resolved_arg0 = terminal_util_find_program_in_path (path, arg0);
+    return resolved_arg0 != NULL &&
+      terminal_util_get_is_shell (resolved_arg0);
+  }
+
+  case TERMINAL_PRESERVE_WORKING_DIRECTORY_ALWAYS:
+    return TRUE;
+
+  case TERMINAL_PRESERVE_WORKING_DIRECTORY_NEVER:
+  default:
+    return FALSE;
+  }
+}
+
+static gboolean
 get_child_command (TerminalScreen *screen,
+                   const char     *path_env,
                    const char     *shell_env,
+                   gboolean       *preserve_cwd_p,
                    GSpawnFlags    *spawn_flags_p,
                    char         ***argv_p,
                    GError        **err)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
+  TerminalPreserveWorkingDirectory preserve_cwd;
   char **argv;
 
-  g_assert (spawn_flags_p != NULL && argv_p != NULL);
+  g_assert (spawn_flags_p != NULL && argv_p != NULL && preserve_cwd_p != NULL);
 
   *argv_p = argv = NULL;
+
+  preserve_cwd = g_settings_get_enum (profile, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY);
 
   if (priv->override_command)
     {
       argv = g_strdupv (priv->override_command);
 
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, argv[0]);
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
     }
   else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
     {
@@ -1113,7 +1140,8 @@ get_child_command (TerminalScreen *screen,
       if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
         return FALSE;
 
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, argv[0]);
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
     }
   else if (priv->shell)
     {
@@ -1126,8 +1154,10 @@ get_child_command (TerminalScreen *screen,
       only_name = strrchr (shell, '/');
       if (only_name != NULL)
         only_name++;
-      else
+      else {
         only_name = shell;
+        *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
+      }
 
       argv = g_new (char*, 3);
 
@@ -1140,6 +1170,7 @@ get_child_command (TerminalScreen *screen,
 
       argv[argc++] = NULL;
 
+      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, shell);
       *spawn_flags_p |= G_SPAWN_FILE_AND_ARGV_ZERO;
     }
 
@@ -1157,7 +1188,7 @@ get_child_command (TerminalScreen *screen,
 
 static char**
 get_child_environment (TerminalScreen *screen,
-                       const char *cwd,
+                       char **path,
                        char **shell)
 {
   TerminalApp *app = terminal_app_get ();
@@ -1216,6 +1247,7 @@ get_child_environment (TerminalScreen *screen,
     g_ptr_array_add (retval, g_strdup_printf ("%s=%s", e, v ? v : ""));
   g_ptr_array_add (retval, NULL);
 
+  *path = g_strdup (g_hash_table_lookup (env_table, "PATH"));
   *shell = g_strdup (g_hash_table_lookup (env_table, "SHELL"));
 
   g_hash_table_destroy (env_table);
@@ -1388,14 +1420,16 @@ terminal_screen_do_exec (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *terminal = VTE_TERMINAL (screen);
-  GSettings *profile;
-  char **env, **argv;
-  char *shell = NULL;
-  const char *working_dir;
   VtePtyFlags pty_flags = VTE_PTY_DEFAULT;
   GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP |
                             VTE_SPAWN_NO_PARENT_ENVV;
   GCancellable *cancellable = NULL;
+  gs_strfreev char **argv = NULL;
+  gs_strfreev char **env = NULL;
+  gs_free char *path = NULL;
+  gs_free char *shell = NULL;
+  gboolean preserve_cwd = FALSE;
+  const char *cwd;
 
   if (priv->child_pid != -1) {
     g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
@@ -1409,23 +1443,24 @@ terminal_screen_do_exec (TerminalScreen *screen,
                          "[screen %p] now launching the child process\n",
                          screen);
 
-  profile = priv->profile;
+  env = get_child_environment (screen, &path, &shell);
 
-  if (priv->initial_working_directory &&
-      !g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
-    working_dir = priv->initial_working_directory;
-  else
-    working_dir = g_get_home_dir ();
-
-  env = get_child_environment (screen, working_dir, &shell);
-
-  argv = NULL;
-  if (!get_child_command (screen, shell, &spawn_flags, &argv, error))
+  if (!get_child_command (screen,
+                          shell, path,
+                          &preserve_cwd, &spawn_flags, &argv,
+                          error))
     return FALSE;
+
+  if (preserve_cwd) {
+    cwd = priv->initial_working_directory;
+  } else {
+    cwd = g_get_home_dir ();
+    env = g_environ_unsetenv (env, "PWD");
+  }
 
   vte_terminal_spawn_async (terminal,
                             pty_flags,
-                            working_dir,
+                            cwd,
                             argv,
                             env,
                             spawn_flags,
@@ -1435,10 +1470,6 @@ terminal_screen_do_exec (TerminalScreen *screen,
                             SPAWN_TIMEOUT,
                             cancellable,
                             spawn_result_cb, NULL);
-
-  g_free (shell);
-  g_strfreev (argv);
-  g_strfreev (env);
 
   return TRUE; /* can't report any more errors since they only occur async */
 }

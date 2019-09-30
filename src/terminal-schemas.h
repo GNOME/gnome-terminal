@@ -61,6 +61,7 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_LOGIN_SHELL_KEY                "login-shell"
 #define TERMINAL_PROFILE_NAME_KEY                       "name"
 #define TERMINAL_PROFILE_PALETTE_KEY                    "palette"
+#define TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY "preserve-working-directory"
 #define TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY           "rewrap-on-resize"
 #define TERMINAL_PROFILE_SCROLLBACK_LINES_KEY           "scrollback-lines"
 #define TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY       "scrollback-unlimited"

@@ -1117,10 +1117,20 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                "active",
                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET |
                                G_SETTINGS_BIND_INVERT_BOOLEAN);
+
+  w = (GtkWidget *) gtk_builder_get_object (builder, "preserve-working-directory-combobox");
+  profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY, w,
+                                            "active",
+                                            G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                            (GSettingsBindGetMapping) string_to_enum,
+                                            (GSettingsBindSetMapping) enum_to_string,
+                                            terminal_preserve_working_directory_get_type, NULL);
+
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
                                gtk_builder_get_object (builder,
                                                        "use-custom-command-checkbutton"),
                                "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
                                gtk_builder_get_object (builder,
                                                        "use-theme-colors-checkbutton"),

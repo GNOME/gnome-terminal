@@ -53,6 +53,12 @@ typedef enum {
   TERMINAL_THEME_VARIANT_DARK   = 2
 } TerminalThemeVariant;
 
+typedef enum {
+  TERMINAL_PRESERVE_WORKING_DIRECTORY_NEVER  = 0,
+  TERMINAL_PRESERVE_WORKING_DIRECTORY_SAFE   = 1,
+  TERMINAL_PRESERVE_WORKING_DIRECTORY_ALWAYS = 2,
+} TerminalPreserveWorkingDirectory;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */
