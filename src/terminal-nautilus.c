@@ -231,7 +231,7 @@ ssh_argv (const char *uri,
   quoted_path = g_shell_quote (path);
 
   /* login shell */
-  argv[argc++] = g_strdup_printf ("cd \"%s\" && exec $SHELL -l", quoted_path);
+  argv[argc++] = g_strdup_printf ("cd %s && exec $SHELL -l", quoted_path);
 
   g_free (path);
   g_free (quoted_path);
