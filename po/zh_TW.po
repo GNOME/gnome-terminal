@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 3.1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2018-12-10 21:01+0000\n"
-"PO-Revision-Date: 2019-02-17 23:24+0800\n"
+"POT-Creation-Date: 2019-09-17 11:04+0000\n"
+"PO-Revision-Date: 2019-10-08 19:14+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 18.12.2\n"
+"X-Generator: Lokalize 19.08.1\n"
 
 #. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
 #: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
 #: ../src/terminal-accels.c:232 ../src/terminal.c:572
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1885 ../src/terminal-window.c:2156
-#: ../src/terminal-window.c:2446
+#: ../src/terminal-window.c:1895 ../src/terminal-window.c:2166
+#: ../src/terminal-window.c:2456
 msgid "Terminal"
 msgstr "終端機"
 
@@ -223,62 +223,78 @@ msgstr ""
 "值。"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:27
+msgid "Whether to perform bidirectional text rendering"
+msgstr "是否執行雙向文字繪製"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:28
+msgid "If true, perform bidirectional text rendering (“BiDi”)."
+msgstr "如果 true，則執行雙向文字繪製（“BiDi”）。"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:29
+msgid "Whether to perform Arabic shaping"
+msgstr "是否執行阿拉伯文字造形"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
+msgid "If true, shape Arabic text."
+msgstr "如果 true，則對阿拉伯文字造形。"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether to allow bold text"
 msgstr "可否使用粗體文字"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:28
+#: ../src/org.gnome.Terminal.gschema.xml.h:32
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "如設定為 true，則允許其它程式在終端機中顯示粗體字型。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Whether bold is also bright"
 msgstr "是否讓粗體也同樣變亮"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid ""
 "If true, setting bold on the first 8 colors also switches to their bright "
 "variants."
 msgstr "如果設定為 true，於首 8 個色彩設定粗體也切換為明亮變體。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Whether to ring the terminal bell"
 msgstr "是否要發出終端機鈴聲"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "List of ASCII punctuation characters that are not to be treated as part of a "
 "word when doing word-wise selection"
 msgstr "ASCII 標點字元清單，當進行文字選擇時不會被視為文字的一部分"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "Default number of columns"
 msgstr "預設的欄數"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
 msgstr "新建立的終端機視窗的欄數。如果沒啟用 use_custom_default_size 就沒有效果。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "Default number of rows"
 msgstr "預設的列數"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
 msgstr "新建立的終端機視窗的列數。如果沒啟用 use_custom_default_size 就沒有效果。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid "When to show the scrollbar"
 msgstr "何時會顯示捲動軸"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid "Number of lines to keep in scrollback"
 msgstr "終端機保留的列數"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -287,11 +303,11 @@ msgstr ""
 "終端機捲動時所保留的列數。您可以在終端機回捲指定的列數；其它的輸出資料將會被"
 "捨棄。如果 scrollback_unlimited 設定為 true，這個數值會被忽略。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "是否不限制終端機保留的列數"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -300,28 +316,28 @@ msgstr ""
 "如果設為 true，回捲的列將永遠不會被丟棄。回捲的歷史紀錄會暫時儲存在磁碟機上，"
 "因此當終端機有大量輸出內容時有可能會造成系统用盡磁碟機空間。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "按下任何鍵後，是否將終端機內容捲至底部"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "如設定為 true，按任何一個鍵都會自動將終端機內容捲動至底部。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "有新的輸出內容時，是否將終端機內容捲至底部"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr "如設定為 true，當終端機有任何新的內容輸出時都會將內容捲動至底部。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "What to do with the terminal when the child command exits"
 msgstr "當指令結束時如何處理終端機進程"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -329,11 +345,11 @@ msgstr ""
 "可接受的值為：「close」關閉終端機；「restart」重新執行指令；「hold」會讓其中"
 "沒有指令執行的終端機保持開啟。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "在終端機中啟動指令時是否讀入 shell 登入時的設定檔案"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -341,11 +357,11 @@ msgstr ""
 "如設定為 true，在終端機中執行指令時會先載入 shell 登入所需的設定檔。(即是說 "
 "argv[0] 前會加上減號。)"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "Whether to run a custom command instead of the shell"
 msgstr "啟動時是否執行自選的程式而不是 shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -353,11 +369,11 @@ msgstr ""
 "如設定為 true，啟動終端機時會執行 custom_command 設定所指定的指令，而不會執"
 "行 shell。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Whether to blink the cursor"
 msgstr "游標可否閃爍"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -365,11 +381,11 @@ msgstr ""
 "可用的數值有「system」為使用全域游標閃爍設定值，或者「on」、「off」可明確的設"
 "定模式。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "The cursor appearance"
 msgstr "游標外觀"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -377,192 +393,191 @@ msgstr ""
 "可能的值為「always」（總是）或是「never」（永不）允許閃爍的文字，或只在當終端"
 "器被「focused」（取得焦點）或「unfocused」（未取得焦點）"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Custom command to use instead of the shell"
 msgstr "啟動時不執行外表殼 shell，而是執行的自訂指令"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "如果 use_custom_command 選項為真，則會執行這個指令來代替外表殼。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Palette for terminal applications"
 msgstr "終端機的色盤"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "A Pango font name and size"
 msgstr "Pango 字型名稱與大小"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "The code sequence the Backspace key generates"
 msgstr "Backspace 鍵產生的代碼序列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "The code sequence the Delete key generates"
 msgstr "Delete 鍵產生的代碼序列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "在終端機元件是否使用佈景主題提供的色彩"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Whether to use the system monospace font"
 msgstr "是否使用系統等寬字型"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "是否以視窗大小重新調整終端機的內容"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Which encoding to use"
 msgstr "要使用哪種編碼"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr "當使用 UTF-8 編碼時不確定寬度字元為窄或寬"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to open a new tab"
 msgstr "用來開啟新分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to open a new window"
 msgstr "用來開啟新視窗的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "用來儲存目前分頁內容的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr "定義透過各種格式匯出目前分頁內容的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr "用來列印目前分頁內容至印表機或檔案的鍵盤快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to close a tab"
 msgstr "用來關閉分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to close a window"
 msgstr "用來關閉視窗的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to copy text"
 msgstr "用來複製文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "用來把文字複製為 HTML 的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to paste text"
 msgstr "用來貼上文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to select all text"
 msgstr "用來選擇全部文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "用來開啟偏好設定對話盒的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "用來切換全螢幕模式的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "用來切換選單列顯示的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "用來切換唯讀狀態的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "用來重設終端機的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "用來重設與清除終端機的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "用來開啟搜尋對話盒的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "用來尋找下一個搜尋字詞出現位置的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "用來尋找上一個搜尋字詞出現位置的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "用來清除尋找標明的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "用來切換到前一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "用來切換到後一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "用來將目前分頁左移的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "用來將目前分頁右移的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to detach current tab"
 msgstr "用來分離目前分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "用來切換到已編號分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "用來切換到最後一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
 msgid "Keyboard shortcut to launch help"
 msgstr "用來執行說明文件瀏覽器的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Keyboard shortcut to make font larger"
 msgstr "用來讓字型變大的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid "Keyboard shortcut to make font smaller"
 msgstr "讓字型變小的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "用來讓字型變成一般大小的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
-#| msgid "Keyboard shortcut to switch to the previous tab"
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid "Keyboard shortcut to show the primary menu"
 msgstr "用來顯示主選單的鍵盤快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Whether the menubar has access keys"
 msgstr "選單列有沒有快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -571,21 +586,21 @@ msgstr ""
 "是否使用 Alt + 字母來使用選單列中的項目。終端機中執行的某些程式可能需要使用這"
 "些按鍵組合，因此允許終端機不截取這類按鍵。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether shortcuts are enabled"
 msgstr "快捷鍵是否啟用"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
 msgstr "快捷鍵是否啟用。它們可能與終端機內執行的某些程式衝突，因此可以將它們關閉。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "選單列可否通過標準的 GTK 快捷鍵來使用"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -594,31 +609,31 @@ msgstr ""
 "在正常情況下按 F10 可使用選單列。該設定也可以通過 gtkrc 變更 (gtk-menu-bar-"
 "accel = \"whatever\")。本選項可以令正常的選單列快捷鍵失效。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "Whether the shell integration is enabled"
 msgstr "是否啟用 shell 整合"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "關閉終端機視窗時是否詢問以確認"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Whether to show the menubar in new windows"
 msgstr "新的視窗中是否顯示選單列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:113
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "是否以新的視窗或分頁開啟新的終端機"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:114
 msgid "When to show the tabs bar"
 msgstr "何時會顯示分頁列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:115
 msgid "The position of the tab bar"
 msgstr "分頁列位置"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:116
 msgid "Which theme variant to use"
 msgstr "要使用哪種布景主題變化"
 
@@ -1271,7 +1286,6 @@ msgid "Contents"
 msgstr "內容"
 
 #: ../src/terminal-accels.c:219
-#| msgid "Show _Menubar"
 msgid "Show Primary Menu"
 msgstr "顯示主選單"
 
@@ -1299,7 +1313,7 @@ msgstr "分頁"
 msgid "Help"
 msgstr "求助"
 
-#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:671
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:673
 msgid "Global"
 msgstr "全域"
 
@@ -1316,30 +1330,28 @@ msgstr "動作(_A)"
 msgid "Shortcut _Key"
 msgstr "快捷鍵(_K)"
 
-#: ../src/terminal-app.c:459
-#| msgid "New _Terminal"
+#: ../src/terminal-app.c:502
 msgid "New Terminal"
 msgstr "新增終端機"
 
-#: ../src/terminal-app.c:469 ../src/terminal-window.c:1796
+#: ../src/terminal-app.c:512 ../src/terminal-window.c:1796
 msgid "New _Terminal"
 msgstr "新增終端機(_T)"
 
-#: ../src/terminal-app.c:471 ../src/terminal-window.c:1805
+#: ../src/terminal-app.c:514 ../src/terminal-window.c:1805
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
-#: ../src/terminal-app.c:472 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-app.c:515 ../src/terminal-headermenu.ui.h:3
 #: ../src/terminal-window.c:1801
 msgid "New _Window"
 msgstr "新增視窗(_W)"
 
-#: ../src/terminal-app.c:521
+#: ../src/terminal-app.c:564
 msgid "Change _Profile"
 msgstr "變更設定檔(_P)"
 
-#: ../src/terminal-app.c:534
-#| msgid "Profiles"
+#: ../src/terminal-app.c:577
 msgid "_Profile"
 msgstr "設定檔(_P)"
 
@@ -1412,7 +1424,7 @@ msgstr "希伯來語"
 #: ../src/terminal-encoding.c:82 ../src/terminal-encoding.c:95
 #: ../src/terminal-encoding.c:105 ../src/terminal-encoding.c:136
 msgid "Arabic"
-msgstr "阿拉伯語"
+msgstr "阿拉伯文字"
 
 #: ../src/terminal-encoding.c:86
 msgid "Nordic"
@@ -1514,49 +1526,53 @@ msgstr "全螢幕(_F)"
 msgid "Read-_Only"
 msgstr "唯讀(_O)"
 
-#: ../src/terminal-headermenu.ui.h:6
-#| msgid "_Cancel"
+#: ../src/terminal-headermenu.ui.h:6 ../src/terminal-menubar.ui.in.h:31
+#: ../src/terminal-notebook-menu.ui.h:4
+msgid "Set _Title…"
+msgstr "設定標題(_T)…"
+
+#: ../src/terminal-headermenu.ui.h:7
 msgid "_Advanced"
 msgstr "進階(_A)"
 
-#: ../src/terminal-headermenu.ui.h:7 ../src/terminal-menubar.ui.in.h:34
+#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:34
 msgid "_Reset"
 msgstr "重設(_R)"
 
-#: ../src/terminal-headermenu.ui.h:8 ../src/terminal-menubar.ui.in.h:35
+#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:35
 msgid "Reset and C_lear"
 msgstr "重設並清除畫面(_L)"
 
-#: ../src/terminal-headermenu.ui.h:9 ../src/terminal-menubar.ui.in.h:36
+#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:36
 msgid "_1. 80×24"
 msgstr "_1. 80×24"
 
-#: ../src/terminal-headermenu.ui.h:10 ../src/terminal-menubar.ui.in.h:37
+#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:37
 msgid "_2. 80×43"
 msgstr "_2. 80×43"
 
-#: ../src/terminal-headermenu.ui.h:11 ../src/terminal-menubar.ui.in.h:38
+#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:38
 msgid "_3. 132×24"
 msgstr "_3. 132×24"
 
-#: ../src/terminal-headermenu.ui.h:12 ../src/terminal-menubar.ui.in.h:39
+#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:39
 msgid "_4. 132×43"
 msgstr "_4. 132×43"
 
-#: ../src/terminal-headermenu.ui.h:13 ../src/terminal-menubar.ui.in.h:51
+#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-menubar.ui.in.h:51
 msgid "_Inspector"
 msgstr "檢查器(_I)"
 
-#: ../src/terminal-headermenu.ui.h:14 ../src/terminal-screen.c:1354
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-screen.c:1361
 #: ../src/terminal-window.c:1789
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-menubar.ui.in.h:47
+#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:47
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/terminal-headermenu.ui.h:16 ../src/terminal-menubar.ui.in.h:50
+#: ../src/terminal-headermenu.ui.h:17 ../src/terminal-menubar.ui.in.h:50
 msgid "_About"
 msgstr "關於(_A)"
 
@@ -1648,10 +1664,6 @@ msgstr "清除標明(_C)"
 msgid "_Terminal"
 msgstr "終端機(_T)"
 
-#: ../src/terminal-menubar.ui.in.h:31 ../src/terminal-notebook-menu.ui.h:4
-msgid "Set _Title…"
-msgstr "設定標題(_T)…"
-
 #: ../src/terminal-menubar.ui.in.h:32
 msgid "Set _Character Encoding"
 msgstr "設定字元編碼(_C)"
@@ -1724,7 +1736,7 @@ msgstr "將終端機右移(_R)"
 msgid "_Detach Terminal"
 msgstr "脫離終端機(_D)"
 
-#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3246
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3256
 msgid "C_lose Terminal"
 msgstr "關閉終端機(_L)"
 
@@ -2049,33 +2061,33 @@ msgstr "一般"
 msgid "Shortcuts"
 msgstr "快捷鍵"
 
-#: ../src/terminal-prefs.c:683
+#: ../src/terminal-prefs.c:685
 msgid "Profiles"
 msgstr "設定檔"
 
-#: ../src/terminal-screen.c:1140
+#: ../src/terminal-screen.c:1147
 msgid "No command supplied nor shell requested"
 msgstr "不支援指令或 shell 要求"
 
-#: ../src/terminal-screen.c:1355 ../src/terminal-screen.c:1681
+#: ../src/terminal-screen.c:1362 ../src/terminal-screen.c:1688
 msgid "_Relaunch"
 msgstr "重新執行(_R)"
 
-#: ../src/terminal-screen.c:1358
+#: ../src/terminal-screen.c:1365
 msgid "There was an error creating the child process for this terminal"
 msgstr "產生該終端機的副進程時出現錯誤"
 
-#: ../src/terminal-screen.c:1685
+#: ../src/terminal-screen.c:1692
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子程序正常的以狀態 %d 結束。"
 
-#: ../src/terminal-screen.c:1688
+#: ../src/terminal-screen.c:1695
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "子程序被信號 %d 中止。"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1698
 msgid "The child process was aborted."
 msgstr "子程序已被中止。"
 
@@ -2209,27 +2221,27 @@ msgstr "設定檔(_R)"
 msgid "L_eave Full Screen"
 msgstr "離開全螢幕(_E)"
 
-#: ../src/terminal-window.c:3233
+#: ../src/terminal-window.c:3243
 msgid "Close this window?"
 msgstr "是否關閉這個視窗？"
 
-#: ../src/terminal-window.c:3233
+#: ../src/terminal-window.c:3243
 msgid "Close this terminal?"
 msgstr "是否關閉這個終端機？"
 
-#: ../src/terminal-window.c:3237
+#: ../src/terminal-window.c:3247
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在這個視窗的部分終端機還有程序在執行。關閉視窗會終結它們。"
 
-#: ../src/terminal-window.c:3241
+#: ../src/terminal-window.c:3251
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "在這個終端機還有程序在執行。關閉終端機會終結它們。"
 
-#: ../src/terminal-window.c:3246
+#: ../src/terminal-window.c:3256
 msgid "C_lose Window"
 msgstr "關閉視窗(_L)"
 
