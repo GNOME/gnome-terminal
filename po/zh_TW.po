@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 3.1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2019-09-17 11:04+0000\n"
-"PO-Revision-Date: 2019-10-08 19:14+0800\n"
+"POT-Creation-Date: 2019-10-08 11:32+0000\n"
+"PO-Revision-Date: 2019-10-08 19:35+0800\n"
 "Last-Translator: pan93412 <pan93412@gmail.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 19.08.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. VERSION=@VERSION@
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:147
-#: ../src/terminal-accels.c:232 ../src/terminal.c:572
+#: ../org.gnome.Terminal.desktop.in.in.h:2 ../src/server.c:150
+#: ../src/terminal-accels.c:232 ../src/terminal.c:570
 #: ../src/terminal-menubar.ui.in.h:30 ../src/terminal-tab-label.c:81
-#: ../src/terminal-window.c:1895 ../src/terminal-window.c:2166
-#: ../src/terminal-window.c:2456
+#: ../src/terminal-window.c:1879 ../src/terminal-window.c:2144
+#: ../src/terminal-window.c:2425
 msgid "Terminal"
 msgstr "終端機"
 
@@ -274,7 +274,8 @@ msgstr "預設的欄數"
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
-msgstr "新建立的終端機視窗的欄數。如果沒啟用 use_custom_default_size 就沒有效果。"
+msgstr ""
+"新建立的終端機視窗的欄數。如果沒啟用 use_custom_default_size 就沒有效果。"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "Default number of rows"
@@ -284,7 +285,8 @@ msgstr "預設的列數"
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
-msgstr "新建立的終端機視窗的列數。如果沒啟用 use_custom_default_size 就沒有效果。"
+msgstr ""
+"新建立的終端機視窗的列數。如果沒啟用 use_custom_default_size 就沒有效果。"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid "When to show the scrollbar"
@@ -358,10 +360,20 @@ msgstr ""
 "argv[0] 前會加上減號。)"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:54
+msgid "Whether to preserve the working directory when opening a new terminal"
+msgstr "是否要在開啟新終端機時保留工作目錄"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
+msgid ""
+"Controls when opening a new terminal from a previous one carries over the "
+"working directory of the opening terminal to the new one."
+msgstr ""
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Whether to run a custom command instead of the shell"
 msgstr "啟動時是否執行自選的程式而不是 shell"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -369,11 +381,11 @@ msgstr ""
 "如設定為 true，啟動終端機時會執行 custom_command 設定所指定的指令，而不會執"
 "行 shell。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Whether to blink the cursor"
 msgstr "游標可否閃爍"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -381,11 +393,11 @@ msgstr ""
 "可用的數值有「system」為使用全域游標閃爍設定值，或者「on」、「off」可明確的設"
 "定模式。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "The cursor appearance"
 msgstr "游標外觀"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -393,191 +405,191 @@ msgstr ""
 "可能的值為「always」（總是）或是「never」（永不）允許閃爍的文字，或只在當終端"
 "器被「focused」（取得焦點）或「unfocused」（未取得焦點）"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Custom command to use instead of the shell"
 msgstr "啟動時不執行外表殼 shell，而是執行的自訂指令"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "如果 use_custom_command 選項為真，則會執行這個指令來代替外表殼。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Palette for terminal applications"
 msgstr "終端機的色盤"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "A Pango font name and size"
 msgstr "Pango 字型名稱與大小"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "The code sequence the Backspace key generates"
 msgstr "Backspace 鍵產生的代碼序列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "The code sequence the Delete key generates"
 msgstr "Delete 鍵產生的代碼序列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "在終端機元件是否使用佈景主題提供的色彩"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Whether to use the system monospace font"
 msgstr "是否使用系統等寬字型"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "是否以視窗大小重新調整終端機的內容"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Which encoding to use"
 msgstr "要使用哪種編碼"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr "當使用 UTF-8 編碼時不確定寬度字元為窄或寬"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to open a new tab"
 msgstr "用來開啟新分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to open a new window"
 msgstr "用來開啟新視窗的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "用來儲存目前分頁內容的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr "定義透過各種格式匯出目前分頁內容的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr "用來列印目前分頁內容至印表機或檔案的鍵盤快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to close a tab"
 msgstr "用來關閉分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to close a window"
 msgstr "用來關閉視窗的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to copy text"
 msgstr "用來複製文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "用來把文字複製為 HTML 的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to paste text"
 msgstr "用來貼上文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to select all text"
 msgstr "用來選擇全部文字的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "用來開啟偏好設定對話盒的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "用來切換全螢幕模式的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "用來切換選單列顯示的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "用來切換唯讀狀態的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "用來重設終端機的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "用來重設與清除終端機的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "用來開啟搜尋對話盒的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "用來尋找下一個搜尋字詞出現位置的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "用來尋找上一個搜尋字詞出現位置的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "用來清除尋找標明的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "用來切換到前一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "用來切換到後一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:96
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "用來將目前分頁左移的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:97
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "用來將目前分頁右移的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:98
 msgid "Keyboard shortcut to detach current tab"
 msgstr "用來分離目前分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:99
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "用來切換到已編號分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:98
+#: ../src/org.gnome.Terminal.gschema.xml.h:100
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "用來切換到最後一個分頁的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:99
+#: ../src/org.gnome.Terminal.gschema.xml.h:101
 msgid "Keyboard shortcut to launch help"
 msgstr "用來執行說明文件瀏覽器的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:100
+#: ../src/org.gnome.Terminal.gschema.xml.h:102
 msgid "Keyboard shortcut to make font larger"
 msgstr "用來讓字型變大的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:101
+#: ../src/org.gnome.Terminal.gschema.xml.h:103
 msgid "Keyboard shortcut to make font smaller"
 msgstr "讓字型變小的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:102
+#: ../src/org.gnome.Terminal.gschema.xml.h:104
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "用來讓字型變成一般大小的快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:103
+#: ../src/org.gnome.Terminal.gschema.xml.h:105
 msgid "Keyboard shortcut to show the primary menu"
 msgstr "用來顯示主選單的鍵盤快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:104
+#: ../src/org.gnome.Terminal.gschema.xml.h:106
 msgid "Whether the menubar has access keys"
 msgstr "選單列有沒有快捷鍵"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:105
+#: ../src/org.gnome.Terminal.gschema.xml.h:107
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -586,21 +598,22 @@ msgstr ""
 "是否使用 Alt + 字母來使用選單列中的項目。終端機中執行的某些程式可能需要使用這"
 "些按鍵組合，因此允許終端機不截取這類按鍵。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:106
+#: ../src/org.gnome.Terminal.gschema.xml.h:108
 msgid "Whether shortcuts are enabled"
 msgstr "快捷鍵是否啟用"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:107
+#: ../src/org.gnome.Terminal.gschema.xml.h:109
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
-msgstr "快捷鍵是否啟用。它們可能與終端機內執行的某些程式衝突，因此可以將它們關閉。"
+msgstr ""
+"快捷鍵是否啟用。它們可能與終端機內執行的某些程式衝突，因此可以將它們關閉。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:108
+#: ../src/org.gnome.Terminal.gschema.xml.h:110
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "選單列可否通過標準的 GTK 快捷鍵來使用"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:109
+#: ../src/org.gnome.Terminal.gschema.xml.h:111
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -609,31 +622,31 @@ msgstr ""
 "在正常情況下按 F10 可使用選單列。該設定也可以通過 gtkrc 變更 (gtk-menu-bar-"
 "accel = \"whatever\")。本選項可以令正常的選單列快捷鍵失效。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:110
+#: ../src/org.gnome.Terminal.gschema.xml.h:112
 msgid "Whether the shell integration is enabled"
 msgstr "是否啟用 shell 整合"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:111
+#: ../src/org.gnome.Terminal.gschema.xml.h:113
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "關閉終端機視窗時是否詢問以確認"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:112
+#: ../src/org.gnome.Terminal.gschema.xml.h:114
 msgid "Whether to show the menubar in new windows"
 msgstr "新的視窗中是否顯示選單列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:113
+#: ../src/org.gnome.Terminal.gschema.xml.h:115
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "是否以新的視窗或分頁開啟新的終端機"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:114
+#: ../src/org.gnome.Terminal.gschema.xml.h:116
 msgid "When to show the tabs bar"
 msgstr "何時會顯示分頁列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:115
+#: ../src/org.gnome.Terminal.gschema.xml.h:117
 msgid "The position of the tab bar"
 msgstr "分頁列位置"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:116
+#: ../src/org.gnome.Terminal.gschema.xml.h:118
 msgid "Which theme variant to use"
 msgstr "要使用哪種布景主題變化"
 
@@ -702,7 +715,7 @@ msgstr "已啟用"
 msgid "Disabled"
 msgstr "已停用"
 
-#. Text blink mode
+#. Preserve working directory
 #: ../src/preferences.ui.h:25
 msgid "Never"
 msgstr "永不"
@@ -717,7 +730,7 @@ msgstr "當取得焦點時"
 msgid "When unfocused"
 msgstr "當未取得焦點時"
 
-#. Text blink mode
+#. Preserve working directory
 #: ../src/preferences.ui.h:31
 msgid "Always"
 msgstr "總是"
@@ -783,7 +796,7 @@ msgid "Solarized"
 msgstr "Solarized"
 
 #. This is the name of a colour scheme
-#: ../src/preferences.ui.h:57 ../src/profile-editor.c:606
+#: ../src/preferences.ui.h:57 ../src/profile-editor.c:598
 msgid "Custom"
 msgstr "自訂"
 
@@ -812,267 +825,276 @@ msgstr "跳脫序列"
 msgid "TTY Erase"
 msgstr "TTY 清除"
 
-#: ../src/preferences.ui.h:68
+#. Preserve working directory
+#: ../src/preferences.ui.h:69
+msgid "Shell only"
+msgstr "僅 Shell"
+
+#: ../src/preferences.ui.h:70
 msgid "_Show menubar by default in new terminals"
 msgstr "預設在新終端機顯示選單列(_S)"
 
-#: ../src/preferences.ui.h:69
+#: ../src/preferences.ui.h:71
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
 msgstr "啟用選單快捷鍵 (例如 Alt+F 可開啟《檔案》選單)(_E)"
 
-#: ../src/preferences.ui.h:70
+#: ../src/preferences.ui.h:72
 msgid "Enable the _menu accelerator key (F10 by default)"
 msgstr "啟用選單快捷鍵 (預設為 F10)(_M)"
 
-#: ../src/preferences.ui.h:71
+#: ../src/preferences.ui.h:73
 msgid "Theme _variant:"
 msgstr "布景主題變化(_V)："
 
-#: ../src/preferences.ui.h:72
+#: ../src/preferences.ui.h:74
 msgid "Open _new terminals in:"
 msgstr "開啟新終端機於(_N)："
 
-#: ../src/preferences.ui.h:73
+#: ../src/preferences.ui.h:75
 msgid "_Enable shortcuts"
 msgstr "啟用快捷鍵(_E)"
 
-#: ../src/preferences.ui.h:74
+#: ../src/preferences.ui.h:76
 msgid "Text Appearance"
 msgstr "文字外觀"
 
-#: ../src/preferences.ui.h:75
+#: ../src/preferences.ui.h:77
 msgid "Initial terminal si_ze:"
 msgstr "初始終端機大小(_Z)："
 
-#: ../src/preferences.ui.h:76
+#: ../src/preferences.ui.h:78
 msgid "columns"
 msgstr "欄"
 
-#: ../src/preferences.ui.h:77
+#: ../src/preferences.ui.h:79
 msgid "rows"
 msgstr "列"
 
-#: ../src/preferences.ui.h:78
+#: ../src/preferences.ui.h:80
 msgid "Rese_t"
 msgstr "重設(_T)"
 
-#: ../src/preferences.ui.h:79
+#: ../src/preferences.ui.h:81
 msgid "Custom _font:"
 msgstr "自訂字型(_F)："
 
-#: ../src/preferences.ui.h:80
+#: ../src/preferences.ui.h:82
 msgid "Choose A Terminal Font"
 msgstr "請選取終端機字型"
 
-#: ../src/preferences.ui.h:81
+#: ../src/preferences.ui.h:83
 msgid "Cell spaci_ng:"
 msgstr "單元格間距(_N)："
 
-#: ../src/preferences.ui.h:82
+#: ../src/preferences.ui.h:84
 msgid "Allow b_linking text:"
 msgstr "允許閃爍文字(_L)："
 
-#: ../src/preferences.ui.h:83
+#: ../src/preferences.ui.h:85
 msgid "Cursor"
 msgstr "游標"
 
-#: ../src/preferences.ui.h:84
+#: ../src/preferences.ui.h:86
 msgid "Cursor _shape:"
 msgstr "游標形狀(_S)："
 
-#: ../src/preferences.ui.h:85
+#: ../src/preferences.ui.h:87
 msgid "Cursor blin_king:"
 msgstr "游標閃爍(_K)："
 
-#: ../src/preferences.ui.h:86
+#: ../src/preferences.ui.h:88
 msgid "Sound"
 msgstr "聲音"
 
-#: ../src/preferences.ui.h:87
+#: ../src/preferences.ui.h:89
 msgid "Terminal _bell"
 msgstr "終端機會發出響聲(_B)"
 
-#: ../src/preferences.ui.h:88
+#: ../src/preferences.ui.h:90
 msgid "Profile ID:"
 msgstr "設定檔 ID："
 
-#: ../src/preferences.ui.h:89
+#: ../src/preferences.ui.h:91
 msgid "Text"
 msgstr "文字"
 
-#: ../src/preferences.ui.h:90
+#: ../src/preferences.ui.h:92
 msgid "Text and Background Color"
 msgstr "文字與背景顏色"
 
-#: ../src/preferences.ui.h:91
+#: ../src/preferences.ui.h:93
 msgid "_Use colors from system theme"
 msgstr "使用系統佈景主題指定的色彩(_U)"
 
-#: ../src/preferences.ui.h:92
+#: ../src/preferences.ui.h:94
 msgid "Built-in sche_mes:"
 msgstr "內建配色方案(_M)"
 
-#: ../src/preferences.ui.h:93
+#: ../src/preferences.ui.h:95
 msgid "Background"
 msgstr "背景"
 
-#: ../src/preferences.ui.h:94
+#: ../src/preferences.ui.h:96
 msgid "_Default color:"
 msgstr "預設顏色(_D)："
 
-#: ../src/preferences.ui.h:95
+#: ../src/preferences.ui.h:97
 msgid "Choose Terminal Text Color"
 msgstr "請選取終端機文字顏色"
 
-#: ../src/preferences.ui.h:96
+#: ../src/preferences.ui.h:98
 msgid "Choose Terminal Background Color"
 msgstr "請選取終端機背景顏色"
 
-#: ../src/preferences.ui.h:97
+#: ../src/preferences.ui.h:99
 msgid "Bo_ld color:"
 msgstr "粗體顏色(_L)："
 
-#: ../src/preferences.ui.h:98
+#: ../src/preferences.ui.h:100
 msgid "Choose Terminal Bold Text Color"
 msgstr "選擇終端機粗體文字的顏色"
 
-#: ../src/preferences.ui.h:99
+#: ../src/preferences.ui.h:101
 msgid "_Underline color:"
 msgstr "底線顏色(_U)："
 
-#: ../src/preferences.ui.h:100
+#: ../src/preferences.ui.h:102
 msgid "Choose Terminal Underlined Text Color"
 msgstr "選擇終端機加底線文字的顏色"
 
-#: ../src/preferences.ui.h:101
+#: ../src/preferences.ui.h:103
 msgid "Cu_rsor color:"
 msgstr "游標顏色(_R)："
 
-#: ../src/preferences.ui.h:102
+#: ../src/preferences.ui.h:104
 msgid "Choose Terminal Cursor Foreground Color"
 msgstr "選擇終端機游標前景的顏色"
 
-#: ../src/preferences.ui.h:103
+#: ../src/preferences.ui.h:105
 msgid "Choose Terminal Cursor Background Color"
 msgstr "選擇終端機游標背景的顏色"
 
-#: ../src/preferences.ui.h:104
+#: ../src/preferences.ui.h:106
 msgid "_Highlight color:"
 msgstr "標明色彩(_H)："
 
-#: ../src/preferences.ui.h:105
+#: ../src/preferences.ui.h:107
 msgid "Choose Terminal Highlight Foreground Color"
 msgstr "選擇終端機標明用的前景色彩"
 
-#: ../src/preferences.ui.h:106
+#: ../src/preferences.ui.h:108
 msgid "Choose Terminal Highlight Background Color"
 msgstr "選擇終端機標明用的背景色彩"
 
-#: ../src/preferences.ui.h:107
+#: ../src/preferences.ui.h:109
 msgid "Palette"
 msgstr "色盤"
 
-#: ../src/preferences.ui.h:108
+#: ../src/preferences.ui.h:110
 msgid "Built-in _schemes:"
 msgstr "內建配色方案(_S)："
 
-#: ../src/preferences.ui.h:109
+#: ../src/preferences.ui.h:111
 msgid "Color p_alette:"
 msgstr "調色盤(_A)："
 
-#: ../src/preferences.ui.h:110
+#: ../src/preferences.ui.h:112
 msgid "Show _bold text in bright colors"
 msgstr "以鮮艷的顏色顯示粗體文字(_B)"
 
-#: ../src/preferences.ui.h:111
+#: ../src/preferences.ui.h:113
 msgid "Colors"
 msgstr "顏色"
 
-#: ../src/preferences.ui.h:112
+#: ../src/preferences.ui.h:114
 msgid "_Show scrollbar"
 msgstr "顯示捲動軸(_S)"
 
-#: ../src/preferences.ui.h:113
+#: ../src/preferences.ui.h:115
 msgid "Scroll on _output"
 msgstr "輸出時捲動(_O)"
 
-#: ../src/preferences.ui.h:114
+#: ../src/preferences.ui.h:116
 msgid "Scroll on _keystroke"
 msgstr "按鍵時還原至原來位置(_K)"
 
-#: ../src/preferences.ui.h:115
+#: ../src/preferences.ui.h:117
 msgid "_Limit scrollback to:"
 msgstr "限制捲回到(_L)："
 
-#: ../src/preferences.ui.h:116
+#: ../src/preferences.ui.h:118
 msgid "lines"
 msgstr "列"
 
-#: ../src/preferences.ui.h:117
+#: ../src/preferences.ui.h:119
 msgid "Scrolling"
 msgstr "捲動方式"
 
-#: ../src/preferences.ui.h:118
+#: ../src/preferences.ui.h:120
 msgid "_Run command as a login shell"
 msgstr "執行指令時讀入 shell 登入的設定檔案(_R)"
 
-#: ../src/preferences.ui.h:119
+#: ../src/preferences.ui.h:121
 msgid "Ru_n a custom command instead of my shell"
 msgstr "啟動時執行自訂的指令而不是執行我的 shell(_N)"
 
-#: ../src/preferences.ui.h:120
+#: ../src/preferences.ui.h:122
 msgid "Custom co_mmand:"
 msgstr "自訂指令(_M)："
 
-#: ../src/preferences.ui.h:121
+#: ../src/preferences.ui.h:123
+msgid "_Preserve working directory:"
+msgstr "保留工作目錄(_P)："
+
+#: ../src/preferences.ui.h:124
 msgid "When command _exits:"
 msgstr "當完成執行指令後(_E)："
 
-#: ../src/preferences.ui.h:122
+#: ../src/preferences.ui.h:125
 msgid "Command"
 msgstr "指令"
 
-#: ../src/preferences.ui.h:123
+#: ../src/preferences.ui.h:126
 msgid "_Backspace key generates:"
 msgstr "_Backspace 鍵會產生："
 
-#: ../src/preferences.ui.h:124
+#: ../src/preferences.ui.h:127
 msgid "_Delete key generates:"
 msgstr "_Delete 鍵會產生："
 
-#: ../src/preferences.ui.h:125
+#: ../src/preferences.ui.h:128
 msgid "_Encoding:"
 msgstr "編碼(_E)："
 
-#: ../src/preferences.ui.h:126
+#: ../src/preferences.ui.h:129
 msgid "Ambiguous-_width characters:"
 msgstr "不確定寬度字元(_W)："
 
-#: ../src/preferences.ui.h:127
+#: ../src/preferences.ui.h:130
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "將有關相容性的選項重設為預設值(_R)"
 
-#: ../src/preferences.ui.h:128
+#: ../src/preferences.ui.h:131
 msgid "Compatibility"
 msgstr "相容性"
 
-#: ../src/preferences.ui.h:129
+#: ../src/preferences.ui.h:132
 msgid "Clone…"
 msgstr "拓製…"
 
-#: ../src/preferences.ui.h:130
+#: ../src/preferences.ui.h:133
 msgid "Rename…"
 msgstr "改名…"
 
-#: ../src/preferences.ui.h:131
+#: ../src/preferences.ui.h:134
 msgid "Delete…"
 msgstr "刪除…"
 
-#: ../src/preferences.ui.h:132
+#: ../src/preferences.ui.h:135
 msgid "Set as default"
 msgstr "設為預設值"
 
-#: ../src/preferences.ui.h:133
+#: ../src/preferences.ui.h:136
 msgid "Cancel"
 msgstr "取消"
 
@@ -1122,21 +1144,21 @@ msgid "Error parsing command: %s"
 msgstr "解析指令時發生錯誤： %s"
 
 #. Translators: Appears as: [numeric entry] × width
-#: ../src/profile-editor.c:828
+#: ../src/profile-editor.c:775
 msgid "width"
 msgstr "寬度"
 
 #. Translators: Appears as: [numeric entry] × height
-#: ../src/profile-editor.c:833
+#: ../src/profile-editor.c:780
 msgid "height"
 msgstr "高度"
 
-#: ../src/profile-editor.c:885
+#: ../src/profile-editor.c:828
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "選取調色盤色彩 %u"
 
-#: ../src/profile-editor.c:889
+#: ../src/profile-editor.c:832
 #, c-format
 msgid "Palette entry %u"
 msgstr "色盤顏色 %u"
@@ -1313,49 +1335,49 @@ msgstr "分頁"
 msgid "Help"
 msgstr "求助"
 
-#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:673
+#: ../src/terminal-accels.c:235 ../src/terminal-prefs.c:646
 msgid "Global"
 msgstr "全域"
 
-#: ../src/terminal-accels.c:362
+#: ../src/terminal-accels.c:360
 #, c-format
 msgid "Switch to Tab %u"
 msgstr "切換到分頁 %u"
 
-#: ../src/terminal-accels.c:552
+#: ../src/terminal-accels.c:550
 msgid "_Action"
 msgstr "動作(_A)"
 
-#: ../src/terminal-accels.c:571
+#: ../src/terminal-accels.c:569
 msgid "Shortcut _Key"
 msgstr "快捷鍵(_K)"
 
-#: ../src/terminal-app.c:502
+#: ../src/terminal-app.c:500
 msgid "New Terminal"
 msgstr "新增終端機"
 
-#: ../src/terminal-app.c:512 ../src/terminal-window.c:1796
+#: ../src/terminal-app.c:510 ../src/terminal-window.c:1780
 msgid "New _Terminal"
 msgstr "新增終端機(_T)"
 
-#: ../src/terminal-app.c:514 ../src/terminal-window.c:1805
+#: ../src/terminal-app.c:512 ../src/terminal-window.c:1789
 msgid "New _Tab"
 msgstr "新增分頁(_T)"
 
-#: ../src/terminal-app.c:515 ../src/terminal-headermenu.ui.h:3
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-app.c:513 ../src/terminal-headermenu.ui.h:3
+#: ../src/terminal-window.c:1785
 msgid "New _Window"
 msgstr "新增視窗(_W)"
 
-#: ../src/terminal-app.c:564
+#: ../src/terminal-app.c:562
 msgid "Change _Profile"
 msgstr "變更設定檔(_P)"
 
-#: ../src/terminal-app.c:577
+#: ../src/terminal-app.c:575
 msgid "_Profile"
 msgstr "設定檔(_P)"
 
-#: ../src/terminal.c:568
+#: ../src/terminal.c:566
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "分析引數失敗：%s\n"
@@ -1522,7 +1544,7 @@ msgid "_Full Screen"
 msgstr "全螢幕(_F)"
 
 #: ../src/terminal-headermenu.ui.h:5 ../src/terminal-menubar.ui.in.h:33
-#: ../src/terminal-window.c:1777
+#: ../src/terminal-window.c:1761
 msgid "Read-_Only"
 msgstr "唯讀(_O)"
 
@@ -1563,8 +1585,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "檢查器(_I)"
 
-#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-screen.c:1361
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-headermenu.ui.h:15 ../src/terminal-screen.c:1395
+#: ../src/terminal-window.c:1773
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
@@ -1604,19 +1626,19 @@ msgstr "關閉視窗(_C)"
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1767
+#: ../src/terminal-menubar.ui.in.h:10 ../src/terminal-window.c:1751
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1768
+#: ../src/terminal-menubar.ui.in.h:11 ../src/terminal-window.c:1752
 msgid "Copy as _HTML"
 msgstr "複製為 _HTML"
 
-#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1769
+#: ../src/terminal-menubar.ui.in.h:12 ../src/terminal-window.c:1753
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1771
+#: ../src/terminal-menubar.ui.in.h:13 ../src/terminal-window.c:1755
 msgid "Paste as _Filenames"
 msgstr "以檔案名稱貼上(_F)"
 
@@ -1632,7 +1654,7 @@ msgstr "偏好設定(_R)"
 msgid "_View"
 msgstr "檢視(_V)"
 
-#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1817
+#: ../src/terminal-menubar.ui.in.h:18 ../src/terminal-window.c:1801
 msgid "Show _Menubar"
 msgstr "顯示選單列(_M)"
 
@@ -1696,31 +1718,31 @@ msgstr "分離分頁(_D)"
 msgid "_Contents"
 msgstr "內容(_C)"
 
-#: ../src/terminal-nautilus.c:534
+#: ../src/terminal-nautilus.c:533
 msgid "Open in _Remote Terminal"
 msgstr "在遠端終端機開啟(_R)"
 
-#: ../src/terminal-nautilus.c:536
+#: ../src/terminal-nautilus.c:535
 msgid "Open in _Local Terminal"
 msgstr "在本地端終端機開啟(_L)"
 
-#: ../src/terminal-nautilus.c:540 ../src/terminal-nautilus.c:551
+#: ../src/terminal-nautilus.c:539 ../src/terminal-nautilus.c:550
 msgid "Open the currently selected folder in a terminal"
 msgstr "在終端機中開啟目前選取的資料夾"
 
-#: ../src/terminal-nautilus.c:542 ../src/terminal-nautilus.c:553
+#: ../src/terminal-nautilus.c:541 ../src/terminal-nautilus.c:552
 msgid "Open the currently open folder in a terminal"
 msgstr "在終端機中開啟目前開啟的資料夾"
 
-#: ../src/terminal-nautilus.c:548
+#: ../src/terminal-nautilus.c:547
 msgid "Open in T_erminal"
 msgstr "以終端機開啟(_E)"
 
-#: ../src/terminal-nautilus.c:558
+#: ../src/terminal-nautilus.c:557
 msgid "Open T_erminal"
 msgstr "開啟終端機(_E)"
 
-#: ../src/terminal-nautilus.c:559
+#: ../src/terminal-nautilus.c:558
 msgid "Open a terminal"
 msgstr "開啟終端機"
 
@@ -1736,11 +1758,11 @@ msgstr "將終端機右移(_R)"
 msgid "_Detach Terminal"
 msgstr "脫離終端機(_D)"
 
-#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3256
+#: ../src/terminal-notebook-menu.ui.h:5 ../src/terminal-window.c:3225
 msgid "C_lose Terminal"
 msgstr "關閉終端機(_L)"
 
-#: ../src/terminal-options.c:281
+#: ../src/terminal-options.c:277
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1748,230 +1770,231 @@ msgid ""
 msgstr "選項「%s」已廢棄，並且在往後的 gnome-terminal 可能會被移除。"
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: ../src/terminal-options.c:292
+#: ../src/terminal-options.c:288
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
 "it."
 msgstr "使用「%s」終止選項並在它後面放上要執行的命令列。"
 
-#: ../src/terminal-options.c:302 ../src/terminal-options.c:315
+#: ../src/terminal-options.c:298 ../src/terminal-options.c:311
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "選項「%s」在這個版本的 gnome-terminal 已不再支援。"
 
-#: ../src/terminal-options.c:387
+#: ../src/terminal-options.c:383
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "「%s」選項後的引數不是一個有效的指令：%s"
 
-#: ../src/terminal-options.c:560
+#: ../src/terminal-options.c:556
 msgid "Two roles given for one window"
 msgstr "同一個視窗指定了兩次視窗識別碼"
 
-#: ../src/terminal-options.c:581 ../src/terminal-options.c:614
+#: ../src/terminal-options.c:577 ../src/terminal-options.c:610
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "「%s」選項會形成兩個同樣的視窗\n"
 
-#: ../src/terminal-options.c:833
+#: ../src/terminal-options.c:829
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "不能通過 FD %d 兩次"
 
-#: ../src/terminal-options.c:895
+#: ../src/terminal-options.c:891
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "「%s」是無效的縮放倍率"
 
-#: ../src/terminal-options.c:902
+#: ../src/terminal-options.c:898
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "縮放倍率「%g」太小，改為使用 %g\n"
 
-#: ../src/terminal-options.c:910
+#: ../src/terminal-options.c:906
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "縮放倍率「%g」太大，改為使用 %g\n"
 
 # "on the rest of command line" is not significant here for "-x" option
 # and is difficult to translate -- Abel
-#: ../src/terminal-options.c:948
+#: ../src/terminal-options.c:944
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
 "command line"
 msgstr "「%s」選項後需要指定準備執行的指令"
 
-#: ../src/terminal-options.c:1101
+#: ../src/terminal-options.c:1097
 msgid "Can only use --wait once"
 msgstr "只能使用 --wait 參數一次"
 
-#: ../src/terminal-options.c:1137
+#: ../src/terminal-options.c:1133
 msgid "Not a valid terminal config file."
 msgstr "並非有效的終端機設定檔。"
 
-#: ../src/terminal-options.c:1150
+#: ../src/terminal-options.c:1146
 msgid "Incompatible terminal config file version."
 msgstr "不相容的終端機設定檔版本。"
 
-#: ../src/terminal-options.c:1304
+#: ../src/terminal-options.c:1300
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr "不向 activation nameserver 登記，因此不會使用現有終端機的資源"
 
-#: ../src/terminal-options.c:1313
+#: ../src/terminal-options.c:1309
 msgid "Load a terminal configuration file"
 msgstr "載入終端機組態檔"
 
-#: ../src/terminal-options.c:1314
+#: ../src/terminal-options.c:1310
 msgid "FILE"
 msgstr "檔案"
 
-#: ../src/terminal-options.c:1330
+#: ../src/terminal-options.c:1326
 msgid "Show preferences window"
 msgstr "顯示偏好設定視窗"
 
-#: ../src/terminal-options.c:1339
+#: ../src/terminal-options.c:1335
 msgid "Print environment variables to interact with the terminal"
 msgstr "輸出環境變數以便與終端器互動"
 
-#: ../src/terminal-options.c:1357
+#: ../src/terminal-options.c:1353
 msgid "Increase diagnostic verbosity"
 msgstr "增加診斷詳細程度"
 
-#: ../src/terminal-options.c:1366
+#: ../src/terminal-options.c:1362
 msgid "Suppress output"
 msgstr "停止輸出"
 
-#: ../src/terminal-options.c:1379
+#: ../src/terminal-options.c:1375
 msgid "Open a new window containing a tab with the default profile"
 msgstr "開啟新的終端機視窗，當中含有以預設設定檔開啟的分頁"
 
-#: ../src/terminal-options.c:1388
+#: ../src/terminal-options.c:1384
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "在最後開啟的視窗中以預設之設定檔開啟新的終端機分頁"
 
-#: ../src/terminal-options.c:1401
+#: ../src/terminal-options.c:1397
 msgid "Turn on the menubar"
 msgstr "開啟選單列"
 
-#: ../src/terminal-options.c:1410
+#: ../src/terminal-options.c:1406
 msgid "Turn off the menubar"
 msgstr "關閉選單列"
 
-#: ../src/terminal-options.c:1419
+#: ../src/terminal-options.c:1415
 msgid "Maximize the window"
 msgstr "最大化視窗"
 
-#: ../src/terminal-options.c:1428
+#: ../src/terminal-options.c:1424
 msgid "Full-screen the window"
 msgstr "將視窗轉為全螢幕"
 
-#: ../src/terminal-options.c:1437
+#: ../src/terminal-options.c:1433
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr "設定視窗的大小；例如：80x24、或 80x24+200+200 (列x欄+X+Y)"
 
-#: ../src/terminal-options.c:1438
+#: ../src/terminal-options.c:1434
 msgid "GEOMETRY"
 msgstr "位置大小"
 
-#: ../src/terminal-options.c:1446
+#: ../src/terminal-options.c:1442
 msgid "Set the window role"
 msgstr "設定視窗角色"
 
-#: ../src/terminal-options.c:1447
+#: ../src/terminal-options.c:1443
 msgid "ROLE"
 msgstr "視窗識別碼"
 
-#: ../src/terminal-options.c:1455
+#: ../src/terminal-options.c:1451
 msgid "Set the last specified tab as the active one in its window"
 msgstr "在終端機視窗中，以最後一個分頁作為使用中的分頁"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1464
 msgid "Execute the argument to this option inside the terminal"
 msgstr "在終端機中執行這個選項的引數"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1473
 msgid "Use the given profile instead of the default profile"
 msgstr "使用指定的設定檔代替預設的設定檔"
 
-#: ../src/terminal-options.c:1478
+#: ../src/terminal-options.c:1474
 msgid "PROFILE-NAME"
 msgstr "設定檔名稱"
 
-#: ../src/terminal-options.c:1486
+#: ../src/terminal-options.c:1482
 msgid "Set the initial terminal title"
 msgstr "設定初始終端機標題"
 
-#: ../src/terminal-options.c:1487
+#: ../src/terminal-options.c:1483
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/terminal-options.c:1495
+#: ../src/terminal-options.c:1491
 msgid "Set the working directory"
 msgstr "設定工作目錄"
 
-#: ../src/terminal-options.c:1496
+#: ../src/terminal-options.c:1492
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/terminal-options.c:1504
+#: ../src/terminal-options.c:1500
 msgid "Wait until the child exits"
 msgstr "請等到子項結束"
 
-#: ../src/terminal-options.c:1513
+#: ../src/terminal-options.c:1509
 msgid "Forward file descriptor"
 msgstr "轉到檔案描述狀態"
 
 #. FD = file descriptor
-#: ../src/terminal-options.c:1515
+#: ../src/terminal-options.c:1511
 msgid "FD"
 msgstr "FD"
 
-#: ../src/terminal-options.c:1523
+#: ../src/terminal-options.c:1519
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "設定終端機的縮放倍率 (1.0 = 原來尺寸)"
 
-#: ../src/terminal-options.c:1524
+#: ../src/terminal-options.c:1520
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ../src/terminal-options.c:1611
+#: ../src/terminal-options.c:1607
 msgid "COMMAND"
 msgstr "COMMAND"
 
-#: ../src/terminal-options.c:1619
+#: ../src/terminal-options.c:1615
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME 終端機模擬器"
 
-#: ../src/terminal-options.c:1620
+#: ../src/terminal-options.c:1616
 msgid "Show GNOME Terminal options"
 msgstr "顯示 GNOME 終端機選項"
 
-#: ../src/terminal-options.c:1630
+#: ../src/terminal-options.c:1626
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr "用來開啟新視窗或終端機分頁的選項；可以指定多個："
 
-#: ../src/terminal-options.c:1631
+#: ../src/terminal-options.c:1627
 msgid "Show terminal options"
 msgstr "顯示終端機選項"
 
-#: ../src/terminal-options.c:1639
+#: ../src/terminal-options.c:1635
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
-msgstr "視窗選項；如果用在第一個 --window 或 --tab 之前，就會成為所有視窗的預設值："
+msgstr ""
+"視窗選項；如果用在第一個 --window 或 --tab 之前，就會成為所有視窗的預設值："
 
-#: ../src/terminal-options.c:1640
+#: ../src/terminal-options.c:1636
 msgid "Show per-window options"
 msgstr "顯示各別視窗選項"
 
-#: ../src/terminal-options.c:1648
+#: ../src/terminal-options.c:1644
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1979,7 +2002,7 @@ msgstr ""
 "終端機選項；如果用在第一個 --window 或 --tab 之前，就會成為所有終端機的預設"
 "值："
 
-#: ../src/terminal-options.c:1649
+#: ../src/terminal-options.c:1645
 msgid "Show per-terminal options"
 msgstr "顯示各別終端機選項"
 
@@ -1993,101 +2016,101 @@ msgstr "設定檔「%s」"
 msgid "Preferences – %s"
 msgstr "偏好設定 – %s"
 
-#: ../src/terminal-prefs.c:377
+#: ../src/terminal-prefs.c:369
 msgid "New Profile"
 msgstr "新增設定檔"
 
-#: ../src/terminal-prefs.c:378
+#: ../src/terminal-prefs.c:370
 msgid "Enter name for new profile with default settings:"
 msgstr "輸入使用預設設定值建立的新設定檔名稱："
 
-#: ../src/terminal-prefs.c:380
+#: ../src/terminal-prefs.c:372
 msgid "Create"
 msgstr "建立"
 
-#: ../src/terminal-prefs.c:392
+#: ../src/terminal-prefs.c:384
 #, c-format
 msgid "Enter name for new profile based on “%s”:"
 msgstr "輸入基於「%s」建立的新設定檔名稱："
 
-#: ../src/terminal-prefs.c:393
+#: ../src/terminal-prefs.c:385
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (複製)"
 
-#: ../src/terminal-prefs.c:396
+#: ../src/terminal-prefs.c:388
 msgid "Clone Profile"
 msgstr "拓製設定檔"
 
-#: ../src/terminal-prefs.c:399
+#: ../src/terminal-prefs.c:391
 msgid "Clone"
 msgstr "拓製"
 
-#: ../src/terminal-prefs.c:414
+#: ../src/terminal-prefs.c:406
 #, c-format
 msgid "Enter new name for profile “%s”:"
 msgstr "輸入新設定檔「%s」的名稱："
 
-#: ../src/terminal-prefs.c:417
+#: ../src/terminal-prefs.c:409
 msgid "Rename Profile"
 msgstr "重新命名設定檔"
 
-#: ../src/terminal-prefs.c:420
+#: ../src/terminal-prefs.c:412
 msgid "Rename"
 msgstr "重新命名"
 
-#: ../src/terminal-prefs.c:435
+#: ../src/terminal-prefs.c:427
 #, c-format
 msgid "Really delete profile “%s”?"
 msgstr "真的要刪除設定檔「%s」？"
 
-#: ../src/terminal-prefs.c:438
+#: ../src/terminal-prefs.c:430
 msgid "Delete Profile"
 msgstr "刪除設定檔"
 
-#: ../src/terminal-prefs.c:441
+#: ../src/terminal-prefs.c:433
 msgid "Delete"
 msgstr "刪除"
 
-#: ../src/terminal-prefs.c:519
+#: ../src/terminal-prefs.c:492
 msgid "This is the default profile"
 msgstr "這是預設的設定檔"
 
-#: ../src/terminal-prefs.c:543
+#: ../src/terminal-prefs.c:516
 msgid "General"
 msgstr "一般"
 
-#: ../src/terminal-prefs.c:548
+#: ../src/terminal-prefs.c:521
 msgid "Shortcuts"
 msgstr "快捷鍵"
 
-#: ../src/terminal-prefs.c:685
+#: ../src/terminal-prefs.c:658
 msgid "Profiles"
 msgstr "設定檔"
 
-#: ../src/terminal-screen.c:1147
+#: ../src/terminal-screen.c:1180
 msgid "No command supplied nor shell requested"
 msgstr "不支援指令或 shell 要求"
 
-#: ../src/terminal-screen.c:1362 ../src/terminal-screen.c:1688
+#: ../src/terminal-screen.c:1396 ../src/terminal-screen.c:1721
 msgid "_Relaunch"
 msgstr "重新執行(_R)"
 
-#: ../src/terminal-screen.c:1365
+#: ../src/terminal-screen.c:1399
 msgid "There was an error creating the child process for this terminal"
 msgstr "產生該終端機的副進程時出現錯誤"
 
-#: ../src/terminal-screen.c:1692
+#: ../src/terminal-screen.c:1725
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子程序正常的以狀態 %d 結束。"
 
-#: ../src/terminal-screen.c:1695
+#: ../src/terminal-screen.c:1728
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "子程序被信號 %d 中止。"
 
-#: ../src/terminal-screen.c:1698
+#: ../src/terminal-screen.c:1731
 msgid "The child process was aborted."
 msgstr "子程序已被中止。"
 
@@ -2161,87 +2184,87 @@ msgstr ""
 "您應該已經和程式一起收到一份 GNU 通用公共許可證的副本。如果還沒有，請參訪 "
 "<http//www.gnu.org/licenses/>。"
 
-#: ../src/terminal-util.c:1149
+#: ../src/terminal-util.c:1157
 msgid "“file” scheme with remote hostname not supported"
 msgstr "尚未支援含遠端主機名稱的「file」網址寫法"
 
-#: ../src/terminal-window.c:457
+#: ../src/terminal-window.c:453
 msgid "Could not save contents"
 msgstr "無法儲存內容"
 
-#: ../src/terminal-window.c:477
+#: ../src/terminal-window.c:473
 msgid "Save as…"
 msgstr "儲存為(_A)…"
 
-#: ../src/terminal-window.c:480
+#: ../src/terminal-window.c:476
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: ../src/terminal-window.c:481
+#: ../src/terminal-window.c:477
 msgid "_Save"
 msgstr "儲存(_S)"
 
-#: ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:1708
 msgid "Open _Hyperlink"
 msgstr "開啟超連結(_H)"
 
-#: ../src/terminal-window.c:1725
+#: ../src/terminal-window.c:1709
 msgid "Copy Hyperlink _Address"
 msgstr "複製超連結位址(_C)"
 
-#: ../src/terminal-window.c:1735
+#: ../src/terminal-window.c:1719
 msgid "Send Mail _To…"
 msgstr "寄送電子郵件至(_T)…"
 
-#: ../src/terminal-window.c:1736
+#: ../src/terminal-window.c:1720
 msgid "Copy Mail _Address"
 msgstr "複製電子郵件位址(_A)"
 
-#: ../src/terminal-window.c:1739
+#: ../src/terminal-window.c:1723
 msgid "Call _To…"
 msgstr "呼叫到(_T)…"
 
-#: ../src/terminal-window.c:1740
+#: ../src/terminal-window.c:1724
 msgid "Copy Call _Address "
 msgstr "複製呼叫位址(_A) "
 
-#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:1729
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
-#: ../src/terminal-window.c:1746
+#: ../src/terminal-window.c:1730
 msgid "Copy _Link"
 msgstr "複製連結(_L)"
 
-#: ../src/terminal-window.c:1784
+#: ../src/terminal-window.c:1768
 msgid "P_rofiles"
 msgstr "設定檔(_R)"
 
-#: ../src/terminal-window.c:1819
+#: ../src/terminal-window.c:1803
 msgid "L_eave Full Screen"
 msgstr "離開全螢幕(_E)"
 
-#: ../src/terminal-window.c:3243
+#: ../src/terminal-window.c:3212
 msgid "Close this window?"
 msgstr "是否關閉這個視窗？"
 
-#: ../src/terminal-window.c:3243
+#: ../src/terminal-window.c:3212
 msgid "Close this terminal?"
 msgstr "是否關閉這個終端機？"
 
-#: ../src/terminal-window.c:3247
+#: ../src/terminal-window.c:3216
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在這個視窗的部分終端機還有程序在執行。關閉視窗會終結它們。"
 
-#: ../src/terminal-window.c:3251
+#: ../src/terminal-window.c:3220
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "在這個終端機還有程序在執行。關閉終端機會終結它們。"
 
-#: ../src/terminal-window.c:3256
+#: ../src/terminal-window.c:3225
 msgid "C_lose Window"
 msgstr "關閉視窗(_L)"
 
@@ -2503,9 +2526,6 @@ msgstr "關閉視窗(_L)"
 
 #~ msgid "Search _backwards"
 #~ msgstr "向上搜尋(_B)"
-
-#~ msgid "Whether to update login records when launching terminal command"
-#~ msgstr "執行終端機指令時是否更新登入記錄"
 
 # FIXME: Almost equivalent in practice, but not 100% identical to original
 # meaning -- Abel
