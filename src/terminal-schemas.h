@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTINGS_LIST_SCHEMA   "org.gnome.Terminal.SettingsList"
 #define TERMINAL_PROFILES_LIST_SCHEMA   "org.gnome.Terminal.ProfilesList"
 
-#define TERMINAL_PROFILE_ALLOW_BOLD_KEY                 "allow-bold"
 #define TERMINAL_PROFILE_AUDIBLE_BELL_KEY               "audible-bell"
 #define TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY             "bold-is-bright"
 #define TERMINAL_PROFILE_BACKGROUND_COLOR_KEY           "background-color"

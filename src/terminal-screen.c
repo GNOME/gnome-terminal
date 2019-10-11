@@ -836,9 +836,6 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
     vte_terminal_set_enable_shaping (vte_terminal,
                                      g_settings_get_boolean (profile, TERMINAL_PROFILE_ENABLE_SHAPING_KEY));
 
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ALLOW_BOLD_KEY))
-    vte_terminal_set_allow_bold (vte_terminal,
-                                 g_settings_get_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD_KEY));
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY))
     vte_terminal_set_bold_is_bright (vte_terminal,
                                      g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY));
