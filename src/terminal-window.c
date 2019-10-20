@@ -1981,6 +1981,8 @@ terminal_window_state_event (GtkWidget            *widget,
                                  g_variant_new_boolean (is_fullscreen));
       g_simple_action_set_enabled (lookup_action (window, "leave-fullscreen"),
                                    is_fullscreen);
+      g_simple_action_set_enabled (lookup_action (window, "size-to"),
+                                   !is_fullscreen);
     }
 
   if (window_state_event)
