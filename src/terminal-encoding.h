@@ -23,8 +23,6 @@
 
 gboolean terminal_encodings_is_known_charset (const char *charset);
 
-void terminal_encodings_append_menu (GMenu *menu);
-
 GtkListStore *terminal_encodings_list_store_new (int column_id,
                                                  int column_text);
 

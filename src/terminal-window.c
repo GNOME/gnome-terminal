@@ -31,7 +31,6 @@
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-enums.h"
-#include "terminal-encoding.h"
 #include "terminal-headerbar.h"
 #include "terminal-icon-button.h"
 #include "terminal-intl.h"
@@ -1302,28 +1301,6 @@ action_profile_state_cb (GSimpleAction *action,
 }
 
 static void
-action_encoding_state_cb (GSimpleAction *action,
-                          GVariant *state,
-                          gpointer user_data)
-{
-  TerminalWindow *window = user_data;
-  TerminalWindowPrivate *priv = window->priv;
-
-  g_assert_nonnull (state);
-
-  if (priv->active_screen == NULL)
-    return;
-
-  const char *charset = g_variant_get_string (state, NULL);
-  g_warn_if_fail (terminal_encodings_is_known_charset (charset));
-
-  /* Only change the state if changing encoding worked */
-  if (vte_terminal_set_encoding (VTE_TERMINAL (priv->active_screen), charset, NULL)) {
-    g_simple_action_set_state (action, state);
-  }
-}
-
-static void
 action_active_tab_set_cb (GSimpleAction *action,
                           GVariant *parameter,
                           gpointer user_data)
@@ -1463,19 +1440,6 @@ terminal_window_update_set_profile_menu_active_profile (TerminalWindow *window)
 
   g_simple_action_set_state (lookup_action (window, "profile"),
                              g_variant_new_take_string (uuid));
-}
-
-static void
-terminal_window_update_encoding_menu_active_encoding (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-
-  if (priv->active_screen == NULL)
-    return;
-
-  const char *charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
-  g_simple_action_set_state (lookup_action (window, "encoding"),
-                             g_variant_new_string (charset));
 }
 
 static void
@@ -2096,7 +2060,6 @@ terminal_window_init (TerminalWindow *window)
 
     /* Actions with state */
     { "active-tab",          action_active_tab_set_cb,   "i",  "@i 0",    action_active_tab_state_cb      },
-    { "encoding",            NULL /* changes state */,   "s",  "'UTF-8'", action_encoding_state_cb        },
     { "header-menu",         NULL /* toggles state */,   NULL, "false",   NULL },
     { "fullscreen",          NULL /* toggles state */,   NULL, "false",   action_fullscreen_state_cb      },
     { "menubar-visible",     NULL /* toggles state */,   NULL, "true",    action_menubar_visible_state_cb },
@@ -2459,16 +2422,6 @@ screen_hyperlink_hover_uri_changed (TerminalScreen *screen,
   gtk_widget_set_tooltip_text (GTK_WIDGET (screen), label);
 }
 
-static void
-screen_encoding_changed_cb (TerminalScreen *screen,
-                            GParamSpec     *psepc,
-                            gpointer        user_data)
-{
-  TerminalWindow *window = user_data;
-
-  terminal_window_update_encoding_menu_active_encoding (window);
-}
-
 /* MDI container callbacks */
 
 static void
@@ -2770,7 +2723,6 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
   terminal_window_update_size (window);
 
   terminal_window_update_tabs_actions_sensitivity (window);
-  terminal_window_update_encoding_menu_active_encoding (window);
   terminal_window_update_terminal_menu (window);
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (screen, window);
@@ -2806,8 +2758,6 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
                     G_CALLBACK (screen_font_any_changed_cb), window);
   g_signal_connect (screen, "notify::cell-width-scale",
                     G_CALLBACK (screen_font_any_changed_cb), window);
-  g_signal_connect (screen, "notify::encoding",
-                    G_CALLBACK (screen_encoding_changed_cb), window);
   g_signal_connect (screen, "selection-changed",
                     G_CALLBACK (terminal_window_update_copy_sensitivity), window);
   g_signal_connect (screen, "hyperlink-hover-uri-changed",
@@ -2881,10 +2831,6 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (screen_font_any_changed_cb),
-                                        window);
-
-  g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
-                                        G_CALLBACK (screen_encoding_changed_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),

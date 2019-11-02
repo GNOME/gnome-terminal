@@ -107,12 +107,10 @@ struct _TerminalApp
   GMenuModel *menubar;
   GMenu *menubar_new_terminal_section;
   GMenu *menubar_set_profile_section;
-  GMenu *menubar_set_encoding_submenu;
 
   GMenuModel *profilemenu;
   GMenuModel *headermenu;
   GMenu *headermenu_set_profile_section;
-  GMenu *headermenu_set_encoding_submenu;
 
   GMenu *set_profile_menu;
 
@@ -596,11 +594,7 @@ terminal_app_create_menubar (TerminalApp *app,
                                        "menubar", &app->menubar,
                                        "new-terminal-section", &app->menubar_new_terminal_section,
                                        "set-profile-section", &app->menubar_set_profile_section,
-                                       "set-encoding-submenu", &app->menubar_set_encoding_submenu,
                                        NULL);
-
-  /* Install the encodings submenu */
-  terminal_encodings_append_menu (app->menubar_set_encoding_submenu);
 
   /* Install profile sections */
   terminal_app_update_profile_menus (app);
@@ -614,15 +608,7 @@ terminal_app_create_headermenu (TerminalApp *app)
   terminal_util_load_objects_resource ("/org/gnome/terminal/ui/headerbar-menu.ui",
                                        "headermenu", &app->headermenu,
                                        "set-profile-section", &app->headermenu_set_profile_section,
-#if 0
-                                       "set-encoding-submenu", &app->headermenu_set_encoding_submenu,
-#endif
                                        NULL);
-
-#if 0
-  /* Install the encodings submenu */
-  terminal_encodings_append_menu (app->headermenu_set_encoding_submenu);
-#endif
 
   /* Install profile sections */
   terminal_app_update_profile_menus (app);
@@ -881,11 +867,9 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->menubar);
   g_clear_object (&app->menubar_new_terminal_section);
   g_clear_object (&app->menubar_set_profile_section);
-  g_clear_object (&app->menubar_set_encoding_submenu);
   g_clear_object (&app->profilemenu);
   g_clear_object (&app->headermenu);
   g_clear_object (&app->headermenu_set_profile_section);
-  g_clear_object (&app->headermenu_set_encoding_submenu);
   g_clear_object (&app->set_profile_menu);
 
   terminal_accels_shutdown ();

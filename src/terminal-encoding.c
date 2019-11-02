@@ -35,9 +35,6 @@
 
 /* Overview
  *
- * There's a list of character sets stored in gsettings, indicating
- * which encodings to display in the encoding menu.
- * 
  * We have a pre-canned list of available encodings
  * (hardcoded in the table below) that can be added to
  * the encoding menu, and to give a human-readable name
@@ -138,79 +135,7 @@ static const EncodingEntry encodings[] = {
   { "WINDOWS-1258",   N_("Vietnamese"),          GROUP_OBSOLETE },
 };
 
-static const struct {
-  EncodingGroup group;
-  const char *name;
-} group_names[] = {
-  { GROUP_UNICODE,  N_("Unicode") },
-  { GROUP_CJKV,     N_("Legacy CJK Encodings") },
-  { GROUP_OBSOLETE, N_("Obsolete Encodings") },
-};
-
 #define EM_DASH "—"
-
-static int
-compare_encoding_entry_cb (const void *ap,
-                           const void *bp)
-{
-  const EncodingEntry *a = ap;
-  const EncodingEntry *b = bp;
-
-  int r = a->group - b->group;
-  if (r != 0)
-    return r;
-
-  r = g_utf8_collate (a->name, b->name);
-  if (r != 0)
-    return r;
-
-  return strcmp (a->charset, b->charset);
-}
-
-/**
- * terminal_encodings_append_menu:
- *
- * Appends to known encodings to a #GMenu, sorted in groups and
- * alphabetically by name inside the groups. The action name
- * used when activating the menu items is "win.encoding".
- */
-void
-terminal_encodings_append_menu (GMenu *menu)
-{
-  /* First, sort the encodings */
-  gs_free EncodingEntry *array = g_memdup (encodings, sizeof encodings);
-  for (guint i = 0; i < G_N_ELEMENTS (encodings); i++)
-    array[i].name = _(array[i].name); /* translate */
-
-  qsort (array, G_N_ELEMENTS (encodings), sizeof array[0],
-         compare_encoding_entry_cb);
-
-  for (guint group = 0 ; group < LAST_GROUP; group++) {
-    gs_unref_object GMenu *section = g_menu_new ();
-
-    for (guint i = 0; i < G_N_ELEMENTS (encodings); i++) {
-      if (array[i].group != group)
-        continue;
-
-      gs_free_gstring GString *str = g_string_sized_new (128);
-      g_string_append (str, array[i].name);
-      g_string_append (str, " " EM_DASH " ");
-      for (const char *p = array[i].charset; *p; p++) {
-        if (*p == '_')
-          g_string_append (str, "__");
-        else
-          g_string_append_c (str, *p);
-      }
-
-      gs_unref_object GMenuItem *item = g_menu_item_new (str->str, NULL);
-      g_menu_item_set_action_and_target (item, "win.encoding", "s", array[i].charset);
-
-      g_menu_append_item (section, item);
-    }
-
-    g_menu_append_section (menu, _(group_names[group].name), G_MENU_MODEL (section));
-  }
-}
 
 /**
  * terminal_encodings_list_store_new:
