@@ -49,8 +49,6 @@ gnome_terminal_server_SOURCES = \
 	terminal-debug.h \
 	terminal-defines.h \
 	terminal-enums.h \
-	terminal-encoding.c \
-	terminal-encoding.h \
 	terminal-gdbus.c \
 	terminal-gdbus.h \
 	terminal-headerbar.c \

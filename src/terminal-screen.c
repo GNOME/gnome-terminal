@@ -49,7 +49,6 @@
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-defines.h"
-#include "terminal-encoding.h"
 #include "terminal-enums.h"
 #include "terminal-intl.h"
 #include "terminal-marshal.h"
@@ -646,10 +645,11 @@ terminal_screen_new (GSettings       *profile,
 
   /* If we got an encoding together with an override command,
    * override the profile encoding; otherwise use the profile
-   * encoding.
+   * encoding (set above). Note that this will still use the
+   * profile's encoding if it's changed during the lifetime
+   * of this terminal.
    */
   if (charset != NULL &&
-      terminal_encodings_is_known_charset (charset) &&
       override_command != NULL) {
     vte_terminal_set_encoding (VTE_TERMINAL (screen),
                                charset,
@@ -768,8 +768,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING_KEY))
     {
       gs_free char *charset = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
-      g_warn_if_fail (terminal_encodings_is_known_charset (charset));
-      vte_terminal_set_encoding (vte_terminal, charset, NULL);
+      const char *encoding = terminal_util_translate_encoding (charset);
+      if (encoding != NULL)
+        vte_terminal_set_encoding (vte_terminal, encoding, NULL);
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY))

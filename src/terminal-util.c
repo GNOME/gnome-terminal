@@ -1438,6 +1438,70 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
   save_cache_keyfile (keyfile, TERMINAL_PRINT_SETTINGS_FILENAME);
 }
 
+/*
+ * terminal_util_translate_encoding:
+ * @encoding: the encoding name
+ *
+ * Translates old encoding name to the one supported by ICU, or
+ * to %NULL if the encoding is not known to ICU.
+ *
+ * Returns: (transfer none): the translated encoding, or %NULL if
+ *   not translation was possible.
+ */
+const char*
+terminal_util_translate_encoding (const char *encoding)
+{
+  if (vte_get_encoding_supported (encoding))
+    return encoding;
+
+  /* ICU knows (or has aliases for) most of the old names, except the following */
+  struct {
+    const char *name;
+    const char *replacement;
+  } translations[] = {
+    { "ARMSCII-8",      NULL           }, /* apparently not supported by ICU */
+    { "GEORGIAN-PS",    NULL           }, /* no idea which charset this even is */
+    { "ISO-IR-111",     NULL           }, /* ISO-IR-111 refers to ECMA-94, but that
+                                           * standard does not contain cyrillic letters.
+                                           * ECMA-94 refers to ECMA-113 (ISO-IR-144),
+                                           * whose assignment differs greatly from ISO-IR-111,
+                                           * so it cannot be that either.
+                                           */
+    /* All the MAC_* charsets appear to be unknown to even glib iconv, so
+     * why did we have them in our list in the first place?
+     */
+    { "MAC_DEVANAGARI", NULL           }, /* apparently not supported by ICU */
+    { "MAC_FARSI",      NULL           }, /* apparently not supported by ICU */
+    { "MAC_GREEK",      "x-MacGreek"   },
+    { "MAC_GUJARATI",   NULL           }, /* apparently not supported by ICU */
+    { "MAC_GURMUKHI",   NULL           }, /* apparently not supported by ICU */
+    { "MAC_ICELANDIC",  NULL           }, /* apparently not supported by ICU */
+    { "MAC_ROMANIAN",   "x-macroman"   }, /* not sure this is the right one */
+    { "MAC_TURKISH",    "x-MacTurkish" },
+    { "MAC_UKRAINIAN",  "x-MacUkraine" },
+
+    { "TCVN",           NULL           }, /* apparently not supported by ICU */
+    { "UHC",            "cp949"        },
+    { "VISCII",         NULL           }, /* apparently not supported by ICU */
+
+    /* ISO-2022-* are known to ICU, but they simply cannot work in vte as
+     * I/O encoding, so don't even try.
+     */
+    { "ISO-2022-JP",    NULL           },
+    { "ISO-2022-KR",    NULL           },
+  };
+
+  const char *replacement = NULL;
+  for (guint i = 0; i < G_N_ELEMENTS (translations); ++i) {
+    if (g_str_equal (encoding, translations[i].name)) {
+      replacement = translations[i].replacement;
+      break;
+    }
+  }
+
+  return replacement;
+}
+
 /* BEGIN code copied from glib
  *
  * Copyright (C) 1995-1998  Peter Mattis, Spencer Kimball and Josh MacDonald

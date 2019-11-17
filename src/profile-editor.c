@@ -27,7 +27,6 @@
 #include <gio/gio.h>
 
 #include "terminal-app.h"
-#include "terminal-encoding.h"
 #include "terminal-enums.h"
 #include "profile-editor.h"
 #include "terminal-prefs.h"
@@ -605,30 +604,34 @@ init_color_scheme_menu (GtkWidget *widget)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer, "text", 0, NULL);
 }
 
-enum {
-  ENCODINGS_COLUMN_ID = 0,
-  ENCODINGS_COLUMN_TEXT = 1
-};
-
 static void
 init_encodings_combo (GtkWidget *widget)
 {
-  gs_unref_object GtkListStore *store = terminal_encodings_list_store_new (ENCODINGS_COLUMN_ID,
-                                                                           ENCODINGS_COLUMN_TEXT);
+  gs_unref_object GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
 
-  /* Now turn on sorting */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+  gs_strfreev char **encodings = vte_get_encodings (TRUE);
+  guint i = 0;
+  for (i = 0; encodings[i] != NULL; i++) {
+    GtkTreeIter iter;
+    gtk_list_store_insert_with_values (store, &iter, -1,
+                                       0, encodings[i],
+                                       -1);
+  }
+
+  if (i == 0) {
+    /* No legacy encodings supported */
+    GtkTreeIter iter;
+    gtk_list_store_insert_with_values (store, &iter, -1,
+                                       0, "UTF-8",
+                                       -1);
+  }
+
+  /* The list returned from vte is already sorted alphabetically */
+  /*  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         ENCODINGS_COLUMN_TEXT,
-                                        GTK_SORT_ASCENDING);
+                                        GTK_SORT_ASCENDING); */
 
-  gtk_combo_box_set_id_column (GTK_COMBO_BOX (widget), ENCODINGS_COLUMN_ID);
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
-
-  /* Cell renderer */
-  GtkCellRenderer *renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer,
-                                  "text", ENCODINGS_COLUMN_TEXT, NULL);
 }
 
 static gboolean
@@ -752,6 +755,27 @@ monospace_filter (const PangoFontFamily *family,
                   gpointer data)
 {
   return pango_font_family_is_monospace ((PangoFontFamily *) family);
+}
+
+static gboolean
+translate_encoding (GValue *value,
+                    GVariant *variant,
+                    gpointer user_data)
+{
+  /* We previously had a list of choices for the 'encodings' key,
+   * but now just use ICU which doesn't know all these names.
+   * If there is no replacement, the mapping fails, which means
+   * the default (UTF-8) is used.
+   */
+
+  const char *str;
+  g_variant_get (variant, "&s", &str);
+
+  const char *replacement = terminal_util_translate_encoding (str);
+  if (replacement != NULL)
+    g_value_set_string (value, replacement);
+
+  return replacement != NULL;
 }
 
 /* Called once per Preferences window, to initialize stuff that doesn't depend on the profile being edited */
@@ -1170,10 +1194,13 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 
   /* Compatibility options */
   w = (GtkWidget *) gtk_builder_get_object (builder, "encoding-combobox");
-  profile_prefs_settings_bind (profile,
-                               TERMINAL_PROFILE_ENCODING_KEY,
-                               w,
-                               "active-id", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  profile_prefs_settings_bind_with_mapping (profile,
+                                            TERMINAL_PROFILE_ENCODING_KEY,
+                                            w,
+                                            "active-id", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                            (GSettingsBindGetMapping) translate_encoding,
+                                            (GSettingsBindSetMapping) NULL,
+                                            NULL, NULL);
 
   w = (GtkWidget *) gtk_builder_get_object (builder, "cjk-ambiguous-width-combobox");
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY,

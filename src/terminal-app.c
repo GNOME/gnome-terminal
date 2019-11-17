@@ -38,7 +38,6 @@
 #include "terminal-profiles-list.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
-#include "terminal-encoding.h"
 #include "terminal-schemas.h"
 #include "terminal-gdbus.h"
 #include "terminal-defines.h"
@@ -1016,7 +1015,6 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
-  g_return_val_if_fail (charset == NULL || terminal_encodings_is_known_charset (charset), NULL);
 
   screen = terminal_screen_new (profile, charset, override_command, title,
                                 working_dir, child_env, zoom);
