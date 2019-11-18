@@ -604,33 +604,150 @@ init_color_scheme_menu (GtkWidget *widget)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer, "text", 0, NULL);
 }
 
+typedef enum {
+        GROUP_UTF8,
+        GROUP_CJKV,
+        GROUP_OBSOLETE,
+        LAST_GROUP
+} EncodingGroup;
+
+typedef struct {
+  const char *charset;
+  const char *name;
+  EncodingGroup group;
+} EncodingEntry;
+
+/* These MUST be sorted by charset so that bsearch can work! */
+static const EncodingEntry encodings[] = {
+  { "ARMSCII-8",      N_("Armenian"),            GROUP_OBSOLETE },
+  { "BIG5",           N_("Chinese Traditional"), GROUP_CJKV },
+  { "BIG5-HKSCS",     N_("Chinese Traditional"), GROUP_CJKV },
+  { "CP866",          N_("Cyrillic/Russian"),    GROUP_OBSOLETE },
+  { "EUC-JP",         N_("Japanese"),            GROUP_CJKV },
+  { "EUC-KR",         N_("Korean"),              GROUP_CJKV },
+  { "EUC-TW",         N_("Chinese Traditional"), GROUP_CJKV },
+  { "GB18030",        N_("Chinese Simplified"),  GROUP_CJKV },
+  { "GB2312",         N_("Chinese Simplified"),  GROUP_CJKV },
+  { "GBK",            N_("Chinese Simplified"),  GROUP_CJKV },
+  { "GEORGIAN-PS",    N_("Georgian"),            GROUP_OBSOLETE },
+  { "IBM850",         N_("Western"),             GROUP_OBSOLETE },
+  { "IBM852",         N_("Central European"),    GROUP_OBSOLETE },
+  { "IBM855",         N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "IBM857",         N_("Turkish"),             GROUP_OBSOLETE },
+  { "IBM862",         N_("Hebrew"),              GROUP_OBSOLETE },
+  { "IBM864",         N_("Arabic"),              GROUP_OBSOLETE },
+  { "ISO-2022-JP",    N_("Japanese"),            GROUP_CJKV },
+  { "ISO-2022-KR",    N_("Korean"),              GROUP_CJKV },
+  { "ISO-8859-1",     N_("Western"),             GROUP_OBSOLETE },
+  { "ISO-8859-10",    N_("Nordic"),              GROUP_OBSOLETE },
+  { "ISO-8859-13",    N_("Baltic"),              GROUP_OBSOLETE },
+  { "ISO-8859-14",    N_("Celtic"),              GROUP_OBSOLETE },
+  { "ISO-8859-15",    N_("Western"),             GROUP_OBSOLETE },
+  { "ISO-8859-16",    N_("Romanian"),            GROUP_OBSOLETE },
+  { "ISO-8859-2",     N_("Central European"),    GROUP_OBSOLETE },
+  { "ISO-8859-3",     N_("South European"),      GROUP_OBSOLETE },
+  { "ISO-8859-4",     N_("Baltic"),              GROUP_OBSOLETE },
+  { "ISO-8859-5",     N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "ISO-8859-6",     N_("Arabic"),              GROUP_OBSOLETE },
+  { "ISO-8859-7",     N_("Greek"),               GROUP_OBSOLETE },
+  { "ISO-8859-8",     N_("Hebrew Visual"),       GROUP_OBSOLETE },
+  { "ISO-8859-8-I",   N_("Hebrew"),              GROUP_OBSOLETE },
+  { "ISO-8859-9",     N_("Turkish"),             GROUP_OBSOLETE },
+  { "ISO-IR-111",     N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "KOI8-R",         N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "KOI8-U",         N_("Cyrillic/Ukrainian"),  GROUP_OBSOLETE },
+  { "MAC-CYRILLIC",   N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "MAC_ARABIC",     N_("Arabic"),              GROUP_OBSOLETE },
+  { "MAC_CE",         N_("Central European"),    GROUP_OBSOLETE },
+  { "MAC_CROATIAN",   N_("Croatian"),            GROUP_OBSOLETE },
+  { "MAC_GREEK",      N_("Greek"),               GROUP_OBSOLETE },
+  { "MAC_HEBREW",     N_("Hebrew"),              GROUP_OBSOLETE },
+  { "MAC_ROMAN",      N_("Western"),             GROUP_OBSOLETE },
+  { "MAC_ROMANIAN",   N_("Romanian"),            GROUP_OBSOLETE },
+  { "MAC_TURKISH",    N_("Turkish"),             GROUP_OBSOLETE },
+  { "MAC_UKRAINIAN",  N_("Cyrillic/Ukrainian"),  GROUP_OBSOLETE },
+  { "SHIFT_JIS",      N_("Japanese"),            GROUP_CJKV },
+  { "TIS-620",        N_("Thai"),                GROUP_OBSOLETE },
+  { "UHC",            N_("Korean"),              GROUP_CJKV },
+  { "UTF-8",          N_("Unicode"),             GROUP_UTF8 },
+  { "WINDOWS-1250",   N_("Central European"),    GROUP_OBSOLETE },
+  { "WINDOWS-1251",   N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "WINDOWS-1252",   N_("Western"),             GROUP_OBSOLETE },
+  { "WINDOWS-1253",   N_("Greek"),               GROUP_OBSOLETE },
+  { "WINDOWS-1254",   N_("Turkish"),             GROUP_OBSOLETE },
+  { "WINDOWS-1255",   N_("Hebrew"),              GROUP_OBSOLETE},
+  { "WINDOWS-1256",   N_("Arabic"),              GROUP_OBSOLETE },
+  { "WINDOWS-1257",   N_("Baltic"),              GROUP_OBSOLETE },
+  { "WINDOWS-1258",   N_("Vietnamese"),          GROUP_OBSOLETE },
+};
+
+static const struct {
+  EncodingGroup group;
+  const char *name;
+} encodings_group_names[] = {
+  { GROUP_UTF8,     N_("Unicode") },
+  { GROUP_CJKV,     N_("Legacy CJK Encodings") },
+  { GROUP_OBSOLETE, N_("Obsolete Encodings") },
+};
+
+#define EM_DASH "—"
+
+enum {
+        ENCODINGS_COL_ID,
+        ENCODINGS_COL_TEXT
+};
+
+static void
+append_encodings_for_group (GtkTreeStore *store,
+                            EncodingGroup group,
+                            gboolean submenu)
+{
+  GtkTreeIter parent_iter;
+
+  if (submenu) {
+    gtk_tree_store_insert_with_values (store,
+                                       &parent_iter,
+                                       NULL,
+                                       -1,
+                                       ENCODINGS_COL_ID, NULL,
+                                       ENCODINGS_COL_TEXT, _(encodings_group_names[group].name),
+                                       -1);
+  }
+
+  for (guint i = 0; i < G_N_ELEMENTS (encodings); i++) {
+    if (encodings[i].group != group)
+      continue;
+
+    gs_free char *name = g_strdup_printf ("%s " EM_DASH " %s",
+                                          _(encodings[i].name), encodings[i].charset);
+
+    GtkTreeIter iter;
+    gtk_tree_store_insert_with_values (store,
+                                       &iter,
+                                       submenu ? &parent_iter : NULL,
+                                       -1,
+                                       ENCODINGS_COL_ID, encodings[i].charset,
+                                       ENCODINGS_COL_TEXT, name,
+                                       -1);
+  }
+}
+
+static GtkTreeStore *
+encodings_tree_store_new (void)
+{
+  GtkTreeStore *store = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+  append_encodings_for_group(store, GROUP_UTF8, FALSE); /* UTF-8 in main menu */
+  append_encodings_for_group(store, GROUP_CJKV, TRUE);
+  append_encodings_for_group(store, GROUP_OBSOLETE, TRUE);
+
+  return store;
+}
+
 static void
 init_encodings_combo (GtkWidget *widget)
 {
-  gs_unref_object GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
-
-  gs_strfreev char **encodings = vte_get_encodings (TRUE);
-  guint i = 0;
-  for (i = 0; encodings[i] != NULL; i++) {
-    GtkTreeIter iter;
-    gtk_list_store_insert_with_values (store, &iter, -1,
-                                       0, encodings[i],
-                                       -1);
-  }
-
-  if (i == 0) {
-    /* No legacy encodings supported */
-    GtkTreeIter iter;
-    gtk_list_store_insert_with_values (store, &iter, -1,
-                                       0, "UTF-8",
-                                       -1);
-  }
-
-  /* The list returned from vte is already sorted alphabetically */
-  /*  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-                                        ENCODINGS_COLUMN_TEXT,
-                                        GTK_SORT_ASCENDING); */
-
+  gs_unref_object GtkTreeStore *store = encodings_tree_store_new ();
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 }
 
