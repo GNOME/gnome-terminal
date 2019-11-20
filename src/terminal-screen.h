@@ -77,31 +77,42 @@ const char *terminal_screen_get_uuid (TerminalScreen *screen);
 
 TerminalScreen *terminal_screen_new (GSettings       *profile,
                                      const char      *charset,
-                                     char           **override_command,
                                      const char      *title,
-                                     const char      *working_dir,
-                                     char           **child_env,
                                      double           zoom);
 
-gboolean terminal_screen_exec (TerminalScreen *screen,
-                               char          **argv,
-                               char          **envv,
-                               gboolean        shell,
-                               const char     *cwd,
-                               GUnixFDList    *fd_list,
-                               GVariant       *fd_array,
-                               GError        **error);
+typedef void (* TerminalScreenExecCallback) (TerminalScreen *screen,
+                                             GError         *error,
+                                             gpointer        user_data);
 
-void _terminal_screen_launch_child_on_idle (TerminalScreen *screen);
+gboolean terminal_screen_exec (TerminalScreen *screen,
+                               char **argv,
+                               char **envv,
+                               gboolean as_shell,
+                               const char *cwd,
+                               GUnixFDList *fd_list,
+                               GVariant *fd_array,
+                               TerminalScreenExecCallback callback,
+                               gpointer user_data,
+                               GDestroyNotify destroy_notify,
+                               GCancellable *cancellable,
+                               GError **error);
+
+
+gboolean terminal_screen_reexec (TerminalScreen *screen,
+                                 char **envv,
+                                 const char *cwd,
+                                 GCancellable *cancellable,
+                                 GError **error);
+
+gboolean terminal_screen_reexec_from_screen (TerminalScreen *screen,
+                                             TerminalScreen *parent_screen,
+                                             GCancellable *cancellable,
+                                             GError **error);
 
 void terminal_screen_set_profile (TerminalScreen *screen,
                                   GSettings      *profile);
 GSettings* terminal_screen_get_profile (TerminalScreen *screen);
 GSettings* terminal_screen_ref_profile (TerminalScreen *screen);
-
-void         terminal_screen_set_initial_environment (TerminalScreen  *screen,
-                                                      char           **argv);
-char **      terminal_screen_get_initial_environment (TerminalScreen  *screen);
 
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 

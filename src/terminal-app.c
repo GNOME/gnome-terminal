@@ -982,53 +982,6 @@ terminal_app_new (const char *app_id)
                        NULL);
 }
 
-/**
- * terminal_app_new_window:
- * @app:
- * @monitor:
- *
- * Creates a new #TerminalWindow on the default display.
- */
-TerminalWindow *
-terminal_app_new_window (TerminalApp *app,
-                         int monitor)
-{
-  TerminalWindow *window;
-
-  window = terminal_window_new (G_APPLICATION (app));
-
-  return window;
-}
-
-TerminalScreen *
-terminal_app_new_terminal (TerminalApp     *app,
-                           TerminalWindow  *window,
-                           GSettings       *profile,
-                           const char      *charset,
-                           char           **override_command,
-                           const char      *title,
-                           const char      *working_dir,
-                           char           **child_env,
-                           double           zoom)
-{
-  TerminalScreen *screen;
-
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-  g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
-
-  screen = terminal_screen_new (profile, charset, override_command, title,
-                                working_dir, child_env, zoom);
-
-  terminal_window_add_screen (window, screen, -1);
-  terminal_window_switch_screen (window, screen);
-  gtk_widget_grab_focus (GTK_WIDGET (screen));
-
-  /* Launch the child on idle */
-  _terminal_screen_launch_child_on_idle (screen);
-
-  return screen;
-}
-
 TerminalScreen *
 terminal_app_get_screen_by_uuid (TerminalApp *app,
                                  const char  *uuid)

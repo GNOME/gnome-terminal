@@ -67,19 +67,6 @@ char *terminal_app_new_profile (TerminalApp *app,
 void terminal_app_remove_profile (TerminalApp *app,
                                   GSettings *profile);
 
-TerminalWindow * terminal_app_new_window   (TerminalApp *app,
-                                            int monitor);
-
-TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
-                                           TerminalWindow  *window,
-                                           GSettings       *profile,
-                                           const char      *charset,
-                                           char           **override_command,
-                                           const char      *title,
-                                           const char      *working_dir,
-                                           char           **child_env,
-                                           double           zoom);
-
 char *terminal_app_dup_screen_object_path (TerminalApp *app,
                                            TerminalScreen *screen);
 
