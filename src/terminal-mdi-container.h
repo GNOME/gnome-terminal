@@ -37,7 +37,8 @@ struct _TerminalMdiContainerInterface {
 
   /* vfuncs */
   void                  (* add_screen)              (TerminalMdiContainer *container,
-                                                     TerminalScreen *screen);
+                                                     TerminalScreen *screen,
+                                                     int position);
   void                  (* remove_screen)           (TerminalMdiContainer *container,
                                                      TerminalScreen *screen);
   TerminalScreen *      (* get_active_screen)       (TerminalMdiContainer *container);
@@ -69,7 +70,8 @@ struct _TerminalMdiContainerInterface {
 GType terminal_mdi_container_get_type (void);
 
 void terminal_mdi_container_add_screen (TerminalMdiContainer *container,
-                                        TerminalScreen *screen);
+                                        TerminalScreen *screen,
+                                        int position);
 
 void terminal_mdi_container_remove_screen (TerminalMdiContainer *container,
                                            TerminalScreen *screen);

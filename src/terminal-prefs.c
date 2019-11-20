@@ -725,6 +725,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   GtkWidget *disable_shortcuts_button;
   GtkWidget *theme_variant_label, *theme_variant_combo;
   GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
+  GtkWidget *new_tab_position_combo;
   GtkWidget *close_button, *help_button;
   GtkWidget *content_box, *general_frame, *keybindings_frame;
   GSettings *settings;
@@ -760,6 +761,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
                                        "disable-shortcuts-checkbutton", &disable_shortcuts_button,
                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
+                                       "new-tab-position-combobox", &new_tab_position_combo,
                                        "accelerators-treeview", &tree_view,
                                        "the-stack", &data->stack,
                                        "the-listbox", &data->listbox,
@@ -830,6 +832,12 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
     gtk_widget_set_visible (new_terminal_mode_label, FALSE);
     gtk_widget_set_visible (new_terminal_mode_combo, FALSE);
   }
+
+  g_settings_bind (settings,
+                   TERMINAL_SETTING_NEW_TAB_POSITION_KEY,
+                   new_tab_position_combo,
+                   "active-id",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   if (shell_shows_menubar) {
     gtk_widget_set_visible (disable_mnemonics_button, FALSE);

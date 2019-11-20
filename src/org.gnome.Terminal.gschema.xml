@@ -29,6 +29,11 @@
     <value nick='tab' value='1'/>
   </enum>
 
+  <enum id='org.gnome.Terminal.NewTabPosition'>
+    <value nick='last' value='0'/>
+    <value nick='next' value='1'/>
+  </enum>
+
    <enum id='org.gnome.Terminal.ScrollbarPolicy'>
     <value nick='always' value='0'/>
     <!-- <value nick='automatic' value='1'/> -->
@@ -682,6 +687,11 @@
     <key name="theme-variant" enum="org.gnome.Terminal.ThemeVariant">
       <default>'system'</default>
       <summary>Which theme variant to use</summary>
+    </key>
+
+    <key name="new-tab-position" enum="org.gnome.Terminal.NewTabPosition">
+      <default>'last'</default>
+      <summary>Whether new tabs should open next to the current one or at the last position</summary>
     </key>
 
     <!-- Note that changing the following settings will only take effect

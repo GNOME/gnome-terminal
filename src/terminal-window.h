@@ -52,6 +52,8 @@ TerminalWindow* terminal_window_new (GApplication *app);
 
 GtkUIManager *terminal_window_get_ui_manager (TerminalWindow *window);
 
+int terminal_window_get_active_screen_num (TerminalWindow *window);
+
 void terminal_window_add_screen (TerminalWindow *window,
                                  TerminalScreen *screen,
                                  int position);

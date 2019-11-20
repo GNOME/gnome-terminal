@@ -2442,6 +2442,13 @@ screen_close_request_cb (TerminalMdiContainer *container,
   terminal_window_remove_screen (window, screen);
 }
 
+int
+terminal_window_get_active_screen_num (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  return terminal_mdi_container_get_active_screen_num (priv->mdi_container);
+}
+
 void
 terminal_window_add_screen (TerminalWindow *window,
                             TerminalScreen *screen,
@@ -2454,12 +2461,28 @@ terminal_window_add_screen (TerminalWindow *window,
   if (gtk_widget_is_toplevel (old_window) &&
       TERMINAL_IS_WINDOW (old_window) &&
       TERMINAL_WINDOW (old_window)== window)
-    return;  
+    return;
 
   if (TERMINAL_IS_WINDOW (old_window))
     terminal_window_remove_screen (TERMINAL_WINDOW (old_window), screen);
 
-  terminal_mdi_container_add_screen (priv->mdi_container, screen);
+  if (position == -1) {
+    GSettings *global_settings = terminal_app_get_global_settings (terminal_app_get ());
+    TerminalNewTabPosition position_pref = g_settings_get_enum (global_settings,
+                                                                TERMINAL_SETTING_NEW_TAB_POSITION_KEY);
+    switch (position_pref) {
+    case TERMINAL_NEW_TAB_POSITION_NEXT:
+      position = terminal_window_get_active_screen_num (window) + 1;
+      break;
+
+    default:
+    case TERMINAL_NEW_TAB_POSITION_LAST:
+      position = -1;
+      break;
+    }
+  }
+
+  terminal_mdi_container_add_screen (priv->mdi_container, screen, position);
 }
 
 void

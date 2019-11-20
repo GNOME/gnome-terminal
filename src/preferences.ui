@@ -20,6 +20,24 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="new-tab-position-liststore">
+    <columns>
+      <!-- column-name label -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="New tab opens at the last position">Last</col>
+        <col id="1">last</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="New tab opens next to current tab">Next</col>
+        <col id="1">next</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkListStore" id="theme-variant-liststore">
     <columns>
       <!-- column-name label -->
@@ -431,6 +449,38 @@
                                   </object>
                                   <packing>
                                     <property name="top_attach">1</property>
+                                    <property name="left_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="new-tab-position-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">New tab _position:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">new-tab-position-combobox</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="left_attach">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="new-tab-position-combobox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="model">new-tab-position-liststore</property>
+                                    <property name="id_column">1</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="renderer3a"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
                                     <property name="left_attach">1</property>
                                   </packing>
                                 </child>

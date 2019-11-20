@@ -97,12 +97,13 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
 
 void 
 terminal_mdi_container_add_screen (TerminalMdiContainer *container,
-                                   TerminalScreen *screen)
+                                   TerminalScreen *screen,
+                                   int position)
 {
   g_return_if_fail (TERMINAL_IS_MDI_CONTAINER (container));
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
 
-  TERMINAL_MDI_CONTAINER_GET_IFACE (container)->add_screen (container, screen);
+  TERMINAL_MDI_CONTAINER_GET_IFACE (container)->add_screen (container, screen, position);
 }
 
 void 
