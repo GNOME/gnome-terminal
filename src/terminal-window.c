@@ -154,6 +154,7 @@ static gboolean find_smaller_zoom_factor (double *zoom);
 static void terminal_window_update_zoom_sensitivity (TerminalWindow *window);
 static void terminal_window_update_search_sensitivity (TerminalScreen *screen,
                                                        TerminalWindow *window);
+static void terminal_window_update_paste_sensitivity (TerminalWindow *window);
 
 static void terminal_window_show (GtkWidget *widget);
 
@@ -1276,6 +1277,8 @@ action_read_only_state_cb (GSimpleAction *action,
 
   g_simple_action_set_state (action, state);
 
+  terminal_window_update_paste_sensitivity (window);
+
   if (priv->active_screen == NULL)
     return;
 
@@ -1524,15 +1527,32 @@ clipboard_targets_changed_cb (TerminalApp *app,
   if (clipboard != priv->clipboard)
     return;
 
+  terminal_window_update_paste_sensitivity (window);
+}
+
+static void
+terminal_window_update_paste_sensitivity (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
   GdkAtom *targets;
   int n_targets;
-  targets = terminal_app_get_clipboard_targets (app, clipboard, &n_targets);
+  targets = terminal_app_get_clipboard_targets (terminal_app_get(), priv->clipboard, &n_targets);
 
-  gboolean can_paste = gtk_targets_include_text (targets, n_targets);
-  gboolean can_paste_uris = gtk_targets_include_uri (targets, n_targets);
+  gboolean can_paste;
+  gboolean can_paste_uris;
+  if (n_targets) {
+    can_paste = gtk_targets_include_text (targets, n_targets);
+    can_paste_uris = gtk_targets_include_uri (targets, n_targets);
+  } else {
+    can_paste = can_paste_uris = FALSE;
+  }
 
-  g_simple_action_set_enabled (lookup_action (window, "paste-text"), can_paste);
-  g_simple_action_set_enabled (lookup_action (window, "paste-uris"), can_paste_uris);
+  gs_unref_variant GVariant *ro_state = g_action_get_state (g_action_map_lookup_action (G_ACTION_MAP (window), "read-only"));
+  gboolean read_only = g_variant_get_boolean (ro_state);
+
+  g_simple_action_set_enabled (lookup_action (window, "paste-text"), can_paste && !read_only);
+  g_simple_action_set_enabled (lookup_action (window, "paste-uris"), can_paste_uris && !read_only);
 }
 
 static void
@@ -2758,6 +2778,7 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
   terminal_window_update_copy_sensitivity (screen, window);
   terminal_window_update_zoom_sensitivity (window);
   terminal_window_update_search_sensitivity (screen, window);
+  terminal_window_update_paste_sensitivity (window);
 }
 
 static void
@@ -2805,6 +2826,7 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
 
   terminal_window_update_tabs_actions_sensitivity (window);
   terminal_window_update_search_sensitivity (screen, window);
+  terminal_window_update_paste_sensitivity (window);
 
 #if 0
   /* FIXMEchpe: wtf is this doing? */
