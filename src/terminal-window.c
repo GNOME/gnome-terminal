@@ -397,7 +397,6 @@ action_new_terminal_cb (GSimpleAction *action,
     window = terminal_window_new (G_APPLICATION (app));
 
   TerminalScreen *screen = terminal_screen_new (profile,
-                                                NULL /* charset */,
                                                 NULL /* title */,
                                                 1.0);
 

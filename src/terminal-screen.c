@@ -763,7 +763,6 @@ terminal_screen_finalize (GObject *object)
 
 TerminalScreen *
 terminal_screen_new (GSettings       *profile,
-                     const char      *charset,
                      const char      *title,
                      double           zoom)
 {
@@ -772,17 +771,6 @@ terminal_screen_new (GSettings       *profile,
   TerminalScreen *screen = g_object_new (TERMINAL_TYPE_SCREEN, NULL);
 
   terminal_screen_set_profile (screen, profile);
-
-  /* If we got an encoding together with an override command,
-   * override the profile encoding; otherwise use the profile
-   * encoding (set above). Note that this will still use the
-   * profile's encoding if it's changed during the lifetime
-   * of this terminal.
-   */
-  if (charset != NULL)
-    vte_terminal_set_encoding (VTE_TERMINAL (screen),
-                               charset,
-                               NULL);
 
   vte_terminal_set_size (VTE_TERMINAL (screen),
                          g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),

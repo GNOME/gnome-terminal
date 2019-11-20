@@ -393,7 +393,6 @@ handle_options (TerminalOptions *options,
                 const char *parent_screen_object_path,
                 TerminalReceiver **wait_for_receiver)
 {
-
   /* We need to forward the locale encoding to the server, see bug #732128 */
   const char *encoding;
   g_get_charset (&encoding);

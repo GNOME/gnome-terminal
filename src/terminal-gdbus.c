@@ -453,14 +453,6 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
       zoom = 1.0;
   }
 
-  const char *encoding;
-  if (!g_variant_lookup (options, "encoding", "&s", &encoding)) {
-    if (parent_screen != NULL)
-      encoding = vte_terminal_get_encoding (VTE_TERMINAL (parent_screen));
-    else
-      encoding = NULL; /* use profile encoding */
-  }
-
   /* Look up the profile */
   gs_unref_object GSettings *profile = NULL;
   const char *profile_uuid;
@@ -484,7 +476,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   g_assert_nonnull (profile);
 
   /* Now we can create the new screen */
-  TerminalScreen *screen = terminal_screen_new (profile, encoding, title, zoom);
+  TerminalScreen *screen = terminal_screen_new (profile, title, zoom);
   terminal_window_add_screen (window, screen, -1);
 
   /* Apply window properties */
