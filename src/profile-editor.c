@@ -325,6 +325,14 @@ static void profile_palette_notify_colorpickers_cb (GSettings *profile,
                                                     const char *key,
                                                     gpointer user_data);
 
+static void profile_notify_encoding_combo_cb (GSettings *profile,
+                                              const char *key,
+                                              GtkComboBox *combo);
+
+enum {
+        ENCODINGS_COL_ID,
+        ENCODINGS_COL_TEXT
+};
 
 /* gdk_rgba_equal is too strict! */
 static gboolean
@@ -576,6 +584,88 @@ reset_compat_defaults_cb (GtkWidget *button,
   g_settings_reset (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
 }
 
+static gboolean
+tree_model_id_to_iter_recurse (GtkTreeModel *model,
+                               int id_column,
+                               const char *active_id,
+                               GtkTreeIter *iter,
+                               GtkTreeIter *result_iter)
+{
+  do {
+    /* Descend the tree */
+    GtkTreeIter child_iter;
+    if (gtk_tree_model_iter_children(model, &child_iter, iter) &&
+        tree_model_id_to_iter_recurse (model, id_column, active_id, &child_iter, result_iter))
+      return TRUE;
+
+    gs_free char *id = NULL;
+    gtk_tree_model_get (model, iter, id_column, &id, -1);
+    if (g_strcmp0 (id, active_id) == 0) {
+      *result_iter = *iter;
+      return TRUE;
+    }
+  } while (gtk_tree_model_iter_next (model, iter));
+
+  return FALSE;
+}
+
+static gboolean
+tree_model_id_to_iter (GtkTreeModel *model,
+                       int id_column,
+                       const char *active_id,
+                       GtkTreeIter *iter)
+{
+  GtkTreeIter first_iter;
+
+  return gtk_tree_model_get_iter_first(model, &first_iter) &&
+    tree_model_id_to_iter_recurse(model, id_column, active_id, &first_iter, iter);
+}
+
+static void
+profile_encoding_combo_changed_cb (GtkComboBox *combo,
+                                   GSettings *profile)
+{
+  GtkTreeIter iter;
+
+  if (!gtk_combo_box_get_active_iter(combo, &iter))
+    return;
+
+  gs_free char *encoding = NULL;
+  gtk_tree_model_get(gtk_combo_box_get_model(combo),
+                     &iter,
+                     ENCODINGS_COL_ID, &encoding,
+                     -1);
+  if (encoding == NULL)
+    return;
+
+  g_signal_handlers_block_by_func (profile, G_CALLBACK (profile_notify_encoding_combo_cb), combo);
+  g_settings_set_string(profile, TERMINAL_PROFILE_ENCODING_KEY, encoding);
+  g_signal_handlers_unblock_by_func (profile, G_CALLBACK (profile_notify_encoding_combo_cb), combo);
+}
+
+static void
+profile_notify_encoding_combo_cb (GSettings *profile,
+                                  const char *key,
+                                  GtkComboBox *combo)
+{
+  gs_free char *encoding = NULL;
+  g_settings_get(profile, key, "s", &encoding);
+
+  g_signal_handlers_block_by_func (combo, G_CALLBACK (profile_encoding_combo_changed_cb), profile);
+
+  GtkTreeIter iter;
+  if (tree_model_id_to_iter(gtk_combo_box_get_model(combo),
+                            ENCODINGS_COL_ID,
+                            encoding,
+                            &iter)) {
+    gtk_combo_box_set_active_iter(combo, &iter);
+  } else {
+    gtk_combo_box_set_active(combo, -1);
+  }
+
+  g_signal_handlers_unblock_by_func (combo, G_CALLBACK (profile_encoding_combo_changed_cb), profile);
+}
+
 /*
  * initialize widgets
  */
@@ -691,11 +781,6 @@ static const struct {
 };
 
 #define EM_DASH "—"
-
-enum {
-        ENCODINGS_COL_ID,
-        ENCODINGS_COL_TEXT
-};
 
 static void
 append_encodings_for_group (GtkTreeStore *store,
@@ -872,27 +957,6 @@ monospace_filter (const PangoFontFamily *family,
                   gpointer data)
 {
   return pango_font_family_is_monospace ((PangoFontFamily *) family);
-}
-
-static gboolean
-translate_encoding (GValue *value,
-                    GVariant *variant,
-                    gpointer user_data)
-{
-  /* We previously had a list of choices for the 'encodings' key,
-   * but now just use ICU which doesn't know all these names.
-   * If there is no replacement, the mapping fails, which means
-   * the default (UTF-8) is used.
-   */
-
-  const char *str;
-  g_variant_get (variant, "&s", &str);
-
-  const char *replacement = terminal_util_translate_encoding (str);
-  if (replacement != NULL)
-    g_value_set_string (value, replacement);
-
-  return replacement != NULL;
 }
 
 /* Called once per Preferences window, to initialize stuff that doesn't depend on the profile being edited */
@@ -1311,13 +1375,14 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 
   /* Compatibility options */
   w = (GtkWidget *) gtk_builder_get_object (builder, "encoding-combobox");
-  profile_prefs_settings_bind_with_mapping (profile,
-                                            TERMINAL_PROFILE_ENCODING_KEY,
-                                            w,
-                                            "active-id", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
-                                            (GSettingsBindGetMapping) translate_encoding,
-                                            (GSettingsBindSetMapping) NULL,
-                                            NULL, NULL);
+  profile_prefs_signal_connect (w, "changed",
+                                G_CALLBACK (profile_encoding_combo_changed_cb),
+                                profile);
+
+  profile_notify_encoding_combo_cb (profile, TERMINAL_PROFILE_ENCODING_KEY, GTK_COMBO_BOX (w));
+  profile_prefs_signal_connect (profile, "changed::" TERMINAL_PROFILE_ENCODING_KEY,
+                                G_CALLBACK (profile_notify_encoding_combo_cb),
+                                w);
 
   w = (GtkWidget *) gtk_builder_get_object (builder, "cjk-ambiguous-width-combobox");
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY,
