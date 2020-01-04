@@ -40,11 +40,11 @@ HELP_FILES = \
 	prob-reset.page \
 	txt-copy-paste.page \
 	txt-links.page \
-#	https://gitlab.gnome.org/GNOME/gnome-terminal/issues/71 :
-#	txt-save-text.page \
 	txt-search.page \
 	txt-select-text.page \
 	$(NULL)
+#	https://gitlab.gnome.org/GNOME/gnome-terminal/issues/71 :
+#	txt-save-text.page
 
 HELP_LINGUAS = ca cs de el es fi fr gl hu ko pl pt_BR ro ru sv
 
