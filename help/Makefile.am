@@ -40,7 +40,8 @@ HELP_FILES = \
 	prob-reset.page \
 	txt-copy-paste.page \
 	txt-links.page \
-	txt-save-text.page \
+#	https://gitlab.gnome.org/GNOME/gnome-terminal/issues/71 :
+#	txt-save-text.page \
 	txt-search.page \
 	txt-select-text.page \
 	$(NULL)
