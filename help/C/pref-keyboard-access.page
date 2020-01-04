@@ -4,6 +4,7 @@
 
   <info>
     <revision version="0.1" date="2013-02-25" status="candidate"/>
+    <revision version="0.2" pkgversion="3.34" date="2020-01-04" status="review"/>
     <link type="guide" xref="index#preferences"/>
     <link type="guide" xref="pref#global"/>
     <link type="seealso" xref="pref-menubar"/>
@@ -32,8 +33,11 @@
   <title>Keyboard accessibility</title>
 
   <note style="important">
+    <!-- see https://gitlab.gnome.org/GNOME/gnome-terminal/issues/145 -->
     <p>These keys will only have an effect in windows in which the menubar is
-    set to be visible.</p>
+    set to be visible. By default, the menubar is not visible.</p>
+    <p>Run the command <cmd>gsettings set org.gnome.Terminal.Legacy.Settings headerbar false</cmd>
+    to see the menubar.</p>
   </note>
 
   <p>You can navigate the <app>Terminal</app> menu using a combination of keys
@@ -58,8 +62,11 @@
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui> <gui style="menuitem">
-        Preferences</gui> <gui style="tab">General</gui></guiseq>.</p>
+        <p>Press the menu button in the top-right corner of the window and select
+        <gui style="menuitem">Preferences</gui>.</p>
+      </item>
+      <item>
+        <p>In the sidebar, select <gui>General</gui>.</p>
       </item>
       <item>
         <p>Check <gui style="checkbox">Enable mnemonics</gui>.</p>
@@ -77,9 +84,11 @@
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-	<gui style="menuitem">Preferences</gui>
-	<gui style="tab">General</gui></guiseq>.</p>
+        <p>Press the menu button in the top-right corner of the window and select
+        <gui style="menuitem">Preferences</gui>.</p>
+      </item>
+      <item>
+        <p>In the sidebar, select <gui>General</gui>.</p>
       </item>
       <item>
         <p>Check <gui style="checkbox">Enable the menu accelerator
