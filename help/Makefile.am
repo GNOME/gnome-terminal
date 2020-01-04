@@ -7,6 +7,7 @@ HELP_ID = gnome-terminal
 HELP_MEDIA = \
 	figures/gnome-terminal.png \
 	figures/gnome-terminal-icon.png \
+	figures/keyboard-key-search.svg \
 	$(NULL)
 
 HELP_FILES = \
