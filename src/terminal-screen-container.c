@@ -57,6 +57,18 @@ G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVER
 
 /* Widget class implementation */
 
+static void
+terminal_screen_container_realize (GtkWidget *widget)
+{
+
+  GTK_WIDGET_CLASS (terminal_screen_container_parent_class)->realize (widget);
+
+  /* We need to realize the screen itself too, see issue #203 */
+  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (widget);
+  TerminalScreenContainerPrivate *priv = container->priv;
+  gtk_widget_realize (GTK_WIDGET (priv->screen));
+}
+
 #ifndef USE_SCROLLED_WINDOW
 
 static void
@@ -217,10 +229,10 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;
 
-#ifndef USE_SCROLLED_WINDOW
-{
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  widget_class->realize = terminal_screen_container_realize;
 
+#ifndef USE_SCROLLED_WINDOW
   widget_class->style_updated = terminal_screen_container_style_updated;
 
   gtk_widget_class_install_style_property (widget_class,
@@ -234,10 +246,8 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                                                                  FALSE,
                                                                  G_PARAM_READWRITE |
                                                                  G_PARAM_STATIC_STRINGS));
-}
 #endif
 
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_css_name(widget_class, TERMINAL_SCREEN_CONTAINER_CSS_NAME);
 
   g_object_class_install_property
