@@ -231,6 +231,11 @@ add_new_window (TerminalOptions *options,
   apply_window_defaults (options, iw);
 
   it = initial_tab_new (profile);
+
+  /* If this is an implicit first window, the new tab should be active */
+  if (iw->implicit_first_window)
+    it->active = TRUE;
+
   iw->tabs = g_list_prepend (NULL, it);
   apply_tab_defaults (options, it);
 
