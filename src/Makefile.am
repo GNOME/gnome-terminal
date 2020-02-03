@@ -21,6 +21,9 @@ dbusservice_DATA = org.gnome.Terminal.service
 systemduserdir = $(prefix)/lib/systemd/user
 nodist_systemduser_DATA = gnome-terminal-server.service
 
+scopedefaultsdir = $(systemduserdir)/gnome-terminal-.scope.d
+nodist_scopedefaults_DATA = defaults.conf
+
 gnome_terminal_server_built = \
 	terminal-marshal.c \
 	terminal-marshal.h \
@@ -160,6 +163,13 @@ gnome-terminal-server.service: Makefile
 		      echo "Type=dbus"; \
 		      echo "BusName=org.gnome.Terminal"; \
 		      echo "ExecStart=${libexecdir}/gnome-terminal-server") > $@
+
+defaults.conf: Makefile
+	$(AM_V_GEN) ( echo "[Unit]"; \
+		      echo "CollectMode=inactive-or-failed"; \
+		      echo "[Scope]"; \
+		      echo "KillMode=process"; \
+		      echo "TimeoutStopSec=5s") > $@
 
 terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
@@ -321,6 +331,7 @@ CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	org.gnome.Terminal.service \
 	gnome-terminal-server.service \
+	gnome-terminal-.scope \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
