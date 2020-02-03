@@ -58,6 +58,7 @@
 #include "terminal-window.h"
 #include "terminal-info-bar.h"
 #include "terminal-libgsystem.h"
+#include "terminal-systemd.h"
 
 #include "eggshell.h"
 
@@ -1631,6 +1632,10 @@ spawn_result_cb (VteTerminal *terminal,
     gboolean can_reexec = TRUE; /* FIXME */
     terminal_screen_show_info_bar (screen, error, can_reexec);
   }
+
+  /* Try to move child process into a new scope.
+   * Might be nice to embed the PTY number instead of using argv[0]. */
+  terminal_start_systemd_scope (exec_data->exec_argv[0], pid, NULL, NULL, NULL, NULL, NULL);
 
   /* Retain info for reexec, if possible */
   ExecData *new_exec_data = exec_data_clone (exec_data);
