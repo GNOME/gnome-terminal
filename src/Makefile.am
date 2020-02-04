@@ -85,6 +85,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-screen-container.h \
 	terminal-search-popover.c \
 	terminal-search-popover.h \
+	terminal-systemd.c \
+	terminal-systemd.h \
 	terminal-tab-label.c \
 	terminal-tab-label.h \
 	terminal-util.c \
@@ -106,7 +108,8 @@ gnome_terminal_server_CFLAGS = \
 	$(TERM_CFLAGS) \
 	$(PTHREAD_CFLAGS) \
 	$(WARN_CFLAGS) \
-	$(AM_CFLAGS)
+	$(AM_CFLAGS) \
+	$(SYSTEMD_CFLAGS)
 
 gnome_terminal_server_LDFLAGS = \
 	$(AM_LDFLAGS)
@@ -114,6 +117,7 @@ gnome_terminal_server_LDFLAGS = \
 gnome_terminal_server_LDADD = \
 	$(TERM_LIBS) \
 	$(PTHREAD_LIBS) \
+	$(SYSTEMD_LIBS) \
 	$(NULL)
 
 TYPES_H_FILES = \

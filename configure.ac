@@ -216,6 +216,27 @@ fi
 
 AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes"])
 
+# ***************************
+# libsystemd availability
+# ***************************
+
+AC_MSG_CHECKING([Whether to integrate with systemd])
+AC_ARG_ENABLE([systemd],
+  [AS_HELP_STRING([--disable-systemd],[Disable gnome-terminal systemd integration])],
+  [],[enable_systemd=yes])
+AC_MSG_RESULT([$enable_systemd])
+
+if test "$enable_systemd" = "yes"; then
+  PKG_CHECK_MODULES([SYSTEMD],[
+    libsystemd])
+
+  AC_SUBST(SYSTEMD_CFLAGS)
+  AC_SUBST(SYSTEMD_LIBS)
+  AC_DEFINE([HAVE_SYSTEMD],[1],[Define to 1 if libsystemd is available])
+fi
+
+AM_CONDITIONAL([ENABLE_SYSTEMD],[test "$enable_systemd" = "yes"])
+
 # ***********
 # Compilation
 # ***********
