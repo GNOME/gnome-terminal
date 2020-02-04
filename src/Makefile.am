@@ -173,9 +173,9 @@ gnome-terminal-server.service: Makefile
 defaults.conf: Makefile
 	$(AM_V_GEN) ( echo "[Unit]"; \
 		      echo "CollectMode=inactive-or-failed"; \
+		      echo "PartOf=graphical-session.target"; \
 		      echo "[Scope]"; \
 		      echo "Slice=apps-org.gnome.Terminal.slice"; \
-		      echo "KillMode=process"; \
 		      echo "TimeoutStopSec=5s") > $@
 
 terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
