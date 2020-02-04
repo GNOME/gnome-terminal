@@ -162,11 +162,13 @@ org.gnome.Terminal.service: Makefile
 gnome-terminal-server.service: Makefile
 	$(AM_V_GEN) ( echo "[Unit]"; \
 		      echo "Description=GNOME Terminal Server"; \
+		      echo "PartOf=graphical-session.target"; \
 		      echo "[Service]"; \
 		      echo "Slice=apps-org.gnome.Terminal.slice"; \
 		      echo "Type=dbus"; \
 		      echo "BusName=org.gnome.Terminal"; \
-		      echo "ExecStart=${libexecdir}/gnome-terminal-server") > $@
+		      echo "ExecStart=${libexecdir}/gnome-terminal-server"; \
+		      echo "TimeoutStopSec=5s") > $@
 
 defaults.conf: Makefile
 	$(AM_V_GEN) ( echo "[Unit]"; \
