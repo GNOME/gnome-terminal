@@ -163,6 +163,7 @@ gnome-terminal-server.service: Makefile
 	$(AM_V_GEN) ( echo "[Unit]"; \
 		      echo "Description=GNOME Terminal Server"; \
 		      echo "[Service]"; \
+		      echo "Slice=apps-org.gnome.Terminal.slice"; \
 		      echo "Type=dbus"; \
 		      echo "BusName=org.gnome.Terminal"; \
 		      echo "ExecStart=${libexecdir}/gnome-terminal-server") > $@
@@ -171,6 +172,7 @@ defaults.conf: Makefile
 	$(AM_V_GEN) ( echo "[Unit]"; \
 		      echo "CollectMode=inactive-or-failed"; \
 		      echo "[Scope]"; \
+		      echo "Slice=apps-org.gnome.Terminal.slice"; \
 		      echo "KillMode=process"; \
 		      echo "TimeoutStopSec=5s") > $@
 
