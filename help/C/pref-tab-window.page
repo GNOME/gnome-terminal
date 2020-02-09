@@ -8,6 +8,7 @@
     <link type="seealso" xref="gs-tabs"/>
     <revision pkgversion="3.12" date="2014-02-26" status="review"/>
     <revision pkgversion="3.14.2" date="2015-01-27" status="review"/>
+    <revision pkgversion="3.34" date="2020-02-09" status="review"/>
 
     <credit type="author copyright">
       <name>Ekaterina Gerasimova</name>
@@ -27,13 +28,36 @@
 
   <title>Windows and tabs</title>
 
+<note style="tip">
+  <p>This setting only applies when the <link xref="pref-menubar">menubar is
+  enabled</link>, or when <app>Terminal</app> is started from the command line and
+  neither the <cmd>--tab</cmd> nor the <cmd>--window</cmd> options are passed.</p>
+</note>
+
   <p>You can choose whether to open a new tab or a new <app>Terminal</app>
   window when you use <gui style="menuitem">New Terminal</gui>.</p>
 
   <steps>
+    <title>If the menubar is enabled,</title>
     <item>
       <p>Select
-      <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Preferences</gui><gui style="tab">General</gui></guiseq>.</p>
+      <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Preferences</gui>
+      <gui style="tab">General</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Set <gui>Open new terminals in:</gui> to <gui>Tab</gui> or
+      <gui>Window</gui>.</p>
+    </item>
+  </steps>
+
+  <steps>
+    <title>If the menubar is not enabled,</title>
+    <item>
+      <p>Press the menu button in the top-right corner of the window and select
+      <gui style="menuitem">Preferences</gui>.</p>
+    </item>
+    <item>
+      <p>In the sidebar, select <gui>General</gui>.</p>
     </item>
     <item>
       <p>Set <gui>Open new terminals in:</gui> to <gui>Tab</gui> or
