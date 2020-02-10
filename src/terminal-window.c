@@ -340,7 +340,6 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
   gs_unref_object GSettings *profile = NULL;
-  gs_free char *new_working_directory = NULL;
   gboolean can_toggle = FALSE;
 
   g_assert (TERMINAL_IS_WINDOW (window));
