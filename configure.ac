@@ -1,12 +1,12 @@
-m4_define([gt_version_major],[3])
-m4_define([gt_version_minor],[35])
-m4_define([gt_version_micro],[2])
-m4_define([gt_version_extra],[])
-m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
+m4_define([terminal_version_major],[3])
+m4_define([terminal_version_minor],[35])
+m4_define([terminal_version_micro],[2])
+m4_define([terminal_version_extra],[])
+m4_define([terminal_version],[terminal_version_major().terminal_version_minor().terminal_version_micro()terminal_version_extra])
 
-m4_define([gt_api_version],[0])
+m4_define([terminal_api_version],[0])
 
-AC_INIT([GNOME Terminal],[gt_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
+AC_INIT([GNOME Terminal],[terminal_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
 AC_CONFIG_SRCDIR([src/terminal.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
@@ -32,9 +32,8 @@ AC_PROG_CC_C99
 AC_ISC_POSIX
 AC_HEADER_STDC
 AM_PROG_LIBTOOL
-IT_PROG_INTLTOOL([0.50.0])
-
-AM_GLIB_GNU_GETTEXT
+AM_GNU_GETTEXT_VERSION([0.19.8])
+AM_GNU_GETTEXT([external])
 
 AX_PTHREAD([],[AC_MSG_ERROR([pthreads are required])])
 
@@ -287,10 +286,10 @@ YELP_HELP_INIT([no-lc-media-links no-lc-dist])
 
 # ****************************
 
-AC_SUBST([TERMINAL_MAJOR_VERSION],[gt_version_major])
-AC_SUBST([TERMINAL_MINOR_VERSION],[gt_version_minor])
-AC_SUBST([TERMINAL_MICRO_VERSION],[gt_version_micro])
-AC_SUBST([TERMINAL_API_VERSION],[gt_api_version])
+AC_SUBST([TERMINAL_MAJOR_VERSION],[terminal_version_major])
+AC_SUBST([TERMINAL_MINOR_VERSION],[terminal_version_minor])
+AC_SUBST([TERMINAL_MICRO_VERSION],[terminal_version_micro])
+AC_SUBST([TERMINAL_API_VERSION],[terminal_api_version])
 AC_SUBST([GTK_API_VERSION])
 AC_SUBST([WARN_CFLAGS])
 AC_SUBST([AM_CPPFLAGS])

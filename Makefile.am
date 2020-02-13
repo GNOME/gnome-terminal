@@ -16,7 +16,9 @@ DISTCHECK_CONFIGURE_FLAGS = \
 desktopdir = $(datadir)/applications
 desktop_in_files = org.gnome.Terminal.desktop.in.in
 nodist_desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
+
+$(nodist_desktop_DATA): $(desktop_in_files:.desktop.in.in=.desktop.in)
+	$(AM_V_GEN)$(MSGFMT) --desktop --template $< -d $(top_srcdir)/po -o $@
 
 DESKTOP_FILE_VALIDATE_FLAGS =
 desktop-file-validate: $(nodist_desktop_DATA)
@@ -38,7 +40,8 @@ if WITH_NAUTILUS_EXTENSION
 nodist_appdata_DATA += org.gnome.Terminal.Nautilus.metainfo.xml
 endif
 
-@INTLTOOL_XML_RULE@
+$(nodist_appdata_DATA): $(appdata_in_files)
+	$(AM_V_GEN) $(MSGFMT) --xml --template $< -d $(top_srcdir)/po -o $@
 
 check-local: desktop-file-validate
 
