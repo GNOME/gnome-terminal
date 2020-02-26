@@ -43,7 +43,11 @@
 #ifndef TERMINAL_REGEX_H
 #define TERMINAL_REGEX_H
 
-/* Lookbehind to see if there's a preceding apostrophe */
+/* Lookbehind to see if there's a preceding apostrophe.
+ * Unlike the other *_DEF macros which define regex subroutines,
+ * this one is a named capture that defines APOS_START to either
+ * an apostrophe or the empty string, depending on the character
+ * preceding this APOS_START_DEF construct. */
 #define APOS_START_DEF "(?<APOS_START>(?<='))?"
 
 #define SCHEME "(?ix: news | telnet | nntp | https? | ftps? | sftp | webcal )"
