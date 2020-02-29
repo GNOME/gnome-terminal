@@ -1,6 +1,6 @@
 m4_define([terminal_version_major],[3])
-m4_define([terminal_version_minor],[36])
-m4_define([terminal_version_micro],[0])
+m4_define([terminal_version_minor],[35])
+m4_define([terminal_version_micro],[92])
 m4_define([terminal_version_extra],[])
 m4_define([terminal_version],[terminal_version_major().terminal_version_minor().terminal_version_micro()terminal_version_extra])
 
@@ -64,7 +64,7 @@ case "$with_gtk" in
        GTK_MIN_REQUIRED=3.18
        GTK_MAX_ALLOWED=3.22
        VTE_API_VERSION=2.91
-       VTE_REQUIRED=0.59.91
+       VTE_REQUIRED=0.59.92
        ;;
 esac
 
