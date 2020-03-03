@@ -99,9 +99,6 @@ char *terminal_util_uri_fixup (const char *uri,
 
 char *terminal_util_hyperlink_uri_label (const char *str);
 
-gchar *terminal_util_utf8_make_valid (const gchar *str,
-                                      gssize       len) G_GNUC_MALLOC;
-
 void terminal_util_load_print_settings (GtkPrintSettings **settings,
                                         GtkPageSetup **page_setup);
 
