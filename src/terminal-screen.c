@@ -963,9 +963,7 @@ terminal_screen_exec (TerminalScreen *screen,
     return FALSE;
   }
 
-  if (preserve_cwd) {
-    data->cwd = g_strdup (cwd);
-  } else {
+  if (!preserve_cwd) {
     cwd = g_get_home_dir ();
     envv = g_environ_unsetenv (envv, "PWD");
   }
@@ -980,6 +978,7 @@ terminal_screen_exec (TerminalScreen *screen,
 
   data->argv = g_strdupv (argv);
   data->exec_argv = g_strdupv (exec_argv);
+  data->cwd = g_strdup (cwd);
   data->envv = g_strdupv (envv);
   data->as_shell = as_shell;
   data->pty_flags = VTE_PTY_DEFAULT;
