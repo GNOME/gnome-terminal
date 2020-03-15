@@ -827,7 +827,8 @@ terminal_screen_reexec_from_exec_data (TerminalScreen *screen,
                                data ? data->argv : NULL,
                                envv ? envv : data ? data->envv : NULL,
                                data ? data->as_shell : TRUE,
-                               cwd ? cwd : data ? data->cwd : NULL,
+                               /* If we have command line args, must always pass the cwd from the command line, too */
+                               data->argv ? data->cwd : cwd ? cwd : data ? data->cwd : NULL,
                                NULL /* fd list */, NULL /* fd array */,
                                NULL, NULL, NULL, /* callback + data + destroy notify */
                                cancellable,
@@ -1323,42 +1324,43 @@ should_preserve_cwd (TerminalPreserveWorkingDirectory preserve_cwd,
 
 static gboolean
 terminal_screen_get_child_command (TerminalScreen *screen,
-                                   char          **exec_argv,
+                                   char          **argv,
                                    const char     *path_env,
                                    const char     *shell_env,
                                    gboolean        as_shell,
                                    gboolean       *preserve_cwd_p,
                                    GSpawnFlags    *spawn_flags_p,
-                                   char         ***argv_p,
+                                   char         ***exec_argv_p,
                                    GError        **err)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
   TerminalPreserveWorkingDirectory preserve_cwd;
-  char **argv;
+  char **exec_argv;
 
-  g_assert (spawn_flags_p != NULL && argv_p != NULL && preserve_cwd_p != NULL);
+  g_assert (spawn_flags_p != NULL && exec_argv_p != NULL && preserve_cwd_p != NULL);
 
-  *argv_p = argv = NULL;
+  *exec_argv_p = exec_argv = NULL;
 
   preserve_cwd = g_settings_get_enum (profile, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY);
 
-  if (exec_argv)
+  if (argv)
     {
-      argv = g_strdupv (exec_argv);
+      exec_argv = g_strdupv (argv);
 
-      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, argv[0]);
+      /* argv and cwd come from the command line client, so it must always be used */
+      *preserve_cwd_p = TRUE;
       *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
     }
   else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
     {
-      gs_free char *argv_str;
+      gs_free char *exec_argv_str;
 
-      argv_str = g_settings_get_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
-      if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
+      exec_argv_str = g_settings_get_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
+      if (!g_shell_parse_argv (exec_argv_str, NULL, &exec_argv, err))
         return FALSE;
 
-      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, argv[0]);
+      *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, exec_argv[0]);
       *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
     }
   else if (as_shell)
@@ -1377,16 +1379,16 @@ terminal_screen_get_child_command (TerminalScreen *screen,
         *spawn_flags_p |= G_SPAWN_SEARCH_PATH_FROM_ENVP;
       }
 
-      argv = g_new (char*, 3);
+      exec_argv = g_new (char*, 3);
 
-      argv[argc++] = shell;
+      exec_argv[argc++] = shell;
 
       if (g_settings_get_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY))
-        argv[argc++] = g_strconcat ("-", only_name, NULL);
+        exec_argv[argc++] = g_strconcat ("-", only_name, NULL);
       else
-        argv[argc++] = g_strdup (only_name);
+        exec_argv[argc++] = g_strdup (only_name);
 
-      argv[argc++] = NULL;
+      exec_argv[argc++] = NULL;
 
       *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, shell);
       *spawn_flags_p |= G_SPAWN_FILE_AND_ARGV_ZERO;
@@ -1399,7 +1401,7 @@ terminal_screen_get_child_command (TerminalScreen *screen,
       return FALSE;
     }
 
-  *argv_p = argv;
+  *exec_argv_p = exec_argv;
 
   return TRUE;
 }
