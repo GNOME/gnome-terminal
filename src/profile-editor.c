@@ -174,6 +174,16 @@ static const TerminalColorScheme color_schemes[] = {
     COLOR (0xff, 0xff, 0xff),
     COLOR (0x00, 0x00, 0x00)
   },
+  /* Translators: "GNOME" is the name of a colour scheme, "light" can be translated */
+  { N_("GNOME light"),
+    COLOR (0x24, 0x1f, 0x31),  /* Dark 4 */
+    COLOR (0xff, 0xff, 0xff)   /* Light 1 */
+  },
+  /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
+  { N_("GNOME dark"),
+    COLOR (0xde, 0xdd, 0xda),  /* Light 3 */
+    COLOR (0x24, 0x1f, 0x31)   /* Dark 4 */
+  },
   /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
   { N_("Tango light"),
     COLOR (0x2e, 0x34, 0x36),
@@ -200,16 +210,37 @@ static const TerminalColorScheme color_schemes[] = {
 
 enum
 {
-  TERMINAL_PALETTE_TANGO     = 0,
-  TERMINAL_PALETTE_LINUX     = 1,
-  TERMINAL_PALETTE_XTERM     = 2,
-  TERMINAL_PALETTE_RXVT      = 3,
-  TERMINAL_PALETTE_SOLARIZED = 4,
+  TERMINAL_PALETTE_GNOME     = 0,
+  TERMINAL_PALETTE_TANGO     = 1,
+  TERMINAL_PALETTE_LINUX     = 2,
+  TERMINAL_PALETTE_XTERM     = 3,
+  TERMINAL_PALETTE_RXVT      = 4,
+  TERMINAL_PALETTE_SOLARIZED = 5,
   TERMINAL_PALETTE_N_BUILTINS
 };
 
 static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
 {
+  /* GNOME 3.32 palette: https://developer.gnome.org/hig/stable/icon-design.html.en#palette */
+  {
+    COLOR (0x24, 0x1f, 0x31),  /* Dark 4 */
+    COLOR (0xc0, 0x1c, 0x28),  /* Red 4 */
+    COLOR (0x26, 0xa2, 0x69),  /* Green 5 */
+    COLOR (0xb5, 0x83, 0x5a),  /* Brown 2 */
+    COLOR (0x1e, 0x50, 0x98),  /* Linear blend 33% Dark 4 over Blue 5 */
+    COLOR (0xa3, 0x47, 0xba),  /* Purple 3 */
+    COLOR (0x30, 0xb7, 0xcb),  /* Linear addition Blue 5 + Green 5 */
+    COLOR (0xde, 0xdd, 0xda),  /* Light 3 */
+    COLOR (0x5e, 0x5c, 0x64),  /* Dark 2 */
+    COLOR (0xed, 0x33, 0x3b),  /* Red 2 */
+    COLOR (0x33, 0xd1, 0x7a),  /* Green 3 */
+    COLOR (0xf8, 0xe4, 0x5c),  /* Yellow 2 */
+    COLOR (0x1c, 0x71, 0xd8),  /* Blue 4 */
+    COLOR (0xc0, 0x61, 0xcb),  /* Purple 2 */
+    COLOR (0x38, 0xda, 0xf3),  /* Linear addition Blue 4 + Green 4 */
+    COLOR (0xff, 0xff, 0xff)   /* Light 1 */
+  },
+
   /* Tango palette */
   {
     COLOR (0x2e, 0x34, 0x36),
