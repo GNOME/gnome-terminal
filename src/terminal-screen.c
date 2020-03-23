@@ -267,8 +267,7 @@ exec_data_new (void)
 }
 
 static ExecData *
-exec_data_clone (ExecData *data,
-                 gboolean preserve_argv)
+exec_data_clone (ExecData *data)
 {
   if (data == NULL)
     return NULL;
@@ -278,8 +277,7 @@ exec_data_clone (ExecData *data,
   clone->cwd = g_strdup (data->cwd);
 
   /* If FDs were passed, cannot repeat argv. Return data only for env and cwd */
-  if (!preserve_argv ||
-      data->fd_list != NULL) {
+  if (data->fd_list != NULL) {
     clone->as_shell = TRUE;
     return clone;
   }
@@ -850,7 +848,6 @@ terminal_screen_reexec_from_screen (TerminalScreen *screen,
 
   g_return_val_if_fail (TERMINAL_IS_SCREEN (parent_screen), FALSE);
 
-  terminal_unref_exec_data ExecData* data = exec_data_clone (parent_screen->priv->exec_data, FALSE);
   gs_free char* cwd = terminal_screen_get_current_dir (parent_screen);
 
   _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
@@ -860,7 +857,7 @@ terminal_screen_reexec_from_screen (TerminalScreen *screen,
                          cwd);
 
   return terminal_screen_reexec_from_exec_data (screen,
-                                                data,
+                                                NULL /* exec data */,
                                                 NULL /* envv */,
                                                 cwd,
                                                 cancellable,
@@ -1636,7 +1633,7 @@ spawn_result_cb (VteTerminal *terminal,
   }
 
   /* Retain info for reexec, if possible */
-  ExecData *new_exec_data = exec_data_clone (exec_data, TRUE);
+  ExecData *new_exec_data = exec_data_clone (exec_data);
   terminal_screen_clear_exec_data (screen, FALSE);
   priv->exec_data = new_exec_data;
 
