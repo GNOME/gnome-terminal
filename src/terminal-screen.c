@@ -828,7 +828,7 @@ terminal_screen_reexec_from_exec_data (TerminalScreen *screen,
                                envv ? envv : data ? data->envv : NULL,
                                data ? data->as_shell : TRUE,
                                /* If we have command line args, must always pass the cwd from the command line, too */
-                               data->argv ? data->cwd : cwd ? cwd : data ? data->cwd : NULL,
+                               data && data->argv ? data->cwd : cwd ? cwd : data ? data->cwd : NULL,
                                NULL /* fd list */, NULL /* fd array */,
                                NULL, NULL, NULL, /* callback + data + destroy notify */
                                cancellable,
