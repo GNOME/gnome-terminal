@@ -161,7 +161,8 @@ gnome-terminal-server.service: Makefile
 		      echo "Type=dbus"; \
 		      echo "BusName=org.gnome.Terminal"; \
 		      echo "ExecStart=${libexecdir}/gnome-terminal-server"; \
-		      echo "TimeoutStopSec=5s") > $@
+		      echo "TimeoutStopSec=5s"; \
+		      echo "KillMode=process") > $@
 
 terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
