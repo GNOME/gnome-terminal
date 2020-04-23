@@ -77,6 +77,7 @@ typedef struct {
   GSpawnFlags spawn_flags;
 
   /* FD passing */
+  GUnixFDList *fd_list_obj;
   int *fd_list;
   int fd_list_len;
   const int *fd_array;
@@ -277,7 +278,7 @@ exec_data_clone (ExecData *data)
   clone->cwd = g_strdup (data->cwd);
 
   /* If FDs were passed, cannot repeat argv. Return data only for env and cwd */
-  if (data->fd_list != NULL) {
+  if (data->fd_list_obj != NULL) {
     clone->as_shell = TRUE;
     return clone;
   }
@@ -318,6 +319,7 @@ exec_data_unref (ExecData *data)
   g_strfreev (data->envv);
   g_free (data->cwd);
   g_free (data->fd_list);
+  g_clear_object (&data->fd_list_obj);
 
   if (data->callback_data_destroy_notify && data->callback_data)
     data->callback_data_destroy_notify (data->callback_data);
@@ -968,6 +970,7 @@ terminal_screen_exec (TerminalScreen *screen,
     envv = g_environ_unsetenv (envv, "PWD");
   }
 
+  data->fd_list_obj = fd_list ? g_object_ref(fd_list) : NULL;
   if (fd_list) {
     const int *fds;
 
