@@ -1348,6 +1348,15 @@ get_goption_context (TerminalOptions *options)
       NULL, NULL
     },
     {
+      "no-environment",
+      0,
+      0,
+      G_OPTION_ARG_NONE,
+      &options->no_environment,
+      N_("Do not pass the environment"),
+      NULL
+    },
+    {
       "preferences",
       0,
       0,

@@ -516,6 +516,7 @@ handle_options (TerminalOptions *options,
           gsize fd_array_len = it->fd_array ? it->fd_array->len : 0;
 
           terminal_client_append_exec_options (&builder,
+                                               !options->no_environment,
                                                it->working_dir ? it->working_dir
                                                                : options->default_working_dir,
                                                fd_array, fd_array_len,

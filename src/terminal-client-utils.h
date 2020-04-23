@@ -41,6 +41,7 @@ typedef struct {
 } PassFdElement;
 
 void terminal_client_append_exec_options            (GVariantBuilder *builder,
+                                                     gboolean         pass_environment,
                                                      const char      *working_directory,
                                                      PassFdElement   *fd_array,
                                                      gsize            fd_array_len,

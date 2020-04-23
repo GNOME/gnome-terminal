@@ -87,6 +87,7 @@ typedef struct
   char   **exec_argv;
   char    *default_profile;
   gboolean default_profile_is_id;
+  gboolean no_environment;
 
   gboolean  execute;
   double    zoom;
