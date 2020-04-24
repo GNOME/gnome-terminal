@@ -1408,6 +1408,80 @@ terminal_screen_get_child_command (TerminalScreen *screen,
   return TRUE;
 }
 
+static gboolean
+get_dbus_property (GDBusConnection *bus,
+                   const char *bus_name,
+                   const char *object_path,
+                   const char *interface_name,
+                   const char *property_name,
+                   int timeout,
+                   GCancellable *cancellable,
+                   GError **error,
+                   const char *format_string,
+                   ...)
+{
+  gs_unref_variant GVariant *variant = NULL;
+  gs_unref_variant GVariant* reply;
+  va_list args;
+
+  reply = g_dbus_connection_call_sync (bus,
+				       bus_name,
+				       object_path,
+				       "org.freedesktop.DBus.Properties",
+				       "Get",
+				       g_variant_new ("(ss)",
+						      interface_name,
+						      property_name),
+				       G_VARIANT_TYPE ("(v)"),
+				       G_DBUS_CALL_FLAGS_NONE,
+				       timeout,
+				       cancellable,
+				       error);
+  if (reply == NULL)
+    return FALSE;
+
+  g_variant_get (reply, "(v)", &variant);
+  if (!g_variant_check_format_string (variant, format_string, TRUE))
+    {
+      g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_SIGNATURE,
+		   "Incompatible format string \"%s\" for variant of type \"%s\"",
+		   format_string,
+		   g_variant_get_type_string (variant));
+      return FALSE;
+    }
+
+  va_start (args, format_string);
+  g_variant_get_va (variant, format_string, NULL, &args);
+  va_end (args);
+
+  return TRUE;
+}
+
+static char**
+get_activation_environment(void)
+{
+  gs_free_error GError *error = NULL;
+  char **envv;
+
+  if (!get_dbus_property(g_application_get_dbus_connection(g_application_get_default()),
+                         "org.freedesktop.systemd1",
+                         "/org/freedesktop/systemd1",
+                         "org.freedesktop.systemd1.Manager",
+                         "Environment",
+                         -1,
+                         NULL,
+                         &error,
+                         "^as",
+                         &envv)) {
+    g_printerr("Failed to get activation environment: %s\n", error->message);
+  }
+
+  for (int i = 0; envv[i]; ++i)
+    g_printerr("%s\n", envv[i]);
+
+  return envv;
+}
+
 static char**
 terminal_screen_get_child_environment (TerminalScreen *screen,
                                        char **initial_envv,
@@ -1425,6 +1499,11 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
   env = initial_envv;
+  gs_strfreev char** freeme = NULL;
+  if (env == NULL) {
+    // FIXME: make this an async call!
+    env = freeme = get_activation_environment();
+  }
   if (env)
     {
       for (i = 0; env[i]; ++i)
