@@ -975,7 +975,7 @@ terminal_screen_exec (TerminalScreen *screen,
     const int *fds;
 
     fds = g_unix_fd_list_peek_fds (fd_list, &data->fd_list_len);
-    data->fd_list = g_memdup (fds, (data->fd_list_len + 1) * sizeof (int));
+    data->fd_list = g_memdup (fds, data->fd_list_len * sizeof (int));
     data->fd_array = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
   }
 
