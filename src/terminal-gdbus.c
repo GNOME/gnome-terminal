@@ -192,7 +192,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
 
   ExecData *exec_data = g_new (ExecData, 1);
   exec_data->receiver = g_object_ref (receiver);
-  exec_data->invocation = g_object_ref (invocation);
+  exec_data->invocation = invocation; /* adopted */
 
   GError *err = NULL;
   if (!terminal_screen_exec (priv->screen,
