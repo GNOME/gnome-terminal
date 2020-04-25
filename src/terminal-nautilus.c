@@ -370,6 +370,7 @@ create_terminal (ExecData *data /* transfer full */)
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
   terminal_client_append_exec_options (&builder,
+                                       FALSE,
                                        data->path,
                                        NULL, 0, /* FD array */
                                        TRUE /* shell */);
