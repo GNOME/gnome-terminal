@@ -176,13 +176,13 @@ static const TerminalColorScheme color_schemes[] = {
   },
   /* Translators: "GNOME" is the name of a colour scheme, "light" can be translated */
   { N_("GNOME light"),
-    COLOR (0x24, 0x1f, 0x31),  /* Dark 4 */
-    COLOR (0xff, 0xff, 0xff)   /* Light 1 */
+    COLOR (0x17, 0x14, 0x21), /* Palette entry 0 */
+    COLOR (0xff, 0xff, 0xff)  /* Palette entry 15 */
   },
   /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
   { N_("GNOME dark"),
-    COLOR (0xde, 0xdd, 0xda),  /* Light 3 */
-    COLOR (0x24, 0x1f, 0x31)   /* Dark 4 */
+    COLOR (0xd0, 0xcf, 0xcc), /* Palette entry 7 */
+    COLOR (0x17, 0x14, 0x21)  /* Palette entry 0 */
   },
   /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
   { N_("Tango light"),
@@ -221,23 +221,23 @@ enum
 
 static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
 {
-  /* GNOME 3.32 palette: https://developer.gnome.org/hig/stable/icon-design.html.en#palette */
+  /* Based on GNOME 3.32 palette: https://developer.gnome.org/hig/stable/icon-design.html.en#palette */
   {
-    COLOR (0x24, 0x1f, 0x31),  /* Dark 4 */
+    COLOR (0x17, 0x14, 0x21),  /* Blend of Dark 4 and Black */
     COLOR (0xc0, 0x1c, 0x28),  /* Red 4 */
     COLOR (0x26, 0xa2, 0x69),  /* Green 5 */
-    COLOR (0xb5, 0x83, 0x5a),  /* Brown 2 */
-    COLOR (0x1e, 0x50, 0x98),  /* Linear blend 33% Dark 4 over Blue 5 */
+    COLOR (0xa2, 0x73, 0x4c),  /* Blend of Brown 2 and Brown 3 */
+    COLOR (0x12, 0x48, 0x8b),  /* Blend of Blue 5 and Dark 4 */
     COLOR (0xa3, 0x47, 0xba),  /* Purple 3 */
-    COLOR (0x30, 0xb7, 0xcb),  /* Linear addition Blue 5 + Green 5 */
-    COLOR (0xde, 0xdd, 0xda),  /* Light 3 */
+    COLOR (0x2a, 0xa1, 0xb3),  /* Linear addition Blue 5 + Green 5, darkened slightly */
+    COLOR (0xd0, 0xcf, 0xcc),  /* Blend of Light 3 and Light 4 */
     COLOR (0x5e, 0x5c, 0x64),  /* Dark 2 */
-    COLOR (0xed, 0x33, 0x3b),  /* Red 2 */
+    COLOR (0xf6, 0x61, 0x51),  /* Red 1 */
     COLOR (0x33, 0xd1, 0x7a),  /* Green 3 */
-    COLOR (0xf8, 0xe4, 0x5c),  /* Yellow 2 */
-    COLOR (0x1c, 0x71, 0xd8),  /* Blue 4 */
+    COLOR (0xe9, 0xad, 0x0c),  /* Blend of Yellow 4 and Yellow 5 */
+    COLOR (0x2a, 0x7b, 0xde),  /* Blend of Blue 3 and Blue 4 */
     COLOR (0xc0, 0x61, 0xcb),  /* Purple 2 */
-    COLOR (0x38, 0xda, 0xf3),  /* Linear addition Blue 4 + Green 4 */
+    COLOR (0x33, 0xc7, 0xde),  /* Linear addition Blue 4 + Green 4, darkened slightly */
     COLOR (0xff, 0xff, 0xff)   /* Light 1 */
   },
 
