@@ -164,6 +164,13 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
       const int fd = fd_array_data[2 * i];
       const int idx = fd_array_data[2 * i + 1];
 
+      if (fd == -1) {
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "Passing of invalid FD %d not supported", fd);
+        goto out;
+      }
       if (fd == STDIN_FILENO ||
           fd == STDOUT_FILENO ||
           fd == STDERR_FILENO) {

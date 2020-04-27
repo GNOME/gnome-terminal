@@ -63,8 +63,6 @@
 
 #define URL_MATCH_CURSOR  (GDK_HAND2)
 
-#define SPAWN_TIMEOUT (30 * 1000 /* 30s */)
-
 typedef struct {
   volatile int refcount;
   char **argv; /* as passed */
@@ -77,11 +75,9 @@ typedef struct {
   GSpawnFlags spawn_flags;
 
   /* FD passing */
-  GUnixFDList *fd_list_obj;
-  int *fd_list;
-  int fd_list_len;
-  const int *fd_array;
-  gsize fd_array_len;
+  GUnixFDList *fd_list;
+  int n_fd_map;
+  int* fd_map;
 
   /* async exec callback */
   TerminalScreenExecCallback callback;
@@ -278,7 +274,7 @@ exec_data_clone (ExecData *data)
   clone->cwd = g_strdup (data->cwd);
 
   /* If FDs were passed, cannot repeat argv. Return data only for env and cwd */
-  if (data->fd_list_obj != NULL) {
+  if (data->fd_list != NULL) {
     clone->as_shell = TRUE;
     return clone;
   }
@@ -318,8 +314,8 @@ exec_data_unref (ExecData *data)
   g_strfreev (data->exec_argv);
   g_strfreev (data->envv);
   g_free (data->cwd);
-  g_free (data->fd_list);
-  g_clear_object (&data->fd_list_obj);
+  g_clear_object (&data->fd_list);
+  g_free (data->fd_map);
 
   if (data->callback_data_destroy_notify && data->callback_data)
     data->callback_data_destroy_notify (data->callback_data);
@@ -970,13 +966,28 @@ terminal_screen_exec (TerminalScreen *screen,
     envv = g_environ_unsetenv (envv, "PWD");
   }
 
-  data->fd_list_obj = fd_list ? g_object_ref(fd_list) : NULL;
-  if (fd_list) {
-    const int *fds;
+  data->fd_list = fd_list ? g_object_ref(fd_list) : NULL;
 
-    fds = g_unix_fd_list_peek_fds (fd_list, &data->fd_list_len);
-    data->fd_list = g_memdup (fds, data->fd_list_len * sizeof (int));
-    data->fd_array = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
+  if (fd_array) {
+    g_assert_nonnull(fd_list);
+    int n_fds = g_unix_fd_list_get_length(fd_list);
+
+    gsize fd_array_data_len;
+    const int *fd_array_data = g_variant_get_fixed_array (fd_array, &fd_array_data_len, 2 * sizeof (int));
+
+    data->n_fd_map = fd_array_data_len;
+    data->fd_map = g_new (int, data->n_fd_map);
+    for (gsize i = 0; i < fd_array_data_len; i++) {
+      const int fd = fd_array_data[2 * i];
+      const int idx = fd_array_data[2 * i + 1];
+      g_assert_cmpint(idx, >=, 0);
+      g_assert_cmpuint(idx, <, n_fds);
+
+      data->fd_map[idx] = fd;
+    }
+  } else {
+    data->n_fd_map = 0;
+    data->fd_map = NULL;
   }
 
   data->argv = g_strdupv (argv);
@@ -1509,79 +1520,6 @@ info_bar_response_cb (GtkWidget *info_bar,
 }
 
 static void
-terminal_screen_child_setup (ExecData *data)
-{
-  int *fds = data->fd_list;
-  int n_fds = data->fd_list_len;
-  const int *fd_array = data->fd_array;
-  gsize fd_array_len = data->fd_array_len;
-  gsize i;
-
-  /* At this point, vte_pty_child_setup() has been called,
-   * so all FDs are FD_CLOEXEC.
-   */
-
-  if (fd_array_len == 0)
-    return;
-
-  for (i = 0; i < fd_array_len; i++) {
-    int target_fd = fd_array[2 * i];
-    int idx = fd_array[2 * i + 1];
-    int fd, r;
-
-    g_assert (idx >= 0 && idx < n_fds);
-
-    /* We want to move fds[idx] to target_fd */
-
-    if (target_fd != fds[idx]) {
-      int j;
-
-      /* Need to check if @target_fd is one of the FDs in the FD list! */
-      for (j = 0; j < n_fds; j++) {
-        if (fds[j] == target_fd) {
-          do {
-            fd = fcntl (fds[j], F_DUPFD_CLOEXEC, 3);
-          } while (fd == -1 && errno == EINTR);
-          if (fd == -1)
-            _exit (127);
-
-          fds[j] = fd;
-          break;
-        }
-      }
-    }
-
-    if (target_fd == fds[idx]) {
-      /* Remove FD_CLOEXEC from target_fd */
-      int flags;
-
-      do {
-        flags = fcntl (target_fd, F_GETFD);
-      } while (flags == -1 && errno == EINTR);
-      if (flags == -1)
-        _exit (127);
-
-      do {
-        r = fcntl (target_fd, F_SETFD, flags & ~FD_CLOEXEC);
-      } while (r == -1 && errno == EINTR);
-      if (r == -1)
-        _exit (127);
-    } else {
-      /* Now we know that target_fd can be safely overwritten. */
-      errno = 0;
-      do {
-        fd = dup3 (fds[idx], target_fd, 0 /* no FD_CLOEXEC */);
-      } while (fd == -1 && errno == EINTR);
-      if (fd != target_fd)
-        _exit (127);
-    }
-
-    /* Don't need to close it here since it's FD_CLOEXEC or consumed */
-    fds[idx] = -1;
-  }
-}
-
-static void
 terminal_screen_show_info_bar (TerminalScreen *screen,
                                GError *error,
                                gboolean show_relaunch)
@@ -1663,20 +1601,29 @@ idle_exec_cb (TerminalScreen *screen)
                            screen, str);
   }
 
+  int n_fds;
+  int *fds;
+  if (data->fd_list) {
+    fds = g_unix_fd_list_steal_fds(data->fd_list, &n_fds);
+  } else {
+    fds = NULL;
+    n_fds = 0;
+  }
+
   VteTerminal *terminal = VTE_TERMINAL (screen);
-  vte_terminal_spawn_async (terminal,
-                            data->pty_flags,
-                            data->cwd,
-                            data->exec_argv,
-                            data->envv,
-                            data->spawn_flags,
-                            (GSpawnChildSetupFunc) terminal_screen_child_setup,
-                            exec_data_ref (data),
-                            (GDestroyNotify) exec_data_unref,
-                            SPAWN_TIMEOUT,
-                            data->cancellable,
-                            spawn_result_cb,
-                            exec_data_ref (data));
+  vte_terminal_spawn_with_fds_async (terminal,
+                                     data->pty_flags,
+                                     data->cwd,
+                                     (char const* const*)data->exec_argv,
+                                     (char const* const*)data->envv,
+                                     fds, n_fds,
+                                     data->fd_map, data->n_fd_map,
+                                     data->spawn_flags,
+                                     NULL, NULL, NULL, /* child setup, data, destroy */
+                                     -1,
+                                     data->cancellable,
+                                     spawn_result_cb,
+                                     exec_data_ref (data));
 
   return FALSE; /* don't run again */
 }
