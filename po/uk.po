@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terninal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-02-29 20:12+0000\n"
-"PO-Revision-Date: 2020-03-05 22:36+0200\n"
+"POT-Creation-Date: 2020-04-23 21:18+0000\n"
+"PO-Revision-Date: 2020-04-30 17:11+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
-"X-Generator: Lokalize 20.03.70\n"
+"X-Generator: Lokalize 20.07.70\n"
 "X-Project-Style: gnome\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
@@ -39,7 +39,7 @@ msgstr "GPL-3.0+"
 
 #. VERSION=@VERSION@
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
-#: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:569
+#: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
 #: src/terminal-window.c:1869 src/terminal-window.c:2135
 #: src/terminal-window.c:2416
@@ -85,7 +85,6 @@ msgid "ModernToolkit"
 msgstr "ModernToolkit"
 
 #: org.gnome.Terminal.appdata.xml.in:51
-#| msgid "_Search for:"
 msgid "SearchProvider"
 msgstr "SearchProvider"
 
@@ -98,8 +97,9 @@ msgstr "UserDocs"
 msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
+#. This is the name of a colour scheme
 #: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
-#: org.gnome.Terminal.Nautilus.metainfo.xml.in:45
+#: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
@@ -133,7 +133,6 @@ msgstr ""
 "меню, щоб відкривати термінал у поточному каталозі."
 
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:47
-#| msgid "Close Terminal"
 msgid "gnome-terminal"
 msgstr "gnome-terminal"
 
@@ -142,7 +141,6 @@ msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;prompt;command;commandline;cmd;оболонка;командний;рядок;команда;"
 
 #: org.gnome.Terminal.desktop.in.in:9
-#| msgid "Close Terminal"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
@@ -453,7 +451,6 @@ msgstr ""
 "(буде додане тире перед argv[0])."
 
 #: src/org.gnome.Terminal.gschema.xml:268
-#| msgid "Whether to update login records when launching terminal command"
 msgid "Whether to preserve the working directory when opening a new terminal"
 msgstr ""
 "Визначає, чи слід зберігати робочий каталог при відкритті нового термінала"
@@ -463,8 +460,8 @@ msgid ""
 "Controls when opening a new terminal from a previous one carries over the "
 "working directory of the opening terminal to the new one."
 msgstr ""
-"Визначає, чи слід зберігати при відкритті нового термінала робочий каталог"
-" вже відкритого термінала у новому."
+"Визначає, чи слід зберігати при відкритті нового термінала робочий каталог "
+"вже відкритого термінала у новому."
 
 #: src/org.gnome.Terminal.gschema.xml:275
 msgid "Whether to run a custom command instead of the shell"
@@ -798,8 +795,8 @@ msgstr "Який варіант теми використовувати"
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
-"Визначає, чи слід відкривати нові вкладки далі за поточною або у останній"
-" позиції"
+"Визначає, чи слід відкривати нові вкладки далі за поточною або у останній "
+"позиції"
 
 #. Open new terminal in new window
 #: src/preferences.ui:14
@@ -818,7 +815,6 @@ msgstr "Остання"
 
 #. New tab opens next to current tab
 #: src/preferences.ui:36
-#| msgid "Find Next"
 msgid "Next"
 msgstr "Далі"
 
@@ -879,7 +875,7 @@ msgstr "Вимкнено"
 
 #. Text blink mode
 #. Preserve working directory
-#: src/preferences.ui:157 src/preferences.ui:265
+#: src/preferences.ui:157 src/preferences.ui:268
 msgid "Never"
 msgstr "Ніколи"
 
@@ -895,7 +891,7 @@ msgstr "Коли не сфокусовано"
 
 #. Text blink mode
 #. Preserve working directory
-#: src/preferences.ui:166 src/preferences.ui:273
+#: src/preferences.ui:166 src/preferences.ui:276
 msgid "Always"
 msgstr "Завжди"
 
@@ -935,335 +931,334 @@ msgid "Hold the terminal open"
 msgstr "Тримати термінал відкритим"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:214
+#: src/preferences.ui:217
 msgid "Tango"
 msgstr "Танго"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:217
+#: src/preferences.ui:220
 msgid "Linux console"
 msgstr "Консоль Linux"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:220
+#: src/preferences.ui:223
 msgid "XTerm"
 msgstr "XTerm"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:223
+#: src/preferences.ui:226
 msgid "Rxvt"
 msgstr "Rxvt"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:226
+#: src/preferences.ui:229
 msgid "Solarized"
 msgstr "Засвічено"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:229 src/profile-editor.c:687
+#: src/preferences.ui:232 src/profile-editor.c:718
 msgid "Custom"
 msgstr "Інше"
 
 #. This refers to the Delete keybinding option
-#: src/preferences.ui:240
+#: src/preferences.ui:243
 msgid "Automatic"
 msgstr "Автоматично"
 
 #. This refers to the Delete keybinding option
-#: src/preferences.ui:243
+#: src/preferences.ui:246
 msgid "Control-H"
 msgstr "Ctrl-H"
 
 #. This refers to the Delete keybinding option
-#: src/preferences.ui:246
+#: src/preferences.ui:249
 msgid "ASCII DEL"
 msgstr "DEL"
 
 #. This refers to the Delete keybinding option
-#: src/preferences.ui:249
+#: src/preferences.ui:252
 msgid "Escape sequence"
 msgstr "Послідовність Escape"
 
 #. This refers to the Delete keybinding option
-#: src/preferences.ui:252
+#: src/preferences.ui:255
 msgid "TTY Erase"
 msgstr "Вилучення TTY"
 
 #. Preserve working directory
-#: src/preferences.ui:269
+#: src/preferences.ui:272
 msgid "Shell only"
 msgstr "Лише оболонка"
 
-#: src/preferences.ui:337
+#: src/preferences.ui:340
 msgid "_Show menubar by default in new terminals"
 msgstr "_Показувати панель меню у нових терміналах"
 
-#: src/preferences.ui:353
+#: src/preferences.ui:356
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
 msgstr "_Увімкнути мнемоніку (такі, як Alt+Ф для меню «Файл»)"
 
-#: src/preferences.ui:370
+#: src/preferences.ui:373
 msgid "Enable the _menu accelerator key (F10 by default)"
 msgstr "Увімкнути акселератор _меню (зазвичай F10)"
 
-#: src/preferences.ui:395
+#: src/preferences.ui:398
 msgid "Theme _variant:"
 msgstr "_Варіант теми:"
 
-#: src/preferences.ui:427
+#: src/preferences.ui:430
 msgid "Open _new terminals in:"
 msgstr "Відкрити _новий термінал у:"
 
-#: src/preferences.ui:459
+#: src/preferences.ui:462
 msgid "New tab _position:"
 msgstr "Позиція _нової вкладки:"
 
-#: src/preferences.ui:520
+#: src/preferences.ui:523
 msgid "_Enable shortcuts"
 msgstr "_Увімкнути скорочення"
 
-#: src/preferences.ui:586
+#: src/preferences.ui:589
 msgid "Text Appearance"
 msgstr "Вигляд тексту"
 
-#: src/preferences.ui:603
+#: src/preferences.ui:606
 msgid "Initial terminal si_ze:"
 msgstr "Початковий _розмір термінала:"
 
-#: src/preferences.ui:636
+#: src/preferences.ui:639
 msgid "columns"
 msgstr "стовпчиків"
 
-#: src/preferences.ui:673
+#: src/preferences.ui:676
 msgid "rows"
 msgstr "рядків"
 
-#: src/preferences.ui:694 src/preferences.ui:840
+#: src/preferences.ui:697 src/preferences.ui:843
 msgid "Rese_t"
 msgstr "С_кинути"
 
-#: src/preferences.ui:715
+#: src/preferences.ui:718
 msgid "Custom _font:"
 msgstr "Користувацький _шрифт:"
 
-#: src/preferences.ui:736
+#: src/preferences.ui:739
 msgid "Choose A Terminal Font"
 msgstr "Вибрати шрифт термінала"
 
-#: src/preferences.ui:749
+#: src/preferences.ui:752
 msgid "Cell spaci_ng:"
 msgstr "Відстань _між клітинками:"
 
-#: src/preferences.ui:864
+#: src/preferences.ui:867
 msgid "Allow b_linking text:"
 msgstr "_Дозволити блимаючий текст:"
 
-#: src/preferences.ui:898
+#: src/preferences.ui:901
 msgid "Cursor"
 msgstr "Курсор"
 
-#: src/preferences.ui:915
+#: src/preferences.ui:918
 msgid "Cursor _shape:"
 msgstr "_Форма курсору:"
 
-#: src/preferences.ui:949
+#: src/preferences.ui:952
 msgid "Cursor blin_king:"
 msgstr "_Блимання курсора:"
 
-#: src/preferences.ui:983
+#: src/preferences.ui:986
 msgid "Sound"
 msgstr "Звук"
 
-#: src/preferences.ui:997
+#: src/preferences.ui:1000
 msgid "Terminal _bell"
 msgstr "Термінальний _сигнал"
 
-#: src/preferences.ui:1023
+#: src/preferences.ui:1026
 msgid "Profile ID:"
 msgstr "Ідентифікатор профілю:"
 
-#: src/preferences.ui:1063 src/preferences.ui:1180
+#: src/preferences.ui:1066 src/preferences.ui:1183
 msgid "Text"
 msgstr "Текст"
 
-#: src/preferences.ui:1086
+#: src/preferences.ui:1089
 msgid "Text and Background Color"
 msgstr "Колір тексту та тла"
 
-#: src/preferences.ui:1110
+#: src/preferences.ui:1113
 msgid "_Use colors from system theme"
 msgstr "Використовувати кольори _системної теми"
 
-#: src/preferences.ui:1139
+#: src/preferences.ui:1142
 msgid "Built-in sche_mes:"
 msgstr "В_будовані схеми:"
 
-#: src/preferences.ui:1192
+#: src/preferences.ui:1195
 msgid "Background"
 msgstr "Тип тла"
 
-#: src/preferences.ui:1205
+#: src/preferences.ui:1208
 msgid "_Default color:"
 msgstr "_Типовий колір:"
 
-#: src/preferences.ui:1222
+#: src/preferences.ui:1225
 msgid "Choose Terminal Text Color"
 msgstr "Вибір кольору тексту термінала"
 
-#: src/preferences.ui:1236
+#: src/preferences.ui:1239
 msgid "Choose Terminal Background Color"
 msgstr "Вибір кольору тла термінала"
 
-#: src/preferences.ui:1246
+#: src/preferences.ui:1249
 msgid "Bo_ld color:"
 msgstr "Колір тексту з _жирним накресленням:"
 
-#: src/preferences.ui:1266
+#: src/preferences.ui:1269
 msgid "Choose Terminal Bold Text Color"
 msgstr "Виберіть колір тексту термінала з жирним накресленням"
 
-#: src/preferences.ui:1276
+#: src/preferences.ui:1279
 msgid "_Underline color:"
 msgstr "Колір під_креслення:"
 
-#: src/preferences.ui:1294
+#: src/preferences.ui:1297
 msgid "Choose Terminal Underlined Text Color"
 msgstr "Виберіть колір підкресленого тексту термінала"
 
-#: src/preferences.ui:1303
+#: src/preferences.ui:1306
 msgid "Cu_rsor color:"
 msgstr "Колір _курсору:"
 
-#: src/preferences.ui:1323
+#: src/preferences.ui:1326
 msgid "Choose Terminal Cursor Foreground Color"
 msgstr "Виберіть колір курсора"
 
-#: src/preferences.ui:1337
+#: src/preferences.ui:1340
 msgid "Choose Terminal Cursor Background Color"
 msgstr "Виберіть колір тла курсора"
 
-#: src/preferences.ui:1347
+#: src/preferences.ui:1350
 msgid "_Highlight color:"
 msgstr "Колір _підкреслення:"
 
-#: src/preferences.ui:1366
+#: src/preferences.ui:1369
 msgid "Choose Terminal Highlight Foreground Color"
 msgstr "Виберіть основний колір виділення термінала"
 
-#: src/preferences.ui:1380
+#: src/preferences.ui:1383
 msgid "Choose Terminal Highlight Background Color"
 msgstr "Виберіть колір фону виділення термінала"
 
-#: src/preferences.ui:1427
+#: src/preferences.ui:1430
 msgid "Palette"
 msgstr "Палітра"
 
-#: src/preferences.ui:1459
+#: src/preferences.ui:1462
 msgid "Built-in _schemes:"
 msgstr "Вбудовані с_хеми:"
 
-#: src/preferences.ui:1492
+#: src/preferences.ui:1495
 msgid "Color p_alette:"
 msgstr "_Палітра:"
 
-#: src/preferences.ui:1733
+#: src/preferences.ui:1736
 msgid "Show _bold text in bright colors"
 msgstr "Показувати текст з _жирним накресленням в яскравих кольорах"
 
-#: src/preferences.ui:1772
+#: src/preferences.ui:1775
 msgid "Colors"
 msgstr "Кольори"
 
-#: src/preferences.ui:1790
+#: src/preferences.ui:1793
 msgid "_Show scrollbar"
 msgstr "По_казувати смужку прокручування"
 
-#: src/preferences.ui:1807
+#: src/preferences.ui:1810
 msgid "Scroll on _output"
 msgstr "Про_кручувати при виводі"
 
-#: src/preferences.ui:1824
+#: src/preferences.ui:1827
 msgid "Scroll on _keystroke"
 msgstr "_Прокручувати при натисканні клавіші"
 
-#: src/preferences.ui:1841
+#: src/preferences.ui:1844
 msgid "_Limit scrollback to:"
 msgstr "_Обмежити зворотне прокручування до:"
 
-#: src/preferences.ui:1879
+#: src/preferences.ui:1882
 msgid "lines"
 msgstr "рядків"
 
-#: src/preferences.ui:1905
+#: src/preferences.ui:1908
 msgid "Scrolling"
 msgstr "Прокручування"
 
-#: src/preferences.ui:1922
+#: src/preferences.ui:1925
 msgid "_Run command as a login shell"
 msgstr "За_пускати команду як оболонку входу"
 
-#: src/preferences.ui:1937
+#: src/preferences.ui:1940
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Запускати _іншу команду замість оболонки"
 
-#: src/preferences.ui:1954
+#: src/preferences.ui:1957
 msgid "Custom co_mmand:"
 msgstr "Інша _команда:"
 
-#: src/preferences.ui:1980
-#| msgid "Set the working directory"
+#: src/preferences.ui:1983
 msgid "_Preserve working directory:"
 msgstr "З_берігати робочий каталог:"
 
-#: src/preferences.ui:2014
+#: src/preferences.ui:2017
 msgid "When command _exits:"
 msgstr "При з_авершенні команди:"
 
-#: src/preferences.ui:2052
+#: src/preferences.ui:2055
 msgid "Command"
 msgstr "Команда"
 
-#: src/preferences.ui:2072
+#: src/preferences.ui:2075
 msgid "_Backspace key generates:"
 msgstr "Клавіша _Backspace генерує:"
 
-#: src/preferences.ui:2105
+#: src/preferences.ui:2108
 msgid "_Delete key generates:"
 msgstr "Клавіша _Delete генерує:"
 
-#: src/preferences.ui:2138
+#: src/preferences.ui:2141
 msgid "_Encoding:"
 msgstr "_Кодування:"
 
-#: src/preferences.ui:2170
+#: src/preferences.ui:2173
 msgid "Ambiguous-_width characters:"
 msgstr "Символи з нечіткою _шириною:"
 
-#: src/preferences.ui:2202
+#: src/preferences.ui:2205
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "С_кинути параметри сумісності в початкові значення"
 
-#: src/preferences.ui:2225
+#: src/preferences.ui:2228
 msgid "Compatibility"
 msgstr "Сумісність"
 
-#: src/preferences.ui:2304
+#: src/preferences.ui:2307
 msgid "Clone…"
 msgstr "Клонувати…"
 
-#: src/preferences.ui:2311
+#: src/preferences.ui:2314
 msgid "Rename…"
 msgstr "Перейменувати…"
 
-#: src/preferences.ui:2318
+#: src/preferences.ui:2321
 msgid "Delete…"
 msgstr "Вилучити…"
 
-#: src/preferences.ui:2331
+#: src/preferences.ui:2334
 msgid "Set as default"
 msgstr "Зробити типовим"
 
-#: src/preferences.ui:2395
+#: src/preferences.ui:2398
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -1287,161 +1282,171 @@ msgstr "Зелений на чорному"
 msgid "White on black"
 msgstr "Білий на чорному"
 
-#. Translators: "Tango" is the name of a colour scheme, "light" can be translated
+#. Translators: "GNOME" is the name of a colour scheme, "light" can be translated
 #: src/profile-editor.c:178
+msgid "GNOME light"
+msgstr "Світла GNOME"
+
+#. Translators: "GNOME" is the name of a colour scheme, "dark" can be translated
+#: src/profile-editor.c:183
+msgid "GNOME dark"
+msgstr "Темна GNOME"
+
+#. Translators: "Tango" is the name of a colour scheme, "light" can be translated
+#: src/profile-editor.c:188
 msgid "Tango light"
 msgstr "Світлий танго"
 
 #. Translators: "Tango" is the name of a colour scheme, "dark" can be translated
-#: src/profile-editor.c:183
+#: src/profile-editor.c:193
 msgid "Tango dark"
 msgstr "Темний танго"
 
 #. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
-#: src/profile-editor.c:188
+#: src/profile-editor.c:198
 msgid "Solarized light"
 msgstr "Засвічена світла"
 
 #. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
-#: src/profile-editor.c:193
+#: src/profile-editor.c:203
 msgid "Solarized dark"
 msgstr "Засвічена темна"
 
-#: src/profile-editor.c:556
+#: src/profile-editor.c:587
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Помилка у синтаксисі команди: %s"
 
-#: src/profile-editor.c:712
+#: src/profile-editor.c:743
 msgid "Armenian"
 msgstr "Американське"
 
-#: src/profile-editor.c:713 src/profile-editor.c:714 src/profile-editor.c:718
+#: src/profile-editor.c:744 src/profile-editor.c:745 src/profile-editor.c:749
 msgid "Chinese Traditional"
 msgstr "Традиційне китайське"
 
-#: src/profile-editor.c:715
+#: src/profile-editor.c:746
 msgid "Cyrillic/Russian"
 msgstr "Кирилиця (російська)"
 
-#: src/profile-editor.c:716 src/profile-editor.c:729 src/profile-editor.c:759
+#: src/profile-editor.c:747 src/profile-editor.c:760 src/profile-editor.c:790
 msgid "Japanese"
 msgstr "Японське"
 
-#: src/profile-editor.c:717 src/profile-editor.c:730 src/profile-editor.c:761
+#: src/profile-editor.c:748 src/profile-editor.c:761 src/profile-editor.c:792
 msgid "Korean"
 msgstr "Корейське"
 
-#: src/profile-editor.c:719 src/profile-editor.c:720 src/profile-editor.c:721
+#: src/profile-editor.c:750 src/profile-editor.c:751 src/profile-editor.c:752
 msgid "Chinese Simplified"
 msgstr "Спрощене китайське"
 
-#: src/profile-editor.c:722
+#: src/profile-editor.c:753
 msgid "Georgian"
 msgstr "Грузинське"
 
-#: src/profile-editor.c:723 src/profile-editor.c:731 src/profile-editor.c:735
-#: src/profile-editor.c:755 src/profile-editor.c:765
+#: src/profile-editor.c:754 src/profile-editor.c:762 src/profile-editor.c:766
+#: src/profile-editor.c:786 src/profile-editor.c:796
 msgid "Western"
 msgstr "Західне"
 
-#: src/profile-editor.c:724 src/profile-editor.c:737 src/profile-editor.c:751
-#: src/profile-editor.c:763
+#: src/profile-editor.c:755 src/profile-editor.c:768 src/profile-editor.c:782
+#: src/profile-editor.c:794
 msgid "Central European"
 msgstr "Центрально-європейське"
 
-#: src/profile-editor.c:725 src/profile-editor.c:740 src/profile-editor.c:746
-#: src/profile-editor.c:747 src/profile-editor.c:749 src/profile-editor.c:764
+#: src/profile-editor.c:756 src/profile-editor.c:771 src/profile-editor.c:777
+#: src/profile-editor.c:778 src/profile-editor.c:780 src/profile-editor.c:795
 msgid "Cyrillic"
 msgstr "Кирилиця"
 
-#: src/profile-editor.c:726 src/profile-editor.c:745 src/profile-editor.c:757
-#: src/profile-editor.c:767
+#: src/profile-editor.c:757 src/profile-editor.c:776 src/profile-editor.c:788
+#: src/profile-editor.c:798
 msgid "Turkish"
 msgstr "Турецьке"
 
-#: src/profile-editor.c:727 src/profile-editor.c:744 src/profile-editor.c:754
-#: src/profile-editor.c:768
+#: src/profile-editor.c:758 src/profile-editor.c:775 src/profile-editor.c:785
+#: src/profile-editor.c:799
 msgid "Hebrew"
 msgstr "Єврейське"
 
-#: src/profile-editor.c:728 src/profile-editor.c:741 src/profile-editor.c:750
-#: src/profile-editor.c:769
+#: src/profile-editor.c:759 src/profile-editor.c:772 src/profile-editor.c:781
+#: src/profile-editor.c:800
 msgid "Arabic"
 msgstr "Арабське"
 
-#: src/profile-editor.c:732
+#: src/profile-editor.c:763
 msgid "Nordic"
 msgstr "Північне"
 
-#: src/profile-editor.c:733 src/profile-editor.c:739 src/profile-editor.c:770
+#: src/profile-editor.c:764 src/profile-editor.c:770 src/profile-editor.c:801
 msgid "Baltic"
 msgstr "Балтійське"
 
-#: src/profile-editor.c:734
+#: src/profile-editor.c:765
 msgid "Celtic"
 msgstr "Кельтське"
 
-#: src/profile-editor.c:736 src/profile-editor.c:756
+#: src/profile-editor.c:767 src/profile-editor.c:787
 msgid "Romanian"
 msgstr "Румунське"
 
-#: src/profile-editor.c:738
+#: src/profile-editor.c:769
 msgid "South European"
 msgstr "Південноєвропейське"
 
-#: src/profile-editor.c:742 src/profile-editor.c:753 src/profile-editor.c:766
+#: src/profile-editor.c:773 src/profile-editor.c:784 src/profile-editor.c:797
 msgid "Greek"
 msgstr "Грецьке"
 
-#: src/profile-editor.c:743
+#: src/profile-editor.c:774
 msgid "Hebrew Visual"
 msgstr "Єврейське візуальне"
 
-#: src/profile-editor.c:748 src/profile-editor.c:758
+#: src/profile-editor.c:779 src/profile-editor.c:789
 msgid "Cyrillic/Ukrainian"
 msgstr "Кирилиця (українська)"
 
-#: src/profile-editor.c:752
+#: src/profile-editor.c:783
 msgid "Croatian"
 msgstr "Хорватське"
 
-#: src/profile-editor.c:760
+#: src/profile-editor.c:791
 msgid "Thai"
 msgstr "Таїландське"
 
-#: src/profile-editor.c:762 src/profile-editor.c:778
+#: src/profile-editor.c:793 src/profile-editor.c:809
 msgid "Unicode"
 msgstr "Юнікод"
 
-#: src/profile-editor.c:771
+#: src/profile-editor.c:802
 msgid "Vietnamese"
 msgstr "В'єтнамське"
 
-#: src/profile-editor.c:779
+#: src/profile-editor.c:810
 msgid "Legacy CJK Encodings"
 msgstr "Застарілі кодування CJK"
 
-#: src/profile-editor.c:780
+#: src/profile-editor.c:811
 msgid "Obsolete Encodings"
 msgstr "Застарілі Кодування"
 
 #. Translators: Appears as: [numeric entry] × width
-#: src/profile-editor.c:980
+#: src/profile-editor.c:1011
 msgid "width"
 msgstr "ширина"
 
 #. Translators: Appears as: [numeric entry] × height
-#: src/profile-editor.c:985
+#: src/profile-editor.c:1016
 msgid "height"
 msgstr "висота"
 
-#: src/profile-editor.c:1033
+#: src/profile-editor.c:1064
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Вибір кольору палітри %u"
 
-#: src/profile-editor.c:1037
+#: src/profile-editor.c:1068
 #, c-format
 msgid "Palette entry %u"
 msgstr "Поле палітри %u"
@@ -1660,7 +1665,7 @@ msgstr "Змінити _профіль"
 msgid "_Profile"
 msgstr "_Профіль"
 
-#: src/terminal.c:565
+#: src/terminal.c:566
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Не вдається визначити аргументи: %s\n"
@@ -1719,7 +1724,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Ревізор"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1592
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1595
 #: src/terminal-window.c:1763
 msgid "_Preferences"
 msgstr "П_араметри"
@@ -1880,7 +1885,7 @@ msgstr "Відкрити термінал"
 msgid "C_lose Terminal"
 msgstr "_Закрити термінал"
 
-#: src/terminal-options.c:282
+#: src/terminal-options.c:307
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1889,7 +1894,7 @@ msgstr ""
 "Параметр «%s» застарів і може бути вилученим у наступних версіях програми."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: src/terminal-options.c:293
+#: src/terminal-options.c:318
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1898,46 +1903,46 @@ msgstr ""
 "Використовуйте «%s» для вказівки завершення параметрів, а потім вкажіть "
 "рядок команди."
 
-#: src/terminal-options.c:303 src/terminal-options.c:316
+#: src/terminal-options.c:328 src/terminal-options.c:341
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "Параметр «%s» більше не підтримується в цій версії термінала."
 
-#: src/terminal-options.c:388
+#: src/terminal-options.c:413
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Аргумент до «%s» не є припустимою командою: %s"
 
-#: src/terminal-options.c:561
+#: src/terminal-options.c:586
 msgid "Two roles given for one window"
 msgstr "Для одного вікна вказано дві ролі"
 
-#: src/terminal-options.c:582 src/terminal-options.c:615
+#: src/terminal-options.c:607 src/terminal-options.c:640
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "«%s» вказано двічі для одного вікна\n"
 
-#: src/terminal-options.c:834
+#: src/terminal-options.c:859
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Неможливо пропустити %d двічі"
 
-#: src/terminal-options.c:896
+#: src/terminal-options.c:921
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "«%s» не є припустимим множником збільшення"
 
-#: src/terminal-options.c:903
+#: src/terminal-options.c:928
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Множник збільшення «%g» надто малий, використовується %g\n"
 
-#: src/terminal-options.c:911
+#: src/terminal-options.c:936
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Множник збільшення «%g» надто великий, використовується %g\n"
 
-#: src/terminal-options.c:949
+#: src/terminal-options.c:974
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1946,19 +1951,19 @@ msgstr ""
 "Параметр «%s» вимагає вказування команди для запуску у залишку командного "
 "рядка"
 
-#: src/terminal-options.c:1102
+#: src/terminal-options.c:1127
 msgid "Can only use --wait once"
 msgstr "Можна використовувати тільки --wait once"
 
-#: src/terminal-options.c:1138
+#: src/terminal-options.c:1163
 msgid "Not a valid terminal config file."
 msgstr "Неправильний формат файлу конфігурації термінала."
 
-#: src/terminal-options.c:1151
+#: src/terminal-options.c:1176
 msgid "Incompatible terminal config file version."
 msgstr "Версія файлу конфігурації та термінала несумісні."
 
-#: src/terminal-options.c:1305
+#: src/terminal-options.c:1330
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1966,139 +1971,143 @@ msgstr ""
 "Не реєструвати за допомогою сервера назв активації, не використовувати "
 "повторно термінал"
 
-#: src/terminal-options.c:1314
+#: src/terminal-options.c:1339
 msgid "Load a terminal configuration file"
 msgstr "Завантажити конфігурацію термінала з файлу"
 
-#: src/terminal-options.c:1315
+#: src/terminal-options.c:1340
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/terminal-options.c:1331
+#: src/terminal-options.c:1356
+msgid "Do not pass the environment"
+msgstr "Не передавати середовище"
+
+#: src/terminal-options.c:1365
 msgid "Show preferences window"
 msgstr "Показати вікно параметрів"
 
-#: src/terminal-options.c:1340
+#: src/terminal-options.c:1374
 msgid "Print environment variables to interact with the terminal"
 msgstr "Вивести змінні середовища для взаємодії з терміналом"
 
-#: src/terminal-options.c:1358
+#: src/terminal-options.c:1392
 msgid "Increase diagnostic verbosity"
 msgstr "Збільшити деталізацію діагностики"
 
-#: src/terminal-options.c:1367
+#: src/terminal-options.c:1401
 msgid "Suppress output"
 msgstr "Приховати вивід"
 
-#: src/terminal-options.c:1380
+#: src/terminal-options.c:1414
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Відкрити нове вікно, що містить вкладку типовим профілем"
 
-#: src/terminal-options.c:1389
+#: src/terminal-options.c:1423
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Відкрити нову вкладку з типовим профілем у останньому відкритому вікні"
 
-#: src/terminal-options.c:1402
+#: src/terminal-options.c:1436
 msgid "Turn on the menubar"
 msgstr "Показати рядок меню"
 
-#: src/terminal-options.c:1411
+#: src/terminal-options.c:1445
 msgid "Turn off the menubar"
 msgstr "Сховати рядок меню"
 
-#: src/terminal-options.c:1420
+#: src/terminal-options.c:1454
 msgid "Maximize the window"
 msgstr "Розгорнути вікно"
 
-#: src/terminal-options.c:1429
+#: src/terminal-options.c:1463
 msgid "Full-screen the window"
 msgstr "Розгорнути на весь екран"
 
-#: src/terminal-options.c:1438
+#: src/terminal-options.c:1472
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Встановити розмір вікна; наприклад: 80x24, або 80x24+200+200 (СТОВПxРЯДК+X+Y)"
 
-#: src/terminal-options.c:1439
+#: src/terminal-options.c:1473
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРІЯ"
 
-#: src/terminal-options.c:1447
+#: src/terminal-options.c:1481
 msgid "Set the window role"
 msgstr "Встановити роль вікна"
 
-#: src/terminal-options.c:1448
+#: src/terminal-options.c:1482
 msgid "ROLE"
 msgstr "РОЛЬ"
 
-#: src/terminal-options.c:1456
+#: src/terminal-options.c:1490
 msgid "Set the last specified tab as the active one in its window"
 msgstr ""
 "Встановити останню вкладку, яка використовувалась, як активну у її вікні"
 
-#: src/terminal-options.c:1469
+#: src/terminal-options.c:1503
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Виконати аргумент цього параметру в терміналі"
 
-#: src/terminal-options.c:1478
+#: src/terminal-options.c:1512
 msgid "Use the given profile instead of the default profile"
 msgstr "Використовувати цей профіль замість типового профілю"
 
-#: src/terminal-options.c:1479
+#: src/terminal-options.c:1513
 msgid "PROFILE-NAME"
 msgstr "НАЗВА-ПРОФІЛЮ"
 
-#: src/terminal-options.c:1487
+#: src/terminal-options.c:1521
 msgid "Set the initial terminal title"
 msgstr "Вказати початковий заголовок термінала"
 
-#: src/terminal-options.c:1488
+#: src/terminal-options.c:1522
 msgid "TITLE"
 msgstr "ЗАГОЛОВОК"
 
-#: src/terminal-options.c:1496
+#: src/terminal-options.c:1530
 msgid "Set the working directory"
 msgstr "Встановити робочий каталог"
 
-#: src/terminal-options.c:1497
+#: src/terminal-options.c:1531
 msgid "DIRNAME"
 msgstr "КАТАЛОГ"
 
-#: src/terminal-options.c:1505
+#: src/terminal-options.c:1539
 msgid "Wait until the child exits"
 msgstr "Чекати, поки існує підпроцес"
 
-#: src/terminal-options.c:1514
+#: src/terminal-options.c:1548
 msgid "Forward file descriptor"
 msgstr "Подальший описувач файла"
 
 #. FD = file descriptor
-#: src/terminal-options.c:1516
+#: src/terminal-options.c:1550
 msgid "FD"
 msgstr "FD"
 
-#: src/terminal-options.c:1524
+#: src/terminal-options.c:1558
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Встановити множник збільшення термінала (1.0 = звичайний розмір)"
 
-#: src/terminal-options.c:1525
+#: src/terminal-options.c:1559
 msgid "ZOOM"
 msgstr "МАСШТАБ"
 
-#: src/terminal-options.c:1612
+#: src/terminal-options.c:1646
 msgid "COMMAND"
 msgstr "КОМАНДА"
 
-#: src/terminal-options.c:1620
+#: src/terminal-options.c:1654
 msgid "GNOME Terminal Emulator"
 msgstr "Емулятор термінала для GNOME"
 
-#: src/terminal-options.c:1621
+#: src/terminal-options.c:1655
 msgid "Show GNOME Terminal options"
 msgstr "Показати параметри термінала GNOME"
 
-#: src/terminal-options.c:1631
+#: src/terminal-options.c:1665
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2106,11 +2115,11 @@ msgstr ""
 "Параметри для відкривання нових вікон чи вкладок термінала; ці параметри "
 "можна вказати кілька разів:"
 
-#: src/terminal-options.c:1632
+#: src/terminal-options.c:1666
 msgid "Show terminal options"
 msgstr "Показати параметри термінала"
 
-#: src/terminal-options.c:1640
+#: src/terminal-options.c:1674
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2118,11 +2127,11 @@ msgstr ""
 "Параметри вікна; якщо використовуються до першого аргументу --window чи --"
 "tab, встановлюються типово для усіх вікон:"
 
-#: src/terminal-options.c:1641
+#: src/terminal-options.c:1675
 msgid "Show per-window options"
 msgstr "Показати параметри, що застосовуються до вікна"
 
-#: src/terminal-options.c:1649
+#: src/terminal-options.c:1683
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2130,7 +2139,7 @@ msgstr ""
 "Параметри термінала; якщо використовуються до першого аргументу --window чи "
 "--tab, встановлюються типово для усіх терміналів:"
 
-#: src/terminal-options.c:1650
+#: src/terminal-options.c:1684
 msgid "Show per-terminal options"
 msgstr "Показати параметри, що застосовуються до термінала"
 
@@ -2216,29 +2225,29 @@ msgstr "Скорочення"
 msgid "Profiles"
 msgstr "Профілі"
 
-#: src/terminal-screen.c:1399
+#: src/terminal-screen.c:1402
 msgid "No command supplied nor shell requested"
 msgstr "Ні команди не надано, ні оболонки не вимагається"
 
-#: src/terminal-screen.c:1593 src/terminal-screen.c:1923
+#: src/terminal-screen.c:1596 src/terminal-screen.c:1926
 msgid "_Relaunch"
 msgstr "_Перезапустити"
 
-#: src/terminal-screen.c:1596
+#: src/terminal-screen.c:1599
 msgid "There was an error creating the child process for this terminal"
 msgstr "Помилка створення процесу-нащадка для цього термінала"
 
-#: src/terminal-screen.c:1927
+#: src/terminal-screen.c:1930
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Підпроцес вийшов нормально зі станом %d."
 
-#: src/terminal-screen.c:1930
+#: src/terminal-screen.c:1933
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Підпроцес скасовано за сигналом %d."
 
-#: src/terminal-screen.c:1933
+#: src/terminal-screen.c:1936
 msgid "The child process was aborted."
 msgstr "Підпроцес скасовано."
 
@@ -2370,7 +2379,7 @@ msgstr "П_рофілі"
 
 #: src/terminal-window.c:1793
 msgid "L_eave Full Screen"
-msgstr "_Лишити на весь екран"
+msgstr "По_лишити повноекранний режим"
 
 #: src/terminal-window.c:3211
 msgid "Close this window?"
