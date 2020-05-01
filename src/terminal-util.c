@@ -1556,3 +1556,25 @@ terminal_util_find_program_in_path (const char *path,
 }
 
 /* END code copied from glib */
+
+/*
+ * terminal_util_check_envv:
+ * @strv:
+ *
+ * Validates that each element is of the form 'KEY=VALUE'.
+ */
+gboolean
+terminal_util_check_envv(char const* const* strv)
+{
+  if (!strv)
+    return TRUE;
+
+  for (int i = 0; strv[i]; ++i) {
+          const char *str = strv[i];
+          const char *equal = strchr(str, '=');
+          if (equal == NULL || equal == str)
+                  return FALSE;
+  }
+
+  return TRUE;
+}

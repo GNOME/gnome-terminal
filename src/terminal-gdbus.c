@@ -141,9 +141,17 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
     shell = FALSE;
   if (!g_variant_lookup (options, "environ", "^a&ay", &envv))
     envv = NULL;
-
   if (!g_variant_lookup (options, "fd-set", "@a(ih)", &fd_array))
     fd_array = NULL;
+
+  /* Check environment */
+  if (!terminal_util_check_envv((const char * const*)envv)) {
+    g_dbus_method_invocation_return_error_literal (invocation,
+                                                   G_DBUS_ERROR,
+                                                   G_DBUS_ERROR_INVALID_ARGS,
+                                                   "Malformed environment");
+    goto out;
+  }
 
   /* Check FD passing */
   if ((fd_list != NULL) ^ (fd_array != NULL)) {

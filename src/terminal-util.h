@@ -110,6 +110,8 @@ const char *terminal_util_translate_encoding (const char *encoding);
 char *terminal_util_find_program_in_path (const char *path,
                                           const char *program);
 
+gboolean terminal_util_check_envv(char const* const* strv);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */
