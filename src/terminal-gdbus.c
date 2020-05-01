@@ -207,7 +207,13 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
 
   ExecData *exec_data = g_new (ExecData, 1);
   exec_data->receiver = g_object_ref (receiver);
-  exec_data->invocation = invocation; /* adopted */
+  /* We want to transfer the ownership of @invocation to ExecData here, but
+   * we have to temporarily ref it so that in the error case below (where
+   * terminal_screen_exec() frees the exec data via the supplied callback,
+   * the g_dbus_method_invocation_take_error() calll still can take ownership
+   * of the invocation's ref passed to this function (terminal_receiver_impl_exec()).
+   */
+  exec_data->invocation = g_object_ref (invocation);
 
   GError *err = NULL;
   if (!terminal_screen_exec (priv->screen,
@@ -221,8 +227,12 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
                              (GDestroyNotify) exec_data_free,
                              NULL /* cancellable */,
                              &err)) {
+    /* Transfers ownership of @invocation */
     g_dbus_method_invocation_take_error (invocation, err);
   }
+
+  /* Now we can remove that extra ref again. */
+  g_object_unref (invocation);
 
 out:
 
