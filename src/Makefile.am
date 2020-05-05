@@ -157,7 +157,7 @@ gnome-terminal-server.service: Makefile
 		      echo "Description=GNOME Terminal Server"; \
 		      echo "PartOf=graphical-session.target"; \
 		      echo "[Service]"; \
-		      echo "Slice=apps-org.gnome.Terminal.slice"; \
+		      echo "Slice=app-org.gnome.Terminal.slice"; \
 		      echo "Type=dbus"; \
 		      echo "BusName=org.gnome.Terminal"; \
 		      echo "ExecStart=${libexecdir}/gnome-terminal-server"; \
