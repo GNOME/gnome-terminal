@@ -169,6 +169,14 @@ if test -z "$DESKTOP_FILE_VALIDATE"; then
   fi
 fi
 
+AC_ARG_VAR([XSLTPROC],[the xsltproc programme])
+if test -z "$XSLTPROC"; then
+  AC_PATH_PROG([XSLTPROC],[xsltproc],[])
+  if test -z "$XSLTPROC"; then
+    AC_MSG_ERROR([xsltproc not found])
+  fi
+fi
+
 # ***************************
 # GNOME Shell search provider
 # ***************************
@@ -307,6 +315,7 @@ Makefile
 org.gnome.Terminal.desktop.in
 data/Makefile
 data/icons/Makefile
+man/Makefile
 src/Makefile
 src/terminal-version.h
 help/Makefile
