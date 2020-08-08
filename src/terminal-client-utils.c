@@ -122,18 +122,32 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
     envv = g_environ_unsetenv (envv, "COLORTERM");
     envv = g_environ_unsetenv (envv, "COLUMNS");
     envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
+    envv = g_environ_unsetenv (envv, "EXIT_CODE");
+    envv = g_environ_unsetenv (envv, "EXIT_STATUS");
     envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
     envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
     envv = g_environ_unsetenv (envv, "GNOME_DESKTOP_ICON");
     envv = g_environ_unsetenv (envv, "INVOCATION_ID");
     envv = g_environ_unsetenv (envv, "JOURNAL_STREAM");
     envv = g_environ_unsetenv (envv, "LINES");
+    envv = g_environ_unsetenv (envv, "LISTEN_FDNAMES");
+    envv = g_environ_unsetenv (envv, "LISTEN_FDS");
+    envv = g_environ_unsetenv (envv, "LISTEN_PID");
+    envv = g_environ_unsetenv (envv, "MAINPID");
     envv = g_environ_unsetenv (envv, "MANAGERPID");
     envv = g_environ_unsetenv (envv, "NOTIFY_SOCKET");
+    envv = g_environ_unsetenv (envv, "NOTIFY_SOCKET");
+    envv = g_environ_unsetenv (envv, "PIDFILE");
     envv = g_environ_unsetenv (envv, "PWD");
+    envv = g_environ_unsetenv (envv, "REMOTE_ADDR");
+    envv = g_environ_unsetenv (envv, "REMOTE_PORT");
+    envv = g_environ_unsetenv (envv, "SERVICE_RESULT");
     envv = g_environ_unsetenv (envv, "TERM");
     envv = g_environ_unsetenv (envv, "VTE_VERSION");
+    envv = g_environ_unsetenv (envv, "WATCHDOG_PID");
+    envv = g_environ_unsetenv (envv, "WATCHDOG_USEC");
     envv = g_environ_unsetenv (envv, "WINDOWID");
+
     envv = g_environ_unsetenv (envv, TERMINAL_ENV_SERVICE_NAME);
     envv = g_environ_unsetenv (envv, TERMINAL_ENV_SCREEN);
 
