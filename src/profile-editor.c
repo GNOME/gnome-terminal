@@ -1293,6 +1293,11 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                             terminal_exit_action_get_type, NULL);
   w = (GtkWidget*) gtk_builder_get_object (builder, "font-selector");
   gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (w), monospace_filter, NULL, NULL);
+#if GTK_CHECK_VERSION (3, 24, 0)
+  gtk_font_chooser_set_level (GTK_FONT_CHOOSER (w), GTK_FONT_CHOOSER_LEVEL_FAMILY |
+                                                    GTK_FONT_CHOOSER_LEVEL_SIZE);
+#endif
+
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_FONT_KEY,
                                w,
                                "font-name", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
