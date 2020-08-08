@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_DELETE_BINDING_KEY             "delete-binding"
 #define TERMINAL_PROFILE_ENABLE_BIDI_KEY                "enable-bidi"
 #define TERMINAL_PROFILE_ENABLE_SHAPING_KEY             "enable-shaping"
+#define TERMINAL_PROFILE_ENABLE_SIXEL_KEY               "enable-sixel"
 #define TERMINAL_PROFILE_ENCODING_KEY                   "encoding"
 #define TERMINAL_PROFILE_EXIT_ACTION_KEY                "exit-action"
 #define TERMINAL_PROFILE_FONT_KEY                       "font"

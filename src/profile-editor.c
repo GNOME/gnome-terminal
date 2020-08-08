@@ -613,6 +613,7 @@ reset_compat_defaults_cb (GtkWidget *button,
   g_settings_reset (profile, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY);
   g_settings_reset (profile, TERMINAL_PROFILE_ENCODING_KEY);
   g_settings_reset (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
+  g_settings_reset (profile, TERMINAL_PROFILE_ENABLE_SIXEL_KEY);
 }
 
 static gboolean
@@ -1425,6 +1426,11 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                w,
                                "active-id",
                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = (GtkWidget *) gtk_builder_get_object (builder, "enable-sixel-checkbutton");
+  profile_prefs_settings_bind (profile, TERMINAL_PROFILE_ENABLE_SIXEL_KEY, w,
+                               "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  gtk_widget_set_visible (w, (vte_get_feature_flags() & VTE_FEATURE_FLAG_SIXEL) != 0);
 }
 
 /* Called once per Preferences window, to destroy stuff that doesn't depend on the profile being edited */
