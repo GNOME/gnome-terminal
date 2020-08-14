@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-04-27 18:54+0000\n"
-"PO-Revision-Date: 2020-05-27 09:09-0400\n"
+"POT-Creation-Date: 2020-08-08 20:03+0000\n"
+"PO-Revision-Date: 2020-08-13 11:45+0800\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: zh_CN\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -326,30 +326,38 @@ msgid "If true, shape Arabic text."
 msgstr "如果是，则整形阿拉伯语。"
 
 #: src/org.gnome.Terminal.gschema.xml:209
+msgid "Whether to enable SIXEL images"
+msgstr "是否启用 SIXEL 图像"
+
+#: src/org.gnome.Terminal.gschema.xml:210
+msgid "If true, SIXEL sequences are parsed and images are rendered."
+msgstr "如果设为真，则解析 SIXEL 序列并渲染图像。"
+
+#: src/org.gnome.Terminal.gschema.xml:214
 msgid "Whether bold is also bright"
 msgstr "粗体是否也用亮色"
 
-#: src/org.gnome.Terminal.gschema.xml:210
+#: src/org.gnome.Terminal.gschema.xml:215
 msgid ""
 "If true, setting bold on the first 8 colors also switches to their bright "
 "variants."
 msgstr "如果设为 ture，前 8 种颜色的粗体设置也会切换到其亮色变种。"
 
-#: src/org.gnome.Terminal.gschema.xml:214
+#: src/org.gnome.Terminal.gschema.xml:219
 msgid "Whether to ring the terminal bell"
 msgstr "是否禁用终端铃声"
 
-#: src/org.gnome.Terminal.gschema.xml:218
+#: src/org.gnome.Terminal.gschema.xml:223
 msgid ""
 "List of ASCII punctuation characters that are not to be treated as part of a "
 "word when doing word-wise selection"
 msgstr "ASCII 标点字符列表，按词选择时不视为词的一部分"
 
-#: src/org.gnome.Terminal.gschema.xml:223
+#: src/org.gnome.Terminal.gschema.xml:228
 msgid "Default number of columns"
 msgstr "默认列数"
 
-#: src/org.gnome.Terminal.gschema.xml:224
+#: src/org.gnome.Terminal.gschema.xml:229
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -357,26 +365,26 @@ msgstr ""
 "新建窗口的列数。如果 use_custom_default_size 选项没有被启用，这个选项没有效"
 "果。"
 
-#: src/org.gnome.Terminal.gschema.xml:229
+#: src/org.gnome.Terminal.gschema.xml:234
 msgid "Default number of rows"
 msgstr "默认行数"
 
-#: src/org.gnome.Terminal.gschema.xml:230
+#: src/org.gnome.Terminal.gschema.xml:235
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
 msgstr ""
 "新建窗口的行数。如果 use_custom_default_size 没有启用，这个选项没有效果。"
 
-#: src/org.gnome.Terminal.gschema.xml:234
+#: src/org.gnome.Terminal.gschema.xml:239
 msgid "When to show the scrollbar"
 msgstr "滚动条显示策略"
 
-#: src/org.gnome.Terminal.gschema.xml:238
+#: src/org.gnome.Terminal.gschema.xml:243
 msgid "Number of lines to keep in scrollback"
 msgstr "回滚的行数"
 
-#: src/org.gnome.Terminal.gschema.xml:239
+#: src/org.gnome.Terminal.gschema.xml:244
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -385,11 +393,11 @@ msgstr ""
 "要保留的回滚行数。您可以往回滚动终端到这么多行；不在回滚之内的行将被丢弃。如"
 "果 scrollback_unlimited 被设置为 true，这个值将被忽略。"
 
-#: src/org.gnome.Terminal.gschema.xml:243
+#: src/org.gnome.Terminal.gschema.xml:248
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "是否保存无限行的回滚内容"
 
-#: src/org.gnome.Terminal.gschema.xml:244
+#: src/org.gnome.Terminal.gschema.xml:249
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -398,28 +406,28 @@ msgstr ""
 "如果为 true，回滚的行将不被丢弃。回滚历史记录临时保存在磁盘上，所以如果终端输"
 "出的内容很多，这个选项可能导致磁盘空间耗尽。"
 
-#: src/org.gnome.Terminal.gschema.xml:248
+#: src/org.gnome.Terminal.gschema.xml:253
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "是否在按键时滚动到底部"
 
-#: src/org.gnome.Terminal.gschema.xml:249
+#: src/org.gnome.Terminal.gschema.xml:254
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "如果为 true，按键把滚动条滚动到底部。"
 
-#: src/org.gnome.Terminal.gschema.xml:253
+#: src/org.gnome.Terminal.gschema.xml:258
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "是否在有新输出时滚动到底部"
 
-#: src/org.gnome.Terminal.gschema.xml:254
+#: src/org.gnome.Terminal.gschema.xml:259
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr "如果为 true，在终端有新输出时滚动条会滚动到底部。"
 
-#: src/org.gnome.Terminal.gschema.xml:258
+#: src/org.gnome.Terminal.gschema.xml:263
 msgid "What to do with the terminal when the child command exits"
 msgstr "子命令退出时终端的行为"
 
-#: src/org.gnome.Terminal.gschema.xml:259
+#: src/org.gnome.Terminal.gschema.xml:264
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -427,11 +435,11 @@ msgstr ""
 "可选值中，“close”可关闭终端，“restart”可重新启动命令，“hold”保持当前终端打开"
 "虽然其中没有运行命令。"
 
-#: src/org.gnome.Terminal.gschema.xml:263
+#: src/org.gnome.Terminal.gschema.xml:268
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "是否将此终端作为登录 shell 来执行命令"
 
-#: src/org.gnome.Terminal.gschema.xml:264
+#: src/org.gnome.Terminal.gschema.xml:269
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -439,31 +447,31 @@ msgstr ""
 "如果为 true，终端中的命令将会以登录 shell 调用（将在 argv[0] 前面添加一个连字"
 "符）。"
 
-#: src/org.gnome.Terminal.gschema.xml:268
+#: src/org.gnome.Terminal.gschema.xml:273
 msgid "Whether to preserve the working directory when opening a new terminal"
 msgstr "是否在打开终端命令时保留工作目录"
 
-#: src/org.gnome.Terminal.gschema.xml:269
+#: src/org.gnome.Terminal.gschema.xml:274
 msgid ""
 "Controls when opening a new terminal from a previous one carries over the "
 "working directory of the opening terminal to the new one."
 msgstr "控制从上一个终端打开新终端时将打开终端的工作目录转移到新终端。"
 
-#: src/org.gnome.Terminal.gschema.xml:275
+#: src/org.gnome.Terminal.gschema.xml:280
 msgid "Whether to run a custom command instead of the shell"
 msgstr "是否运行自定义命令而不是 Shell"
 
-#: src/org.gnome.Terminal.gschema.xml:276
+#: src/org.gnome.Terminal.gschema.xml:281
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr "如果为 true，将会使用用户自定义的设置来取代 shell。"
 
-#: src/org.gnome.Terminal.gschema.xml:280
+#: src/org.gnome.Terminal.gschema.xml:285
 msgid "Whether to blink the cursor"
 msgstr "是否闪烁光标"
 
-#: src/org.gnome.Terminal.gschema.xml:281
+#: src/org.gnome.Terminal.gschema.xml:286
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -471,11 +479,11 @@ msgstr ""
 "可供选择的值包括 “system” 可使用全局光标闪烁设置，“on” 或 “off” 可显式设置模"
 "式。"
 
-#: src/org.gnome.Terminal.gschema.xml:285
+#: src/org.gnome.Terminal.gschema.xml:290
 msgid "The cursor appearance"
 msgstr "光标外观"
 
-#: src/org.gnome.Terminal.gschema.xml:289
+#: src/org.gnome.Terminal.gschema.xml:294
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -483,225 +491,225 @@ msgstr ""
 "可选值为“always”一直闪烁文字，“never”从不闪烁文本，“focused”仅当窗口聚焦时"
 "或“unfocused”仅当窗口不聚焦时。"
 
-#: src/org.gnome.Terminal.gschema.xml:293
+#: src/org.gnome.Terminal.gschema.xml:298
 msgid "Custom command to use instead of the shell"
 msgstr "取代 shell 的自定义命令"
 
-#: src/org.gnome.Terminal.gschema.xml:294
+#: src/org.gnome.Terminal.gschema.xml:299
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "在 shell 的位置运行此命令，如果 use_custom_command 为 true。"
 
-#: src/org.gnome.Terminal.gschema.xml:313
+#: src/org.gnome.Terminal.gschema.xml:318
 msgid "Palette for terminal applications"
 msgstr "终端程序调色板"
 
-#: src/org.gnome.Terminal.gschema.xml:317
+#: src/org.gnome.Terminal.gschema.xml:322
 msgid "A Pango font name and size"
 msgstr "Pango 字体的名称和大小"
 
-#: src/org.gnome.Terminal.gschema.xml:321
+#: src/org.gnome.Terminal.gschema.xml:326
 msgid "The code sequence the Backspace key generates"
 msgstr "按 Backspace 键产生的代码序列"
 
-#: src/org.gnome.Terminal.gschema.xml:325
+#: src/org.gnome.Terminal.gschema.xml:330
 msgid "The code sequence the Delete key generates"
 msgstr "按 Delete 键产生的代码序列"
 
-#: src/org.gnome.Terminal.gschema.xml:329
+#: src/org.gnome.Terminal.gschema.xml:334
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "是否为终端部件使用主题中的颜色"
 
-#: src/org.gnome.Terminal.gschema.xml:333
+#: src/org.gnome.Terminal.gschema.xml:338
 msgid "Whether to use the system monospace font"
 msgstr "是否使用等宽字体"
 
-#: src/org.gnome.Terminal.gschema.xml:337
+#: src/org.gnome.Terminal.gschema.xml:342
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "调整窗口大小的时候是否对终端内容重新折行"
 
-#: src/org.gnome.Terminal.gschema.xml:341
+#: src/org.gnome.Terminal.gschema.xml:346
 msgid "Which encoding to use"
 msgstr "要使用的编码"
 
-#: src/org.gnome.Terminal.gschema.xml:345
+#: src/org.gnome.Terminal.gschema.xml:350
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr "UTF-8 编码时，宽度有歧义的字符是窄还是宽"
 
-#: src/org.gnome.Terminal.gschema.xml:354
+#: src/org.gnome.Terminal.gschema.xml:359
 msgid "Keyboard shortcut to open a new tab"
 msgstr "打开新标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:358
+#: src/org.gnome.Terminal.gschema.xml:363
 msgid "Keyboard shortcut to open a new window"
 msgstr "打开新窗口的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:362
+#: src/org.gnome.Terminal.gschema.xml:367
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "保存当前标签内容到文件的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:366
+#: src/org.gnome.Terminal.gschema.xml:371
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
 msgstr "以多种格式导出当前标签内容到文件的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:370
+#: src/org.gnome.Terminal.gschema.xml:375
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr "打印当前标签内容到打印机或文件的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:374
+#: src/org.gnome.Terminal.gschema.xml:379
 msgid "Keyboard shortcut to close a tab"
 msgstr "关闭标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:378
+#: src/org.gnome.Terminal.gschema.xml:383
 msgid "Keyboard shortcut to close a window"
 msgstr "关闭窗口的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:382
+#: src/org.gnome.Terminal.gschema.xml:387
 msgid "Keyboard shortcut to copy text"
 msgstr "复制文字的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:386
+#: src/org.gnome.Terminal.gschema.xml:391
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "将文本复制为 HTML 的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:390
+#: src/org.gnome.Terminal.gschema.xml:395
 msgid "Keyboard shortcut to paste text"
 msgstr "粘贴文字的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:394
+#: src/org.gnome.Terminal.gschema.xml:399
 msgid "Keyboard shortcut to select all text"
 msgstr "选择所有文本的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:398
+#: src/org.gnome.Terminal.gschema.xml:403
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "打开首选项对话框的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:402
+#: src/org.gnome.Terminal.gschema.xml:407
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "切换全屏模式的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:406
+#: src/org.gnome.Terminal.gschema.xml:411
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "切换菜单栏是否可见的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:410
+#: src/org.gnome.Terminal.gschema.xml:415
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "切换只读状态的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:414
+#: src/org.gnome.Terminal.gschema.xml:419
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "重置终端的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:418
+#: src/org.gnome.Terminal.gschema.xml:423
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "重置并清除终端的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:422
+#: src/org.gnome.Terminal.gschema.xml:427
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "打开搜索对话框的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:426
+#: src/org.gnome.Terminal.gschema.xml:431
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "查找搜索项下个出现位置的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:430
+#: src/org.gnome.Terminal.gschema.xml:435
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr "查找搜索项上个出现位置的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:434
+#: src/org.gnome.Terminal.gschema.xml:439
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "清除查找高亮显示的键盘快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:438
+#: src/org.gnome.Terminal.gschema.xml:443
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "切换到上一标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:442
+#: src/org.gnome.Terminal.gschema.xml:447
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "切换到下一标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:446
+#: src/org.gnome.Terminal.gschema.xml:451
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "向左移动当前标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:450
+#: src/org.gnome.Terminal.gschema.xml:455
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "向右移动当前标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:454
+#: src/org.gnome.Terminal.gschema.xml:459
 msgid "Keyboard shortcut to detach current tab"
 msgstr "分离当前标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:458
-#: src/org.gnome.Terminal.gschema.xml:462
-#: src/org.gnome.Terminal.gschema.xml:466
-#: src/org.gnome.Terminal.gschema.xml:470
-#: src/org.gnome.Terminal.gschema.xml:474
-#: src/org.gnome.Terminal.gschema.xml:478
-#: src/org.gnome.Terminal.gschema.xml:482
-#: src/org.gnome.Terminal.gschema.xml:486
-#: src/org.gnome.Terminal.gschema.xml:490
-#: src/org.gnome.Terminal.gschema.xml:494
-#: src/org.gnome.Terminal.gschema.xml:498
-#: src/org.gnome.Terminal.gschema.xml:502
-#: src/org.gnome.Terminal.gschema.xml:506
-#: src/org.gnome.Terminal.gschema.xml:510
-#: src/org.gnome.Terminal.gschema.xml:514
-#: src/org.gnome.Terminal.gschema.xml:518
-#: src/org.gnome.Terminal.gschema.xml:522
-#: src/org.gnome.Terminal.gschema.xml:526
-#: src/org.gnome.Terminal.gschema.xml:530
-#: src/org.gnome.Terminal.gschema.xml:534
-#: src/org.gnome.Terminal.gschema.xml:538
-#: src/org.gnome.Terminal.gschema.xml:542
-#: src/org.gnome.Terminal.gschema.xml:546
-#: src/org.gnome.Terminal.gschema.xml:550
-#: src/org.gnome.Terminal.gschema.xml:554
-#: src/org.gnome.Terminal.gschema.xml:558
-#: src/org.gnome.Terminal.gschema.xml:562
-#: src/org.gnome.Terminal.gschema.xml:566
-#: src/org.gnome.Terminal.gschema.xml:570
-#: src/org.gnome.Terminal.gschema.xml:574
-#: src/org.gnome.Terminal.gschema.xml:578
-#: src/org.gnome.Terminal.gschema.xml:582
-#: src/org.gnome.Terminal.gschema.xml:586
-#: src/org.gnome.Terminal.gschema.xml:590
-#: src/org.gnome.Terminal.gschema.xml:594
+#: src/org.gnome.Terminal.gschema.xml:463
+#: src/org.gnome.Terminal.gschema.xml:467
+#: src/org.gnome.Terminal.gschema.xml:471
+#: src/org.gnome.Terminal.gschema.xml:475
+#: src/org.gnome.Terminal.gschema.xml:479
+#: src/org.gnome.Terminal.gschema.xml:483
+#: src/org.gnome.Terminal.gschema.xml:487
+#: src/org.gnome.Terminal.gschema.xml:491
+#: src/org.gnome.Terminal.gschema.xml:495
+#: src/org.gnome.Terminal.gschema.xml:499
+#: src/org.gnome.Terminal.gschema.xml:503
+#: src/org.gnome.Terminal.gschema.xml:507
+#: src/org.gnome.Terminal.gschema.xml:511
+#: src/org.gnome.Terminal.gschema.xml:515
+#: src/org.gnome.Terminal.gschema.xml:519
+#: src/org.gnome.Terminal.gschema.xml:523
+#: src/org.gnome.Terminal.gschema.xml:527
+#: src/org.gnome.Terminal.gschema.xml:531
+#: src/org.gnome.Terminal.gschema.xml:535
+#: src/org.gnome.Terminal.gschema.xml:539
+#: src/org.gnome.Terminal.gschema.xml:543
+#: src/org.gnome.Terminal.gschema.xml:547
+#: src/org.gnome.Terminal.gschema.xml:551
+#: src/org.gnome.Terminal.gschema.xml:555
+#: src/org.gnome.Terminal.gschema.xml:559
+#: src/org.gnome.Terminal.gschema.xml:563
+#: src/org.gnome.Terminal.gschema.xml:567
+#: src/org.gnome.Terminal.gschema.xml:571
+#: src/org.gnome.Terminal.gschema.xml:575
+#: src/org.gnome.Terminal.gschema.xml:579
+#: src/org.gnome.Terminal.gschema.xml:583
+#: src/org.gnome.Terminal.gschema.xml:587
+#: src/org.gnome.Terminal.gschema.xml:591
+#: src/org.gnome.Terminal.gschema.xml:595
+#: src/org.gnome.Terminal.gschema.xml:599
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "切换到第几个标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:598
+#: src/org.gnome.Terminal.gschema.xml:603
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "切换到最后一个标签页的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:602
+#: src/org.gnome.Terminal.gschema.xml:607
 msgid "Keyboard shortcut to launch help"
 msgstr "调用帮助的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:606
+#: src/org.gnome.Terminal.gschema.xml:611
 msgid "Keyboard shortcut to make font larger"
 msgstr "增大字号的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:610
+#: src/org.gnome.Terminal.gschema.xml:615
 msgid "Keyboard shortcut to make font smaller"
 msgstr "减小字号的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:614
+#: src/org.gnome.Terminal.gschema.xml:619
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "正常字号的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:618
+#: src/org.gnome.Terminal.gschema.xml:623
 msgid "Keyboard shortcut to show the primary menu"
 msgstr "显示主菜单的快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:628
+#: src/org.gnome.Terminal.gschema.xml:633
 msgid "Whether the menubar has access keys"
 msgstr "菜单栏是否有访问键"
 
-#: src/org.gnome.Terminal.gschema.xml:629
+#: src/org.gnome.Terminal.gschema.xml:634
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -710,21 +718,21 @@ msgstr ""
 "菜单栏是否使用 Alt 加字母的快捷键。终端中运行的很多程序都可能与此快捷键产生冲"
 "突，所以可以关闭此特性。"
 
-#: src/org.gnome.Terminal.gschema.xml:638
+#: src/org.gnome.Terminal.gschema.xml:643
 msgid "Whether shortcuts are enabled"
 msgstr "是否启用快捷键"
 
-#: src/org.gnome.Terminal.gschema.xml:639
+#: src/org.gnome.Terminal.gschema.xml:644
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
 msgstr "是否启用快捷键。终端中运行的很多程序可能收到干扰，所以可以关闭此特性。"
 
-#: src/org.gnome.Terminal.gschema.xml:648
+#: src/org.gnome.Terminal.gschema.xml:653
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "是否启用 GTK 标准的快捷键访问菜单栏"
 
-#: src/org.gnome.Terminal.gschema.xml:649
+#: src/org.gnome.Terminal.gschema.xml:654
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -733,35 +741,35 @@ msgstr ""
 "通常您可以用 F10 访问菜单栏。这也可以通过 gtkrc 自定义（gtk-menu-bar-accel = "
 "“某个键”）。此选项允许禁用标准的菜单栏加速键。"
 
-#: src/org.gnome.Terminal.gschema.xml:659
+#: src/org.gnome.Terminal.gschema.xml:664
 msgid "Whether the shell integration is enabled"
 msgstr "是否启用了 shell 集成"
 
-#: src/org.gnome.Terminal.gschema.xml:664
+#: src/org.gnome.Terminal.gschema.xml:669
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "是否在关闭终端窗口时请求确认"
 
-#: src/org.gnome.Terminal.gschema.xml:669
+#: src/org.gnome.Terminal.gschema.xml:674
 msgid "Whether to show the menubar in new windows"
 msgstr "是否在新窗口中显示菜单栏"
 
-#: src/org.gnome.Terminal.gschema.xml:674
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "以新窗口还是新标签页方式打开终端"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "When to show the tabs bar"
 msgstr "何时显示标签栏"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "The position of the tab bar"
 msgstr "标签栏位置"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "Which theme variant to use"
 msgstr "要使用的主题类型"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr "应在当前选项卡旁边还是最后一个位置打开新选项卡"
@@ -924,7 +932,7 @@ msgid "Solarized"
 msgstr "Solarized"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:232 src/profile-editor.c:718
+#: src/preferences.ui:232 src/profile-editor.c:719
 msgid "Custom"
 msgstr "自定义"
 
@@ -1203,30 +1211,34 @@ msgid "Ambiguous-_width characters:"
 msgstr "宽度有歧义的字符(_W)："
 
 #: src/preferences.ui:2205
+msgid "Enable _SIXEL images"
+msgstr "启用 SIXEL 图像(_S)"
+
+#: src/preferences.ui:2221
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "重置兼容性选项为默认值(_R)"
 
-#: src/preferences.ui:2228
+#: src/preferences.ui:2244
 msgid "Compatibility"
 msgstr "兼容性"
 
-#: src/preferences.ui:2307
+#: src/preferences.ui:2323
 msgid "Clone…"
 msgstr "复制…"
 
-#: src/preferences.ui:2314
+#: src/preferences.ui:2330
 msgid "Rename…"
 msgstr "重命名…"
 
-#: src/preferences.ui:2321
+#: src/preferences.ui:2337
 msgid "Delete…"
 msgstr "删除…"
 
-#: src/preferences.ui:2334
+#: src/preferences.ui:2350
 msgid "Set as default"
 msgstr "设为默认"
 
-#: src/preferences.ui:2398
+#: src/preferences.ui:2414
 msgid "Cancel"
 msgstr "取消"
 
@@ -1285,136 +1297,136 @@ msgstr "深色的 Solarized"
 msgid "Error parsing command: %s"
 msgstr "分析命令时出错：%s"
 
-#: src/profile-editor.c:743
+#: src/profile-editor.c:744
 msgid "Armenian"
 msgstr "亚美尼亚语"
 
-#: src/profile-editor.c:744 src/profile-editor.c:745 src/profile-editor.c:749
+#: src/profile-editor.c:745 src/profile-editor.c:746 src/profile-editor.c:750
 msgid "Chinese Traditional"
 msgstr "繁体中文"
 
-#: src/profile-editor.c:746
+#: src/profile-editor.c:747
 msgid "Cyrillic/Russian"
 msgstr "西里尔文/俄语"
 
-#: src/profile-editor.c:747 src/profile-editor.c:760 src/profile-editor.c:790
+#: src/profile-editor.c:748 src/profile-editor.c:761 src/profile-editor.c:791
 msgid "Japanese"
 msgstr "日语"
 
-#: src/profile-editor.c:748 src/profile-editor.c:761 src/profile-editor.c:792
+#: src/profile-editor.c:749 src/profile-editor.c:762 src/profile-editor.c:793
 msgid "Korean"
 msgstr "朝鲜语"
 
-#: src/profile-editor.c:750 src/profile-editor.c:751 src/profile-editor.c:752
+#: src/profile-editor.c:751 src/profile-editor.c:752 src/profile-editor.c:753
 msgid "Chinese Simplified"
 msgstr "简体中文"
 
-#: src/profile-editor.c:753
+#: src/profile-editor.c:754
 msgid "Georgian"
 msgstr "格鲁吉亚语"
 
-#: src/profile-editor.c:754 src/profile-editor.c:762 src/profile-editor.c:766
-#: src/profile-editor.c:786 src/profile-editor.c:796
+#: src/profile-editor.c:755 src/profile-editor.c:763 src/profile-editor.c:767
+#: src/profile-editor.c:787 src/profile-editor.c:797
 msgid "Western"
 msgstr "西欧"
 
-#: src/profile-editor.c:755 src/profile-editor.c:768 src/profile-editor.c:782
-#: src/profile-editor.c:794
+#: src/profile-editor.c:756 src/profile-editor.c:769 src/profile-editor.c:783
+#: src/profile-editor.c:795
 msgid "Central European"
 msgstr "中欧"
 
-#: src/profile-editor.c:756 src/profile-editor.c:771 src/profile-editor.c:777
-#: src/profile-editor.c:778 src/profile-editor.c:780 src/profile-editor.c:795
+#: src/profile-editor.c:757 src/profile-editor.c:772 src/profile-editor.c:778
+#: src/profile-editor.c:779 src/profile-editor.c:781 src/profile-editor.c:796
 msgid "Cyrillic"
 msgstr "西里尔语"
 
-#: src/profile-editor.c:757 src/profile-editor.c:776 src/profile-editor.c:788
-#: src/profile-editor.c:798
+#: src/profile-editor.c:758 src/profile-editor.c:777 src/profile-editor.c:789
+#: src/profile-editor.c:799
 msgid "Turkish"
 msgstr "土耳其语"
 
-#: src/profile-editor.c:758 src/profile-editor.c:775 src/profile-editor.c:785
-#: src/profile-editor.c:799
+#: src/profile-editor.c:759 src/profile-editor.c:776 src/profile-editor.c:786
+#: src/profile-editor.c:800
 msgid "Hebrew"
 msgstr "希伯来语"
 
-#: src/profile-editor.c:759 src/profile-editor.c:772 src/profile-editor.c:781
-#: src/profile-editor.c:800
+#: src/profile-editor.c:760 src/profile-editor.c:773 src/profile-editor.c:782
+#: src/profile-editor.c:801
 msgid "Arabic"
 msgstr "阿拉伯语"
 
-#: src/profile-editor.c:763
+#: src/profile-editor.c:764
 msgid "Nordic"
 msgstr "北欧"
 
-#: src/profile-editor.c:764 src/profile-editor.c:770 src/profile-editor.c:801
+#: src/profile-editor.c:765 src/profile-editor.c:771 src/profile-editor.c:802
 msgid "Baltic"
 msgstr "波罗的语"
 
-#: src/profile-editor.c:765
+#: src/profile-editor.c:766
 msgid "Celtic"
 msgstr "凯尔特语"
 
-#: src/profile-editor.c:767 src/profile-editor.c:787
+#: src/profile-editor.c:768 src/profile-editor.c:788
 msgid "Romanian"
 msgstr "罗马尼亚语"
 
-#: src/profile-editor.c:769
+#: src/profile-editor.c:770
 msgid "South European"
 msgstr "南欧"
 
-#: src/profile-editor.c:773 src/profile-editor.c:784 src/profile-editor.c:797
+#: src/profile-editor.c:774 src/profile-editor.c:785 src/profile-editor.c:798
 msgid "Greek"
 msgstr "希腊语"
 
-#: src/profile-editor.c:774
+#: src/profile-editor.c:775
 msgid "Hebrew Visual"
 msgstr "可视希伯来语"
 
-#: src/profile-editor.c:779 src/profile-editor.c:789
+#: src/profile-editor.c:780 src/profile-editor.c:790
 msgid "Cyrillic/Ukrainian"
 msgstr "西里尔语/乌克兰语"
 
-#: src/profile-editor.c:783
+#: src/profile-editor.c:784
 msgid "Croatian"
 msgstr "克罗地亚语"
 
-#: src/profile-editor.c:791
+#: src/profile-editor.c:792
 msgid "Thai"
 msgstr "泰语"
 
-#: src/profile-editor.c:793 src/profile-editor.c:809
+#: src/profile-editor.c:794 src/profile-editor.c:810
 msgid "Unicode"
 msgstr "Unicode"
 
-#: src/profile-editor.c:802
+#: src/profile-editor.c:803
 msgid "Vietnamese"
 msgstr "越南语"
 
-#: src/profile-editor.c:810
+#: src/profile-editor.c:811
 msgid "Legacy CJK Encodings"
 msgstr "传统 CJK 编码"
 
-#: src/profile-editor.c:811
+#: src/profile-editor.c:812
 msgid "Obsolete Encodings"
 msgstr "废弃编码"
 
 #. Translators: Appears as: [numeric entry] × width
-#: src/profile-editor.c:1011
+#: src/profile-editor.c:1012
 msgid "width"
 msgstr "宽度"
 
 #. Translators: Appears as: [numeric entry] × height
-#: src/profile-editor.c:1016
+#: src/profile-editor.c:1017
 msgid "height"
 msgstr "高度"
 
-#: src/profile-editor.c:1064
+#: src/profile-editor.c:1065
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "选择调色板颜色 %u"
 
-#: src/profile-editor.c:1068
+#: src/profile-editor.c:1069
 #, c-format
 msgid "Palette entry %u"
 msgstr "调色板项 %u"
@@ -1692,7 +1704,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "检查器(_I)"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1533
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
 #: src/terminal-window.c:1763
 msgid "_Preferences"
 msgstr "配置文件首选项(_P)"
@@ -2182,29 +2194,29 @@ msgstr "快捷键"
 msgid "Profiles"
 msgstr "配置文件"
 
-#: src/terminal-screen.c:1413
+#: src/terminal-screen.c:1417
 msgid "No command supplied nor shell requested"
 msgstr "未提供命令，也未指定 shell"
 
-#: src/terminal-screen.c:1534 src/terminal-screen.c:1873
+#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
 msgid "_Relaunch"
 msgstr "重新启动(_R)"
 
-#: src/terminal-screen.c:1537
+#: src/terminal-screen.c:1541
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: src/terminal-screen.c:1877
+#: src/terminal-screen.c:1881
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子进程以状态%d正常的退出。"
 
-#: src/terminal-screen.c:1880
+#: src/terminal-screen.c:1884
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "子进程被信号%d中断。"
 
-#: src/terminal-screen.c:1883
+#: src/terminal-screen.c:1887
 msgid "The child process was aborted."
 msgstr "子进程被中断。"
 
@@ -2248,7 +2260,8 @@ msgstr ""
 "Tong Hui <tonghuix@gmail.com>, 2014\n"
 "Mingcong Bai <jeffbai@aosc.xyz>, 2016, 2017, 2018\n"
 "Dingzhong Chen <wsxy162@gmail.com>, 2016, 2018, 2019\n"
-"王滋涵 <wi24rd@fedoraproject.org>, 2020"
+"王滋涵 <wi24rd@fedoraproject.org>, 2020\n"
+"Weiyi Xu <xuweiyi0923@gmail.com>, 2020"
 
 #: src/terminal-util.c:321
 #, c-format
