@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-06-01 20:10+0000\n"
-"PO-Revision-Date: 2020-07-30 13:58+0200\n"
+"POT-Creation-Date: 2020-08-08 20:03+0000\n"
+"PO-Revision-Date: 2020-08-23 19:22+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -322,10 +322,18 @@ msgid "If true, shape Arabic text."
 msgstr "Om true (sant), forma arabisk text."
 
 #: src/org.gnome.Terminal.gschema.xml:209
+msgid "Whether to enable SIXEL images"
+msgstr "Huruvida SIXEL-bilder ska aktiveras"
+
+#: src/org.gnome.Terminal.gschema.xml:210
+msgid "If true, SIXEL sequences are parsed and images are rendered."
+msgstr "Om true (sant) så tolkas SIXEL-sekvenser och bilder renderas."
+
+#: src/org.gnome.Terminal.gschema.xml:214
 msgid "Whether bold is also bright"
 msgstr "Huruvida fet text också är ljus"
 
-#: src/org.gnome.Terminal.gschema.xml:210
+#: src/org.gnome.Terminal.gschema.xml:215
 msgid ""
 "If true, setting bold on the first 8 colors also switches to their bright "
 "variants."
@@ -333,11 +341,11 @@ msgstr ""
 "Om true (sant) så växlas de första 8 färgerna till sina ljusa varianter om "
 "de sätts till fetstil."
 
-#: src/org.gnome.Terminal.gschema.xml:214
+#: src/org.gnome.Terminal.gschema.xml:219
 msgid "Whether to ring the terminal bell"
 msgstr "Huruvida terminalljudet ska användas"
 
-#: src/org.gnome.Terminal.gschema.xml:218
+#: src/org.gnome.Terminal.gschema.xml:223
 msgid ""
 "List of ASCII punctuation characters that are not to be treated as part of a "
 "word when doing word-wise selection"
@@ -345,11 +353,11 @@ msgstr ""
 "Lista över skiljetecken i ASCII som inte ska behandlas som del av ett ord "
 "när ordvis markering utförs"
 
-#: src/org.gnome.Terminal.gschema.xml:223
+#: src/org.gnome.Terminal.gschema.xml:228
 msgid "Default number of columns"
 msgstr "Antal kolumner som standard"
 
-#: src/org.gnome.Terminal.gschema.xml:224
+#: src/org.gnome.Terminal.gschema.xml:229
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -357,11 +365,11 @@ msgstr ""
 "Antal kolumner i nyligen skapade terminalfönster. Har ingen effekt om "
 "use_custom_default_size inte har aktiverats."
 
-#: src/org.gnome.Terminal.gschema.xml:229
+#: src/org.gnome.Terminal.gschema.xml:234
 msgid "Default number of rows"
 msgstr "Antal rader som standard"
 
-#: src/org.gnome.Terminal.gschema.xml:230
+#: src/org.gnome.Terminal.gschema.xml:235
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -369,15 +377,15 @@ msgstr ""
 "Antal rader i nyligen skapade terminalfönster. Har ingen effekt om "
 "use_custom_default_size inte har aktiverats."
 
-#: src/org.gnome.Terminal.gschema.xml:234
+#: src/org.gnome.Terminal.gschema.xml:239
 msgid "When to show the scrollbar"
 msgstr "När rullningslisten ska visas"
 
-#: src/org.gnome.Terminal.gschema.xml:238
+#: src/org.gnome.Terminal.gschema.xml:243
 msgid "Number of lines to keep in scrollback"
 msgstr "Antal rader som ska behållas i rullningshistoriken"
 
-#: src/org.gnome.Terminal.gschema.xml:239
+#: src/org.gnome.Terminal.gschema.xml:244
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don’t fit in the scrollback are "
@@ -388,11 +396,11 @@ msgstr ""
 "rullningshistoriken förkastas. Om scrollback_unlimited är true (sant) så "
 "ignoreras detta värde."
 
-#: src/org.gnome.Terminal.gschema.xml:243
+#: src/org.gnome.Terminal.gschema.xml:248
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Huruvida ett obegränsat antal rader ska behållas i rullningshistoriken"
 
-#: src/org.gnome.Terminal.gschema.xml:244
+#: src/org.gnome.Terminal.gschema.xml:249
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -402,32 +410,32 @@ msgstr ""
 "Rullningshistoriken lagras temporärt på disk så detta kan orsaka att "
 "systemet får slut på diskutrymme om det är mycket utdata i terminalfönstret."
 
-#: src/org.gnome.Terminal.gschema.xml:248
+#: src/org.gnome.Terminal.gschema.xml:253
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Huruvida det ska rullas till nedersta läget då en tangent trycks ned"
 
-#: src/org.gnome.Terminal.gschema.xml:249
+#: src/org.gnome.Terminal.gschema.xml:254
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr ""
 "Om true (sant) hoppar rullningslisten till nedersta läget då en tangent "
 "trycks ned."
 
-#: src/org.gnome.Terminal.gschema.xml:253
+#: src/org.gnome.Terminal.gschema.xml:258
 msgid "Whether to scroll to the bottom when there’s new output"
 msgstr "Huruvida det ska rullas till nedersta läget då det finns nya utdata"
 
-#: src/org.gnome.Terminal.gschema.xml:254
+#: src/org.gnome.Terminal.gschema.xml:259
 msgid ""
 "If true, whenever there’s new output the terminal will scroll to the bottom."
 msgstr ""
 "Om true (sant) kommer terminalfönstret att rulla till nedersta läget så fort "
 "det finns nya utdata."
 
-#: src/org.gnome.Terminal.gschema.xml:258
+#: src/org.gnome.Terminal.gschema.xml:263
 msgid "What to do with the terminal when the child command exits"
 msgstr "Vad som ska göras med terminalfönstret när barnkommandot avslutar"
 
-#: src/org.gnome.Terminal.gschema.xml:259
+#: src/org.gnome.Terminal.gschema.xml:264
 msgid ""
 "Possible values are “close” to close the terminal, “restart” to restart the "
 "command, and “hold” to keep the terminal open with no command running inside."
@@ -436,12 +444,12 @@ msgstr ""
 "starta om kommandot och ”hold” för att hålla terminalfönstret öppet utan "
 "något kommando körandes inuti."
 
-#: src/org.gnome.Terminal.gschema.xml:263
+#: src/org.gnome.Terminal.gschema.xml:268
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Huruvida kommandot inuti terminalfönstret ska startas som inloggningsskal"
 
-#: src/org.gnome.Terminal.gschema.xml:264
+#: src/org.gnome.Terminal.gschema.xml:269
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -449,11 +457,11 @@ msgstr ""
 "Om true (sant) kommer kommandot inuti terminalfönstret att startas som ett "
 "inloggningsskal (argv[0] kommer att ha ett bindestreck före)."
 
-#: src/org.gnome.Terminal.gschema.xml:268
+#: src/org.gnome.Terminal.gschema.xml:273
 msgid "Whether to preserve the working directory when opening a new terminal"
 msgstr "Huruvida arbetskatalogen ska bevaras då en ny terminal öppnas"
 
-#: src/org.gnome.Terminal.gschema.xml:269
+#: src/org.gnome.Terminal.gschema.xml:274
 msgid ""
 "Controls when opening a new terminal from a previous one carries over the "
 "working directory of the opening terminal to the new one."
@@ -461,11 +469,11 @@ msgstr ""
 "Styr när öppnande av en ny terminal från en befintlig överför "
 "arbetskatalogen från den öppnande terminalen till den nya."
 
-#: src/org.gnome.Terminal.gschema.xml:275
+#: src/org.gnome.Terminal.gschema.xml:280
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Huruvida ett eget kommando ska köras istället för skalet"
 
-#: src/org.gnome.Terminal.gschema.xml:276
+#: src/org.gnome.Terminal.gschema.xml:281
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -473,11 +481,11 @@ msgstr ""
 "Om true (sant) kommer värdet för inställningen custom_command att användas "
 "istället för att ett skal körs."
 
-#: src/org.gnome.Terminal.gschema.xml:280
+#: src/org.gnome.Terminal.gschema.xml:285
 msgid "Whether to blink the cursor"
 msgstr "Huruvida markören ska blinka"
 
-#: src/org.gnome.Terminal.gschema.xml:281
+#: src/org.gnome.Terminal.gschema.xml:286
 msgid ""
 "The possible values are “system” to use the global cursor blinking settings, "
 "or “on” or “off” to set the mode explicitly."
@@ -486,11 +494,11 @@ msgstr ""
 "markörblinkning, eller ”on” eller ”off” för att uttryckligen ställa in "
 "önskat läge."
 
-#: src/org.gnome.Terminal.gschema.xml:285
+#: src/org.gnome.Terminal.gschema.xml:290
 msgid "The cursor appearance"
 msgstr "Markörens utseende"
 
-#: src/org.gnome.Terminal.gschema.xml:289
+#: src/org.gnome.Terminal.gschema.xml:294
 msgid ""
 "Possible values are “always” or “never” allow blinking text, or only when "
 "the terminal is “focused” or “unfocused”."
@@ -499,48 +507,48 @@ msgstr ""
 "blinkande text, eller endast när terminalen är ”focused” (fokuserad) or "
 "”unfocused” (ej fokuserad)."
 
-#: src/org.gnome.Terminal.gschema.xml:293
+#: src/org.gnome.Terminal.gschema.xml:298
 msgid "Custom command to use instead of the shell"
 msgstr "Eget kommando att använda istället för skalet"
 
-#: src/org.gnome.Terminal.gschema.xml:294
+#: src/org.gnome.Terminal.gschema.xml:299
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Kör detta kommando istället för skalet, om use_custom_command är true (sant)."
 
-#: src/org.gnome.Terminal.gschema.xml:313
+#: src/org.gnome.Terminal.gschema.xml:318
 msgid "Palette for terminal applications"
 msgstr "Palett för terminalprogram"
 
-#: src/org.gnome.Terminal.gschema.xml:317
+#: src/org.gnome.Terminal.gschema.xml:322
 msgid "A Pango font name and size"
 msgstr "Ett Pango-typsnittsnamn och -storlek"
 
-#: src/org.gnome.Terminal.gschema.xml:321
+#: src/org.gnome.Terminal.gschema.xml:326
 msgid "The code sequence the Backspace key generates"
 msgstr "Kodsekvensen som Backstegstangenten genererar"
 
-#: src/org.gnome.Terminal.gschema.xml:325
+#: src/org.gnome.Terminal.gschema.xml:330
 msgid "The code sequence the Delete key generates"
 msgstr "Kodsekvensen som Delete-tangenten genererar"
 
-#: src/org.gnome.Terminal.gschema.xml:329
+#: src/org.gnome.Terminal.gschema.xml:334
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Huruvida färgerna från temat ska användas för terminalkomponenten"
 
-#: src/org.gnome.Terminal.gschema.xml:333
+#: src/org.gnome.Terminal.gschema.xml:338
 msgid "Whether to use the system monospace font"
 msgstr "Huruvida systemtypsnittet för fastbredd ska användas"
 
-#: src/org.gnome.Terminal.gschema.xml:337
+#: src/org.gnome.Terminal.gschema.xml:342
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Huruvida radbrytningar ska justeras när storleken på fönstret ändras"
 
-#: src/org.gnome.Terminal.gschema.xml:341
+#: src/org.gnome.Terminal.gschema.xml:346
 msgid "Which encoding to use"
 msgstr "Vilken kodning som ska användas"
 
-#: src/org.gnome.Terminal.gschema.xml:345
+#: src/org.gnome.Terminal.gschema.xml:350
 msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
@@ -548,19 +556,19 @@ msgstr ""
 "Huruvida tvetydig-bredd bokstäver är smala eller breda vid användning av "
 "UTF-8-kodning"
 
-#: src/org.gnome.Terminal.gschema.xml:354
+#: src/org.gnome.Terminal.gschema.xml:359
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Tangentbordsgenväg för att öppna en ny flik"
 
-#: src/org.gnome.Terminal.gschema.xml:358
+#: src/org.gnome.Terminal.gschema.xml:363
 msgid "Keyboard shortcut to open a new window"
 msgstr "Tangentbordsgenväg för att öppna ett nytt fönster"
 
-#: src/org.gnome.Terminal.gschema.xml:362
+#: src/org.gnome.Terminal.gschema.xml:367
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Tangentbordsgenväg för att spara innehållet i aktuell flik till en fil"
 
-#: src/org.gnome.Terminal.gschema.xml:366
+#: src/org.gnome.Terminal.gschema.xml:371
 msgid ""
 "Keyboard shortcut to export the current tab contents to file in various "
 "formats"
@@ -568,164 +576,164 @@ msgstr ""
 "Tangentbordsgenväg för att exportera det aktuella flikinnehållet till fil i "
 "olika format"
 
-#: src/org.gnome.Terminal.gschema.xml:370
+#: src/org.gnome.Terminal.gschema.xml:375
 msgid "Keyboard shortcut to print the current tab contents to printer or file"
 msgstr ""
 "Tangentbordsgenväg för att skriva ut det aktuella flikinnehållet till "
 "skrivare eller fil"
 
-#: src/org.gnome.Terminal.gschema.xml:374
+#: src/org.gnome.Terminal.gschema.xml:379
 msgid "Keyboard shortcut to close a tab"
 msgstr "Tangentbordsgenväg för att stänga en flik"
 
-#: src/org.gnome.Terminal.gschema.xml:378
+#: src/org.gnome.Terminal.gschema.xml:383
 msgid "Keyboard shortcut to close a window"
 msgstr "Tangentbordsgenväg för att stänga ett fönster"
 
-#: src/org.gnome.Terminal.gschema.xml:382
+#: src/org.gnome.Terminal.gschema.xml:387
 msgid "Keyboard shortcut to copy text"
 msgstr "Tangentbordsgenväg för att kopiera text"
 
-#: src/org.gnome.Terminal.gschema.xml:386
+#: src/org.gnome.Terminal.gschema.xml:391
 msgid "Keyboard shortcut to copy text as HTML"
 msgstr "Tangentbordsgenväg för att kopiera text som HTML"
 
-#: src/org.gnome.Terminal.gschema.xml:390
+#: src/org.gnome.Terminal.gschema.xml:395
 msgid "Keyboard shortcut to paste text"
 msgstr "Tangentbordsgenväg för att klistra in text"
 
-#: src/org.gnome.Terminal.gschema.xml:394
+#: src/org.gnome.Terminal.gschema.xml:399
 msgid "Keyboard shortcut to select all text"
 msgstr "Tangentbordsgenväg för att markera all text"
 
-#: src/org.gnome.Terminal.gschema.xml:398
+#: src/org.gnome.Terminal.gschema.xml:403
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Tangentbordsgenväg för att öppna inställningsdialogen"
 
-#: src/org.gnome.Terminal.gschema.xml:402
+#: src/org.gnome.Terminal.gschema.xml:407
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Tangentbordsgenväg för att växla helskärmsläge"
 
-#: src/org.gnome.Terminal.gschema.xml:406
+#: src/org.gnome.Terminal.gschema.xml:411
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Tangentbordsgenväg för att växla synligheten på menyraden"
 
-#: src/org.gnome.Terminal.gschema.xml:410
+#: src/org.gnome.Terminal.gschema.xml:415
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Tangentbordsgenväg för att växla skrivskyddsläget"
 
-#: src/org.gnome.Terminal.gschema.xml:414
+#: src/org.gnome.Terminal.gschema.xml:419
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Tangentbordsgenväg för att återställa terminalfönstret"
 
-#: src/org.gnome.Terminal.gschema.xml:418
+#: src/org.gnome.Terminal.gschema.xml:423
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Tangentbordsgenväg för att återställa och tömma terminalfönstret"
 
-#: src/org.gnome.Terminal.gschema.xml:422
+#: src/org.gnome.Terminal.gschema.xml:427
 msgid "Keyboard shortcut to open the search dialog"
 msgstr "Tangentbordsgenväg för att öppna sökdialogen"
 
-#: src/org.gnome.Terminal.gschema.xml:426
+#: src/org.gnome.Terminal.gschema.xml:431
 msgid "Keyboard shortcut to find the next occurrence of the search term"
 msgstr "Tangentbordsgenväg för att söka efter nästa förekomst av sökfrasen"
 
-#: src/org.gnome.Terminal.gschema.xml:430
+#: src/org.gnome.Terminal.gschema.xml:435
 msgid "Keyboard shortcut to find the previous occurrence of the search term"
 msgstr ""
 "Tangentbordsgenväg för att söka efter föregående förekomst av sökfrasen"
 
-#: src/org.gnome.Terminal.gschema.xml:434
+#: src/org.gnome.Terminal.gschema.xml:439
 msgid "Keyboard shortcut to clear the find highlighting"
 msgstr "Tangentbordsgenväg för att rensa sökmarkeringen"
 
-#: src/org.gnome.Terminal.gschema.xml:438
+#: src/org.gnome.Terminal.gschema.xml:443
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Tangentbordsgenväg för att växla till föregående flik"
 
-#: src/org.gnome.Terminal.gschema.xml:442
+#: src/org.gnome.Terminal.gschema.xml:447
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Tangentbordsgenväg för att växla till nästa flik"
 
-#: src/org.gnome.Terminal.gschema.xml:446
+#: src/org.gnome.Terminal.gschema.xml:451
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Tangentbordsgenväg för att flytta aktuell flik till vänster"
 
-#: src/org.gnome.Terminal.gschema.xml:450
+#: src/org.gnome.Terminal.gschema.xml:455
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Tangentbordsgenväg för att flytta aktuell flik till höger"
 
-#: src/org.gnome.Terminal.gschema.xml:454
+#: src/org.gnome.Terminal.gschema.xml:459
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Tangentbordsgenväg för att koppla loss aktuell flik"
 
-#: src/org.gnome.Terminal.gschema.xml:458
-#: src/org.gnome.Terminal.gschema.xml:462
-#: src/org.gnome.Terminal.gschema.xml:466
-#: src/org.gnome.Terminal.gschema.xml:470
-#: src/org.gnome.Terminal.gschema.xml:474
-#: src/org.gnome.Terminal.gschema.xml:478
-#: src/org.gnome.Terminal.gschema.xml:482
-#: src/org.gnome.Terminal.gschema.xml:486
-#: src/org.gnome.Terminal.gschema.xml:490
-#: src/org.gnome.Terminal.gschema.xml:494
-#: src/org.gnome.Terminal.gschema.xml:498
-#: src/org.gnome.Terminal.gschema.xml:502
-#: src/org.gnome.Terminal.gschema.xml:506
-#: src/org.gnome.Terminal.gschema.xml:510
-#: src/org.gnome.Terminal.gschema.xml:514
-#: src/org.gnome.Terminal.gschema.xml:518
-#: src/org.gnome.Terminal.gschema.xml:522
-#: src/org.gnome.Terminal.gschema.xml:526
-#: src/org.gnome.Terminal.gschema.xml:530
-#: src/org.gnome.Terminal.gschema.xml:534
-#: src/org.gnome.Terminal.gschema.xml:538
-#: src/org.gnome.Terminal.gschema.xml:542
-#: src/org.gnome.Terminal.gschema.xml:546
-#: src/org.gnome.Terminal.gschema.xml:550
-#: src/org.gnome.Terminal.gschema.xml:554
-#: src/org.gnome.Terminal.gschema.xml:558
-#: src/org.gnome.Terminal.gschema.xml:562
-#: src/org.gnome.Terminal.gschema.xml:566
-#: src/org.gnome.Terminal.gschema.xml:570
-#: src/org.gnome.Terminal.gschema.xml:574
-#: src/org.gnome.Terminal.gschema.xml:578
-#: src/org.gnome.Terminal.gschema.xml:582
-#: src/org.gnome.Terminal.gschema.xml:586
-#: src/org.gnome.Terminal.gschema.xml:590
-#: src/org.gnome.Terminal.gschema.xml:594
+#: src/org.gnome.Terminal.gschema.xml:463
+#: src/org.gnome.Terminal.gschema.xml:467
+#: src/org.gnome.Terminal.gschema.xml:471
+#: src/org.gnome.Terminal.gschema.xml:475
+#: src/org.gnome.Terminal.gschema.xml:479
+#: src/org.gnome.Terminal.gschema.xml:483
+#: src/org.gnome.Terminal.gschema.xml:487
+#: src/org.gnome.Terminal.gschema.xml:491
+#: src/org.gnome.Terminal.gschema.xml:495
+#: src/org.gnome.Terminal.gschema.xml:499
+#: src/org.gnome.Terminal.gschema.xml:503
+#: src/org.gnome.Terminal.gschema.xml:507
+#: src/org.gnome.Terminal.gschema.xml:511
+#: src/org.gnome.Terminal.gschema.xml:515
+#: src/org.gnome.Terminal.gschema.xml:519
+#: src/org.gnome.Terminal.gschema.xml:523
+#: src/org.gnome.Terminal.gschema.xml:527
+#: src/org.gnome.Terminal.gschema.xml:531
+#: src/org.gnome.Terminal.gschema.xml:535
+#: src/org.gnome.Terminal.gschema.xml:539
+#: src/org.gnome.Terminal.gschema.xml:543
+#: src/org.gnome.Terminal.gschema.xml:547
+#: src/org.gnome.Terminal.gschema.xml:551
+#: src/org.gnome.Terminal.gschema.xml:555
+#: src/org.gnome.Terminal.gschema.xml:559
+#: src/org.gnome.Terminal.gschema.xml:563
+#: src/org.gnome.Terminal.gschema.xml:567
+#: src/org.gnome.Terminal.gschema.xml:571
+#: src/org.gnome.Terminal.gschema.xml:575
+#: src/org.gnome.Terminal.gschema.xml:579
+#: src/org.gnome.Terminal.gschema.xml:583
+#: src/org.gnome.Terminal.gschema.xml:587
+#: src/org.gnome.Terminal.gschema.xml:591
+#: src/org.gnome.Terminal.gschema.xml:595
+#: src/org.gnome.Terminal.gschema.xml:599
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Tangentbordsgenväg för att växla till flik med angivet nummer"
 
-#: src/org.gnome.Terminal.gschema.xml:598
+#: src/org.gnome.Terminal.gschema.xml:603
 msgid "Keyboard shortcut to switch to the last tab"
 msgstr "Tangentbordsgenväg för att växla till den sista fliken"
 
-#: src/org.gnome.Terminal.gschema.xml:602
+#: src/org.gnome.Terminal.gschema.xml:607
 msgid "Keyboard shortcut to launch help"
 msgstr "Tangentbordsgenväg för att starta hjälp"
 
-#: src/org.gnome.Terminal.gschema.xml:606
+#: src/org.gnome.Terminal.gschema.xml:611
 msgid "Keyboard shortcut to make font larger"
 msgstr "Tangentbordsgenväg för att göra typsnitt större"
 
-#: src/org.gnome.Terminal.gschema.xml:610
+#: src/org.gnome.Terminal.gschema.xml:615
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Tangentbordsgenväg för att göra typsnitt mindre"
 
-#: src/org.gnome.Terminal.gschema.xml:614
+#: src/org.gnome.Terminal.gschema.xml:619
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Tangentbordsgenväg för att göra typsnitt till normal storlek"
 
-#: src/org.gnome.Terminal.gschema.xml:618
+#: src/org.gnome.Terminal.gschema.xml:623
 msgid "Keyboard shortcut to show the primary menu"
 msgstr "Tangentbordsgenväg för att visa den primära menyn"
 
-#: src/org.gnome.Terminal.gschema.xml:628
+#: src/org.gnome.Terminal.gschema.xml:633
 msgid "Whether the menubar has access keys"
 msgstr "Huruvida menyraden har åtkomsttangenter"
 
-#: src/org.gnome.Terminal.gschema.xml:629
+#: src/org.gnome.Terminal.gschema.xml:634
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
@@ -735,11 +743,11 @@ msgstr ""
 "kan kollidera med en del program som körs inuti terminalfönstret, och det är "
 "därför möjligt att inaktivera dem."
 
-#: src/org.gnome.Terminal.gschema.xml:638
+#: src/org.gnome.Terminal.gschema.xml:643
 msgid "Whether shortcuts are enabled"
 msgstr "Huruvida snabbtangenter är aktiverade"
 
-#: src/org.gnome.Terminal.gschema.xml:639
+#: src/org.gnome.Terminal.gschema.xml:644
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it’s possible to turn them off."
@@ -747,11 +755,11 @@ msgstr ""
 "Huruvida snabbtangenter är aktiverade. De kan påverka vissa program som kör "
 "i terminalen, så det är möjligt att slå av dem."
 
-#: src/org.gnome.Terminal.gschema.xml:648
+#: src/org.gnome.Terminal.gschema.xml:653
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Huruvida GTK:s standardsnabbtangent för menyradsåtkomst är aktiverad"
 
-#: src/org.gnome.Terminal.gschema.xml:649
+#: src/org.gnome.Terminal.gschema.xml:654
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -761,35 +769,35 @@ msgstr ""
 "anpassas via gtkrc (gtk-menu-bar-accel = \"whatever\"). Detta alternativ "
 "möjliggör att standardmenyradsgenvägen inaktiveras."
 
-#: src/org.gnome.Terminal.gschema.xml:659
+#: src/org.gnome.Terminal.gschema.xml:664
 msgid "Whether the shell integration is enabled"
 msgstr "Huruvida skalets integration är aktiverad"
 
-#: src/org.gnome.Terminal.gschema.xml:664
+#: src/org.gnome.Terminal.gschema.xml:669
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Huruvida bekräftelse ska efterfrågas då terminalfönster stängs"
 
-#: src/org.gnome.Terminal.gschema.xml:669
+#: src/org.gnome.Terminal.gschema.xml:674
 msgid "Whether to show the menubar in new windows"
 msgstr "Huruvida menyraden ska visas i nya fönster"
 
-#: src/org.gnome.Terminal.gschema.xml:674
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Huruvida nya terminaler ska öppnas som fönster eller flikar"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "When to show the tabs bar"
 msgstr "När flikraden ska visas"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "The position of the tab bar"
 msgstr "Tabulatorradens position"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "Which theme variant to use"
 msgstr "Vilken temavariant som ska användas"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -954,7 +962,7 @@ msgid "Solarized"
 msgstr "Solarized"
 
 #. This is the name of a colour scheme
-#: src/preferences.ui:232 src/profile-editor.c:718
+#: src/preferences.ui:232 src/profile-editor.c:719
 msgid "Custom"
 msgstr "Anpassad"
 
@@ -1236,30 +1244,34 @@ msgid "Ambiguous-_width characters:"
 msgstr "Tecken med tvet_ydig bredd:"
 
 #: src/preferences.ui:2205
+msgid "Enable _SIXEL images"
+msgstr "Aktivera _SIXEL-bilder"
+
+#: src/preferences.ui:2221
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Återställ kompatibilitetsalternativ till standardvärden"
 
-#: src/preferences.ui:2228
+#: src/preferences.ui:2244
 msgid "Compatibility"
 msgstr "Kompatibilitet"
 
-#: src/preferences.ui:2307
+#: src/preferences.ui:2323
 msgid "Clone…"
 msgstr "Klona…"
 
-#: src/preferences.ui:2314
+#: src/preferences.ui:2330
 msgid "Rename…"
 msgstr "Byt namn…"
 
-#: src/preferences.ui:2321
+#: src/preferences.ui:2337
 msgid "Delete…"
 msgstr "Ta bort…"
 
-#: src/preferences.ui:2334
+#: src/preferences.ui:2350
 msgid "Set as default"
 msgstr "Ange som standard"
 
-#: src/preferences.ui:2398
+#: src/preferences.ui:2414
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -1318,136 +1330,136 @@ msgstr "Mörk Solarized"
 msgid "Error parsing command: %s"
 msgstr "Fel vid tolkning av kommando: %s"
 
-#: src/profile-editor.c:743
+#: src/profile-editor.c:744
 msgid "Armenian"
 msgstr "Armenisk"
 
-#: src/profile-editor.c:744 src/profile-editor.c:745 src/profile-editor.c:749
+#: src/profile-editor.c:745 src/profile-editor.c:746 src/profile-editor.c:750
 msgid "Chinese Traditional"
 msgstr "Traditionell kinesisk"
 
-#: src/profile-editor.c:746
+#: src/profile-editor.c:747
 msgid "Cyrillic/Russian"
 msgstr "Kyrillisk/Rysk"
 
-#: src/profile-editor.c:747 src/profile-editor.c:760 src/profile-editor.c:790
+#: src/profile-editor.c:748 src/profile-editor.c:761 src/profile-editor.c:791
 msgid "Japanese"
 msgstr "Japansk"
 
-#: src/profile-editor.c:748 src/profile-editor.c:761 src/profile-editor.c:792
+#: src/profile-editor.c:749 src/profile-editor.c:762 src/profile-editor.c:793
 msgid "Korean"
 msgstr "Koreansk"
 
-#: src/profile-editor.c:750 src/profile-editor.c:751 src/profile-editor.c:752
+#: src/profile-editor.c:751 src/profile-editor.c:752 src/profile-editor.c:753
 msgid "Chinese Simplified"
 msgstr "Förenklad kinesisk"
 
-#: src/profile-editor.c:753
+#: src/profile-editor.c:754
 msgid "Georgian"
 msgstr "Georgisk"
 
-#: src/profile-editor.c:754 src/profile-editor.c:762 src/profile-editor.c:766
-#: src/profile-editor.c:786 src/profile-editor.c:796
+#: src/profile-editor.c:755 src/profile-editor.c:763 src/profile-editor.c:767
+#: src/profile-editor.c:787 src/profile-editor.c:797
 msgid "Western"
 msgstr "Västerländsk"
 
-#: src/profile-editor.c:755 src/profile-editor.c:768 src/profile-editor.c:782
-#: src/profile-editor.c:794
+#: src/profile-editor.c:756 src/profile-editor.c:769 src/profile-editor.c:783
+#: src/profile-editor.c:795
 msgid "Central European"
 msgstr "Centraleuropeisk"
 
-#: src/profile-editor.c:756 src/profile-editor.c:771 src/profile-editor.c:777
-#: src/profile-editor.c:778 src/profile-editor.c:780 src/profile-editor.c:795
+#: src/profile-editor.c:757 src/profile-editor.c:772 src/profile-editor.c:778
+#: src/profile-editor.c:779 src/profile-editor.c:781 src/profile-editor.c:796
 msgid "Cyrillic"
 msgstr "Kyrillisk"
 
-#: src/profile-editor.c:757 src/profile-editor.c:776 src/profile-editor.c:788
-#: src/profile-editor.c:798
+#: src/profile-editor.c:758 src/profile-editor.c:777 src/profile-editor.c:789
+#: src/profile-editor.c:799
 msgid "Turkish"
 msgstr "Turkisk"
 
-#: src/profile-editor.c:758 src/profile-editor.c:775 src/profile-editor.c:785
-#: src/profile-editor.c:799
+#: src/profile-editor.c:759 src/profile-editor.c:776 src/profile-editor.c:786
+#: src/profile-editor.c:800
 msgid "Hebrew"
 msgstr "Hebreisk"
 
-#: src/profile-editor.c:759 src/profile-editor.c:772 src/profile-editor.c:781
-#: src/profile-editor.c:800
+#: src/profile-editor.c:760 src/profile-editor.c:773 src/profile-editor.c:782
+#: src/profile-editor.c:801
 msgid "Arabic"
 msgstr "Arabisk"
 
-#: src/profile-editor.c:763
+#: src/profile-editor.c:764
 msgid "Nordic"
 msgstr "Nordisk"
 
-#: src/profile-editor.c:764 src/profile-editor.c:770 src/profile-editor.c:801
+#: src/profile-editor.c:765 src/profile-editor.c:771 src/profile-editor.c:802
 msgid "Baltic"
 msgstr "Baltisk"
 
-#: src/profile-editor.c:765
+#: src/profile-editor.c:766
 msgid "Celtic"
 msgstr "Keltisk"
 
-#: src/profile-editor.c:767 src/profile-editor.c:787
+#: src/profile-editor.c:768 src/profile-editor.c:788
 msgid "Romanian"
 msgstr "Rumänsk"
 
-#: src/profile-editor.c:769
+#: src/profile-editor.c:770
 msgid "South European"
 msgstr "Sydeuropeisk"
 
-#: src/profile-editor.c:773 src/profile-editor.c:784 src/profile-editor.c:797
+#: src/profile-editor.c:774 src/profile-editor.c:785 src/profile-editor.c:798
 msgid "Greek"
 msgstr "Grekisk"
 
-#: src/profile-editor.c:774
+#: src/profile-editor.c:775
 msgid "Hebrew Visual"
 msgstr "Hebreisk (visuell)"
 
-#: src/profile-editor.c:779 src/profile-editor.c:789
+#: src/profile-editor.c:780 src/profile-editor.c:790
 msgid "Cyrillic/Ukrainian"
 msgstr "Kyrillisk/Ukrainsk"
 
-#: src/profile-editor.c:783
+#: src/profile-editor.c:784
 msgid "Croatian"
 msgstr "Kroatisk"
 
-#: src/profile-editor.c:791
+#: src/profile-editor.c:792
 msgid "Thai"
 msgstr "Thai"
 
-#: src/profile-editor.c:793 src/profile-editor.c:809
+#: src/profile-editor.c:794 src/profile-editor.c:810
 msgid "Unicode"
 msgstr "Unicode"
 
-#: src/profile-editor.c:802
+#: src/profile-editor.c:803
 msgid "Vietnamese"
 msgstr "Vietnamesisk"
 
-#: src/profile-editor.c:810
+#: src/profile-editor.c:811
 msgid "Legacy CJK Encodings"
 msgstr "Äldre CJK-kodningar"
 
-#: src/profile-editor.c:811
+#: src/profile-editor.c:812
 msgid "Obsolete Encodings"
 msgstr "Föråldrade kodningar"
 
 #. Translators: Appears as: [numeric entry] × width
-#: src/profile-editor.c:1011
+#: src/profile-editor.c:1012
 msgid "width"
 msgstr "bredd"
 
 #. Translators: Appears as: [numeric entry] × height
-#: src/profile-editor.c:1016
+#: src/profile-editor.c:1017
 msgid "height"
 msgstr "höjd"
 
-#: src/profile-editor.c:1064
+#: src/profile-editor.c:1065
 #, c-format
 msgid "Choose Palette Color %u"
 msgstr "Välj palettfärg %u"
 
-#: src/profile-editor.c:1068
+#: src/profile-editor.c:1069
 #, c-format
 msgid "Palette entry %u"
 msgstr "Palettpost %u"
@@ -1726,7 +1738,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspekterare"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1533
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
 #: src/terminal-window.c:1763
 msgid "_Preferences"
 msgstr "_Inställningar"
@@ -2234,29 +2246,29 @@ msgstr "Snabbtangenter"
 msgid "Profiles"
 msgstr "Profiler"
 
-#: src/terminal-screen.c:1413
+#: src/terminal-screen.c:1417
 msgid "No command supplied nor shell requested"
 msgstr "Inget kommando tillhandahölls, inte heller efterfrågades ett skal"
 
-#: src/terminal-screen.c:1534 src/terminal-screen.c:1873
+#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
 msgid "_Relaunch"
 msgstr "Sta_rta igen"
 
-#: src/terminal-screen.c:1537
+#: src/terminal-screen.c:1541
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ett fel uppstod vid skapande av barnprocessen för denna terminal"
 
-#: src/terminal-screen.c:1877
+#: src/terminal-screen.c:1881
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Barnprocessen avslutades normalt med status %d."
 
-#: src/terminal-screen.c:1880
+#: src/terminal-screen.c:1884
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Barnprocessen terminerades av signal %d."
 
-#: src/terminal-screen.c:1883
+#: src/terminal-screen.c:1887
 msgid "The child process was aborted."
 msgstr "Barnprocessen terminerades."
 
