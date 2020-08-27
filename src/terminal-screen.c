@@ -1994,7 +1994,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
     case TARGET_MOZ_URL:
       {
-        char *utf8_data, *newline, *text;
+        char *utf8_data, *text;
         char *uris[2];
         gsize len;
         
@@ -2002,6 +2002,9 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
          *
          * The data contains the URL, a \n, then the
          * title of the web page.
+         *
+         * Note that some producers (e.g. dolphin) delimit with a \r\n
+         * (see issue#293), so we need to handle that, too.
          */
         if (selection_data_format != 8 ||
             selection_data_length == 0 ||
@@ -2014,11 +2017,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         if (!utf8_data)
           return;
 
-        newline = strchr (utf8_data, '\n');
-        if (newline)
-          *newline = '\0';
-
-        uris[0] = utf8_data;
+        uris[0] = g_strdelimit(utf8_data, "\r\n", 0);
         uris[1] = NULL;
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
