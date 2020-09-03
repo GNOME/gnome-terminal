@@ -48,6 +48,8 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>gnome-terminal</command>
+      <group rep="repeat"><replaceable>OPTION</replaceable></group>
+      <group>-- <replaceable>PROGRAM</replaceable> <group rep="repeat"><replaceable>ARG</replaceable></group></group>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -180,7 +182,38 @@
         <term><option>--command, -e=COMMAND</option></term>
         <listitem>
           <para>
-            Execute the argument to this option inside the terminal.
+            Split the argument to this option into a program and arguments
+            in the same way a shell would, and execute the resulting
+            command-line inside the terminal.
+          </para>
+          <para>
+            This option is deprecated. Instead, use <option>--</option>
+            to terminate the options, and put the program and arguments to
+            execute after it: for example, instead of
+            <userinput>gnome-terminal -e "python3 -q"</userinput>, prefer to use
+            <userinput>gnome-terminal -- python3 -q</userinput>.
+          </para>
+          <para>
+            Note that the <replaceable>COMMAND</replaceable> is not run via
+            a shell: it is split into words and executed as a program. If
+            shell syntax is required, use the form
+            <userinput>gnome-terminal -- sh -c '...'</userinput>.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term><option>--execute PROGRAM [ARGS], -x PROGRAM [ARGS]</option></term>
+        <listitem>
+          <para>
+            Stop parsing options at this point, and interpret all
+            subsequent options as a program and arguments to execute
+            inside the terminal.
+          </para>
+          <para>
+            This option is deprecated: use <option>--</option> instead.
+            For example, instead of
+            <userinput>gnome-terminal -x python3 -q</userinput>, prefer to use
+            <userinput>gnome-terminal -- python3 -q</userinput>.
           </para>
         </listitem>
       </varlistentry>
@@ -370,6 +403,23 @@
       Please read
       <ulink url="https://wiki.gnome.org/Apps/Terminal/ReportingBugs"></ulink>
       on how to report bugs.
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>EXAMPLES</title>
+    <para>
+      To run a terminal containing an interactive Python prompt:
+      <literallayout>
+        gnome-terminal --title=Python -- python3 -q
+      </literallayout>
+    </para>
+    <para>
+      To interpret shell syntax in a terminal, either write it in a
+      separate shell script, or use <literal>sh -c</literal>:
+      <literallayout>
+        gnome-terminal -- sh -c 'if [ "$(id -u)" = 0 ]; then ...'
+      </literallayout>
     </para>
   </refsect1>
 
