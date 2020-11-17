@@ -41,6 +41,7 @@
 #include "terminal-app.h"
 #include "terminal-intl.h"
 #include "terminal-util.h"
+#include "terminal-version.h"
 #include "terminal-libgsystem.h"
 
 /**
@@ -174,6 +175,7 @@ terminal_util_show_about (void)
   gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
   GPtrArray *array;
   gs_free char *comment;
+  gs_free char *version;
   gs_free char *vte_version;
   GtkWindow *dialog;
 
@@ -220,6 +222,11 @@ terminal_util_show_about (void)
 
   licence_text = terminal_util_get_licence_text ();
 
+  int gnome_version = (TERMINAL_MINOR_VERSION + 1) & ~1;
+  version = g_strdup_printf (_("Version %s for GNOME %d"),
+                             VERSION,
+                             gnome_version);
+
   vte_version = g_strdup_printf (_("Using VTE version %u.%u.%u"),
                                  vte_get_major_version (),
                                  vte_get_minor_version (),
@@ -236,7 +243,7 @@ terminal_util_show_about (void)
                          "program-name", _("GNOME Terminal"),
                          "copyright", copyright,
                          "comments", comment,
-                         "version", VERSION,
+                         "version", version,
                          "authors", array_strv,
                          "artists", artists,
                          "documenters", documenters,
