@@ -51,6 +51,7 @@ G_BEGIN_DECLS
 GS_DEFINE_CLEANUP_FUNCTION0(GArray*, gs_local_array_unref, g_array_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GBytes*, gs_local_bytes_unref, g_bytes_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GChecksum*, gs_local_checksum_free, g_checksum_free)
+GS_DEFINE_CLEANUP_FUNCTION0(GDateTime*, gs_local_date_time_unref, g_date_time_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GError*, gs_local_free_error, g_error_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GKeyFile*, gs_local_key_file_unref, g_key_file_unref)
@@ -163,6 +164,15 @@ static inline void gs_local_gstring_free (void *v) \
  * be %NULL.
  */
 #define gs_free_checksum __attribute__ ((cleanup(gs_local_checksum_free)))
+
+/**
+ * gs_unref_date_time:
+ *
+ * Call g_date_time_free() on a variable location when it goes out
+ * of scope.  Note that unlike g_date_time_free(), the variable may
+ * be %NULL.
+ */
+#define gs_unref_date_time __attribute__ ((cleanup(gs_local_date_time_unref)))
 
 /**
  * gs_unref_bytes:

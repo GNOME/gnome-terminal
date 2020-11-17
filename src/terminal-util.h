@@ -93,6 +93,7 @@ void terminal_g_settings_set_rgba_palette (GSettings      *settings,
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
 char *terminal_util_number_info (const char *str);
+char *terminal_util_timestamp_info (const char *str);
 
 char *terminal_util_uri_fixup (const char *uri,
                                GError **error);

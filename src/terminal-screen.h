@@ -150,6 +150,7 @@ struct _TerminalScreenPopupInfo {
   TerminalURLFlavor url_flavor;
   char *hyperlink;
   char *number_info;
+  char *timestamp_info;
   guint button;
   guint state;
   guint32 timestamp;

@@ -1727,13 +1727,31 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   }
 
   /* Info section */
-  if (info->number_info != NULL) {
-    gs_unref_object GMenu *section3 = g_menu_new ();
-    /* Non-existent action will make this item insensitive */
-    gs_unref_object GMenuItem *item3 = g_menu_item_new (info->number_info, "win.notexist");
-    g_menu_append_item (section3, item3);
-    g_menu_append_section (menu, NULL, G_MENU_MODEL (section3));
+  gs_strfreev char** citems = g_settings_get_strv (terminal_app_get_global_settings (terminal_app_get ()),
+                                                   TERMINAL_SETTING_CONTEXT_INFO_KEY);
+
+  gs_unref_object GMenu *section3 = g_menu_new ();
+
+  for (int i = 0; citems[i] != NULL; ++i) {
+    const char *citem = citems[i];
+
+    if (g_str_equal (citem, "numbers") &&
+        info->number_info != NULL) {
+      /* Non-existent action will make this item insensitive */
+      gs_unref_object GMenuItem *item3 = g_menu_item_new (info->number_info, "win.notexist");
+      g_menu_append_item (section3, item3);
+    }
+
+    if (g_str_equal (citem, "timestamps") &&
+        info->timestamp_info != NULL) {
+      /* Non-existent action will make this item insensitive */
+      gs_unref_object GMenuItem *item3 = g_menu_item_new (info->timestamp_info, "win.notexist");
+      g_menu_append_item (section3, item3);
+    }
   }
+
+  if (g_menu_model_get_n_items(G_MENU_MODEL (section3)) > 0)
+    g_menu_append_section (menu, NULL, G_MENU_MODEL (section3));
 
   /* Clipboard section */
   gs_unref_object GMenu *section4 = g_menu_new ();

@@ -163,7 +163,8 @@ static char* terminal_screen_check_hyperlink   (TerminalScreen            *scree
                                                 GdkEvent                  *event);
 static void terminal_screen_check_extra (TerminalScreen *screen,
                                          GdkEvent       *event,
-                                         char           **number_info);
+                                         char           **number_info,
+                                         char           **timestamp_info);
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 GdkEvent                  *event,
                                                 int                  *flavor);
@@ -1683,6 +1684,7 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
   g_free (info->hyperlink);
   g_free (info->url);
   g_free (info->number_info);
+  g_free (info->timestamp_info);
   g_slice_free (TerminalScreenPopupInfo, info);
 }
 
@@ -1708,7 +1710,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
                           char *hyperlink,
                           char *url,
                           int url_flavor,
-                          char *number_info)
+                          char *number_info,
+                          char *timestamp_info)
 {
   TerminalScreenPopupInfo *info;
 
@@ -1720,6 +1723,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   info->url = url; /* adopted */
   info->url_flavor = url_flavor;
   info->number_info = number_info; /* adopted */
+  info->timestamp_info = timestamp_info; /* adopted */
 
   g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
   terminal_screen_popup_info_unref (info);
@@ -1736,13 +1740,14 @@ terminal_screen_button_press (GtkWidget      *widget,
   gs_free char *url = NULL;
   int url_flavor = 0;
   gs_free char *number_info = NULL;
+  gs_free char *timestamp_info = NULL;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   hyperlink = terminal_screen_check_hyperlink (screen, (GdkEvent*)event);
   url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
-  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
+  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info, &timestamp_info);
 
   if (hyperlink != NULL &&
       (event->button == 1 || event->button == 2) &&
@@ -1783,19 +1788,21 @@ terminal_screen_button_press (GtkWidget      *widget,
           if (button_press_event && button_press_event (widget, event))
             return TRUE;
 
-          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info);
+          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
           hyperlink = NULL; /* adopted to the popup info */
           url = NULL; /* ditto */
           number_info = NULL; /* ditto */
+          timestamp_info = NULL; /* ditto */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
-          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info);
+          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
           hyperlink = NULL; /* adopted to the popup info */
           url = NULL; /* ditto */
           number_info = NULL; /* ditto */
+          timestamp_info = NULL; /* ditto */
           return TRUE;
         }
     }
@@ -2163,7 +2170,8 @@ terminal_screen_check_match (TerminalScreen *screen,
 static void
 terminal_screen_check_extra (TerminalScreen *screen,
                              GdkEvent       *event,
-                             char           **number_info)
+                             char           **number_info,
+                             char           **timestamp_info)
 {
   guint i;
   char **matches;
@@ -2191,6 +2199,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
                   if (!flavor_number_found)
                     {
                       *number_info = terminal_util_number_info (matches[i]);
+                      *timestamp_info = terminal_util_timestamp_info (matches[i]);
                       flavor_number_found = TRUE;
                     }
                   g_free (matches[i]);

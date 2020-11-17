@@ -1030,22 +1030,21 @@ terminal_util_number_info (const char *str)
   gs_free char *hextmp = NULL;
   gs_free char *hexstr = NULL;
   gs_free char *magnitudestr = NULL;
-  unsigned long long num;
   gboolean exact = TRUE;
   gboolean hex = FALSE;
   const char *thousep;
 
-  errno = 0;
   /* Deliberately not handle octal */
-  if (str[1] == 'x' || str[1] == 'X') {
-    num = strtoull(str + 2, NULL, 16);
+  if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+    str += 2;
     hex = TRUE;
-  } else {
-    num = strtoull(str, NULL, 10);
   }
-  if (errno) {
+
+  errno = 0;
+  char* end;
+  gint64 num = g_ascii_strtoull(str, &end, hex ? 16 : 10);
+  if (errno || str == end || num == -1)
     return NULL;
-  }
 
   /* No use in dec-hex conversion for so small numbers */
   if (num < 10) {
@@ -1057,18 +1056,18 @@ terminal_util_number_info (const char *str)
   if (thousep[0] != '\0') {
     /* If thousep is nonempty, use printf's magic which can handle
        more complex separating logics, e.g. 2+2+2+3 for some locales */
-    decstr = g_strdup_printf("%'llu", num);
+    decstr = g_strdup_printf("%'" G_GINT64_FORMAT, num);
   } else {
     /* If, however, thousep is empty, override it with a space so that we
        do always group the digits (that's the whole point of this feature;
        the choice of space guarantees not conflicting with the decimal separator) */
-    gs_free char *tmp = g_strdup_printf("%llu", num);
+    gs_free char *tmp = g_strdup_printf("%" G_GINT64_FORMAT, num);
     thousep = " ";
     decstr = add_separators(tmp, thousep, 3);
   }
 
   /* Group the hex digits by 4 using the same nonempty separator */
-  hextmp = g_strdup_printf("%llx", num);
+  hextmp = g_strdup_printf("%" G_GINT64_MODIFIER "x", (guint64)(num));
   hexstr = add_separators(hextmp, thousep, 4);
 
   /* Find out the human-readable magnitude, e.g. 15.99 Mi */
@@ -1091,6 +1090,44 @@ terminal_util_number_info (const char *str)
   }
 
   return g_strdup_printf(hex ? "0x%2$s = %1$s%3$s" : "%s = 0x%s%s", decstr, hexstr, magnitudestr);
+}
+
+/**
+ * terminal_util_timestamp_info:
+ * @str: a dec or hex number as string
+ *
+ * Returns: (transfer full): Formatted localtime if @str is decimal and looks like a timestamp, or %NULL
+ */
+char *
+terminal_util_timestamp_info (const char *str)
+{
+  /* Bail out on hex numbers */
+  if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+    return NULL;
+  }
+
+  /* Deliberately not handle octal */
+  errno = 0;
+  char* end;
+  gint64 num = g_ascii_strtoull (str, &end, 10);
+  if (errno || end == str || num == -1)
+    return NULL;
+
+  /* Java uses Unix time in milliseconds. */
+  if (num >= 1000000000000 && num <= 1999999999999)
+    num /= 1000;
+
+  /* Fun: use inclusive interval so you can right-click on these numbers
+   * and check the human-readable time in gnome-terminal.
+   * (They're Sep 9 2001 and May 18 2033 by the way.) */
+  if (num < 1000000000 || num > 1999999999)
+    return NULL;
+
+  gs_unref_date_time GDateTime* date = g_date_time_new_from_unix_utc (num);
+  if (date == NULL)
+    return NULL;
+
+  return g_date_time_format(date, "%c");
 }
 
 /**
