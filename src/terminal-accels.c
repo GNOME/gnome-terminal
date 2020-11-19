@@ -22,6 +22,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 
 #include "terminal-accels.h"
@@ -258,13 +259,45 @@ binding_name (guint            keyval,
   return g_strdup ("disabled");
 }
 
+static guint
+get_alternate_accel_key (guint key)
+{
+  guint retval = 0;
+
+  switch (key) {
+    case GDK_KEY_0:
+      retval = GDK_KEY_KP_0;
+      break;
+    case GDK_KEY_minus:
+      retval = GDK_KEY_KP_Subtract;
+      break;
+    case GDK_KEY_plus:
+      retval = GDK_KEY_KP_Add;
+      break;
+    case GDK_KEY_KP_0:
+      retval = GDK_KEY_0;
+      break;
+    case GDK_KEY_KP_Add:
+      retval = GDK_KEY_plus;
+      break;
+    case GDK_KEY_KP_Subtract:
+      retval = GDK_KEY_minus;
+      break;
+    default:
+      break;
+  }
+
+  return retval;
+}
+
 static void
 key_changed_cb (GSettings *settings,
                 const char *settings_key,
                 gpointer user_data)
 {
   GtkApplication *application = user_data;
-  const gchar *accels[2] = { NULL, NULL };
+  const gchar *accels[3] = { NULL, NULL, NULL };
+  gsize accels_offset = 0;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
@@ -280,6 +313,7 @@ key_changed_cb (GSettings *settings,
     }
 
   gs_free char *value = g_settings_get_string (settings, settings_key);
+  gs_free char *alternate_value = NULL;
 
   gs_free char *detailed = g_action_print_detailed_name (key_entry->action_name,
                                                          key_entry->parameter);
@@ -299,7 +333,20 @@ key_changed_cb (GSettings *settings,
   if (g_str_equal (value, "disabled")) {
     accels[0] = NULL;
   } else {
-    accels[0] = value;
+    accels[accels_offset] = value;
+    accels_offset++;
+
+    GdkModifierType mods;
+    guint key;
+    gtk_accelerator_parse (value, &key, &mods);
+
+    guint alternate_key = get_alternate_accel_key (key);
+
+    if (alternate_key != 0) {
+      alternate_value = gtk_accelerator_name (alternate_key, mods);
+      accels[accels_offset] = alternate_value;
+      accels_offset++;
+    }
   }
 
   gtk_application_set_accels_for_action (application,
