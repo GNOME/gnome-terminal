@@ -290,13 +290,79 @@ get_alternate_accel_key (guint key)
   return retval;
 }
 
+static guint
+get_convenience_accel_key (guint key)
+{
+  guint retval = 0;
+
+  if (key != GDK_KEY_plus && key != GDK_KEY_KP_Add)
+    goto out;
+
+  GdkDisplay *display = gdk_display_get_default ();
+  if (display == NULL)
+    goto out;
+
+  GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+  guint keycode = 0;
+
+  {
+    gs_free GdkKeymapKey *keymap_keys = NULL;
+    gint n_keymap_keys;
+
+    if (!gdk_keymap_get_entries_for_keyval (keymap, GDK_KEY_plus, &keymap_keys, &n_keymap_keys)) {
+      _terminal_debug_print (TERMINAL_DEBUG_ACCELS, "GdkKeymapKey for GDK_KEY_plus not found\n");
+      goto out;
+    }
+
+    g_message ("n_keymap_keys: %d", n_keymap_keys);
+    g_message ("keymap_key: %u, %d, %d", keymap_keys[0].keycode, keymap_keys[0].group, keymap_keys[0].level);
+
+    gint i;
+
+    for (i = 0; i < n_keymap_keys; i++) {
+      if (keymap_keys[i].level == 1) {
+        keycode = keymap_keys[i].keycode;
+        break;
+      }
+    }
+
+    if (keycode == 0) {
+      _terminal_debug_print (TERMINAL_DEBUG_ACCELS, "No GdkKeymapKey for GDK_KEY_plus is on the upper level\n");
+      goto out;
+    }
+  }
+
+  {
+    gs_free GdkKeymapKey *keymap_keys = NULL;
+    gint n_keymap_keys;
+    guint *keys;
+
+    if (!gdk_keymap_get_entries_for_keycode (keymap, keycode, &keymap_keys, &keys, &n_keymap_keys)) {
+      _terminal_debug_print (TERMINAL_DEBUG_ACCELS, "Key values for key code %u not found\n", keycode);
+      goto out;
+    }
+
+    gint i;
+
+    for (i = 0; i < n_keymap_keys; i++) {
+      if (keymap_keys[i].level == 0) {
+        retval = keys[i];
+        break;
+      }
+    }
+  }
+
+out:
+  return retval;
+}
+
 static void
 key_changed_cb (GSettings *settings,
                 const char *settings_key,
                 gpointer user_data)
 {
   GtkApplication *application = user_data;
-  const gchar *accels[3] = { NULL, NULL, NULL };
+  const gchar *accels[4] = { NULL, NULL, NULL, NULL };
   gsize accels_offset = 0;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
@@ -314,6 +380,7 @@ key_changed_cb (GSettings *settings,
 
   gs_free char *value = g_settings_get_string (settings, settings_key);
   gs_free char *alternate_value = NULL;
+  gs_free char *convenience_value = NULL;
 
   gs_free char *detailed = g_action_print_detailed_name (key_entry->action_name,
                                                          key_entry->parameter);
@@ -345,6 +412,14 @@ key_changed_cb (GSettings *settings,
     if (alternate_key != 0) {
       alternate_value = gtk_accelerator_name (alternate_key, mods);
       accels[accels_offset] = alternate_value;
+      accels_offset++;
+    }
+
+    guint convenience_key = get_convenience_accel_key (key);
+
+    if (convenience_key != 0) {
+      convenience_value = gtk_accelerator_name (convenience_key, mods);
+      accels[accels_offset] = convenience_value;
       accels_offset++;
     }
   }
