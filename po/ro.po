@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.ro\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-14 15:43+0300\n"
+"POT-Creation-Date: 2020-11-17 20:46+0000\n"
+"PO-Revision-Date: 2020-12-12 19:20+0200\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
 "Language-Team: Gnome Romanian Translation Team\n"
 "Language: ro\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);;\n"
-"X-Generator: Poedit 2.4\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Project-Style: gnome\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
@@ -40,8 +40,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1887 src/terminal-window.c:2153
+#: src/terminal-window.c:2434
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -787,26 +787,32 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Dacă să solicite confirmarea înaintea închiderii terminalului"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr ""
+"Elemente adiționale ale secțiunii de informații care vor apărea în meniul "
+"contextual"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Dacă să fie afișată bara de meniu în noile ferestre"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Dacă să se deschidă noile terminale ca ferestre sau taburi"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Dacă să se afișeze bara de taburi"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "Poziția barei de taburi"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Care versiune de temă să fie folosită"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -1663,16 +1669,16 @@ msgstr "_Tastă acces rapid"
 msgid "New Terminal"
 msgstr "Terminal nou"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1788
 msgid "New _Terminal"
 msgstr "_Terminal nou"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1797
 msgid "New _Tab"
 msgstr "_Tab nou"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1793
 msgid "New _Window"
 msgstr "Fereastră _nouă"
 
@@ -1702,7 +1708,7 @@ msgid "_Full Screen"
 msgstr "_Pe tot ecranul"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1769
 msgid "Read-_Only"
 msgstr "Doar citire"
 
@@ -1743,8 +1749,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspector"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1538
+#: src/terminal-window.c:1781
 msgid "_Preferences"
 msgstr "_Preferințe"
 
@@ -1784,19 +1790,19 @@ msgstr "În_chide fereastră"
 msgid "_Edit"
 msgstr "_Editare"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1759
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1760
 msgid "Copy as _HTML"
 msgstr "Copiază ca _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1761
 msgid "_Paste"
 msgstr "Li_pește"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1763
 msgid "Paste as _Filenames"
 msgstr "Lipește ca nume _fișiere"
 
@@ -1812,7 +1818,7 @@ msgstr "P_referințe"
 msgid "_View"
 msgstr "_Vizualizare"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1809
 msgid "Show _Menubar"
 msgstr "Arată bara de _meniu"
 
@@ -1900,7 +1906,7 @@ msgstr "Deschide t_erminal"
 msgid "Open a terminal"
 msgstr "Deschide un terminal"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3242
 msgid "C_lose Terminal"
 msgstr "Închide termina_l"
 
@@ -2246,30 +2252,30 @@ msgstr "Scurtături"
 msgid "Profiles"
 msgstr "Profiluri"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1418
 msgid "No command supplied nor shell requested"
 msgstr "Nicio comandă furnizată, niciun shell cerut"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1539 src/terminal-screen.c:1884
 msgid "_Relaunch"
 msgstr "_Relansează"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1542
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "A intervenit o eroare la crearea unui proces copil pentru acest terminal"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Procesul copil s-a terminat normal cu starea %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1891
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Procesul copil a fost abandonat de către semnalul %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1894
 msgid "The child process was aborted."
 msgstr "Procesul copil a fost abandonat."
 
@@ -2277,28 +2283,33 @@ msgstr "Procesul copil a fost abandonat."
 msgid "Close tab"
 msgstr "Închide tabul"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "A apărut o eroare la afișarea ajutorului"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Colaboratori:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Versiunea %s pentru GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Se folosește versiunea VTE %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulator de terminal pentru desktop-ul GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Mugurel Tudor <mugurelu@gnome.ro>\n"
@@ -2307,12 +2318,12 @@ msgstr ""
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, "
 "2019-2020"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Nu s-a putut deschide adresa „%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2324,7 +2335,7 @@ msgstr ""
 "publicată de Free Software Foundation, fie versiunea 3 a licenței, fie (la "
 "latitudinea dumneavoastră) orice versiune ulterioară."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2335,7 +2346,7 @@ msgstr ""
 "GARANȚIE, fără garanție implicită de vandabilitate și conformitate unui "
 "anumit scop. Citiți Licența Publică Generală GNU pentru detalii."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2343,7 +2354,7 @@ msgstr ""
 "Ar trebui să fi primit o copie a Licenței Publice Generale GNU împreună cu "
 "Terminal GNOME. Dacă nu consultați <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "schma „file” cu un nume de gazdă la distanță nu este suportată"
 
@@ -2395,23 +2406,23 @@ msgstr "_Deschide legătură"
 msgid "Copy _Link"
 msgstr "Copiază _legătura"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1776
 msgid "P_rofiles"
 msgstr "P_rofiluri"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1811
 msgid "L_eave Full Screen"
 msgstr "Părăs_ește modul pe tot ecranul"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this window?"
 msgstr "Închideți acestă fereastră?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this terminal?"
 msgstr "Închideți acest terminal?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3233
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2419,14 +2430,14 @@ msgstr ""
 "Momentan unele procese încă rulează în unul din terminalele din această "
 "fereastră. Închiderea ferestrei le va distruge pe toate."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3237
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Momentan rulează un proces în terminal. Închiderea terminalul îl va distruge."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3242
 msgid "C_lose Window"
 msgstr "Î_nchide fereastra"
 
