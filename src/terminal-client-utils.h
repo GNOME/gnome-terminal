@@ -47,7 +47,11 @@ void terminal_client_append_exec_options            (GVariantBuilder *builder,
                                                      gsize            fd_array_len,
                                                      gboolean         shell);
 
-char * terminal_client_get_fallback_startup_id      (void);
+char * terminal_client_get_fallback_startup_id      (void) G_GNUC_MALLOC;
+
+char const* const* terminal_client_get_environment_filters (void);
+
+char** terminal_client_filter_environment           (char** envv) G_GNUC_MALLOC;
 
 G_END_DECLS
 

@@ -45,6 +45,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-accels.h \
 	terminal-app.c \
 	terminal-app.h \
+	terminal-client-utils.c \
+	terminal-client-utils.h \
 	terminal-debug.c \
 	terminal-debug.h \
 	terminal-defines.h \

@@ -21,6 +21,7 @@
 #include "terminal-pcre2.h"
 #include "terminal-regex.h"
 #include "terminal-screen.h"
+#include "terminal-client-utils.h"
 
 #include <errno.h>
 #include <string.h>
@@ -1453,20 +1454,10 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
         }
     }
 
-  g_hash_table_remove (env_table, "COLUMNS");
-  g_hash_table_remove (env_table, "LINES");
-  g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
-
-  /* WINDOWID does not work correctly ever since we don't use a native
-   * GdkWindow anymore, and it also becomes incorrect if the screen is
-   * moved to a different window, or the window unrealized and re-realized.
-   * Additionally, it cannot ever work on non-X11 displays like wayland.
-   * And on X11, the only use for this is broken foreign drawing on the
-   * window (w3m etc), and trying to find the focused screen (brltty),
-   * which can now be done correctly using DECSET 1004.
-   * Therefore we do not set WINDOWID, and remove an existing variable.
-   */
-  g_hash_table_remove (env_table, "WINDOWID");
+  /* Remove unwanted env variables */
+  char const* const* filters = terminal_client_get_environment_filters ();
+  for (i = 0; filters[i]; ++i)
+    g_hash_table_remove (env_table, filters[i]);
 
   terminal_util_add_proxy_env (env_table);
 

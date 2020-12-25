@@ -99,6 +99,65 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
                            "fullscreen-window", g_variant_new_boolean (TRUE));
 }
 
+char const* const*
+terminal_client_get_environment_filters (void)
+{
+  static char const* filters[] = {
+    "COLORTERM",
+    "COLUMNS",
+    "DESKTOP_STARTUP_ID",
+    "EXIT_CODE",
+    "EXIT_STATUS",
+    "GIO_LAUNCHED_DESKTOP_FILE",
+    "GIO_LAUNCHED_DESKTOP_FILE_PID",
+    "GNOME_DESKTOP_ICON",
+    "INVOCATION_ID",
+    "JOURNAL_STREAM",
+    "LINES",
+    "LISTEN_FDNAMES",
+    "LISTEN_FDS",
+    "LISTEN_PID",
+    "MAINPID",
+    "MANAGERPID",
+    "NOTIFY_SOCKET",
+    "NOTIFY_SOCKET",
+    "PIDFILE",
+    "PWD",
+    "REMOTE_ADDR",
+    "REMOTE_PORT",
+    "SERVICE_RESULT",
+    "TERM",
+    "VTE_VERSION",
+    "WATCHDOG_PID",
+    "WATCHDOG_USEC",
+    "WINDOWID",
+    NULL
+  };
+
+  return filters;
+}
+
+/**
+ * terminal_client_filter_environment:
+ * @envv: (transfer full): the environment
+ *
+ * Filters unwanted variables from @envv, and returns it.
+ *
+ * Returns: (transfer full): the filtered environment
+ */
+char**
+terminal_client_filter_environment (char** envv)
+{
+  if (envv == NULL)
+    return NULL;
+
+  char const* const* filters = terminal_client_get_environment_filters ();
+  for (unsigned i = 0; filters[i]; ++i)
+    envv = g_environ_unsetenv (envv, filters[i]);
+
+  return envv;
+}
+
 /**
  * terminal_client_append_exec_options:
  * @builder: a #GVariantBuilder of #GVariantType "a{sv}"
@@ -122,34 +181,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
     gs_strfreev char **envv;
 
     envv = g_get_environ ();
-    envv = g_environ_unsetenv (envv, "COLORTERM");
-    envv = g_environ_unsetenv (envv, "COLUMNS");
-    envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
-    envv = g_environ_unsetenv (envv, "EXIT_CODE");
-    envv = g_environ_unsetenv (envv, "EXIT_STATUS");
-    envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
-    envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
-    envv = g_environ_unsetenv (envv, "GNOME_DESKTOP_ICON");
-    envv = g_environ_unsetenv (envv, "INVOCATION_ID");
-    envv = g_environ_unsetenv (envv, "JOURNAL_STREAM");
-    envv = g_environ_unsetenv (envv, "LINES");
-    envv = g_environ_unsetenv (envv, "LISTEN_FDNAMES");
-    envv = g_environ_unsetenv (envv, "LISTEN_FDS");
-    envv = g_environ_unsetenv (envv, "LISTEN_PID");
-    envv = g_environ_unsetenv (envv, "MAINPID");
-    envv = g_environ_unsetenv (envv, "MANAGERPID");
-    envv = g_environ_unsetenv (envv, "NOTIFY_SOCKET");
-    envv = g_environ_unsetenv (envv, "NOTIFY_SOCKET");
-    envv = g_environ_unsetenv (envv, "PIDFILE");
-    envv = g_environ_unsetenv (envv, "PWD");
-    envv = g_environ_unsetenv (envv, "REMOTE_ADDR");
-    envv = g_environ_unsetenv (envv, "REMOTE_PORT");
-    envv = g_environ_unsetenv (envv, "SERVICE_RESULT");
-    envv = g_environ_unsetenv (envv, "TERM");
-    envv = g_environ_unsetenv (envv, "VTE_VERSION");
-    envv = g_environ_unsetenv (envv, "WATCHDOG_PID");
-    envv = g_environ_unsetenv (envv, "WATCHDOG_USEC");
-    envv = g_environ_unsetenv (envv, "WINDOWID");
+    envv = terminal_client_filter_environment (envv);
 
     envv = g_environ_unsetenv (envv, TERMINAL_ENV_SERVICE_NAME);
     envv = g_environ_unsetenv (envv, TERMINAL_ENV_SCREEN);
