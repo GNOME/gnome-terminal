@@ -102,7 +102,10 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
 /**
  * terminal_client_append_exec_options:
  * @builder: a #GVariantBuilder of #GVariantType "a{sv}"
+ * @pass_environment: whether to pass the current environment
  * @working_directory: (allow-none): the cwd, or %NULL
+ * @fd_array: (array lenght=fd_array_len):
+ * @fd_array_len:
  * @shell:
  *
  * Appends the environment and the working directory to @builder.
