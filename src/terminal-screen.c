@@ -944,9 +944,7 @@ terminal_screen_exec (TerminalScreen *screen,
                                                                   &shell);
 
   gboolean preserve_cwd = FALSE;
-  GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP;
-  if (initial_envv)
-    spawn_flags |= VTE_SPAWN_NO_PARENT_ENVV;
+  GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP | VTE_SPAWN_NO_PARENT_ENVV;
   gs_strfreev char **exec_argv = NULL;
   if (!terminal_screen_get_child_command (screen,
                                           argv,
@@ -1433,6 +1431,7 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
 {
   TerminalApp *app = terminal_app_get ();
   char **env;
+  gs_strfreev char** current_environ = NULL;
   char *e, *v;
   GHashTable *env_table;
   GHashTableIter iter;
@@ -1441,17 +1440,21 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  env = initial_envv;
-  if (env)
+  if (initial_envv)
+    env = initial_envv;
+  else {
+    env = current_environ = g_get_environ ();
+    /* Remove this variable which we set in server.c:main() */
+    env = g_environ_unsetenv (env, "G_ENABLE_DIAGNOSTIC");
+  }
+
+  for (i = 0; env[i]; ++i)
     {
-      for (i = 0; env[i]; ++i)
-        {
-          v = strchr (env[i], '=');
-          if (v)
-             g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
-           else
-             g_hash_table_replace (env_table, g_strdup (env[i]), NULL);
-        }
+      v = strchr (env[i], '=');
+      if (v)
+          g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
+        else
+          g_hash_table_replace (env_table, g_strdup (env[i]), NULL);
     }
 
   /* Remove unwanted env variables */
