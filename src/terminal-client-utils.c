@@ -110,6 +110,8 @@ terminal_client_get_environment_filters (void)
     "EXIT_STATUS",
     "GIO_LAUNCHED_DESKTOP_FILE",
     "GIO_LAUNCHED_DESKTOP_FILE_PID",
+    "GJS_DEBUG_OUTPUT",
+    "GJS_DEBUG_TOPICS",
     "GNOME_DESKTOP_ICON",
     "INVOCATION_ID",
     "JOURNAL_STREAM",
