@@ -344,6 +344,15 @@ wrap_around_toggled_cb (GtkToggleButton *button,
 /* Class implementation */
 
 static void
+terminal_search_popover_grab_focus (GtkWidget *widget)
+{
+  TerminalSearchPopover *popover = TERMINAL_SEARCH_POPOVER (widget);
+  TerminalSearchPopoverPrivate *priv = PRIV (popover);
+
+  gtk_widget_grab_focus (priv->search_entry);
+}
+
+static void
 terminal_search_popover_init (TerminalSearchPopover *popover)
 {
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
@@ -484,6 +493,8 @@ terminal_search_popover_class_init (TerminalSearchPopoverClass *klass)
   gobject_class->finalize = terminal_search_popover_finalize;
   gobject_class->get_property = terminal_search_popover_get_property;
   gobject_class->set_property = terminal_search_popover_set_property;
+
+  widget_class->grab_focus = terminal_search_popover_grab_focus;
 
   signals[SEARCH] =
     g_signal_new (I_("search"),
