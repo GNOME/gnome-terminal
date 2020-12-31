@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.18.x\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-10-12 14:17+0000\n"
-"PO-Revision-Date: 2020-10-18 16:57+0200\n"
+"POT-Creation-Date: 2020-12-27 11:39+0000\n"
+"PO-Revision-Date: 2020-12-31 10:16+0100\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <massimo.furlani@libero.it>\n"
 "Language: fur\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -35,8 +35,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1889 src/terminal-window.c:2155
+#: src/terminal-window.c:2436
 msgid "Terminal"
 msgstr "Terminâl"
 
@@ -92,12 +92,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -138,11 +138,11 @@ msgstr "shell;prompt;terminâl;comant;riedicomant;cmd;"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Gnûf barcon"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Preferencis"
 
@@ -777,26 +777,31 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Indiche se domandâ conferme prime di sierâ un terminâl"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr ""
+"Elements de sezion di informazions adizionâls di mostrâ tal menù contestuâl"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Indiche se mostrâ la sbare dai menù intai gnûfs barcons"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Indiche se vierzi i gnûfs terminâi come barcons o schedis"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Cuant mostrâ la sbare di scoriment"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "La posizion de sbare des schedis"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Cuale variant dal teme di doprâ"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -1653,16 +1658,16 @@ msgstr "Boton s_curte"
 msgid "New Terminal"
 msgstr "Gnûf terminâl"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1790
 msgid "New _Terminal"
 msgstr "Gnûf _terminâl"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1799
 msgid "New _Tab"
 msgstr "Gnove _schede"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1795
 msgid "New _Window"
 msgstr "Gnûf _barcon"
 
@@ -1692,7 +1697,7 @@ msgid "_Full Screen"
 msgstr "_Plen visôr"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1771
 msgid "Read-_Only"
 msgstr "N_ome leture"
 
@@ -1733,8 +1738,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspector"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1532
+#: src/terminal-window.c:1783
 msgid "_Preferences"
 msgstr "_Preferencis"
 
@@ -1774,19 +1779,19 @@ msgstr "_Siere barcon"
 msgid "_Edit"
 msgstr "_Modifiche"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1761
 msgid "_Copy"
 msgstr "_Copie"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1762
 msgid "Copy as _HTML"
 msgstr "Copie come _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1763
 msgid "_Paste"
 msgstr "_Tache"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1765
 msgid "Paste as _Filenames"
 msgstr "Tache come nons di _file"
 
@@ -1802,7 +1807,7 @@ msgstr "P_referencis"
 msgid "_View"
 msgstr "_Visualize"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1811
 msgid "Show _Menubar"
 msgstr "Mostre sba_re di menù"
 
@@ -1890,7 +1895,7 @@ msgstr "Vierç t_erminâl"
 msgid "Open a terminal"
 msgstr "Vierç un terminâl"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3244
 msgid "C_lose Terminal"
 msgstr "_Siere terminâl"
 
@@ -2237,25 +2242,25 @@ msgstr "Profîi"
 msgid "No command supplied nor shell requested"
 msgstr "Nol è stât furnît nissun comant o richieste di shell"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1533 src/terminal-screen.c:1878
 msgid "_Relaunch"
 msgstr "_Torne invie"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1536
 msgid "There was an error creating the child process for this terminal"
 msgstr "Erôr tal creâ il procès fi par chest terminâl"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1882
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Il procès fi al è jessût normalmentri cul stât %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Il procès fi al è stât interot dal segnâl %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1888
 msgid "The child process was aborted."
 msgstr "Il procès fi al è stât interot."
 
@@ -2263,28 +2268,33 @@ msgstr "Il procès fi al è stât interot."
 msgid "Close tab"
 msgstr "Siere schede"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Erôr tal mostrâ la guide"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Contribûts di:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Version %s par GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Version VTE in ûs %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emuladôr di terminâl par GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "Terminâl di GNOME"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Massimo Furlani <massimo.furlani@libero.it>\n"
@@ -2292,12 +2302,12 @@ msgstr ""
 "Agata Furlani <agata.furlani@libero.it>\n"
 "Fabio Tomat <f.t.public@gmail.com>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Impussibil vierzi la direzion “%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2308,7 +2318,7 @@ msgstr ""
 "o modificâlu secont i tiermins de GNU General Public License, publicade de "
 "Free Software Corporation, version 3 o (a tô sielte) sucessive."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2320,7 +2330,7 @@ msgstr ""
 "IDONEITÂT A UNE FINALITÂT PARTICOLÂR. Consultâ la licence GNU General Public "
 "License par vê plui detais."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2329,7 +2339,7 @@ msgstr ""
 "General Public License, in câs diviers consultâ la pagjine <http://www.gnu."
 "org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Scheme “file” cun non host rimot no supuartât"
 
@@ -2349,55 +2359,55 @@ msgstr "A_nule"
 msgid "_Save"
 msgstr "_Salve"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1700
 msgid "Open _Hyperlink"
 msgstr "Vierç colegament _ipertestuâl"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1701
 msgid "Copy Hyperlink _Address"
 msgstr "Copie di_rezion colegament ipertestuâl"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1711
 msgid "Send Mail _To…"
 msgstr "In_vie e-mail a…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1712
 msgid "Copy Mail _Address"
 msgstr "Copie direzion _e-mail"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1715
 msgid "Call _To…"
 msgstr "Clamade _a…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1716
 msgid "Copy Call _Address "
 msgstr "Copie _recapit di clamade "
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1721
 msgid "_Open Link"
 msgstr "_Vierç leam"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1722
 msgid "Copy _Link"
 msgstr "Copie _direzion"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1778
 msgid "P_rofiles"
 msgstr "P_rofîi"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1813
 msgid "L_eave Full Screen"
 msgstr "Barcon nor_mâl"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3231
 msgid "Close this window?"
 msgstr "Sierâ chest barcon?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3231
 msgid "Close this terminal?"
 msgstr "Sierâ chest terminâl?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3235
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2405,7 +2415,7 @@ msgstr ""
 "A son ancjemò procès che a zirin in cualchi terminâl tal barcon. Sierant il "
 "barcon tu terminarâs ducj i procès."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3239
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2413,7 +2423,7 @@ msgstr ""
 "Al è ancjemò un procès che al zire in chest terminâl. Sierant il terminâl al "
 "vignarà interot il procès."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3244
 msgid "C_lose Window"
 msgstr "_Siere barcon"
 
