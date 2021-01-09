@@ -1,6 +1,6 @@
 m4_define([terminal_version_major],[3])
 m4_define([terminal_version_minor],[38])
-m4_define([terminal_version_micro],[2])
+m4_define([terminal_version_micro],[3])
 m4_define([terminal_version_extra],[])
 m4_define([terminal_version],[terminal_version_major().terminal_version_minor().terminal_version_micro()terminal_version_extra])
 
