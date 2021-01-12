@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-13 11:45+0800\n"
+"POT-Creation-Date: 2020-11-17 20:46+0000\n"
+"PO-Revision-Date: 2021-01-11 19:35-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Language: zh_CN\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -54,8 +54,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1887 src/terminal-window.c:2153
+#: src/terminal-window.c:2434
 msgid "Terminal"
 msgstr "终端"
 
@@ -750,26 +750,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "是否在关闭终端窗口时请求确认"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "要在上下文菜单中显示的额外信息部分项"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "是否在新窗口中显示菜单栏"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "以新窗口还是新标签页方式打开终端"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "何时显示标签栏"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "标签栏位置"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "要使用的主题类型"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr "应在当前选项卡旁边还是最后一个位置打开新选项卡"
@@ -1624,16 +1628,16 @@ msgstr "快捷键(_K)"
 msgid "New Terminal"
 msgstr "新建终端"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1788
 msgid "New _Terminal"
 msgstr "新建终端(_T)"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1797
 msgid "New _Tab"
 msgstr "新建标签页(_T)"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1793
 msgid "New _Window"
 msgstr "新建窗口"
 
@@ -1663,7 +1667,7 @@ msgid "_Full Screen"
 msgstr "全屏(_F)"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1769
 msgid "Read-_Only"
 msgstr "只读(_O)"
 
@@ -1704,8 +1708,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "检查器(_I)"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1538
+#: src/terminal-window.c:1781
 msgid "_Preferences"
 msgstr "配置文件首选项(_P)"
 
@@ -1745,19 +1749,19 @@ msgstr "关闭窗口(_C)"
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1759
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1760
 msgid "Copy as _HTML"
 msgstr "复制为 HTML(_H)"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1761
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1763
 msgid "Paste as _Filenames"
 msgstr "粘贴文件名(_F)"
 
@@ -1773,7 +1777,7 @@ msgstr "首选项(_R)"
 msgid "_View"
 msgstr "查看(_V)"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1809
 msgid "Show _Menubar"
 msgstr "显示菜单栏(_M)"
 
@@ -1861,7 +1865,7 @@ msgstr "打开终端(_E)"
 msgid "Open a terminal"
 msgstr "打开终端"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3242
 msgid "C_lose Terminal"
 msgstr "关闭终端(_L)"
 
@@ -2194,29 +2198,29 @@ msgstr "快捷键"
 msgid "Profiles"
 msgstr "配置文件"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1418
 msgid "No command supplied nor shell requested"
 msgstr "未提供命令，也未指定 shell"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1539 src/terminal-screen.c:1884
 msgid "_Relaunch"
 msgstr "重新启动(_R)"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1542
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子进程以状态%d正常的退出。"
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1891
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "子进程被信号%d中断。"
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1894
 msgid "The child process was aborted."
 msgstr "子进程被中断。"
 
@@ -2224,28 +2228,33 @@ msgstr "子进程被中断。"
 msgid "Close tab"
 msgstr "关闭标签页"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "显示帮助时出错"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "贡献者："
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "版本 %s 搭配 GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "使用 VTE 版本 %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME 桌面的终端模拟器"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
@@ -2263,12 +2272,12 @@ msgstr ""
 "王滋涵 <wi24rd@fedoraproject.org>, 2020\n"
 "Weiyi Xu <xuweiyi0923@gmail.com>, 2020"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "无法打开地址“%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2278,7 +2287,7 @@ msgstr ""
 "GNOME 终端是自由软件；您可以在自由软件基金会发布的 GNU 通用公共许可证下重新发"
 "布或修改它；许可证应使用第三版本或您所选择的更新的版本。"
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2289,7 +2298,7 @@ msgstr ""
 "式的担保，也无法保证它可以在特定用途中得到您希望的结果。请参看 GNU GPL 许可中"
 "的更多细节。"
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2297,7 +2306,7 @@ msgstr ""
 "您应该在收到 GNOME 终端 的同时收到了 GNU 通用公共许可证的副本；如果您没有收"
 "到，请查看 <http://www.gnu.org/licenses/>。"
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "不支持包含远程主机名的“文件”方案"
 
@@ -2349,35 +2358,35 @@ msgstr "打开链接(_O)"
 msgid "Copy _Link"
 msgstr "复制链接(_L)"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1776
 msgid "P_rofiles"
 msgstr "配置文件(_R)"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1811
 msgid "L_eave Full Screen"
 msgstr "退出全屏(_E)"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this window?"
 msgstr "关闭这个窗口？"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this terminal?"
 msgstr "关闭此终端？"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3233
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在这个窗口的一些终端中仍然有进程在运行。关闭该窗口将杀死所有这些进程。"
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3237
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "该终端中仍然有一个进程在运行。关闭终端将杀死该进程。"
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3242
 msgid "C_lose Window"
 msgstr "关闭窗口(_L)"
 
