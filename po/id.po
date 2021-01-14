@@ -5,13 +5,13 @@
 # Ahmad Riza H Nst  <rizahnst@eriagempita.co.id> 2006
 # Andika Triwidada <andika@gmail.com>, 2009, 2010, 2012-2016.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010, 2011, 2013.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2020.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-14 09:12+0000\n"
-"PO-Revision-Date: 2020-08-27 19:21+0700\n"
+"POT-Creation-Date: 2020-11-17 20:46+0000\n"
+"PO-Revision-Date: 2021-01-14 19:57+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -40,8 +40,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1887 src/terminal-window.c:2153
+#: src/terminal-window.c:2434
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -777,26 +777,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Apakah menanyakan konfirmasi sebelum menutup terminal"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "Butir bagian info tambahan akan muncul di menu konteks"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Apakah menampilkan bilah menu pada jendela baru"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Apakah membuka terminal baru sebagai jendela atau tab"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Kapan menampilkan bilah tab"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "Posisi dari bilah tab"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Varian tema mana yang akan dipakai"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -1653,16 +1657,16 @@ msgstr "_Tombol Pintas"
 msgid "New Terminal"
 msgstr "Terminal Baru"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1788
 msgid "New _Terminal"
 msgstr "_Terminal Baru"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1797
 msgid "New _Tab"
 msgstr "_Tab Baru"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1793
 msgid "New _Window"
 msgstr "_Jendela Baru"
 
@@ -1692,7 +1696,7 @@ msgid "_Full Screen"
 msgstr "Layar _Penuh"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1769
 msgid "Read-_Only"
 msgstr "H_anya-Baca"
 
@@ -1733,8 +1737,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "Pemer_iksa"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1538
+#: src/terminal-window.c:1781
 msgid "_Preferences"
 msgstr "_Preferensi"
 
@@ -1774,19 +1778,19 @@ msgstr "Tutup Jende_la"
 msgid "_Edit"
 msgstr "_Sunting"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1759
 msgid "_Copy"
 msgstr "_Salin"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1760
 msgid "Copy as _HTML"
 msgstr "Salin sebagai _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1761
 msgid "_Paste"
 msgstr "_Tempel"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1763
 msgid "Paste as _Filenames"
 msgstr "Tempel sebagai Nama _Berkas"
 
@@ -1802,7 +1806,7 @@ msgstr "P_referensi"
 msgid "_View"
 msgstr "_Tampilan"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1809
 msgid "Show _Menubar"
 msgstr "Tampilkan Bilah _Menu"
 
@@ -1890,7 +1894,7 @@ msgstr "Buka T_erminal"
 msgid "Open a terminal"
 msgstr "Buka sebuah terminal"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3242
 msgid "C_lose Terminal"
 msgstr "Tutup Termina_l"
 
@@ -2235,29 +2239,29 @@ msgstr "Pintas"
 msgid "Profiles"
 msgstr "Profil"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1418
 msgid "No command supplied nor shell requested"
 msgstr "Tak ada perintah yang diberikan maupun shell yang diminta"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1539 src/terminal-screen.c:1884
 msgid "_Relaunch"
 msgstr "Luncu_rkan Ulang"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1542
 msgid "There was an error creating the child process for this terminal"
 msgstr "Terjadi galat ketika membuat proses anak terminal"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Proses anak keluar secara normal dengan status %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1891
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Proses anak digugurkan oleh sinyal %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1894
 msgid "The child process was aborted."
 msgstr "Proses anak digugurkan."
 
@@ -2265,42 +2269,47 @@ msgstr "Proses anak digugurkan."
 msgid "Close tab"
 msgstr "Tutup tab"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Terjadi galat ketika menampilkan bantuan"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Kontributor:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Versi %s untuk GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Memakai VTE versi %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Emulator terminal untuk desktop GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Ahmad Riza H Nst  <rizahnst@eriagempita.co.id>, 2006.\n"
 "Andika Triwidada <andika@gmail.com>, 2009, 2010, 2012-2016, 2019.\n"
 "Dirgita <dirgitadevina@yahoo.co.id>, 2010, 2011.\n"
-"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2020."
+"Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021."
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Tidak dapat membuka alamat \"%s\""
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2312,7 +2321,7 @@ msgstr ""
 "sebagaimana dipublikasikan oleh Free Software Foundation; Lisensi versi 3, "
 "atau (sesuai pilihan Anda) menggunakan versi selanjutnya."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2323,7 +2332,7 @@ msgstr ""
 "ADANYA JAMINAN; termasuk tanpa jaminan DAYA JUAL atau KELAIKAN UNTUK TUJUAN "
 "TERTENTU. Lihat GNU General Public License untuk rincian lebih lanjut."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2331,7 +2340,7 @@ msgstr ""
 "Salinan GNU General Public License seharusnya sudah Anda dapatkan bersamaan "
 "dengan Terminal GNOME; bila tidak, lihat <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Skema \"berkas\" dengan nama host jauh tidak didukung"
 
@@ -2383,23 +2392,23 @@ msgstr "_Buka Taut"
 msgid "Copy _Link"
 msgstr "Salin A_lamat Taut"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1776
 msgid "P_rofiles"
 msgstr "P_rofil"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1811
 msgid "L_eave Full Screen"
 msgstr "Tinggalkan Layar P_enuh"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this window?"
 msgstr "Tutup jendela ini?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3229
 msgid "Close this terminal?"
 msgstr "Tutup terminal ini?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3233
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2407,7 +2416,7 @@ msgstr ""
 "Ada proses masih berjalan pada beberapa terminal di jendela ini. Menutup "
 "jendela akan menghentikan semuanya."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3237
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2415,7 +2424,7 @@ msgstr ""
 "Masih ada proses berjalan pada terminal ini. Menutup terminal akan "
 "menghentikannya."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3242
 msgid "C_lose Window"
 msgstr "Tutup Jende_la"
 
