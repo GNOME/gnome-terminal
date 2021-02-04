@@ -640,7 +640,7 @@ update_clipboard_targets (TerminalApp *app,
   free_clipboard_targets (app);
 
   /* Sometimes we receive targets == NULL but n_targets == -1 */
-  if (targets != NULL) {
+  if (targets != NULL && n_targets < 255) {
     app->clipboard_targets = g_memdup (targets, sizeof (targets[0]) * n_targets);
     app->n_clipboard_targets = n_targets;
   }
