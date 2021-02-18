@@ -1,5 +1,5 @@
 # Brazilian Portuguese translation of the gnome-terminal.
-# Copyright (C) 2020 the GNOME Terminal authors.
+# Copyright (C) 2021 the GNOME Terminal authors.
 # This file is distributed under the same license as the gnome-terminal package.
 # Evandro Fernandes Giovanini <evandrofg@ig.com.br>, 2002, 2003.
 # Alexandre Folle de Menezes <afmenez@terra.com.br>, 2003.
@@ -15,14 +15,14 @@
 # Henrique P Machado <zehrique@gmail.com>, 2009.
 # Antonio Fernandes C. Neto <fernandesn@gnome.org>, 2011.
 # Enrico Nicoletto <liverig@gmail.com>, 2009, 2013-2016, 2018.
-# Rafael Fontenelle <rafaelff@gnome.org>, 2013-2020.
+# Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-18 10:10-0300\n"
+"POT-Creation-Date: 2021-02-13 20:39+0000\n"
+"PO-Revision-Date: 2021-02-17 22:57-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 "X-Project-Style: gnome\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
@@ -51,8 +51,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -109,12 +109,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -156,11 +156,11 @@ msgstr "shell;prompt;comando;linha de comando;cmd;"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Nova janela"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Preferências"
 
@@ -797,26 +797,31 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Se deve pedir confirmação antes de fechar um terminal"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr ""
+"Itens adicionais da seção de informações a serem exibidos no menu de contexto"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Se deve mostrar a barra de menu em novas janelas"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Se deve abrir novos terminais como janelas ou abas"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Indica quando a barra de abas deve ser mostrada"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "A posição da barra de abas"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Qual tema a ser usado"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr "Se novas abas devem ser abertas próximo à atual ou na última posição"
@@ -1313,13 +1318,11 @@ msgstr "Branco no preto"
 
 #. Translators: "GNOME" is the name of a colour scheme, "light" can be translated
 #: src/profile-editor.c:178
-#| msgid "GNOME"
 msgid "GNOME light"
 msgstr "GNOME claro"
 
 #. Translators: "GNOME" is the name of a colour scheme, "dark" can be translated
 #: src/profile-editor.c:183
-#| msgid "GNOME"
 msgid "GNOME dark"
 msgstr "GNOME escuro"
 
@@ -1675,16 +1678,16 @@ msgstr "Te_cla de atalho"
 msgid "New Terminal"
 msgstr "Novo terminal"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "Novo _terminal"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "Nova _aba"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "Nova _janela"
 
@@ -1714,7 +1717,7 @@ msgid "_Full Screen"
 msgstr "_Tela cheia"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "S_omente leitura"
 
@@ -1755,8 +1758,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspetor"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1532
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "_Preferências"
 
@@ -1796,19 +1799,19 @@ msgstr "_Fechar janela"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "Copiar como _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "C_olar"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "Colar como nomes de ar_quivos"
 
@@ -1824,7 +1827,7 @@ msgstr "P_referências"
 msgid "_View"
 msgstr "_Ver"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "Mostrar barra de _menu"
 
@@ -1912,7 +1915,7 @@ msgstr "Abrir _terminal"
 msgid "Open a terminal"
 msgstr "Abre um terminal"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "Fec_har o terminal"
 
@@ -2264,25 +2267,25 @@ msgstr "Perfis"
 msgid "No command supplied nor shell requested"
 msgstr "Nenhum comando fornecido tão pouco nenhum shell foi solicitado"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1533 src/terminal-screen.c:1878
 msgid "_Relaunch"
 msgstr "_Relançar"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1536
 msgid "There was an error creating the child process for this terminal"
 msgstr "Houve um erro ao criar um processo filho para este terminal"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1882
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "O processo filho saiu normalmente com o status %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "O processo filho foi anulado pelo sinal %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1888
 msgid "The child process was aborted."
 msgstr "O processo filho foi anulado."
 
@@ -2290,28 +2293,33 @@ msgstr "O processo filho foi anulado."
 msgid "Close tab"
 msgstr "Fechar aba"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Houve um erro ao exibir a ajuda"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Contribuidores:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Versão %s para GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Usando VTE versão %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Um emulador de terminal para o GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "Terminal do GNOME"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
@@ -2329,12 +2337,12 @@ msgstr ""
 "Henrique P Machado <zehrique@gmail.com>\n"
 "Rafael Fontenelle <rafaelff@gnome.org>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Não foi possível abrir o endereço “%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2346,7 +2354,7 @@ msgstr ""
 "conforme publicada pela Free Software Foundation; tanto a versão 3 da "
 "Licença como (a seu critério) qualquer versão mais nova."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2358,7 +2366,7 @@ msgstr ""
 "A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU "
 "para obter mais detalhes."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2367,7 +2375,7 @@ msgstr ""
 "Terminal do GNOME; caso contrário, consulte see <http://www.gnu.org/licenses/"
 ">."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "Sem suporte a esquema “file” com hostname"
 
@@ -2387,55 +2395,55 @@ msgstr "_Cancelar"
 msgid "_Save"
 msgstr "_Salvar"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "Abrir _hyperlink"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "Copiar _endereço de hyperlink"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "Enviar e-mail _para…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "Copiar _endereço de e-mail"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "Ligar _para…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "Copiar _endereço de chamada"
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "_Abrir link"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "Copiar _link"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "Pe_rfis"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "Sa_ir da tela cheia"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "Fechar esta janela?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "Fechar este terminal?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2443,7 +2451,7 @@ msgstr ""
 "Ainda há processos sendo executados em alguns terminais nesta janela. Fechar "
 "esta janela irá matar todos eles."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2451,7 +2459,7 @@ msgstr ""
 "Ainda há um processo sendo executado neste terminal. Fechar este terminal "
 "irá matá-lo."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "_Fechar janela"
 
