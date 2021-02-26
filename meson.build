@@ -279,6 +279,12 @@ if get_option('docs')
   subdir('man')
 endif
 
+# Dist
+
+meson.add_dist_script(
+  find_program('meson_changelog.sh'),
+)
+
 # Simple compat Makefile
 
 makefile_conf = configuration_data()

@@ -1,4 +1,5 @@
-# Copyright © 2019 Christian Persch
+#!/usr/bin/env bash
+# Copyright © 2021 Christian Persch
 #
 # This programme is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -13,39 +14,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this programme.  If not, see <https://www.gnu.org/licenses/>.
 
-srcdir=@srcdir@
-builddir=@builddir@
+set -e
 
-#
+top_srcdir="$MESON_SOURCE_ROOT"
+top_builddir="MESON_BUILD_ROOT"
+top_distdir="$MESON_DIST_ROOT"
 
-NTHREADS = 1
-NJOBS = -j$(NTHREADS)
-NINJA = ninja $(NJOBS)
+if ! test -e "${top_srcdir}"/.git; then
+    echo "Must be run from gnome-terminal git checkout"
+    exit 1
+fi
 
-MESON = meson
+if ! test -e "${top_distdir}"; then
+    echo "Must be run from 'meson dist'"
+    exit 1
+fi
 
-#
-
-all:
-	$(NINJA)
-
-check:
-	MESON_TESTTHREADS=$(NTHREADS) $(NINJA) test
-
-clean:
-	$(NINJA) clean
-
-coverage:
-	$(NINJA) coverage
-
-install:
-	$(NINJA) install
-
-uninstall:
-	$(NINJA) uninstall
-
-dist:
-	$(MESON) dist --no-tests
-
-distcheck:
-	$(MESON) dist
+GIT_DIR="${top_srcdir}"/.git git log --stat > "${top_distdir}"/ChangeLog
