@@ -6,14 +6,14 @@
 # Žygimantas Beručka <zygis@gnome.org>, 2004-2007, 2010.
 # Gintautas Miliauskas <gintas@akl.lt>, 2008.
 # Gintautas Miliauskas <gintautas@miliauskas.lt>, 2009.
-# Aurimas Černius <aurisc4@gmail.com>, 2010-2020.
+# Aurimas Černius <aurisc4@gmail.com>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-25 22:52+0300\n"
+"POT-Creation-Date: 2021-02-22 17:13+0000\n"
+"PO-Revision-Date: 2021-02-27 14:24+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -42,8 +42,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -99,12 +99,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -146,11 +146,11 @@ msgstr "apvalkalas;eilutė;komanda;komandų eilutė;cmd;"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Naujas langas"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Nuostatos"
 
@@ -778,26 +778,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Ar klausti patvirtinimo prieš užveriant terminalą"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "Papildomos informacijos elementai, rodomi kontekstiniame meniu"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Ar rodyti meniu juostą naujuose languose"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Ar atverti naujus terminalus kaip langus ar korteles"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Kada rodyti kortelių juostą"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "Kortelių juostos padėtis"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Kokį temos variantą naudoti"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr "Ar naujos kortelės turi būti atvertos šalia dabartinės, ar pabaigoje"
@@ -1652,16 +1656,16 @@ msgstr "Spartusis _klavišas"
 msgid "New Terminal"
 msgstr "Naujas terminalas"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "Naujas _terminalas"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "Nauja _kortelė"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "Naujas _langas"
 
@@ -1691,7 +1695,7 @@ msgid "_Full Screen"
 msgstr "_Visame ekrane"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "Tik _skaitymui"
 
@@ -1732,8 +1736,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspektorius"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "_Nuostatos"
 
@@ -1773,19 +1777,19 @@ msgstr "_Užverti langą"
 msgid "_Edit"
 msgstr "K_eisti"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "Kopijuoti _HTML formatu"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "Įdėti kaip _failų pavadinimus"
 
@@ -1801,7 +1805,7 @@ msgstr "_Nuostatos"
 msgid "_View"
 msgstr "R_odymas"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "Rodyti _meniu juostą"
 
@@ -1889,7 +1893,7 @@ msgstr "Atverti t_erminalą"
 msgid "Open a terminal"
 msgstr "Atverti terminalą"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "_Užverti terminalą"
 
@@ -2233,29 +2237,29 @@ msgstr "Trumpiniai"
 msgid "Profiles"
 msgstr "Profiliai"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "Nepateikta komanda bei neprašyta apvalkalo"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "_Paleisti iš naujo"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "Klaida bandant sukurti šio terminalo antrinį procesą"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Antrinis procesas baigtas įprastai grąžinant būsena %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Vaikinis procesas nutrauktas signalu %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "Vaikinis procesas buvo nutrauktas."
 
@@ -2263,28 +2267,33 @@ msgstr "Vaikinis procesas buvo nutrauktas."
 msgid "Close tab"
 msgstr "Užverti kortelę"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Įvyko klaida rodant žinyną"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Pagalbininkai:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Versija %s GNOME aplinkai %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Naujama VTE versija %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminalo emuliatorius GNOME darbalaukiui"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "GNOME terminalas"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Paskutinysis vertėjas:\n"
@@ -2296,12 +2305,12 @@ msgstr ""
 "Vaidrius Petrauskas <vaidrius@delfi.lt>\n"
 "Moo"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Nepavyko atverti adreso „%s“"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2313,7 +2322,7 @@ msgstr ""
 "Free Software Foundation organizacija; 3-iosios arba (savo nuožiūra) bet "
 "kurios naujesnės licencijos versijos."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2325,7 +2334,7 @@ msgstr ""
 "garantijų. Daugiau informacijos galite rasti GNU Bendrosios viešosios "
 "licencijos tekste."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2333,7 +2342,7 @@ msgstr ""
 "GNU bendrosios viešos licencijos kopiją turėjote gauti su GNOME terminalo "
 "programa. Jei negavote, žiūrėkite <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "„file“ schema su nuotoliniu kompiuteriu nepalaikoma"
 
@@ -2353,55 +2362,55 @@ msgstr "_Atsisakyti"
 msgid "_Save"
 msgstr "Į_rašyti"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "Atverti _hipersaitą"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "Kopijuoti hipersaito _adresą"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "_Siųsti laišką…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "Kopijuoti el. pašto _adresą"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "_Skambinti…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "Kopijuoti skambučio _adresą "
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "Kopijuoti _nuorodą"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "P_rofiliai"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "_Palikti visą ekraną"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "Užverti langą?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "Užverti terminalą?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2409,7 +2418,7 @@ msgstr ""
 "Yra procesų, veikiančių šio lango terminaluose. Jei uždarysite langą, jie "
 "visi bus nutraukti."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2417,7 +2426,7 @@ msgstr ""
 "Šiame terminale vis dar veikia procesas. Jei uždarysite terminalą, jis bus "
 "nutrauktas."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "_Užverti langą"
 
