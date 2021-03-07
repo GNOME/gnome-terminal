@@ -4,13 +4,13 @@
 #
 # Artis Trops <hornet@navigator.lv>, 2002.
 # Raivis Dejus <orvils@gmail.com>, 2006.
-# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
+# Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: lv\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-09-12 16:01+0300\n"
+"POT-Creation-Date: 2021-02-22 17:13+0000\n"
+"PO-Revision-Date: 2021-03-07 16:44+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -39,8 +39,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "Terminālis"
 
@@ -81,7 +81,6 @@ msgid "ModernToolkit"
 msgstr "ModernToolkit"
 
 #: org.gnome.Terminal.appdata.xml.in:51
-#| msgid "Search"
 msgid "SearchProvider"
 msgstr "SearchProvider"
 
@@ -95,12 +94,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -130,7 +129,6 @@ msgstr ""
 "vienumu konteksta izvēlnei, kas atver termināli pārlūkotajā direktorijā."
 
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:47
-#| msgid "Close Terminal"
 msgid "gnome-terminal"
 msgstr "gnome-terminal"
 
@@ -139,15 +137,14 @@ msgid "shell;prompt;command;commandline;cmd;"
 msgstr "čaula;uzvedne;komanda;komandrinda;cmd;"
 
 #: org.gnome.Terminal.desktop.in.in:9
-#| msgid "Close Terminal"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Jauns logs"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Iestatījumi"
 
@@ -455,7 +452,6 @@ msgstr ""
 "priekšā būs defise)."
 
 #: src/org.gnome.Terminal.gschema.xml:273
-#| msgid "Whether to ask for confirmation before closing a terminal"
 msgid "Whether to preserve the working directory when opening a new terminal"
 msgstr "Vai saglabāt darba direktoriju, kad atver jaunu termināļa logu"
 
@@ -464,9 +460,9 @@ msgid ""
 "Controls when opening a new terminal from a previous one carries over the "
 "working directory of the opening terminal to the new one."
 msgstr ""
-"Ja opcija ir ieslēgta un terminālis tiek atvērts no jau esoša termināļa,"
-" jaunais terminālis izmantos to pašu darba direktoriju ko izmanto sākotnējais"
-" terminālis."
+"Ja opcija ir ieslēgta un terminālis tiek atvērts no jau esoša termināļa, "
+"jaunais terminālis izmantos to pašu darba direktoriju ko izmanto sākotnējais "
+"terminālis."
 
 #: src/org.gnome.Terminal.gschema.xml:280
 msgid "Whether to run a custom command instead of the shell"
@@ -777,31 +773,35 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Vai prasīt apstiprinājumu pirms tiek aizvērts termināļa logs"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "Papildu informācijas sadaļas vienumi parādīsies konteksta izvēlnē"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Vai rādīt izvēļņu joslu jaunos logos"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Vai jaunos termināļus atvērt kā logus vai cilnes"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Kad rādīt ciļņu joslu"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "Ciļņu joslas novietojums"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Kuru motīva variantu izmantot"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
-"Vai jaunajām cilnēm vajadzētu atvērties pie pašreizējās cilnes, vai pašās"
-" beigās"
+"Vai jaunajām cilnēm vajadzētu atvērties pie pašreizējās cilnes, vai pašās "
+"beigās"
 
 #. Open new terminal in new window
 #: src/preferences.ui:14
@@ -820,7 +820,6 @@ msgstr "Pēdējais"
 
 #. New tab opens next to current tab
 #: src/preferences.ui:36
-#| msgid "Find Next"
 msgid "Next"
 msgstr "Nākamais"
 
@@ -1213,7 +1212,6 @@ msgid "Custom co_mmand:"
 msgstr "Pielāgotā ko_manda:"
 
 #: src/preferences.ui:1983
-#| msgid "Set the working directory"
 msgid "_Preserve working directory:"
 msgstr "_Saglabāt darba direktoriju:"
 
@@ -1655,16 +1653,16 @@ msgstr "Ī_sinājumtaustiņš"
 msgid "New Terminal"
 msgstr "Jauns terminālis"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "Jauns _terminālis"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "Jauna _cilne"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "Jauns _logs"
 
@@ -1694,7 +1692,7 @@ msgid "_Full Screen"
 msgstr "_Pilnekrāns"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "_Tikai lasāms"
 
@@ -1735,8 +1733,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspektors"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "_Iestatījumi"
 
@@ -1776,19 +1774,19 @@ msgstr "_Aizvērt logu"
 msgid "_Edit"
 msgstr "R_ediģēt"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "Kopēt kā _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "Ielīmēt kā _datņu nosaukumus"
 
@@ -1804,7 +1802,7 @@ msgstr "_Iestatījumi"
 msgid "_View"
 msgstr "_Skats"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "Rādīt _izvēļņu joslu"
 
@@ -1892,7 +1890,7 @@ msgstr "Atvērt t_ermināli"
 msgid "Open a terminal"
 msgstr "Atvērt termināli"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "Aizvērt terminā_li"
 
@@ -2234,29 +2232,29 @@ msgstr "Īsinājumtaustiņi"
 msgid "Profiles"
 msgstr "Profili"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "Nav ne dota komanda, nedz pieprasīta čaula"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "Palaist atkā_rtoti"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "Atgadījās kļūda, izveidojot bērnprocesu šim terminālim"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Bērna process izgāja normāli ar statusu %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Bērna process tika pārtraukts ar signālu %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "Bērna process tika pārtraukts."
 
@@ -2264,39 +2262,44 @@ msgstr "Bērna process tika pārtraukts."
 msgid "Close tab"
 msgstr "Aizvērt cilni"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Gadījās kļūda, parādot palīdzību"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Veidotāji:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Versija %s GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Izmanto VTE versiju %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Termināļa emulators GNOME darbvirsmai"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "GNOME terminālis"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Edijs Vilciņš <edijs.vilcins@tvnet.lv>\n"
 "Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Nevarēja atvērt adresi “%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2307,7 +2310,7 @@ msgstr ""
 "mainīt, ievērojot GNU General Public License, ko publicējis Free Software "
 "Foundation, noteikumus, tās trešajā vai vēlākā versijā (pēc izvēles)."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2318,7 +2321,7 @@ msgstr ""
 "GARANTIJAS. Pat bez netiešas garantijas, ka tas būs izmantojams kādam "
 "mērķim. Vairāk informācijas lasiet GNU General Public License."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2326,7 +2329,7 @@ msgstr ""
 "Jums vajadzēja saņemt GNU Vispārējo Publisko Licenci ar GNOME termināli. Ja "
 "nē, skatiet <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "“file” shēma ar attālināto resursdatoru nav atbalstīta"
 
@@ -2346,69 +2349,69 @@ msgstr "At_celt"
 msgid "_Save"
 msgstr "_Saglabāt"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "Atvērt _hipersaiti"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "Kopēt hipersaites _adresi"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "Sū_tīt e-pastu…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "Kopēt e-pasta _adresi"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "Zvanī_t…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "Kopēt zvanīšanas _adresi "
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "_Atvērt saiti"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "Kopēt _saiti"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "P_rofili"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "Pamest piln_ekrānu"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "Aizvērt šo logu?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "Aizvērt šo termināli?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "Šī loga termināļos vēl procesi, kuri darbojas. Loga aizvēršana tos nobeigs."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "Šajā terminālī vēl ir process, kas darbojas. Termināļa aizvēršana to nobeigs."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "Aizvērt _logu"
 
