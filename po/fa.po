@@ -7,14 +7,14 @@
 # Elnaz Sarbar <elnaz@farsiweb.info>, 2005.
 # Mahyar Moghimi <mahyar.moqimi@gmail.com>, 2010.
 # Arash Mousavi <mousavi.arash@gmail.com>, 2011-2015.
-# Danial Behzadi <dani.behzi@gmail.com>, 2012, 2016-2020.
+# Danial Behzadi <dani.behzi@gmail.com>, 2012, 2016-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal gnome-2-12\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-19 21:06+0000\n"
+"POT-Creation-Date: 2021-03-07 14:45+0000\n"
+"PO-Revision-Date: 2021-03-10 15:17+0000\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -43,7 +43,7 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135 src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156 src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "پایانه"
 
@@ -97,12 +97,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "گنوم"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -143,11 +143,11 @@ msgstr "shell;prompt;command;commandline;cmd;فرمان;خط فرمان;پایا
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "پنجرهٔ جدید"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "ترجیحات"
 
@@ -733,26 +733,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "این که موقع بستن یک پایانه تصدیق گرفته شود یا نه"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "موردهای بخش اطّلاعات اضافی برای نمایش در فهرست محتوا"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "این که نوار فهرست در پنجره‌های جدید نشان داده شود یا نه"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "این که پایانه‌های جدید به صورت پنجره گشوده شوند یا زبانه"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "زمان نمایش نوار زبانه‌ها"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "مکان نوار زبانه"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "گونهٔ زمینهٔ مورد استفاده"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid "Whether new tabs should open next to the current one or at the last position"
 msgstr "این‌که زبانه‌های جدید باید بعد از زبانهٔ جاری یا در آخرین موقعیت باز شوند"
 
@@ -1607,15 +1611,15 @@ msgstr "_کلید میان‌بر"
 msgid "New Terminal"
 msgstr "پایانهٔ جدید"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "_پایانهٔ جدید"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "_زبانهٔ جدید"
 
-#: src/terminal-app.c:510 src/terminal-headermenu.ui:39 src/terminal-window.c:1775
+#: src/terminal-app.c:510 src/terminal-headermenu.ui:39 src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "پنجرهٔ جدید"
 
@@ -1645,7 +1649,7 @@ msgid "_Full Screen"
 msgstr "_تمام‌صفحه"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "_فقط‌خواندنی"
 
@@ -1686,8 +1690,8 @@ msgstr "_۴. ۱۳۲×۴۳"
 msgid "_Inspector"
 msgstr "_بازرس"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "_ترجیحات"
 
@@ -1727,19 +1731,19 @@ msgstr "بس_تن پنجره"
 msgid "_Edit"
 msgstr "_ویرایش"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "رونوشت به عنوان _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "_جای‌گذاری"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "چسباندن به عنوان نام _پرونده"
 
@@ -1755,7 +1759,7 @@ msgstr "_ترجیحات"
 msgid "_View"
 msgstr "_نما"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "نمایش نوار _فهرست"
 
@@ -1843,7 +1847,7 @@ msgstr "گشودن _پایانه"
 msgid "Open a terminal"
 msgstr "گشودن یک پایانه"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "_بستن پایانه"
 
@@ -2177,29 +2181,29 @@ msgstr "میان‌برها"
 msgid "Profiles"
 msgstr "نمایه‌ها"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "هیچ فرمانی فراهم و هیچ پوسته‌ای درخواست نشده است"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "راه‌اندازی _مجدد"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "در ایجاد فرایند فرزند برای این پایانه خطایی رخ داد"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "فرایند فرزند با وضعیت %Id معمولی خارج شد."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "فرایند فرزند توسط سیگنال %Id پایان یافت."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "فرایند فرزند پایان داده شد."
 
@@ -2207,28 +2211,33 @@ msgstr "فرایند فرزند پایان داده شد."
 msgid "Close tab"
 msgstr "بستن زبانه"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "در نمایش راهنما خطایی رخ داد"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "مشارک‌کنندگان:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "نگارش %s برای گنوم %Id"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "با استفاده از VTE نگارش %Iu.%Iu.%Iu"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "یک شبیه‌ساز پایانه برای میزکار گنوم"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "پایانهٔ گنوم"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "آرش موسوی <mousavi.arash@gmail.com>\n"
@@ -2238,12 +2247,12 @@ msgstr ""
 "میلاد زکریا <meelad@farsiweb.info>‏\n"
 "الناز سربر <elnaz@farsiweb.info>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "امکان گشودن «%s» نبود"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it under "
 "the terms of the GNU General Public License as published by the Free Software "
@@ -2254,7 +2263,7 @@ msgstr ""
 "خودتان) هر نگارش بالاتر دیگری از پروانهٔ جامع همگانی گنو، که بنیاد نرم‌افزارهای "
 "آزاد منتشر کرده است،‌ تغییر داده یا دوباره توزیع کنید."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A "
@@ -2264,7 +2273,7 @@ msgstr ""
 "بدون ضمانت ضمنی قابل فروش بودن یا مناسب بودن برای یک هدف مشخص.  برای جزییات "
 "بیش‌تر، پروانهٔ جامع همگانی گنو را ببینید."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2272,7 +2281,7 @@ msgstr ""
 "باید همراه پایانهٔ گنوم، نگارشی از پروانهٔ جامع همگانی گنو را دریافت کرده باشید. در "
 "غیر این صورت <http://www.gnu.org/licenses/> را ببینید."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "شِمای «file» با نام کارساز دوردست پشتیبانی نمی‌شود"
 
@@ -2292,55 +2301,55 @@ msgstr "_لغو"
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "گشودن _ابرپیوند"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "رونوشت از _نشانی ابرپیوند"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "ارسال _رایانامه به…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "رونوشت از _نشانی رایانامه"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "تماس _با…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "رونوشت از نشانی _تماس "
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "_گشودن پیوند"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "_رونوشت از _پیوند"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "نمایه‌ها"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "خروج از _تمام‌صفحه"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "این پنجره بسته شود؟"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "این پایانه بسته شود؟"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing the "
 "window will kill all of them."
@@ -2348,7 +2357,7 @@ msgstr ""
 "همچنان فرایند‌هایی وجود دارند که در بعضی پایانه‌های داخل این پنجره در حال اجرا "
 "هستند. بستن پنجره همهٔ آن‌ها را خواهد کشت."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will kill "
 "it."
@@ -2356,7 +2365,7 @@ msgstr ""
 "همچنان فرایندی وجود دارد که در داخل این پایانه در حال اجرا است. بستن پنجره آن را "
 "خواهد کشت."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "_بستن پنجره"
 
