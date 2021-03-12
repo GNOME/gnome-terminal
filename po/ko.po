@@ -4,7 +4,7 @@
 # Young-ho, Cha <ganadist at mizi.com>, 2002-2003, 2007.
 # Youngbin Han <sukso96100 at gmail.com>, 2016-2017
 # Jinho Bang <zino at chromium.org>, 2018.
-# Changwoo Ryu <cwryu at debian.org>, 2003, 2007, 2009-2017, 2019-2020.
+# Changwoo Ryu <cwryu at debian.org>, 2003, 2007, 2009-2017, 2019-2021.
 #
 # 새로 번역하시는 분은 아래 "translator-credits"에 추가하세요.
 #
@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-08-30 16:56+0900\n"
+"POT-Creation-Date: 2021-03-07 14:45+0000\n"
+"PO-Revision-Date: 2021-03-11 02:13+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -41,8 +41,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "터미널"
 
@@ -103,12 +103,12 @@ msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 # appdata 키워드 번역하면 안 됨
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -152,11 +152,11 @@ msgstr ""
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "새 창"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "기본 설정"
 
@@ -468,7 +468,7 @@ msgstr "참이면, 셸을 실행하지 않고 custom_command 설정의 값을 �
 
 #: src/org.gnome.Terminal.gschema.xml:285
 msgid "Whether to blink the cursor"
-msgstr "커서를 깜박일 지 여부"
+msgstr "커서를 깜박일지 여부"
 
 #: src/org.gnome.Terminal.gschema.xml:286
 msgid ""
@@ -719,7 +719,9 @@ msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it’s possible to turn them "
 "off."
-msgstr "메뉴 모음에서 <Alt>+글자 단축 키를 사용할지 여부. 이 단축 키 때문에 터미널에서 어떤 프로그램의 동작을 방해할 수도 있기 때문에, 이런 경우 끌 수 있습니다."
+msgstr ""
+"메뉴 모음에서 <Alt>+글자 단축 키를 사용할지 여부. 이 단축 키 때문에 터미널에"
+"서 어떤 프로그램의 동작을 방해할 수도 있기 때문에, 이런 경우 끌 수 있습니다."
 
 #: src/org.gnome.Terminal.gschema.xml:643
 msgid "Whether shortcuts are enabled"
@@ -756,26 +758,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "터미널을 닫기 전에 확인 질문을 할지 여부"
 
 #: src/org.gnome.Terminal.gschema.xml:674
-msgid "Whether to show the menubar in new windows"
-msgstr "새 창에서 메뉴 모음을 보일 지 여부"
+msgid "Additional info section items to appear in the context menu"
+msgstr "컨텍스트 메뉴에 표시할 추가 정보 부분 항목"
 
 #: src/org.gnome.Terminal.gschema.xml:679
+msgid "Whether to show the menubar in new windows"
+msgstr "새 창에서 메뉴 모음을 보일지 여부"
+
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "새 터미널을 창으로 열지 탭으로 열지 여부"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "탭 목록을 표시할 조건"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "탭 모음의 위치"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "사용할 테마 종류"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr "새 탭을 현재 탭 다음 위치에 열지, 아니면 맨 뒤 위치에 열지"
@@ -1631,16 +1637,16 @@ msgstr "바로 가기 키(_K)"
 msgid "New Terminal"
 msgstr "새 터미널"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "새 터미널(_T)"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "새 탭(_T)"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "새 창(_W)"
 
@@ -1670,7 +1676,7 @@ msgid "_Full Screen"
 msgstr "전체 화면(_F)"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "읽기 전용(_O)"
 
@@ -1712,8 +1718,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "인스펙터(_I)"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "기본 설정(_P)"
 
@@ -1753,19 +1759,19 @@ msgstr "창 닫기(_C)"
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "복사(_C)"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "HTML로 복사(_H)"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "파일 이름으로 붙여넣기(_F)"
 
@@ -1781,7 +1787,7 @@ msgstr "기본 설정(_R)"
 msgid "_View"
 msgstr "보기(_V)"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "메뉴 모음 보이기(_M)"
 
@@ -1870,7 +1876,7 @@ msgstr "터미널 열기(_E)"
 msgid "Open a terminal"
 msgstr "터미널을 엽니다"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "터미널 닫기(_L)"
 
@@ -2222,29 +2228,29 @@ msgstr "바로 가기"
 msgid "Profiles"
 msgstr "프로파일"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "명령어나 지정하지 않았거나 셸을 요청하지 않았습니다"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "다시 실행(_R)"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "터미널을 만드려고 하위 프로세스를 만드는 중 오류가 발생했습니다"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "하위 프로세스가 상태 %d번으로 정상적으로 끝났습니다."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "하위 프로세스가 시그널 %d번으로 중단되었습니다."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "하위 프로세스가 중단되었습니다."
 
@@ -2252,28 +2258,33 @@ msgstr "하위 프로세스가 중단되었습니다."
 msgid "Close tab"
 msgstr "탭 닫기"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "도움말을 보여주는 데 오류가 발생했습니다"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "기여한 분:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "버전 %s, 그놈 %d용"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "VTE 버전 %u.%u.%u 사용"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "그놈 데스크톱의 터미널 에뮬레이터"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "그놈 터미널"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "차영호 <ganadist@gmail.com>\n"
@@ -2281,12 +2292,12 @@ msgstr ""
 "류창우 <cwryu@debian.org>\n"
 "방진호 <zino@chromium.org>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "“%s” 주소를 열 수 없습니다"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2298,7 +2309,7 @@ msgstr ""
 "Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2310,7 +2321,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2318,7 +2329,7 @@ msgstr ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "원격 호스트이름과 같이 “file” 방식 사용은 지원하지 않습니다"
 
@@ -2338,55 +2349,55 @@ msgstr "취소(_C)"
 msgid "_Save"
 msgstr "저장(_S)"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "하이퍼링크 열기(_H)"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "하이퍼링크 주소 복사(_A)"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "메일 보내기(_T)…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "메일 주소 복사(_A)"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "전화 하기(_T)…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "호출 주소 복사(_A)"
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "링크 주소 복사(_L)"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "프로파일(_R)"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "전체 화면 나가기(_E)"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "이 창을 닫으시겠습니까?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "이 터미널을 닫으시겠습니까?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2394,7 +2405,7 @@ msgstr ""
 "아직 터미널에 실행 중인 프로세스가 있습니다. 터미널을 닫으면 이 프로세스를 강"
 "제 종료하게 됩니다."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2402,7 +2413,7 @@ msgstr ""
 "아직 터미널에 실행 중인 프로세스가 있습니다. 터미널을 닫으면 이 프로세스를 강"
 "제 종료하게 됩니다."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "창 닫기(_L)"
 
