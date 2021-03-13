@@ -46,6 +46,6 @@ HELP_FILES = \
 #	https://gitlab.gnome.org/GNOME/gnome-terminal/issues/71 :
 #	txt-save-text.page
 
-HELP_LINGUAS = ca cs de el es fi fr gl hu id ko pl pt_BR ro ru sv uk
+HELP_LINGUAS = ca cs da de el es fi fr gl hu id ko pl pt_BR ro ru sv uk
 
 -include $(top_srcdir)/git.mk
