@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-HEAD-help-el-5250\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-08-08 20:03+0000\n"
-"PO-Revision-Date: 2020-09-09 01:16+0300\n"
+"POT-Creation-Date: 2021-03-07 14:45+0000\n"
+"PO-Revision-Date: 2021-03-26 09:32+0200\n"
 "Last-Translator: Efstathios Iosifidis <eiosifidis@gnome.org>\n"
 "Language-Team: team@lists.gnome.gr\n"
 "Language: el\n"
@@ -38,8 +38,8 @@ msgstr "GPL-3.0+"
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "Τερματικό"
 
@@ -96,12 +96,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -132,7 +132,6 @@ msgstr ""
 "θέση του καταλόγου."
 
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:47
-#| msgid "Close Terminal"
 msgid "gnome-terminal"
 msgstr "gnome-terminal"
 
@@ -142,15 +141,14 @@ msgstr ""
 "κέλυφος;προτροπή;εντολή;γραμμή εντολών;shell;prompt;command;commandline;cmd;"
 
 #: org.gnome.Terminal.desktop.in.in:9
-#| msgid "Close Terminal"
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "Νέο παράθυρο"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
@@ -808,26 +806,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Αν θα γίνεται ερώτηση επιβεβαίωσης πριν το κλείσιμο ενός τερματικού"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "Πρόσθετα στοιχεία ενότητας για εμφάνιση στο μενού περιβάλλοντος"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Αν θα εμφανίζεται η γραμμή μενού στα νέα παράθυρα"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Εάν θα ανοίγουν νέα τερματικά ως παράθυρα ή καρτέλες"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "Πότε θα εμφανίζεται η μπάρα καρτελών"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "Η θέση της μπάρας καρτελών"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Ποια παραλλαγή θέματος θα χρησιμοποιηθεί"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -1684,16 +1686,16 @@ msgstr "_Πλήκτρο συντόμευσης"
 msgid "New Terminal"
 msgstr "Νέο τερματικό"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "Νέο _τερματικό"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "Νέα _καρτέλα"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "Νέο _παράθυρο"
 
@@ -1723,7 +1725,7 @@ msgid "_Full Screen"
 msgstr "_Πλήρης οθόνη"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "Μόν_ο για ανάγνωση"
 
@@ -1764,8 +1766,8 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "Ε_πόπτης"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
@@ -1805,19 +1807,19 @@ msgstr "_Κλείσιμο παραθύρου"
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_Αντιγραφή"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "Αντιγραφή ως _HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "Επικόλληση ως _ονόματα αρχείων"
 
@@ -1833,7 +1835,7 @@ msgstr "_Προτιμήσεις"
 msgid "_View"
 msgstr "_Προβολή"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "Εμφάνιση γραμμής _μενού"
 
@@ -1921,7 +1923,7 @@ msgstr "Άνοιγμα τ_ερματικού"
 msgid "Open a terminal"
 msgstr "Άνοιγμα ενός τερματικού"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "Κλείσιμο τε_ρματικού"
 
@@ -2276,30 +2278,30 @@ msgstr "Συντομεύσεις"
 msgid "Profiles"
 msgstr "Προφίλ"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "Δε δόθηκε εντολή ούτε απαιτήθηκε κέλυφος"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "Επα_νεκκίνηση"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Σφάλμα κατά τη δημιουργία της θυγατρικής διεργασίας για αυτό το τερματικό"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Η θυγατρική διεργασία τερματίσθηκε κανονικά με κατάσταση %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Η θυγατρική διεργασία τερματίστηκε από το σήμα %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "Η θυγατρική διεργασία εγκαταλείφθηκε."
 
@@ -2307,28 +2309,33 @@ msgstr "Η θυγατρική διεργασία εγκαταλείφθηκε."
 msgid "Close tab"
 msgstr "Κλείσιμο καρτέλας"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "Σφάλμα κατά την εμφάνιση της βοήθειας"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "Συντελεστές:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "Έκδοση %s για το GNOME %d"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "Χρήση έκδοσης VTE %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Προσομοιωτής τερματικού για την επιφάνεια εργασίας του GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "Τερματικό GNOME"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "Ελληνική μεταφραστική ομάδα GNOME\n"
@@ -2340,12 +2347,12 @@ msgstr ""
 "Για περισσότερες πληροφορίες, επισκεφθείτε την σελίδα\n"
 "http://www.gnome.gr/"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Αδυναμία ανοίγματος της διεύθυνσης “%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2358,7 +2365,7 @@ msgstr ""
 "Λογισμικού -Free Software Foundation- είτε της έκδοσης 3 της άδειας, είτε "
 "(κατ' επιλογήν) οποιασδήποτε μεταγενέστερης έκδοσης."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2370,7 +2377,7 @@ msgstr ""
 "ή ΚΑΤΑΛΛΗΛΟΤΗΤΑΣ ΓΙΑ ΣΥΓΚΕΚΡΙΜΕΝΟ ΣΚΟΠΟ. Δείτε για περισσότερες λεπτομέρειες "
 "τη Γενική Άδεια Δημόσιας Χρήσης GNU."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2379,7 +2386,7 @@ msgstr ""
 "GNU μαζί με αυτό το τερματικό GNOME. Εάν όχι, επισκεφθείτε το <http://www."
 "gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "δεν υποστηρίζεται «αρχείο» με απομακρυσμένο όνομα κεντρικού υπολογιστή"
 
@@ -2399,55 +2406,55 @@ msgstr "_Ακύρωση"
 msgid "_Save"
 msgstr "Απο_θήκευση"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "Ά_νοιγμα υπερσυνδέσμου"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "_Αντιγραφή διεύθυνσης υπερσυνδέσμου"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "_Αποστολή μηνύματος προς…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "Αντιγραφή ηλεκτρονικής _διεύθυνσης"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "_Κλήση…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "_Αντιγραφή διεύθυνσης κλήσης "
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "Ά_νοιγμα συνδέσμου"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "Αντιγραφή _συνδέσμου"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "Π_ροφίλ"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "Έ_ξοδος από την πλήρη οθόνη"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "Κλείσιμο παραθύρου;"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "Κλείσιμο αυτού του τερματικού;"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2455,7 +2462,7 @@ msgstr ""
 "Εκτελούνται ακόμη διεργασίες σε κάποια τερματικά αυτού του παραθύρου. Αν "
 "κλείσετε το τερματικό, θα τερματιστούν όλες οι διεργασίες."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2463,7 +2470,7 @@ msgstr ""
 "Εκτελείται ακόμα μία διεργασία σε αυτό το τερματικό. Αν κλείσετε το "
 "τερματικό, η διεργασία θα τερματιστεί."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "Κ_λείσιμο παραθύρου"
 
