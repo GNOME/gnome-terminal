@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) 2005 THE PACKAGE'S COPYRIGHT HOLDER
 # Gil 'Dolfin' Osher <dolfin@rpg.org.il>, 2002,2003
-# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2020.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2020-09-14 22:11+0000\n"
-"PO-Revision-Date: 2020-09-29 01:12+0300\n"
+"POT-Creation-Date: 2021-03-07 14:45+0000\n"
+"PO-Revision-Date: 2021-03-29 02:06+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"X-Generator: Gtranslator 3.38.0\n"
 
 #: org.gnome.Terminal.appdata.xml.in:35
 msgid "org.gnome.Terminal.desktop"
@@ -40,8 +40,8 @@ msgstr "הרישיון הציבורי הכללי של גנו, גרסה 3 או כ
 #: org.gnome.Terminal.appdata.xml.in:38 org.gnome.Terminal.desktop.in.in:4
 #: src/server.c:150 src/terminal-accels.c:232 src/terminal.c:570
 #: src/terminal-menubar.ui.in:144 src/terminal-tab-label.c:81
-#: src/terminal-window.c:1869 src/terminal-window.c:2135
-#: src/terminal-window.c:2416
+#: src/terminal-window.c:1890 src/terminal-window.c:2156
+#: src/terminal-window.c:2437
 msgid "Terminal"
 msgstr "מסוף"
 
@@ -95,12 +95,12 @@ msgid "https://wiki.gnome.org/Apps/Terminal"
 msgstr "https://wiki.gnome.org/Apps/Terminal"
 
 #. This is the name of a colour scheme
-#: org.gnome.Terminal.appdata.xml.in:55 org.gnome.Terminal.appdata.xml.in:56
+#: org.gnome.Terminal.appdata.xml.in:55
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:45 src/preferences.ui:214
 msgid "GNOME"
 msgstr "GNOME"
 
-#: org.gnome.Terminal.appdata.xml.in:57
+#: org.gnome.Terminal.appdata.xml.in:56
 #: org.gnome.Terminal.Nautilus.metainfo.xml.in:46
 msgid "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
 msgstr "https://wiki.gnome.org/Apps/Terminal/ReportingBugs"
@@ -141,11 +141,11 @@ msgstr "מעטפת;פקודה;שורת פקודה;שורה;מסך שחור;חל�
 msgid "org.gnome.Terminal"
 msgstr "org.gnome.Terminal"
 
-#: org.gnome.Terminal.desktop.in.in:17 src/terminal-accels.c:127
+#: org.gnome.Terminal.desktop.in.in:18 src/terminal-accels.c:127
 msgid "New Window"
 msgstr "חלון חדש"
 
-#: org.gnome.Terminal.desktop.in.in:21 src/terminal-accels.c:146
+#: org.gnome.Terminal.desktop.in.in:22 src/terminal-accels.c:146
 msgid "Preferences"
 msgstr "העדפות"
 
@@ -762,26 +762,30 @@ msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Whether to ask for confirmation before closing a terminal"
 
 #: src/org.gnome.Terminal.gschema.xml:674
+msgid "Additional info section items to appear in the context menu"
+msgstr "Additional info section items to appear in the context menu"
+
+#: src/org.gnome.Terminal.gschema.xml:679
 msgid "Whether to show the menubar in new windows"
 msgstr "Whether to show the menubar in new windows"
 
-#: src/org.gnome.Terminal.gschema.xml:679
+#: src/org.gnome.Terminal.gschema.xml:684
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Whether to open new terminals as windows or tabs"
 
-#: src/org.gnome.Terminal.gschema.xml:684
+#: src/org.gnome.Terminal.gschema.xml:689
 msgid "When to show the tabs bar"
 msgstr "When to show the tabs bar"
 
-#: src/org.gnome.Terminal.gschema.xml:689
+#: src/org.gnome.Terminal.gschema.xml:694
 msgid "The position of the tab bar"
 msgstr "The position of the tab bar"
 
-#: src/org.gnome.Terminal.gschema.xml:694
+#: src/org.gnome.Terminal.gschema.xml:699
 msgid "Which theme variant to use"
 msgstr "Which theme variant to use"
 
-#: src/org.gnome.Terminal.gschema.xml:699
+#: src/org.gnome.Terminal.gschema.xml:704
 msgid ""
 "Whether new tabs should open next to the current one or at the last position"
 msgstr ""
@@ -1277,13 +1281,11 @@ msgstr "לבן על שחור"
 
 #. Translators: "GNOME" is the name of a colour scheme, "light" can be translated
 #: src/profile-editor.c:178
-#| msgid "GNOME"
 msgid "GNOME light"
 msgstr "‏GNOME בהיר"
 
 #. Translators: "GNOME" is the name of a colour scheme, "dark" can be translated
 #: src/profile-editor.c:183
-#| msgid "GNOME"
 msgid "GNOME dark"
 msgstr "‏GNOME כהה"
 
@@ -1639,16 +1641,16 @@ msgstr "_מקש קיצור"
 msgid "New Terminal"
 msgstr "מסוף חדש"
 
-#: src/terminal-app.c:507 src/terminal-window.c:1770
+#: src/terminal-app.c:507 src/terminal-window.c:1791
 msgid "New _Terminal"
 msgstr "מסוף _חדש"
 
-#: src/terminal-app.c:509 src/terminal-window.c:1779
+#: src/terminal-app.c:509 src/terminal-window.c:1800
 msgid "New _Tab"
 msgstr "_לשונית חדשה"
 
 #: src/terminal-app.c:510 src/terminal-headermenu.ui:39
-#: src/terminal-window.c:1775
+#: src/terminal-window.c:1796
 msgid "New _Window"
 msgstr "_חלון חדש"
 
@@ -1678,7 +1680,7 @@ msgid "_Full Screen"
 msgstr "_מסך מלא"
 
 #: src/terminal-headermenu.ui:50 src/terminal-menubar.ui.in:155
-#: src/terminal-window.c:1751
+#: src/terminal-window.c:1772
 msgid "Read-_Only"
 msgstr "קריאה _בלבד"
 
@@ -1719,8 +1721,8 @@ msgstr "‏_4. ‎132×43"
 msgid "_Inspector"
 msgstr "_מפקח"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1537
-#: src/terminal-window.c:1763
+#: src/terminal-headermenu.ui:106 src/terminal-screen.c:1535
+#: src/terminal-window.c:1784
 msgid "_Preferences"
 msgstr "ה_עדפות"
 
@@ -1760,19 +1762,19 @@ msgstr "_סגירת החלון"
 msgid "_Edit"
 msgstr "ע_ריכה"
 
-#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1741
+#: src/terminal-menubar.ui.in:59 src/terminal-window.c:1762
 msgid "_Copy"
 msgstr "_העתקה"
 
-#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1742
+#: src/terminal-menubar.ui.in:64 src/terminal-window.c:1763
 msgid "Copy as _HTML"
 msgstr "העתקה כ־_HTML"
 
-#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1743
+#: src/terminal-menubar.ui.in:69 src/terminal-window.c:1764
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1745
+#: src/terminal-menubar.ui.in:73 src/terminal-window.c:1766
 msgid "Paste as _Filenames"
 msgstr "הדבקה כ_שמות קבצים"
 
@@ -1788,7 +1790,7 @@ msgstr "_העדפות"
 msgid "_View"
 msgstr "_תצוגה"
 
-#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1791
+#: src/terminal-menubar.ui.in:96 src/terminal-window.c:1812
 msgid "Show _Menubar"
 msgstr "הצגת _סרגל התפריטים"
 
@@ -1876,7 +1878,7 @@ msgstr "פתיחת מ_סוף"
 msgid "Open a terminal"
 msgstr "פתיחת מסוף"
 
-#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3224
+#: src/terminal-notebook-menu.ui:43 src/terminal-window.c:3245
 msgid "C_lose Terminal"
 msgstr "_סגירת המסוף"
 
@@ -2220,29 +2222,29 @@ msgstr "מקשי קיצור"
 msgid "Profiles"
 msgstr "פרופילים"
 
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1420
 msgid "No command supplied nor shell requested"
 msgstr "לא סופקה פקודה או שהתבקשה מעטפת"
 
-#: src/terminal-screen.c:1538 src/terminal-screen.c:1877
+#: src/terminal-screen.c:1536 src/terminal-screen.c:1881
 msgid "_Relaunch"
 msgstr "טעינה _מחדש"
 
-#: src/terminal-screen.c:1541
+#: src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "ארעה שגיאה ביצירת תהליך בן במסוף זה"
 
-#: src/terminal-screen.c:1881
+#: src/terminal-screen.c:1885
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "תהליך הצאצא הסתיים כרגיל עם מצב %d."
 
-#: src/terminal-screen.c:1884
+#: src/terminal-screen.c:1888
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "תהליך הצאצא בוטל עם האות %d."
 
-#: src/terminal-screen.c:1887
+#: src/terminal-screen.c:1891
 msgid "The child process was aborted."
 msgstr "תהליך הצאצא בוטל."
 
@@ -2250,28 +2252,33 @@ msgstr "תהליך הצאצא בוטל."
 msgid "Close tab"
 msgstr "סגירת הלשונית"
 
-#: src/terminal-util.c:150
+#: src/terminal-util.c:151
 msgid "There was an error displaying help"
 msgstr "ארעה שגיאה בהצגת העזרה"
 
-#: src/terminal-util.c:207
+#: src/terminal-util.c:209
 msgid "Contributors:"
 msgstr "תורמים:"
 
-#: src/terminal-util.c:223
+#: src/terminal-util.c:226
+#, c-format
+msgid "Version %s for GNOME %d"
+msgstr "גרסה %s עבור GNOME %d‎"
+
+#: src/terminal-util.c:230
 #, c-format
 msgid "Using VTE version %u.%u.%u"
 msgstr "באמצעות VTE גרסה %u.%u.%u"
 
-#: src/terminal-util.c:229
+#: src/terminal-util.c:236
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "מדמה מסוף לשולחן העבודה של GNOME"
 
-#: src/terminal-util.c:236
+#: src/terminal-util.c:243
 msgid "GNOME Terminal"
 msgstr "מסוף GNOME‏"
 
-#: src/terminal-util.c:246
+#: src/terminal-util.c:253
 msgid "translator-credits"
 msgstr ""
 "גיל אשר <dolfin@rpg.org.il>\n"
@@ -2280,12 +2287,12 @@ msgstr ""
 "יוסף אור בוצ׳קו <yoseforb@gmail.com>\n"
 "<a href=\"https://l10n.gnome.org/teams/he/\">מיזם תרגום GNOME לעברית</a>"
 
-#: src/terminal-util.c:321
+#: src/terminal-util.c:328
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "לא ניתן לפתוח את הכתובת “%s”"
 
-#: src/terminal-util.c:390
+#: src/terminal-util.c:397
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2297,7 +2304,7 @@ msgstr ""
 "Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 
-#: src/terminal-util.c:394
+#: src/terminal-util.c:401
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2309,7 +2316,7 @@ msgstr ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 
-#: src/terminal-util.c:398
+#: src/terminal-util.c:405
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -2317,7 +2324,7 @@ msgstr ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 
-#: src/terminal-util.c:1157
+#: src/terminal-util.c:1201
 msgid "“file” scheme with remote hostname not supported"
 msgstr "“file” scheme with remote hostname not supported"
 
@@ -2337,68 +2344,68 @@ msgstr "_ביטול"
 msgid "_Save"
 msgstr "_שמירה"
 
-#: src/terminal-window.c:1698
+#: src/terminal-window.c:1701
 msgid "Open _Hyperlink"
 msgstr "פתיחת _כתובת הקישור"
 
-#: src/terminal-window.c:1699
+#: src/terminal-window.c:1702
 msgid "Copy Hyperlink _Address"
 msgstr "ה_עתקת כתובת הקישור"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1712
 msgid "Send Mail _To…"
 msgstr "שליחת _דוא״ל אל…"
 
-#: src/terminal-window.c:1710
+#: src/terminal-window.c:1713
 msgid "Copy Mail _Address"
 msgstr "העתקת כתוב_ת דוא״ל"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1716
 msgid "Call _To…"
 msgstr "ה_תקשרות אל…"
 
-#: src/terminal-window.c:1714
+#: src/terminal-window.c:1717
 msgid "Copy Call _Address "
 msgstr "העתקת כתוב_ת ההתקשרות"
 
-#: src/terminal-window.c:1719
+#: src/terminal-window.c:1722
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
-#: src/terminal-window.c:1720
+#: src/terminal-window.c:1723
 msgid "Copy _Link"
 msgstr "העתקת _קישור"
 
-#: src/terminal-window.c:1758
+#: src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "פרופי_לים"
 
-#: src/terminal-window.c:1793
+#: src/terminal-window.c:1814
 msgid "L_eave Full Screen"
 msgstr "י_ציאה ממסך מלא"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this window?"
 msgstr "האם לסגור חלון זה?"
 
-#: src/terminal-window.c:3211
+#: src/terminal-window.c:3232
 msgid "Close this terminal?"
 msgstr "האם לסגור מסוף זה?"
 
-#: src/terminal-window.c:3215
+#: src/terminal-window.c:3236
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "עדיין ישנם תהליכים הפעילים דרך כמה מסופים בחלון זה. סגירת החלון תחסל את כולם."
 
-#: src/terminal-window.c:3219
+#: src/terminal-window.c:3240
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "עדיין ישנו תהליך הפעיל דרך מסוף זה. סגירת המסוף תחסל אותו."
 
-#: src/terminal-window.c:3224
+#: src/terminal-window.c:3245
 msgid "C_lose Window"
 msgstr "סגירת ה_חלון"
 
