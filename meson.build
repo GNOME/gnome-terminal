@@ -15,7 +15,7 @@
 
 project(
   'gnome-terminal',
-  ['c',],
+  ['c', 'cpp',],
   default_options: [
     'buildtype=release',
     'c_std=gnu11',
@@ -39,6 +39,9 @@ gt_dns_name = 'org.gnome.Terminal'
 # Compiler requirements
 
 c_req_std = 'gnu11'
+cxx_req_std               = 'gnu++11'
+gxx_req_version           = '4.8.1'
+clangxx_req_version       = '3.3'
 
 # Requirements
 
@@ -108,11 +111,40 @@ po_dir = meson.current_source_dir() / 'po'
 
 # Compilers
 
+# C compiler
+
 cc = meson.get_compiler('c')
 
 c_std_opt = '-std=' + c_req_std
 assert(cc.has_argument(c_std_opt), 'option ' + c_std_opt + ' not supported by ' + cc.get_id())
 add_project_arguments(c_std_opt, language: 'c')
+
+# C++ compiler
+
+cxx = meson.get_compiler('cpp')
+
+cxx_std_opt = '-std=' + cxx_req_std
+assert(cxx.has_argument(cxx_std_opt), 'option ' + cxx_std_opt + ' not supported by ' + cxx.get_id())
+add_project_arguments(cxx_std_opt, language: 'cpp')
+
+# The above only checks that the compiler supports the given -std option,
+# but not that the compiler really supports that C++ standard version.
+# Do a simple version check based on
+# https://gcc.gnu.org/projects/cxx-status.html and
+# https://clang.llvm.org/cxx_status.html
+# for the C++ features that vte actually uses.
+
+if cxx.get_id() == 'gcc'
+  assert(cxx.version().version_compare('>=' + gxx_req_version), 'needs g++ >= ' + gxx_req_version + ' for ' + cxx_req_std + ' support')
+endif
+
+if cxx.get_id() == 'clang'
+  assert(cxx.version().version_compare('>=' + clangxx_req_version), 'needs clang++ >= ' + clangxx_req_version + ' for ' + cxx_req_std + ' support')
+endif
+
+# Include directories
+
+top_inc = include_directories('.')
 
 # Asserts must not be disabled
 
@@ -196,16 +228,47 @@ compiler_flags_common_undesirable = [
   '-fno-strict-aliasing'
 ]
 
-compiler_flags_cc_required = [
+compiler_flags_c_required = [
+  '-fvisibility=hidden',
+]
+
+compiler_flags_c_only = [
+  '-Waggregate-return',
+  '-Werror=implicit-function-declaration',
+  '-Werror=missing-prototypes',
+  '-Wimplicit',
+  '-Wimplicit-fallthrough=3',
+  '-Wmissing-parameter-type',
+  '-Wnested-externs',
+  '-Wold-style-declaration',
+  '-Wold-style-definition',
+  '-Woverride-init',
+  '-Wsign-compare',
+  '-Wstrict-prototypes',
+]
+
+compiler_flags_cxx_only = [
+  '-Wimplicit-fallthrough=5',
+  '-Wnon-virtual-dtor',
+  '-Wstrict-null-sentinel',
+]
+
+compiler_flags_cxx_required = [
+  '-fvisibility-inlines-hidden',
   '-fvisibility=hidden',
 ]
 
 global_cflags = cc.get_supported_arguments(compiler_flags_common +
                                            compiler_flags_common_undesirable +
-                                           compiler_flags_cc_required)
+                                           compiler_flags_c_only +
+					   compiler_flags_c_required)
+global_cxxflags = cxx.get_supported_arguments(compiler_flags_common +
+                                              compiler_flags_common_undesirable +
+                                              compiler_flags_cxx_only +
+                                              compiler_flags_cxx_required)
 
-foreach flag: compiler_flags_cc_required
-  assert(cc.has_argument(flag), flag + ' is required but not supported')
+foreach flag: compiler_flags_cxx_required
+  assert(cxx.has_argument(flag), flag + ' is required but not supported')
 endforeach
 
 # These flags have to be tested together
@@ -262,8 +325,6 @@ configure_file(
   configuration: config_h,
 )
 
-top_inc = include_directories('.')
-
 # Utilities
 
 xsltproc = find_program('xsltproc')
@@ -310,17 +371,19 @@ configure_file(
 
 output = '\n'
 output += 'Configuration for gnome-terminal:\n\n'
-output += '  Version:                ' + gt_version + '\n'
+output += '  Version:            ' + gt_version + '\n'
 output += '\n'
-output += '  C compiler:             ' + cc.get_id() + '\n\n'
-output += '  Coverage:               ' + get_option('b_coverage').to_string() + '\n'
-output += '  Documentation:          ' + get_option('docs').to_string() + '\n'
-output += '  Debug:                  ' + enable_debug.to_string() + '\n'
+output += '  C compiler:         ' + cc.get_id() + ' (version ' + cc.version() + ')\n'
+output += '  C++ compiler:       ' + cxx.get_id() + ' (version ' + cxx.version() + ')\n'
 output += '\n'
-output += '  Prefix:                 ' + get_option('prefix') + '\n'
+output += '  Coverage:           ' + get_option('b_coverage').to_string() + '\n'
+output += '  Documentation:      ' + get_option('docs').to_string() + '\n'
+output += '  Debug:              ' + enable_debug.to_string() + '\n'
 output += '\n'
-output += '  Nautilus extension:     ' + get_option('nautilus_extension').to_string() + '\n'
-output += '  Search provider:        ' + get_option('search_provider').to_string() + '\n'
+output += '  Prefix:             ' + get_option('prefix') + '\n'
+output += '\n'
+output += '  Nautilus extension: ' + get_option('nautilus_extension').to_string() + '\n'
+output += '  Search provider:    ' + get_option('search_provider').to_string() + '\n'
 message(output)
 
 # Done

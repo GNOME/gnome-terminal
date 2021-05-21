@@ -18,13 +18,13 @@ src_inc = include_directories('.')
 # Common sources
 
 client_util_sources = files(
-  'terminal-client-utils.c',
-  'terminal-client-utils.h',
+  'terminal-client-utils.cc',
+  'terminal-client-utils.hh',
 )
 
 debug_sources = files(
-  'terminal-debug.c',
-  'terminal-debug.h',
+  'terminal-debug.cc',
+  'terminal-debug.hh',
 )
 
 dbus_sources = gnome.gdbus_codegen(
@@ -38,36 +38,36 @@ dbus_sources = gnome.gdbus_codegen(
 )
 
 i18n_sources = files(
-  'terminal-i18n.c',
-  'terminal-i18n.h',
-  'terminal-intl.h',
+  'terminal-i18n.cc',
+  'terminal-i18n.hh',
+  'terminal-intl.hh',
 )
 
 misc_sources = files(
-  'terminal-defines.h',
-  'terminal-libgsystem.h',
+  'terminal-defines.hh',
+  'terminal-libgsystem.hh',
 )
 
 profiles_sources = files(
-  'terminal-profiles-list.c',
-  'terminal-profiles-list.h',
-  'terminal-schemas.h',
-  'terminal-settings-list.c',
-  'terminal-settings-list.h',
+  'terminal-profiles-list.cc',
+  'terminal-profiles-list.hh',
+  'terminal-schemas.hh',
+  'terminal-settings-list.cc',
+  'terminal-settings-list.hh',
 )
 
 regex_sources = files(
-  'terminal-regex.h',
+  'terminal-regex.hh',
 )
 
 types_sources = files(
-  'terminal-enums.h',
+  'terminal-enums.hh',
 )
 
 types_sources += gnome.mkenums(
   'terminal-type-builtins',
-  c_template: 'terminal-type-builtins.h.template',
-  h_template: 'terminal-type-builtins.c.template',
+  c_template: 'terminal-type-builtins.hh.template',
+  h_template: 'terminal-type-builtins.cc.template',
   install_header: false,
   sources: types_sources,
 )
@@ -80,7 +80,7 @@ version_conf = {
 
 version_sources = [configure_file(
   configuration: version_conf,
-  input: 'terminal-version.h.in',
+  input: 'terminal-version.hh.in',
   install: false,
   output: '@BASENAME@',
 )]
@@ -117,45 +117,45 @@ menubar_ui_nomnemonics = custom_target(
 )
 
 server_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + misc_sources + profiles_sources + regex_sources + types_sources + version_sources + files(
-  'eggshell.c',
-  'eggshell.h',
-  'profile-editor.c',
-  'profile-editor.h',
-  'server.c',
-  'terminal-accels.c',
-  'terminal-accels.h',
-  'terminal-app.c',
-  'terminal-app.h',
-  'terminal-enums.h',
-  'terminal-gdbus.c',
-  'terminal-gdbus.h',
-  'terminal-headerbar.c',
-  'terminal-headerbar.h',
-  'terminal-icon-button.c',
-  'terminal-icon-button.h',
-  'terminal-info-bar.c',
-  'terminal-info-bar.h',
-  'terminal-mdi-container.c',
-  'terminal-mdi-container.h',
-  'terminal-menu-button.c',
-  'terminal-menu-button.h',
-  'terminal-notebook.c',
-  'terminal-notebook.h',
-  'terminal-pcre2.h',
-  'terminal-prefs.c',
-  'terminal-prefs.h',
-  'terminal-screen-container.c',
-  'terminal-screen-container.h',
-  'terminal-screen.c',
-  'terminal-screen.h',
-  'terminal-search-popover.c',
-  'terminal-search-popover.h',
-  'terminal-tab-label.c',
-  'terminal-tab-label.h',
-  'terminal-util.c',
-  'terminal-util.h',
-  'terminal-window.c',
-  'terminal-window.h',
+  'eggshell.cc',
+  'eggshell.hh',
+  'profile-editor.cc',
+  'profile-editor.hh',
+  'server.cc',
+  'terminal-accels.cc',
+  'terminal-accels.hh',
+  'terminal-app.cc',
+  'terminal-app.hh',
+  'terminal-enums.hh',
+  'terminal-gdbus.cc',
+  'terminal-gdbus.hh',
+  'terminal-headerbar.cc',
+  'terminal-headerbar.hh',
+  'terminal-icon-button.cc',
+  'terminal-icon-button.hh',
+  'terminal-info-bar.cc',
+  'terminal-info-bar.hh',
+  'terminal-mdi-container.cc',
+  'terminal-mdi-container.hh',
+  'terminal-menu-button.cc',
+  'terminal-menu-button.hh',
+  'terminal-notebook.cc',
+  'terminal-notebook.hh',
+  'terminal-pcre2.hh',
+  'terminal-prefs.cc',
+  'terminal-prefs.hh',
+  'terminal-screen-container.cc',
+  'terminal-screen-container.hh',
+  'terminal-screen.cc',
+  'terminal-screen.hh',
+  'terminal-search-popover.cc',
+  'terminal-search-popover.hh',
+  'terminal-tab-label.cc',
+  'terminal-tab-label.hh',
+  'terminal-util.cc',
+  'terminal-util.hh',
+  'terminal-window.cc',
+  'terminal-window.hh',
 )
 
 server_sources += gnome.compile_resources(
@@ -184,8 +184,8 @@ server_sources += gnome.genmarshal(
 if get_option('search_provider')
 
   server_sources += files(
-    'terminal-search-provider.c',
-    'terminal-search-provider.h',
+    'terminal-search-provider.cc',
+    'terminal-search-provider.hh',
   )
 
   server_sources += gnome.gdbus_codegen(
@@ -204,7 +204,7 @@ server_incs = [
   src_inc,
 ]
 
-server_cflags = [
+server_cxxflags = [
   '-DTERMINAL_COMPILATION',
   '-DVTE_DISABLE_DEPRECATION_WARNINGS',
   '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
@@ -226,7 +226,7 @@ server_deps = [
 
 server = executable(
   gt_name + '-server',
-  c_args: server_cflags,
+  cpp_args: server_cxxflags,
   dependencies: server_deps,
   include_directories: server_incs,
   install: true,
@@ -272,9 +272,9 @@ endif # option 'search_provider'
 # Legacy client
 
 client_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + profiles_sources + types_sources + files(
-  'terminal-options.c',
-  'terminal-options.h',
-  'terminal.c',
+  'terminal-options.cc',
+  'terminal-options.hh',
+  'terminal.cc',
 )
 
 client_incs = [
@@ -287,7 +287,7 @@ client_incs = [
   src_inc,
 ]
 
-client_cflags = [
+client_cxxflags = [
   '-DTERMINAL_COMPILATION',
   '-DTERMINAL_CLIENT',
   '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
@@ -308,7 +308,7 @@ client_deps = [
 
 client = executable(
   gt_name,
-  c_args: client_cflags,
+  cpp_args: client_cxxflags,
   include_directories: client_incs,
   dependencies: client_deps,
   install: true,
@@ -332,7 +332,7 @@ meson.add_install_script(
 if get_option('nautilus_extension')
 
   nautilus_sources = client_util_sources + dbus_sources + i18n_sources + misc_sources + types_sources + files(
-    'terminal-nautilus.c',
+    'terminal-nautilus.cc',
   )
 
   nautilus_map = meson.current_source_dir() / 'nautilus.map'
@@ -342,7 +342,7 @@ if get_option('nautilus_extension')
     src_inc,
   ]
 
-  nautilus_cflags = [
+  nautilus_cxxflags = [
     '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
   ]
 
@@ -359,7 +359,7 @@ if get_option('nautilus_extension')
 
   nautilus_extension = shared_library(
      'libterminal-nautilus',
-     c_args: nautilus_cflags,
+     cpp_args: nautilus_cxxflags,
      dependencies: nautilus_deps,
      include_directories: nautilus_incs,
      install: true,
@@ -375,12 +375,12 @@ endif # option 'nautilus_extension'
 # Unit tests
 
 test_regex_sources = regex_sources + files(
-  'terminal-regex.c',
+  'terminal-regex.cc',
 )
 
 test_regex = executable(
   'test-regex',
-  c_args: [
+  cpp_args: [
     '-DTERMINAL_REGEX_MAIN',
   ],
   dependencies: [
