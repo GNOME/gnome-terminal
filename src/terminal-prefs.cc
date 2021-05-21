@@ -37,7 +37,7 @@
 #include "terminal-profiles-list.hh"
 #include "terminal-libgsystem.hh"
 
-PrefData *the_pref_data = NULL;  /* global */
+PrefData *the_pref_data = nullptr;  /* global */
 
 /* Bottom */
 
@@ -64,7 +64,7 @@ lookup_action (GtkWindow *window,
   GAction *action;
 
   action = g_action_map_lookup_action (G_ACTION_MAP (window), name);
-  g_return_val_if_fail (action != NULL, NULL);
+  g_return_val_if_fail (action != nullptr, nullptr);
 
   return G_SIMPLE_ACTION (action);
 }
@@ -84,16 +84,16 @@ listbox_update (GtkListBox *box)
 
   /* GTK+ doesn't seem to like if a popover is assigned to multiple buttons at once
    * (not even temporarily), so make sure to remove it from the previous button first. */
-  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != NULL; i++) {
+  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != nullptr; i++) {
     button = (GtkMenuButton*)g_object_get_data (G_OBJECT (row), "popover-button");
-    gtk_menu_button_set_popover (button, NULL);
+    gtk_menu_button_set_popover (button, nullptr);
   }
 
-  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != NULL; i++) {
+  for (i = 0; (row = gtk_list_box_get_row_at_index (box, i)) != nullptr; i++) {
     profile = (GSettings*)g_object_get_data (G_OBJECT (row), "gsettings");
 
-    gboolean is_selected_profile = (profile != NULL && profile == the_pref_data->selected_profile);
-    gboolean is_default_profile = (profile != NULL && profile == default_profile);
+    gboolean is_selected_profile = (profile != nullptr && profile == the_pref_data->selected_profile);
+    gboolean is_default_profile = (profile != nullptr && profile == default_profile);
 
     stack = (GtkStack*)g_object_get_data (G_OBJECT (row), "home-stack");
     gtk_stack_set_visible_child_name (stack, is_default_profile ? "home" : "placeholder");
@@ -116,7 +116,7 @@ static void
 update_window_title (void)
 {
   GtkListBoxRow *row = the_pref_data->selected_list_box_row;
-  if (row == NULL)
+  if (row == nullptr)
     return;
 
   GSettings *profile = (GSettings*)g_object_get_data (G_OBJECT (row), "gsettings");
@@ -125,7 +125,7 @@ update_window_title (void)
   gs_free char *subtitle;
   gs_free char *title;
 
-  if (profile == NULL) {
+  if (profile == nullptr) {
     subtitle = g_strdup (text);
   } else {
     subtitle = g_strdup_printf (_("Profile “%s”"), text);
@@ -143,21 +143,21 @@ listbox_row_selected_cb (GtkListBox *box,
 {
   profile_prefs_unload ();
 
-  /* row can be NULL intermittently during a profile meta operations */
+  /* row can be nullptr intermittently during a profile meta operations */
   g_free (the_pref_data->selected_profile_uuid);
-  if (row != NULL) {
+  if (row != nullptr) {
     the_pref_data->selected_profile = (GSettings*)g_object_get_data (G_OBJECT (row), "gsettings");
     the_pref_data->selected_profile_uuid = g_strdup ((char const*)g_object_get_data (G_OBJECT (row), "uuid"));
   } else {
-    the_pref_data->selected_profile = NULL;
-    the_pref_data->selected_profile_uuid = NULL;
+    the_pref_data->selected_profile = nullptr;
+    the_pref_data->selected_profile_uuid = nullptr;
   }
   the_pref_data->selected_list_box_row = row;
 
   listbox_update (box);
 
-  if (row != NULL) {
-    if (the_pref_data->selected_profile != NULL) {
+  if (row != nullptr) {
+    if (the_pref_data->selected_profile != nullptr) {
       profile_prefs_load (the_pref_data->selected_profile_uuid, the_pref_data->selected_profile);
     }
 
@@ -185,7 +185,7 @@ static gboolean
 listbox_select_profile (const char *uuid)
 {
   GtkListBoxRow *row;
-  for (int i = 0; (row = gtk_list_box_get_row_at_index (the_pref_data->listbox, i)) != NULL; i++) {
+  for (int i = 0; (row = gtk_list_box_get_row_at_index (the_pref_data->listbox, i)) != nullptr; i++) {
     const char *rowuuid = (char const*) g_object_get_data (G_OBJECT (row), "uuid");
     if (g_strcmp0 (rowuuid, uuid) == 0) {
       g_signal_emit_by_name (row, "activate");
@@ -199,7 +199,7 @@ listbox_select_profile (const char *uuid)
 static void
 profile_new_now (const char *name)
 {
-  gs_free char *uuid = terminal_app_new_profile (terminal_app_get (), NULL, name);
+  gs_free char *uuid = terminal_app_new_profile (terminal_app_get (), nullptr, name);
 
   listbox_select_profile (uuid);
 }
@@ -208,7 +208,7 @@ profile_new_now (const char *name)
 static void
 profile_clone_now (const char *name)
 {
-  if (the_pref_data->selected_profile == NULL)
+  if (the_pref_data->selected_profile == nullptr)
     return;
 
   gs_free char *uuid = terminal_app_new_profile (terminal_app_get (), the_pref_data->selected_profile, name);
@@ -220,7 +220,7 @@ profile_clone_now (const char *name)
 static void
 profile_rename_now (const char *name)
 {
-  if (the_pref_data->selected_profile == NULL)
+  if (the_pref_data->selected_profile == nullptr)
     return;
 
   /* This will automatically trigger a call to profile_name_changed_cb(). */
@@ -231,17 +231,17 @@ profile_rename_now (const char *name)
 static void
 profile_delete_now (const char *dummy)
 {
-  if (the_pref_data->selected_profile == NULL)
+  if (the_pref_data->selected_profile == nullptr)
     return;
 
   /* Prepare to select the next one, or if there's no such then the previous one. */
   int index = gtk_list_box_row_get_index (the_pref_data->selected_list_box_row);
   GtkListBoxRow *new_selected_row = gtk_list_box_get_row_at_index (the_pref_data->listbox, index + 1);
-  if (new_selected_row == NULL)
+  if (new_selected_row == nullptr)
     new_selected_row = gtk_list_box_get_row_at_index (the_pref_data->listbox, index - 1);
   GSettings *new_selected_profile = (GSettings*)g_object_get_data (G_OBJECT (new_selected_row), "gsettings");
-  gs_free char *uuid = NULL;
-  if (new_selected_profile != NULL)
+  gs_free char *uuid = nullptr;
+  if (new_selected_profile != nullptr)
     uuid = terminal_settings_list_dup_uuid_from_child (the_pref_data->profiles_list, new_selected_profile);
 
   terminal_app_remove_profile (terminal_app_get (), the_pref_data->selected_profile);
@@ -255,7 +255,7 @@ profile_set_as_default_cb (GSimpleAction *simple,
                            GVariant      *parameter,
                            gpointer       user_data)
 {
-  if (the_pref_data->selected_profile_uuid == NULL)
+  if (the_pref_data->selected_profile_uuid == nullptr)
     return;
 
   /* This will automatically trigger a call to listbox_update() via "default-changed". */
@@ -283,7 +283,7 @@ popover_dialog_ok_clicked_cb (GtkButton *button,
   (*fn) (name);
 
   /* Hide/popdown the popover */
-  popover_dialog_cancel_clicked_cb (button, NULL);
+  popover_dialog_cancel_clicked_cb (button, nullptr);
 }
 
 static void
@@ -297,12 +297,12 @@ popover_dialog_closed_cb (GtkPopover *popover,
   GtkButton *ok = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-ok"));
   GtkButton *cancel = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-cancel"));
 
-  g_signal_handlers_disconnect_matched (ok, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
-                                        (void*)popover_dialog_ok_clicked_cb, NULL);
-  g_signal_handlers_disconnect_matched (cancel, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
-                                        (void*)popover_dialog_cancel_clicked_cb, NULL);
-  g_signal_handlers_disconnect_matched (popover, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
-                                        (void*)popover_dialog_closed_cb, NULL);
+  g_signal_handlers_disconnect_matched (ok, G_SIGNAL_MATCH_FUNC, 0, 0, nullptr,
+                                        (void*)popover_dialog_ok_clicked_cb, nullptr);
+  g_signal_handlers_disconnect_matched (cancel, G_SIGNAL_MATCH_FUNC, 0, 0, nullptr,
+                                        (void*)popover_dialog_cancel_clicked_cb, nullptr);
+  g_signal_handlers_disconnect_matched (popover, G_SIGNAL_MATCH_FUNC, 0, 0, nullptr,
+                                        (void*)popover_dialog_closed_cb, nullptr);
 }
 
 
@@ -334,7 +334,7 @@ profile_popup_dialog (GtkWidget *relative_to,
   gtk_label_set_text (label2, body);
 
   GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
-  if (entry_text != NULL) {
+  if (entry_text != nullptr) {
     gtk_entry_set_text (entry, entry_text);
     gtk_widget_show (GTK_WIDGET (entry));
   } else {
@@ -348,8 +348,8 @@ profile_popup_dialog (GtkWidget *relative_to,
   GtkPopover *popover_dialog = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-dialog"));
 
   g_signal_connect (ok, "clicked", G_CALLBACK (popover_dialog_ok_clicked_cb), (void*)fn);
-  g_signal_connect (cancel, "clicked", G_CALLBACK (popover_dialog_cancel_clicked_cb), NULL);
-  g_signal_connect (popover_dialog, "closed", G_CALLBACK (popover_dialog_closed_cb), NULL);
+  g_signal_connect (cancel, "clicked", G_CALLBACK (popover_dialog_cancel_clicked_cb), nullptr);
+  g_signal_connect (popover_dialog, "closed", G_CALLBACK (popover_dialog_closed_cb), nullptr);
 
   gtk_popover_set_relative_to (popover_dialog, relative_to);
   gtk_popover_set_position (popover_dialog, GTK_POS_BOTTOM);
@@ -357,7 +357,7 @@ profile_popup_dialog (GtkWidget *relative_to,
 
   gtk_popover_popup (popover_dialog);
 
-  gtk_widget_grab_focus (entry_text != NULL ? GTK_WIDGET (entry) : GTK_WIDGET (cancel));
+  gtk_widget_grab_focus (entry_text != nullptr ? GTK_WIDGET (entry) : GTK_WIDGET (cancel));
 }
 
 /* "New" selected, ask for profile name */
@@ -398,7 +398,7 @@ profile_rename_cb (GSimpleAction *simple,
                         GVariant      *parameter,
                         gpointer       user_data)
 {
-  if (the_pref_data->selected_profile == NULL)
+  if (the_pref_data->selected_profile == nullptr)
     return;
 
   gs_free char *name = g_settings_get_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
@@ -419,7 +419,7 @@ profile_delete_cb (GSimpleAction *simple,
                    GVariant      *parameter,
                    gpointer       user_data)
 {
-  if (the_pref_data->selected_profile == NULL)
+  if (the_pref_data->selected_profile == nullptr)
     return;
 
   gs_free char *name = g_settings_get_string (the_pref_data->selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
@@ -429,7 +429,7 @@ profile_delete_cb (GSimpleAction *simple,
   profile_popup_dialog (GTK_WIDGET (the_pref_data->selected_list_box_row),
                         _("Delete Profile"),
                         label,
-                        NULL,
+                        nullptr,
                         _("Delete"),
                         profile_delete_now);
 }
@@ -446,7 +446,7 @@ listbox_create_row (const char *name,
 
   g_object_set_data_full (G_OBJECT (row), "stack_child_name", g_strdup (stack_child_name), g_free);
   g_object_set_data_full (G_OBJECT (row), "uuid", g_strdup (uuid), g_free);
-  if (gsettings != NULL)
+  if (gsettings != nullptr)
     g_object_set_data_full (G_OBJECT (row), "gsettings", gsettings, (GDestroyNotify)g_object_unref);
   g_object_set_data (G_OBJECT (row), "sort_order", sort_order);
 
@@ -457,7 +457,7 @@ listbox_create_row (const char *name,
   gtk_widget_set_margin_bottom (GTK_WIDGET (hbox), 6);
 
   GtkLabel *label = GTK_LABEL (gtk_label_new (name));
-  if (gsettings != NULL) {
+  if (gsettings != nullptr) {
     g_signal_connect (label, "notify::label", G_CALLBACK (profile_name_changed_cb), row);
     g_settings_bind (gsettings,
                      TERMINAL_PROFILE_VISIBLE_NAME_KEY,
@@ -515,12 +515,12 @@ listbox_add_all_globals (PrefData *data)
 
   row = listbox_create_row (_("General"),
                             "general-prefs",
-                            NULL, NULL, (gpointer) 0);
+                            nullptr, nullptr, (gpointer) 0);
   gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
 
   row = listbox_create_row (_("Shortcuts"),
                             "shortcut-prefs",
-                            NULL, NULL, (gpointer) 1);
+                            nullptr, nullptr, (gpointer) 1);
   gtk_list_box_insert (data->listbox, GTK_WIDGET (row), -1);
 }
 
@@ -530,16 +530,16 @@ listbox_remove_all_profiles (PrefData *data)
 {
   int i = 0;
 
-  data->selected_profile = NULL;
+  data->selected_profile = nullptr;
   g_free (data->selected_profile_uuid);
-  data->selected_profile_uuid = NULL;
+  data->selected_profile_uuid = nullptr;
   profile_prefs_unload ();
 
   GtkListBoxRow *row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (the_pref_data->listbox), 0);
   g_signal_emit_by_name (row, "activate");
 
-  while ((row = gtk_list_box_get_row_at_index (data->listbox, i)) != NULL) {
-    if (g_object_get_data (G_OBJECT (row), "gsettings") != NULL) {
+  while ((row = gtk_list_box_get_row_at_index (data->listbox, i)) != nullptr) {
+    if (g_object_get_data (G_OBJECT (row), "gsettings") != nullptr) {
       gtk_widget_destroy (GTK_WIDGET (row));
     } else {
       i++;
@@ -556,11 +556,11 @@ listbox_add_all_profiles (PrefData *data)
 
   list = terminal_settings_list_ref_children (data->profiles_list);
 
-  for (l = list; l != NULL; l = l->next) {
+  for (l = list; l != nullptr; l = l->next) {
     GSettings *profile = (GSettings *) l->data;
     gs_free gchar *uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
 
-    row = listbox_create_row (NULL,
+    row = listbox_create_row (nullptr,
                               "profile-prefs",
                               uuid,
                               profile /* adopts */,
@@ -589,7 +589,7 @@ listbox_readd_profiles (PrefData *data)
   listbox_remove_all_profiles (data);
   listbox_add_all_profiles (data);
 
-  if (uuid != NULL)
+  if (uuid != nullptr)
     listbox_select_profile (uuid);
 }
 
@@ -604,7 +604,7 @@ listboxrow_create_header (const char *text,
   gtk_widget_set_margin_top (GTK_WIDGET (hbox), 6);
   gtk_widget_set_margin_bottom (GTK_WIDGET (hbox), 6);
 
-  GtkLabel *label = GTK_LABEL (gtk_label_new (NULL));
+  GtkLabel *label = GTK_LABEL (gtk_label_new (nullptr));
   gs_free char *markup = g_markup_printf_escaped ("<b>%s</b>", text);
   gtk_label_set_markup (label, markup);
   gtk_label_set_xalign (label, 0);
@@ -626,7 +626,7 @@ listboxrow_create_header (const char *text,
 
   if (visible_button) {
     gtk_stack_set_visible_child_name (stack, "button");
-    g_signal_connect (button, "clicked", G_CALLBACK (profile_new_cb), NULL);
+    g_signal_connect (button, "clicked", G_CALLBACK (profile_new_cb), nullptr);
     the_pref_data->new_profile_button = GTK_WIDGET (button);
   } else {
     gtk_stack_set_visible_child_name (stack, "placeholder");
@@ -641,20 +641,20 @@ listboxrow_update_header (GtkListBoxRow *row,
                           GtkListBoxRow *before,
                           gpointer       user_data)
 {
-  if (before == NULL) {
-    if (gtk_list_box_row_get_header (row) == NULL) {
+  if (before == nullptr) {
+    if (gtk_list_box_row_get_header (row) == nullptr) {
       gtk_list_box_row_set_header (row, listboxrow_create_header (_("Global"), FALSE));
     }
     return;
   }
 
   GSettings *profile = (GSettings*)g_object_get_data (G_OBJECT (row), "gsettings");
-  if (profile != NULL) {
+  if (profile != nullptr) {
     GSettings *profile_before = (GSettings*)g_object_get_data (G_OBJECT (before), "gsettings");
-    if (profile_before != NULL) {
-      gtk_list_box_row_set_header (row, NULL);
+    if (profile_before != nullptr) {
+      gtk_list_box_row_set_header (row, nullptr);
     } else {
-      if (gtk_list_box_row_get_header (row) == NULL) {
+      if (gtk_list_box_row_get_header (row) == nullptr) {
         gtk_list_box_row_set_header (row, listboxrow_create_header (_("Profiles"), TRUE));
       }
     }
@@ -731,13 +731,13 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   GSettings *settings;
 
   const GActionEntry action_entries[] = {
-    { "clone",          profile_clone_cb,          NULL, NULL, NULL },
-    { "rename",         profile_rename_cb,         NULL, NULL, NULL },
-    { "delete",         profile_delete_cb,         NULL, NULL, NULL },
-    { "set-as-default", profile_set_as_default_cb, NULL, NULL, NULL },
+    { "clone",          profile_clone_cb,          nullptr, nullptr, nullptr },
+    { "rename",         profile_rename_cb,         nullptr, nullptr, nullptr },
+    { "delete",         profile_delete_cb,         nullptr, nullptr, nullptr },
+    { "set-as-default", profile_set_as_default_cb, nullptr, nullptr, nullptr },
   };
 
-  if (the_pref_data != NULL)
+  if (the_pref_data != nullptr)
     goto done;
 
   {
@@ -766,7 +766,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
                                        "accelerators-treeview", &tree_view,
                                        "the-stack", &data->stack,
                                        "the-listbox", &data->listbox,
-                                       NULL);
+                                       nullptr);
 
   data->dialog = dialog;
 
@@ -784,10 +784,10 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (data->listbox),
                                 listboxrow_update_header,
-                                NULL,
-                                NULL);
+                                nullptr,
+                                nullptr);
   g_signal_connect (data->listbox, "row-selected", G_CALLBACK (listbox_row_selected_cb), data->stack);
-  gtk_list_box_set_sort_func (data->listbox, listboxrow_compare_cb, NULL, NULL);
+  gtk_list_box_set_sort_func (data->listbox, listboxrow_compare_cb, nullptr, nullptr);
 
   listbox_add_all_globals (data);
   listbox_add_all_profiles (data);
@@ -805,7 +805,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   gboolean shell_shows_menubar;
   g_object_get (gtk_settings_get_default (),
                 "gtk-shell-shows-menubar", &shell_shows_menubar,
-                NULL);
+                nullptr);
   if (shell_shows_menubar || terminal_app_get_use_headerbar (app)) {
     gtk_widget_set_visible (show_menubar_button, FALSE);
   } else {
@@ -895,7 +895,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
     gtk_window_set_titlebar (GTK_WINDOW (dialog), headerbar);
 
     /* Remove extra spacing around the content, and extra frames */
-    g_object_set (G_OBJECT (content_box), "margin", 0, NULL);
+    g_object_set (G_OBJECT (content_box), "margin", 0, nullptr);
     gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
     gtk_frame_set_shadow_type (GTK_FRAME (keybindings_frame), GTK_SHADOW_NONE);
   }
@@ -910,7 +910,7 @@ terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
   }
 
 done:
-  if (profile != NULL) {
+  if (profile != nullptr) {
     gs_free char *uuid = terminal_settings_list_dup_uuid_from_child (the_pref_data->profiles_list, profile);
     listbox_select_profile (uuid);
   } else {

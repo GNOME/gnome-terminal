@@ -34,7 +34,7 @@ get_match (const char *pattern, const char *string, GRegexMatchFlags match_flags
   GMatchInfo *match_info;
   gchar *match;
 
-  regex = g_regex_new (pattern, GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
+  regex = g_regex_new (pattern, GRegexCompileFlags(0), GRegexMatchFlags(0), nullptr);
   g_regex_match (regex, string, match_flags, &match_info);
   match = g_match_info_fetch (match_info, 0);
 
@@ -68,7 +68,7 @@ main (int argc, char **argv)
   assert_match_anchored (SCHEME, "HTTPS", ENTIRE);
 
   /* USER is nonempty, alphanumeric, dot, plus and dash */
-  assert_match_anchored (USER, "",              NULL);
+  assert_match_anchored (USER, "",              nullptr);
   assert_match_anchored (USER, "dr.john-smith", ENTIRE);
   assert_match_anchored (USER, "abc+def@ghi",   "abc+def");
 
@@ -85,19 +85,19 @@ main (int argc, char **argv)
   assert_match_anchored (HOSTNAME1, "déjà-vu.com",       ENTIRE);
   assert_match_anchored (HOSTNAME1, "➡.ws",              ENTIRE);
   assert_match_anchored (HOSTNAME1, "cömbining-áccents", ENTIRE);
-  assert_match_anchored (HOSTNAME1, "12",                NULL);
-  assert_match_anchored (HOSTNAME1, "12.34",             NULL);
+  assert_match_anchored (HOSTNAME1, "12",                nullptr);
+  assert_match_anchored (HOSTNAME1, "12.34",             nullptr);
   assert_match_anchored (HOSTNAME1, "12.ab",             ENTIRE);
-//  assert_match_anchored (HOSTNAME1, "ab.12",             NULL);  /* errr... could we fail here?? */
+//  assert_match_anchored (HOSTNAME1, "ab.12",             nullptr);  /* errr... could we fail here?? */
 
   /* Hostname of at least 2 components, containing at least one non-digit in at least one of the segments */
   assert_match_anchored (HOSTNAME2, "example.com",       ENTIRE);
-  assert_match_anchored (HOSTNAME2, "example",           NULL);
-  assert_match_anchored (HOSTNAME2, "12",                NULL);
-  assert_match_anchored (HOSTNAME2, "12.34",             NULL);
+  assert_match_anchored (HOSTNAME2, "example",           nullptr);
+  assert_match_anchored (HOSTNAME2, "12",                nullptr);
+  assert_match_anchored (HOSTNAME2, "12.34",             nullptr);
   assert_match_anchored (HOSTNAME2, "12.ab",             ENTIRE);
-  assert_match_anchored (HOSTNAME2, "ab.12",             NULL);
-//  assert_match_anchored (HOSTNAME2, "ab.cd.12",          NULL);  /* errr... could we fail here?? */
+  assert_match_anchored (HOSTNAME2, "ab.12",             nullptr);
+//  assert_match_anchored (HOSTNAME2, "ab.cd.12",          nullptr);  /* errr... could we fail here?? */
 
   /* IPv4 segment (number between 0 and 255) */
   assert_match_anchored (DEFS "(?&S4)", "0",    ENTIRE);
@@ -109,75 +109,75 @@ main (int argc, char **argv)
   assert_match_anchored (DEFS "(?&S4)", "200",  ENTIRE);
   assert_match_anchored (DEFS "(?&S4)", "250",  ENTIRE);
   assert_match_anchored (DEFS "(?&S4)", "255",  ENTIRE);
-  assert_match_anchored (DEFS "(?&S4)", "256",  NULL);
-  assert_match_anchored (DEFS "(?&S4)", "260",  NULL);
-  assert_match_anchored (DEFS "(?&S4)", "300",  NULL);
-  assert_match_anchored (DEFS "(?&S4)", "1000", NULL);
-  assert_match_anchored (DEFS "(?&S4)", "",     NULL);
-  assert_match_anchored (DEFS "(?&S4)", "a1b",  NULL);
+  assert_match_anchored (DEFS "(?&S4)", "256",  nullptr);
+  assert_match_anchored (DEFS "(?&S4)", "260",  nullptr);
+  assert_match_anchored (DEFS "(?&S4)", "300",  nullptr);
+  assert_match_anchored (DEFS "(?&S4)", "1000", nullptr);
+  assert_match_anchored (DEFS "(?&S4)", "",     nullptr);
+  assert_match_anchored (DEFS "(?&S4)", "a1b",  nullptr);
 
   /* IPv4 addresses */
   assert_match_anchored (DEFS "(?&IPV4)", "11.22.33.44",    ENTIRE);
   assert_match_anchored (DEFS "(?&IPV4)", "0.1.254.255",    ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV4)", "75.150.225.300", NULL);
+  assert_match_anchored (DEFS "(?&IPV4)", "75.150.225.300", nullptr);
   assert_match_anchored (DEFS "(?&IPV4)", "1.2.3.4.5",      "1.2.3.4");  /* we could also bail out and not match at all */
 
   /* IPv6 addresses */
-  assert_match_anchored (DEFS "(?&IPV6)", "11:::22",                           NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22::33:44::55:66",               NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:::22",                           nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22::33:44::55:66",               nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "dead::beef",                        ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV6)", "faded::bee",                        NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "live::pork",                        NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "faded::bee",                        nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "live::pork",                        nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "::1",                               ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV6)", "11::22:33::44",                     NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:::33",                        NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11::22:33::44",                     nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:::33",                        nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "dead:beef::192.168.1.1",            ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV6)", "192.168.1.1",                       NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:87654",        NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22::33:45678",                   NULL);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:192.168.1.12345", NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "192.168.1.1",                       nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:87654",        nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22::33:45678",                   nullptr);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:192.168.1.12345", nullptr);
 
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77",              NULL);   /* no :: */
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77",              nullptr);   /* no :: */
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:88",           ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:88:99",        NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:88:99",        nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:66:77",            ENTIRE); /* :: at the start */
-  assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:66:77:88",         NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:66:77:88",         nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:66:77",             ENTIRE); /* :: in the middle */
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:66:77:88",          NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:66:77:88",          nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77::",            ENTIRE); /* :: at the end */
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:88::",         NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:88::",         nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "::",                                ENTIRE); /* :: only */
 
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:192.168.1.1",        NULL);   /* no :: */
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:192.168.1.1",        nullptr);   /* no :: */
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:192.168.1.1",     ENTIRE);
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:192.168.1.1",  NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66:77:192.168.1.1",  nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:192.168.1.1",      ENTIRE); /* :: at the start */
-  assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:66:192.168.1.1",   NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "::11:22:33:44:55:66:192.168.1.1",   nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:192.168.1.1",       ENTIRE); /* :: in the imddle */
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:66:192.168.1.1",    NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33::44:55:66:192.168.1.1",    nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55::192.168.1.1",       ENTIRE); /* :: at the end(ish) */
-  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66::192.168.1.1",    NULL);
+  assert_match_anchored (DEFS "(?&IPV6)", "11:22:33:44:55:66::192.168.1.1",    nullptr);
   assert_match_anchored (DEFS "(?&IPV6)", "::192.168.1.1",                     ENTIRE); /* :: only(ish) */
 
   /* URL_HOST is either a hostname, or an IPv4 address, or a bracket-enclosed IPv6 address */
   assert_match_anchored (DEFS URL_HOST, "example",       ENTIRE);
   assert_match_anchored (DEFS URL_HOST, "example.com",   ENTIRE);
   assert_match_anchored (DEFS URL_HOST, "11.22.33.44",   ENTIRE);
-  assert_match_anchored (DEFS URL_HOST, "[11.22.33.44]", NULL);
+  assert_match_anchored (DEFS URL_HOST, "[11.22.33.44]", nullptr);
   assert_match_anchored (DEFS URL_HOST, "dead::be:ef",   "dead");  /* TODO: can/should we totally abort here? */
   assert_match_anchored (DEFS URL_HOST, "[dead::be:ef]", ENTIRE);
 
   /* EMAIL_HOST is either an at least two-component hostname, or a bracket-enclosed IPv[46] address */
-  assert_match_anchored (DEFS EMAIL_HOST, "example",        NULL);
+  assert_match_anchored (DEFS EMAIL_HOST, "example",        nullptr);
   assert_match_anchored (DEFS EMAIL_HOST, "example.com",    ENTIRE);
-  assert_match_anchored (DEFS EMAIL_HOST, "11.22.33.44",    NULL);
+  assert_match_anchored (DEFS EMAIL_HOST, "11.22.33.44",    nullptr);
   assert_match_anchored (DEFS EMAIL_HOST, "[11.22.33.44]",  ENTIRE);
-  assert_match_anchored (DEFS EMAIL_HOST, "[11.22.33.456]", NULL);
-  assert_match_anchored (DEFS EMAIL_HOST, "dead::be:ef",    NULL);
+  assert_match_anchored (DEFS EMAIL_HOST, "[11.22.33.456]", nullptr);
+  assert_match_anchored (DEFS EMAIL_HOST, "dead::be:ef",    nullptr);
   assert_match_anchored (DEFS EMAIL_HOST, "[dead::be:ef]",  ENTIRE);
 
   /* Number between 1 and 65535 (helper for port) */
-  assert_match_anchored (N_1_65535, "0",      NULL);
+  assert_match_anchored (N_1_65535, "0",      nullptr);
   assert_match_anchored (N_1_65535, "1",      ENTIRE);
   assert_match_anchored (N_1_65535, "10",     ENTIRE);
   assert_match_anchored (N_1_65535, "100",    ENTIRE);
@@ -188,14 +188,14 @@ main (int argc, char **argv)
   assert_match_anchored (N_1_65535, "65500",  ENTIRE);
   assert_match_anchored (N_1_65535, "65530",  ENTIRE);
   assert_match_anchored (N_1_65535, "65535",  ENTIRE);
-  assert_match_anchored (N_1_65535, "65536",  NULL);
-  assert_match_anchored (N_1_65535, "65540",  NULL);
-  assert_match_anchored (N_1_65535, "65600",  NULL);
-  assert_match_anchored (N_1_65535, "66000",  NULL);
-  assert_match_anchored (N_1_65535, "70000",  NULL);
-  assert_match_anchored (N_1_65535, "100000", NULL);
-  assert_match_anchored (N_1_65535, "",       NULL);
-  assert_match_anchored (N_1_65535, "a1b",    NULL);
+  assert_match_anchored (N_1_65535, "65536",  nullptr);
+  assert_match_anchored (N_1_65535, "65540",  nullptr);
+  assert_match_anchored (N_1_65535, "65600",  nullptr);
+  assert_match_anchored (N_1_65535, "66000",  nullptr);
+  assert_match_anchored (N_1_65535, "70000",  nullptr);
+  assert_match_anchored (N_1_65535, "100000", nullptr);
+  assert_match_anchored (N_1_65535, "",       nullptr);
+  assert_match_anchored (N_1_65535, "a1b",    nullptr);
 
   /* PORT is an optional colon-prefixed value */
   assert_match_anchored (PORT, "",       ENTIRE);
@@ -231,7 +231,7 @@ main (int argc, char **argv)
 
   /* Put the components together and test the big picture */
 
-  assert_match (REGEX_URL_AS_IS, "There's no URL here http:/foo",               NULL);
+  assert_match (REGEX_URL_AS_IS, "There's no URL here http:/foo",               nullptr);
   assert_match (REGEX_URL_AS_IS, "Visit http://example.com for details",        "http://example.com");
   assert_match (REGEX_URL_AS_IS, "Trailing dot http://foo/bar.html.",           "http://foo/bar.html");
   assert_match (REGEX_URL_AS_IS, "Trailing ellipsis http://foo/bar.html...",    "http://foo/bar.html");
@@ -245,7 +245,7 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "<a href='http://foo/bar'>foo</a>",            "http://foo/bar");
   assert_match (REGEX_URL_AS_IS, "<url>http://foo/bar</url>",                   "http://foo/bar");
 
-  assert_match (REGEX_URL_AS_IS, "http://",          NULL);
+  assert_match (REGEX_URL_AS_IS, "http://",          nullptr);
   assert_match (REGEX_URL_AS_IS, "http://a",         ENTIRE);
   assert_match (REGEX_URL_AS_IS, "http://aa.",       "http://aa");
   assert_match (REGEX_URL_AS_IS, "http://aa.b",      ENTIRE);
@@ -266,9 +266,9 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "https://[dead::beef:11.22.33.44]",    ENTIRE);
   assert_match (REGEX_URL_AS_IS, "http://1.2.3.4:",                     "http://1.2.3.4");  /* TODO: can/should we totally abort here? */
   assert_match (REGEX_URL_AS_IS, "https://dead::beef/no-brackets-ipv6", "https://dead");    /* ditto */
-  assert_match (REGEX_URL_AS_IS, "http://111.222.333.444/",             NULL);
+  assert_match (REGEX_URL_AS_IS, "http://111.222.333.444/",             nullptr);
   assert_match (REGEX_URL_AS_IS, "http://1.2.3.4:70000",                "http://1.2.3.4");  /* TODO: can/should we totally abort here? */
-  assert_match (REGEX_URL_AS_IS, "http://[dead::beef:111.222.333.444]", NULL);
+  assert_match (REGEX_URL_AS_IS, "http://[dead::beef:111.222.333.444]", nullptr);
 
   /* Username, password */
   assert_match (REGEX_URL_AS_IS, "http://joe@example.com",                 ENTIRE);
@@ -279,7 +279,7 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "http://invalidusername!@host",           "http://invalidusername");
 
   assert_match (REGEX_URL_AS_IS, "http://ab.cd/ef?g=h&i=j|k=l#m=n:o=p", ENTIRE);
-  assert_match (REGEX_URL_AS_IS, "http:///foo",                         NULL);
+  assert_match (REGEX_URL_AS_IS, "http:///foo",                         nullptr);
 
   /* Parentheses are only allowed in matching pairs, see bug 763980. */
   assert_match (REGEX_URL_AS_IS, "https://en.wikipedia.org/wiki/The_Offspring_(album)", ENTIRE);
@@ -300,23 +300,23 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_HTTP, "WWW3.foo.bar/baz",    ENTIRE);
   assert_match (REGEX_URL_HTTP, "FTP.FOO.BAR/BAZ",     ENTIRE);  /* FIXME if no scheme is given and url starts with ftp, can we make the protocol ftp instead of http? */
   assert_match (REGEX_URL_HTTP, "ftpxy.foo.bar/baz",   ENTIRE);
-//  assert_match (REGEX_URL_HTTP, "ftp.123/baz",         NULL);  /* errr... could we fail here?? */
-  assert_match (REGEX_URL_HTTP, "foo.bar/baz",         NULL);
-  assert_match (REGEX_URL_HTTP, "abc.www.foo.bar/baz", NULL);
-  assert_match (REGEX_URL_HTTP, "uvwww.foo.bar/baz",   NULL);
-  assert_match (REGEX_URL_HTTP, "xftp.foo.bar/baz",    NULL);
+//  assert_match (REGEX_URL_HTTP, "ftp.123/baz",         nullptr);  /* errr... could we fail here?? */
+  assert_match (REGEX_URL_HTTP, "foo.bar/baz",         nullptr);
+  assert_match (REGEX_URL_HTTP, "abc.www.foo.bar/baz", nullptr);
+  assert_match (REGEX_URL_HTTP, "uvwww.foo.bar/baz",   nullptr);
+  assert_match (REGEX_URL_HTTP, "xftp.foo.bar/baz",    nullptr);
 
   /* file:/ or file://(hostname)?/ */
-  assert_match (REGEX_URL_FILE, "file:",                NULL);
+  assert_match (REGEX_URL_FILE, "file:",                nullptr);
   assert_match (REGEX_URL_FILE, "file:/",               ENTIRE);
-  assert_match (REGEX_URL_FILE, "file://",              NULL);
+  assert_match (REGEX_URL_FILE, "file://",              nullptr);
   assert_match (REGEX_URL_FILE, "file:///",             ENTIRE);
-  assert_match (REGEX_URL_FILE, "file:////",            NULL);
-  assert_match (REGEX_URL_FILE, "file:etc/passwd",      NULL);
+  assert_match (REGEX_URL_FILE, "file:////",            nullptr);
+  assert_match (REGEX_URL_FILE, "file:etc/passwd",      nullptr);
   assert_match (REGEX_URL_FILE, "File:/etc/passwd",     ENTIRE);
   assert_match (REGEX_URL_FILE, "FILE:///etc/passwd",   ENTIRE);
-  assert_match (REGEX_URL_FILE, "file:////etc/passwd",  NULL);
-  assert_match (REGEX_URL_FILE, "file://host.name",     NULL);
+  assert_match (REGEX_URL_FILE, "file:////etc/passwd",  nullptr);
+  assert_match (REGEX_URL_FILE, "file://host.name",     nullptr);
   assert_match (REGEX_URL_FILE, "file://host.name/",    ENTIRE);
   assert_match (REGEX_URL_FILE, "file://host.name/etc", ENTIRE);
 
@@ -331,13 +331,13 @@ main (int argc, char **argv)
   assert_match (REGEX_EMAIL, "Write to mailto:foo@bar.com.", "mailto:foo@bar.com");
   assert_match (REGEX_EMAIL, "Write to MAILTO:FOO@BAR.COM.", "MAILTO:FOO@BAR.COM");
   assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.4]",       "foo@[1.2.3.4]");
-  assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.456]",     NULL);
+  assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.456]",     nullptr);
   assert_match (REGEX_EMAIL, "Write to foo@[1::2345]",       "foo@[1::2345]");
   assert_match (REGEX_EMAIL, "Write to foo@[dead::beef]",    "foo@[dead::beef]");
-  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.4",         NULL);
-  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.456",       NULL);
-  assert_match (REGEX_EMAIL, "Write to foo@1::2345",         NULL);
-  assert_match (REGEX_EMAIL, "Write to foo@dead::beef",      NULL);
+  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.4",         nullptr);
+  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.456",       nullptr);
+  assert_match (REGEX_EMAIL, "Write to foo@1::2345",         nullptr);
+  assert_match (REGEX_EMAIL, "Write to foo@dead::beef",      nullptr);
   assert_match (REGEX_EMAIL, "<baz email=\"foo@bar.com\"/>", "foo@bar.com");
   assert_match (REGEX_EMAIL, "<baz email='foo@bar.com'/>",   "foo@bar.com");
   assert_match (REGEX_EMAIL, "<email>foo@bar.com</email>",   "foo@bar.com");

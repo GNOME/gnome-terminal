@@ -62,7 +62,7 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                 gboolean         fullscreen_window)
 {
   /* Bytestring options */
-  if (display_name != NULL)
+  if (display_name != nullptr)
     g_variant_builder_add (builder, "{sv}",
                            "display", g_variant_new_bytestring (display_name));
   if (startup_id)
@@ -133,7 +133,7 @@ terminal_client_get_environment_filters (void)
     "WATCHDOG_PID",
     "WATCHDOG_USEC",
     "WINDOWID",
-    NULL
+    nullptr
   };
 
   return filters;
@@ -150,8 +150,8 @@ terminal_client_get_environment_filters (void)
 char**
 terminal_client_filter_environment (char** envv)
 {
-  if (envv == NULL)
-    return NULL;
+  if (envv == nullptr)
+    return nullptr;
 
   char const* const* filters = terminal_client_get_environment_filters ();
   for (unsigned i = 0; filters[i]; ++i)
@@ -164,7 +164,7 @@ terminal_client_filter_environment (char** envv)
  * terminal_client_append_exec_options:
  * @builder: a #GVariantBuilder of #GVariantType "a{sv}"
  * @pass_environment: whether to pass the current environment
- * @working_directory: (allow-none): the cwd, or %NULL
+ * @working_directory: (allow-none): the cwd, or %nullptr
  * @fd_array: (array lenght=fd_array_len):
  * @fd_array_len:
  * @shell:
@@ -223,7 +223,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
 /**
  * terminal_client_get_fallback_startup_id:
  *
- * Returns: a fallback startup ID, or %NULL
+ * Returns: a fallback startup ID, or %nullptr
  */
 char *
 terminal_client_get_fallback_startup_id  (void)
@@ -235,7 +235,7 @@ terminal_client_get_fallback_startup_id  (void)
   XEvent event;
 
   display = gdk_display_get_default ();
-  if (display == NULL || !GDK_IS_X11_DISPLAY (display))
+  if (display == nullptr || !GDK_IS_X11_DISPLAY (display))
     goto out;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
@@ -282,5 +282,5 @@ terminal_client_get_fallback_startup_id  (void)
   return g_strdup_printf ("_TIME%lu", event.xproperty.time);
 out:
 #endif
-  return NULL;
+  return nullptr;
 }

@@ -42,7 +42,7 @@
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
 
-static char *app_id = NULL;
+static char *app_id = nullptr;
 
 #define INACTIVITY_TIMEOUT (100 /* ms */)
 
@@ -67,7 +67,7 @@ option_app_id_cb (const gchar *option_name,
 
 static const GOptionEntry options[] = {
   { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, (void*)option_app_id_cb, "Application ID", "ID" },
-  { NULL }
+  { nullptr }
 };
 
 /* We use up to 8 FDs per terminal, so let's bump the limit way up.
@@ -91,7 +91,7 @@ increase_rlimit_nofile (void)
   if (getrlimit (RLIMIT_NOFILE, &sv_rlimit_nofile) < 0)
     return FALSE;
 
-  if (pthread_atfork (NULL, NULL, atfork_child_restore_rlimit_nofile) != 0)
+  if (pthread_atfork (nullptr, nullptr, atfork_child_restore_rlimit_nofile) != 0)
     return FALSE;
 
   l.rlim_cur = l.rlim_max = sv_rlimit_nofile.rlim_max;
@@ -114,7 +114,7 @@ init_server (int argc,
     return _EXIT_FAILURE_WRONG_ID;
   }
 
-  if (setlocale (LC_ALL, "") == NULL) {
+  if (setlocale (LC_ALL, "") == nullptr) {
     g_printerr ("Locale not supported.\n");
     return _EXIT_FAILURE_UNSUPPORTED_LOCALE;
   }
@@ -130,7 +130,7 @@ init_server (int argc,
   g_unsetenv ("DBUS_STARTER_BUS_TYPE");
 
   /* Not interested in silly debug spew polluting the journal, bug #749195 */
-  if (g_getenv ("G_ENABLE_DIAGNOSTIC") == NULL)
+  if (g_getenv ("G_ENABLE_DIAGNOSTIC") == nullptr)
     g_setenv ("G_ENABLE_DIAGNOSTIC", "0", TRUE);
 
   _terminal_debug_init ();
@@ -140,7 +140,7 @@ init_server (int argc,
    * On failure back to /.
    */
   const char *home_dir = g_get_home_dir ();
-  if (home_dir == NULL || chdir (home_dir) < 0)
+  if (home_dir == nullptr || chdir (home_dir) < 0)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
     chdir ("/");
@@ -149,9 +149,9 @@ init_server (int argc,
   g_set_prgname ("gnome-terminal-server");
   g_set_application_name (_("Terminal"));
 
-  GError *error = NULL;
-  if (!gtk_init_with_args (&argc, &argv, NULL, options, NULL, &error)) {
-    if (error != NULL) {
+  GError *error = nullptr;
+  if (!gtk_init_with_args (&argc, &argv, nullptr, options, nullptr, &error)) {
+    if (error != nullptr) {
       g_printerr ("Failed to parse arguments: %s\n", error->message);
       g_error_free (error);
     }
@@ -165,7 +165,7 @@ init_server (int argc,
   /* Now we can create the app */
   GApplication *app = terminal_app_new (app_id);
   g_free (app_id);
-  app_id = NULL;
+  app_id = nullptr;
 
   /* We stay around a bit after the last window closed */
   g_application_set_inactivity_timeout (app, INACTIVITY_TIMEOUT);
@@ -178,7 +178,7 @@ int
 main (int argc,
       char *argv[])
 {
-  gs_unref_object GApplication *app = NULL;
+  gs_unref_object GApplication *app = nullptr;
   int r = init_server (argc, argv, &app);
   if (r != 0)
     return r;
@@ -187,5 +187,5 @@ main (int argc,
    * thus ensuring that all pending signal emissions (e.g. child-exited)
    * are delivered.
    */
-  return g_application_run (app, 0, NULL);
+  return g_application_run (app, 0, nullptr);
 }

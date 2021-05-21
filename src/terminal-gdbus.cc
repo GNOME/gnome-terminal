@@ -60,7 +60,7 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
   TerminalReceiverImplPrivate *priv;
 
   g_return_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl));
-  g_return_if_fail (screen == NULL || TERMINAL_IS_SCREEN (screen));
+  g_return_if_fail (screen == nullptr || TERMINAL_IS_SCREEN (screen));
 
   priv = impl->priv;
   if (priv->screen == screen)
@@ -69,7 +69,7 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
   if (priv->screen) {
     g_signal_handlers_disconnect_matched (priv->screen,
                                           G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL, NULL, impl);
+                                          0, 0, nullptr, nullptr, impl);
   }
 
   priv->screen = screen;
@@ -98,8 +98,8 @@ exec_data_free (ExecData *data)
 }
 
 static void
-exec_cb (TerminalScreen *screen, /* unused, may be %NULL */
-         GError *error, /* set on error, %NULL on success */
+exec_cb (TerminalScreen *screen, /* unused, may be %nullptr */
+         GError *error, /* set on error, %nullptr on success */
          ExecData *data)
 {
   /* Note: these calls transfer the ref */
@@ -107,7 +107,7 @@ exec_cb (TerminalScreen *screen, /* unused, may be %NULL */
   if (error) {
     g_dbus_method_invocation_return_gerror (data->invocation, error);
   } else {
-    terminal_receiver_complete_exec (data->receiver, data->invocation, NULL /* outfdlist */);
+    terminal_receiver_complete_exec (data->receiver, data->invocation, nullptr /* outfdlist */);
   }
 }
 
@@ -123,11 +123,11 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   const char *working_directory;
   gboolean shell;
   gsize exec_argc;
-  gs_free char **exec_argv = NULL; /* container needs to be freed, strings not owned */
-  gs_free char **envv = NULL; /* container needs to be freed, strings not owned */
-  gs_unref_variant GVariant *fd_array = NULL;
+  gs_free char **exec_argv = nullptr; /* container needs to be freed, strings not owned */
+  gs_free char **envv = nullptr; /* container needs to be freed, strings not owned */
+  gs_unref_variant GVariant *fd_array = nullptr;
 
-  if (priv->screen == NULL) {
+  if (priv->screen == nullptr) {
     g_dbus_method_invocation_return_error_literal (invocation,
                                                    G_DBUS_ERROR,
                                                    G_DBUS_ERROR_FAILED,
@@ -136,13 +136,13 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   }
 
   if (!g_variant_lookup (options, "cwd", "^&ay", &working_directory))
-    working_directory = NULL;
+    working_directory = nullptr;
   if (!g_variant_lookup (options, "shell", "b", &shell))
     shell = FALSE;
   if (!g_variant_lookup (options, "environ", "^a&ay", &envv))
-    envv = NULL;
+    envv = nullptr;
   if (!g_variant_lookup (options, "fd-set", "@a(ih)", &fd_array))
-    fd_array = NULL;
+    fd_array = nullptr;
 
   /* Check environment */
   if (!terminal_util_check_envv((const char * const*)envv)) {
@@ -154,14 +154,14 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   }
 
   /* Check FD passing */
-  if ((fd_list != NULL) ^ (fd_array != NULL)) {
+  if ((fd_list != nullptr) ^ (fd_array != nullptr)) {
     g_dbus_method_invocation_return_error_literal (invocation,
                                                    G_DBUS_ERROR,
                                                    G_DBUS_ERROR_INVALID_ARGS,
                                                    "Must pass both fd-set options and a FD list");
     return TRUE; /* handled */
   }
-  if (fd_list != NULL && fd_array != NULL) {
+  if (fd_list != nullptr && fd_array != nullptr) {
     const int *fd_array_data;
     gsize fd_array_data_len, i;
     int n_fds;
@@ -200,7 +200,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
     }
   }
 
-  if (working_directory != NULL)
+  if (working_directory != nullptr)
     _terminal_debug_print (TERMINAL_DEBUG_SERVER,
                            "CWD is '%s'\n", working_directory);
 
@@ -216,9 +216,9 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
    */
   exec_data->invocation = (GDBusMethodInvocation*)g_object_ref (invocation);
 
-  GError *err = NULL;
+  GError *err = nullptr;
   if (!terminal_screen_exec (priv->screen,
-                             exec_argc > 0 ? exec_argv : NULL,
+                             exec_argc > 0 ? exec_argv : nullptr,
                              envv,
                              shell,
                              working_directory,
@@ -226,7 +226,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
                              (TerminalScreenExecCallback) exec_cb,
                              exec_data /* adopted */,
                              (GDestroyNotify) exec_data_free,
-                             NULL /* cancellable */,
+                             nullptr /* cancellable */,
                              &err)) {
     /* Transfers ownership of @invocation */
     g_dbus_method_invocation_take_error (invocation, err);
@@ -258,7 +258,7 @@ terminal_receiver_impl_dispose (GObject *object)
 {
   TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (object);
 
-  terminal_receiver_impl_set_screen (impl, NULL);
+  terminal_receiver_impl_set_screen (impl, nullptr);
 
   G_OBJECT_CLASS (terminal_receiver_impl_parent_class)->dispose (object);
 }
@@ -311,7 +311,7 @@ terminal_receiver_impl_class_init (TerminalReceiverImplClass *klass)
   g_object_class_install_property
      (gobject_class,
       PROP_SCREEN,
-      g_param_spec_object ("screen", NULL, NULL,
+      g_param_spec_object ("screen", nullptr, nullptr,
                           TERMINAL_TYPE_SCREEN,
 			   GParamFlags(G_PARAM_READWRITE |
 				       G_PARAM_CONSTRUCT_ONLY |
@@ -341,12 +341,12 @@ terminal_receiver_impl_new (TerminalScreen *screen)
  * terminal_receiver_impl_get_screen:
  * @impl: a #TerminalReceiverImpl
  *
- * Returns: (transfer none): the impl's #TerminalScreen, or %NULL
+ * Returns: (transfer none): the impl's #TerminalScreen, or %nullptr
  */
 TerminalScreen *
 terminal_receiver_impl_get_screen (TerminalReceiverImpl *impl)
 {
-  g_return_val_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl), NULL);
+  g_return_val_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl), nullptr);
 
   return impl->priv->screen;
 }
@@ -362,7 +362,7 @@ terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl)
 {
   g_return_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl));
 
-  terminal_receiver_impl_set_screen (impl, NULL);
+  terminal_receiver_impl_set_screen (impl, nullptr);
 }
 
 /* ---------------------------------------------------------------------------
@@ -382,11 +382,11 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   TerminalApp *app = terminal_app_get ();
 
   /* If a parent screen is specified, use that to fill in missing information */
-  TerminalScreen *parent_screen = NULL;
+  TerminalScreen *parent_screen = nullptr;
   const char *parent_screen_object_path;
   if (g_variant_lookup (options, "parent-screen", "&o", &parent_screen_object_path)) {
     parent_screen = terminal_app_get_screen_by_object_path (app, parent_screen_object_path);
-    if (parent_screen == NULL) {
+    if (parent_screen == nullptr) {
       g_dbus_method_invocation_return_error (invocation,
                                              G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
                                              "Failed to get screen from object path %s",
@@ -398,13 +398,13 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   /* Try getting a parent window, first by parent screen then by window ID;
    * if that fails, create a new window.
    */
-  TerminalWindow *window = NULL;
+  TerminalWindow *window = nullptr;
   gboolean have_new_window = FALSE;
   const char *window_from_screen_object_path;
   if (g_variant_lookup (options, "window-from-screen", "&o", &window_from_screen_object_path)) {
     TerminalScreen *window_screen =
       terminal_app_get_screen_by_object_path (app, window_from_screen_object_path);
-    if (window_screen == NULL) {
+    if (window_screen == nullptr) {
       g_dbus_method_invocation_return_error (invocation,
                                              G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
                                              "Failed to get screen from object path %s",
@@ -419,7 +419,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   /* Support old client */
   guint window_id;
-  if (window == NULL && g_variant_lookup (options, "window-id", "u", &window_id)) {
+  if (window == nullptr && g_variant_lookup (options, "window-id", "u", &window_id)) {
     GtkWindow *win = gtk_application_get_window_by_id (GTK_APPLICATION (app), window_id);
 
     if (!TERMINAL_IS_WINDOW (win)) {
@@ -434,7 +434,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   }
 
   /* Still no parent window? Create a new one */
-  if (window == NULL) {
+  if (window == nullptr) {
     const char *startup_id, *role;
     gboolean start_maximized, start_fullscreen;
 
@@ -468,30 +468,30 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   const char *title;
   if (!g_variant_lookup (options, "title", "&s", &title))
-    title = NULL;
+    title = nullptr;
 
   double zoom;
   if (!g_variant_lookup (options, "zoom", "d", &zoom)) {
-    if (parent_screen != NULL)
+    if (parent_screen != nullptr)
       zoom = vte_terminal_get_font_scale (VTE_TERMINAL (parent_screen));
     else
       zoom = 1.0;
   }
 
   /* Look up the profile */
-  gs_unref_object GSettings *profile = NULL;
+  gs_unref_object GSettings *profile = nullptr;
   const char *profile_uuid;
   if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
-    profile_uuid = NULL;
+    profile_uuid = nullptr;
 
-  if (profile_uuid == NULL && parent_screen != NULL) {
+  if (profile_uuid == nullptr && parent_screen != nullptr) {
     profile = terminal_screen_ref_profile (parent_screen);
   } else {
-    GError *err = NULL;
+    GError *err = nullptr;
     profile = terminal_profiles_list_ref_profile_by_uuid (terminal_app_get_profiles_list (app),
-                                                          profile_uuid /* default if NULL */,
+                                                          profile_uuid /* default if nullptr */,
                                                           &err);
-    if (profile == NULL) {
+    if (profile == nullptr) {
       g_dbus_method_invocation_return_gerror (invocation, err);
       g_error_free (err);
       return TRUE;

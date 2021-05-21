@@ -101,7 +101,7 @@ close_button_clicked_cb (TerminalTabLabel *tab_label,
   notebook = TERMINAL_NOTEBOOK (gtk_widget_get_ancestor (GTK_WIDGET (screen),
                                                          TERMINAL_TYPE_NOTEBOOK));
 
-  if (notebook != NULL)
+  if (notebook != nullptr)
     g_signal_emit_by_name (notebook, "screen-close-request", screen);
 }
 
@@ -126,7 +126,7 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook);
   GtkWidget *screen_container, *tab_label;
 
-  g_warn_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) == NULL);
+  g_warn_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) == nullptr);
 
   screen_container = terminal_screen_container_new (screen);
   gtk_widget_show (screen_container);
@@ -135,7 +135,7 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
 
   tab_label = terminal_tab_label_new (screen);
   g_signal_connect (tab_label, "close-button-clicked",
-                    G_CALLBACK (close_button_clicked_cb), NULL);
+                    G_CALLBACK (close_button_clicked_cb), nullptr);
 
   gtk_notebook_insert_page (gtk_notebook,
                             screen_container,
@@ -145,7 +145,7 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
                            screen_container,
                            "tab-expand", TRUE,
                            "tab-fill", TRUE,
-                           NULL);
+                           nullptr);
   gtk_notebook_set_tab_reorderable (gtk_notebook, screen_container, TRUE);
 #if 0
   gtk_notebook_set_tab_detachable (gtk_notebook, screen_container, TRUE);
@@ -208,7 +208,7 @@ terminal_notebook_list_screens (TerminalMdiContainer *container)
   GList *list, *l;
 
   list = terminal_notebook_list_screen_containers (container);
-  for (l = list; l != NULL; l = l->next)
+  for (l = list; l != nullptr; l = l->next)
     l->data = terminal_screen_container_get_screen ((TerminalScreenContainer *) l->data);
 
   return list;
@@ -390,7 +390,7 @@ terminal_notebook_init (TerminalNotebook *notebook)
 
   priv = notebook->priv = TERMINAL_NOTEBOOK_GET_PRIVATE (notebook);
 
-  priv->active_screen = NULL;
+  priv->active_screen = nullptr;
   priv->policy = GTK_POLICY_AUTOMATIC;
 }
 
@@ -496,7 +496,7 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   g_object_class_install_property
     (gobject_class,
      PROP_TAB_POLICY,
-     g_param_spec_enum ("tab-policy", NULL, NULL,
+     g_param_spec_enum ("tab-policy", nullptr, nullptr,
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
@@ -559,15 +559,15 @@ terminal_notebook_get_action_box (TerminalNotebook *notebook,
   GtkNotebook *gtk_notebook;
   GtkWidget *box, *inner_box;
 
-  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), nullptr);
 
   gtk_notebook = GTK_NOTEBOOK (notebook);
   box = gtk_notebook_get_action_widget (gtk_notebook, pack_type);
-  if (box != NULL) {
+  if (box != nullptr) {
     gs_free_list GList *list;
 
     list = gtk_container_get_children (GTK_CONTAINER (box));
-    g_assert (list->data != NULL);
+    g_assert (list->data != nullptr);
     return (GtkWidget*)list->data;
   }
 

@@ -116,7 +116,7 @@ typedef struct
 } KeyEntryList;
 
 #define ENTRY_FULL(name, key, action, type, parameter, shadow_name) \
-  { name, key, "win." action, (const GVariantType *) type, parameter, NULL, shadow_name }
+  { name, key, "win." action, (const GVariantType *) type, parameter, nullptr, shadow_name }
 #define ENTRY(name, key, action, type, parameter) \
   ENTRY_FULL (name, key, action, type, parameter, "win.shadow")
 #define ENTRY_MDI(name, key, action, type, parameter) \
@@ -126,13 +126,13 @@ static KeyEntry file_entries[] = {
   ENTRY (N_("New Tab"),       KEY_NEW_TAB,       "new-terminal",  "(ss)",  "('tab','current')"   ),
   ENTRY (N_("New Window"),    KEY_NEW_WINDOW,    "new-terminal",  "(ss)",  "('window','current')"),
 #ifdef ENABLE_SAVE
-  ENTRY (N_("Save Contents"), KEY_SAVE_CONTENTS, "save-contents", NULL,    NULL                  ),
+  ENTRY (N_("Save Contents"), KEY_SAVE_CONTENTS, "save-contents", nullptr,    nullptr                  ),
 #endif
 #ifdef ENABLE_EXPORT
-  ENTRY (N_("Export"),        KEY_EXPORT,        "export",        NULL,    NULL                  ),
+  ENTRY (N_("Export"),        KEY_EXPORT,        "export",        nullptr,    nullptr                  ),
 #endif
 #ifdef ENABLE_PRINT
-  ENTRY (N_("Print"),         KEY_PRINT,         "print",         NULL,    NULL                  ),
+  ENTRY (N_("Print"),         KEY_PRINT,         "print",         nullptr,    nullptr                  ),
 #endif
   ENTRY (N_("Close Tab"),     KEY_CLOSE_TAB,     "close",         "s",     "'tab'"               ),
   ENTRY (N_("Close Window"),  KEY_CLOSE_WINDOW,  "close",         "s",     "'window'"            ),
@@ -141,82 +141,82 @@ static KeyEntry file_entries[] = {
 static KeyEntry edit_entries[] = {
   ENTRY (N_("Copy"),                KEY_COPY,                "copy",         "s", "'text'"   ),
   ENTRY (N_("Copy as HTML"),        KEY_COPY_HTML,           "copy",         "s", "'html'"   ),
-  ENTRY (N_("Paste"),               KEY_PASTE,               "paste-text",   NULL, NULL      ),
-  ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   NULL, NULL      ),
-  ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "edit-preferences",  NULL, NULL      ),
+  ENTRY (N_("Paste"),               KEY_PASTE,               "paste-text",   nullptr, nullptr      ),
+  ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   nullptr, nullptr      ),
+  ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "edit-preferences",  nullptr, nullptr      ),
 };
 
 static KeyEntry search_entries[] = {
-  ENTRY (N_("Find"),            KEY_FIND,       "find",          NULL, NULL),
-  ENTRY (N_("Find Next"),       KEY_FIND_NEXT,  "find-forward",  NULL, NULL),
-  ENTRY (N_("Find Previous"),   KEY_FIND_PREV,  "find-backward", NULL, NULL),
-  ENTRY (N_("Clear Highlight"), KEY_FIND_CLEAR, "find-clear",    NULL, NULL)
+  ENTRY (N_("Find"),            KEY_FIND,       "find",          nullptr, nullptr),
+  ENTRY (N_("Find Next"),       KEY_FIND_NEXT,  "find-forward",  nullptr, nullptr),
+  ENTRY (N_("Find Previous"),   KEY_FIND_PREV,  "find-backward", nullptr, nullptr),
+  ENTRY (N_("Clear Highlight"), KEY_FIND_CLEAR, "find-clear",    nullptr, nullptr)
 };
 
 static KeyEntry view_entries[] = {
-  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "menubar-visible", NULL, NULL),
-  ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",      NULL, NULL),
-  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",         NULL, NULL),
-  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",        NULL, NULL),
-  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom-normal",     NULL, NULL)
+  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "menubar-visible", nullptr, nullptr),
+  ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",      nullptr, nullptr),
+  ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",         nullptr, nullptr),
+  ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",        nullptr, nullptr),
+  ENTRY (N_("Normal Size"),           KEY_ZOOM_NORMAL,    "zoom-normal",     nullptr, nullptr)
 };
 
 static KeyEntry terminal_entries[] = {
-  ENTRY (N_("Read-Only"),       KEY_READ_ONLY,          "read-only", NULL, NULL   ),
+  ENTRY (N_("Read-Only"),       KEY_READ_ONLY,          "read-only", nullptr, nullptr   ),
   ENTRY (N_("Reset"),           KEY_RESET,              "reset",     "b",  "false"),
   ENTRY (N_("Reset and Clear"), KEY_RESET_AND_CLEAR,    "reset",     "b",  "true" ),
 };
 
 static KeyEntry tabs_entries[] = {
-  ENTRY_MDI (N_("Switch to Previous Tab"), KEY_PREV_TAB,       "tab-switch-left",  NULL, NULL),
-  ENTRY_MDI (N_("Switch to Next Tab"),     KEY_NEXT_TAB,       "tab-switch-right", NULL, NULL),
-  ENTRY_MDI (N_("Move Tab to the Left"),   KEY_MOVE_TAB_LEFT,  "tab-move-left",    NULL, NULL),
-  ENTRY_MDI (N_("Move Tab to the Right"),  KEY_MOVE_TAB_RIGHT, "tab-move-right",   NULL, NULL),
-  ENTRY_MDI (N_("Detach Tab"),             KEY_DETACH_TAB,     "tab-detach",       NULL, NULL),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "1", "active-tab", "i", "0"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "2", "active-tab", "i", "1"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "3", "active-tab", "i", "2"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "4", "active-tab", "i", "3"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "5", "active-tab", "i", "4"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "6", "active-tab", "i", "5"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "7", "active-tab", "i", "6"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "8", "active-tab", "i", "7"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "9", "active-tab", "i", "8"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "10", "active-tab", "i", "9"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "11", "active-tab", "i", "10"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "12", "active-tab", "i", "11"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "13", "active-tab", "i", "12"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "14", "active-tab", "i", "13"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "15", "active-tab", "i", "14"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "16", "active-tab", "i", "15"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "17", "active-tab", "i", "16"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "18", "active-tab", "i", "17"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "19", "active-tab", "i", "18"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "20", "active-tab", "i", "19"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "21", "active-tab", "i", "20"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "22", "active-tab", "i", "21"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "23", "active-tab", "i", "22"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "24", "active-tab", "i", "23"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "25", "active-tab", "i", "24"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "26", "active-tab", "i", "25"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "27", "active-tab", "i", "26"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "28", "active-tab", "i", "27"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "29", "active-tab", "i", "28"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "30", "active-tab", "i", "29"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "31", "active-tab", "i", "30"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "32", "active-tab", "i", "31"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "33", "active-tab", "i", "32"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "34", "active-tab", "i", "33"),
-  ENTRY_MDI (NULL, KEY_SWITCH_TAB_PREFIX "35", "active-tab", "i", "34"),
+  ENTRY_MDI (N_("Switch to Previous Tab"), KEY_PREV_TAB,       "tab-switch-left",  nullptr, nullptr),
+  ENTRY_MDI (N_("Switch to Next Tab"),     KEY_NEXT_TAB,       "tab-switch-right", nullptr, nullptr),
+  ENTRY_MDI (N_("Move Tab to the Left"),   KEY_MOVE_TAB_LEFT,  "tab-move-left",    nullptr, nullptr),
+  ENTRY_MDI (N_("Move Tab to the Right"),  KEY_MOVE_TAB_RIGHT, "tab-move-right",   nullptr, nullptr),
+  ENTRY_MDI (N_("Detach Tab"),             KEY_DETACH_TAB,     "tab-detach",       nullptr, nullptr),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "1", "active-tab", "i", "0"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "2", "active-tab", "i", "1"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "3", "active-tab", "i", "2"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "4", "active-tab", "i", "3"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "5", "active-tab", "i", "4"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "6", "active-tab", "i", "5"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "7", "active-tab", "i", "6"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "8", "active-tab", "i", "7"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "9", "active-tab", "i", "8"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "10", "active-tab", "i", "9"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "11", "active-tab", "i", "10"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "12", "active-tab", "i", "11"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "13", "active-tab", "i", "12"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "14", "active-tab", "i", "13"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "15", "active-tab", "i", "14"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "16", "active-tab", "i", "15"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "17", "active-tab", "i", "16"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "18", "active-tab", "i", "17"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "19", "active-tab", "i", "18"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "20", "active-tab", "i", "19"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "21", "active-tab", "i", "20"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "22", "active-tab", "i", "21"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "23", "active-tab", "i", "22"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "24", "active-tab", "i", "23"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "25", "active-tab", "i", "24"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "26", "active-tab", "i", "25"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "27", "active-tab", "i", "26"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "28", "active-tab", "i", "27"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "29", "active-tab", "i", "28"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "30", "active-tab", "i", "29"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "31", "active-tab", "i", "30"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "32", "active-tab", "i", "31"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "33", "active-tab", "i", "32"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "34", "active-tab", "i", "33"),
+  ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "35", "active-tab", "i", "34"),
   ENTRY_MDI (N_("Switch to Last Tab"), KEY_SWITCH_TAB_PREFIX "last", "active-tab", "i", "-1"),
 };
 
 static KeyEntry help_entries[] = {
-  ENTRY (N_("Contents"), KEY_HELP, "help", NULL, NULL)
+  ENTRY (N_("Contents"), KEY_HELP, "help", nullptr, nullptr)
 };
 
 static KeyEntry global_entries[] = {
-  ENTRY (N_("Show Primary Menu"), KEY_HEADER_MENU, "header-menu", NULL, NULL),
+  ENTRY (N_("Show Primary Menu"), KEY_HEADER_MENU, "header-menu", nullptr, nullptr),
 };
 
 #undef ENTRY_FULL
@@ -243,7 +243,7 @@ enum
 };
 
 static GHashTable *settings_key_to_entry;
-static GSettings *keybinding_settings = NULL;
+static GSettings *keybinding_settings = nullptr;
 
 GS_DEFINE_CLEANUP_FUNCTION(GtkTreePath*, _terminal_local_free_tree_path, gtk_tree_path_free)
 #define terminal_free_tree_path __attribute__((__cleanup__(_terminal_local_free_tree_path)))
@@ -264,7 +264,7 @@ key_changed_cb (GSettings *settings,
                 gpointer user_data)
 {
   GtkApplication *application = (GtkApplication*)user_data;
-  const gchar *accels[2] = { NULL, NULL };
+  const gchar *accels[2] = { nullptr, nullptr };
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
@@ -298,7 +298,7 @@ key_changed_cb (GSettings *settings,
    */
 
   if (g_str_equal (value, "disabled")) {
-    accels[0] = NULL;
+    accels[0] = nullptr;
   } else {
     accels[0] = value;
   }
@@ -321,13 +321,13 @@ add_accel_entries (GApplication*application,
   for (j = 0; j < n_entries; ++j) {
     KeyEntry *key_entry = &entries[j];
     if (key_entry->action_parameter) {
-      GError *err = NULL;
+      GError *err = nullptr;
       key_entry->parameter = g_variant_parse (key_entry->action_parameter_type,
                                               key_entry->action_parameter,
-                                              NULL, NULL, &err);
+                                              nullptr, nullptr, &err);
       g_assert_no_error (err);
 
-      g_assert (key_entry->parameter != NULL);
+      g_assert (key_entry->parameter != nullptr);
     }
 
     g_hash_table_insert (settings_key_to_entry,
@@ -353,9 +353,9 @@ terminal_accels_init (GApplication *application,
   j = 1;
   for (i = 0; i < G_N_ELEMENTS (tabs_entries); i++)
     {
-      gs_free char *name = NULL;
+      gs_free char *name = nullptr;
 
-      if (tabs_entries[i].user_visible_name != NULL)
+      if (tabs_entries[i].user_visible_name != nullptr)
         continue;
 
       name = g_strdup_printf (_("Switch to Tab %u"), j++);
@@ -408,7 +408,7 @@ foreach_row_cb (GtkTreeModel *model,
 		      KEYVAL_COLUMN, &key_entry,
 		      -1);
 
-  if (key_entry == NULL ||
+  if (key_entry == nullptr ||
       !g_str_equal (key_entry->settings_key, key))
     return FALSE;
 
@@ -437,11 +437,11 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                       KEYVAL_COLUMN, &ke,
                       -1);
 
-  if (ke == NULL) {
+  if (ke == nullptr) {
     /* This is a title row */
     g_object_set (cell,
                   "visible", FALSE,
-		  NULL);
+		  nullptr);
   } else {
     gs_free char *value;
     guint key;
@@ -461,7 +461,7 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                   "editable", writable,
                   "accel-key", key,
                   "accel-mods", mods,
-		  NULL);
+		  nullptr);
   }
 }
 
@@ -473,10 +473,10 @@ accel_update (GtkTreeView          *view,
               GdkModifierType       mask)
 {
   GtkTreeModel *model;
-  terminal_free_tree_path GtkTreePath *path = NULL;
+  terminal_free_tree_path GtkTreePath *path = nullptr;
   GtkTreeIter iter;
   KeyEntry *ke;
-  gs_free char *str = NULL;
+  gs_free char *str = nullptr;
 
   model = gtk_tree_view_get_model (view);
 
@@ -490,7 +490,7 @@ accel_update (GtkTreeView          *view,
   gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
 
   /* sanity check */
-  if (ke == NULL)
+  if (ke == nullptr)
     return;
 
   str = binding_name (keyval, mask);
@@ -543,7 +543,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell_renderer;
-  gs_unref_object GtkTreeStore *tree = NULL;
+  gs_unref_object GtkTreeStore *tree = nullptr;
   guint i;
 
   /* Column 1 */
@@ -551,7 +551,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
   column = gtk_tree_view_column_new_with_attributes (_("_Action"),
 						     cell_renderer,
 						     "text", ACTION_COLUMN,
-						     NULL);
+						     nullptr);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* Column 2 */
@@ -559,7 +559,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
   g_object_set (cell_renderer,
                 "editable", TRUE,
                 "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                NULL);
+                nullptr);
 
   g_signal_connect (cell_renderer, "accel-edited",
                     G_CALLBACK (accel_edited_callback), tree_view);
@@ -570,7 +570,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
   gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func,
-                                           disable_shortcuts_button, NULL);
+                                           disable_shortcuts_button, nullptr);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* Add the data */
@@ -579,7 +579,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
 
 #ifdef ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
-    g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), NULL);
+    g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), nullptr);
 #endif
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
@@ -587,9 +587,9 @@ terminal_accels_fill_treeview (GtkWidget *tree_view,
       GtkTreeIter parent_iter;
       guint j;
 
-      gtk_tree_store_insert_with_values (tree, &parent_iter, NULL, -1,
+      gtk_tree_store_insert_with_values (tree, &parent_iter, nullptr, -1,
                                          ACTION_COLUMN, _(all_entries[i].user_visible_name),
-                                         KEYVAL_COLUMN, NULL,
+                                         KEYVAL_COLUMN, nullptr,
                                          -1);
 
       for (j = 0; j < all_entries[i].n_elements; ++j)

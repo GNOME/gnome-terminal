@@ -76,7 +76,7 @@ terminal_info_bar_new (GtkMessageType type,
 		   nullptr));
 
   va_start (args, first_button_text);
-  while (first_button_text != NULL) {
+  while (first_button_text != nullptr) {
     int response_id;
 
     response_id = va_arg (args, int);
@@ -96,7 +96,7 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
                                ...)
 {
   TerminalInfoBarPrivate *priv;
-  gs_free char *text = NULL;
+  gs_free char *text = nullptr;
   GtkWidget *label;
   va_list args;
 

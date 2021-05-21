@@ -84,12 +84,12 @@ terminal_screen_container_style_updated (GtkWidget *widget)
   gtk_widget_style_get (widget,
                         "window-placement", &corner,
                         "window-placement-set", &set,
-                        NULL);
+                        nullptr);
 
   if (!set) {
     g_object_get (gtk_widget_get_settings (widget),
                   "gtk-scrolled-window-placement", &corner,
-                  NULL);
+                  nullptr);
   }
 
   switch (corner) {
@@ -129,7 +129,7 @@ terminal_screen_container_constructed (GObject *object)
 
   G_OBJECT_CLASS (terminal_screen_container_parent_class)->constructed (object);
 
-  g_assert (priv->screen != NULL);
+  g_assert (priv->screen != nullptr);
 
 #ifdef USE_SCROLLED_WINDOW
 {
@@ -236,13 +236,13 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   widget_class->style_updated = terminal_screen_container_style_updated;
 
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_enum ("window-placement", NULL, NULL,
+                                           g_param_spec_enum ("window-placement", nullptr, nullptr,
                                                               GTK_TYPE_CORNER_TYPE,
                                                               GTK_CORNER_BOTTOM_RIGHT,
                                                               GParamFlags(G_PARAM_READWRITE |
 									  G_PARAM_STATIC_STRINGS)));
   gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("window-placement-set", NULL, NULL,
+                                           g_param_spec_boolean ("window-placement-set", nullptr, nullptr,
                                                                  FALSE,
                                                                  GParamFlags(G_PARAM_READWRITE |
 									     G_PARAM_STATIC_STRINGS)));
@@ -253,7 +253,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   g_object_class_install_property
     (gobject_class,
      PROP_SCREEN,
-     g_param_spec_object ("screen", NULL, NULL,
+     g_param_spec_object ("screen", nullptr, nullptr,
                           TERMINAL_TYPE_SCREEN,
                           GParamFlags(G_PARAM_READWRITE |
 				      G_PARAM_CONSTRUCT_ONLY |
@@ -262,7 +262,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
    g_object_class_install_property
     (gobject_class,
      PROP_HSCROLLBAR_POLICY,
-     g_param_spec_enum ("hscrollbar-policy", NULL, NULL,
+     g_param_spec_enum ("hscrollbar-policy", nullptr, nullptr,
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         GParamFlags(G_PARAM_READWRITE |
@@ -270,7 +270,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
    g_object_class_install_property
     (gobject_class,
      PROP_VSCROLLBAR_POLICY,
-     g_param_spec_enum ("vscrollbar-policy", NULL, NULL,
+     g_param_spec_enum ("vscrollbar-policy", nullptr, nullptr,
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         GParamFlags(G_PARAM_READWRITE |
@@ -303,10 +303,10 @@ terminal_screen_container_new (TerminalScreen *screen)
 TerminalScreen *
 terminal_screen_container_get_screen (TerminalScreenContainer *container)
 {
-  if (container == NULL)
-    return NULL;
+  if (container == nullptr)
+    return nullptr;
 
-  g_return_val_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container), nullptr);
 
   return container->priv->screen;
 }
@@ -320,10 +320,10 @@ terminal_screen_container_get_screen (TerminalScreenContainer *container)
 TerminalScreenContainer *
 terminal_screen_container_get_from_screen (TerminalScreen *screen)
 {
-  if (screen == NULL)
-    return NULL;
+  if (screen == nullptr)
+    return nullptr;
 
-  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), nullptr);
 
   return TERMINAL_SCREEN_CONTAINER (gtk_widget_get_ancestor (GTK_WIDGET (screen), TERMINAL_TYPE_SCREEN_CONTAINER));
 }

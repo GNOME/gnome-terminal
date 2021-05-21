@@ -36,7 +36,7 @@ strv_contains (char **strv,
 {
   guint n, i;
 
-  if (strv == NULL)
+  if (strv == nullptr)
     return 0;
 
   n = 0;
@@ -96,7 +96,7 @@ get_profile_names (TerminalSettingsList *list,
     names[i] = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
   }
 
-  names[n] = NULL;
+  names[n] = nullptr;
 }
 
 /**
@@ -118,7 +118,7 @@ terminal_profiles_list_ref_children_sorted (TerminalSettingsList *list)
  * @uuid: (allow-none):
  * @error:
  *
- * Returns: (transfer full): the UUID of the profile specified by @uuid, or %NULL
+ * Returns: (transfer full): the UUID of the profile specified by @uuid, or %nullptr
  */
 char *
 terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
@@ -127,13 +127,13 @@ terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
 {
   char *rv;
 
-  if (uuid == NULL) {
+  if (uuid == nullptr) {
     rv = terminal_settings_list_dup_default_child (list);
-    if (rv == NULL)
+    if (rv == nullptr)
       goto err;
     return rv;
   } else if (!valid_uuid (uuid, error))
-    return NULL;
+    return nullptr;
 
   if (terminal_settings_list_has_child (list, uuid))
     return g_strdup (uuid);
@@ -141,7 +141,7 @@ terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
  err:
   g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                "No profile with UUID \"%s\" exists", uuid);
-  return NULL;
+  return nullptr;
 }
 
 /**
@@ -150,7 +150,7 @@ terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
  * @uuid:
  * @error:
  *
- * Returns: (transfer full): the profile #GSettings specified by @uuid, or %NULL
+ * Returns: (transfer full): the profile #GSettings specified by @uuid, or %nullptr
  */
 GSettings *
 terminal_profiles_list_ref_profile_by_uuid (TerminalSettingsList *list,
@@ -161,8 +161,8 @@ terminal_profiles_list_ref_profile_by_uuid (TerminalSettingsList *list,
   GSettings *profile;
 
   profile_uuid = terminal_profiles_list_dup_uuid (list, uuid, error);
-  if (profile_uuid == NULL)
-    return NULL;
+  if (profile_uuid == nullptr)
+    return nullptr;
 
   profile = terminal_settings_list_ref_child (list, profile_uuid);
   return profile;
@@ -174,7 +174,7 @@ terminal_profiles_list_ref_profile_by_uuid (TerminalSettingsList *list,
  * @uuid: (allow-none):
  * @error:
  *
- * Returns: (transfer full): the UUID of the profile specified by @uuid, or %NULL
+ * Returns: (transfer full): the UUID of the profile specified by @uuid, or %nullptr
  */
 char *
 terminal_profiles_list_dup_uuid_or_name (TerminalSettingsList *list,
@@ -185,8 +185,8 @@ terminal_profiles_list_dup_uuid_or_name (TerminalSettingsList *list,
   char *rv;
   guint n, i;
 
-  rv = terminal_profiles_list_dup_uuid (list, uuid_or_name, NULL);
-  if (rv != NULL)
+  rv = terminal_profiles_list_dup_uuid (list, uuid_or_name, nullptr);
+  if (rv != nullptr)
     return rv;
 
   /* Not found as UUID; try finding a profile with this string as 'visible-name' */
@@ -196,11 +196,11 @@ terminal_profiles_list_dup_uuid_or_name (TerminalSettingsList *list,
   if (n == 0) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                  "No profile with UUID or name \"%s\" exists", uuid_or_name);
-    rv = NULL;
+    rv = nullptr;
   } else if (n != 1) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                  "No profile with UUID \"%s\" found and name is ambiguous", uuid_or_name);
-    rv = NULL;
+    rv = nullptr;
   } else {
     rv = g_strdup (profiles[i]);
   }
@@ -217,7 +217,7 @@ terminal_profiles_list_dup_uuid_or_name (TerminalSettingsList *list,
  * @uuid:
  * @error:
  *
- * Returns: (transfer full): the profile #GSettings specified by @uuid, or %NULL
+ * Returns: (transfer full): the profile #GSettings specified by @uuid, or %nullptr
  */
 GSettings *
 terminal_profiles_list_ref_profile_by_uuid_or_name (TerminalSettingsList *list,
@@ -228,11 +228,11 @@ terminal_profiles_list_ref_profile_by_uuid_or_name (TerminalSettingsList *list,
   GSettings *profile;
 
   uuid = terminal_profiles_list_dup_uuid_or_name (list, uuid_or_name, error);
-  if (uuid == NULL)
-    return NULL;
+  if (uuid == nullptr)
+    return nullptr;
 
   profile = terminal_settings_list_ref_child (list, uuid);
-  g_assert (profile != NULL);
+  g_assert (profile != nullptr);
   return profile;
 }
 
@@ -242,17 +242,17 @@ terminal_profiles_compare (gconstpointer pa,
 {
   GSettings *a = (GSettings *) pa;
   GSettings *b = (GSettings *) pb;
-  gs_free char *na = NULL;
-  gs_free char *nb = NULL;
-  gs_free char *patha = NULL;
-  gs_free char *pathb = NULL;
+  gs_free char *na = nullptr;
+  gs_free char *nb = nullptr;
+  gs_free char *patha = nullptr;
+  gs_free char *pathb = nullptr;
   int result;
 
   if (pa == pb)
     return 0;
-  if (pa == NULL)
+  if (pa == nullptr)
     return 1;
-  if (pb == NULL)
+  if (pb == nullptr)
     return -1;
 
   na = g_settings_get_string (a, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
@@ -261,7 +261,7 @@ terminal_profiles_compare (gconstpointer pa,
   if (result != 0)
     return result;
 
-  g_object_get (a, "path", &patha, NULL);
-  g_object_get (b, "path", &pathb, NULL);
+  g_object_get (a, "path", &patha, nullptr);
+  g_object_get (b, "path", &pathb, nullptr);
   return strcmp (patha, pathb);
 }

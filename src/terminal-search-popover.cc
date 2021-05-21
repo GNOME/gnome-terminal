@@ -98,11 +98,11 @@ history_enabled (void)
   gboolean enabled;
 
   /* not quite an exact setting for this, but close enough… */
-  g_object_get (gtk_settings_get_default (), "gtk-recent-files-enabled", &enabled, NULL);
+  g_object_get (gtk_settings_get_default (), "gtk-recent-files-enabled", &enabled, nullptr);
   if (!enabled)
     return FALSE;
 
-  if (history_store == NULL) {
+  if (history_store == nullptr) {
     history_store = gtk_list_store_new (1, G_TYPE_STRING);
     g_object_set_data_full (G_OBJECT (terminal_app_get ()), "search-history-store",
                             history_store, (GDestroyNotify) g_object_unref);
@@ -125,7 +125,7 @@ history_remove_item (const char  *text)
 
     gtk_tree_model_get (model, &iter, 0, &item_text, -1);
 
-    if (item_text != NULL && strcmp (item_text, text) == 0) {
+    if (item_text != nullptr && strcmp (item_text, text) == 0) {
       gtk_list_store_remove (history_store, &iter);
       return TRUE;
     }
@@ -156,7 +156,7 @@ history_insert_item (const char *text)
 {
   GtkTreeIter iter;
 
-  if (!history_enabled () || text == NULL)
+  if (!history_enabled () || text == nullptr)
     return;
 
   if (g_utf8_strlen (text, -1) <= HISTORY_MIN_ITEM_LEN)
@@ -182,7 +182,7 @@ update_sensitivity (TerminalSearchPopover *popover)
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
   gboolean can_search;
 
-  can_search = priv->regex != NULL;
+  can_search = priv->regex != nullptr;
 
   gtk_widget_set_sensitive (priv->search_prev_button, can_search);
   gtk_widget_set_sensitive (priv->search_next_button, can_search);
@@ -194,7 +194,7 @@ perform_search (TerminalSearchPopover *popover,
 {
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
 
-  if (priv->regex == NULL)
+  if (priv->regex == nullptr)
     return;
 
   /* Add to search history */
@@ -259,7 +259,7 @@ update_regex (TerminalSearchPopover *popover)
   const char *search_text;
   gboolean caseless;
   gs_free char *pattern;
-  gs_free_error GError *error = NULL;
+  gs_free_error GError *error = nullptr;
 
   search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
 
@@ -297,15 +297,15 @@ update_regex (TerminalSearchPopover *popover)
       compile_flags |= PCRE2_CASELESS;
 
     priv->regex = vte_regex_new_for_search (pattern, -1, compile_flags, &error);
-    if (priv->regex != NULL &&
-        (!vte_regex_jit (priv->regex, PCRE2_JIT_COMPLETE, NULL) ||
-         !vte_regex_jit (priv->regex, PCRE2_JIT_PARTIAL_SOFT, NULL))) {
+    if (priv->regex != nullptr &&
+        (!vte_regex_jit (priv->regex, PCRE2_JIT_COMPLETE, nullptr) ||
+         !vte_regex_jit (priv->regex, PCRE2_JIT_PARTIAL_SOFT, nullptr))) {
     }
 
-    if (priv->regex != NULL)
+    if (priv->regex != nullptr)
       gs_transfer_out_value (&priv->regex_pattern, &pattern);
   } else {
-    priv->regex = NULL;
+    priv->regex = nullptr;
   }
 
   priv->regex_caseless = caseless;
@@ -371,7 +371,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   g_object_set (G_OBJECT (priv->search_entry),
 		"model", history_store,
 		"entry-text-column", 0,
-		NULL);
+		nullptr);
 #endif
 
   if (history_enabled ()) {
@@ -414,7 +414,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
 
   g_signal_connect (priv->wrap_around_checkbutton, "toggled", G_CALLBACK (wrap_around_toggled_cb), popover);
 
-  g_signal_connect (popover, "key-press-event", G_CALLBACK (key_press_cb), NULL);
+  g_signal_connect (popover, "key-press-event", G_CALLBACK (key_press_cb), nullptr);
 
   if (terminal_app_get_dialog_use_headerbar (terminal_app_get ())) {
     GtkWidget *headerbar;
@@ -501,14 +501,14 @@ terminal_search_popover_class_init (TerminalSearchPopoverClass *klass)
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalSearchPopoverClass, search),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__BOOLEAN,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_BOOLEAN);
 
   pspecs[PROP_REGEX] =
-    g_param_spec_boxed ("regex", NULL, NULL,
+    g_param_spec_boxed ("regex", nullptr, nullptr,
                         VTE_TYPE_REGEX,
                         GParamFlags(G_PARAM_READABLE |
 				    G_PARAM_STATIC_NAME |
@@ -516,7 +516,7 @@ terminal_search_popover_class_init (TerminalSearchPopoverClass *klass)
 				    G_PARAM_STATIC_BLURB));
 
   pspecs[PROP_WRAP_AROUND] =
-    g_param_spec_boolean ("wrap-around", NULL, NULL,
+    g_param_spec_boolean ("wrap-around", nullptr, nullptr,
                           FALSE,
                           GParamFlags(G_PARAM_READABLE |
 				      G_PARAM_STATIC_NAME |
@@ -562,12 +562,12 @@ terminal_search_popover_new (GtkWidget *relative_to_widget)
  * terminal_search_popover_get_regex:
  * @popover: a #TerminalSearchPopover
  *
- * Returns: (transfer none): the search regex, or %NULL
+ * Returns: (transfer none): the search regex, or %nullptr
  */
 VteRegex *
 terminal_search_popover_get_regex (TerminalSearchPopover *popover)
 {
-  g_return_val_if_fail (TERMINAL_IS_SEARCH_POPOVER (popover), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SEARCH_POPOVER (popover), nullptr);
 
   return PRIV (popover)->regex;
 }

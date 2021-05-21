@@ -26,7 +26,7 @@ G_BEGIN_DECLS
   if (outp)                                                \
     {                                                      \
       *(outp) = *(srcp);                                   \
-      *(srcp) = NULL;                                      \
+      *(srcp) = nullptr;                                      \
     }                                                      \
   } G_STMT_END;
 
@@ -46,7 +46,7 @@ G_BEGIN_DECLS
 /* These functions shouldn't be invoked directly;
  * they are stubs that:
  * 1) Take a pointer to the location (typically itself a pointer).
- * 2) Provide %NULL-safety where it doesn't exist already (e.g. g_object_unref)
+ * 2) Provide %nullptr-safety where it doesn't exist already (e.g. g_object_unref)
  */
 GS_DEFINE_CLEANUP_FUNCTION0(GArray*, gs_local_array_unref, g_array_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GBytes*, gs_local_bytes_unref, g_bytes_unref)
@@ -89,7 +89,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_object_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_object_unref(), the variable may be
- * %NULL.
+ * %nullptr.
  */
 #define gs_unref_object __attribute__ ((cleanup(gs_local_obj_unref)))
 
@@ -98,7 +98,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_variant_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_variant_unref(), the variable may be
- * %NULL.
+ * %nullptr.
  */
 #define gs_unref_variant __attribute__ ((cleanup(gs_local_variant_unref)))
 
@@ -123,7 +123,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_array_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_array_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_array __attribute__ ((cleanup(gs_local_array_unref)))
@@ -133,7 +133,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_ptr_array_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_ptr_array_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_ptrarray __attribute__ ((cleanup(gs_local_ptrarray_unref)))
@@ -143,7 +143,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_hash_table_unref() on a variable location when it goes out
  * of scope.  Note that unlike g_hash_table_unref(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_unref_hashtable __attribute__ ((cleanup(gs_local_hashtable_unref)))
 
@@ -152,7 +152,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_key_file_unref() on a variable location when it goes out
  * of scope.  Note that unlike g_key_file_unref(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_unref_key_file __attribute__ ((cleanup(gs_local_key_file_unref)))
 
@@ -161,7 +161,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_checksum_free() on a variable location when it goes out
  * of scope.  Note that unlike g_checksum_free(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_free_checksum __attribute__ ((cleanup(gs_local_checksum_free)))
 
@@ -170,7 +170,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_date_time_free() on a variable location when it goes out
  * of scope.  Note that unlike g_date_time_free(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_unref_date_time __attribute__ ((cleanup(gs_local_date_time_unref)))
 
@@ -179,7 +179,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_bytes_unref() on a variable location when it goes out
  * of scope.  Note that unlike g_bytes_unref(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_unref_bytes __attribute__ ((cleanup(gs_local_bytes_unref)))
 
@@ -209,7 +209,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_regex_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_regex_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_regex __attribute__ ((cleanup(gs_local_regex_unref)))
@@ -219,7 +219,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_regex_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_regex_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_free_match_info __attribute__ ((cleanup(gs_local_match_info_free)))
@@ -229,7 +229,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_settings_schema_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_settings_schema_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_settings_schema __attribute__ ((cleanup(gs_local_settings_schema_unref)))
@@ -239,7 +239,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_settings_schema_source_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_settings_schema_source_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_settings_schema_source __attribute__ ((cleanup(gs_local_settings_schema_source_unref)))
@@ -249,7 +249,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_settings_schema_key_unref() on a variable location when it goes out of
  * scope.  Note that unlike g_settings_schema_key_unref(), the variable may be
- * %NULL.
+ * %nullptr.
 
  */
 #define gs_unref_settings_schema_key __attribute__ ((cleanup(gs_local_settings_schema_key_unref)))
@@ -259,7 +259,7 @@ static inline void gs_local_gstring_free (void *v) \
  *
  * Call g_string_free(TRUE) on a variable location when it goes out
  * of scope.  Note that unlike g_string_free(), the variable may
- * be %NULL.
+ * be %nullptr.
  */
 #define gs_free_gstring __attribute__ ((cleanup(gs_local_gstring_free)))
 

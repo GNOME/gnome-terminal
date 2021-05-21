@@ -44,15 +44,15 @@ G_DEFINE_TYPE (TerminalSearchProvider, terminal_search_provider, G_TYPE_OBJECT)
 static char *
 normalize_casefold_and_unaccent (const char *str)
 {
-  gs_free char *casefolded = NULL, *normalized = NULL;
-  char *retval = NULL;
+  gs_free char *casefolded = nullptr, *normalized = nullptr;
+  char *retval = nullptr;
 
-  if (str == NULL)
+  if (str == nullptr)
     goto out;
 
   normalized = g_utf8_normalize (str, -1, G_NORMALIZE_ALL_COMPOSE);
   casefolded = g_utf8_casefold (normalized, -1);
-  retval = g_str_to_ascii (casefolded, NULL);
+  retval = g_str_to_ascii (casefolded, nullptr);
 
  out:
   return retval;
@@ -69,7 +69,7 @@ normalize_casefold_and_unaccent_terms (const char* const *terms)
 
   for (i = 0; i < n; i++)
     casefolded_terms[i] = normalize_casefold_and_unaccent (terms[i]);
-  casefolded_terms[n] = NULL;
+  casefolded_terms[n] = nullptr;
 
   return casefolded_terms;
 }
@@ -78,20 +78,20 @@ static gboolean
 match_terms (const char        *str,
              const char* const *terms)
 {
-  gs_free char *casefolded_str = NULL;
+  gs_free char *casefolded_str = nullptr;
   gboolean matches = TRUE;
   guint i;
 
-  if (str == NULL)
+  if (str == nullptr)
     {
       matches = FALSE;
       goto out;
     }
 
   casefolded_str = normalize_casefold_and_unaccent (str);
-  for (i = 0; terms[i] != NULL; i++)
+  for (i = 0; terms[i] != nullptr; i++)
     {
-      if (strstr (casefolded_str, terms[i]) == NULL)
+      if (strstr (casefolded_str, terms[i]) == nullptr)
         {
           matches = FALSE;
           break;
@@ -108,16 +108,16 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
                                   const char *const        *terms,
                                   gpointer                  user_data)
 {
-  GList *l, *screens = NULL, *windows;
+  GList *l, *screens = nullptr, *windows;
   gs_unref_ptrarray GPtrArray *results;
   TerminalApp *app;
-  gs_strfreev char **casefolded_terms = NULL;
+  gs_strfreev char **casefolded_terms = nullptr;
 
   _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "GetInitialResultSet started\n");
 
   app = terminal_app_get ();
   windows = gtk_application_get_windows (GTK_APPLICATION (app));
-  for (l = windows; l != NULL; l = l->next)
+  for (l = windows; l != nullptr; l = l->next)
     {
       TerminalWindow *window = (TerminalWindow*)(l->data);
       GList *c, *containers;
@@ -126,7 +126,7 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
         continue;
 
       containers = terminal_window_list_screen_containers (window);
-      for (c = containers; c != NULL; c = c->next)
+      for (c = containers; c != nullptr; c = c->next)
         {
           TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (c->data);
           TerminalScreen *screen;
@@ -139,10 +139,10 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
   casefolded_terms = normalize_casefold_and_unaccent_terms (terms);
   results = g_ptr_array_new_with_free_func (g_free);
 
-  for (l = screens; l != NULL; l = l->next)
+  for (l = screens; l != nullptr; l = l->next)
     {
       TerminalScreen *screen = TERMINAL_SCREEN (l->data);
-      gs_free char *cmdline = NULL, *process = NULL;
+      gs_free char *cmdline = nullptr, *process = nullptr;
       const char *cwd, *title;
 
       cwd = vte_terminal_get_current_directory_uri (VTE_TERMINAL (screen));
@@ -162,7 +162,7 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
         }
     }
 
-  g_ptr_array_add (results, NULL);
+  g_ptr_array_add (results, nullptr);
   terminal_search_provider2_complete_get_initial_result_set (skeleton,
                                                              invocation,
                                                              (const char *const *) results->pdata);
@@ -180,7 +180,7 @@ handle_get_subsearch_result_set_cb (TerminalSearchProvider2  *skeleton,
 {
   gs_unref_ptrarray GPtrArray *results;
   TerminalApp *app;
-  gs_strfreev char **casefolded_terms = NULL;
+  gs_strfreev char **casefolded_terms = nullptr;
   guint i;
 
   _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "GetSubsearchResultSet started\n");
@@ -189,14 +189,14 @@ handle_get_subsearch_result_set_cb (TerminalSearchProvider2  *skeleton,
   casefolded_terms = normalize_casefold_and_unaccent_terms (terms);
   results = g_ptr_array_new_with_free_func (g_free);
 
-  for (i = 0; previous_results[i] != NULL; i++)
+  for (i = 0; previous_results[i] != nullptr; i++)
     {
       TerminalScreen *screen;
-      gs_free char *cmdline = NULL, *process = NULL;
+      gs_free char *cmdline = nullptr, *process = nullptr;
       const char *cwd, *title;
 
       screen = terminal_app_get_screen_by_uuid (app, previous_results[i]);
-      if (screen == NULL)
+      if (screen == nullptr)
         {
           _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Not a screen: %s\n", previous_results[i]);
           continue;
@@ -215,7 +215,7 @@ handle_get_subsearch_result_set_cb (TerminalSearchProvider2  *skeleton,
         }
     }
 
-  g_ptr_array_add (results, NULL);
+  g_ptr_array_add (results, nullptr);
   terminal_search_provider2_complete_get_subsearch_result_set (skeleton,
                                                                invocation,
                                                                (const char *const *) results->pdata);
@@ -239,38 +239,38 @@ handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
   app = terminal_app_get ();
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("aa{sv}"));
 
-  for (i = 0; results[i] != NULL; i++)
+  for (i = 0; results[i] != nullptr; i++)
     {
       TerminalScreen *screen;
       const char *title;
-      gs_free char *escaped_text = NULL;
-      gs_free char *text = NULL;
+      gs_free char *escaped_text = nullptr;
+      gs_free char *text = nullptr;
 
       screen = terminal_app_get_screen_by_uuid (app, results[i]);
-      if (screen == NULL)
+      if (screen == nullptr)
         {
           _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Not a screen: %s\n", results[i]);
           continue;
         }
 
       title = terminal_screen_get_title (screen);
-      if (terminal_screen_has_foreground_process (screen, NULL, NULL)) {
+      if (terminal_screen_has_foreground_process (screen, nullptr, nullptr)) {
         VteTerminal *terminal = VTE_TERMINAL (screen);
         long cursor_row;
 
-        vte_terminal_get_cursor_position (terminal, NULL, &cursor_row);
+        vte_terminal_get_cursor_position (terminal, nullptr, &cursor_row);
         text = vte_terminal_get_text_range (terminal,
                                             MAX(0, cursor_row - 1),
                                             0,
                                             cursor_row + 1,
                                             vte_terminal_get_column_count (terminal) - 1,
-                                            NULL, NULL, NULL);
+                                            nullptr, nullptr, nullptr);
       }
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
       g_variant_builder_add (&builder, "{sv}", "id", g_variant_new_string (results[i]));
       g_variant_builder_add (&builder, "{sv}", "name", g_variant_new_string (title));
-      if (text != NULL)
+      if (text != nullptr)
         {
           escaped_text = g_markup_escape_text (text, -1);
           g_variant_builder_add (&builder, "{sv}", "description", g_variant_new_string (escaped_text));
@@ -301,7 +301,7 @@ handle_activate_result_cb (TerminalSearchProvider2  *skeleton,
 
   app = terminal_app_get ();
   screen = terminal_app_get_screen_by_uuid (app, identifier);
-  if (screen == NULL)
+  if (screen == nullptr)
     goto out;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));

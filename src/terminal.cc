@@ -70,12 +70,12 @@ factory_name_owner_notify_cb (TerminalFactory *factory,
                               GParamSpec *pspec,
                               RunData *data)
 {
-  /* Name owner change to NULL can only mean that the server
+  /* Name owner change to nullptr can only mean that the server
    * went away before it could send out our child-exited signal.
    * Assume the server was killed and thus our child process
    * too, and return with the corresponding exit code.
    */
-  if (g_dbus_proxy_get_name_owner(G_DBUS_PROXY (factory)) != NULL)
+  if (g_dbus_proxy_get_name_owner(G_DBUS_PROXY (factory)) != nullptr)
     return;
 
   data->status = W_EXITCODE(0, SIGKILL);
@@ -88,7 +88,7 @@ static int
 run_receiver (TerminalFactory *factory,
               TerminalReceiver *receiver)
 {
-  RunData data = { g_main_loop_new (NULL, FALSE), 0 };
+  RunData data = { g_main_loop_new (nullptr, FALSE), 0 };
   gulong receiver_exited_id = g_signal_connect (receiver, "child-exited",
                                                 G_CALLBACK (receiver_child_exited_cb), &data);
   gulong factory_notify_id = g_signal_connect (factory, "notify::g-name-owner",
@@ -119,12 +119,12 @@ get_factory_exit_status (const char *service_name,
                          const char *message,
                          int *exit_status)
 {
-  gs_free char *pattern = NULL, *number = NULL;
-  gs_unref_regex GRegex *regex = NULL;
-  gs_free_match_info GMatchInfo *match_info = NULL;
+  gs_free char *pattern = nullptr, *number = nullptr;
+  gs_unref_regex GRegex *regex = nullptr;
+  gs_free_match_info GMatchInfo *match_info = nullptr;
   gint64 v;
   char *end;
-  GError *err = NULL;
+  GError *err = nullptr;
 
   pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$",
                              service_name);
@@ -225,24 +225,24 @@ factory_proxy_new_for_service_name (const char *service_name,
                                     char **service_name_ptr,
                                     GError **error)
 {
-  if (service_name == NULL)
+  if (service_name == nullptr)
     service_name = TERMINAL_APPLICATION_ID;
 
-  gs_free_error GError *err = NULL;
+  gs_free_error GError *err = nullptr;
   gs_unref_object TerminalFactory *factory =
     terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                              GDBusProxyFlags(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                              connect_signals ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
                                              service_name,
                                              TERMINAL_FACTORY_OBJECT_PATH,
-                                             NULL /* cancellable */,
+                                             nullptr /* cancellable */,
                                              &err);
-  if (factory == NULL) {
+  if (factory == nullptr) {
     if (!handle_factory_error (service_name, err))
       terminal_printerr ("Error constructing proxy for %s:%s: %s\n",
                          service_name, TERMINAL_FACTORY_OBJECT_PATH, err->message);
     g_propagate_error (error, err);
-    err = NULL;
+    err = nullptr;
     return FALSE;
   }
 
@@ -257,11 +257,11 @@ factory_proxy_new_for_service_name (const char *service_name,
                                                            g_variant_new ("()"),
                                                            G_DBUS_CALL_FLAGS_NONE,
                                                            1000 /* 1s */,
-                                                           NULL /* cancelleable */,
+                                                           nullptr /* cancelleable */,
                                                            &err);
-    if (v == NULL) {
+    if (v == nullptr) {
       g_propagate_error (error, err);
-      err = NULL;
+      err = nullptr;
       return FALSE;
     }
   }
@@ -287,9 +287,9 @@ factory_proxy_new (TerminalOptions *options,
    * If the server specified by the environment doesn't exist, fall back to the
    * default server, and ignore the environment-specified parent screen.
    */
-  if (options->server_app_id == NULL &&
-      options->server_unique_name != NULL) {
-    gs_free_error GError *err = NULL;
+  if (options->server_app_id == nullptr &&
+      options->server_unique_name != nullptr) {
+    gs_free_error GError *err = nullptr;
     if (factory_proxy_new_for_service_name (options->server_unique_name,
                                             TRUE,
                                             options->wait,
@@ -305,10 +305,10 @@ factory_proxy_new (TerminalOptions *options,
     terminal_printerr ("Falling back to default server.\n");
 
     /* Fall back to the default */
-    service_name = NULL;
+    service_name = nullptr;
   }
 
-  *parent_screen_object_path_ptr = NULL;
+  *parent_screen_object_path_ptr = nullptr;
 
   return factory_proxy_new_for_service_name (service_name,
                                              FALSE,
@@ -322,13 +322,13 @@ static void
 handle_show_preferences (TerminalOptions *options,
                          const char *service_name)
 {
-  gs_free_error GError *error = NULL;
-  gs_unref_object GDBusConnection *bus = NULL;
-  gs_free char *object_path = NULL;
+  gs_free_error GError *error = nullptr;
+  gs_unref_object GDBusConnection *bus = nullptr;
+  gs_free char *object_path = nullptr;
   GVariantBuilder builder;
 
-  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
-  if (bus == NULL) {
+  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, nullptr, &error);
+  if (bus == nullptr) {
     terminal_printerr ("Failed to get session bus: %s\n", error->message);
     return;
   }
@@ -365,7 +365,7 @@ handle_show_preferences (TerminalOptions *options,
                                     G_VARIANT_TYPE ("()"),
                                     G_DBUS_CALL_FLAGS_NO_AUTO_START,
                                     30 * 1000 /* ms timeout */,
-                                    NULL /* cancelleable */,
+                                    nullptr /* cancelleable */,
                                     &error)) {
     terminal_printerr ("Activate call failed: %s\n", error->message);
     return;
@@ -406,7 +406,7 @@ handle_options (TerminalOptions *options,
 
   const char *factory_unique_name = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (factory));
 
-  for (GList *lw = options->initial_windows;  lw != NULL; lw = lw->next)
+  for (GList *lw = options->initial_windows;  lw != nullptr; lw = lw->next)
     {
       InitialWindow *iw = (InitialWindow*)lw->data;
 
@@ -414,12 +414,12 @@ handle_options (TerminalOptions *options,
 
       guint window_id = 0;
 
-      gs_free char *previous_screen_object_path = NULL;
+      gs_free char *previous_screen_object_path = nullptr;
       if (iw->implicit_first_window)
         previous_screen_object_path = g_strdup (parent_screen_object_path);
 
       /* Now add the tabs */
-      for (GList *lt = iw->tabs; lt != NULL; lt = lt->next)
+      for (GList *lt = iw->tabs; lt != nullptr; lt = lt->next)
         {
           InitialTab *it = (InitialTab*)lt->data;
           g_assert_nonnull (it);
@@ -440,7 +440,7 @@ handle_options (TerminalOptions *options,
                                                           iw->start_fullscreen);
 
           /* This will be used to apply missing defaults */
-          if (parent_screen_object_path != NULL)
+          if (parent_screen_object_path != nullptr)
             g_variant_builder_add (&builder, "{sv}",
                                    "parent-screen", g_variant_new_object_path (parent_screen_object_path));
 
@@ -462,13 +462,13 @@ handle_options (TerminalOptions *options,
             g_variant_builder_add (&builder, "{sv}",
                                    "show-menubar", g_variant_new_boolean (iw->menubar_state));
 
-          gs_free_error GError *err = NULL;
-          gs_free char *object_path = NULL;
+          gs_free_error GError *err = nullptr;
+          gs_free char *object_path = nullptr;
           if (!terminal_factory_call_create_instance_sync
                  (factory,
                   g_variant_builder_end (&builder),
                   &object_path,
-                  NULL /* cancellable */,
+                  nullptr /* cancellable */,
                   &err)) {
             if (handle_create_instance_error (service_name, err))
               return FALSE;
@@ -479,7 +479,7 @@ handle_options (TerminalOptions *options,
           /* Deprecated and not working on new server anymore */
           char *p = strstr (object_path, "/window/");
           if (p) {
-            char *end = NULL;
+            char *end = nullptr;
             guint64 value;
 
             errno = 0;
@@ -498,9 +498,9 @@ handle_options (TerminalOptions *options,
 								      (it->wait ? 0 : G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS)),
                                                       factory_unique_name,
                                                       object_path,
-                                                      NULL /* cancellable */,
+                                                      nullptr /* cancellable */,
                                                       &err);
-          if (receiver == NULL) {
+          if (receiver == nullptr) {
             if (handle_create_receiver_proxy_error (service_name, err))
               return FALSE;
             else
@@ -512,7 +512,7 @@ handle_options (TerminalOptions *options,
           char **argv = it->exec_argv ? it->exec_argv : options->exec_argv;
           int argc = argv ? g_strv_length (argv) : 0;
 
-          PassFdElement *fd_array = it->fd_array ? (PassFdElement*)it->fd_array->data : NULL;
+          PassFdElement *fd_array = it->fd_array ? (PassFdElement*)it->fd_array->data : nullptr;
           gsize fd_array_len = it->fd_array ? it->fd_array->len : 0;
 
           terminal_client_append_exec_options (&builder,
@@ -525,8 +525,8 @@ handle_options (TerminalOptions *options,
           if (!terminal_receiver_call_exec_sync (receiver,
                                                  g_variant_builder_end (&builder),
                                                  g_variant_new_bytestring_array ((const char * const *) argv, argc),
-                                                 it->fd_list, NULL /* outfdlist */,
-                                                 NULL /* cancellable */,
+                                                 it->fd_list, nullptr /* outfdlist */,
+                                                 nullptr /* cancellable */,
                                                  &err)) {
             if (handle_exec_error (service_name, err))
               return FALSE;
@@ -550,7 +550,7 @@ main (int argc, char **argv)
 {
   int exit_code = EXIT_FAILURE;
 
-  g_log_set_writer_func (terminal_log_writer, NULL, NULL);
+  g_log_set_writer_func (terminal_log_writer, nullptr, nullptr);
 
   g_set_prgname ("gnome-terminal");
 
@@ -560,18 +560,18 @@ main (int argc, char **argv)
 
   _terminal_debug_init ();
 
-  gs_free_error GError *error = NULL;
+  gs_free_error GError *error = nullptr;
   gs_free_options TerminalOptions *options = terminal_options_parse (&argc, &argv, &error);
-  if (options == NULL) {
+  if (options == nullptr) {
     terminal_printerr (_("Failed to parse arguments: %s\n"), error->message);
     return exit_code;
   }
 
   g_set_application_name (_("Terminal"));
 
-  gs_unref_object TerminalFactory *factory = NULL;
-  gs_free char *service_name = NULL;
-  gs_free char *parent_screen_object_path = NULL;
+  gs_unref_object TerminalFactory *factory = nullptr;
+  gs_free char *service_name = nullptr;
+  gs_free char *parent_screen_object_path = nullptr;
   if (!factory_proxy_new (options,
                           &factory,
                           &service_name,
@@ -581,17 +581,17 @@ main (int argc, char **argv)
 
   if (options->print_environment) {
     const char *name_owner = g_dbus_proxy_get_name_owner (G_DBUS_PROXY (factory));
-    if (name_owner != NULL)
+    if (name_owner != nullptr)
       g_print ("%s=%s\n", TERMINAL_ENV_SERVICE_NAME, name_owner);
     else
       return exit_code;
   }
 
-  TerminalReceiver *receiver = NULL;
+  TerminalReceiver *receiver = nullptr;
   if (!handle_options (options, factory, service_name, parent_screen_object_path, &receiver))
     return exit_code;
 
-  if (receiver != NULL) {
+  if (receiver != nullptr) {
     exit_code = run_receiver (factory, receiver);
     g_object_unref (receiver);
   } else

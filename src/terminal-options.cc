@@ -110,7 +110,7 @@ static GOptionContext *get_goption_context (TerminalOptions *options);
 static TerminalSettingsList *
 terminal_options_ensure_profiles_list (TerminalOptions *options)
 {
-  if (options->profiles_list == NULL)
+  if (options->profiles_list == nullptr)
     options->profiles_list = terminal_profiles_list_new ();
 
   return options->profiles_list;
@@ -126,7 +126,7 @@ terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
 
   escaped = g_key_file_get_string (key_file, group, key, error);
   if (!escaped)
-    return NULL;
+    return nullptr;
 
   unescaped = g_strcompress (escaped);
   g_free (escaped);
@@ -147,7 +147,7 @@ terminal_util_key_file_get_argv (GKeyFile *key_file,
 
   flat = terminal_util_key_file_get_string_unescape (key_file, group, key, error);
   if (!flat)
-    return NULL;
+    return nullptr;
 
   retval = g_shell_parse_argv (flat, argc, &argv, error);
   g_free (flat);
@@ -155,7 +155,7 @@ terminal_util_key_file_get_argv (GKeyFile *key_file,
   if (retval)
     return argv;
 
-  return NULL;
+  return nullptr;
 }
 
 static InitialTab*
@@ -166,14 +166,14 @@ initial_tab_new (char *profile /* adopts */)
   it = g_slice_new (InitialTab);
 
   it->profile = profile;
-  it->exec_argv = NULL;
-  it->title = NULL;
-  it->working_dir = NULL;
+  it->exec_argv = nullptr;
+  it->title = nullptr;
+  it->working_dir = nullptr;
   it->zoom = 1.0;
   it->zoom_set = FALSE;
   it->active = FALSE;
-  it->fd_list = NULL;
-  it->fd_array = NULL;
+  it->fd_list = nullptr;
+  it->fd_array = nullptr;
 
   return it;
 }
@@ -218,10 +218,10 @@ apply_window_defaults (TerminalOptions *options,
   if (options->default_role)
     {
       iw->role = options->default_role;
-      options->default_role = NULL;
+      options->default_role = nullptr;
     }
 
-  if (iw->geometry == NULL)
+  if (iw->geometry == nullptr)
     iw->geometry = g_strdup (options->default_geometry);
 
   if (options->default_window_menubar_forced)
@@ -252,7 +252,7 @@ add_new_window (TerminalOptions *options,
   InitialTab *it;
 
   iw = initial_window_new (0);
-  iw->implicit_first_window = (options->initial_windows == NULL) && implicit_if_first_window;
+  iw->implicit_first_window = (options->initial_windows == nullptr) && implicit_if_first_window;
   apply_window_defaults (options, iw);
 
   it = initial_tab_new (profile);
@@ -261,7 +261,7 @@ add_new_window (TerminalOptions *options,
   if (iw->implicit_first_window)
     it->active = TRUE;
 
-  iw->tabs = g_list_prepend (NULL, it);
+  iw->tabs = g_list_prepend (nullptr, it);
   apply_tab_defaults (options, it);
 
   options->initial_windows = g_list_append (options->initial_windows, iw);
@@ -274,8 +274,8 @@ ensure_top_window (TerminalOptions *options,
 {
   InitialWindow *iw;
 
-  if (options->initial_windows == NULL)
-    iw = add_new_window (options, NULL /* profile */, implicit_if_first_window);
+  if (options->initial_windows == nullptr)
+    iw = add_new_window (options, nullptr /* profile */, implicit_if_first_window);
   else
     iw = (InitialWindow*)g_list_last (options->initial_windows)->data;
 
@@ -400,12 +400,12 @@ option_command_callback (const gchar *option_name,
                          GError     **error)
 {
   TerminalOptions *options = (TerminalOptions*)data;
-  GError *err = NULL;
+  GError *err = nullptr;
   char  **exec_argv;
 
   deprecated_command_option_warning (option_name);
 
-  if (!g_shell_parse_argv (value, NULL, &exec_argv, &err))
+  if (!g_shell_parse_argv (value, nullptr, &exec_argv, &err))
     {
       g_set_error(error,
                   G_OPTION_ERROR,
@@ -444,16 +444,16 @@ option_profile_cb (const gchar *option_name,
 
   profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                      value, error);
-  if (profile == NULL)
+  if (profile == nullptr)
   {
       terminal_printerr ("Profile '%s' specified but not found. Attempting to fall back "
                          "to the default profile.\n", value);
       g_clear_error (error);
       profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
-                                                         NULL, error);
+                                                         nullptr, error);
   }
 
-  if (profile == NULL)
+  if (profile == nullptr)
       return FALSE;
 
   if (options->initial_windows)
@@ -483,7 +483,7 @@ option_profile_id_cb (const gchar *option_name,
 
   profile = terminal_profiles_list_dup_uuid (terminal_options_ensure_profiles_list (options),
                                              value, error);
-  if (profile == NULL)
+  if (profile == nullptr)
     return FALSE;
 
   if (options->initial_windows)
@@ -512,22 +512,22 @@ option_window_callback (const gchar *option_name,
   TerminalOptions *options = (TerminalOptions*)data;
   char *profile;
 
-  if (value != NULL) {
+  if (value != nullptr) {
     profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                        value, error);
 
-    if (value && profile == NULL) {
+    if (value && profile == nullptr) {
       terminal_printerr ("Profile '%s' specified but not found. Attempting to fall back "
                          "to the default profile.\n", value);
       g_clear_error (error);
       profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
-                                                         NULL, error);
+                                                         nullptr, error);
     }
 
-    if (profile == NULL)
+    if (profile == nullptr)
       return FALSE;
   } else
-    profile = NULL;
+    profile = nullptr;
 
   add_new_window (options, profile /* adopts */, FALSE);
 
@@ -543,13 +543,13 @@ option_tab_callback (const gchar *option_name,
   TerminalOptions *options = (TerminalOptions*)data;
   char *profile;
 
-  if (value != NULL) {
+  if (value != nullptr) {
     profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                        value, error);
-    if (profile == NULL)
+    if (profile == nullptr)
       return FALSE;
   } else
-    profile = NULL;
+    profile = nullptr;
 
   if (options->initial_windows)
     {
@@ -843,9 +843,9 @@ option_pass_fd_cb (const gchar *option_name,
   }
 
   InitialTab *it = ensure_top_tab (options);
-  if (it->fd_list == NULL)
+  if (it->fd_list == nullptr)
     it->fd_list = g_unix_fd_list_new ();
-  if (it->fd_array == NULL)
+  if (it->fd_array == nullptr)
     it->fd_array = g_array_sized_new (FALSE /* zero terminate */,
                                       TRUE /* clear */,
                                       sizeof (PassFdElement),
@@ -910,10 +910,10 @@ option_zoom_callback (const gchar *option_name,
     * typed by a person, then fall back to ascii_strtod (we
     * always save session in C locale format)
     */
-  end = NULL;
+  end = nullptr;
   errno = 0;
   zoom = g_strtod (value, &end);
-  if (end == NULL || *end != '\0')
+  if (end == nullptr || *end != '\0')
     {
       g_set_error (error,
                    G_OPTION_ERROR,
@@ -966,7 +966,7 @@ digest_options_callback (GOptionContext *context,
 
   if (options->execute)
     {
-      if (options->exec_argv == NULL)
+      if (options->exec_argv == nullptr)
         {
           g_set_error (error,
                        G_OPTION_ERROR,
@@ -980,7 +980,7 @@ digest_options_callback (GOptionContext *context,
       /* Apply -x/--execute command only to the first tab */
       it = ensure_top_tab (options);
       it->exec_argv = options->exec_argv;
-      options->exec_argv = NULL;
+      options->exec_argv = nullptr;
     }
 
   return TRUE;
@@ -996,7 +996,7 @@ digest_options_callback (GOptionContext *context,
  * Parses the argument vector *@argvp.
  *
  * Returns: a new #TerminalOptions containing the windows and tabs to open,
- *   or %NULL on error.
+ *   or %nullptr on error.
  */
 TerminalOptions *
 terminal_options_parse (int *argcp,
@@ -1020,15 +1020,15 @@ terminal_options_parse (int *argcp,
 
   const char *startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id && startup_id[0] &&
-      g_utf8_validate (startup_id, -1, NULL))
+      g_utf8_validate (startup_id, -1, nullptr))
     options->startup_id = g_strdup (startup_id);
   else
-    options->startup_id = NULL;
-  options->display_name = NULL;
-  options->initial_windows = NULL;
-  options->default_role = NULL;
-  options->default_geometry = NULL;
-  options->default_title = NULL;
+    options->startup_id = nullptr;
+  options->display_name = nullptr;
+  options->initial_windows = nullptr;
+  options->default_role = nullptr;
+  options->default_geometry = nullptr;
+  options->default_title = nullptr;
   options->zoom = 1.0;
   options->zoom_set = FALSE;
 
@@ -1036,7 +1036,7 @@ terminal_options_parse (int *argcp,
 
   /* Collect info from gnome-terminal private env vars */
   const char *server_unique_name = g_getenv (TERMINAL_ENV_SERVICE_NAME);
-  if (server_unique_name != NULL) {
+  if (server_unique_name != nullptr) {
     if (g_dbus_is_unique_name (server_unique_name))
       options->server_unique_name = g_strdup (server_unique_name);
     else
@@ -1046,7 +1046,7 @@ terminal_options_parse (int *argcp,
   }
 
   const char *parent_screen_object_path = g_getenv (TERMINAL_ENV_SCREEN);
-  if (parent_screen_object_path != NULL) {
+  if (parent_screen_object_path != nullptr) {
     if (g_variant_is_object_path (parent_screen_object_path))
       options->parent_screen_object_path = g_strdup (parent_screen_object_path);
     else
@@ -1057,7 +1057,7 @@ terminal_options_parse (int *argcp,
 
   /* The old -x/--execute option is broken, so we need to pre-scan for it. */
   /* We now also support passing the command after the -- switch. */
-  options->exec_argv = NULL;
+  options->exec_argv = nullptr;
   for (i = 1 ; i < *argcp; ++i)
     {
       gboolean is_execute;
@@ -1085,7 +1085,7 @@ terminal_options_parse (int *argcp,
       options->exec_argv = g_new0 (char*, *argcp - i + 1);
       for (j = 0; i < *argcp; ++i, ++j)
         options->exec_argv[j] = g_strdup (argv[i]);
-      options->exec_argv[j] = NULL;
+      options->exec_argv[j] = nullptr;
 
       *argcp = last;
       break;
@@ -1097,25 +1097,25 @@ terminal_options_parse (int *argcp,
 
   if (!retval) {
     terminal_options_free (options);
-    return NULL;
+    return nullptr;
   }
 
   /* Do this here so that gdk_display is initialized */
-  if (options->startup_id == NULL)
+  if (options->startup_id == nullptr)
     options->startup_id = terminal_client_get_fallback_startup_id ();
-  /* Still NULL? */
-  if (options->startup_id == NULL)
+  /* Still nullptr? */
+  if (options->startup_id == nullptr)
     terminal_printerr_detail ("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
 
   GdkDisplay *display = gdk_display_get_default ();
-  if (display != NULL)
+  if (display != nullptr)
     options->display_name = g_strdup (gdk_display_get_name (display));
 
   /* Sanity check */
   guint wait = 0;
-  for (GList *lw = options->initial_windows;  lw != NULL; lw = lw->next) {
+  for (GList *lw = options->initial_windows;  lw != nullptr; lw = lw->next) {
     InitialWindow *iw = (InitialWindow*)lw->data;
-    for (GList *lt = iw->tabs; lt != NULL; lt = lt->next) {
+    for (GList *lt = iw->tabs; lt != nullptr; lt = lt->next) {
       InitialTab *it = (InitialTab*)lt->data;
       if (it->wait)
         wait++;
@@ -1154,7 +1154,7 @@ terminal_options_merge_config (TerminalOptions *options,
   char **groups;
   guint i;
   gboolean have_error = FALSE;
-  GList *initial_windows = NULL;
+  GList *initial_windows = nullptr;
 
   if (!g_key_file_has_group (key_file, TERMINAL_CONFIG_GROUP))
     {
@@ -1164,8 +1164,8 @@ terminal_options_merge_config (TerminalOptions *options,
       return FALSE;
     }
   
-  version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, NULL);
-  compat_version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, NULL);
+  version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, nullptr);
+  compat_version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, nullptr);
 
   if (version <= 0 ||
       compat_version <= 0 ||
@@ -1177,7 +1177,7 @@ terminal_options_merge_config (TerminalOptions *options,
       return FALSE;
     }
 
-  groups = g_key_file_get_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, NULL, error);
+  groups = g_key_file_get_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, nullptr, error);
   if (!groups)
     return FALSE;
 
@@ -1189,7 +1189,7 @@ terminal_options_merge_config (TerminalOptions *options,
       InitialWindow *iw;
       guint j;
 
-      tab_groups = g_key_file_get_string_list (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_TABS, NULL, error);
+      tab_groups = g_key_file_get_string_list (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_TABS, nullptr, error);
       if (!tab_groups)
         continue; /* no tabs in this window, skip it */
 
@@ -1197,15 +1197,15 @@ terminal_options_merge_config (TerminalOptions *options,
       initial_windows = g_list_append (initial_windows, iw);
       apply_window_defaults (options, iw);
 
-      active_terminal = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB, NULL);
-      iw->role = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ROLE, NULL);
-      iw->geometry = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY, NULL);
-      iw->start_fullscreen = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN, NULL);
-      iw->start_maximized = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED, NULL);
-      if (g_key_file_has_key (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL))
+      active_terminal = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB, nullptr);
+      iw->role = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ROLE, nullptr);
+      iw->geometry = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY, nullptr);
+      iw->start_fullscreen = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN, nullptr);
+      iw->start_maximized = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED, nullptr);
+      if (g_key_file_has_key (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, nullptr))
         {
           iw->force_menubar_state = TRUE;
-          iw->menubar_state = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL);
+          iw->menubar_state = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, nullptr);
         }
 
       for (j = 0; tab_groups[j]; ++j)
@@ -1214,7 +1214,7 @@ terminal_options_merge_config (TerminalOptions *options,
           InitialTab *it;
           char *profile;
 
-          profile = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, NULL);
+          profile = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, nullptr);
           it = initial_tab_new (profile /* adopts */);
 
           iw->tabs = g_list_append (iw->tabs, it);
@@ -1222,13 +1222,13 @@ terminal_options_merge_config (TerminalOptions *options,
           if (g_strcmp0 (active_terminal, tab_group) == 0)
             it->active = TRUE;
 
-/*          it->width = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH, NULL);
-          it->height = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT, NULL);*/
-          it->working_dir = terminal_util_key_file_get_string_unescape (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, NULL);
-          it->title = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, NULL);
+/*          it->width = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH, nullptr);
+          it->height = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT, nullptr);*/
+          it->working_dir = terminal_util_key_file_get_string_unescape (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, nullptr);
+          it->title = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, nullptr);
 
-          if (g_key_file_has_key (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL) &&
-              !(it->exec_argv = terminal_util_key_file_get_argv (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL, error)))
+          if (g_key_file_has_key (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, nullptr) &&
+              !(it->exec_argv = terminal_util_key_file_get_argv (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, nullptr, error)))
             {
               have_error = TRUE;
               break;
@@ -1328,7 +1328,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)unsupported_option_fatal_callback,
       N_("Do not register with the activation nameserver, do not re-use an active terminal"),
-      NULL
+      nullptr
     },
     {
       "load-config",
@@ -1345,7 +1345,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)unsupported_option_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "no-environment",
@@ -1354,7 +1354,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_NONE,
       &options->no_environment,
       N_("Do not pass the environment"),
-      NULL
+      nullptr
     },
     {
       "preferences",
@@ -1363,7 +1363,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_NONE,
       &options->show_preferences,
       N_("Show preferences window"),
-      NULL
+      nullptr
     },
     {
       "print-environment",
@@ -1372,7 +1372,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_NONE,
       &options->print_environment,
       N_("Print environment variables to interact with the terminal"),
-      NULL
+      nullptr
     },
     {
       "version",
@@ -1380,8 +1380,8 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_version_cb,
-      NULL,
-      NULL
+      nullptr,
+      nullptr
     },
     {
       "verbose",
@@ -1390,7 +1390,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_verbosity_cb,
       N_("Increase diagnostic verbosity"),
-      NULL
+      nullptr
     },
     {
       "quiet",
@@ -1399,9 +1399,9 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_verbosity_cb,
       N_("Suppress output"),
-      NULL
+      nullptr
     },
-    { NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+    { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
   };
 
   const GOptionEntry global_multiple_goptions[] = {
@@ -1412,7 +1412,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_window_callback,
       N_("Open a new window containing a tab with the default profile"),
-      NULL
+      nullptr
     },
     {
       "tab",
@@ -1421,9 +1421,9 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_tab_callback,
       N_("Open a new tab in the last-opened window with the default profile"),
-      NULL
+      nullptr
     },
-    { NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+    { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
   };
 
   const GOptionEntry window_goptions[] = {
@@ -1434,7 +1434,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_show_menubar_callback,
       N_("Turn on the menubar"),
-      NULL
+      nullptr
     },
     {
       "hide-menubar",
@@ -1443,7 +1443,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_hide_menubar_callback,
       N_("Turn off the menubar"),
-      NULL
+      nullptr
     },
     {
       "maximize",
@@ -1452,7 +1452,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_maximize_callback,
       N_("Maximize the window"),
-      NULL
+      nullptr
     },
     {
       "full-screen",
@@ -1461,7 +1461,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_fullscreen_callback,
       N_("Full-screen the window"),
-      NULL
+      nullptr
     },
     {
       "geometry",
@@ -1488,9 +1488,9 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_active_callback,
       N_("Set the last specified tab as the active one in its window"),
-      NULL
+      nullptr
     },
-    { NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+    { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
   };
 
   const GOptionEntry terminal_goptions[] = {
@@ -1501,7 +1501,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_command_callback,
       N_("Execute the argument to this option inside the terminal"),
-      NULL
+      nullptr
     },
     {
       "profile",
@@ -1537,7 +1537,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_ARG_CALLBACK,
       (void*)option_wait_cb,
       N_("Wait until the child exits"),
-      NULL
+      nullptr
     },
     {
       "fd",
@@ -1558,7 +1558,7 @@ get_goption_context (TerminalOptions *options)
       N_("Set the terminal’s zoom factor (1.0 = normal size)"),
       N_("ZOOM")
     },
-    { NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+    { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
   };
 
   const GOptionEntry internal_goptions[] = {  
@@ -1568,7 +1568,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_profile_id_cb,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "window-with-profile",
@@ -1576,7 +1576,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_window_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "tab-with-profile",
@@ -1584,7 +1584,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_tab_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "window-with-profile-internal-id",
@@ -1592,7 +1592,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_window_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "tab-with-profile-internal-id",
@@ -1600,7 +1600,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)option_tab_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "default-working-directory",
@@ -1608,7 +1608,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_FILENAME,
       &options->default_working_dir,
-      NULL, NULL,
+      nullptr, nullptr,
     },
     {
       "use-factory",
@@ -1616,7 +1616,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
       (void*)unsupported_option_callback,
-      NULL, NULL
+      nullptr, nullptr
     },
     {
       "startup-id",
@@ -1624,19 +1624,19 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_STRING,
       &options->startup_id,
-      NULL,
-      NULL
+      nullptr,
+      nullptr
     },
-    { NULL, 0, 0, G_OPTION_ARG_NONE, NULL, NULL, NULL }
+    { nullptr, 0, 0, G_OPTION_ARG_NONE, nullptr, nullptr, nullptr }
   };
 
   const GOptionEntry smclient_goptions[] = {
-    { "sm-client-disable",    0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
-    { "sm-client-state-file", 0, G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_FILENAME, G_OPTION_ARG_CALLBACK, (void*)option_load_config_cb, NULL, NULL },
-    { "sm-client-id",         0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_client_id,         NULL, NULL },
-    { "sm-disable",           0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
-    { "sm-config-prefix",     0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_config_prefix,     NULL, NULL },
-    { NULL }
+    { "sm-client-disable",    0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    nullptr, nullptr },
+    { "sm-client-state-file", 0, G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_FILENAME, G_OPTION_ARG_CALLBACK, (void*)option_load_config_cb, nullptr, nullptr },
+    { "sm-client-id",         0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_client_id,         nullptr, nullptr },
+    { "sm-disable",           0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    nullptr, nullptr },
+    { "sm-config-prefix",     0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_config_prefix,     nullptr, nullptr },
+    { nullptr }
   };
 
   GOptionContext *context;
@@ -1654,18 +1654,18 @@ get_goption_context (TerminalOptions *options)
                               N_("GNOME Terminal Emulator"),
                               N_("Show GNOME Terminal options"),
                               options,
-                              NULL);
+                              nullptr);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, global_unique_goptions);
   g_option_group_add_entries (group, internal_goptions);
-  g_option_group_set_parse_hooks (group, NULL, digest_options_callback);
+  g_option_group_set_parse_hooks (group, nullptr, digest_options_callback);
   g_option_context_set_main_group (context, group);
 
   group = g_option_group_new ("terminal",
                               N_("Options to open new windows or terminal tabs; more than one of these may be specified:"),
                               N_("Show terminal options"),
                               options,
-                              NULL);
+                              nullptr);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, global_multiple_goptions);
   g_option_context_add_group (context, group);
@@ -1674,7 +1674,7 @@ get_goption_context (TerminalOptions *options)
                               N_("Window options; if used before the first --window or --tab argument, sets the default for all windows:"),
                               N_("Show per-window options"),
                               options,
-                              NULL);
+                              nullptr);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, window_goptions);
   g_option_context_add_group (context, group);
@@ -1683,12 +1683,12 @@ get_goption_context (TerminalOptions *options)
                               N_("Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"),
                               N_("Show per-terminal options"),
                               options,
-                              NULL);
+                              nullptr);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
 
-  group = g_option_group_new ("sm-client", "", "", options, NULL);
+  group = g_option_group_new ("sm-client", "", "", options, nullptr);
   g_option_group_add_entries (group, smclient_goptions);
   g_option_context_add_group (context, group);
 

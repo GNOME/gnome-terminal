@@ -136,7 +136,7 @@ terminal_app_init_debug (void)
 {
 #ifdef ENABLE_DEBUG
   const char *env = g_getenv ("GTK_TEXT_DIR");
-  if (env != NULL) {
+  if (env != nullptr) {
     if (g_str_equal (env, "help")) {
       g_printerr ("Usage: GTK_TEXT_DIR=ltr|rtl\n");
     } else {
@@ -151,7 +151,7 @@ terminal_app_init_debug (void)
   }
 
   env = g_getenv ("GTK_SETTINGS");
-  if (env == NULL)
+  if (env == nullptr)
     return;
 
   GObject *settings = G_OBJECT (gtk_settings_get_default ());
@@ -177,14 +177,14 @@ terminal_app_init_debug (void)
                 "and '!setting' to invert.\n");
   } else {
     gs_strfreev char **tokens = g_strsplit (env, ",", -1);
-    for (guint i = 0; tokens[i] != NULL; i++) {
+    for (guint i = 0; tokens[i] != nullptr; i++) {
       const char *prop = tokens[i];
       char c = prop[0];
       if (c == '~' || c == '!')
         prop++;
 
       GParamSpec *pspec = g_object_class_find_property (settings_class, prop);
-      if (pspec == NULL) {
+      if (pspec == nullptr) {
         g_printerr ("Setting \"%s\" does not exist.\n", prop);
       } else if (G_PARAM_SPEC_VALUE_TYPE (pspec) != G_TYPE_BOOLEAN) {
         g_printerr ("Setting \"%s\" is not boolean.\n", prop);
@@ -212,10 +212,10 @@ terminal_app_init_debug (void)
 static gboolean
 strv_contains_gnome (char **strv)
 {
-  if (strv == NULL)
+  if (strv == nullptr)
     return FALSE;
 
-  for (int i = 0; strv[i] != NULL; i++) {
+  for (int i = 0; strv[i] != nullptr; i++) {
     if (g_ascii_strcasecmp (strv[i], "gnome") == 0 ||
         g_ascii_strcasecmp (strv[i], "gnome-classic") == 0)
       return TRUE;
@@ -242,7 +242,7 @@ terminal_app_should_use_headerbar (TerminalApp *app)
     return use;
 
   const char *desktop = g_getenv ("XDG_CURRENT_DESKTOP");
-  if (desktop == NULL)
+  if (desktop == nullptr)
     return FALSE;
 
   char **desktops = g_strsplit (desktop, G_SEARCHPATH_SEPARATOR_S, -1);
@@ -260,14 +260,14 @@ load_css_from_resource (GApplication *application,
   const char *base_path;
   gs_free char *uri;
   gs_unref_object GFile *file;
-  gs_free_error GError *error = NULL;
+  gs_free_error GError *error = nullptr;
 
   base_path = g_application_get_resource_base_path (application);
 
   if (theme) {
     gs_free char *str, *theme_name;
 
-    g_object_get (gtk_settings_get_default (), "gtk-theme-name", &str, NULL);
+    g_object_get (gtk_settings_get_default (), "gtk-theme-name", &str, nullptr);
     theme_name = g_ascii_strdown (str, -1);
     uri = g_strdup_printf ("resource://%s/css/%s/terminal.css", base_path, theme_name);
   } else {
@@ -275,7 +275,7 @@ load_css_from_resource (GApplication *application,
   }
 
   file = g_file_new_for_uri (uri);
-  if (!g_file_query_exists (file, NULL /* cancellable */))
+  if (!g_file_query_exists (file, nullptr /* cancellable */))
     return FALSE;
 
   if (!gtk_css_provider_load_from_file (provider, file, &error))
@@ -338,7 +338,7 @@ terminal_app_remove_profile (TerminalApp *app,
 
   /* First, we need to switch any screen using this profile to the default profile */
   gs_free_list GList *screens = g_hash_table_get_values (app->screen_map);
-  for (GList *l = screens; l != NULL; l = l->next) {
+  for (GList *l = screens; l != nullptr; l = l->next) {
     TerminalScreen *screen = TERMINAL_SCREEN (l->data);
     if (terminal_screen_get_profile (screen) != profile)
       continue;
@@ -365,7 +365,7 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
     g_object_set (gtk_settings,
                   GTK_SETTING_PREFER_DARK_THEME,
                   theme == TERMINAL_THEME_VARIANT_DARK,
-                  NULL);
+                  nullptr);
 }
 
 /* Submenus for New Terminal per profile, and to change profiles */
@@ -404,7 +404,7 @@ foreach_profile_cb (TerminalSettingsList *list,
   /* only connect if we haven't seen this profile before */
   if (g_signal_handler_find (profile,
 			     GSignalMatchType(G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
-                             0, 0, NULL,
+                             0, 0, nullptr,
 			     (void*)terminal_app_update_profile_menus, user_data->app) == 0)
     g_signal_connect_swapped (profile, "changed::" TERMINAL_PROFILE_VISIBLE_NAME_KEY,
                               G_CALLBACK (terminal_app_update_profile_menus), user_data->app);
@@ -447,7 +447,7 @@ menu_append_numbered (GMenu *menu,
       g_string_append_c (str, *p);
   }
 
-  item = g_menu_item_new (str->str, NULL);
+  item = g_menu_item_new (str->str, nullptr);
   g_menu_item_set_action_and_target_value (item, action_name, target);
   g_menu_append_item (menu, item);
 }
@@ -459,7 +459,7 @@ append_new_terminal_item (GMenu *section,
                           ProfileData *data,
                           guint n_profiles)
 {
-  gs_unref_object GMenuItem *item = g_menu_item_new (label, NULL);
+  gs_unref_object GMenuItem *item = g_menu_item_new (label, nullptr);
 
   if (n_profiles > 1) {
     gs_unref_object GMenu *submenu = g_menu_new ();
@@ -483,7 +483,7 @@ fill_header_new_terminal_menu (GMenuModel *menu,
                                ProfileData *data,
                                guint n_profiles)
 {
-  gs_unref_object GMenu *section = NULL;
+  gs_unref_object GMenu *section = nullptr;
 
   if (n_profiles <= 1)
     return;
@@ -519,7 +519,7 @@ set_profile_submenu_new (ProfileData *data,
 {
   /* No submenu if there's only one profile */
   if (n_profiles <= 1)
-    return NULL;
+    return nullptr;
 
   GMenu *menu = g_menu_new ();
   for (guint i = 0; i < n_profiles; i++) {
@@ -552,25 +552,25 @@ terminal_app_update_profile_menus (TerminalApp *app)
 
   app->set_profile_menu = set_profile_submenu_new (profiles, n_profiles);
 
-  if (app->menubar != NULL) {
+  if (app->menubar != nullptr) {
     g_menu_remove_all (G_MENU (app->menubar_new_terminal_section));
     fill_new_terminal_section (app, app->menubar_new_terminal_section, profiles, n_profiles);
 
     g_menu_remove_all (G_MENU (app->menubar_set_profile_section));
-    if (app->set_profile_menu != NULL) {
+    if (app->set_profile_menu != nullptr) {
       g_menu_append_submenu (app->menubar_set_profile_section, _("Change _Profile"),
                              G_MENU_MODEL (app->set_profile_menu));
     }
   }
 
-  if (app->profilemenu != NULL) {
+  if (app->profilemenu != nullptr) {
     g_menu_remove_all (G_MENU (app->profilemenu));
     fill_header_new_terminal_menu (app->profilemenu, profiles, n_profiles);
   }
 
-  if (app->headermenu != NULL) {
+  if (app->headermenu != nullptr) {
     g_menu_remove_all (G_MENU (app->headermenu_set_profile_section));
-    if (app->set_profile_menu != NULL) {
+    if (app->set_profile_menu != nullptr) {
       g_menu_append_submenu (app->headermenu_set_profile_section, _("_Profile"),
                              G_MENU_MODEL (app->set_profile_menu));
     }
@@ -595,7 +595,7 @@ terminal_app_create_menubar (TerminalApp *app,
                                        "menubar", &app->menubar,
                                        "new-terminal-section", &app->menubar_new_terminal_section,
                                        "set-profile-section", &app->menubar_set_profile_section,
-                                       NULL);
+                                       nullptr);
 
   /* Install profile sections */
   terminal_app_update_profile_menus (app);
@@ -609,7 +609,7 @@ terminal_app_create_headermenu (TerminalApp *app)
   terminal_util_load_objects_resource ("/org/gnome/terminal/ui/headerbar-menu.ui",
                                        "headermenu", &app->headermenu,
                                        "set-profile-section", &app->headermenu_set_profile_section,
-                                       NULL);
+                                       nullptr);
 
   /* Install profile sections */
   terminal_app_update_profile_menus (app);
@@ -630,7 +630,7 @@ static void
 free_clipboard_targets (TerminalApp *app)
 {
   g_free (app->clipboard_targets);
-  app->clipboard_targets = NULL;
+  app->clipboard_targets = nullptr;
   app->n_clipboard_targets = 0;
 }
 
@@ -641,8 +641,8 @@ update_clipboard_targets (TerminalApp *app,
 {
   free_clipboard_targets (app);
 
-  /* Sometimes we receive targets == NULL but n_targets == -1 */
-  if (targets != NULL && n_targets < 255) {
+  /* Sometimes we receive targets == nullptr but n_targets == -1 */
+  if (targets != nullptr && n_targets < 255) {
     app->clipboard_targets = reinterpret_cast<GdkAtom*>
       (g_memdup (targets, sizeof (targets[0]) * n_targets));
     app->n_clipboard_targets = n_targets;
@@ -679,7 +679,7 @@ clipboard_owner_change_cb (GtkClipboard *clipboard,
   _terminal_debug_print (TERMINAL_DEBUG_CLIPBOARD,
                          "Clipboard owner changed\n");
 
-  clipboard_targets_received_cb (clipboard, NULL, 0, app); /* clear */
+  clipboard_targets_received_cb (clipboard, nullptr, 0, app); /* clear */
 
   /* We can do this without holding a reference to @app since
    * the app lives as long as the process.
@@ -699,7 +699,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, NULL, NULL);
+  terminal_app_edit_preferences (app, nullptr, nullptr);
 }
 
 static void
@@ -707,7 +707,7 @@ app_menu_help_cb (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-  terminal_util_show_help (NULL);
+  terminal_util_show_help (nullptr);
 }
 
 static void
@@ -750,10 +750,10 @@ terminal_app_startup (GApplication *application)
 {
   TerminalApp *app = TERMINAL_APP (application);
   const GActionEntry action_entries[] = {
-    { "preferences", app_menu_preferences_cb,   NULL, NULL, NULL },
-    { "help",        app_menu_help_cb,          NULL, NULL, NULL },
-    { "about",       app_menu_about_cb,         NULL, NULL, NULL },
-    { "quit",        app_menu_quit_cb,          NULL, NULL, NULL }
+    { "preferences", app_menu_preferences_cb,   nullptr, nullptr, nullptr },
+    { "help",        app_menu_help_cb,          nullptr, nullptr, nullptr },
+    { "about",       app_menu_about_cb,         nullptr, nullptr, nullptr },
+    { "quit",        app_menu_quit_cb,          nullptr, nullptr, nullptr }
   };
 
   g_application_set_resource_base_path (application, TERMINAL_RESOURCES_PATH_PREFIX);
@@ -773,7 +773,7 @@ terminal_app_startup (GApplication *application)
   gboolean shell_shows_menubar;
   g_object_get (gtk_settings_get_default (),
                 "gtk-shell-shows-menubar", &shell_shows_menubar,
-                NULL);
+                nullptr);
 
   /* Create menubar */
   terminal_app_create_menubar (app, shell_shows_menubar);
@@ -830,7 +830,7 @@ terminal_app_init (TerminalApp *app)
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();
   app->clipboard = gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);
-  clipboard_owner_change_cb (app->clipboard, NULL, app);
+  clipboard_owner_change_cb (app->clipboard, nullptr, app);
   g_signal_connect (app->clipboard, "owner-change",
                     G_CALLBACK (clipboard_owner_change_cb), app);
 
@@ -840,7 +840,7 @@ terminal_app_init (TerminalApp *app)
   /* Get the profiles */
   app->profiles_list = terminal_profiles_list_new ();
 
-  app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
 
   gs_unref_object GSettings *settings = g_settings_get_child (app->global_settings, "keybindings");
   terminal_accels_init (G_APPLICATION (app), settings, app->use_headerbar);
@@ -886,8 +886,8 @@ terminal_app_dbus_register (GApplication    *application,
                             GError         **error)
 {
   TerminalApp *app = TERMINAL_APP (application);
-  gs_unref_object TerminalObjectSkeleton *object = NULL;
-  gs_unref_object TerminalFactory *factory = NULL;
+  gs_unref_object TerminalObjectSkeleton *object = nullptr;
+  gs_unref_object TerminalFactory *factory = nullptr;
 
   if (!G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_register (application,
                                                                        connection,
@@ -933,14 +933,14 @@ terminal_app_dbus_unregister (GApplication    *application,
   if (app->object_manager) {
     g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
     g_object_unref (app->object_manager);
-    app->object_manager = NULL;
+    app->object_manager = nullptr;
   }
 
 #ifdef ENABLE_SEARCH_PROVIDER
   if (app->search_provider) {
     terminal_search_provider_dbus_unregister (app->search_provider, connection, TERMINAL_SEARCH_PROVIDER_PATH);
     g_object_unref (app->search_provider);
-    app->search_provider = NULL;
+    app->search_provider = nullptr;
   }
 #endif /* ENABLE_SEARCH_PROVIDER */
 
@@ -967,7 +967,7 @@ terminal_app_class_init (TerminalAppClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalAppClass, clipboard_targets_changed),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, G_TYPE_OBJECT);
 }
@@ -990,7 +990,7 @@ TerminalScreen *
 terminal_app_get_screen_by_uuid (TerminalApp *app,
                                  const char  *uuid)
 {
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (TERMINAL_IS_APP (app), nullptr);
 
   return reinterpret_cast<TerminalScreen*>(g_hash_table_lookup (app->screen_map, uuid));
 }
@@ -1011,7 +1011,7 @@ terminal_app_dup_screen_object_path (TerminalApp *app,
  * @app:
  * @object_path:
  *
- * Returns: (transfer full): the #TerminalReceiverImpl for @object_path, or %NULL
+ * Returns: (transfer full): the #TerminalReceiverImpl for @object_path, or %nullptr
  */
 static TerminalReceiverImpl *
 terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
@@ -1020,13 +1020,13 @@ terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
   gs_unref_object GDBusObject *skeleton =
     g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (app->object_manager),
                                       object_path);
-  if (skeleton == NULL || !TERMINAL_IS_OBJECT_SKELETON (skeleton))
-    return NULL;
+  if (skeleton == nullptr || !TERMINAL_IS_OBJECT_SKELETON (skeleton))
+    return nullptr;
 
-  TerminalReceiverImpl *impl = NULL;
-  g_object_get (skeleton, "receiver", &impl, NULL);
-  if (impl == NULL)
-    return NULL;
+  TerminalReceiverImpl *impl = nullptr;
+  g_object_get (skeleton, "receiver", &impl, nullptr);
+  if (impl == nullptr)
+    return nullptr;
 
   g_assert (TERMINAL_IS_RECEIVER_IMPL (impl));
   return impl;
@@ -1037,7 +1037,7 @@ terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
  * @app:
  * @object_path:
  *
- * Returns: (transfer full): the #TerminalScreen for @object_path, or %NULL
+ * Returns: (transfer full): the #TerminalScreen for @object_path, or %nullptr
  */
 TerminalScreen *
 terminal_app_get_screen_by_object_path (TerminalApp *app,
@@ -1045,8 +1045,8 @@ terminal_app_get_screen_by_object_path (TerminalApp *app,
 {
   gs_unref_object TerminalReceiverImpl *impl =
     terminal_app_get_receiver_impl_by_object_path (app, object_path);
-  if (impl == NULL)
-    return NULL;
+  if (impl == nullptr)
+    return nullptr;
 
   return terminal_receiver_impl_get_screen (impl);
 }
@@ -1082,9 +1082,9 @@ terminal_app_unregister_screen (TerminalApp *app,
   gs_free char *object_path = terminal_app_dup_screen_object_path (app, screen);
   gs_unref_object TerminalReceiverImpl *impl =
     terminal_app_get_receiver_impl_by_object_path (app, object_path);
-  g_warn_if_fail (impl != NULL);
+  g_warn_if_fail (impl != nullptr);
 
-  if (impl != NULL)
+  if (impl != nullptr)
     terminal_receiver_impl_unset_screen (impl);
 
   g_dbus_object_manager_server_unexport (app->object_manager, object_path);
@@ -1095,12 +1095,12 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
                                     GtkClipboard *clipboard,
                                     int *n_targets)
 {
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-  g_return_val_if_fail (n_targets != NULL, NULL);
+  g_return_val_if_fail (TERMINAL_IS_APP (app), nullptr);
+  g_return_val_if_fail (n_targets != nullptr, nullptr);
 
   if (clipboard != app->clipboard) {
     *n_targets = 0;
-    return NULL;
+    return nullptr;
   }
 
   *n_targets = app->n_clipboard_targets;
@@ -1147,7 +1147,7 @@ terminal_app_get_menubar (TerminalApp *app)
 GMenuModel *
 terminal_app_get_headermenu (TerminalApp *app)
 {
-  if (app->headermenu == NULL)
+  if (app->headermenu == nullptr)
     terminal_app_create_headermenu (app);
 
   return app->headermenu;
@@ -1162,7 +1162,7 @@ terminal_app_get_headermenu (TerminalApp *app)
 GMenuModel *
 terminal_app_get_profilemenu (TerminalApp *app)
 {
-  if (app->profilemenu == NULL)
+  if (app->profilemenu == nullptr)
     terminal_app_create_profilemenu (app);
 
   return app->profilemenu;
@@ -1233,9 +1233,9 @@ terminal_app_get_gtk_debug_settings (TerminalApp *app)
 PangoFontDescription *
 terminal_app_get_system_font (TerminalApp *app)
 {
-  gs_free char *font = NULL;
+  gs_free char *font = nullptr;
 
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (TERMINAL_IS_APP (app), nullptr);
 
   font = g_settings_get_string (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME);
 
@@ -1248,7 +1248,7 @@ terminal_app_get_system_font (TerminalApp *app)
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
-  g_warn_if_fail (app->object_manager != NULL);
+  g_warn_if_fail (app->object_manager != nullptr);
   return app->object_manager;
 }
 
@@ -1276,7 +1276,7 @@ terminal_app_get_dialog_use_headerbar (TerminalApp *app)
   gboolean dialog_use_header;
   g_object_get (gtk_settings_get_default (),
                 "gtk-dialogs-use-header", &dialog_use_header,
-                NULL);
+                nullptr);
 
   return dialog_use_header && app->use_headerbar;
 }

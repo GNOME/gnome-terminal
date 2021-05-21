@@ -100,7 +100,7 @@ struct _TerminalScreenPrivate
   char *uuid;
   gboolean registered; /* D-Bus interface is registered */
 
-  GSettings *profile; /* never NULL */
+  GSettings *profile; /* never nullptr */
   guint profile_changed_id;
   guint profile_forgotten_id;
   int child_pid;
@@ -244,8 +244,8 @@ strv_to_string (char **strv)
 static char*
 exec_data_to_string (ExecData *data)
 {
-  gs_free char *str1 = NULL;
-  gs_free char *str2 = NULL;
+  gs_free char *str1 = nullptr;
+  gs_free char *str2 = nullptr;
   return data ? g_strdup_printf ("data %p argv:[%s] exec-argv:[%s] envv:%p(%u) as-shell:%s cwd:%s",
                                  data,
                                  (str1 = strv_to_string (data->argv)),
@@ -268,15 +268,15 @@ exec_data_new (void)
 static ExecData *
 exec_data_clone (ExecData *data)
 {
-  if (data == NULL)
-    return NULL;
+  if (data == nullptr)
+    return nullptr;
 
   ExecData *clone = exec_data_new ();
   clone->envv = g_strdupv (data->envv);
   clone->cwd = g_strdup (data->cwd);
 
   /* If FDs were passed, cannot repeat argv. Return data only for env and cwd */
-  if (data->fd_list != NULL) {
+  if (data->fd_list != nullptr) {
     clone->as_shell = TRUE;
     return clone;
   }
@@ -306,7 +306,7 @@ exec_data_ref (ExecData *data)
 static void
 exec_data_unref (ExecData *data)
 {
-  if (data == NULL)
+  if (data == nullptr)
     return;
 
   if (--data->refcount > 0)
@@ -336,18 +336,18 @@ terminal_screen_clear_exec_data (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  if (priv->exec_data == NULL)
+  if (priv->exec_data == nullptr)
     return;
 
   if (cancelled) {
-    gs_free_error GError *err = NULL;
+    gs_free_error GError *err = nullptr;
     g_set_error_literal (&err, G_IO_ERROR, G_IO_ERROR_CANCELLED,
                          "Spawning was cancelled");
     exec_data_callback (priv->exec_data, err, screen);
   }
 
   exec_data_unref (priv->exec_data);
-  priv->exec_data = NULL;
+  priv->exec_data = nullptr;
 }
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
@@ -371,7 +371,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 
   for (i = 0; i < n_regexes; ++i)
     {
-      GError *error = NULL;
+      GError *error = nullptr;
 
       (*regexes)[i] = vte_regex_new_for_match (regex_patterns[i].pattern, -1,
                                                PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_UCP | PCRE2_MULTILINE,
@@ -420,7 +420,7 @@ terminal_screen_get_window (TerminalScreen *screen)
 
   toplevel = gtk_widget_get_toplevel (widget);
   if (!gtk_widget_is_toplevel (toplevel))
-    return NULL;
+    return nullptr;
 
   return TERMINAL_WINDOW (toplevel);
 }
@@ -524,7 +524,7 @@ terminal_screen_init (TerminalScreen *screen)
     }
 
   /* Setup DND */
-  target_list = gtk_target_list_new (NULL, 0);
+  target_list = gtk_target_list_new (nullptr, 0);
   gtk_target_list_add_uri_targets (target_list, 0);
   gtk_target_list_add_text_targets (target_list, 0);
   gtk_target_list_add_table (target_list, target_table, G_N_ELEMENTS (target_table));
@@ -552,8 +552,8 @@ terminal_screen_init (TerminalScreen *screen)
 #ifdef ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
     {
-      g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
-      g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
+      g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), nullptr);
+      g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), nullptr);
     }
 #endif
 }
@@ -628,7 +628,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, profile_set),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, G_TYPE_SETTINGS);
@@ -638,7 +638,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, show_popup_menu),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__POINTER,
                   G_TYPE_NONE,
                   1,
@@ -649,7 +649,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, match_clicked),
-                  g_signal_accumulator_true_handled, NULL,
+                  g_signal_accumulator_true_handled, nullptr,
                   _terminal_marshal_BOOLEAN__STRING_INT_UINT,
                   G_TYPE_BOOLEAN,
                   3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_UINT);
@@ -659,7 +659,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, close_screen),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -667,7 +667,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   g_object_class_install_property
     (object_class,
      PROP_PROFILE,
-     g_param_spec_object ("profile", NULL, NULL,
+     g_param_spec_object ("profile", nullptr, nullptr,
                           G_TYPE_SETTINGS,
                           GParamFlags(G_PARAM_READWRITE |
 				      G_PARAM_STATIC_NAME |
@@ -677,8 +677,8 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   g_object_class_install_property
     (object_class,
      PROP_TITLE,
-     g_param_spec_string ("title", NULL, NULL,
-                          NULL,
+     g_param_spec_string ("title", nullptr, nullptr,
+                          nullptr,
                           GParamFlags(G_PARAM_READABLE |
 				      G_PARAM_STATIC_NAME |
 				      G_PARAM_STATIC_NICK |
@@ -724,7 +724,7 @@ terminal_screen_dispose (GObject *object)
 
   settings = gtk_widget_get_settings (GTK_WIDGET (screen));
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL, NULL,
+                                        0, 0, nullptr, nullptr,
                                         screen);
 
   if (priv->idle_exec_source != 0)
@@ -758,7 +758,7 @@ terminal_screen_finalize (GObject *object)
                                         (void*)terminal_screen_system_font_changed_cb,
                                         screen);
 
-  terminal_screen_set_profile (screen, NULL);
+  terminal_screen_set_profile (screen, nullptr);
 
   g_slist_free_full (priv->match_tags, (GDestroyNotify) free_tag_data);
 
@@ -772,7 +772,7 @@ terminal_screen_new (GSettings       *profile,
                      const char      *title,
                      double           zoom)
 {
-  g_return_val_if_fail (G_IS_SETTINGS (profile), NULL);
+  g_return_val_if_fail (G_IS_SETTINGS (profile), nullptr);
 
   TerminalScreen *screen = (TerminalScreen*)g_object_new (TERMINAL_TYPE_SCREEN, nullptr);
 
@@ -785,7 +785,7 @@ terminal_screen_new (GSettings       *profile,
   /* If given an initial title, strip it of control characters and
    * feed it to the terminal.
    */
-  if (title != NULL) {
+  if (title != nullptr) {
     GString *seq;
     const char *p;
 
@@ -830,13 +830,13 @@ terminal_screen_reexec_from_exec_data (TerminalScreen *screen,
   }
 
   return terminal_screen_exec (screen,
-                               data ? data->argv : NULL,
-                               envv ? envv : data ? data->envv : NULL,
+                               data ? data->argv : nullptr,
+                               envv ? envv : data ? data->envv : nullptr,
                                data ? data->as_shell : TRUE,
                                /* If we have command line args, must always pass the cwd from the command line, too */
-                               data && data->argv ? data->cwd : cwd ? cwd : data ? data->cwd : NULL,
-                               NULL /* fd list */, NULL /* fd array */,
-                               NULL, NULL, NULL, /* callback + data + destroy notify */
+                               data && data->argv ? data->cwd : cwd ? cwd : data ? data->cwd : nullptr,
+                               nullptr /* fd list */, nullptr /* fd array */,
+                               nullptr, nullptr, nullptr, /* callback + data + destroy notify */
                                cancellable,
                                error);
 }
@@ -849,7 +849,7 @@ terminal_screen_reexec_from_screen (TerminalScreen *screen,
 {
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), FALSE);
 
-  if (parent_screen == NULL)
+  if (parent_screen == nullptr)
     return TRUE;
 
   g_return_val_if_fail (TERMINAL_IS_SCREEN (parent_screen), FALSE);
@@ -863,8 +863,8 @@ terminal_screen_reexec_from_screen (TerminalScreen *screen,
                          cwd);
 
   return terminal_screen_reexec_from_exec_data (screen,
-                                                NULL /* exec data */,
-                                                NULL /* envv */,
+                                                nullptr /* exec data */,
+                                                nullptr /* envv */,
                                                 cwd,
                                                 cancellable,
                                                 error);
@@ -909,12 +909,12 @@ terminal_screen_exec (TerminalScreen *screen,
                       GError **error)
 {
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), FALSE);
-  g_return_val_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable), FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  g_return_val_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) != NULL, FALSE);
+  g_return_val_if_fail (cancellable == nullptr || G_IS_CANCELLABLE (cancellable), FALSE);
+  g_return_val_if_fail (error == nullptr || *error == nullptr, FALSE);
+  g_return_val_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) != nullptr, FALSE);
 
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_PROCESSES) {
-    gs_free char *argv_str = NULL;
+    gs_free char *argv_str = nullptr;
     _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
                            "[screen %p] exec: argv:[%s] envv:%p(%u) as-shell:%s cwd:%s\n",
                            screen,
@@ -931,7 +931,7 @@ terminal_screen_exec (TerminalScreen *screen,
   data->callback_data = user_data;
   data->callback_data_destroy_notify = destroy_notify;
 
-  GError *err = NULL;
+  GError *err = nullptr;
   if (priv->child_pid != -1) {
     g_set_error_literal (&err, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
                          "Cannot launch a new child process while the terminal is still running another child process");
@@ -942,8 +942,8 @@ terminal_screen_exec (TerminalScreen *screen,
     return FALSE;
   }
 
-  gs_free char *path = NULL;
-  gs_free char *shell = NULL;
+  gs_free char *path = nullptr;
+  gs_free char *shell = nullptr;
   gs_strfreev char **envv = terminal_screen_get_child_environment (screen,
                                                                   initial_envv,
                                                                   &path,
@@ -952,7 +952,7 @@ terminal_screen_exec (TerminalScreen *screen,
   gboolean preserve_cwd = FALSE;
   GSpawnFlags spawn_flags = GSpawnFlags(G_SPAWN_SEARCH_PATH_FROM_ENVP |
 					VTE_SPAWN_NO_PARENT_ENVV);
-  gs_strfreev char **exec_argv = NULL;
+  gs_strfreev char **exec_argv = nullptr;
   if (!terminal_screen_get_child_command (screen,
                                           argv,
                                           path,
@@ -994,7 +994,7 @@ terminal_screen_exec (TerminalScreen *screen,
     }
   } else {
     data->n_fd_map = 0;
-    data->fd_map = NULL;
+    data->fd_map = nullptr;
   }
 
   data->argv = g_strdupv (argv);
@@ -1047,8 +1047,8 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
     {
       gs_free char *charset = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
       const char *encoding = terminal_util_translate_encoding (charset);
-      if (encoding != NULL)
-        vte_terminal_set_encoding (vte_terminal, encoding, NULL);
+      if (encoding != nullptr)
+        vte_terminal_set_encoding (vte_terminal, encoding, nullptr);
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY))
@@ -1161,8 +1161,8 @@ update_color_scheme (TerminalScreen *screen)
   GdkRGBA cursor_bg, cursor_fg;
   GdkRGBA highlight_bg, highlight_fg;
   GdkRGBA *boldp;
-  GdkRGBA *cursor_bgp = NULL, *cursor_fgp = NULL;
-  GdkRGBA *highlight_bgp = NULL, *highlight_fgp = NULL;
+  GdkRGBA *cursor_bgp = nullptr, *cursor_fgp = nullptr;
+  GdkRGBA *highlight_bgp = nullptr, *highlight_fgp = nullptr;
   GtkStyleContext *context;
   gboolean use_theme_colors;
 
@@ -1186,7 +1186,7 @@ update_color_scheme (TerminalScreen *screen)
       terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold))
     boldp = &bold;
   else
-    boldp = NULL;
+    boldp = nullptr;
 
   if (g_settings_get_boolean (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY) &&
       !use_theme_colors)
@@ -1296,7 +1296,7 @@ terminal_screen_set_profile (TerminalScreen *screen,
         g_signal_connect (profile, "changed",
                           G_CALLBACK (terminal_screen_profile_changed_cb),
                           screen);
-      terminal_screen_profile_changed_cb (profile, NULL, screen);
+      terminal_screen_profile_changed_cb (profile, nullptr, screen);
 
       g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
     }
@@ -1320,9 +1320,9 @@ terminal_screen_ref_profile (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  if (priv->profile != NULL)
+  if (priv->profile != nullptr)
     return (GSettings*)g_object_ref (priv->profile);
-  return NULL;
+  return nullptr;
 }
 
 static gboolean
@@ -1333,7 +1333,7 @@ should_preserve_cwd (TerminalPreserveWorkingDirectory preserve_cwd,
   switch (preserve_cwd) {
   case TERMINAL_PRESERVE_WORKING_DIRECTORY_SAFE: {
     gs_free char *resolved_arg0 = terminal_util_find_program_in_path (path, arg0);
-    return resolved_arg0 != NULL &&
+    return resolved_arg0 != nullptr &&
       terminal_util_get_is_shell (resolved_arg0);
   }
 
@@ -1362,9 +1362,9 @@ terminal_screen_get_child_command (TerminalScreen *screen,
   TerminalPreserveWorkingDirectory preserve_cwd;
   char **exec_argv;
 
-  g_assert (spawn_flags_p != NULL && exec_argv_p != NULL && preserve_cwd_p != NULL);
+  g_assert (spawn_flags_p != nullptr && exec_argv_p != nullptr && preserve_cwd_p != nullptr);
 
-  *exec_argv_p = exec_argv = NULL;
+  *exec_argv_p = exec_argv = nullptr;
 
   preserve_cwd = TerminalPreserveWorkingDirectory
     (g_settings_get_enum (profile, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY));
@@ -1382,7 +1382,7 @@ terminal_screen_get_child_command (TerminalScreen *screen,
       gs_free char *exec_argv_str;
 
       exec_argv_str = g_settings_get_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
-      if (!g_shell_parse_argv (exec_argv_str, NULL, &exec_argv, err))
+      if (!g_shell_parse_argv (exec_argv_str, nullptr, &exec_argv, err))
         return FALSE;
 
       *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, exec_argv[0]);
@@ -1397,7 +1397,7 @@ terminal_screen_get_child_command (TerminalScreen *screen,
       shell = egg_shell (shell_env);
 
       only_name = strrchr (shell, '/');
-      if (only_name != NULL)
+      if (only_name != nullptr)
         only_name++;
       else {
         only_name = shell;
@@ -1409,11 +1409,11 @@ terminal_screen_get_child_command (TerminalScreen *screen,
       exec_argv[argc++] = shell;
 
       if (g_settings_get_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY))
-        exec_argv[argc++] = g_strconcat ("-", only_name, NULL);
+        exec_argv[argc++] = g_strconcat ("-", only_name, nullptr);
       else
         exec_argv[argc++] = g_strdup (only_name);
 
-      exec_argv[argc++] = NULL;
+      exec_argv[argc++] = nullptr;
 
       *preserve_cwd_p = should_preserve_cwd (preserve_cwd, path_env, shell);
       *spawn_flags_p = GSpawnFlags(*spawn_flags_p | G_SPAWN_FILE_AND_ARGV_ZERO);
@@ -1439,7 +1439,7 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
 {
   TerminalApp *app = terminal_app_get ();
   char **env;
-  gs_strfreev char** current_environ = NULL;
+  gs_strfreev char** current_environ = nullptr;
   char *e, *v;
   GHashTable *env_table;
   GHashTableIter iter;
@@ -1462,7 +1462,7 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
       if (v)
           g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
         else
-          g_hash_table_replace (env_table, g_strdup (env[i]), NULL);
+          g_hash_table_replace (env_table, g_strdup (env[i]), nullptr);
     }
 
   /* Remove unwanted env variables */
@@ -1485,7 +1485,7 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
   g_hash_table_iter_init (&iter, env_table);
   while (g_hash_table_iter_next (&iter, (gpointer *) &e, (gpointer *) &v))
     g_ptr_array_add (retval, g_strdup_printf ("%s=%s", e, v ? v : ""));
-  g_ptr_array_add (retval, NULL);
+  g_ptr_array_add (retval, nullptr);
 
   *path = g_strdup ((char const*)g_hash_table_lookup (env_table, "PATH"));
   *shell = g_strdup ((char const*)g_hash_table_lookup (env_table, "SHELL"));
@@ -1513,7 +1513,7 @@ info_bar_response_cb (GtkWidget *info_bar,
       break;
     case RESPONSE_RELAUNCH:
       gtk_widget_destroy (info_bar);
-      terminal_screen_reexec (screen, NULL, NULL, NULL, NULL);
+      terminal_screen_reexec (screen, nullptr, nullptr, nullptr, nullptr);
       break;
     case RESPONSE_EDIT_PREFERENCES:
       terminal_app_edit_preferences (terminal_app_get (),
@@ -1538,8 +1538,8 @@ terminal_screen_show_info_bar (TerminalScreen *screen,
 
   info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
                                     _("_Preferences"), RESPONSE_EDIT_PREFERENCES,
-                                    !show_relaunch ? NULL : _("_Relaunch"), RESPONSE_RELAUNCH,
-                                    NULL);
+                                    !show_relaunch ? nullptr : _("_Relaunch"), RESPONSE_RELAUNCH,
+                                    nullptr);
   terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                  _("There was an error creating the child process for this terminal"));
   terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
@@ -1565,7 +1565,7 @@ spawn_result_cb (VteTerminal *terminal,
   ExecData *exec_data = (ExecData*)user_data;
 
   /* Terminal was destroyed while the spawn operation was in progress; nothing to do. */
-  if (terminal == NULL)
+  if (terminal == nullptr)
     goto out;
 
   {
@@ -1575,7 +1575,7 @@ spawn_result_cb (VteTerminal *terminal,
 
   if (error) {
      // FIXMEchpe should be unnecessary, vte already does this internally
-    vte_terminal_set_pty (terminal, NULL);
+    vte_terminal_set_pty (terminal, nullptr);
 
     gboolean can_reexec = TRUE; /* FIXME */
     terminal_screen_show_info_bar (screen, error, can_reexec);
@@ -1615,7 +1615,7 @@ idle_exec_cb (TerminalScreen *screen)
   if (data->fd_list) {
     fds = g_unix_fd_list_steal_fds(data->fd_list, &n_fds);
   } else {
-    fds = NULL;
+    fds = nullptr;
     n_fds = 0;
   }
 
@@ -1628,7 +1628,7 @@ idle_exec_cb (TerminalScreen *screen)
                                      fds, n_fds,
                                      data->fd_map, data->n_fd_map,
                                      data->spawn_flags,
-                                     NULL, NULL, NULL, /* child setup, data, destroy */
+                                     nullptr, nullptr, nullptr, /* child setup, data, destroy */
                                      -1,
                                      data->cancellable,
                                      spawn_result_cb,
@@ -1671,7 +1671,7 @@ terminal_screen_popup_info_new (TerminalScreen *screen)
 TerminalScreenPopupInfo *
 terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info)
 {
-  g_return_val_if_fail (info != NULL, NULL);
+  g_return_val_if_fail (info != nullptr, nullptr);
 
   info->ref_count++;
   return info;
@@ -1680,7 +1680,7 @@ terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info)
 void
 terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
 {
-  g_return_if_fail (info != NULL);
+  g_return_if_fail (info != nullptr);
 
   if (--info->ref_count > 0)
     return;
@@ -1740,11 +1740,11 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  gs_free char *hyperlink = NULL;
-  gs_free char *url = NULL;
+  gs_free char *hyperlink = nullptr;
+  gs_free char *url = nullptr;
   int url_flavor = 0;
-  gs_free char *number_info = NULL;
-  gs_free char *timestamp_info = NULL;
+  gs_free char *number_info = nullptr;
+  gs_free char *timestamp_info = nullptr;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
@@ -1753,7 +1753,7 @@ terminal_screen_button_press (GtkWidget      *widget,
   url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
   terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info, &timestamp_info);
 
-  if (hyperlink != NULL &&
+  if (hyperlink != nullptr &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
@@ -1768,7 +1768,7 @@ terminal_screen_button_press (GtkWidget      *widget,
         return TRUE; /* don't do anything else such as select with the click */
     }
 
-  if (url != NULL &&
+  if (url != nullptr &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
@@ -1793,20 +1793,20 @@ terminal_screen_button_press (GtkWidget      *widget,
             return TRUE;
 
           terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
-          hyperlink = NULL; /* adopted to the popup info */
-          url = NULL; /* ditto */
-          number_info = NULL; /* ditto */
-          timestamp_info = NULL; /* ditto */
+          hyperlink = nullptr; /* adopted to the popup info */
+          url = nullptr; /* ditto */
+          number_info = nullptr; /* ditto */
+          timestamp_info = nullptr; /* ditto */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
           terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
-          hyperlink = NULL; /* adopted to the popup info */
-          url = NULL; /* ditto */
-          number_info = NULL; /* ditto */
-          timestamp_info = NULL; /* ditto */
+          hyperlink = nullptr; /* adopted to the popup info */
+          url = nullptr; /* ditto */
+          number_info = nullptr; /* ditto */
+          timestamp_info = nullptr; /* ditto */
           return TRUE;
         }
     }
@@ -1826,7 +1826,7 @@ terminal_screen_button_press (GtkWidget      *widget,
  * in @screen's PTY.
  *
  * Returns: a newly allocated string containing the current working directory,
- *   or %NULL on failure
+ *   or %nullptr on failure
  */
 char *
 terminal_screen_get_current_dir (TerminalScreen *screen)
@@ -1834,14 +1834,14 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
   const char *uri;
 
   uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (screen));
-  if (uri != NULL)
-    return g_filename_from_uri (uri, NULL, NULL);
+  if (uri != nullptr)
+    return g_filename_from_uri (uri, nullptr, nullptr);
 
   ExecData *data = screen->priv->exec_data;
   if (data && data->cwd)
     return g_strdup (data->cwd);
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -1863,7 +1863,7 @@ terminal_screen_child_exited (VteTerminal *terminal,
   if (priv->child_pid == -1)
     return;
 
-  /* No need to chain up to VteTerminalClass::child_exited since it's NULL */
+  /* No need to chain up to VteTerminalClass::child_exited since it's nullptr */
 
   _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
                          "[screen %p] child process exited\n",
@@ -1879,14 +1879,14 @@ terminal_screen_child_exited (VteTerminal *terminal,
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
     case TERMINAL_EXIT_RESTART:
-      terminal_screen_reexec (screen, NULL, NULL, NULL, NULL);
+      terminal_screen_reexec (screen, nullptr, nullptr, nullptr, nullptr);
       break;
     case TERMINAL_EXIT_HOLD: {
       GtkWidget *info_bar;
 
       info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO,
                                         _("_Relaunch"), RESPONSE_RELAUNCH,
-                                        NULL);
+                                        nullptr);
       if (WIFEXITED (status)) {
         terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                       _("The child process exited normally with status %d."), WEXITSTATUS (status));
@@ -1940,7 +1940,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
     g_print ("info: %d\n", info);
     tmp = context->targets;
-    while (tmp != NULL)
+    while (tmp != nullptr)
       {
         GdkAtom atom = GDK_POINTER_TO_ATOM (tmp->data);
 
@@ -1956,7 +1956,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
   if (gtk_targets_include_uri (&selection_data_target, 1))
     {
       gs_strfreev char **uris;
-      gs_free char *text = NULL;
+      gs_free char *text = nullptr;
       gsize len;
 
       uris = gtk_selection_data_get_uris (selection_data);
@@ -2024,12 +2024,12 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
         utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data_data,
                                      selection_data_length / 2,
-                                     NULL, NULL, NULL);
+                                     nullptr, nullptr, nullptr);
         if (!utf8_data)
           return;
 
         uris[0] = g_strdelimit(utf8_data, "\r\n", 0);
-        uris[1] = NULL;
+        uris[1] = nullptr;
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
         text = terminal_util_concat_uris (uris, &len);
@@ -2057,7 +2057,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
           *newline = '\0';
 
         uris[0] = utf8_data;
-        uris[1] = NULL;
+        uris[1] = nullptr;
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
         text = terminal_util_concat_uris (uris, &len);
@@ -2108,7 +2108,7 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
   GtkPolicyType vpolicy;
 
   container = terminal_screen_container_get_from_screen (screen);
-  if (container == NULL)
+  if (container == nullptr)
     return;
 
   vpolicy = GtkPolicyType(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
@@ -2156,7 +2156,7 @@ terminal_screen_check_match (TerminalScreen *screen,
   char *match;
 
   match = vte_terminal_match_check_event (VTE_TERMINAL (screen), event, &tag);
-  for (tags = priv->match_tags; tags != NULL; tags = tags->next)
+  for (tags = priv->match_tags; tags != nullptr; tags = tags->next)
     {
       TagData *tag_data = (TagData*) tags->data;
       if (tag_data->tag == tag)
@@ -2168,7 +2168,7 @@ terminal_screen_check_match (TerminalScreen *screen,
     }
 
   g_free (match);
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -2194,7 +2194,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
     {
       for (i = 0; i < n_extra_regexes; i++)
         {
-          if (matches[i] != NULL)
+          if (matches[i] != nullptr)
             {
               /* Store the first match for each flavor, free all the others */
               switch (extra_regex_flavors[i])
@@ -2219,8 +2219,8 @@ terminal_screen_check_extra (TerminalScreen *screen,
 /**
  * terminal_screen_has_foreground_process:
  * @screen:
- * @process_name: (out) (allow-none): the basename of the program, or %NULL
- * @cmdline: (out) (allow-none): the full command line, or %NULL
+ * @process_name: (out) (allow-none): the basename of the program, or %nullptr
+ * @cmdline: (out) (allow-none): the full command line, or %nullptr
  *
  * Checks whether there's a foreground process running in
  * this terminal.
@@ -2233,10 +2233,10 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
                                         char           **cmdline)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  gs_free char *command = NULL;
-  gs_free char *data_buf = NULL;
-  gs_free char *basename = NULL;
-  gs_free char *name = NULL;
+  gs_free char *command = nullptr;
+  gs_free char *data_buf = nullptr;
+  gs_free char *basename = nullptr;
+  gs_free char *name = nullptr;
   VtePty *pty;
   int fd;
 #if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__)
@@ -2253,7 +2253,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
     return FALSE;
 
   pty = vte_terminal_get_pty (VTE_TERMINAL (screen));
-  if (pty == NULL)
+  if (pty == nullptr)
     return FALSE;
 
   fd = vte_pty_get_fd (pty);
@@ -2269,11 +2269,11 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   mib[1] = KERN_PROC;
   mib[2] = KERN_PROC_ARGS;
   mib[3] = fgpid;
-  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), nullptr, &len, nullptr, 0) == -1)
       return TRUE;
 
   data_buf = g_malloc0 (len);
-  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, NULL, 0) == -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, nullptr, 0) == -1)
       return TRUE;
   data = data_buf;
 #elif defined(__OpenBSD__)
@@ -2281,16 +2281,16 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   mib[1] = KERN_PROC_ARGS;
   mib[2] = fgpid;
   mib[3] = KERN_PROC_ARGV;
-  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), nullptr, &len, nullptr, 0) == -1)
       return TRUE;
 
   data_buf = g_malloc0 (len);
-  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, NULL, 0) == -1)
+  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, nullptr, 0) == -1)
       return TRUE;
   data = ((char**)data_buf)[0];
 #else
   g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
-  if (!g_file_get_contents (filename, &data_buf, &len, NULL))
+  if (!g_file_get_contents (filename, &data_buf, &len, nullptr))
     return TRUE;
   data = data_buf;
 #endif
@@ -2299,7 +2299,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (!basename)
     return TRUE;
 
-  name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+  name = g_filename_to_utf8 (basename, -1, nullptr, nullptr, nullptr);
   if (!name)
     return TRUE;
 
@@ -2316,7 +2316,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
         data[i] = ' ';
     }
 
-  command = g_filename_to_utf8 (data, -1, NULL, NULL, NULL);
+  command = g_filename_to_utf8 (data, -1, nullptr, nullptr, nullptr);
   if (!command)
     return TRUE;
 
@@ -2328,7 +2328,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
 const char *
 terminal_screen_get_uuid (TerminalScreen *screen)
 {
-  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), nullptr);
 
   return screen->priv->uuid;
 }

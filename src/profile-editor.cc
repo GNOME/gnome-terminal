@@ -532,9 +532,9 @@ palette_color_notify_cb (GtkColorButton *button,
   gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &color);
   i = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "palette-entry-index"));
 
-  g_signal_handlers_block_by_func (profile, (void*)profile_palette_notify_colorpickers_cb, NULL);
+  g_signal_handlers_block_by_func (profile, (void*)profile_palette_notify_colorpickers_cb, nullptr);
   modify_palette_entry (profile, i, &color);
-  g_signal_handlers_unblock_by_func (profile, (void*)profile_palette_notify_colorpickers_cb, NULL);
+  g_signal_handlers_unblock_by_func (profile, (void*)profile_palette_notify_colorpickers_cb, nullptr);
 }
 
 static void
@@ -569,14 +569,14 @@ static void
 custom_command_entry_changed_cb (GtkEntry *entry)
 {
   const char *command;
-  gs_free_error GError *error = NULL;
+  gs_free_error GError *error = nullptr;
 
   command = gtk_entry_get_text (entry);
 
   if (command[0] == '\0' ||
-      g_shell_parse_argv (command, NULL, NULL, &error))
+      g_shell_parse_argv (command, nullptr, nullptr, &error))
     {
-      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, nullptr);
     }
   else
     {
@@ -630,7 +630,7 @@ tree_model_id_to_iter_recurse (GtkTreeModel *model,
         tree_model_id_to_iter_recurse (model, id_column, active_id, &child_iter, result_iter))
       return TRUE;
 
-    gs_free char *id = NULL;
+    gs_free char *id = nullptr;
     gtk_tree_model_get (model, iter, id_column, &id, -1);
     if (g_strcmp0 (id, active_id) == 0) {
       *result_iter = *iter;
@@ -662,12 +662,12 @@ profile_encoding_combo_changed_cb (GtkComboBox *combo,
   if (!gtk_combo_box_get_active_iter(combo, &iter))
     return;
 
-  gs_free char *encoding = NULL;
+  gs_free char *encoding = nullptr;
   gtk_tree_model_get(gtk_combo_box_get_model(combo),
                      &iter,
                      ENCODINGS_COL_ID, &encoding,
                      -1);
-  if (encoding == NULL)
+  if (encoding == nullptr)
     return;
 
   g_signal_handlers_block_by_func (profile, (void*)profile_notify_encoding_combo_cb, combo);
@@ -680,7 +680,7 @@ profile_notify_encoding_combo_cb (GSettings *profile,
                                   const char *key,
                                   GtkComboBox *combo)
 {
-  gs_free char *encoding = NULL;
+  gs_free char *encoding = nullptr;
   g_settings_get(profile, key, "s", &encoding);
 
   g_signal_handlers_block_by_func (combo, (void*)profile_encoding_combo_changed_cb, profile);
@@ -723,7 +723,7 @@ init_color_scheme_menu (GtkWidget *widget)
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer, "text", 0, NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer, "text", 0, nullptr);
 }
 
 typedef enum {
@@ -824,9 +824,9 @@ append_encodings_for_group (GtkTreeStore *store,
   if (submenu) {
     gtk_tree_store_insert_with_values (store,
                                        &parent_iter,
-                                       NULL,
+                                       nullptr,
                                        -1,
-                                       ENCODINGS_COL_ID, NULL,
+                                       ENCODINGS_COL_ID, nullptr,
                                        ENCODINGS_COL_TEXT, _(encodings_group_names[group].name),
                                        -1);
   }
@@ -841,7 +841,7 @@ append_encodings_for_group (GtkTreeStore *store,
     GtkTreeIter iter;
     gtk_tree_store_insert_with_values (store,
                                        &iter,
-                                       submenu ? &parent_iter : NULL,
+                                       submenu ? &parent_iter : nullptr,
                                        -1,
                                        ENCODINGS_COL_ID, encodings[i].charset,
                                        ENCODINGS_COL_TEXT, name,
@@ -891,11 +891,11 @@ rgba_to_s (const GValue *value,
            gpointer user_data)
 {
   GdkRGBA *color;
-  gs_free char *s = NULL;
+  gs_free char *s = nullptr;
 
   color = reinterpret_cast<GdkRGBA*>(g_value_get_boxed (value));
-  if (color == NULL)
-    return NULL;
+  if (color == nullptr)
+    return nullptr;
 
   s = gdk_rgba_to_string (color);
   return g_variant_new_string (s);
@@ -908,7 +908,7 @@ string_to_enum (GValue *value,
 {
   GType (* get_type) (void) = (GType (*)(void))user_data;
   GEnumClass *klass;
-  GEnumValue *eval = NULL;
+  GEnumValue *eval = nullptr;
   const char *s;
   guint i;
 
@@ -928,7 +928,7 @@ string_to_enum (GValue *value,
 
   g_type_class_unref (klass);
 
-  return eval != NULL;
+  return eval != nullptr;
 }
 
 static GVariant *
@@ -938,10 +938,10 @@ enum_to_string (const GValue *value,
 {
   GType (* get_type) (void) = (GType (*)(void))user_data;
   GEnumClass *klass;
-  GEnumValue *eval = NULL;
+  GEnumValue *eval = nullptr;
   int val;
   guint i;
-  GVariant *variant = NULL;
+  GVariant *variant = nullptr;
 
   val = g_value_get_int (value);
 
@@ -1075,10 +1075,10 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                     profile);
     }
 
-  profile_palette_notify_colorpickers_cb (profile, TERMINAL_PROFILE_PALETTE_KEY, NULL);
+  profile_palette_notify_colorpickers_cb (profile, TERMINAL_PROFILE_PALETTE_KEY, nullptr);
   profile_prefs_signal_connect (profile, "changed::" TERMINAL_PROFILE_PALETTE_KEY,
                                 G_CALLBACK (profile_palette_notify_colorpickers_cb),
-                                NULL);
+                                nullptr);
 
   w = (GtkWidget *) gtk_builder_get_object (builder, "palette-combobox");
   profile_prefs_signal_connect (w, "notify::active",
@@ -1096,7 +1096,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                 G_CALLBACK (color_scheme_combo_changed_cb),
                                 profile);
 
-  profile_colors_notify_scheme_combo_cb (profile, NULL, GTK_COMBO_BOX (w));
+  profile_colors_notify_scheme_combo_cb (profile, nullptr, GTK_COMBO_BOX (w));
   profile_prefs_signal_connect (profile, "changed::" TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
                                 G_CALLBACK (profile_colors_notify_scheme_combo_cb),
                                 w);
@@ -1107,7 +1107,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
   w = GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry"));
   custom_command_entry_changed_cb (GTK_ENTRY (w));
   profile_prefs_signal_connect (w, "changed",
-                                G_CALLBACK (custom_command_entry_changed_cb), NULL);
+                                G_CALLBACK (custom_command_entry_changed_cb), nullptr);
 
   profile_prefs_signal_connect (gtk_builder_get_object (builder, "reset-compat-defaults-button"),
                                 "clicked",
@@ -1123,7 +1123,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   profile_prefs_settings_bind_with_mapping (profile,
                                             TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
@@ -1134,7 +1134,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            vte_erase_binding_get_type, NULL);
+                                            vte_erase_binding_get_type, nullptr);
   profile_prefs_settings_bind (profile,
                                TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY,
                                gtk_builder_get_object (builder, "bold-is-bright-checkbutton"),
@@ -1164,7 +1164,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_NO_SENSITIVITY),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cell-height-scale-spinbutton"));
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
@@ -1201,7 +1201,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_NO_SENSITIVITY),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "cursor-background-colorpicker"));
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
@@ -1217,7 +1217,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_NO_SENSITIVITY),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
                                gtk_builder_get_object (builder,
@@ -1240,7 +1240,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_NO_SENSITIVITY),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   w = GTK_WIDGET (gtk_builder_get_object (builder, "highlight-background-colorpicker"));
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
@@ -1256,7 +1256,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_NO_SENSITIVITY),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                                             gtk_builder_get_object (builder,
@@ -1266,7 +1266,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            vte_cursor_shape_get_type, NULL);
+                                            vte_cursor_shape_get_type, nullptr);
   profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
                                             gtk_builder_get_object (builder,
                                                                     "cursor-blink-mode-combobox"),
@@ -1275,7 +1275,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            vte_cursor_blink_mode_get_type, NULL);
+                                            vte_cursor_blink_mode_get_type, nullptr);
   profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY,
                                             gtk_builder_get_object (builder,
                                                                     "text-blink-mode-combobox"),
@@ -1284,7 +1284,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            vte_text_blink_mode_get_type, NULL);
+                                            vte_text_blink_mode_get_type, nullptr);
 
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
                                gtk_builder_get_object (builder,
@@ -1315,7 +1315,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            vte_erase_binding_get_type, NULL);
+                                            vte_erase_binding_get_type, nullptr);
   profile_prefs_settings_bind_with_mapping (profile, TERMINAL_PROFILE_EXIT_ACTION_KEY,
                                             gtk_builder_get_object (builder,
                                                                     "exit-action-combobox"),
@@ -1324,9 +1324,9 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            terminal_exit_action_get_type, NULL);
+                                            terminal_exit_action_get_type, nullptr);
   w = (GtkWidget*) gtk_builder_get_object (builder, "font-selector");
-  gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (w), monospace_filter, NULL, NULL);
+  gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (w), monospace_filter, nullptr, nullptr);
 #if GTK_CHECK_VERSION (3, 24, 0)
   gtk_font_chooser_set_level (GTK_FONT_CHOOSER (w),
 			      GtkFontChooserLevel(GTK_FONT_CHOOSER_LEVEL_FAMILY |
@@ -1348,7 +1348,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) s_to_rgba,
                                             (GSettingsBindSetMapping) rgba_to_s,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
 
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY,
                                gtk_builder_get_object (builder,
@@ -1387,7 +1387,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) scrollbar_policy_to_bool,
                                             (GSettingsBindSetMapping) bool_to_scrollbar_policy,
-                                            NULL, NULL);
+                                            nullptr, nullptr);
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
                                gtk_builder_get_object (builder,
                                                        "scroll-on-keystroke-checkbutton"),
@@ -1415,7 +1415,7 @@ profile_prefs_load (const char *uuid, GSettings *profile)
 							       G_SETTINGS_BIND_SET),
                                             (GSettingsBindGetMapping) string_to_enum,
                                             (GSettingsBindSetMapping) enum_to_string,
-                                            terminal_preserve_working_directory_get_type, NULL);
+                                            terminal_preserve_working_directory_get_type, nullptr);
 
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
                                gtk_builder_get_object (builder,

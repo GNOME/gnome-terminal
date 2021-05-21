@@ -87,7 +87,7 @@ sync_tab_label (TerminalScreen *screen,
    */
   window = TERMINAL_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (label),
                                                      TERMINAL_TYPE_WINDOW));
-  if (window != NULL)
+  if (window != nullptr)
     terminal_window_update_size (window);
 }
 
@@ -139,7 +139,7 @@ terminal_tab_label_parent_set (GtkWidget *widget,
 
   parent = gtk_widget_get_parent (widget);
   if (GTK_IS_NOTEBOOK (parent)) {
-    notify_tab_pos_cb (GTK_NOTEBOOK (parent), NULL, TERMINAL_TAB_LABEL (widget));
+    notify_tab_pos_cb (GTK_NOTEBOOK (parent), nullptr, TERMINAL_TAB_LABEL (widget));
     g_signal_connect (parent, "notify::tab-pos", 
                       G_CALLBACK (notify_tab_pos_cb), widget);
   }
@@ -185,11 +185,11 @@ terminal_tab_label_constructed (GObject *object)
 
   hbox = GTK_WIDGET (tab_label);
 
-  g_assert (priv->screen != NULL);
+  g_assert (priv->screen != nullptr);
   
   gtk_box_set_spacing (GTK_BOX (hbox), SPACING);
 
-  priv->label = label = gtk_label_new (NULL);
+  priv->label = label = gtk_label_new (nullptr);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_widget_set_margin_start  (label, 0);
@@ -206,7 +206,7 @@ terminal_tab_label_constructed (GObject *object)
   gtk_widget_set_tooltip_text (close_button, _("Close tab"));
   gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-  sync_tab_label (priv->screen, NULL, label);
+  sync_tab_label (priv->screen, nullptr, label);
   g_signal_connect (priv->screen, "notify::title",
                     G_CALLBACK (sync_tab_label), label);
 
@@ -222,12 +222,12 @@ terminal_tab_label_dispose (GObject *object)
   TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
   TerminalTabLabelPrivate *priv = tab_label->priv;
 
-  if (priv->screen != NULL) {
+  if (priv->screen != nullptr) {
     g_signal_handlers_disconnect_by_func (priv->screen,
                                           (void*)sync_tab_label,
                                           priv->label);
     g_object_unref (priv->screen);
-    priv->screen = NULL;
+    priv->screen = nullptr;
   }
 
   G_OBJECT_CLASS (terminal_tab_label_parent_class)->dispose (object);
@@ -298,7 +298,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalTabLabelClass, close_button_clicked),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -306,7 +306,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   g_object_class_install_property
     (gobject_class,
      PROP_SCREEN,
-     g_param_spec_object ("screen", NULL, NULL,
+     g_param_spec_object ("screen", nullptr, nullptr,
                           TERMINAL_TYPE_SCREEN,
                           GParamFlags(G_PARAM_READWRITE |
 				      G_PARAM_STATIC_NAME |
@@ -389,7 +389,7 @@ terminal_tab_label_set_bold (TerminalTabLabel *tab_label,
 TerminalScreen *
 terminal_tab_label_get_screen (TerminalTabLabel *tab_label)
 {
-  g_return_val_if_fail (TERMINAL_IS_TAB_LABEL (tab_label), NULL);
+  g_return_val_if_fail (TERMINAL_IS_TAB_LABEL (tab_label), nullptr);
 
   return tab_label->priv->screen;
 }

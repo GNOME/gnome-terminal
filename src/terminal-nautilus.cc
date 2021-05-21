@@ -112,7 +112,7 @@ get_terminal_file_info_from_uri (const char *uri)
 
   uri_scheme = g_uri_parse_scheme (uri);
 
-  if (uri_scheme == NULL) {
+  if (uri_scheme == nullptr) {
     ret = FILE_INFO_OTHER;
   } else if (strcmp (uri_scheme, "file") == 0) {
     ret = FILE_INFO_LOCAL;
@@ -148,12 +148,12 @@ parse_sftp_uri (GFile *file,
   char *uri;
 
   uri = g_file_get_uri (file);
-  g_assert (uri != NULL);
+  g_assert (uri != nullptr);
   save = uri;
 
-  *path = NULL;
-  *user = NULL;
-  *host = NULL;
+  *path = nullptr;
+  *user = nullptr;
+  *host = nullptr;
   *port = 0;
 
   /* skip intial 'sftp:// prefix */
@@ -162,18 +162,18 @@ parse_sftp_uri (GFile *file,
 
   /* cut out the path */
   tmp = strchr (uri, '/');
-  if (tmp != NULL) {
+  if (tmp != nullptr) {
     *path = g_uri_unescape_string (tmp, "/");
     *tmp = '\0';
   }
 
   /* read the username - it ends with @ */
   tmp = strchr (uri, '@');
-  if (tmp != NULL) {
+  if (tmp != nullptr) {
     *tmp++ = '\0';
 
     *user = strdup (uri);
-    if (strchr (*user, ':') != NULL) {
+    if (strchr (*user, ':') != nullptr) {
       /* chop the password */
       *(strchr (*user, ':')) = '\0'; 
     }
@@ -183,7 +183,7 @@ parse_sftp_uri (GFile *file,
 
   /* now read the port, starts with : */
   tmp = strchr (uri, ':');
-  if (tmp != NULL) {
+  if (tmp != nullptr) {
     *tmp++ = '\0';
     *port = atoi (tmp);  /*FIXME: getservbyname*/
   }
@@ -203,7 +203,7 @@ ssh_argv (const char *uri,
   char *host_name, *path, *user_name, *quoted_path;
   guint host_port;
 
-  g_assert (uri != NULL);
+  g_assert (uri != nullptr);
 
   argv = g_new0 (char *, 9);
   argc = 0;
@@ -214,7 +214,7 @@ ssh_argv (const char *uri,
   parse_sftp_uri (file, &user_name, &host_name, &host_port, &path);
   g_object_unref (file);
 
-  if (user_name != NULL) {
+  if (user_name != nullptr) {
     argv[argc++ ]= g_strdup_printf ("%s@%s", user_name, host_name);
     g_free (host_name);
     g_free (user_name);
@@ -258,7 +258,7 @@ uri_has_local_path (const char *uri)
   file = g_file_new_for_uri (uri);
   path = g_file_get_path (file);
 
-  ret = (path != NULL);
+  ret = (path != nullptr);
 
   g_free (path);
   g_object_unref (file);
@@ -293,7 +293,7 @@ create_terminal (ExecData *data /* transfer full */)
 {
   TerminalFactory *factory;
   TerminalReceiver *receiver;
-  GError *error = NULL;
+  GError *error = nullptr;
   GVariantBuilder builder;
   char *object_path;
   char startup_id[32];
@@ -305,9 +305,9 @@ create_terminal (ExecData *data /* transfer full */)
 								     G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
                                                      TERMINAL_APPLICATION_ID,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
-                                                     NULL /* cancellable */,
+                                                     nullptr /* cancellable */,
                                                      &error);
-  if (factory == NULL) {
+  if (factory == nullptr) {
     g_dbus_error_strip_remote_error (error);
     g_printerr ("Error constructing proxy for %s:%s: %s\n",
                 TERMINAL_APPLICATION_ID, TERMINAL_FACTORY_OBJECT_PATH,
@@ -324,11 +324,11 @@ create_terminal (ExecData *data /* transfer full */)
   terminal_client_append_create_instance_options (&builder,
                                                   gdk_display_get_name (gdk_display_get_default ()),
                                                   startup_id,
-                                                  NULL /* geometry */,
-                                                  NULL /* role */,
-                                                  NULL /* use default profile */,
-                                                  NULL /* use profile encoding */,
-                                                  NULL /* title */,
+                                                  nullptr /* geometry */,
+                                                  nullptr /* role */,
+                                                  nullptr /* use default profile */,
+                                                  nullptr /* use profile encoding */,
+                                                  nullptr /* title */,
                                                   TRUE, /* active */
                                                   FALSE /* maximised */,
                                                   FALSE /* fullscreen */);
@@ -337,7 +337,7 @@ create_terminal (ExecData *data /* transfer full */)
          (factory,
           g_variant_builder_end (&builder),
           &object_path,
-          NULL /* cancellable */,
+          nullptr /* cancellable */,
           &error)) {
     g_dbus_error_strip_remote_error (error);
     g_printerr ("Error creating terminal: %s\n", error->message);
@@ -354,9 +354,9 @@ create_terminal (ExecData *data /* transfer full */)
 								       G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS),
                                                        TERMINAL_APPLICATION_ID,
                                                        object_path,
-                                                       NULL /* cancellable */,
+                                                       nullptr /* cancellable */,
                                                        &error);
-  if (receiver == NULL) {
+  if (receiver == nullptr) {
     g_dbus_error_strip_remote_error (error);
     g_printerr ("Failed to create proxy for terminal: %s\n", error->message);
     g_error_free (error);
@@ -372,22 +372,22 @@ create_terminal (ExecData *data /* transfer full */)
   terminal_client_append_exec_options (&builder,
                                        TRUE, /* pass environment */
                                        data->path,
-                                       NULL, 0, /* FD array */
+                                       nullptr, 0, /* FD array */
                                        TRUE /* shell */);
 
   if (data->info == FILE_INFO_SFTP &&
       data->remote) {
     argv = ssh_argv (data->uri, &argc);
   } else {
-    argv = NULL; argc = 0;
+    argv = nullptr; argc = 0;
   }
 
   if (!terminal_receiver_call_exec_sync (receiver,
                                          g_variant_builder_end (&builder),
                                          g_variant_new_bytestring_array ((const char * const *) argv, argc),
-                                         NULL /* in FD list */,
-                                         NULL /* out FD list */,
-                                         NULL /* cancellable */,
+                                         nullptr /* in FD list */,
+                                         nullptr /* out FD list */,
+                                         nullptr /* cancellable */,
                                          &error)) {
     g_dbus_error_strip_remote_error (error);
     g_printerr ("Error: %s\n", error->message);
@@ -417,15 +417,15 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
   ExecData *data;
 
   uri = nautilus_file_info_get_activation_uri (menu_item->file_info);
-  if (uri == NULL)
+  if (uri == nullptr)
     return;
 
-  path = NULL;
+  path = nullptr;
   info = get_terminal_file_info_from_uri (uri);
 
   switch (info) {
     case FILE_INFO_LOCAL:
-      path = g_filename_from_uri (uri, NULL, NULL);
+      path = g_filename_from_uri (uri, nullptr, nullptr);
       break;
 
     case FILE_INFO_DESKTOP:
@@ -452,7 +452,7 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
       g_assert_not_reached ();
   }
 
-  if (path == NULL && (info != FILE_INFO_SFTP || !menu_item->remote_terminal)) {
+  if (path == nullptr && (info != FILE_INFO_SFTP || !menu_item->remote_terminal)) {
     g_free (uri);
     return;
   }
@@ -480,13 +480,13 @@ terminal_nautilus_menu_item_dispose (GObject *object)
 {
   TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (object);
 
-  if (menu_item->file_info != NULL) {
+  if (menu_item->file_info != nullptr) {
     g_object_unref (menu_item->file_info);
-    menu_item->file_info = NULL;
+    menu_item->file_info = nullptr;
   }
-  if (menu_item->nautilus != NULL) {
+  if (menu_item->nautilus != nullptr) {
     g_object_unref (menu_item->nautilus);
-    menu_item->nautilus = NULL;
+    menu_item->nautilus = nullptr;
   }
 
   G_OBJECT_CLASS (terminal_nautilus_menu_item_parent_class)->dispose (object);
@@ -591,13 +591,13 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
   TerminalFileInfo terminal_file_info;
 
   if (terminal_locked_down (nautilus))
-    return NULL;
+    return nullptr;
 
   uri = nautilus_file_info_get_activation_uri (file_info);
-  if (uri == NULL)
-    return NULL;
+  if (uri == nullptr)
+    return nullptr;
 
-  items = NULL;
+  items = nullptr;
 
   terminal_file_info = get_terminal_file_info_from_uri (uri);
 
@@ -642,24 +642,24 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
   TerminalFileInfo terminal_file_info;
 
   if (terminal_locked_down (nautilus))
-    return NULL;
+    return nullptr;
 
   /* Only add items when passed exactly one file */
-  if (files == NULL || files->next != NULL)
-    return NULL;
+  if (files == nullptr || files->next != nullptr)
+    return nullptr;
 
   file_info = (NautilusFileInfo *) files->data;
   file_type = nautilus_file_info_get_file_type (file_info);
   if (!nautilus_file_info_is_directory (file_info) &&
       file_type != G_FILE_TYPE_SHORTCUT &&
       file_type != G_FILE_TYPE_MOUNTABLE)
-    return NULL;
+    return nullptr;
 
   uri = nautilus_file_info_get_activation_uri (file_info);
-  if (uri == NULL)
-    return NULL;
+  if (uri == nullptr)
+    return nullptr;
 
-  items = NULL;
+  items = nullptr;
 
   terminal_file_info = get_terminal_file_info_from_uri (uri);
 

@@ -48,11 +48,11 @@
  * terminal_util_show_error_dialog:
  * @transient_parent: parent of the future dialog window;
  * @weap_ptr: pointer to a #Widget pointer, to control the population.
- * @error: a #GError, or %NULL
+ * @error: a #GError, or %nullptr
  * @message_format: printf() style format string
  *
  * Create a #GtkMessageDialog window with the message, and present it, handling its buttons.
- * If @weap_ptr is not #NULL, only create the dialog if <literal>*weap_ptr</literal> is #NULL 
+ * If @weap_ptr is not #nullptr, only create the dialog if <literal>*weap_ptr</literal> is #nullptr 
  * (and in that * case, set @weap_ptr to be a weak pointer to the new dialog), otherwise just 
  * present <literal>*weak_ptr</literal>. Note that in this last case, the message <emph>will</emph>
  * be changed.
@@ -73,25 +73,25 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
       message = g_strdup_vprintf (message_format, args);
       va_end (args);
     }
-  else message = NULL;
+  else message = nullptr;
 
-  if (weak_ptr == NULL || *weak_ptr == NULL)
+  if (weak_ptr == nullptr || *weak_ptr == nullptr)
     {
       GtkWidget *dialog;
       dialog = gtk_message_dialog_new (transient_parent,
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_ERROR,
                                        GTK_BUTTONS_OK,
-                                       message ? "%s" : NULL,
+                                       message ? "%s" : nullptr,
 				       message);
 
-      if (error != NULL)
+      if (error != nullptr)
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                   "%s", error->message);
 
-      g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), nullptr);
 
-      if (weak_ptr != NULL)
+      if (weak_ptr != nullptr)
         {
         *weak_ptr = dialog;
         g_object_add_weak_pointer (G_OBJECT (dialog), (void**)weak_ptr);
@@ -106,7 +106,7 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
       g_return_if_fail (GTK_IS_MESSAGE_DIALOG (*weak_ptr));
 
       /* Sucks that there's no direct accessor for "text" property */
-      g_object_set (G_OBJECT (*weak_ptr), "text", message, NULL);
+      g_object_set (G_OBJECT (*weak_ptr), "text", message, nullptr);
 
       gtk_window_present (GTK_WINDOW (*weak_ptr));
     }
@@ -127,7 +127,7 @@ open_url (GtkWindow *parent,
     screen = gdk_screen_get_default ();
 
   uri_fixed = terminal_util_uri_fixup (uri, error);
-  if (uri_fixed == NULL)
+  if (uri_fixed == nullptr)
     return FALSE;
 
   return gtk_show_uri (screen, uri_fixed, user_time, error);
@@ -136,7 +136,7 @@ open_url (GtkWindow *parent,
 void
 terminal_util_show_help (const char *topic)
 {
-  gs_free_error GError *error = NULL;
+  gs_free_error GError *error = nullptr;
   gs_free char *uri;
 
   if (topic) {
@@ -145,9 +145,9 @@ terminal_util_show_help (const char *topic)
     uri = g_strdup ("help:gnome-terminal");
   }
 
-  if (!open_url (NULL, uri, gtk_get_current_event_time (), &error))
+  if (!open_url (nullptr, uri, gtk_get_current_event_time (), &error))
     {
-      terminal_util_show_error_dialog (NULL, NULL, error,
+      terminal_util_show_error_dialog (nullptr, nullptr, error,
                                        _("There was an error displaying help"));
     }
 }
@@ -170,7 +170,7 @@ terminal_util_show_about (void)
   GBytes *bytes;
   const guint8 *data;
   gsize data_len;
-  GError *error = NULL;
+  GError *error = nullptr;
   char **authors, **contributors, **artists, **documenters, **array_strv;
   gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
   GPtrArray *array;
@@ -189,10 +189,10 @@ terminal_util_show_about (void)
   g_key_file_load_from_data (key_file, (const char *) data, data_len, GKeyFileFlags(0), &error);
   g_assert_no_error (error);
 
-  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, NULL);
-  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, NULL);
-  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
-  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, nullptr);
+  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, nullptr);
+  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, nullptr);
+  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, nullptr);
 
   g_key_file_free (key_file);
   g_bytes_unref (bytes);
@@ -212,7 +212,7 @@ terminal_util_show_about (void)
   }
   g_free (contributors); /* strings are now owned by the array */
 
-  g_ptr_array_add (array, NULL);
+  g_ptr_array_add (array, nullptr);
   array_strv = (char **) g_ptr_array_free (array, FALSE);
 
   for (i = 0; i < n_artists; ++i)
@@ -254,7 +254,7 @@ terminal_util_show_about (void)
                          "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
                          nullptr);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), nullptr);
   gtk_window_present (dialog);
 
   g_strfreev (array_strv);
@@ -274,7 +274,7 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
   
   obj = gtk_widget_get_accessible (widget);
 
-  if (obj == NULL)
+  if (obj == nullptr)
     {
       g_warning ("%s: for some reason widget has no GtkAccessible",
                  G_STRFUNC);
@@ -297,10 +297,10 @@ terminal_util_open_url (GtkWidget *parent,
                         TerminalURLFlavor flavor,
                         guint32 user_time)
 {
-  gs_free_error GError *error = NULL;
-  gs_free char *uri = NULL;
+  gs_free_error GError *error = nullptr;
+  gs_free char *uri = nullptr;
 
-  g_return_if_fail (orig_url != NULL);
+  g_return_if_fail (orig_url != nullptr);
 
   switch (flavor)
     {
@@ -318,13 +318,13 @@ terminal_util_open_url (GtkWidget *parent,
       uri = g_strdup (orig_url);
       break;
     default:
-      uri = NULL;
+      uri = nullptr;
       g_assert_not_reached ();
     }
 
   if (!open_url (GTK_WINDOW (parent), uri, user_time, &error))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
+      terminal_util_show_error_dialog (GTK_WINDOW (parent), nullptr, error,
                                        _("Could not open the address “%s”"),
                                        uri);
     }
@@ -406,13 +406,13 @@ terminal_util_get_licence_text (void)
        "along with GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>.")
   };
 
-  return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
+  return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), nullptr);
 }
 
 static void
 main_object_destroy_cb (GtkWidget *widget)
 {
-  g_object_set_data (G_OBJECT (widget), "builder", NULL);
+  g_object_set_data (G_OBJECT (widget), "builder", nullptr);
 }
 
 GtkBuilder *
@@ -422,7 +422,7 @@ terminal_util_load_widgets_resource (const char *path,
                                      ...)
 {
   GtkBuilder *builder;
-  GError *error = NULL;
+  GError *error = nullptr;
   va_list args;
 
   builder = gtk_builder_new ();
@@ -450,7 +450,7 @@ terminal_util_load_widgets_resource (const char *path,
 
     main_object = gtk_builder_get_object (builder, main_object_name);
     g_object_set_data_full (main_object, "builder", g_object_ref (builder), (GDestroyNotify) g_object_unref);
-    g_signal_connect (main_object, "destroy", G_CALLBACK (main_object_destroy_cb), NULL);
+    g_signal_connect (main_object, "destroy", G_CALLBACK (main_object_destroy_cb), nullptr);
 
     /* Fixup dialogue padding, #735242 */
     if (GTK_IS_DIALOG (main_object) &&
@@ -470,7 +470,7 @@ terminal_util_load_objects_resource (const char *path,
                                      ...)
 {
   gs_unref_object GtkBuilder *builder;
-  GError *error = NULL;
+  GError *error = nullptr;
   va_list args;
 
   builder = gtk_builder_new ();
@@ -508,21 +508,21 @@ terminal_util_dialog_focus_widget (GtkBuilder *builder,
 {
   GtkWidget *widget, *page, *page_parent;
 
-  if (widget_name == NULL)
+  if (widget_name == nullptr)
     return;
 
   widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
-  if (widget == NULL)
+  if (widget == nullptr)
     return;
 
   page = widget;
-  while (page != NULL &&
-         (page_parent = gtk_widget_get_parent (page)) != NULL &&
+  while (page != nullptr &&
+         (page_parent = gtk_widget_get_parent (page)) != nullptr &&
          !GTK_IS_NOTEBOOK (page_parent))
     page = page_parent;
 
   page_parent = gtk_widget_get_parent (page);
-  if (page != NULL && GTK_IS_NOTEBOOK (page_parent)) {
+  if (page != nullptr && GTK_IS_NOTEBOOK (page_parent)) {
     GtkNotebook *notebook;
 
     notebook = GTK_NOTEBOOK (page_parent);
@@ -549,20 +549,20 @@ set_proxy_env (GHashTable *env_table,
                const char *key,
                char *value /* consumed */)
 {
-  char *key1 = NULL, *key2 = NULL;
-  char *value1 = NULL, *value2 = NULL;
+  char *key1 = nullptr, *key2 = nullptr;
+  char *value1 = nullptr, *value2 = nullptr;
 
   if (!value)
     return;
 
-  if (g_hash_table_lookup (env_table, key) == NULL)
+  if (g_hash_table_lookup (env_table, key) == nullptr)
     key1 = g_strdup (key);
 
   key2 = g_ascii_strup (key, -1);
-  if (g_hash_table_lookup (env_table, key) != NULL)
+  if (g_hash_table_lookup (env_table, key) != nullptr)
     {
       g_free (key2);
-      key2 = NULL;
+      key2 = nullptr;
     }
 
   if (key1 && key2)
@@ -619,13 +619,13 @@ setup_proxy_env (GSettings  *proxy_settings,
         {
           gs_free char *password;
 
-          g_string_append_uri_escaped (buf, user, NULL, TRUE);
+          g_string_append_uri_escaped (buf, user, nullptr, TRUE);
 
           password = g_settings_get_string (child_settings, "authentication-password");
           if (password[0])
             {
               g_string_append_c (buf, ':');
-              g_string_append_uri_escaped (buf, password, NULL, TRUE);
+              g_string_append_uri_escaped (buf, password, nullptr, TRUE);
             }
           g_string_append_c (buf, '@');
         }
@@ -661,11 +661,11 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
   int i;
 
   g_settings_get (proxy_settings, "ignore-hosts", "^as", &ignore);
-  if (ignore == NULL)
+  if (ignore == nullptr)
     return;
 
   buf = g_string_sized_new (64);
-  for (i = 0; ignore[i] != NULL; ++i)
+  for (i = 0; ignore[i] != nullptr; ++i)
     {
       if (buf->len)
         g_string_append_c (buf, ',');
@@ -714,9 +714,9 @@ terminal_util_add_proxy_env (GHashTable *env_table)
 char **
 terminal_util_get_etc_shells (void)
 {
-  GError *err = NULL;
+  GError *err = nullptr;
   gsize len;
-  gs_free char *contents = NULL;
+  gs_free char *contents = nullptr;
   char *str, *nl, *end;
   GPtrArray *arr;
 
@@ -725,7 +725,7 @@ terminal_util_get_etc_shells (void)
     char *default_shells[3] = {
       (char*) "/bin/sh",
       (char*) "/bin/csh",
-      NULL
+      nullptr
     };
     return g_strdupv (default_shells);
   }
@@ -733,7 +733,7 @@ terminal_util_get_etc_shells (void)
   arr = g_ptr_array_new ();
   str = contents;
   end = contents + len;
-  while (str < end && (nl = strchr (str, '\n')) != NULL) {
+  while (str < end && (nl = strchr (str, '\n')) != nullptr) {
     if (str != nl) /* non-empty? */
       g_ptr_array_add (arr, g_strndup (str, nl - str));
     str = nl + 1;
@@ -742,7 +742,7 @@ terminal_util_get_etc_shells (void)
   if (str < end && str[0])
     g_ptr_array_add (arr, g_strdup (str));
 
-  g_ptr_array_add (arr, NULL);
+  g_ptr_array_add (arr, nullptr);
   return (char **) g_ptr_array_free (arr, FALSE);
 }
 
@@ -761,7 +761,7 @@ terminal_util_get_is_shell (const char *command)
   guint i;
 
   shells = terminal_util_get_etc_shells ();
-  if (shells == NULL)
+  if (shells == nullptr)
     return FALSE;
 
   for (i = 0; shells[i]; i++)
@@ -779,9 +779,9 @@ s_to_rgba (GVariant *variant,
   GdkRGBA *color = (GdkRGBA*)user_data;
   const char *str;
 
-  if (variant == NULL) {
+  if (variant == nullptr) {
     /* Fallback */
-    *result = NULL;
+    *result = nullptr;
     return TRUE;
   }
 
@@ -801,10 +801,10 @@ s_to_rgba (GVariant *variant,
  * @mandatory_key_type: the expected value type of @mandatory_key
  *
  * Creates a #GSettings for @schema_id, if this schema exists and
- * has a key named @mandatory_key (if non-%NULL) with the value type
+ * has a key named @mandatory_key (if non-%nullptr) with the value type
  * @mandatory_key_type.
  *
- * Returns: (transfer full): a new #GSettings, or %NULL
+ * Returns: (transfer full): a new #GSettings, or %nullptr
  */
 GSettings *
 terminal_g_settings_new (const char *schema_id,
@@ -816,22 +816,22 @@ terminal_g_settings_new (const char *schema_id,
   schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
                                             schema_id,
                                             TRUE);
-  if (schema == NULL)
-    return NULL;
+  if (schema == nullptr)
+    return nullptr;
 
   if (mandatory_key) {
     gs_unref_settings_schema_key GSettingsSchemaKey *key;
 
     key = g_settings_schema_get_key (schema, mandatory_key);
-    if (key == NULL)
-      return NULL;
+    if (key == nullptr)
+      return nullptr;
 
     if (!g_variant_type_equal (g_settings_schema_key_get_value_type (key),
                                mandatory_key_type))
-      return NULL;
+      return nullptr;
   }
 
-  return g_settings_new_full (schema, NULL, NULL);
+  return g_settings_new_full (schema, nullptr, nullptr);
 }
 
 /**
@@ -842,14 +842,14 @@ terminal_g_settings_new (const char *schema_id,
  *
  * Gets a color from @key in @settings.
  *
- * Returns: @color if parsing succeeded, or %NULL otherwise
+ * Returns: @color if parsing succeeded, or %nullptr otherwise
  */
 const GdkRGBA *
 terminal_g_settings_get_rgba (GSettings  *settings,
                               const char *key,
                               GdkRGBA    *color)
 {
-  g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (color != nullptr, FALSE);
 
   return (GdkRGBA const*)g_settings_get_mapped (settings, key,
 						s_to_rgba,
@@ -881,14 +881,14 @@ as_to_rgba_palette (GVariant *variant,
                     gpointer user_data)
 {
   gsize *n_colors = (gsize*)user_data;
-  gs_free GdkRGBA *colors = NULL;
+  gs_free GdkRGBA *colors = nullptr;
   gsize n = 0;
   GVariantIter iter;
   const char *str;
   gsize i;
 
   /* Fallback */
-  if (variant == NULL)
+  if (variant == nullptr)
     goto out;
 
   g_variant_iter_init (&iter, variant);
@@ -914,7 +914,7 @@ as_to_rgba_palette (GVariant *variant,
  * terminal_g_settings_get_rgba_palette:
  * @settings: a #GSettings
  * @key: a valid key in @settings or type "s"
- * @n_colors: (allow-none): location to store the number of palette entries, or %NULL
+ * @n_colors: (allow-none): location to store the number of palette entries, or %nullptr
  *
  * Returns: (transfer full):
  */
@@ -940,7 +940,7 @@ terminal_g_settings_set_rgba_palette (GSettings      *settings,
   strv = g_new (char *, n_colors + 1);
   for (i = 0; i < n_colors; ++i)
     strv[i] = gdk_rgba_to_string (&colors[i]);
-  strv[n_colors] = NULL;
+  strv[n_colors] = nullptr;
 
   g_settings_set (settings, key, "^as", strv);
 }
@@ -963,7 +963,7 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
   GList *list, *l;
 
   list = gtk_widget_list_mnemonic_labels (widget);
-  for (l = list; l != NULL; l = l->next) {
+  for (l = list; l != nullptr; l = l->next) {
     GtkWidget *label = (GtkWidget*)l->data;
 
     if (gtk_widget_is_ancestor (label, widget))
@@ -975,7 +975,7 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
              gtk_buildable_get_name (GTK_BUILDABLE (label)));
 #endif
 
-    mnemonic_label_set_sensitive_cb (widget, NULL, label);
+    mnemonic_label_set_sensitive_cb (widget, nullptr, label);
     g_signal_connect (widget, "notify::sensitive",
                       G_CALLBACK (mnemonic_label_set_sensitive_cb),
                       label);
@@ -986,7 +986,7 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
     gtk_container_foreach (GTK_CONTAINER (widget),
                            /* See #96 for double casting. */
                            (GtkCallback) (GCallback) terminal_util_bind_mnemonic_label_sensitivity,
-                           NULL);
+                           nullptr);
 }
 
 /*
@@ -1028,15 +1028,15 @@ add_separators (const char *in, const char *sep, int groupby)
  * terminal_util_number_info:
  * @str: a dec or hex number as string
  *
- * Returns: (transfer full): Useful info about @str, or %NULL if it's too large
+ * Returns: (transfer full): Useful info about @str, or %nullptr if it's too large
  */
 char *
 terminal_util_number_info (const char *str)
 {
-  gs_free char *decstr = NULL;
-  gs_free char *hextmp = NULL;
-  gs_free char *hexstr = NULL;
-  gs_free char *magnitudestr = NULL;
+  gs_free char *decstr = nullptr;
+  gs_free char *hextmp = nullptr;
+  gs_free char *hexstr = nullptr;
+  gs_free char *magnitudestr = nullptr;
   gboolean exact = TRUE;
   gboolean hex = FALSE;
   const char *thousep;
@@ -1051,11 +1051,11 @@ terminal_util_number_info (const char *str)
   char* end;
   gint64 num = g_ascii_strtoull(str, &end, hex ? 16 : 10);
   if (errno || str == end || num == -1)
-    return NULL;
+    return nullptr;
 
   /* No use in dec-hex conversion for so small numbers */
   if (num < 10) {
-    return NULL;
+    return nullptr;
   }
 
   /* Group the decimal digits */
@@ -1103,14 +1103,14 @@ terminal_util_number_info (const char *str)
  * terminal_util_timestamp_info:
  * @str: a dec or hex number as string
  *
- * Returns: (transfer full): Formatted localtime if @str is decimal and looks like a timestamp, or %NULL
+ * Returns: (transfer full): Formatted localtime if @str is decimal and looks like a timestamp, or %nullptr
  */
 char *
 terminal_util_timestamp_info (const char *str)
 {
   /* Bail out on hex numbers */
   if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
-    return NULL;
+    return nullptr;
   }
 
   /* Deliberately not handle octal */
@@ -1118,7 +1118,7 @@ terminal_util_timestamp_info (const char *str)
   char* end;
   gint64 num = g_ascii_strtoull (str, &end, 10);
   if (errno || end == str || num == -1)
-    return NULL;
+    return nullptr;
 
   /* Java uses Unix time in milliseconds. */
   if (num >= 1000000000000 && num <= 1999999999999)
@@ -1128,11 +1128,11 @@ terminal_util_timestamp_info (const char *str)
    * and check the human-readable time in gnome-terminal.
    * (They're Sep 9 2001 and May 18 2033 by the way.) */
   if (num < 1000000000 || num > 1999999999)
-    return NULL;
+    return nullptr;
 
   gs_unref_date_time GDateTime* date = g_date_time_new_from_unix_utc (num);
-  if (date == NULL)
-    return NULL;
+  if (date == nullptr)
+    return nullptr;
 
   return g_date_time_format(date, "%c");
 }
@@ -1154,7 +1154,7 @@ terminal_util_timestamp_info (const char *str)
  * work around bug 781800 (LibreOffice bug 107461).
  *
  * Returns: The possibly rewritten URI if gnome-terminal should attempt
- *   to handle it, NULL if it should refuse to handle.
+ *   to handle it, nullptr if it should refuse to handle.
  */
 char *
 terminal_util_uri_fixup (const char *uri,
@@ -1163,9 +1163,9 @@ terminal_util_uri_fixup (const char *uri,
   gs_free char *filename;
   gs_free char *hostname;
 
-  filename = g_filename_from_uri (uri, &hostname, NULL);
-  if (filename != NULL &&
-      hostname != NULL &&
+  filename = g_filename_from_uri (uri, &hostname, nullptr);
+  if (filename != nullptr &&
+      hostname != nullptr &&
       hostname[0] != '\0') {
     /* "file" scheme and nonempty hostname */
     if (g_ascii_strcasecmp (hostname, "localhost") == 0 ||
@@ -1177,7 +1177,7 @@ terminal_util_uri_fixup (const char *uri,
        * "file:/etc/passwd", but just in case we do, or encounter
        * something else unexpected, leave the URI unchanged. */
       slash1 = strchr(uri, '/');
-      if (slash1 == NULL)
+      if (slash1 == nullptr)
         return g_strdup (uri);
 
       slash2 = slash1 + 1;
@@ -1185,7 +1185,7 @@ terminal_util_uri_fixup (const char *uri,
         return g_strdup (uri);
 
       slash3 = strchr(slash2 + 1, '/');
-      if (slash3 == NULL)
+      if (slash3 == nullptr)
         return g_strdup (uri);
 
       return g_strdup_printf("%.*s%s",
@@ -1199,7 +1199,7 @@ terminal_util_uri_fixup (const char *uri,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_SUPPORTED,
                          _("“file” scheme with remote hostname not supported"));
-      return NULL;
+      return nullptr;
     }
   } else {
     /* "file" scheme without hostname, or some other scheme */
@@ -1218,26 +1218,26 @@ terminal_util_uri_fixup (const char *uri,
  */
 char *terminal_util_hyperlink_uri_label (const char *uri)
 {
-  gs_free char *unesc = NULL;
+  gs_free char *unesc = nullptr;
   gboolean replace_hostname;
 
-  if (uri == NULL)
-    return NULL;
+  if (uri == nullptr)
+    return nullptr;
 
-  unesc = g_uri_unescape_string(uri, NULL);
-  if (unesc == NULL)
+  unesc = g_uri_unescape_string(uri, nullptr);
+  if (unesc == nullptr)
     unesc = g_strdup(uri);
 
   if (g_ascii_strncasecmp(unesc, "ftp://", 6) == 0 ||
       g_ascii_strncasecmp(unesc, "http://", 7) == 0 ||
       g_ascii_strncasecmp(unesc, "https://", 8) == 0) {
-    gs_free char *unidn = NULL;
+    gs_free char *unidn = nullptr;
     char *hostname = strchr(unesc, '/') + 2;
     char *hostname_end = strchrnul(hostname, '/');
     char save = *hostname_end;
     *hostname_end = '\0';
     unidn = g_hostname_to_unicode(hostname);
-    replace_hostname = unidn != NULL && g_ascii_strcasecmp(unidn, hostname) != 0;
+    replace_hostname = unidn != nullptr && g_ascii_strcasecmp(unidn, hostname) != 0;
     *hostname_end = save;
     if (replace_hostname) {
       char *new_unesc = g_strdup_printf("%.*s%s%s",
@@ -1264,7 +1264,7 @@ char *terminal_util_hyperlink_uri_label (const char *uri)
 static char *
 get_cache_dir (void)
 {
-  return g_build_filename (g_get_user_cache_dir (), TERMINAL_CACHE_DIR, NULL);
+  return g_build_filename (g_get_user_cache_dir (), TERMINAL_CACHE_DIR, nullptr);
 }
 
 static gboolean
@@ -1285,7 +1285,7 @@ static char *
 get_cache_filename (const char *filename)
 {
   gs_free char *cache_dir = get_cache_dir ();
-  return g_build_filename (cache_dir, filename, NULL);
+  return g_build_filename (cache_dir, filename, nullptr);
 }
 
 static GKeyFile *
@@ -1298,32 +1298,32 @@ load_cache_keyfile (const char *filename,
 
   path = get_cache_filename (filename);
   keyfile = g_key_file_new ();
-  if (g_key_file_load_from_file (keyfile, path, flags, NULL) || ignore_error)
+  if (g_key_file_load_from_file (keyfile, path, flags, nullptr) || ignore_error)
     return keyfile;
 
   g_key_file_unref (keyfile);
-  return NULL;
+  return nullptr;
 }
 
 static void
 save_cache_keyfile (GKeyFile *keyfile,
                     const char *filename)
 {
-  gs_free char *path = NULL;
-  gs_free char *data = NULL;
+  gs_free char *path = nullptr;
+  gs_free char *data = nullptr;
   gsize len = 0;
 
   if (!ensure_cache_dir ())
     return;
 
-  data = g_key_file_to_data (keyfile, &len, NULL);
-  if (data == NULL || len == 0)
+  data = g_key_file_to_data (keyfile, &len, nullptr);
+  if (data == nullptr || len == 0)
     return;
 
   path = get_cache_filename (filename);
 
   /* Ignore errors */
-  GError *err = NULL;
+  GError *err = nullptr;
   if (!g_file_set_contents (path, data, len, &err)) {
     g_printerr ("Error saving print settings: %s\n", err->message);
     g_error_free (err);
@@ -1339,8 +1339,8 @@ keyfile_remove_keys (GKeyFile *keyfile,
   const char *key;
 
   va_start (args, group_name);
-  while ((key = va_arg (args, const char *)) != NULL) {
-    g_key_file_remove_key (keyfile, group_name, key, NULL);
+  while ((key = va_arg (args, const char *)) != nullptr) {
+    g_key_file_remove_key (keyfile, group_name, key, nullptr);
   }
   va_end (args);
 }
@@ -1357,19 +1357,19 @@ terminal_util_load_print_settings (GtkPrintSettings **settings,
   gs_unref_key_file GKeyFile *keyfile = load_cache_keyfile (TERMINAL_PRINT_SETTINGS_FILENAME,
                                                             KEYFILE_FLAGS_FOR_LOAD,
                                                             FALSE);
-  if (keyfile == NULL) {
-    *settings = NULL;
-    *page_setup = NULL;
+  if (keyfile == nullptr) {
+    *settings = nullptr;
+    *page_setup = nullptr;
     return;
   }
 
   /* Ignore errors */
   *settings = gtk_print_settings_new_from_key_file (keyfile,
                                                     TERMINAL_PRINT_SETTINGS_GROUP_NAME,
-                                                    NULL);
+                                                    nullptr);
   *page_setup = gtk_page_setup_new_from_key_file (keyfile,
                                                   TERMINAL_PAGE_SETUP_GROUP_NAME,
-                                                  NULL);
+                                                  nullptr);
 }
 
 /**
@@ -1383,14 +1383,14 @@ void
 terminal_util_save_print_settings (GtkPrintSettings *settings,
                                    GtkPageSetup *page_setup)
 {
-  gs_unref_key_file GKeyFile *keyfile = NULL;
+  gs_unref_key_file GKeyFile *keyfile = nullptr;
 
   keyfile = load_cache_keyfile (TERMINAL_PRINT_SETTINGS_FILENAME,
                                 KEYFILE_FLAGS_FOR_SAVE,
                                 TRUE);
-  g_assert (keyfile != NULL);
+  g_assert (keyfile != nullptr);
 
-  if (settings != NULL)
+  if (settings != nullptr)
     gtk_print_settings_to_key_file (settings, keyfile,
                                     TERMINAL_PRINT_SETTINGS_GROUP_NAME);
 
@@ -1408,9 +1408,9 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
                        GTK_PRINT_SETTINGS_PRINT_PAGES,
                        GTK_PRINT_SETTINGS_REVERSE,
                        GTK_PRINT_SETTINGS_SCALE,
-                       NULL);
+                       nullptr);
 
-  if (page_setup != NULL)
+  if (page_setup != nullptr)
     gtk_page_setup_to_key_file (page_setup, keyfile,
                                 TERMINAL_PAGE_SETUP_GROUP_NAME);
 
@@ -1424,7 +1424,7 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
                        "page-setup-margin-left",
                        "page-setup-margin-right",
                        "page-setup-margin-top",
-                       NULL);
+                       nullptr);
 
   save_cache_keyfile (keyfile, TERMINAL_PRINT_SETTINGS_FILENAME);
 }
@@ -1434,9 +1434,9 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
  * @encoding: the encoding name
  *
  * Translates old encoding name to the one supported by ICU, or
- * to %NULL if the encoding is not known to ICU.
+ * to %nullptr if the encoding is not known to ICU.
  *
- * Returns: (transfer none): the translated encoding, or %NULL if
+ * Returns: (transfer none): the translated encoding, or %nullptr if
  *   not translation was possible.
  */
 const char*
@@ -1450,9 +1450,9 @@ terminal_util_translate_encoding (const char *encoding)
     const char *name;
     const char *replacement;
   } translations[] = {
-    { "ARMSCII-8",      NULL           }, /* apparently not supported by ICU */
-    { "GEORGIAN-PS",    NULL           }, /* no idea which charset this even is */
-    { "ISO-IR-111",     NULL           }, /* ISO-IR-111 refers to ECMA-94, but that
+    { "ARMSCII-8",      nullptr           }, /* apparently not supported by ICU */
+    { "GEORGIAN-PS",    nullptr           }, /* no idea which charset this even is */
+    { "ISO-IR-111",     nullptr           }, /* ISO-IR-111 refers to ECMA-94, but that
                                            * standard does not contain cyrillic letters.
                                            * ECMA-94 refers to ECMA-113 (ISO-IR-144),
                                            * whose assignment differs greatly from ISO-IR-111,
@@ -1461,28 +1461,28 @@ terminal_util_translate_encoding (const char *encoding)
     /* All the MAC_* charsets appear to be unknown to even glib iconv, so
      * why did we have them in our list in the first place?
      */
-    { "MAC_DEVANAGARI", NULL           }, /* apparently not supported by ICU */
-    { "MAC_FARSI",      NULL           }, /* apparently not supported by ICU */
+    { "MAC_DEVANAGARI", nullptr           }, /* apparently not supported by ICU */
+    { "MAC_FARSI",      nullptr           }, /* apparently not supported by ICU */
     { "MAC_GREEK",      "x-MacGreek"   },
-    { "MAC_GUJARATI",   NULL           }, /* apparently not supported by ICU */
-    { "MAC_GURMUKHI",   NULL           }, /* apparently not supported by ICU */
-    { "MAC_ICELANDIC",  NULL           }, /* apparently not supported by ICU */
+    { "MAC_GUJARATI",   nullptr           }, /* apparently not supported by ICU */
+    { "MAC_GURMUKHI",   nullptr           }, /* apparently not supported by ICU */
+    { "MAC_ICELANDIC",  nullptr           }, /* apparently not supported by ICU */
     { "MAC_ROMANIAN",   "x-macroman"   }, /* not sure this is the right one */
     { "MAC_TURKISH",    "x-MacTurkish" },
     { "MAC_UKRAINIAN",  "x-MacUkraine" },
 
-    { "TCVN",           NULL           }, /* apparently not supported by ICU */
+    { "TCVN",           nullptr           }, /* apparently not supported by ICU */
     { "UHC",            "cp949"        },
-    { "VISCII",         NULL           }, /* apparently not supported by ICU */
+    { "VISCII",         nullptr           }, /* apparently not supported by ICU */
 
     /* ISO-2022-* are known to ICU, but they simply cannot work in vte as
      * I/O encoding, so don't even try.
      */
-    { "ISO-2022-JP",    NULL           },
-    { "ISO-2022-KR",    NULL           },
+    { "ISO-2022-JP",    nullptr           },
+    { "ISO-2022-KR",    nullptr           },
   };
 
-  const char *replacement = NULL;
+  const char *replacement = nullptr;
   for (guint i = 0; i < G_N_ELEMENTS (translations); ++i) {
     if (g_str_equal (encoding, translations[i].name)) {
       replacement = translations[i].replacement;
@@ -1514,7 +1514,7 @@ terminal_util_translate_encoding (const char *encoding)
  * PATH environment variable as the search path.
  *
  * Returns: (type filename) (transfer full) (nullable): a newly allocated
- *  string containing the full path to @program, or %NULL if @program
+ *  string containing the full path to @program, or %nullptr if @program
  *  could not be found in @path.
  */
 char *
@@ -1526,24 +1526,24 @@ terminal_util_find_program_in_path (const char *path,
   gsize len;
   gsize pathlen;
 
-  if (program == NULL)
-    return NULL;
+  if (program == nullptr)
+    return nullptr;
 
   /* If it is an absolute path, or a relative path including subdirectories,
    * don't look in PATH.
    */
   if (g_path_is_absolute (program)
-      || strchr (program, G_DIR_SEPARATOR) != NULL
+      || strchr (program, G_DIR_SEPARATOR) != nullptr
       )
     {
       if (g_file_test (program, G_FILE_TEST_IS_EXECUTABLE) &&
 	  !g_file_test (program, G_FILE_TEST_IS_DIR))
         return g_strdup (program);
       else
-        return NULL;
+        return nullptr;
     }
 
-  if (path == NULL)
+  if (path == nullptr)
     {
       /* There is no 'PATH' in the environment.  The default
        * search path in GNU libc is the current directory followed by
@@ -1596,7 +1596,7 @@ terminal_util_find_program_in_path (const char *path,
   while (*p++ != '\0');
 
   g_free (freeme);
-  return NULL;
+  return nullptr;
 }
 
 /* END code copied from glib */
@@ -1616,7 +1616,7 @@ terminal_util_check_envv(char const* const* strv)
   for (int i = 0; strv[i]; ++i) {
           const char *str = strv[i];
           const char *equal = strchr(str, '=');
-          if (equal == NULL || equal == str)
+          if (equal == nullptr || equal == str)
                   return FALSE;
   }
 

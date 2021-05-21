@@ -71,7 +71,7 @@ egg_shell (const char *shell)
 	if (geteuid () == getuid () &&
 	    getegid () == getgid ()) {
 		/* only in non-setuid */
-		if (shell != NULL) {
+		if (shell != nullptr) {
 			if (access (shell, X_OK) == 0) {
 				return g_strdup (shell);
 			}
@@ -94,7 +94,7 @@ egg_shell (const char *shell)
 	g_assert_not_reached ();
 
 	/* Placate compiler.  */
-	return NULL;
+	return nullptr;
 #else
 	/* g_find_program_in_path() always looks also in the Windows
 	 * and System32 directories, so it should always find either cmd.exe
@@ -102,10 +102,10 @@ egg_shell (const char *shell)
 	 */
 	char *retval = g_find_program_in_path ("cmd.exe");
 
-	if (retval == NULL)
+	if (retval == nullptr)
 		retval = g_find_program_in_path ("command.com");
 
-	g_assert (retval != NULL);
+	g_assert (retval != nullptr);
 
 	return retval;
 #endif

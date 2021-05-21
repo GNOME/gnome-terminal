@@ -74,7 +74,7 @@ strv_printerr (char **strv)
 {
   char **p;
 
-  if (strv == NULL) {
+  if (strv == nullptr) {
     g_printerr ("(null)");
     return;
   }
@@ -96,7 +96,7 @@ strv_equal (char **a,
 {
   char **e, **f;
 
-  if (a == NULL || b == NULL)
+  if (a == nullptr || b == nullptr)
     return a == b;
 
   for (e = a, f = b; *e && *f; e++, f++) {
@@ -113,7 +113,7 @@ strv_find (char **strv,
 {
   int i;
 
-  if (strv == NULL || str == NULL)
+  if (strv == nullptr || str == nullptr)
     return -1;
 
   for (i = 0; strv[i]; i++) {
@@ -132,8 +132,8 @@ strv_dupv_insert (char **strv,
 {
   char **nstrv, **p, **q;
 
-  if (strv == NULL) {
-    char *s[2] = { (char *) str, NULL };
+  if (strv == nullptr) {
+    char *s[2] = { (char *) str, nullptr };
     return g_strdupv (s);
   }
 
@@ -147,7 +147,7 @@ strv_dupv_insert (char **strv,
   for (p = strv, q = nstrv; *p; p++, q++)
     *q = g_strdup (*p);
   *q++ = g_strdup (str);
-  *q = NULL;
+  *q = nullptr;
 
   return strv_sort (nstrv);
 }
@@ -158,8 +158,8 @@ strv_dupv_remove (char **strv,
 {
   char **nstrv, **p, **q;
 
-  if (strv == NULL)
-    return NULL;
+  if (strv == nullptr)
+    return nullptr;
 
   nstrv = g_strdupv (strv);
   for (p = q = nstrv; *p; p++) {
@@ -168,7 +168,7 @@ strv_dupv_remove (char **strv,
     else
       g_free (*p);
   }
-  *q = NULL;
+  *q = nullptr;
 
   return nstrv;
 }
@@ -178,7 +178,7 @@ terminal_settings_list_valid_uuid (const char *str)
 {
   uuid_t u;
 
-  if (str == NULL)
+  if (str == nullptr)
     return FALSE;
 
   return uuid_parse ((char *) str, u) == 0;
@@ -213,7 +213,7 @@ validate_list (TerminalSettingsList *list,
   gboolean allow_empty = (list->flags & TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY) != 0;
   guint i;
 
-  if (entries == NULL)
+  if (entries == nullptr)
     return allow_empty;
 
   for (i = 0; entries[i]; i++) {
@@ -232,7 +232,7 @@ list_map_func (GVariant *value,
   TerminalSettingsList *list = (TerminalSettingsList*)user_data;
   gs_strfreev char **entries;
 
-  entries = strv_sort (g_variant_dup_strv (value, NULL));
+  entries = strv_sort (g_variant_dup_strv (value, nullptr));
 
   if (validate_list (list, entries)) {
     gs_transfer_out_value(result, &entries);
@@ -254,10 +254,10 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
                                            const char *uuid)
 {
   GSettings *child;
-  gs_free char *path = NULL;
+  gs_free char *path = nullptr;
 
   if (strv_find (list->uuids, uuid) == -1)
-    return NULL;
+    return nullptr;
 
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s UUID %s\n", G_STRFUNC, uuid);
@@ -280,7 +280,7 @@ new_child (TerminalSettingsList *list,
 {
   char *new_uuid = new_list_entry ();
 
-  if (name != NULL) {
+  if (name != nullptr) {
     gs_free char *new_path = path_new (list, new_uuid);
     gs_unref_object GSettings *child = g_settings_new_with_path (list->child_schema_id, new_path);
     g_settings_set_string (child, TERMINAL_PROFILE_VISIBLE_NAME_KEY, name);
@@ -317,7 +317,7 @@ clone_child (TerminalSettingsList *list,
                                                                                       list->child_schema_id,
                                                                                       TRUE);
    /* shouldn't really happen ever */
-  if (schema == NULL)
+  if (schema == nullptr)
     return new_uuid;
 
   gs_strfreev char **keys = g_settings_schema_list_keys (schema);
@@ -326,26 +326,26 @@ clone_child (TerminalSettingsList *list,
     gs_free char *rkey;
     gs_unref_variant GVariant *value;
 
-    rkey = g_strconcat (path, keys[i], NULL);
+    rkey = g_strconcat (path, keys[i], nullptr);
     value = dconf_client_read (client, rkey);
     if (value) {
       gs_free char *wkey;
-      wkey = g_strconcat (new_path, keys[i], NULL);
+      wkey = g_strconcat (new_path, keys[i], nullptr);
       dconf_changeset_set (changeset, wkey, value);
     }
   }
 
-  if (name != NULL) {
+  if (name != nullptr) {
     GVariant *value;
     value = g_variant_new_string (name);
     if (value) {
       gs_free char *wkey;
-      wkey = g_strconcat (new_path, TERMINAL_PROFILE_VISIBLE_NAME_KEY, NULL);
+      wkey = g_strconcat (new_path, TERMINAL_PROFILE_VISIBLE_NAME_KEY, nullptr);
       dconf_changeset_set (changeset, wkey, value);
     }
   }
 
-  dconf_client_change_sync (client, changeset, NULL, NULL, NULL);
+  dconf_client_change_sync (client, changeset, nullptr, nullptr, nullptr);
   dconf_changeset_unref (changeset);
 
   return new_uuid;
@@ -385,13 +385,13 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
 
   new_uuids = strv_dupv_remove (list->uuids, uuid);
 
-  if ((new_uuids == NULL || new_uuids[0] == NULL) &&
+  if ((new_uuids == nullptr || new_uuids[0] == nullptr) &&
       (list->flags & TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY) == 0)
     return;
 
   g_settings_set_strv (&list->parent, TERMINAL_SETTINGS_LIST_LIST_KEY, (const char * const *) new_uuids);
 
-  if (list->default_uuid != NULL &&
+  if (list->default_uuid != nullptr &&
       g_str_equal (list->default_uuid, uuid))
     g_settings_set_string (&list->parent, TERMINAL_SETTINGS_LIST_DEFAULT_KEY, "");
 
@@ -402,7 +402,7 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
 
     path = path_new (list, uuid);
     client = dconf_client_new ();
-    dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
+    dconf_client_write_sync (client, path, nullptr, nullptr, nullptr, nullptr);
   }
 }
 
@@ -439,7 +439,7 @@ terminal_settings_list_update_list (TerminalSettingsList *list)
                                         (GDestroyNotify) g_object_unref);
 
   if (uuids) {
-    for (i = 0; uuids[i] != NULL; i++) {
+    for (i = 0; uuids[i] != nullptr; i++) {
       uuid = uuids[i];
 
       child = (GSettings*)g_hash_table_lookup (list->children, uuid);
@@ -493,13 +493,13 @@ terminal_settings_list_changed (GSettings *list_settings,
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s key %s", G_STRFUNC, key ? key : "(null)");
 
-  if (key == NULL || 
+  if (key == nullptr || 
       g_str_equal (key, TERMINAL_SETTINGS_LIST_LIST_KEY)) {
     terminal_settings_list_update_list (list);
     terminal_settings_list_update_default (list);
   }
 
-  if (key == NULL)
+  if (key == nullptr)
     return;
 
   if (g_str_equal (key, TERMINAL_SETTINGS_LIST_DEFAULT_KEY)) {
@@ -520,15 +520,15 @@ terminal_settings_list_constructed (GObject *object)
 
   G_OBJECT_CLASS (terminal_settings_list_parent_class)->constructed (object);
 
-  g_assert (list->child_schema_id != NULL);
+  g_assert (list->child_schema_id != nullptr);
 
-  g_object_get (object, "path", &list->path, NULL);
+  g_object_get (object, "path", &list->path, nullptr);
 
   list->children = g_hash_table_new_full (g_str_hash, g_str_equal,
                                           (GDestroyNotify) g_free,
                                           (GDestroyNotify) g_object_unref);
 
-  terminal_settings_list_changed (&list->parent, NULL);
+  terminal_settings_list_changed (&list->parent, nullptr);
 }
 
 static void
@@ -582,8 +582,8 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
    * The name of the schema of the children of this list.
    */
   g_object_class_install_property (object_class, PROP_CHILD_SCHEMA_ID,
-                                   g_param_spec_string ("child-schema-id", NULL, NULL,
-                                                        NULL,
+                                   g_param_spec_string ("child-schema-id", nullptr, nullptr,
+                                                        nullptr,
                                                         GParamFlags(G_PARAM_CONSTRUCT_ONLY |
 								    G_PARAM_WRITABLE |
 								    G_PARAM_STATIC_STRINGS)));
@@ -594,7 +594,7 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
    * Flags from #TerminalSettingsListFlags.
    */
   g_object_class_install_property (object_class, PROP_FLAGS,
-                                   g_param_spec_flags ("flags", NULL,NULL,
+                                   g_param_spec_flags ("flags", nullptr,nullptr,
                                                        TERMINAL_TYPE_SETTINGS_LIST_FLAGS,
                                                        TERMINAL_SETTINGS_LIST_FLAG_NONE,
                                                        GParamFlags(G_PARAM_CONSTRUCT_ONLY |
@@ -612,7 +612,7 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
     g_signal_new ("children-changed", TERMINAL_TYPE_SETTINGS_LIST,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalSettingsListClass, children_changed),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -628,7 +628,7 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
     g_signal_new ("default-changed", TERMINAL_TYPE_SETTINGS_LIST,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalSettingsListClass, default_changed),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -652,10 +652,10 @@ terminal_settings_list_new (const char *path,
                             const char *child_schema_id,
                             TerminalSettingsListFlags flags)
 {
-  g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (schema_id != NULL, NULL);
-  g_return_val_if_fail (child_schema_id != NULL, NULL);
-  g_return_val_if_fail (g_str_has_suffix (path, ":/"), NULL);
+  g_return_val_if_fail (path != nullptr, nullptr);
+  g_return_val_if_fail (schema_id != nullptr, nullptr);
+  g_return_val_if_fail (child_schema_id != nullptr, nullptr);
+  g_return_val_if_fail (g_str_has_suffix (path, ":/"), nullptr);
 
   return reinterpret_cast<TerminalSettingsList*>(g_object_new (TERMINAL_TYPE_SETTINGS_LIST,
 							       "schema-id", schema_id,
@@ -669,13 +669,13 @@ terminal_settings_list_new (const char *path,
  * terminal_settings_list_dupv_children:
  * @list: a #TerminalSettingsList
  *
- * Returns: (transfer full): the UUIDs of the children in the settings list, or %NULL
+ * Returns: (transfer full): the UUIDs of the children in the settings list, or %nullptr
  *  if the list is empty
  */
 char **
 terminal_settings_list_dupv_children (TerminalSettingsList *list)
 {
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
   return g_strdupv (list->uuids);
 }
@@ -689,10 +689,10 @@ terminal_settings_list_dupv_children (TerminalSettingsList *list)
 char *
 terminal_settings_list_dup_default_child (TerminalSettingsList *list)
 {
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
   if ((list->flags & TERMINAL_SETTINGS_LIST_FLAG_HAS_DEFAULT) == 0)
-    return NULL;
+    return nullptr;
 
   if ((strv_find (list->uuids, list->default_uuid)) != -1)
     return g_strdup (list->default_uuid);
@@ -700,9 +700,9 @@ terminal_settings_list_dup_default_child (TerminalSettingsList *list)
   /* Just randomly designate the first child as default, but don't write that
    * to dconf.
    */
-  if (list->uuids == NULL || list->uuids[0] == NULL) {
+  if (list->uuids == nullptr || list->uuids[0] == nullptr) {
     g_warn_if_fail ((list->flags & TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY));
-    return NULL;
+    return nullptr;
   }
 
   return g_strdup (list->uuids[0]);
@@ -730,17 +730,17 @@ terminal_settings_list_has_child (TerminalSettingsList *list,
  * @list: a #TerminalSettingsList
  * @uuid: the UUID of a list child
  *
- * Returns the child #GSettings for the list child with UUID @uuid, or %NULL
+ * Returns the child #GSettings for the list child with UUID @uuid, or %nullptr
  *   if @list has no such child.
  *
- * Returns: (transfer full): a reference to the #GSettings for the child, or %NULL
+ * Returns: (transfer full): a reference to the #GSettings for the child, or %nullptr
  */
 GSettings *
 terminal_settings_list_ref_child (TerminalSettingsList *list,
                                   const char *uuid)
 {
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
-  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), nullptr);
 
   return terminal_settings_list_ref_child_internal (list, uuid);
 }
@@ -759,12 +759,12 @@ terminal_settings_list_ref_children (TerminalSettingsList *list)
   GList *l;
   guint i;
 
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
-  if (list->uuids == NULL)
-    return NULL;
+  if (list->uuids == nullptr)
+    return nullptr;
 
-  l = NULL;
+  l = nullptr;
   for (i = 0; list->uuids[i]; i++)
     l = g_list_prepend (l, terminal_settings_list_ref_child (list, list->uuids[i]));
 
@@ -775,21 +775,21 @@ terminal_settings_list_ref_children (TerminalSettingsList *list)
  * terminal_settings_list_ref_default_child:
  * @list: a #TerminalSettingsList
  *
- * Returns the default child #GSettings for the list, or %NULL if @list has no
+ * Returns the default child #GSettings for the list, or %nullptr if @list has no
  *   children.
  *
- * Returns: (transfer full): a reference to the #GSettings for the default child, or %NULL
+ * Returns: (transfer full): a reference to the #GSettings for the default child, or %nullptr
  */
 GSettings *
 terminal_settings_list_ref_default_child (TerminalSettingsList *list)
 {
-  gs_free char *uuid = NULL;
+  gs_free char *uuid = nullptr;
 
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
   uuid = terminal_settings_list_dup_default_child (list);
-  if (uuid == NULL)
-    return NULL;
+  if (uuid == nullptr)
+    return nullptr;
 
   return terminal_settings_list_ref_child_internal (list, uuid);
 }
@@ -807,9 +807,9 @@ char *
 terminal_settings_list_add_child (TerminalSettingsList *list,
                                   const char *name)
 {
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
-  return terminal_settings_list_add_child_internal (list, NULL, name);
+  return terminal_settings_list_add_child_internal (list, nullptr, name);
 }
 
 /**
@@ -828,8 +828,8 @@ terminal_settings_list_clone_child (TerminalSettingsList *list,
                                     const char *uuid,
                                     const char *name)
 {
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
-  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), nullptr);
 
   return terminal_settings_list_add_child_internal (list, uuid, name);
 }
@@ -856,9 +856,9 @@ terminal_settings_list_remove_child (TerminalSettingsList *list,
  * @list: a #TerminalSettingsList
  * @child: a #GSettings of a child in the list
  *
- * Returns the UUID of @child in the list, or %NULL if @child is not in the list.
+ * Returns the UUID of @child in the list, or %nullptr if @child is not in the list.
  *
- * Returns: (transfer full): the UUID of the child in the settings list, or %NULL
+ * Returns: (transfer full): the UUID of the child in the settings list, or %nullptr
  */
 char *
 terminal_settings_list_dup_uuid_from_child (TerminalSettingsList *list,
@@ -867,16 +867,16 @@ terminal_settings_list_dup_uuid_from_child (TerminalSettingsList *list,
   gs_free char *path;
   char *p;
 
-  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
+  g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), nullptr);
 
-  g_object_get (child, "path", &path, NULL);
-  g_return_val_if_fail (g_str_has_prefix (path, list->path), NULL);
+  g_object_get (child, "path", &path, nullptr);
+  g_return_val_if_fail (g_str_has_prefix (path, list->path), nullptr);
 
   p = path + strlen (list->path);
-  g_return_val_if_fail (p[0] == ':', NULL);
+  g_return_val_if_fail (p[0] == ':', nullptr);
   p++;
-  g_return_val_if_fail (strlen (p) == 37, NULL);
-  g_return_val_if_fail (p[36] == '/', NULL);
+  g_return_val_if_fail (strlen (p) == 37, nullptr);
+  g_return_val_if_fail (p[36] == '/', nullptr);
   p[36] = '\0';
   g_assert (terminal_settings_list_valid_uuid (p));
 
@@ -924,7 +924,7 @@ terminal_settings_list_foreach_child (TerminalSettingsList *list,
   for (char **p = list->uuids; *p; p++) {
     const char *uuid = *p;
     gs_unref_object GSettings *child = terminal_settings_list_ref_child_internal (list, uuid);
-    if (child != NULL)
+    if (child != nullptr)
       callback (list, uuid, child, user_data);
   }
 }

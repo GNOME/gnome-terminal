@@ -42,7 +42,7 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMdiContainerInterface, screen_added),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, TERMINAL_TYPE_SCREEN);
@@ -52,7 +52,7 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMdiContainerInterface, screen_added),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, TERMINAL_TYPE_SCREEN);
@@ -62,8 +62,8 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMdiContainerInterface, screen_switched),
-                  NULL, NULL,
-                  NULL,
+                  nullptr, nullptr,
+                  nullptr,
                   G_TYPE_NONE,
                   2, TERMINAL_TYPE_SCREEN, TERMINAL_TYPE_SCREEN);
 
@@ -72,7 +72,7 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMdiContainerInterface, screens_reordered),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
@@ -82,13 +82,13 @@ terminal_mdi_container_default_init (TerminalMdiContainerInterface *iface)
                   G_TYPE_FROM_INTERFACE (iface),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMdiContainerInterface, screen_close_request),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, TERMINAL_TYPE_SCREEN);
 
   g_object_interface_install_property (iface,
-    g_param_spec_object ("active-screen", NULL, NULL,
+    g_param_spec_object ("active-screen", nullptr, nullptr,
                          TERMINAL_TYPE_SCREEN,
                          GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 }
@@ -119,7 +119,7 @@ terminal_mdi_container_remove_screen (TerminalMdiContainer *container,
 TerminalScreen *
 terminal_mdi_container_get_active_screen (TerminalMdiContainer *container)
 {
-  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), NULL);
+  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), nullptr);
 
   return TERMINAL_MDI_CONTAINER_GET_IFACE (container)->get_active_screen (container);
 }
@@ -138,7 +138,7 @@ terminal_mdi_container_set_active_screen (TerminalMdiContainer *container,
 GList *
 terminal_mdi_container_list_screens (TerminalMdiContainer *container)
 {
-  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), NULL);
+  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), nullptr);
 
   return TERMINAL_MDI_CONTAINER_GET_IFACE (container)->list_screens (container);
 }
@@ -146,7 +146,7 @@ terminal_mdi_container_list_screens (TerminalMdiContainer *container)
 GList *
 terminal_mdi_container_list_screen_containers (TerminalMdiContainer *container)
 {
-  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), NULL);
+  g_return_val_if_fail (TERMINAL_IS_MDI_CONTAINER (container), nullptr);
 
   return TERMINAL_MDI_CONTAINER_GET_IFACE (container)->list_screen_containers (container);
 }

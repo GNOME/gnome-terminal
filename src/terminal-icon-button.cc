@@ -32,7 +32,7 @@ terminal_icon_button_new (const char *gicon_name)
   button = (GtkWidget *) g_object_new (GTK_TYPE_BUTTON,
                                        "relief", GTK_RELIEF_NONE,
                                        "focus-on-click", FALSE,
-                                       NULL);
+                                       nullptr);
 
   icon = g_themed_icon_new_with_default_fallbacks (gicon_name);
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);

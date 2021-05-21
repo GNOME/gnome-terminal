@@ -128,7 +128,7 @@ terminal_menu_button_class_init (TerminalMenuButtonClass *klass)
                   G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalMenuButtonClass, update_menu),
-                  NULL, NULL,
+                  nullptr, nullptr,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);

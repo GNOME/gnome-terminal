@@ -63,7 +63,7 @@ enum
 
 typedef struct
 {
-  TerminalSettingsList *profiles_list; /* may be NULL */
+  TerminalSettingsList *profiles_list; /* may be nullptr */
 
   gboolean print_environment;
 
