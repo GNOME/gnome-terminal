@@ -36,7 +36,8 @@ typedef struct _TerminalSettingsListClass TerminalSettingsListClass;
 
 GType terminal_settings_list_get_type (void);
 
-TerminalSettingsList *terminal_settings_list_new (const char *path,
+TerminalSettingsList *terminal_settings_list_new (GSettingsSchemaSource* schema_source,
+                                                  const char *path,
                                                   const char *schema_id,
                                                   const char *child_schema_id,
                                                   TerminalSettingsListFlags flags);

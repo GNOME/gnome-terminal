@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "terminal-settings-list.hh"
+#include "terminal-client-utils.hh"
 
 #include <string.h>
 #include <uuid.h>
@@ -38,6 +39,7 @@ extern "C" {
 struct _TerminalSettingsList {
   GSettings parent;
 
+  GSettingsSchemaSource* schema_source;
   char *path;
   char *child_schema_id;
 
@@ -57,7 +59,8 @@ struct _TerminalSettingsListClass {
 };
 
 enum {
-  PROP_CHILD_SCHEMA_ID = 1,
+  PROP_SCHEMA_SOURCE = 1,
+  PROP_CHILD_SCHEMA_ID,
   PROP_FLAGS
 };
 
@@ -267,7 +270,9 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
     goto done;
 
   path = path_new (list, uuid);
-  child = g_settings_new_with_path (list->child_schema_id, path);
+  child = terminal_g_settings_new_with_path(list->schema_source,
+                                            list->child_schema_id,
+                                            path);
   g_hash_table_insert (list->children, g_strdup (uuid), child /* adopted */);
 
  done:
@@ -282,7 +287,10 @@ new_child (TerminalSettingsList *list,
 
   if (name != nullptr) {
     gs_free char *new_path = path_new (list, new_uuid);
-    gs_unref_object GSettings *child = g_settings_new_with_path (list->child_schema_id, new_path);
+    gs_unref_object GSettings *child =
+      terminal_g_settings_new_with_path(list->schema_source,
+                                        list->child_schema_id,
+                                        new_path);
     g_settings_set_string (child, TERMINAL_PROFILE_VISIBLE_NAME_KEY, name);
   }
 
@@ -520,6 +528,7 @@ terminal_settings_list_constructed (GObject *object)
 
   G_OBJECT_CLASS (terminal_settings_list_parent_class)->constructed (object);
 
+  g_assert (list->schema_source != nullptr);
   g_assert (list->child_schema_id != nullptr);
 
   g_object_get (object, "path", &list->path, nullptr);
@@ -541,6 +550,7 @@ terminal_settings_list_finalize (GObject *object)
   g_strfreev (list->uuids);
   g_free (list->default_uuid);
   g_hash_table_unref (list->children);
+  g_settings_schema_source_unref(list->schema_source);
 
   G_OBJECT_CLASS (terminal_settings_list_parent_class)->finalize (object);
 }
@@ -554,6 +564,11 @@ terminal_settings_list_set_property (GObject *object,
   TerminalSettingsList *list = TERMINAL_SETTINGS_LIST (object);
 
   switch (prop_id) {
+  case PROP_SCHEMA_SOURCE: {
+    auto const schema_source = reinterpret_cast<GSettingsSchemaSource*>(g_value_get_boxed(value));
+    list->schema_source = g_settings_schema_source_ref(schema_source);
+    break;
+  }
     case PROP_CHILD_SCHEMA_ID:
       list->child_schema_id = g_value_dup_string (value);
       break;
@@ -575,6 +590,18 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
   object_class->set_property = terminal_settings_list_set_property;
   object_class->constructed = terminal_settings_list_constructed;
   object_class->finalize = terminal_settings_list_finalize;
+
+  /**
+   * TerminalSettingsList:child-schema-id:
+   *
+   * The name of the schema of the children of this list.
+   */
+  g_object_class_install_property (object_class, PROP_SCHEMA_SOURCE,
+                                   g_param_spec_boxed("schema-source", nullptr, nullptr,
+                                                      G_TYPE_SETTINGS_SCHEMA_SOURCE,
+                                                      GParamFlags(G_PARAM_CONSTRUCT_ONLY |
+                                                                  G_PARAM_WRITABLE |
+                                                                  G_PARAM_STATIC_STRINGS)));
 
   /**
    * TerminalSettingsList:child-schema-id:
@@ -639,6 +666,7 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
 
 /**
  * terminal_settings_list_new:
+ * @schema_source: a #GSettingsSchemaSource
  * @path: the settings path for the list
  * @schema_id: the schema of the list, equal to or derived from "org.gnome.Terminal.SettingsList"
  * @child_schema_id: the schema of the list children
@@ -647,17 +675,20 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
  * Returns: (transfer full): the newly created #TerminalSettingsList
  */
 TerminalSettingsList *
-terminal_settings_list_new (const char *path,
+terminal_settings_list_new (GSettingsSchemaSource* schema_source,
+                            const char *path,
                             const char *schema_id,
                             const char *child_schema_id,
                             TerminalSettingsListFlags flags)
 {
+  g_return_val_if_fail (schema_source != nullptr, nullptr);
   g_return_val_if_fail (path != nullptr, nullptr);
   g_return_val_if_fail (schema_id != nullptr, nullptr);
   g_return_val_if_fail (child_schema_id != nullptr, nullptr);
   g_return_val_if_fail (g_str_has_suffix (path, ":/"), nullptr);
 
   return reinterpret_cast<TerminalSettingsList*>(g_object_new (TERMINAL_TYPE_SETTINGS_LIST,
+                                                               "schema-source", schema_source,
 							       "schema-id", schema_id,
 							       "child-schema-id", child_schema_id,
 							       "path", path,

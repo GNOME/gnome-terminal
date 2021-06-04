@@ -102,11 +102,23 @@ gboolean terminal_app_get_dialog_use_headerbar (TerminalApp *app);
 
 /* GSettings */
 
+typedef enum {
+  TERMINAL_PROXY_HTTP  = 0,
+  TERMINAL_PROXY_HTTPS = 1,
+  TERMINAL_PROXY_FTP   = 2,
+  TERMINAL_PROXY_SOCKS = 3,
+} TerminalProxyProtocol;
+
+GSettingsSchemaSource* terminal_app_get_schema_source(TerminalApp* app);
+
 GSettings *terminal_app_get_global_settings (TerminalApp *app);
 
 GSettings *terminal_app_get_desktop_interface_settings (TerminalApp *app);
 
 GSettings *terminal_app_get_proxy_settings (TerminalApp *app);
+
+GSettings *terminal_app_get_proxy_settings_for_protocol(TerminalApp *app,
+                                                        TerminalProxyProtocol protocol);
 
 GSettings *terminal_app_get_gtk_debug_settings (TerminalApp *app);
 
