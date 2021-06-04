@@ -24,7 +24,10 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+/* Work around https://gitlab.gnome.org/GNOME/nautilus/-/issues/1884 */
+extern "C" {
 #include <nautilus-extension.h>
+}
 
 #include <errno.h>
 #include <fcntl.h>
@@ -745,7 +748,7 @@ terminal_nautilus_class_finalize (TerminalNautilusClass *klass)
 
 static GType type_list[1];
 
-#define EXPORT __attribute__((__visibility__("default"))) extern
+#define EXPORT extern "C" __attribute__((__visibility__("default")))
 
 EXPORT void
 nautilus_module_initialize (GTypeModule *module)
