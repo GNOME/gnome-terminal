@@ -1442,8 +1442,10 @@ terminal_util_save_print_settings (GtkPrintSettings *settings,
 const char*
 terminal_util_translate_encoding (const char *encoding)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (vte_get_encoding_supported (encoding))
     return encoding;
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* ICU knows (or has aliases for) most of the old names, except the following */
   struct {
