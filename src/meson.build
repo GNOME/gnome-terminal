@@ -373,7 +373,7 @@ if get_option('nautilus_extension')
   ]
 
   nautilus_extension = shared_library(
-     'libterminal-nautilus',
+     'terminal-nautilus',
      cpp_args: nautilus_cxxflags,
      dependencies: nautilus_deps,
      include_directories: nautilus_incs,
