@@ -208,6 +208,7 @@ server_cxxflags = [
   '-DTERMINAL_COMPILATION',
   '-DVTE_DISABLE_DEPRECATION_WARNINGS',
   '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
+  '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
 ]
 
 server_deps = [
@@ -293,6 +294,7 @@ client_cxxflags = [
   '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
   '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
   '-DTERM_PKGDATADIR="@0@"'.format(gt_prefix / gt_pkgdatadir),
+  '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
 ]
 
 client_deps = [
@@ -325,6 +327,19 @@ install_data(
 meson.add_install_script(
   'meson_compileschemas.py',
   gt_prefix / gt_schemadir,
+)
+
+reference_schemas = custom_target(
+  'gschemas.compiled',
+  command: [
+    glib_compile_schemas,
+    '--targetdir', meson.current_build_dir(),
+    '--schema-file', files(gt_dns_name + '.gschema.xml'),
+    '--schema-file', files('external.gschema.xml'),
+  ],
+  install: true,
+  install_dir: gt_prefix / gt_pkglibdir,
+  output: 'gschemas.compiled',
 )
 
 # Nautilus extension

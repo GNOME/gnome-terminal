@@ -80,6 +80,7 @@ gt_localedir  = get_option('localedir')
 gt_prefix     = get_option('prefix')
 
 gt_pkgdatadir = gt_datadir / gt_name
+gt_pkglibdir  = gt_libdir  / gt_name
 
 gt_schemadir = gt_datadir / 'glib-2.0' / 'schemas'
 
@@ -327,6 +328,7 @@ configure_file(
 
 # Utilities
 
+glib_compile_schemas = find_program('glib-compile-schemas')
 xsltproc = find_program('xsltproc')
 
 # Subdirs
