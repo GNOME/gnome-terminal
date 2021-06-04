@@ -54,6 +54,10 @@
 #include <stdlib.h>
 #include <time.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
@@ -831,8 +835,11 @@ terminal_app_init (TerminalApp *app)
   g_signal_connect (app->clipboard, "owner-change",
                     G_CALLBACK (clipboard_owner_change_cb), app);
 
-  if (!gdk_display_supports_selection_notification (display))
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY(display) &&
+      !gdk_display_supports_selection_notification (display))
     g_printerr ("Display does not support owner-change; copy/paste will be broken!\n");
+#endif
 
   /* Get the profiles */
   app->profiles_list = terminal_profiles_list_new ();
