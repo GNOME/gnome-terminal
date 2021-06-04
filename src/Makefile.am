@@ -99,6 +99,7 @@ gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DVTE_DISABLE_DEPRECATION_WARNINGS \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
+	-DTERM_PKGLIBDIR="\"$(pkglibdir)\"" \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_server_CFLAGS = \
@@ -241,6 +242,7 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DTERM_PKGLIBDIR="\"$(pkglibdir)\"" \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_CFLAGS = \
@@ -320,12 +322,25 @@ gsettings_SCHEMAS = \
 	org.gnome.Terminal.gschema.xml \
 	$(NULL)
 
+external_gsettings_schemas = \
+	external.gschema.xml \
+	$(NULL)
+
+referenceschemadir = $(pkglibdir)
+referenceschema_DATA = \
+	gschemas.compiled \
+	$(NULL)
+
+gschemas.compiled: $(gsettings_SCHEMAS) $(external_gsettings_schemas)
+	$(AM_V_GEN)$(GLIB_COMPILE_SCHEMAS) $(patsubst %,--schema-file=%,$^) --targetdir=$(builddir)
+
 CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
 	org.gnome.Terminal.service \
 	gnome-terminal-server.service \
+	gschemas.compiled \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
@@ -347,6 +362,7 @@ EXTRA_DIST = \
 	$(about_DATA) \
 	$(builder_DATA) \
 	$(gsettings_SCHEMAS) \
+	$(external_gsettings_schemas) \
 	$(NULL)
 
 @GSETTINGS_RULES@

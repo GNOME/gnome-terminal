@@ -294,6 +294,7 @@ terminal_g_settings_new_with_path (GSettingsSchemaSource* source,
     g_settings_schema_source_lookup(source,
                                     schema_id,
                                     TRUE /* recursive */);
+  g_assert_nonnull(schema);
 
   return g_settings_new_full(schema,
                              NULL /* default backend */,

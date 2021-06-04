@@ -70,8 +70,6 @@
 #define GTK_SETTING_PREFER_DARK_THEME           "gtk-application-prefer-dark-theme"
 
 #define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.Settings.Debug"
-#define GTK_DEBUG_ENABLE_INSPECTOR_KEY          "enable-inspector-keybinding"
-#define GTK_DEBUG_ENABLE_INSPECTOR_TYPE         G_VARIANT_TYPE_BOOLEAN
 
 #ifdef DISUNIFY_NEW_TERMINAL_SECTION
 #error Use a gsettings override instead
@@ -807,7 +805,7 @@ terminal_app_init (TerminalApp *app)
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
-  app->schema_source = g_settings_schema_source_get_default();
+  app->schema_source = terminal_g_settings_schema_source_get_default();
 
   /* Desktop proxy settings */
   app->system_proxy_settings = terminal_g_settings_new(app->schema_source,
@@ -842,10 +840,9 @@ terminal_app_init (TerminalApp *app)
                                                  TERMINAL_SETTING_SCHEMA);
 
   /* Gtk debug settings */
-  app->gtk_debug_settings = terminal_g_settings_new_checked(app->schema_source,
-                                                            GTK_DEBUG_SETTING_SCHEMA,
-                                                            GTK_DEBUG_ENABLE_INSPECTOR_KEY,
-                                                            GTK_DEBUG_ENABLE_INSPECTOR_TYPE);
+  app->gtk_debug_settings = terminal_g_settings_new(app->schema_source,
+                                                    GTK_DEBUG_SETTING_SCHEMA);
+;
 
   /* These are internal settings that exists only for distributions
    * to override, so we cache them on startup and don't react to changes.
