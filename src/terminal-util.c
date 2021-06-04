@@ -584,21 +584,19 @@ set_proxy_env (GHashTable *env_table,
 }
 
 static void
-setup_proxy_env (GSettings  *proxy_settings,
-                 const char *child_schema_id,
+setup_proxy_env (TerminalApp* app,
+                 TerminalProxyProtocol protocol,
                  const char *proxy_scheme,
                  const char *env_name,
                  GHashTable *env_table)
 {
-  gs_unref_object GSettings *child_settings;
   GString *buf;
   gs_free char *host;
   int port;
-  gboolean is_http;
 
-  is_http = (strcmp (child_schema_id, "http") == 0);
+  gboolean is_http = (protocol == TERMINAL_PROXY_HTTP);
 
-  child_settings = g_settings_get_child (proxy_settings, child_schema_id);
+  GSettings *child_settings = terminal_app_get_proxy_settings_for_protocol(app, protocol);
 
   host = g_settings_get_string (child_settings, "host");
   port = g_settings_get_int (child_settings, "port");
@@ -636,23 +634,6 @@ setup_proxy_env (GSettings  *proxy_settings,
 }
 
 static void
-setup_autoconfig_proxy_env (GSettings *proxy_settings,
-                            GHashTable *env_table)
-{
-  /* XXX  Not sure what to do with this.  See bug #596688.
-  gs_free char *url;
-
-  url = g_settings_get_string (proxy_settings, "autoconfig-url");
-  if (url[0])
-    {
-      char *proxy;
-      proxy = g_strdup_printf ("pac+%s", url);
-      set_proxy_env (env_table, "http_proxy", proxy);
-    }
-  */
-}
-
-static void
 setup_ignore_proxy_env (GSettings *proxy_settings,
                         GHashTable *env_table)
 {
@@ -684,25 +665,25 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
 void
 terminal_util_add_proxy_env (GHashTable *env_table)
 {
-  GSettings *proxy_settings;
+  TerminalApp* app = terminal_app_get();
   GDesktopProxyMode mode;
 
-  proxy_settings = terminal_app_get_proxy_settings (terminal_app_get ());
+  GSettings* proxy_settings = terminal_app_get_proxy_settings(app);
   mode = g_settings_get_enum (proxy_settings, "mode");
 
   if (mode == G_DESKTOP_PROXY_MODE_MANUAL)
     {
-      setup_proxy_env (proxy_settings, "http", "http", "http_proxy", env_table);
+      setup_proxy_env (app, TERMINAL_PROXY_HTTP, "http", "http_proxy", env_table);
       /* Even though it's https, the proxy scheme is 'http'. See bug #624440. */
-      setup_proxy_env (proxy_settings, "https", "http", "https_proxy", env_table);
+      setup_proxy_env (app, TERMINAL_PROXY_HTTPS, "http", "https_proxy", env_table);
       /* Even though it's ftp, the proxy scheme is 'http'. See bug #624440. */
-      setup_proxy_env (proxy_settings, "ftp", "http", "ftp_proxy", env_table);
-      setup_proxy_env (proxy_settings, "socks", "socks", "all_proxy", env_table);
+      setup_proxy_env (app, TERMINAL_PROXY_FTP, "http", "ftp_proxy", env_table);
+      setup_proxy_env (app, TERMINAL_PROXY_SOCKS, "socks", "all_proxy", env_table);
       setup_ignore_proxy_env (proxy_settings, env_table);
     }
   else if (mode == G_DESKTOP_PROXY_MODE_AUTO)
     {
-      setup_autoconfig_proxy_env (proxy_settings, env_table);
+      /* Not supported */
     }
 }
 
@@ -795,7 +776,8 @@ s_to_rgba (GVariant *variant,
 }
 
 /**
- * terminal_g_settings_new:
+ * terminal_g_settings_new_checked:
+ * @schema_source: a #GSettingsSchemaSource
  * @schema_id: a settings schema ID
  * @mandatory_key: the name of a key that must exist in the schema
  * @mandatory_key_type: the expected value type of @mandatory_key
@@ -807,15 +789,16 @@ s_to_rgba (GVariant *variant,
  * Returns: (transfer full): a new #GSettings, or %NULL
  */
 GSettings *
-terminal_g_settings_new (const char *schema_id,
-                         const char *mandatory_key,
-                         const GVariantType *mandatory_key_type)
+terminal_g_settings_new_checked(GSettingsSchemaSource* schema_source,
+                                const char *schema_id,
+                                const char *mandatory_key,
+                                const GVariantType *mandatory_key_type)
 {
   gs_unref_settings_schema GSettingsSchema *schema;
 
-  schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
-                                            schema_id,
-                                            TRUE);
+  schema = g_settings_schema_source_lookup(schema_source,
+                                           schema_id,
+                                           TRUE);
   if (schema == NULL)
     return NULL;
 

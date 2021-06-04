@@ -65,13 +65,15 @@ valid_uuid (const char *str,
 
 /**
  * terminal_profiles_list_new:
+ * @schema_source: a #GSettingsSchemaSource
  *
  * Returns: (transfer full): a new #TerminalSettingsList for the profiles list
  */
 TerminalSettingsList *
-terminal_profiles_list_new (void)
+terminal_profiles_list_new(GSettingsSchemaSource* schema_source)
 {
-  return terminal_settings_list_new (TERMINAL_PROFILES_PATH_PREFIX,
+  return terminal_settings_list_new (schema_source,
+                                     TERMINAL_PROFILES_PATH_PREFIX,
                                      TERMINAL_PROFILES_LIST_SCHEMA,
                                      TERMINAL_PROFILE_SCHEMA,
                                      TERMINAL_SETTINGS_LIST_FLAG_HAS_DEFAULT);

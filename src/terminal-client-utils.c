@@ -284,3 +284,25 @@ out:
 #endif
   return NULL;
 }
+
+GSettings*
+terminal_g_settings_new_with_path (GSettingsSchemaSource* source,
+                                   char const* schema_id,
+                                   char const* path)
+{
+  gs_unref_settings_schema GSettingsSchema* schema =
+    g_settings_schema_source_lookup(source,
+                                    schema_id,
+                                    TRUE /* recursive */);
+
+  return g_settings_new_full(schema,
+                             NULL /* default backend */,
+                             path);
+}
+
+GSettings*
+terminal_g_settings_new(GSettingsSchemaSource* source,
+                        char const* schema_id)
+{
+  return terminal_g_settings_new_with_path(source, schema_id, NULL);
+}
