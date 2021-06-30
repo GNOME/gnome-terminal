@@ -1661,31 +1661,17 @@ schema_key_range_compatible(GSettingsSchema* source_schema,
       return FALSE;
     }
 
+    gs_unref_variant GVariant* reference_min = nullptr;
+    gs_unref_variant GVariant* reference_max = nullptr;
+    g_variant_get(reference_data, "(**)", &reference_min, &reference_max);
+
+    gs_unref_variant GVariant* source_min = nullptr;
+    gs_unref_variant GVariant* source_max = nullptr;
+    g_variant_get(source_data, "(**)", &source_min, &source_max);
+
     /* The source interval must be contained within the reference interval */
-    gboolean ok = FALSE;
-
-    if (g_variant_is_of_type(reference_data, G_VARIANT_TYPE("(ii)"))) {
-      int source_min, source_max;
-      g_variant_get(source_data, "(ii)", &source_min, &source_max);
-
-      int reference_min, reference_max;
-      g_variant_get(reference_data, "(ii)", &reference_min, &reference_max);
-
-      ok = (source_min >= reference_min && source_max <= reference_max);
-    } else if (g_variant_is_of_type(reference_data, G_VARIANT_TYPE("(dd)"))) {
-      double source_min, source_max;
-      g_variant_get(source_data, "(dd)", &source_min, &source_max);
-
-      double reference_min, reference_max;
-      g_variant_get(reference_data, "(dd)", &reference_min, &reference_max);
-
-      ok = (source_min >= reference_min && source_max <= reference_max);
-    } else {
-      /* Our schemas don't use this. If that changes, need to implement this! */
-      g_assert_not_reached();
-    }
-
-    if (!ok) {
+    if (g_variant_compare(source_min, reference_min) < 0 ||
+        g_variant_compare(source_max, reference_max) > 0) {
       g_set_error(error, TERMINAL_SCHEMA_VERIFIER_ERROR,
                   TERMINAL_SCHEMA_VERIFIER_KEY_RANGE_INTERVAL,
                   "Schema \"%s\" key \"%s\" has range interval not contained in reference range interval",
