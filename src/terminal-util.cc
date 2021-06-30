@@ -1926,7 +1926,6 @@ terminal_g_settings_schema_source_get_default(void)
                "Using unverified installed schemas.\n",
                error->message);
 
-    g_settings_schema_source_unref(reference_source);
     return g_settings_schema_source_ref(default_source);
   }
 
