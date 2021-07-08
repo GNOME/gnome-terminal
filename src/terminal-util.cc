@@ -222,7 +222,11 @@ terminal_util_show_about (void)
 
   licence_text = terminal_util_get_licence_text ();
 
-  int gnome_version = (TERMINAL_MINOR_VERSION + 1) & ~1;
+  /* gnome 40 corresponds to g-t 3.40.x. After that, gnome version
+   * increases by 1 while the g-t minor version increases by 2 between
+   * stable releases.
+   */
+  auto const gnome_version = 40 + (TERMINAL_MINOR_VERSION - 40 + 1) / 2;
   version = g_strdup_printf (_("Version %s for GNOME %d"),
                              VERSION,
                              gnome_version);
