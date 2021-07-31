@@ -845,7 +845,6 @@ terminal_app_init (TerminalApp *app)
   /* Gtk debug settings */
   app->gtk_debug_settings = terminal_g_settings_new(app->schema_source,
                                                     GTK_DEBUG_SETTING_SCHEMA);
-;
 
   /* These are internal settings that exists only for distributions
    * to override, so we cache them on startup and don't react to changes.
