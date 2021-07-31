@@ -128,6 +128,7 @@ terminal_client_get_environment_filters (void)
     "REMOTE_ADDR",
     "REMOTE_PORT",
     "SERVICE_RESULT",
+    "SHLVL",
     "TERM",
     "VTE_VERSION",
     "WATCHDOG_PID",
