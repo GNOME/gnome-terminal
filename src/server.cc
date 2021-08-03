@@ -43,6 +43,7 @@
 #include "terminal-libgsystem.hh"
 
 static char *app_id = nullptr;
+static gboolean no_intent = false;
 
 #define INACTIVITY_TIMEOUT (100 /* ms */)
 
@@ -67,6 +68,7 @@ option_app_id_cb (const gchar *option_name,
 
 static const GOptionEntry options[] = {
   { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, (void*)option_app_id_cb, "Application ID", "ID" },
+  { "no-intent", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, (void*)&no_intent, nullptr, nullptr },
   { nullptr }
 };
 
@@ -163,7 +165,7 @@ init_server (int argc,
   }
 
   /* Now we can create the app */
-  GApplication *app = terminal_app_new (app_id);
+  auto const app = terminal_app_new(app_id, !no_intent);
   g_free (app_id);
   app_id = nullptr;
 

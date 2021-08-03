@@ -108,6 +108,9 @@ struct _TerminalScreenPrivate
   gboolean exec_on_realize;
   guint idle_exec_source;
   ExecData *exec_data;
+
+  bool exit_action_set;
+  TerminalExitAction exit_action;
 };
 
 enum
@@ -176,12 +179,12 @@ static void terminal_screen_show_info_bar (TerminalScreen *screen,
 
 
 static char**terminal_screen_get_child_environment (TerminalScreen *screen,
-                                                    char **initial_envv,
+                                                    char const* const* initial_envv,
                                                     char **path,
                                                     char **shell);
 
 static gboolean terminal_screen_get_child_command (TerminalScreen *screen,
-                                                   char          **exec_argv,
+                                                   char const* const* exec_argv,
                                                    const char     *path_env,
                                                    const char     *shell_env,
                                                    gboolean        shell,
@@ -236,9 +239,9 @@ fake_dup3 (int fd, int fd2, int flags)
 #endif /* !__linux__ */
 
 static char*
-strv_to_string (char **strv)
+strv_to_string (char const* const* strv)
 {
-  return strv ? g_strjoinv (" ", strv) : g_strdup ("(null)");
+  return strv ? g_strjoinv (" ", (char**)strv) : g_strdup ("(null)");
 }
 
 static char*
@@ -896,10 +899,10 @@ terminal_screen_reexec (TerminalScreen *screen,
 
 gboolean
 terminal_screen_exec (TerminalScreen *screen,
-                      char **argv,
-                      char **initial_envv,
+                      char const* const* argv,
+                      char const* const* initial_envv,
                       gboolean as_shell,
-                      const char *cwd,
+                      char const* cwd,
                       GUnixFDList *fd_list,
                       GVariant *fd_array,
                       TerminalScreenExecCallback callback,
@@ -919,7 +922,7 @@ terminal_screen_exec (TerminalScreen *screen,
                            "[screen %p] exec: argv:[%s] envv:%p(%u) as-shell:%s cwd:%s\n",
                            screen,
                            (argv_str = strv_to_string(argv)),
-                           initial_envv, initial_envv ? g_strv_length (initial_envv) : 0,
+                           initial_envv, initial_envv ? g_strv_length((char**)initial_envv) : 0,
                            as_shell ? "true":"false",
                            cwd);
   }
@@ -944,7 +947,7 @@ terminal_screen_exec (TerminalScreen *screen,
 
   gs_free char *path = nullptr;
   gs_free char *shell = nullptr;
-  gs_strfreev char **envv = terminal_screen_get_child_environment (screen,
+  gs_strfreev char **envv = terminal_screen_get_child_environment(screen,
                                                                   initial_envv,
                                                                   &path,
                                                                   &shell);
@@ -997,7 +1000,7 @@ terminal_screen_exec (TerminalScreen *screen,
     data->fd_map = nullptr;
   }
 
-  data->argv = g_strdupv (argv);
+  data->argv = g_strdupv ((char**)argv);
   data->exec_argv = g_strdupv (exec_argv);
   data->cwd = g_strdup (cwd);
   data->envv = g_strdupv (envv);
@@ -1348,7 +1351,7 @@ should_preserve_cwd (TerminalPreserveWorkingDirectory preserve_cwd,
 
 static gboolean
 terminal_screen_get_child_command (TerminalScreen *screen,
-                                   char          **argv,
+                                   char const* const* argv,
                                    const char     *path_env,
                                    const char     *shell_env,
                                    gboolean        as_shell,
@@ -1371,7 +1374,7 @@ terminal_screen_get_child_command (TerminalScreen *screen,
 
   if (argv)
     {
-      exec_argv = g_strdupv (argv);
+      exec_argv = g_strdupv((char**)argv);
 
       /* argv and cwd come from the command line client, so it must always be used */
       *preserve_cwd_p = TRUE;
@@ -1432,10 +1435,10 @@ terminal_screen_get_child_command (TerminalScreen *screen,
 }
 
 static char**
-terminal_screen_get_child_environment (TerminalScreen *screen,
-                                       char **initial_envv,
-                                       char **path,
-                                       char **shell)
+terminal_screen_get_child_environment(TerminalScreen *screen,
+				      char const* const* initial_envv,
+				      char **path,
+				      char **shell)
 {
   TerminalApp *app = terminal_app_get ();
   char **env;
@@ -1449,11 +1452,11 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
   if (initial_envv)
-    env = initial_envv;
+    env = (char**)initial_envv;
   else {
     env = current_environ = g_get_environ ();
     /* Remove this variable which we set in server.c:main() */
-    env = g_environ_unsetenv (env, "G_ENABLE_DIAGNOSTIC");
+    env = g_environ_unsetenv(env, "G_ENABLE_DIAGNOSTIC");
   }
 
   for (i = 0; env[i]; ++i)
@@ -1871,7 +1874,12 @@ terminal_screen_child_exited (VteTerminal *terminal,
 
   priv->child_pid = -1;
 
-  action = TerminalExitAction(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY));
+  if (priv->exit_action_set)
+    action = priv->exit_action;
+  else
+    action = TerminalExitAction(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY));
+
+  auto const can_relaunch = !priv->exit_action_set;
 
   switch (action)
     {
@@ -1885,8 +1893,12 @@ terminal_screen_child_exited (VteTerminal *terminal,
       GtkWidget *info_bar;
 
       info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO,
-                                        _("_Relaunch"), RESPONSE_RELAUNCH,
                                         nullptr);
+      if (can_relaunch)
+        gtk_info_bar_add_button(GTK_INFO_BAR(info_bar),
+                                _("_Relaunch"),
+                                RESPONSE_RELAUNCH);
+
       if (WIFEXITED (status)) {
         terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                       _("The child process exited normally with status %d."), WEXITSTATUS (status));
@@ -2331,4 +2343,15 @@ terminal_screen_get_uuid (TerminalScreen *screen)
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), nullptr);
 
   return screen->priv->uuid;
+}
+
+void
+terminal_screen_set_exit_action(TerminalScreen* screen,
+                                TerminalExitAction action)
+{
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+
+  auto const priv = screen->priv;
+  priv->exit_action = action;
+  priv->exit_action_set = true;
 }

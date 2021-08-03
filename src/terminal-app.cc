@@ -95,7 +95,9 @@ struct _TerminalApp
 {
   GtkApplication parent_instance;
 
-  GDBusObjectManagerServer *object_manager;
+  GDBusObjectManagerServer *org_gnome_object_manager;
+  TerminalIntent* terminal_intent;
+  bool implement_intent;
 
   TerminalSettingsList *profiles_list;
 
@@ -134,6 +136,11 @@ enum
 {
   CLIPBOARD_TARGETS_CHANGED,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_IMPLEMENT_INTENT,
 };
 
 static guint signals[LAST_SIGNAL];
@@ -928,8 +935,6 @@ terminal_app_dbus_register (GApplication    *application,
                             GError         **error)
 {
   TerminalApp *app = TERMINAL_APP (application);
-  gs_unref_object TerminalObjectSkeleton *object = nullptr;
-  gs_unref_object TerminalFactory *factory = nullptr;
 
   if (!G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_register (application,
                                                                        connection,
@@ -953,15 +958,30 @@ terminal_app_dbus_register (GApplication    *application,
   }
 #endif /* ENABLE_SEARCH_PROVIDER */
 
-  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
-  factory = terminal_factory_impl_new ();
-  terminal_object_skeleton_set_factory (object, factory);
+  if (app->implement_intent) {
+    app->terminal_intent = terminal_intent_impl_new();
+    if (!g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(app->terminal_intent),
+                                          connection,
+                                          TERMINAL_INTENT_OBJECT_PATH,
+                                          error))
+      return false;
+  }
 
-  app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
-  g_dbus_object_manager_server_export (app->object_manager, G_DBUS_OBJECT_SKELETON (object));
+  gs_unref_object TerminalObjectSkeleton* object = nullptr;
+  gs_unref_object TerminalFactory* factory = nullptr;
+  object = terminal_object_skeleton_new(TERMINAL_FACTORY_OBJECT_PATH);
+  factory = terminal_factory_impl_new();
+  terminal_object_skeleton_set_factory(object, factory);
 
-  /* And export the object */
-  g_dbus_object_manager_server_set_connection (app->object_manager, connection);
+  app->org_gnome_object_manager =
+    g_dbus_object_manager_server_new(TERMINAL_OBJECT_PATH_PREFIX);
+
+  g_dbus_object_manager_server_export(app->org_gnome_object_manager,
+				      G_DBUS_OBJECT_SKELETON(object));
+
+  /* And export the objects */
+  g_dbus_object_manager_server_set_connection(app->org_gnome_object_manager,
+					      connection);
   return TRUE;
 }
 
@@ -972,10 +992,17 @@ terminal_app_dbus_unregister (GApplication    *application,
 {
   TerminalApp *app = TERMINAL_APP (application);
 
-  if (app->object_manager) {
-    g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
-    g_object_unref (app->object_manager);
-    app->object_manager = nullptr;
+  if (app->org_gnome_object_manager) {
+    g_dbus_object_manager_server_unexport(app->org_gnome_object_manager,
+					  TERMINAL_FACTORY_OBJECT_PATH);
+    g_object_unref(app->org_gnome_object_manager);
+    app->org_gnome_object_manager = nullptr;
+  }
+
+  if (app->terminal_intent) {
+    g_dbus_interface_skeleton_unexport(G_DBUS_INTERFACE_SKELETON(app->terminal_intent));
+    g_object_unref(app->terminal_intent);
+    app->terminal_intent = nullptr;
   }
 
 #ifdef ENABLE_SEARCH_PROVIDER
@@ -992,12 +1019,32 @@ terminal_app_dbus_unregister (GApplication    *application,
 }
 
 static void
+terminal_app_set_property(GObject* object,
+                          guint prop_id,
+                          GValue const* value,
+                          GParamSpec* pspec)
+{
+  auto const app = TERMINAL_APP(object);
+
+  switch (prop_id)
+    {
+      case PROP_IMPLEMENT_INTENT:
+        app->implement_intent = g_value_get_boolean(value) != false;
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *g_application_class = G_APPLICATION_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
+  object_class->set_property = terminal_app_set_property;
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
@@ -1012,18 +1059,32 @@ terminal_app_class_init (TerminalAppClass *klass)
                   nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, G_TYPE_OBJECT);
+
+  g_object_class_install_property
+    (object_class,
+     PROP_IMPLEMENT_INTENT,
+     g_param_spec_boolean("implement-intent", nullptr, nullptr,
+                          false,
+                          GParamFlags(G_PARAM_WRITABLE |
+                                      G_PARAM_CONSTRUCT_ONLY |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB)));
+
 }
 
 /* Public API */
 
 GApplication *
-terminal_app_new (const char *app_id)
+terminal_app_new (const char *app_id,
+                  gboolean implement_intent)
 {
   const GApplicationFlags flags = G_APPLICATION_IS_SERVICE;
 
   return reinterpret_cast<GApplication*>
     (g_object_new (TERMINAL_TYPE_APP,
 		   "application-id", app_id ? app_id : TERMINAL_APPLICATION_ID,
+                   "implement-intent", implement_intent,
 		   "flags", flags,
 		   nullptr));
 }
@@ -1060,8 +1121,8 @@ terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
                                                const char *object_path)
 {
   gs_unref_object GDBusObject *skeleton =
-    g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (app->object_manager),
-                                      object_path);
+    g_dbus_object_manager_get_object(G_DBUS_OBJECT_MANAGER(app->org_gnome_object_manager),
+				     object_path);
   if (skeleton == nullptr || !TERMINAL_IS_OBJECT_SKELETON (skeleton))
     return nullptr;
 
@@ -1107,7 +1168,7 @@ terminal_app_register_screen (TerminalApp *app,
   terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (impl));
   g_object_unref (impl);
 
-  g_dbus_object_manager_server_export (app->object_manager,
+  g_dbus_object_manager_server_export (app->org_gnome_object_manager,
                                        G_DBUS_OBJECT_SKELETON (skeleton));
 }
 
@@ -1129,7 +1190,7 @@ terminal_app_unregister_screen (TerminalApp *app,
   if (impl != nullptr)
     terminal_receiver_impl_unset_screen (impl);
 
-  g_dbus_object_manager_server_unexport (app->object_manager, object_path);
+  g_dbus_object_manager_server_unexport (app->org_gnome_object_manager, object_path);
 }
 
 GdkAtom *
@@ -1316,8 +1377,8 @@ terminal_app_get_system_font (TerminalApp *app)
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
-  g_warn_if_fail (app->object_manager != nullptr);
-  return app->object_manager;
+  g_warn_if_fail (app->org_gnome_object_manager != nullptr);
+  return app->org_gnome_object_manager;
 }
 
 gboolean

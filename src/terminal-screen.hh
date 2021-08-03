@@ -24,6 +24,8 @@
 
 #include <vte/vte.h>
 
+#include "terminal-enums.hh"
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -84,10 +86,10 @@ typedef void (* TerminalScreenExecCallback) (TerminalScreen *screen,
                                              gpointer        user_data);
 
 gboolean terminal_screen_exec (TerminalScreen *screen,
-                               char **argv,
-                               char **envv,
+                               char const* const* argv,
+                               char const* const* envv,
                                gboolean as_shell,
-                               const char *cwd,
+                               char const* cwd,
                                GUnixFDList *fd_list,
                                GVariant *fd_array,
                                TerminalScreenExecCallback callback,
@@ -125,6 +127,9 @@ void       terminal_screen_get_cell_size (TerminalScreen *screen,
                                           int *height_chars);
 
 void _terminal_screen_update_scrollbar (TerminalScreen *screen);
+
+void terminal_screen_set_exit_action(TerminalScreen* screen,
+                                     TerminalExitAction action);
 
 void terminal_screen_save_config (TerminalScreen *screen,
                                   GKeyFile *key_file,

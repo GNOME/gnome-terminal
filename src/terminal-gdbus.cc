@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011, 2012 Christian Persch
+ * Copyright © 2011, 2012, 2021 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
+#include <glib/gi18n.h>
 
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
@@ -29,6 +30,10 @@
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"
+
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
 
 /* ------------------------------------------------------------------------- */
 
@@ -85,14 +90,14 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
 /* Class implementation */
 
 typedef struct {
-  TerminalReceiver *receiver;
-  GDBusMethodInvocation *invocation;
+  void* object;
+  GDBusMethodInvocation* invocation;
 } ExecData;
 
 static void
 exec_data_free (ExecData *data)
 {
-  g_object_unref (data->receiver);
+  g_object_unref (data->object);
   g_object_unref (data->invocation);
   g_free (data);
 }
@@ -107,7 +112,8 @@ exec_cb (TerminalScreen *screen, /* unused, may be %nullptr */
   if (error) {
     g_dbus_method_invocation_return_gerror (data->invocation, error);
   } else {
-    terminal_receiver_complete_exec (data->receiver, data->invocation, nullptr /* outfdlist */);
+    terminal_receiver_complete_exec(TERMINAL_RECEIVER(data->object),
+                                    data->invocation, nullptr /* outfdlist */);
   }
 }
 
@@ -207,7 +213,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   exec_argv = (char **) g_variant_get_bytestring_array (arguments, &exec_argc);
 
   ExecData *exec_data = g_new (ExecData, 1);
-  exec_data->receiver = (TerminalReceiver*)g_object_ref (receiver);
+  exec_data->object = g_object_ref(receiver);
   /* We want to transfer the ownership of @invocation to ExecData here, but
    * we have to temporarily ref it so that in the error case below (where
    * terminal_screen_exec() frees the exec data via the supplied callback,
@@ -564,4 +570,235 @@ terminal_factory_impl_new (void)
 {
   return reinterpret_cast<TerminalFactory*>
     (g_object_new (TERMINAL_TYPE_FACTORY_IMPL, nullptr));
+}
+
+/* ---------------------------------------------------------------------------
+ * org.freedesktop.Terminal1 intent implementation
+ * ---------------------------------------------------------------------------
+ */
+
+static void
+exec_intent_cb(TerminalScreen *screen, /* unused, may be %nullptr */
+               GError *error, /* set on error, %nullptr on success */
+               ExecData *data)
+{
+  /* Note: these calls transfer the ref */
+  g_object_ref(data->invocation);
+  if (error) {
+    g_dbus_method_invocation_return_gerror(data->invocation, error);
+  } else {
+    terminal_intent_complete_launch_command(TERMINAL_INTENT(data->object),
+					    data->invocation);
+  }
+}
+
+static gboolean
+terminal_intent_impl_launch_command(TerminalIntent* intent,
+				    GDBusMethodInvocation* invocation,
+				    char const* const* argv,
+				    char const* cwd,
+				    char const* desktop_entry,
+				    char const* const* envv,
+				    GVariant* options,
+				    GVariant* platform_data)
+{
+  TerminalApp *app = terminal_app_get ();
+
+  if (!terminal_util_check_envv(envv)) {
+    /* Transfers ownership of @invocation */
+    g_dbus_method_invocation_return_error_literal(invocation,
+						  G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+						  "Invalid envv array passed");
+      return true;
+  }
+
+  /* Try to get some info from the passed desktop entry */
+  gs_free char* desktop_cwd = nullptr;
+  gs_free char* desktop_icon = nullptr;
+  gs_free char* desktop_title = nullptr;
+  gs_free char* desktop_wm_class = nullptr;
+  gs_free char* desktop_profile_uuid = nullptr;
+
+  if (desktop_entry[0]) {
+    gs_free char* desktop_entry_utf8 = g_utf8_make_valid(desktop_entry, -1);
+    gs_unref_key_file GKeyFile* key_file = g_key_file_new();
+
+    gs_free_error GError* err = nullptr;
+    if (!g_key_file_load_from_file(key_file,
+                                   desktop_entry,
+                                   GKeyFileFlags(G_KEY_FILE_NONE),
+                                   &err)) {
+      /* Transfers ownership of @invocation */
+      g_dbus_method_invocation_return_error(invocation,
+                                            G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                            "Failed to load desktop entry \"%s\": %s",
+                                            desktop_entry_utf8, err->message);
+      return true;
+    }
+
+    gs_free char* version = g_key_file_get_string(key_file,
+                                                  G_KEY_FILE_DESKTOP_GROUP,
+                                                  G_KEY_FILE_DESKTOP_KEY_VERSION,
+                                                  nullptr);
+    gs_free char* type = g_key_file_get_string(key_file,
+                                               G_KEY_FILE_DESKTOP_GROUP,
+                                               G_KEY_FILE_DESKTOP_KEY_TYPE,
+                                               nullptr);
+    auto const is_terminal = g_key_file_get_boolean(key_file,
+                                                    G_KEY_FILE_DESKTOP_GROUP,
+                                                    G_KEY_FILE_DESKTOP_KEY_TERMINAL,
+                                                    nullptr);
+    if (!version ||
+        !g_str_equal(version, "1.0") ||
+        !type ||
+        !g_str_equal(type, G_KEY_FILE_DESKTOP_TYPE_APPLICATION) ||
+        !is_terminal) {
+      /* Transfers ownership of @invocation */
+      g_dbus_method_invocation_return_error(invocation,
+                                            G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                            "\"%s\" is not a valid desktop file of a terminal application",
+                                            desktop_entry_utf8);
+      return true;
+    }
+
+
+    desktop_cwd = g_key_file_get_string(key_file,
+                                        G_KEY_FILE_DESKTOP_GROUP,
+                                        G_KEY_FILE_DESKTOP_KEY_PATH,
+                                        nullptr);
+
+    desktop_icon = g_key_file_get_locale_string(key_file,
+                                                G_KEY_FILE_DESKTOP_GROUP,
+                                                G_KEY_FILE_DESKTOP_KEY_ICON,
+                                                nullptr, // default locale
+                                                nullptr);
+
+    desktop_title = g_key_file_get_locale_string(key_file,
+                                                 G_KEY_FILE_DESKTOP_GROUP,
+                                                 G_KEY_FILE_DESKTOP_KEY_NAME,
+                                                 nullptr, // default locale
+                                                 nullptr);
+    if (!desktop_title || !desktop_title[0]) {
+      g_clear_pointer(&desktop_title, GDestroyNotify(g_free));
+      desktop_title = g_key_file_get_locale_string(key_file,
+                                                   G_KEY_FILE_DESKTOP_GROUP,
+                                                   G_KEY_FILE_DESKTOP_KEY_GENERIC_NAME,
+                                                   nullptr, // default locale
+                                                   nullptr);
+    }
+
+    desktop_wm_class = g_key_file_get_string(key_file,
+                                             G_KEY_FILE_DESKTOP_GROUP,
+                                             G_KEY_FILE_DESKTOP_KEY_STARTUP_WM_CLASS,
+                                             nullptr);
+
+    desktop_profile_uuid = g_key_file_get_string(key_file,
+                                                 G_KEY_FILE_DESKTOP_GROUP,
+                                                 "X-GNOME-Profile-UUID",
+                                                 nullptr);
+  }
+
+  auto option_keep = gboolean{false};
+  (void)g_variant_lookup(options, "keep-terminal-open", "b", &option_keep);
+
+  char const* option_profile_uuid = nullptr;
+  (void)g_variant_lookup(options, "x-gnome-profile", "&s", &option_profile_uuid);
+
+  GError* err = nullptr;
+  gs_unref_object GSettings* profile =
+    terminal_profiles_list_ref_profile_by_uuid(terminal_app_get_profiles_list (app),
+                                               option_profile_uuid ? option_profile_uuid : desktop_profile_uuid, /* nullptr if default */
+                                               &err);
+  if (profile == nullptr) {
+    g_dbus_method_invocation_take_error(invocation, err);
+    return true;
+  }
+
+  /* Now open new window and terminal */
+  auto window = terminal_window_new(G_APPLICATION(app));
+
+  char const* startup_id = nullptr;
+  if (g_variant_lookup(platform_data, "desktop-startup-id", "&s", &startup_id))
+    gtk_window_set_startup_id(GTK_WINDOW(window), startup_id);
+
+  if (desktop_wm_class) {
+#ifdef GDK_WINDOWING_X11
+    if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+      gtk_window_set_wmclass(GTK_WINDOW(window), desktop_wm_class, desktop_wm_class);
+#endif
+  }
+
+  auto const zoom = 1.0;
+
+  auto const screen = terminal_screen_new(profile,
+                                          desktop_title ? desktop_title : _("Terminal"),
+                                          zoom);
+
+  if (option_keep)
+    terminal_screen_set_exit_action(screen, TERMINAL_EXIT_HOLD);
+
+  terminal_window_add_screen(window, screen, -1);
+
+  gtk_window_present(GTK_WINDOW(window));
+
+  auto exec_data = g_new(ExecData, 1);
+  exec_data->object = g_object_ref(intent);
+  /* We want to transfer the ownership of @invocation to ExecData here, but
+   * we have to temporarily ref it so that in the error case below (where
+   * terminal_screen_exec() frees the exec data via the supplied callback,
+   * the g_dbus_method_invocation_take_error() calll still can take ownership
+   * of the invocation's ref passed to this function (terminal_receiver_impl_exec()).
+   */
+  exec_data->invocation = (GDBusMethodInvocation*)g_object_ref (invocation);
+
+  if (!terminal_screen_exec(screen,
+                            argv,
+                            envv,
+                            false /* shell */,
+                            cwd[0] ? cwd : desktop_cwd ? desktop_cwd : nullptr,
+                            nullptr, nullptr,
+                            TerminalScreenExecCallback(exec_intent_cb),
+                            exec_data /* adopted */,
+                            GDestroyNotify(exec_data_free),
+                            nullptr /* cancellable */,
+                            &err)) {
+    /* Transfers ownership of @invocation */
+    g_dbus_method_invocation_take_error(invocation, err);
+  }
+
+  /* Now we can remove that extra ref again. */
+  g_object_unref (invocation);
+
+  return true;
+}
+
+static void
+terminal_intent_impl_iface_init (TerminalIntentIface *iface)
+{
+  iface->handle_launch_command = terminal_intent_impl_launch_command;
+}
+
+G_DEFINE_TYPE_WITH_CODE (TerminalIntentImpl, terminal_intent_impl, TERMINAL_TYPE_INTENT_SKELETON,
+                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_INTENT, terminal_intent_impl_iface_init))
+
+static void
+terminal_intent_impl_init (TerminalIntentImpl *impl)
+{
+}
+
+static void
+terminal_intent_impl_class_init (TerminalIntentImplClass *klass)
+{
+}
+
+/**
+ * terminal_intent_impl_new:
+ *
+ * Returns: (transfer full): a new #TerminalIntentImpl
+ */
+TerminalIntent *
+terminal_intent_impl_new (void)
+{
+  return reinterpret_cast<TerminalIntent*>
+    (g_object_new (TERMINAL_TYPE_INTENT_IMPL, nullptr));
 }

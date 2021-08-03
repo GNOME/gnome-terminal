@@ -40,6 +40,9 @@ enum {
 
 #define TERMINAL_SEARCH_PROVIDER_PATH           TERMINAL_OBJECT_PATH_PREFIX "/SearchProvider"
 
+#define TERMINAL_INTENT_OBJECT_PATH            "/org/freedesktop/intent/Terminal1"
+#define TERMINAL_INTENT_INTERFACE_NAME         "org.freedesktop.Terminal1"
+
 #define TERMINAL_ENV_SERVICE_NAME               "GNOME_TERMINAL_SERVICE"
 #define TERMINAL_ENV_SCREEN                     "GNOME_TERMINAL_SCREEN"
 
