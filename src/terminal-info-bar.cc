@@ -73,6 +73,7 @@ terminal_info_bar_new (GtkMessageType type,
   info_bar = reinterpret_cast<GtkWidget*>
     (g_object_new (TERMINAL_TYPE_INFO_BAR,
 		   "message-type", type,
+                   "show-close-button", true,
 		   nullptr));
 
   va_start (args, first_button_text);
