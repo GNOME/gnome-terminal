@@ -81,6 +81,10 @@ struct _TerminalWindowPrivate
 
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
 
+  /* For restoring hints after unmaximizing etc */
+  GdkGeometry hints;
+  GdkWindowState window_state;
+
   GtkWidget *confirm_close_dialog;
   TerminalSearchPopover *search_popover;
 
@@ -111,12 +115,18 @@ struct _TerminalWindowPrivate
 #endif
 #endif
 
-/* See bug #789356 */
-#define WINDOW_STATE_TILED (GDK_WINDOW_STATE_TILED       | \
-                            GDK_WINDOW_STATE_LEFT_TILED  | \
-                            GDK_WINDOW_STATE_RIGHT_TILED | \
-                            GDK_WINDOW_STATE_TOP_TILED   | \
-                            GDK_WINDOW_STATE_BOTTOM_TILED)
+/* See bug #789356 and issue gnome-terminal#129*/
+static inline constexpr auto
+window_state_is_snapped(GdkWindowState state) noexcept
+{
+  return (state & (GDK_WINDOW_STATE_FULLSCREEN |
+                   GDK_WINDOW_STATE_MAXIMIZED |
+                   GDK_WINDOW_STATE_BOTTOM_TILED |
+                   GDK_WINDOW_STATE_LEFT_TILED |
+                   GDK_WINDOW_STATE_RIGHT_TILED |
+                   GDK_WINDOW_STATE_TOP_TILED |
+                   GDK_WINDOW_STATE_TILED)) != 0;
+}
 
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
@@ -1567,13 +1577,10 @@ screen_resize_window_cb (TerminalScreen *screen,
                          guint rows,
                          TerminalWindow* window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget = GTK_WIDGET (screen);
+  auto const priv = window->priv;
 
-  if (gtk_widget_get_realized (widget) &&
-      (gdk_window_get_state (gtk_widget_get_window (widget)) & (GDK_WINDOW_STATE_MAXIMIZED |
-                                                                GDK_WINDOW_STATE_FULLSCREEN |
-                                                                WINDOW_STATE_TILED)) != 0)
+  if (priv->realized &&
+      window_state_is_snapped(priv->window_state))
     return;
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), columns, rows);
@@ -1932,28 +1939,6 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window,
 
 /*****************************************/
 
-#ifdef ENABLE_DEBUG
-static void
-terminal_window_size_request_cb (GtkWidget *widget,
-                                 GtkRequisition *req)
-{
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] size-request result %d : %d\n",
-                         widget, req->width, req->height);
-}
-
-static void
-terminal_window_size_allocate_cb (GtkWidget *widget,
-                                  GtkAllocation *allocation)
-{
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] size-alloc result %d : %d at (%d, %d)\n",
-                         widget,
-                         allocation->width, allocation->height,
-                         allocation->x, allocation->y);
-}
-#endif /* ENABLE_DEBUG */
-
 static void
 terminal_window_realize (GtkWidget *widget)
 {
@@ -1982,15 +1967,20 @@ static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
 {
-  gboolean (* window_state_event) (GtkWidget *, GdkEventWindowState *event) =
-    GTK_WIDGET_CLASS (terminal_window_parent_class)->window_state_event;
+  auto const window_state_event =
+    GTK_WIDGET_CLASS(terminal_window_parent_class)->window_state_event;
+  auto const window = TERMINAL_WINDOW(widget);
+  auto const priv = window->priv;
+
+  priv->window_state = event->new_window_state;
+
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "Window state changed mask %x old state %x new state %x\n",
+                         event->changed_mask, priv->window_state, event->new_window_state);
 
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
     {
-      TerminalWindow *window = TERMINAL_WINDOW (widget);
-      gboolean is_fullscreen;
-
-      is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+      auto const is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
 
       g_simple_action_set_state (lookup_action (window, "fullscreen"),
                                  g_variant_new_boolean (is_fullscreen));
@@ -2000,10 +1990,32 @@ terminal_window_state_event (GtkWidget            *widget,
                                    !is_fullscreen);
     }
 
+  if (window_state_is_snapped(event->changed_mask))
+    {
+      if (window_state_is_snapped(event->new_window_state))
+        {
+          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                                 "Disapplying geometry hints entering snapped state\n");
+          gtk_window_set_geometry_hints(GTK_WINDOW(widget), nullptr, nullptr,
+                                        GdkWindowHints(0));
+        }
+      else
+        {
+          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                                 "Reapplying geometry hints after leaving snapped state\n");
+          gtk_window_set_geometry_hints (GTK_WINDOW (window),
+                                         nullptr,
+                                         &priv->hints,
+                                         GdkWindowHints(GDK_HINT_RESIZE_INC |
+                                                        GDK_HINT_MIN_SIZE |
+                                                        GDK_HINT_BASE_SIZE));
+        }
+    }
+
   if (window_state_event)
     return window_state_event (widget, event);
 
-  return FALSE;
+  return false;
 }
 
 static void
@@ -2141,13 +2153,6 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
                     nullptr);
-#ifdef ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
-    {
-      g_signal_connect_after (window, "size-request", G_CALLBACK (terminal_window_size_request_cb), nullptr);
-      g_signal_connect_after (window, "size-allocate", G_CALLBACK (terminal_window_size_allocate_cb), nullptr);
-    }
-#endif
 
   use_headerbar = terminal_app_get_use_headerbar (app);
   if (use_headerbar) {
@@ -2627,16 +2632,12 @@ terminal_window_get_mdi_container (TerminalWindow *window)
 void
 terminal_window_update_size (TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
+  auto const priv = window->priv;
   int grid_width, grid_height;
   int pixel_width, pixel_height;
-  GdkWindow *gdk_window;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-
-  if (gdk_window != nullptr &&
-      (gdk_window_get_state (gdk_window) &
-       (GDK_WINDOW_STATE_MAXIMIZED | WINDOW_STATE_TILED | GDK_WINDOW_STATE_FULLSCREEN)))
+  if (priv->realized &&
+      window_state_is_snapped(priv->window_state))
     {
       /* Don't adjust the size of maximized or tiled (snapped, half-maximized)
        * windows: if we do, there will be ugly gaps of up to 1 character cell
@@ -3011,7 +3012,7 @@ terminal_window_update_geometry (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *widget;
-  GdkGeometry hints;
+  GdkGeometry *hints = &priv->hints;
   GtkBorder padding;
   GtkRequisition vbox_request, widget_request;
   int grid_width, grid_height;
@@ -3098,6 +3099,11 @@ terminal_window_update_geometry (TerminalWindow *window)
        * until we've done that. */
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "not realized yet\n");
     }
+  else if (window_state_is_snapped(priv->window_state))
+    {
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                             "Not applying geometry in snapped state\n");
+    }
   else if (char_width != priv->old_char_width ||
       char_height != priv->old_char_height ||
       padding.left + padding.right != priv->old_padding_width ||
@@ -3108,19 +3114,19 @@ terminal_window_update_geometry (TerminalWindow *window)
       csd_height != priv->old_csd_height ||
       widget != (GtkWidget*) priv->old_geometry_widget)
     {
-      hints.base_width = chrome_width + csd_width;
-      hints.base_height = chrome_height + csd_height;
+      hints->base_width = chrome_width + csd_width;
+      hints->base_height = chrome_height + csd_height;
 
-      hints.width_inc = char_width;
-      hints.height_inc = char_height;
+      hints->width_inc = char_width;
+      hints->height_inc = char_height;
 
       /* min size is min size of the whole window, remember. */
-      hints.min_width = hints.base_width + hints.width_inc * MIN_WIDTH_CHARS;
-      hints.min_height = hints.base_height + hints.height_inc * MIN_HEIGHT_CHARS;
-      
+      hints->min_width = hints->base_width + hints->width_inc * MIN_WIDTH_CHARS;
+      hints->min_height = hints->base_height + hints->height_inc * MIN_HEIGHT_CHARS;
+
       gtk_window_set_geometry_hints (GTK_WINDOW (window),
                                      nullptr,
-                                     &hints,
+                                     hints,
                                      GdkWindowHints(GDK_HINT_RESIZE_INC |
 						    GDK_HINT_MIN_SIZE |
 						    GDK_HINT_BASE_SIZE));
@@ -3128,12 +3134,12 @@ terminal_window_update_geometry (TerminalWindow *window)
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                              "[window %p] hints: base %dx%d min %dx%d inc %d %d\n",
                              window,
-                             hints.base_width,
-                             hints.base_height,
-                             hints.min_width,
-                             hints.min_height,
-                             hints.width_inc,
-                             hints.height_inc);
+                             hints->base_width,
+                             hints->base_height,
+                             hints->min_width,
+                             hints->min_height,
+                             hints->width_inc,
+                             hints->height_inc);
 
       priv->old_csd_width = csd_width;
       priv->old_csd_height = csd_height;
