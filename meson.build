@@ -18,7 +18,6 @@ project(
   ['c', 'cpp',],
   default_options: [
     'buildtype=release',
-    'c_std=gnu11',
     'warning_level=' + (meson.version().version_compare('>= 0.50.0') ? '0' : '1'),
     'b_ndebug=false',
   ],
