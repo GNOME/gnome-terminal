@@ -1976,7 +1976,9 @@ terminal_window_state_event (GtkWidget            *widget,
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "Window state changed mask %x old state %x new state %x\n",
-                         event->changed_mask, priv->window_state, event->new_window_state);
+                         unsigned(event->changed_mask),
+                         unsigned(priv->window_state),
+                         unsigned(event->new_window_state));
 
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
     {

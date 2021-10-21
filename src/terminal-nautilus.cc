@@ -439,8 +439,7 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
       if (menu_item->remote_terminal)
         break;
 
-      /* fall through */
-
+      [[fallthrough]];
     case FILE_INFO_OTHER: {
       GFile *file;
 

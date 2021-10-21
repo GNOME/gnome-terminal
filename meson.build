@@ -181,10 +181,8 @@ compiler_flags_common = [
   '-Wall',
   '-Wcast-align',
   '-Wendif-labels',
-  '-Werror=implicit-function-declaration',
   '-Werror=init-self',
   '-Werror=missing-include-dirs',
-  '-Werror=missing-prototypes',
   '-Werror=pointer-arith',
   '-Wextra',
   '-Wfloat-equal',
@@ -196,6 +194,7 @@ compiler_flags_common = [
   '-Wmissing-include-dirs',
   '-Wmissing-noreturn',
   '-Wnested-externs',
+  '-Wno-maybe-uninitialized',
   '-Wno-missing-field-initializers',
   '-Wno-switch-enum',
   '-Wno-unused-parameter',
@@ -290,6 +289,7 @@ endforeach
 # ... and now make these flags the default
 
 add_project_arguments(global_cflags, language: 'c',)
+add_project_arguments(global_cxxflags, language: 'cpp')
 
 # Dependencies
 
