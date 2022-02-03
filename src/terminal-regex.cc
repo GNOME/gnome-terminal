@@ -220,6 +220,10 @@ main (int argc, char **argv)
   assert_match_anchored (DEFS URLPATH, "/().", "/()");
   assert_match_anchored (DEFS URLPATH, "/", ENTIRE);
   assert_match_anchored (DEFS URLPATH, "", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "?", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "?param=value", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "#", ENTIRE);
+  assert_match_anchored (DEFS URLPATH, "#anchor", ENTIRE);
   assert_match_anchored (DEFS URLPATH, "/php?param[]=value1&param[]=value2", ENTIRE);
   assert_match_anchored (DEFS URLPATH, "/foo?param1[index1]=value1&param2[index2]=value2", ENTIRE);
   assert_match_anchored (DEFS URLPATH, "/[[[]][]]", ENTIRE);
@@ -269,6 +273,18 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "http://111.222.333.444/",             nullptr);
   assert_match (REGEX_URL_AS_IS, "http://1.2.3.4:70000",                "http://1.2.3.4");  /* TODO: can/should we totally abort here? */
   assert_match (REGEX_URL_AS_IS, "http://[dead::beef:111.222.333.444]", nullptr);
+
+  /* '?' or '#' without '/', #7888 */
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar?",                  ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar?param=value",       ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar:12345?param=value", ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://1.2.3.4?param=value",       ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://[dead::beef]?param=value",  ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar#",                  ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar#anchor",            ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://foo.bar:12345#anchor",      ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://1.2.3.4#anchor",            ENTIRE);
+  assert_match (REGEX_URL_AS_IS, "http://[dead::beef]#anchor",       ENTIRE);
 
   /* Username, password */
   assert_match (REGEX_URL_AS_IS, "http://joe@example.com",                 ENTIRE);
