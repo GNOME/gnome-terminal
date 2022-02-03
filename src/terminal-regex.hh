@@ -139,7 +139,7 @@
 /* Same as above, but the last character (if exists and is not a parenthesis) must be from PATHTERM_CLASS. */
 #define PATH_DEF "(?(DEFINE)(?<PATH>(?x: (?: " PATHCHARS_CLASS "* (?: \\( (?&PATH_INNER) \\) | \\[ (?&PATH_INNER) \\] ) )* (?: " PATHCHARS_CLASS "* (?(<APOS_START>)" PATHTERM_NOAPOS_CLASS "|" PATHTERM_CLASS ") )? )))"
 
-#define URLPATH "(?x: /(?&PATH) )?"
+#define URLPATH "(?x: [/?#](?&PATH) )?"
 #define VOIP_PATH "(?x: [;?](?&PATH) )?"
 
 /* Now let's put these fragments together */
