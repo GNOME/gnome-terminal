@@ -88,7 +88,7 @@
 /* Ends with :: */
 #define IPV6_RIGHT "(?x: (?&S6C){1,7} : )"
 /* Is "::" and nothing more */
-#define IPV6NULL  "(?x: :: )"
+#define IPV6_NULL  "(?x: :: )"
 
 /* The same ones for IPv4-embedded notation, without the actual IPv4 part */
 #define IPV6V4_FULL  "(?x: (?&S6C){6} )"
@@ -98,7 +98,7 @@
 
 /* IPV6: An IPv6 address (possibly with an embedded IPv4).
  * This macro defines both IPV4 and IPV6, since the latter one requires the former. */
-#define IP_DEF IPV4_DEF S6_DEF "(?(DEFINE)(?<IPV6>(?x: (?: " IPV6NULL " | " IPV6_LEFT " | " IPV6_MID " | " IPV6_RIGHT " | " IPV6_FULL " | (?: " IPV6V4_FULL " | " IPV6V4_LEFT " | " IPV6V4_MID " | " IPV6V4_RIGHT " ) (?&IPV4) ) (?! [.:[:xdigit:]] ) )))"
+#define IP_DEF IPV4_DEF S6_DEF "(?(DEFINE)(?<IPV6>(?x: (?: " IPV6_NULL " | " IPV6_LEFT " | " IPV6_MID " | " IPV6_RIGHT " | " IPV6_FULL " | (?: " IPV6V4_FULL " | " IPV6V4_LEFT " | " IPV6V4_MID " | " IPV6V4_RIGHT " ) (?&IPV4) ) (?! [.:[:xdigit:]] ) )))"
 
 /* Either an alphanumeric character or dash; or if [negative lookahead] not ASCII
  * then any graphical Unicode character.
