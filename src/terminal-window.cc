@@ -692,7 +692,7 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
     terminal_util_transform_uris_to_quoted_fuse_paths (uris);
     text = terminal_util_concat_uris (uris, &len);
 
-    vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+    terminal_screen_paste_text (screen, text, len);
   }
 
   g_weak_ref_clear (&data->screen_weak_ref);

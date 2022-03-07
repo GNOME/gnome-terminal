@@ -160,6 +160,12 @@ TerminalScreenPopupInfo *terminal_screen_popup_info_ref (TerminalScreenPopupInfo
 
 void terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info);
 
+/* API hack */
+
+void terminal_screen_paste_text (TerminalScreen* screen,
+                                 char const* text,
+                                 gssize len);
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_H */

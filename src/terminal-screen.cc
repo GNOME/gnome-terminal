@@ -1942,7 +1942,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
       text = terminal_util_concat_uris (uris, &len);
-      vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+      terminal_screen_paste_text (screen, text, len);
     }
   else if (gtk_targets_include_text (&selection_data_target, 1))
     {
@@ -1950,7 +1950,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
       text = (char *) gtk_selection_data_get_text (selection_data);
       if (text && text[0])
-        vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+        terminal_screen_paste_text (screen, text, -1);
     }
   else switch (info)
     {
@@ -2009,7 +2009,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
         text = terminal_util_concat_uris (uris, &len);
-        vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+        terminal_screen_paste_text (screen, text, len);
         g_free (text);
         g_free (uris[0]);
       }
@@ -2037,7 +2037,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
         text = terminal_util_concat_uris (uris, &len);
-        vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+        terminal_screen_paste_text (screen, text, len);
         g_free (text);
         g_free (uris[0]);
       }
@@ -2307,4 +2307,26 @@ terminal_screen_get_uuid (TerminalScreen *screen)
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), nullptr);
 
   return screen->priv->uuid;
+}
+
+/**
+ * terminal_screen_paste_text:
+ * @screen:
+ * @text: a NUL-terminated string
+ * @len: length of @text, or -1
+ *
+ * Inserts @text to @terminal as if pasted.
+ */
+void
+terminal_screen_paste_text (TerminalScreen* screen,
+                            char const* text,
+                            gssize len)
+{
+  g_return_if_fail (text != nullptr);
+  g_return_if_fail (len >= -1);
+
+  /* This is just an API hack until vte 0.69 adds vte_terminal_paste_text_len() */
+  /* Note that @text MUST be NUL-terminated */
+
+  vte_terminal_paste_text (VTE_TERMINAL (screen), text);
 }
