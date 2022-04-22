@@ -1404,6 +1404,17 @@ terminal_screen_get_child_command (TerminalScreen *screen,
   return TRUE;
 }
 
+static gboolean
+remove_prefixed_cb(void* key,
+                   void* value,
+                   void* user_data)
+{
+  auto const env = reinterpret_cast<char const*>(key);
+  auto const prefix = reinterpret_cast<char const*>(user_data);
+
+  return g_str_has_prefix(env, prefix);
+}
+
 static char**
 terminal_screen_get_child_environment (TerminalScreen *screen,
                                        char **initial_envv,
@@ -1439,9 +1450,16 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
     }
 
   /* Remove unwanted env variables */
-  char const* const* filters = terminal_client_get_environment_filters ();
+  auto const filters = terminal_client_get_environment_filters ();
   for (i = 0; filters[i]; ++i)
     g_hash_table_remove (env_table, filters[i]);
+
+  auto const pfilters = terminal_client_get_environment_filters ();
+  for (i = 0; pfilters[i]; ++i) {
+    g_hash_table_foreach_remove (env_table,
+                                 GHRFunc(remove_prefixed_cb),
+                                 (void*)pfilters[i]);
+  }
 
   terminal_util_add_proxy_env (env_table);
 

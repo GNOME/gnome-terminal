@@ -51,6 +51,8 @@ char * terminal_client_get_fallback_startup_id      (void) G_GNUC_MALLOC;
 
 char const* const* terminal_client_get_environment_filters (void);
 
+char const* const* terminal_client_get_environment_prefix_filters (void);
+
 char** terminal_client_filter_environment           (char** envv) G_GNUC_MALLOC;
 
 GSettings* terminal_g_settings_new (GSettingsSchemaSource* source,

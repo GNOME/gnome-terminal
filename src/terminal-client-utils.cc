@@ -140,6 +140,49 @@ terminal_client_get_environment_filters (void)
   return filters;
 }
 
+char const* const*
+terminal_client_get_environment_prefix_filters (void)
+{
+  static char const* filters[] = {
+    "GNOME_TERMINAL_",
+
+    /* other terminals */
+    "FOOT_",
+    "ITERM2_",
+    "MC_",
+    "MINTTY_",
+    "PUTTY_",
+    "RXVT_",
+    "TERM_",
+    "URXVT_",
+    "WEZTERM_",
+    "XTERM_",
+    nullptr
+  };
+
+  return filters;
+}
+
+static char**
+terminal_environ_unsetenv_prefix (char** envv,
+                                  char const* prefix)
+{
+  if (!envv)
+    return envv;
+
+  for (auto i = 0; envv[i]; ++i) {
+    if (!g_str_has_prefix (envv[i], prefix))
+      continue;
+
+    auto const equal = strchr(envv[i], '=');
+    g_assert(equal != nullptr);
+    gs_free char* env = g_strndup(envv[i], equal - envv[i]);
+    envv = g_environ_unsetenv (envv, env);
+  }
+
+  return envv;
+}
+
 /**
  * terminal_client_filter_environment:
  * @envv: (transfer full): the environment
@@ -154,9 +197,13 @@ terminal_client_filter_environment (char** envv)
   if (envv == nullptr)
     return nullptr;
 
-  char const* const* filters = terminal_client_get_environment_filters ();
-  for (unsigned i = 0; filters[i]; ++i)
+  auto filters = terminal_client_get_environment_filters ();
+  for (auto i = 0; filters[i]; ++i)
     envv = g_environ_unsetenv (envv, filters[i]);
+
+  filters = terminal_client_get_environment_prefix_filters ();
+  for (auto i = 0; filters[i]; ++i)
+    envv = terminal_environ_unsetenv_prefix (envv, filters[i]);
 
   return envv;
 }
