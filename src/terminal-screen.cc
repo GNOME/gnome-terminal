@@ -62,7 +62,7 @@
 
 #include "eggshell.hh"
 
-#define URL_MATCH_CURSOR  (GDK_HAND2)
+#define URL_MATCH_CURSOR_NAME "pointer"
 
 typedef struct {
   volatile int refcount;
@@ -498,7 +498,7 @@ terminal_screen_init (TerminalScreen *screen)
       tag_data = g_slice_new (TagData);
       tag_data->flavor = url_regex_flavors[i];
       tag_data->tag = vte_terminal_match_add_regex (terminal, url_regexes[i], 0);
-      vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
+      vte_terminal_match_set_cursor_name (terminal, tag_data->tag, URL_MATCH_CURSOR_NAME);
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
