@@ -1073,7 +1073,7 @@ terminal_util_timestamp_info (const char *str)
   if (num < 1000000000 || num > 1999999999)
     return nullptr;
 
-  gs_unref_date_time GDateTime* date = g_date_time_new_from_unix_utc (num);
+  gs_unref_date_time GDateTime* date = g_date_time_new_from_unix_local (num);
   if (date == nullptr)
     return nullptr;
 
