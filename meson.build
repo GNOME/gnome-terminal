@@ -28,7 +28,7 @@ project(
     'GFDL-1.3-only',                # the appstream data
   ],
   meson_version: '>= 0.49.0',
-  version: '3.42.3',
+  version: '3.42.4',
 )
 
 # Naming
