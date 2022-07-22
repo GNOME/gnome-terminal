@@ -835,6 +835,10 @@ append_encodings_for_group (GtkTreeStore *store,
     if (encodings[i].group != group)
       continue;
 
+    /* Skip encodings not supported by ICU */
+    if (terminal_util_translate_encoding (encodings[i].charset) == nullptr)
+      continue;
+
     gs_free char *name = g_strdup_printf ("%s " EM_DASH " %s",
                                           _(encodings[i].name), encodings[i].charset);
 
