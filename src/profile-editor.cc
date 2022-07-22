@@ -741,7 +741,6 @@ typedef struct {
 
 /* These MUST be sorted by charset so that bsearch can work! */
 static const EncodingEntry encodings[] = {
-  { "ARMSCII-8",      N_("Armenian"),            GROUP_OBSOLETE },
   { "BIG5",           N_("Chinese Traditional"), GROUP_CJKV },
   { "BIG5-HKSCS",     N_("Chinese Traditional"), GROUP_CJKV },
   { "CP866",          N_("Cyrillic/Russian"),    GROUP_OBSOLETE },
@@ -751,15 +750,12 @@ static const EncodingEntry encodings[] = {
   { "GB18030",        N_("Chinese Simplified"),  GROUP_CJKV },
   { "GB2312",         N_("Chinese Simplified"),  GROUP_CJKV },
   { "GBK",            N_("Chinese Simplified"),  GROUP_CJKV },
-  { "GEORGIAN-PS",    N_("Georgian"),            GROUP_OBSOLETE },
   { "IBM850",         N_("Western"),             GROUP_OBSOLETE },
   { "IBM852",         N_("Central European"),    GROUP_OBSOLETE },
   { "IBM855",         N_("Cyrillic"),            GROUP_OBSOLETE },
   { "IBM857",         N_("Turkish"),             GROUP_OBSOLETE },
   { "IBM862",         N_("Hebrew"),              GROUP_OBSOLETE },
   { "IBM864",         N_("Arabic"),              GROUP_OBSOLETE },
-  { "ISO-2022-JP",    N_("Japanese"),            GROUP_CJKV },
-  { "ISO-2022-KR",    N_("Korean"),              GROUP_CJKV },
   { "ISO-8859-1",     N_("Western"),             GROUP_OBSOLETE },
   { "ISO-8859-10",    N_("Nordic"),              GROUP_OBSOLETE },
   { "ISO-8859-13",    N_("Baltic"),              GROUP_OBSOLETE },
@@ -775,7 +771,6 @@ static const EncodingEntry encodings[] = {
   { "ISO-8859-8",     N_("Hebrew Visual"),       GROUP_OBSOLETE },
   { "ISO-8859-8-I",   N_("Hebrew"),              GROUP_OBSOLETE },
   { "ISO-8859-9",     N_("Turkish"),             GROUP_OBSOLETE },
-  { "ISO-IR-111",     N_("Cyrillic"),            GROUP_OBSOLETE },
   { "KOI8-R",         N_("Cyrillic"),            GROUP_OBSOLETE },
   { "KOI8-U",         N_("Cyrillic/Ukrainian"),  GROUP_OBSOLETE },
   { "MAC-CYRILLIC",   N_("Cyrillic"),            GROUP_OBSOLETE },
