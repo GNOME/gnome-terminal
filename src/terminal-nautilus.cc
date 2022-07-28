@@ -18,8 +18,6 @@
  */
 
 #include "config.h"
-#undef GDK_VERSION_MIN_REQUIRED
-#undef GDK_VERSION_MAX_ALLOWED
 
 #include <glib.h>
 #include <glib/gi18n-lib.h>

@@ -162,17 +162,25 @@ config_h.set('ENABLE_SEARCH_PROVIDER', get_option('search_provider'))
 # FIXME AC_USE_SYSTEM_EXTENSIONS also supported non-gnu systems
 config_h.set10('_GNU_SOURCE', true)
 
+# Min/max version requirement flags
 
-ver = glib_min_req_version.split('.')
-config_h.set('GLIB_VERSION_MIN_REQUIRED', '(G_ENCODE_VERSION(' + ver[0] + ',' + ver[1] + '))')
-ver = glib_max_allowed_version.split('.')
-config_h.set('GLIB_VERSION_MAX_ALLOWED', '(G_ENCODE_VERSION(' + ver[0] + ',' + ver[1] + '))')
+minver = glib_min_req_version.split('.')
+maxver = glib_max_allowed_version.split('.')
 
-ver = gtk_min_req_version.split('.')
-config_h.set('GDK_VERSION_MIN_REQUIRED', '(G_ENCODE_VERSION(' + ver[0] + ',' + ver[1] + '))')
+glib_version_cxxflags = [
+  '-DGLIB_VERSION_MIN_REQUIRED=(G_ENCODE_VERSION(' + minver[0] + ',' + minver[1] + '))',
+  '-DGLIB_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
+]
 
-ver = gtk_max_allowed_version.split('.')
-config_h.set('GDK_VERSION_MAX_ALLOWED', '(G_ENCODE_VERSION(' + ver[0] + ',' + ver[1] + '))')
+minver = gtk_min_req_version.split('.')
+maxver = gtk_max_allowed_version.split('.')
+
+gtk_version_cxxflags = [
+  '-DGDK_VERSION_MIN_REQUIRED=(G_ENCODE_VERSION(' + minver[0] + ',' + minver[1] + '))',
+  '-DGDK_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
+]
+
+version_cxxflags = glib_version_cxxflags + gtk_version_cxxflags
 
 # Compiler flags
 

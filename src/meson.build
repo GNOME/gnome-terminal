@@ -204,7 +204,7 @@ server_incs = [
   src_inc,
 ]
 
-server_cxxflags = [
+server_cxxflags = version_cxxflags + [
   '-DTERMINAL_COMPILATION',
   '-DVTE_DISABLE_DEPRECATION_WARNINGS',
   '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
@@ -288,7 +288,7 @@ client_incs = [
   src_inc,
 ]
 
-client_cxxflags = [
+client_cxxflags = version_cxxflags + [
   '-DTERMINAL_COMPILATION',
   '-DTERMINAL_CLIENT',
   '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
@@ -357,7 +357,7 @@ if get_option('nautilus_extension')
     src_inc,
   ]
 
-  nautilus_cxxflags = [
+  nautilus_cxxflags = glib_version_cxxflags + [
     '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
   ]
 
