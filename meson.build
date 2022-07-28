@@ -159,8 +159,26 @@ config_h.set_quoted('VERSION', gt_version)
 config_h.set('ENABLE_DEBUG', enable_debug)
 config_h.set('ENABLE_SEARCH_PROVIDER', get_option('search_provider'))
 
-# FIXME AC_USE_SYSTEM_EXTENSIONS also supported non-gnu systems
-config_h.set10('_GNU_SOURCE', true)
+# Enable libc features
+
+libc_feature_defines = [
+  ['_GNU_SOURCE', '1'],
+  ['_POSIX_C_SOURCE', '200809L'],
+  ['_XOPEN_SOURCE', '700'],
+  ['_XOPEN_SOURCE_EXTENDED', '1'],
+]
+
+if host_machine.system() == 'freebsd'
+  # Defining _POSIX_C_SOURCE above makes freebsd not expose some functionality
+  # that's hidden behind __BSD_VISIBLE.  Not defininy any of the above however
+  # makes it expose verything.
+
+  libc_feature_defines = []
+endif
+
+foreach f: libc_feature_defines
+  config_h.set(f[0], f[1])
+endforeach
 
 # Min/max version requirement flags
 
