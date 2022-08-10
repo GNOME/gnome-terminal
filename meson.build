@@ -85,7 +85,7 @@ gt_schemadir = gt_datadir / 'glib-2.0' / 'schemas'
 
 gt_searchproviderdir = gt_datadir / 'gnome-shell' / 'search-providers'
 
-gt_nautilusextensiondir = gt_libdir / 'nautilus' / 'extensions-3.0'
+gt_nautilusextensiondir = gt_libdir / 'nautilus' / 'extensions-4'
 
 gt_dbusinterfacedir = gt_datadir / 'dbus-1' / 'interfaces'
 gt_dbusservicedir   = gt_datadir / 'dbus-1' / 'services'
