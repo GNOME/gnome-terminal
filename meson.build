@@ -56,7 +56,7 @@ gtk_min_req_version          = '3.18'
 gtk_max_allowed_version      = '3.24'
 
 dconf_req_version            = '0.14.0'
-libnautilus_ext_req_version  = '3.28.0'
+libnautilus_ext_req_version  = '43'
 pcre2_req_version            = '10.00'
 schemas_req_version          = '0.1.0'
 
@@ -333,7 +333,7 @@ schemas_dep   = dependency('gsettings-desktop-schemas',
 uuid_dep      = dependency('uuid')
 
 if get_option('nautilus_extension')
-  libnautilus_extension_dep = dependency('libnautilus-extension', version: '>=' + libnautilus_ext_req_version,)
+  libnautilus_extension_dep = dependency('libnautilus-extension-4', version: '>=' + libnautilus_ext_req_version,)
 else
   libnautilus_extension_dep = dependency('', required: false,)
 endif
