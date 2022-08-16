@@ -22,7 +22,6 @@
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
-#include <gtk/gtk.h>
 
 /* Work around https://gitlab.gnome.org/GNOME/nautilus/-/issues/1884 */
 extern "C" {
@@ -325,7 +324,7 @@ create_terminal (ExecData *data /* transfer full */)
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
   terminal_client_append_create_instance_options (&builder,
-                                                  gdk_display_get_name (gdk_display_get_default ()),
+                                                  nullptr, // display name. FIXMEgtk4?
                                                   startup_id,
                                                   nullptr /* geometry */,
                                                   nullptr /* role */,
@@ -461,11 +460,7 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
 
   data = g_new (ExecData, 1);
   data->nautilus = (TerminalNautilus*)g_object_ref (nautilus);
-#if GTK_CHECK_VERSION (4, 0, 0)
-  data->timestamp = GDK_CURRENT_TIME; /* FIXMEgtk4 */
-#else
-  data->timestamp = gtk_get_current_event_time ();
-#endif
+  data->timestamp = 0; // GDK_CURRENT_TIME
   data->path = path;
   data->uri = uri;
   data->info = info;
@@ -587,7 +582,6 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
 
 static GList *
 terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
-                                        GtkWidget            *window,
                                         NautilusFileInfo     *file_info)
 {
   TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
@@ -636,7 +630,6 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 
 static GList *
 terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
-                                  GtkWidget            *window,
                                   GList                *files)
 {
   TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
