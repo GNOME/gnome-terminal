@@ -161,7 +161,8 @@ init_server (int argc,
   }
 
   if (!increase_rlimit_nofile ()) {
-    g_printerr ("Failed to increase RLIMIT_NOFILE: %m\n");
+    auto const errsv = errno;
+    g_printerr ("Failed to increase RLIMIT_NOFILE: %s\n", g_strerror(errsv));
   }
 
   /* Now we can create the app */

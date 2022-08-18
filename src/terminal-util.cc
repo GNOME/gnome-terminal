@@ -1219,8 +1219,10 @@ ensure_cache_dir (void)
   cache_dir = get_cache_dir ();
   errno = 0;
   r = g_mkdir_with_parents (cache_dir, 0700);
-  if (r == -1 && errno != EEXIST)
-    g_printerr ("Failed to create cache dir: %m\n");
+  if (r == -1 && errno != EEXIST) {
+    auto const errsv = errno;
+    g_printerr ("Failed to create cache dir: %s\n", g_strerror(errsv));
+  }
   return r == 0;
 }
 
