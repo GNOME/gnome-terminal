@@ -320,8 +320,7 @@ clone_child (TerminalSettingsList *list,
   client = dconf_client_new ();
   changeset = dconf_changeset_new ();
 
-  GSettingsSchemaSource *source = g_settings_schema_source_get_default (); /* unowned */
-  gs_unref_settings_schema GSettingsSchema* schema = g_settings_schema_source_lookup (source,
+  gs_unref_settings_schema GSettingsSchema* schema = g_settings_schema_source_lookup (list->schema_source,
                                                                                       list->child_schema_id,
                                                                                       TRUE);
    /* shouldn't really happen ever */
