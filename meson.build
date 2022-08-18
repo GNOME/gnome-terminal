@@ -168,12 +168,19 @@ libc_feature_defines = [
   ['_XOPEN_SOURCE_EXTENDED', '1'],
 ]
 
-if host_machine.system() == 'freebsd'
+system = host_machine.system()
+
+if system == 'freebsd'
   # Defining _POSIX_C_SOURCE above makes freebsd not expose some functionality
   # that's hidden behind __BSD_VISIBLE.  Not defininy any of the above however
   # makes it expose verything.
 
   libc_feature_defines = []
+
+elif system == 'netbsd'
+  libc_feature_defines += [
+    '_NETBSD_SOURCE',
+  ]
 endif
 
 foreach f: libc_feature_defines
