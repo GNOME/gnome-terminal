@@ -111,7 +111,7 @@ static TerminalSettingsList *
 terminal_options_ensure_profiles_list (TerminalOptions *options)
 {
   if (options->profiles_list == nullptr)
-    options->profiles_list = terminal_profiles_list_new(g_settings_schema_source_get_default());
+    options->profiles_list = terminal_profiles_list_new(nullptr, nullptr);
 
   return options->profiles_list;
 }

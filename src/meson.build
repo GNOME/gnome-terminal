@@ -1,4 +1,4 @@
-# Copyright © 2019, 2020, 2021 Christian Persch
+# Copyright © 2019, 2020, 2021, 2022 Christian Persch
 #
 # This programme is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -15,7 +15,45 @@
 
 src_inc = include_directories('.')
 
+# UI files
+
+ui_xsltproc_command = [
+  xsltproc,
+  '--nonet',
+  '-o', '@OUTPUT@',
+  '@INPUT@',
+]
+
+menubar_ui_mnemonics = custom_target(
+  'terminal-menubar-with-mnemonics.ui',
+  command: ui_xsltproc_command,
+  input: files(
+    '..' / 'data' / 'ui-filter-mnemonics.xslt',
+    'terminal-menubar.ui.in',
+  ),
+  install: false,
+  output: 'terminal-menubar-with-mnemonics.ui',
+)
+
+menubar_ui_nomnemonics = custom_target(
+  'terminal-menubar-without-mnemonics.ui',
+  command: ui_xsltproc_command,
+  input: files(
+    '..' / 'data' / 'ui-filter-no-mnemonics.xslt',
+    'terminal-menubar.ui.in',
+  ),
+  install: false,
+  output: 'terminal-menubar-without-mnemonics.ui',
+)
+
 # Common sources
+
+app_sources = files(
+  'terminal-accels.cc',
+  'terminal-accels.hh',
+  'terminal-app.cc',
+  'terminal-app.hh',
+)
 
 client_util_sources = files(
   'terminal-client-utils.cc',
@@ -37,10 +75,27 @@ dbus_sources = gnome.gdbus_codegen(
   object_manager: true,
 )
 
+egg_sources = files(
+  'eggshell.cc',
+  'eggshell.hh',
+)
+
 i18n_sources = files(
   'terminal-i18n.cc',
   'terminal-i18n.hh',
   'terminal-intl.hh',
+)
+
+marshal_sources = gnome.genmarshal(
+  'terminal-marshal',
+  internal: true,
+  install_header: false,
+  prefix: '_terminal_marshal',
+  sources: files(
+    'terminal-marshal.list',
+  ),
+  stdinc: true,
+  valist_marshallers: true,
 )
 
 misc_sources = files(
@@ -49,11 +104,23 @@ misc_sources = files(
 )
 
 profiles_sources = files(
+  'terminal-dconf.cc',
+  'terminal-dconf.hh',
   'terminal-profiles-list.cc',
   'terminal-profiles-list.hh',
   'terminal-schemas.hh',
   'terminal-settings-list.cc',
   'terminal-settings-list.hh',
+)
+
+settings_dbus_sources = gnome.gdbus_codegen(
+  'terminal-settings-bridge-generated',
+  'org.gnome.Terminal.SettingsBridge.xml',
+  autocleanup: 'all',
+  install_header: false,
+  interface_prefix: gt_dns_name,
+  namespace: 'Terminal',
+  object_manager: false,
 )
 
 regex_sources = files(
@@ -85,47 +152,39 @@ version_sources = [configure_file(
   output: '@BASENAME@',
 )]
 
-# Server
+util_sources = files(
+  'terminal-util.cc',
+  'terminal-util.hh',
+)
 
-ui_xsltproc_command = [
-  xsltproc,
-  '--nonet',
-  '-o', '@OUTPUT@',
-  '@INPUT@',
+# Flags
+
+common_cxxflags = version_cxxflags + [
+  '-DTERMINAL_COMPILATION',
+  '-DTERM_BINDIR="@0@"'.format(gt_prefix / gt_bindir),
+  '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
+  '-DTERM_LIBEXECDIR="@0@"'.format(gt_prefix / gt_libexecdir),
+  '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
+  '-DTERM_PKGDATADIR="@0@"'.format(gt_prefix / gt_pkgdatadir),
+  '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
+  '-DVTE_DISABLE_DEPRECATION_WARNINGS',
 ]
 
-menubar_ui_mnemonics = custom_target(
-  'terminal-menubar-with-mnemonics.ui',
-  command: ui_xsltproc_command,
-  input: files(
-    '..' / 'data' / 'ui-filter-mnemonics.xslt',
-    'terminal-menubar.ui.in',
-  ),
-  install: false,
-  output: 'terminal-menubar-with-mnemonics.ui',
+# Server
+
+server_resources_sources = gnome.compile_resources(
+  'terminal-server-resources',
+  'terminal.gresource.xml',
+  c_name: 'terminal',
+  dependencies: [
+    menubar_ui_mnemonics,
+    menubar_ui_nomnemonics,
+  ],
+  export: false,
 )
 
-menubar_ui_nomnemonics = custom_target(
-  'terminal-menubar-without-mnemonics.ui',
-  command: ui_xsltproc_command,
-  input: files(
-    '..' / 'data' / 'ui-filter-no-mnemonics.xslt',
-    'terminal-menubar.ui.in',
-  ),
-  install: false,
-  output: 'terminal-menubar-without-mnemonics.ui',
-)
-
-server_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + misc_sources + profiles_sources + regex_sources + types_sources + version_sources + files(
-  'eggshell.cc',
-  'eggshell.hh',
-  'profile-editor.cc',
-  'profile-editor.hh',
+server_sources = app_sources + client_util_sources + debug_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + types_sources + util_sources + version_sources + files(
   'server.cc',
-  'terminal-accels.cc',
-  'terminal-accels.hh',
-  'terminal-app.cc',
-  'terminal-app.hh',
   'terminal-enums.hh',
   'terminal-gdbus.cc',
   'terminal-gdbus.hh',
@@ -142,43 +201,20 @@ server_sources = client_util_sources + debug_sources + dbus_sources + i18n_sourc
   'terminal-notebook.cc',
   'terminal-notebook.hh',
   'terminal-pcre2.hh',
-  'terminal-prefs.cc',
-  'terminal-prefs.hh',
+  'terminal-prefs-process.cc',
+  'terminal-prefs-process.hh',
   'terminal-screen-container.cc',
   'terminal-screen-container.hh',
   'terminal-screen.cc',
   'terminal-screen.hh',
   'terminal-search-popover.cc',
   'terminal-search-popover.hh',
+  'terminal-settings-bridge-impl.cc',
+  'terminal-settings-bridge-impl.hh',
   'terminal-tab-label.cc',
   'terminal-tab-label.hh',
-  'terminal-util.cc',
-  'terminal-util.hh',
   'terminal-window.cc',
   'terminal-window.hh',
-)
-
-server_sources += gnome.compile_resources(
-  'terminal-resources',
-  'terminal.gresource.xml',
-  c_name: 'terminal',
-  dependencies: [
-    menubar_ui_mnemonics,
-    menubar_ui_nomnemonics,
-  ],
-  export: false,
-)
-
-server_sources += gnome.genmarshal(
-  'terminal-marshal',
-  internal: true,
-  install_header: false,
-  prefix: '_terminal_marshal',
-  sources: files(
-    'terminal-marshal.list',
-  ),
-  stdinc: true,
-  valist_marshallers: true,
 )
 
 if get_option('search_provider')
@@ -204,11 +240,8 @@ server_incs = [
   src_inc,
 ]
 
-server_cxxflags = version_cxxflags + [
-  '-DTERMINAL_COMPILATION',
-  '-DVTE_DISABLE_DEPRECATION_WARNINGS',
-  '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
-  '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
+server_cxxflags = common_cxxflags + [
+  '-DTERMINAL_SERVER',
 ]
 
 server_deps = [
@@ -270,6 +303,42 @@ if get_option('search_provider')
   )
 endif # option 'search_provider'
 
+# Preferences
+
+prefs_resources_sources = gnome.compile_resources(
+  'terminal-prefs-resources',
+  'prefs.gresource.xml',
+  c_name: 'terminal',
+  export: false,
+)
+
+prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + types_sources + util_sources + version_sources + files(
+  'prefs-main.cc',
+  'profile-editor.cc',
+  'profile-editor.hh',
+  'terminal-prefs.cc',
+  'terminal-prefs.hh',
+  'terminal-settings-bridge-backend.cc',
+  'terminal-settings-bridge-backend.hh',
+)
+
+prefs_main_cxxflags = common_cxxflags + [
+  '-DTERMINAL_PREFERENCES',
+]
+
+prefs_main_incs = server_incs
+prefs_main_deps = server_deps
+
+prefs_main = executable(
+  gt_name + '-preferences',
+  cpp_args: prefs_main_cxxflags,
+  include_directories: prefs_main_incs,
+  dependencies: prefs_main_deps,
+  install: true,
+  install_dir: gt_prefix / gt_pkglibdir,
+  sources: prefs_main_sources,
+)
+
 # Legacy client
 
 client_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + profiles_sources + types_sources + files(
@@ -288,13 +357,8 @@ client_incs = [
   src_inc,
 ]
 
-client_cxxflags = version_cxxflags + [
-  '-DTERMINAL_COMPILATION',
+client_cxxflags = common_cxxflags + [
   '-DTERMINAL_CLIENT',
-  '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
-  '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
-  '-DTERM_PKGDATADIR="@0@"'.format(gt_prefix / gt_pkgdatadir),
-  '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
 ]
 
 client_deps = [

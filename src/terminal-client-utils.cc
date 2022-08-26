@@ -21,9 +21,15 @@
 
 #include "config.h"
 
+#include <unistd.h>
 #include "terminal-client-utils.hh"
+#include "terminal-debug.hh"
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
+
+#ifdef TERMINAL_PREFERENCES
+#include "terminal-debug.hh"
+#endif
 
 #include <string.h>
 
@@ -33,6 +39,98 @@
 #if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
 #include <gdk/gdkx.h>
 #endif
+
+static char*
+get_binary_path_if_uninstalled(char const* install_dir) noexcept
+{
+#ifdef __linux__
+  char buf[1024];
+  auto const r = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+  if (r < 0 || r >= ssize_t(sizeof(buf)))
+    return nullptr;
+
+  buf[r] = '\0'; // nul terminate
+
+  gs_free auto path = g_path_get_dirname(buf);
+  if (!path)
+    return nullptr;
+
+  if (g_str_equal(path, install_dir))
+    return nullptr;
+
+  return reinterpret_cast<char*>(g_steal_pointer(&path));
+#else
+  return nullptr;
+#endif /* __linux__ */
+}
+
+static char*
+get_path_if_uninstalled(char const* exe_install_dir,
+                        char const* file_name,
+                        GFileTest tests)
+{
+  gs_free auto path = get_binary_path_if_uninstalled(exe_install_dir);
+  if (!path)
+    return nullptr;
+
+  gs_free auto file = g_build_filename(path, file_name, nullptr);
+  if (!g_file_test(file, GFileTest(tests | G_FILE_TEST_EXISTS)))
+    return nullptr;
+
+  return reinterpret_cast<char*>(g_steal_pointer(&path));
+}
+
+/**
+ * terminal_client_find_file_uninstalled:
+ * @exe_install_dir: the directory where the current exe is installed
+ * @file_install_dir: the directory where the file to locate is installed
+ * @file_name: the name of the file to locate
+ * @tests: extra tests from #GFileTest
+ *
+ * Tries to locate the directory that contains @file_name in a build directory,
+ * and returns the directory.  If @file_name is not found, returns the
+ * installed location for it.
+ */
+char*
+terminal_client_get_directory_uninstalled(char const* exe_install_dir,
+                                          char const *file_install_dir,
+                                          char const* file_name,
+                                          GFileTest tests)
+{
+#ifdef ENABLE_DEBUG
+  auto path = get_path_if_uninstalled(exe_install_dir, file_name, tests);
+  if (path)
+    return path;
+#endif /* ENABLE_DEBUG */
+
+  return g_strdup(file_install_dir);
+}
+
+/**
+ * terminal_client_find_file_uninstalled:
+ * @exe_install_dir: the directory where the current exe is installed
+ * @file_install_dir: the directory where the file to locate is installed
+ * @file_name: the name of the file to locate
+ * @tests: extra tests from #GFileTest
+ *
+ * Tries to locate the file @file_name in a build directory, and
+ * returns a full path to it.  If @file_name is not found, returns the
+ * installed location for it.
+ */
+char*
+terminal_client_get_file_uninstalled(char const* exe_install_dir,
+                                     char const *file_install_dir,
+                                     char const* file_name,
+                                     GFileTest tests)
+{
+#ifdef ENABLE_DEBUG
+  gs_free auto path = get_path_if_uninstalled(exe_install_dir, file_name, tests);
+  if (path)
+    return g_build_filename(path, file_name, nullptr);
+#endif /* ENABLE_DEBUG */
+
+  return g_build_filename(file_install_dir, file_name, nullptr);
+}
 
 /**
  * terminal_client_append_create_instance_options:
@@ -333,8 +431,56 @@ out:
   return nullptr;
 }
 
+#ifdef ENABLE_DEBUG
+
+static gboolean
+settings_change_event_cb(GSettings* settings,
+                         void* keys,
+                         int n_keys,
+                         void* data)
+{
+  gs_free char* schema_id = nullptr;
+  gs_free char* path = nullptr;
+  g_object_get(settings,
+               "schema-id", &schema_id,
+               "path", &path,
+               nullptr);
+
+  auto const qkeys = reinterpret_cast<GQuark*>(keys);
+  for (auto i = 0; i < n_keys; ++i) {
+    auto key = g_quark_to_string(qkeys[i]);
+    _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                          "Bridge backend ::change-event schema %s path %s key %s\n",
+                          schema_id, path, key);
+  }
+
+  return false; // propagate
+}
+
+static gboolean
+settings_writable_change_event_cb(GSettings* settings,
+                                  char const* key,
+                                  void* data)
+{
+  gs_free char* schema_id = nullptr;
+  gs_free char* path = nullptr;
+  g_object_get(settings,
+               "schema-id", &schema_id,
+               "path", &path,
+               nullptr);
+
+  _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                        "Bridge backend ::writeable-change-event schema %s path %s key %s\n",
+                        schema_id, path, key);
+
+  return false; // propagate
+}
+
+#endif /* ENABLE_DEBUG */
+
 GSettings*
-terminal_g_settings_new_with_path (GSettingsSchemaSource* source,
+terminal_g_settings_new_with_path (GSettingsBackend* backend,
+                                   GSettingsSchemaSource* source,
                                    char const* schema_id,
                                    char const* path)
 {
@@ -344,14 +490,39 @@ terminal_g_settings_new_with_path (GSettingsSchemaSource* source,
                                     TRUE /* recursive */);
   g_assert_nonnull(schema);
 
-  return g_settings_new_full(schema,
-                             nullptr /* default backend */,
-                             path);
+  auto const settings = g_settings_new_full(schema,
+                                            backend,
+                                            path);
+
+#ifdef ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF(TERMINAL_DEBUG_BRIDGE) {
+
+    _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                          "Creating GSettings for schema %s at %s with backend %s\n",
+                          schema_id, path,
+                          backend ? G_OBJECT_TYPE_NAME(backend) : "(default)");
+
+    if (backend != nullptr &&
+        g_str_equal(G_OBJECT_TYPE_NAME(backend), "TerminalSettingsBridgeBackend")) {
+      g_signal_connect(settings,
+                       "change-event",
+                       G_CALLBACK(settings_change_event_cb),
+                       nullptr);
+      g_signal_connect(settings,
+                       "writable-change-event",
+                       G_CALLBACK(settings_writable_change_event_cb),
+                       nullptr);
+    }
+  }
+#endif /* ENABLE_DEBUG */
+
+  return settings;
 }
 
 GSettings*
-terminal_g_settings_new(GSettingsSchemaSource* source,
+terminal_g_settings_new(GSettingsBackend* backend,
+                        GSettingsSchemaSource* source,
                         char const* schema_id)
 {
-  return terminal_g_settings_new_with_path(source, schema_id, nullptr);
+  return terminal_g_settings_new_with_path(backend, source, schema_id, nullptr);
 }

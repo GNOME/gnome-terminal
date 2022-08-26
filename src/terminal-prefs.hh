@@ -48,7 +48,9 @@ typedef struct {
 
 extern PrefData *the_pref_data;  /* global */
 
-void terminal_prefs_show_preferences (GSettings *profile, const char *widget_name);
+void terminal_prefs_show_preferences(GSettings* profile,
+                                     char const* widget_name,
+                                     unsigned timestamp);
 
 G_END_DECLS
 

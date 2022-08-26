@@ -71,6 +71,7 @@ gt_micro_version = version_split[2].to_int()
 
 # Directories
 
+gt_bindir     = get_option('bindir')
 gt_datadir    = get_option('datadir')
 gt_includedir = get_option('includedir')
 gt_libdir     = get_option('libdir')

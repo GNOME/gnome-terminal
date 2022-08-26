@@ -39,6 +39,7 @@
 
 #include "terminal-accels.hh"
 #include "terminal-app.hh"
+#include "terminal-client-utils.hh"
 #include "terminal-intl.hh"
 #include "terminal-util.hh"
 #include "terminal-version.hh"
@@ -1906,9 +1907,22 @@ terminal_g_settings_schema_source_get_default(void)
 {
   GSettingsSchemaSource* default_source = g_settings_schema_source_get_default();
 
+  gs_free auto schema_dir =
+    terminal_client_get_directory_uninstalled(
+#if defined(TERMINAL_SERVER)
+                                              TERM_LIBEXECDIR,
+#elif defined(TERMINAL_PREFERENCES)
+                                              TERM_PKGLIBDIR,
+#else
+#error Need to define installed location
+#endif
+                                              TERM_PKGLIBDIR,
+                                              "gschemas.compiled",
+                                              GFileTest(0));
+
   gs_free_error GError* error = nullptr;
   GSettingsSchemaSource* reference_source =
-    g_settings_schema_source_new_from_directory(TERM_PKGLIBDIR,
+    g_settings_schema_source_new_from_directory(schema_dir,
                                                 nullptr /* parent source */,
                                                 FALSE /* trusted */,
                                                 &error);

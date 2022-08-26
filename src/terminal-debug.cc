@@ -38,6 +38,7 @@ _terminal_debug_init(void)
     { "profile",       TERMINAL_DEBUG_PROFILE       },
     { "settings-list", TERMINAL_DEBUG_SETTINGS_LIST },
     { "search",        TERMINAL_DEBUG_SEARCH        },
+    { "bridge",        TERMINAL_DEBUG_BRIDGE        },
   };
 
   _terminal_debug_flags = TerminalDebugFlags(g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),
