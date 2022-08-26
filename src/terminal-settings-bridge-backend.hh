@@ -35,15 +35,4 @@ GType terminal_settings_bridge_backend_get_type(void);
 
 GSettingsBackend* terminal_settings_bridge_backend_new(TerminalSettingsBridge* bridge);
 
-void terminal_settings_bridge_backend_clone_schema(TerminalSettingsBridgeBackend* backend,
-                                                   GSettingsSchemaSource*schema_source,
-                                                   char const* schema_id,
-                                                   char const* path,
-                                                   char const* new_path,
-                                                   char const* first_key,
-                                                   ...);
-
-void terminal_settings_bridge_backend_erase_path(TerminalSettingsBridgeBackend* backend,
-                                                 char const* path);
-
 G_END_DECLS

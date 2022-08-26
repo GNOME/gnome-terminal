@@ -121,6 +121,102 @@ terminal_g_settings_new(GSettingsBackend* backend,
 
 #if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
+void
+terminal_g_settings_backend_clone_schema(GSettingsBackend* backend,
+                                         GSettingsSchemaSource* schema_source,
+                                         char const* schema_id,
+                                         char const* path,
+                                         char const* new_path,
+                                         GTree* tree)
+{
+  gs_unref_settings_schema auto schema =
+    g_settings_schema_source_lookup(schema_source, schema_id, true);
+  if (schema == nullptr) [[unlikely]] // This shouldn't really happen ever
+    return;
+
+  gs_strfreev auto keys = g_settings_schema_list_keys(schema);
+
+  for (auto i = 0; keys[i]; ++i) {
+    gs_unref_settings_schema_key auto schema_key =
+      g_settings_schema_get_key(schema, keys[i]);
+
+    gs_free auto rkey = g_strconcat(path, keys[i], nullptr);
+    auto const value =
+      terminal_g_settings_backend_read(backend,
+                                       rkey,
+                                       g_settings_schema_key_get_value_type(schema_key),
+                                       false);
+
+    if (value) {
+      g_tree_insert(tree,
+                    g_strconcat(new_path, keys[i], nullptr), // transfer
+                    value); // transfer
+    }
+  }
+}
+
+gboolean
+terminal_g_settings_backend_erase_path(GSettingsBackend* backend,
+                                       GSettingsSchemaSource* schema_source,
+                                       char const* schema_id,
+                                       char const* path)
+
+{
+  // We want to erase all keys below @path, not just keys we wrote ourself
+  // or that are (currently) in a known schema.  DConf supports this kind of
+  // 'directory reset' by writing a NULL value for the non-key @path (i.e.
+  // which ends in a slash). However, neither g_settings_backend_reset() nor
+  // g_settings_backend_write() accept a non-key path, and the latter
+  // doesn't accept NULL values anyway. g_settings_backend_write_tree()
+  // does allow NULL values, and the DConf backend works fine with this and
+  // performs the directory reset, however it also (as is a documented
+  // requirement) calls g_settings_backend_changed_tree() which chokes on
+  // such a tree containing a non-key path.
+  //
+  // We could:
+  // 1. Just do nothing, i.e. leave the deleted settings lying around.
+  // 2. Fix glib. However, getting any improvements to gsettings into glib
+  //    seems almost impossible at this point.
+  // 3. Interpose a fixed g_settings_backend_changed_tree() that works
+  //    with these non-key paths. This will work with out-of-tree
+  //    settings backends like DConf. However, this will *not* work with
+  //    the settings backends inside libgio, like the memory and keyfile
+  //    backends, due to -Bsymbolic_functions.
+  // 4. At least reset those keys we know might exists, i.e. those in
+  //    the schema.
+  //
+  // Since I don't like 1, 2 is impossible, and 3 is too hacky, let's at least
+  // do 4.
+
+#if 0
+  // This is how this function would ideally work if glib was fixed (option 2 above)
+  auto tree = terminal_g_settings_backend_create_tree();
+  g_tree_insert(tree, g_strdup(path), nullptr);
+  auto const tag = &backend;
+  auto const r = terminal_g_settings_backend_write_tree(backend, tree, tag);
+  g_tree_unref(tree);
+#endif
+
+  gs_unref_settings_schema auto schema =
+    g_settings_schema_source_lookup(schema_source, schema_id, true);
+  if (schema == nullptr) [[unlikely]] // This shouldn't really happen ever
+    return false;
+
+  auto tree = terminal_g_settings_backend_create_tree();
+  gs_strfreev auto keys = g_settings_schema_list_keys(schema);
+
+  for (auto i = 0; keys[i]; ++i) {
+    g_tree_insert(tree,
+                  g_strconcat(path, keys[i], nullptr), // transfer
+                  nullptr); // reset key
+  }
+
+  auto const tag = &backend;
+  auto const r = terminal_g_settings_backend_write_tree(backend, tree, tag);
+  g_tree_unref(tree);
+  return r;
+}
+
 #define TERMINAL_SCHEMA_VERIFIER_ERROR (g_quark_from_static_string("TerminalSchemaVerifier"))
 
 typedef enum {
@@ -497,6 +593,8 @@ terminal_g_settings_schema_source_get_default(void)
   return g_settings_schema_source_ref(default_source);
 }
 
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
+
 // BEGIN copied from glib/gio/gsettingsbackend.c
 
 /*
@@ -553,25 +651,31 @@ terminal_g_settings_backend_create_tree(void)
                          variant_unref0);
 }
 
-/*
- * SPDX-License-Identifier: LGPL-2.1-or-later
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
- *
- * Authors: Ryan Lortie <desrt@desrt.ca>
- *          Matthias Clasen <mclasen@redhat.com>
- */
+#ifdef ENABLE_DEBUG
+
+static gboolean
+print_tree(void* key,
+           void* value,
+           void* closure)
+{
+  g_printerr("  %s => %s\n",
+             reinterpret_cast<char const*>(key),
+             value ? g_variant_print(reinterpret_cast<GVariant*>(value), true): "(null)");
+
+  return false; // continue
+}
+
+void
+terminal_g_settings_backend_print_tree(GTree* tree)
+{
+  g_printerr("Settings tree: [\n");
+  g_tree_foreach(tree, print_tree, nullptr);
+  g_printerr("]\n");
+}
+
+#endif /* ENABLE_DEBUG */
+
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
 /*
  * g_settings_backend_read:

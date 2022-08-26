@@ -21,19 +21,6 @@
   <interface name="org.gnome.Terminal.SettingsBridge">
     <annotation name="org.gtk.GDBus.C.Name" value="SettingsBridge" />
 
-    <method name="clone_schema">
-      <arg type="s" name="schema_id" direction="in" />
-      <arg type="s" name="path_from" direction="in" />
-      <arg type="s" name="path_to" direction="in" />
-      <arg type="a(sv)" name="extra_prefs" direction="in">
-        <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
-      </arg>
-    </method>
-
-    <method name="erase_path">
-      <arg type="s" name="path" direction="in" />
-    </method>
-
     <method name="get_permission">
       <arg type="s" name="path" direction="in" />
       <arg type="v" name="permission" direction="out" />

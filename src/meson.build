@@ -104,8 +104,6 @@ misc_sources = files(
 )
 
 profiles_sources = files(
-  'terminal-dconf.cc',
-  'terminal-dconf.hh',
   'terminal-profiles-list.cc',
   'terminal-profiles-list.hh',
   'terminal-schemas.hh',
@@ -250,7 +248,6 @@ server_cxxflags = common_cxxflags + [
 ]
 
 server_deps = [
-  dconf_dep,
   gio_dep,
   gio_unix_dep,
   glib_dep,
@@ -367,7 +364,6 @@ client_cxxflags = common_cxxflags + [
 ]
 
 client_deps = [
-  dconf_dep,
   gio_dep,
   gio_unix_dep,
   glib_dep,

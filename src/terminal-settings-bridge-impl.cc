@@ -23,7 +23,6 @@
 #include "terminal-settings-bridge-impl.hh"
 
 #include "terminal-app.hh"
-#include "terminal-dconf.hh"
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
 #include "terminal-settings-utils.hh"
@@ -140,44 +139,6 @@ success(GDBusMethodInvocation* invocation,
 }
 
 /* TerminalSettingsBridge interface implementation */
-
-static gboolean
-terminal_settings_bridge_impl_clone_schema(TerminalSettingsBridge* object,
-                                           GDBusMethodInvocation* invocation,
-                                           char const* schema_id,
-                                           char const* path_from,
-                                           char const* path_to,
-                                           GVariant* asv)
-{
-  _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
-                        "Bridge impl ::clone_schema schema %s from-path %s to-path %s\n",
-                        schema_id, path_from, path_to);
-
-  auto const impl = IMPL(object);
-  if (terminal_dconf_backend_is_dconf(impl->backend)) {
-    auto const schema_source = terminal_app_get_schema_source(terminal_app_get());
-    terminal_dconf_clone_schemav(schema_source, schema_id, path_from, path_to, asv);
-  }
-
-  return nothing(invocation);
-}
-
-static gboolean
-terminal_settings_bridge_impl_erase_path(TerminalSettingsBridge* object,
-                                         GDBusMethodInvocation* invocation,
-                                         char const* path)
-{
-  _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
-                        "Bridge impl ::erase_path path %s\n",
-                        path);
-
-  auto const impl = IMPL(object);
-  if (terminal_dconf_backend_is_dconf(impl->backend)) {
-    terminal_dconf_erase_path(path);
-  }
-
-  return nothing(invocation);
-}
 
 static gboolean
 terminal_settings_bridge_impl_get_permission(TerminalSettingsBridge* object,
@@ -360,8 +321,6 @@ terminal_settings_bridge_impl_write_tree(TerminalSettingsBridge* object,
 static void
 terminal_settings_bridge_impl_iface_init(TerminalSettingsBridgeIface* iface) noexcept
 {
-  iface->handle_clone_schema = terminal_settings_bridge_impl_clone_schema;
-  iface->handle_erase_path = terminal_settings_bridge_impl_erase_path;
   iface->handle_get_permission = terminal_settings_bridge_impl_get_permission;
   iface->handle_get_writable = terminal_settings_bridge_impl_get_writable;
   iface->handle_read = terminal_settings_bridge_impl_read;

@@ -29,6 +29,22 @@ GSettings* terminal_g_settings_new_with_path (GSettingsBackend* backend,
                                               char const* schema_id,
                                               char const* path);
 
+void terminal_g_settings_backend_clone_schema(GSettingsBackend* backend,
+                                              GSettingsSchemaSource*schema_source,
+                                              char const* schema_id,
+                                              char const* path,
+                                              char const* new_path,
+                                              GTree* tree);
+
+gboolean terminal_g_settings_backend_erase_path(GSettingsBackend* backend,
+                                                GSettingsSchemaSource* schema_source,
+                                                char const* schema_id,
+                                                char const* path);
+
+GTree* terminal_g_settings_backend_create_tree(void);
+
+void terminal_g_settings_backend_print_tree(GTree* tree);
+
 GSettingsSchemaSource* terminal_g_settings_schema_source_get_default(void);
 
 GTree* terminal_g_settings_backend_create_tree(void);

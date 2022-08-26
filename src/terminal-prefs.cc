@@ -21,7 +21,6 @@
 #include <string.h>
 
 #include <uuid.h>
-#include <dconf.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>

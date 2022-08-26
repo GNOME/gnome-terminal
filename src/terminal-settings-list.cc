@@ -30,12 +30,7 @@
 #include "terminal-settings-utils.hh"
 #include "terminal-schemas.hh"
 #include "terminal-debug.hh"
-#include "terminal-dconf.hh"
 #include "terminal-libgsystem.hh"
-
-#ifdef TERMINAL_PREFERENCES
-#include "terminal-settings-bridge-backend.hh"
-#endif
 
 struct _TerminalSettingsList {
   GSettings parent;
@@ -131,6 +126,8 @@ strv_find (char **strv,
   return -1;
 }
 
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
+
 static char **
 strv_dupv_insert (char **strv,
                   const char *str)
@@ -178,6 +175,8 @@ strv_dupv_remove (char **strv,
   return nstrv;
 }
 
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
+
 gboolean
 terminal_settings_list_valid_uuid (const char *str)
 {
@@ -188,6 +187,8 @@ terminal_settings_list_valid_uuid (const char *str)
 
   return uuid_parse ((char *) str, u) == 0;
 }
+
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
 static char *
 new_list_entry (void)
@@ -200,6 +201,8 @@ new_list_entry (void)
 
   return g_strdup (name);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 static gboolean
 validate_list (TerminalSettingsList *list,
@@ -272,114 +275,48 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
   return (GSettings*)g_object_ref(child);
 }
 
-static char *
-new_child (TerminalSettingsList *list,
-           const char *name)
-{
-  char *new_uuid = new_list_entry ();
-
-  if (name != nullptr) {
-    gs_free char *new_path = path_new (list, new_uuid);
-    gs_unref_object GSettings *child =
-      terminal_g_settings_new_with_path(list->settings_backend,
-                                        list->schema_source,
-                                        list->child_schema_id,
-                                        new_path);
-    g_settings_set_string (child, TERMINAL_PROFILE_VISIBLE_NAME_KEY, name);
-  }
-
-  return new_uuid;
-}
-
-static char *
-clone_child_dconf (TerminalSettingsList *list,
-                   const char *uuid,
-                   const char *name)
-{
-  char* const new_uuid = new_list_entry();
-
-  _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
-                         "%s UUID %s NEW UUID %s \n", G_STRFUNC, uuid ? uuid : "(null)", new_uuid);
-
-  gs_free auto path = path_new(list, uuid);
-  gs_free auto new_path = path_new(list, new_uuid);
-
-  if (name)
-    terminal_dconf_clone_schema(list->schema_source,
-                                list->child_schema_id,
-                                path,
-                                new_path,
-                                TERMINAL_PROFILE_VISIBLE_NAME_KEY, "s", name,
-                                nullptr);
-  else
-    terminal_dconf_clone_schema(list->schema_source,
-                                list->child_schema_id,
-                                path,
-                                new_path,
-                                nullptr);
-
-  return new_uuid;
-}
-
-#ifdef TERMINAL_PREFERENCES
-
-static char *
-clone_child_bridge (TerminalSettingsList *list,
-                    const char *uuid,
-                    const char *name)
-{
-  char* const new_uuid = new_list_entry();
-
-  _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
-                         "%s UUID %s NEW UUID %s \n", G_STRFUNC, uuid ? uuid : "(null)", new_uuid);
-
-  gs_free auto path = path_new(list, uuid);
-  gs_free auto new_path = path_new(list, new_uuid);
-
-  if (name)
-    terminal_settings_bridge_backend_clone_schema(TERMINAL_SETTINGS_BRIDGE_BACKEND(list->settings_backend),
-                                                  list->schema_source,
-                                                  list->child_schema_id,
-                                                  path,
-                                                  new_path,
-                                                  TERMINAL_PROFILE_VISIBLE_NAME_KEY, "s", name,
-                                                  nullptr);
-  else
-    terminal_settings_bridge_backend_clone_schema(TERMINAL_SETTINGS_BRIDGE_BACKEND(list->settings_backend),
-                                                  list->schema_source,
-                                                  list->child_schema_id,
-                                                  path,
-                                                  new_path,
-                                                  nullptr);
-
-  return new_uuid;
-}
-
-#endif /* TERMINAL_PREFERENCES */
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
 static char *
 terminal_settings_list_add_child_internal (TerminalSettingsList *list,
                                            const char *uuid,
                                            const char *name)
 {
-  char *new_uuid;
-  gs_strfreev char **new_uuids;
 
-  if (uuid && terminal_dconf_backend_is_dconf (list->settings_backend))
-    new_uuid = clone_child_dconf (list, uuid, name);
-#ifdef TERMINAL_PREFERENCES
-  else if (uuid && TERMINAL_IS_SETTINGS_BRIDGE_BACKEND (list->settings_backend))
-    new_uuid = clone_child_bridge (list, uuid, name);
-#endif
-  else
-    new_uuid = new_child (list, name);
-
+  auto const new_uuid = new_list_entry();
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s NEW UUID %s\n", G_STRFUNC, new_uuid);
 
-  new_uuids = strv_dupv_insert (list->uuids, new_uuid);
-  g_settings_set_strv (&list->parent, TERMINAL_SETTINGS_LIST_LIST_KEY,
-                       (const char * const *) new_uuids);
+  gs_free auto path = path_new(list, uuid);
+  gs_free auto new_path = path_new(list, new_uuid);
+
+  auto tree = terminal_g_settings_backend_create_tree();
+  terminal_g_settings_backend_clone_schema(list->settings_backend,
+                                           list->schema_source,
+                                           list->child_schema_id,
+                                           path,
+                                           new_path,
+                                           tree);
+  if (name) {
+    g_tree_insert(tree,
+                  g_strconcat(new_path, TERMINAL_PROFILE_VISIBLE_NAME_KEY, nullptr), // transfer
+                  g_variant_take_ref(g_variant_new_string(name))); // transfer
+  }
+
+#ifdef ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF(TERMINAL_DEBUG_SETTINGS_LIST) {
+    g_printerr("Cloning schema %s from %s -> %s\n", list->child_schema_id, path, new_path);
+    terminal_g_settings_backend_print_tree(tree);
+  }
+#endif
+
+  auto const tag = &list;
+  (void)terminal_g_settings_backend_write_tree(list->settings_backend, tree, tag);
+  g_tree_unref(tree);
+
+  gs_strfreev auto new_uuids = strv_dupv_insert(list->uuids, new_uuid);
+  g_settings_set_strv(&list->parent, TERMINAL_SETTINGS_LIST_LIST_KEY,
+                      (char const* const*)new_uuids);
 
   return new_uuid;
 }
@@ -406,18 +343,14 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
     g_settings_set_string (&list->parent, TERMINAL_SETTINGS_LIST_DEFAULT_KEY, "");
 
   /* Now we unset all keys under the child */
-  if (terminal_dconf_backend_is_dconf (list->settings_backend)) {
-    gs_free auto path = path_new(list, uuid);
-    terminal_dconf_erase_path(path);
-  }
-#ifdef TERMINAL_PREFERENCES
-  else if (TERMINAL_IS_SETTINGS_BRIDGE_BACKEND (list->settings_backend)) {
-    gs_free auto path = path_new(list, uuid);
-    terminal_settings_bridge_backend_erase_path(TERMINAL_SETTINGS_BRIDGE_BACKEND (list->settings_backend),
-                                                path);
-  }
-#endif
+  gs_free auto path = path_new(list, uuid);
+  terminal_g_settings_backend_erase_path(list->settings_backend,
+                                         list->schema_source,
+                                         list->child_schema_id,
+                                         path);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 static void
 terminal_settings_list_update_list (TerminalSettingsList *list)
@@ -841,6 +774,8 @@ terminal_settings_list_ref_default_child (TerminalSettingsList *list)
   return terminal_settings_list_ref_child_internal (list, uuid);
 }
 
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
+
 /**
  * terminal_settings_list_add_child:
  * @list: a #TerminalSettingsList
@@ -897,6 +832,8 @@ terminal_settings_list_remove_child (TerminalSettingsList *list,
 
   terminal_settings_list_remove_child_internal (list, uuid);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 /**
  * terminal_settings_list_dup_uuid_from_child:
