@@ -123,6 +123,11 @@ settings_dbus_sources = gnome.gdbus_codegen(
   object_manager: false,
 )
 
+settings_utils_sources = files(
+  'terminal-settings-utils.cc',
+  'terminal-settings-utils.hh',
+)
+
 regex_sources = files(
   'terminal-regex.hh',
 )
@@ -183,7 +188,7 @@ server_resources_sources = gnome.compile_resources(
   export: false,
 )
 
-server_sources = app_sources + client_util_sources + debug_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + types_sources + util_sources + version_sources + files(
+server_sources = app_sources + client_util_sources + debug_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'server.cc',
   'terminal-enums.hh',
   'terminal-gdbus.cc',
@@ -312,7 +317,7 @@ prefs_resources_sources = gnome.compile_resources(
   export: false,
 )
 
-prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + types_sources + util_sources + version_sources + files(
+prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'prefs-main.cc',
   'profile-editor.cc',
   'profile-editor.hh',

@@ -26,6 +26,7 @@
 #include "terminal-dconf.hh"
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-settings-bridge-generated.h"
 
 #include <gio/gio.h>
@@ -39,7 +40,6 @@ struct _TerminalSettingsBridgeImpl {
   TerminalSettingsBridgeSkeleton parent_instance;
 
   GSettingsBackend* backend;
-  GSettingsBackendClass* backend_class;
   void* tag;
 };
 
@@ -58,21 +58,6 @@ static inline constexpr auto
 IMPL(T* that) noexcept
 {
   return reinterpret_cast<TerminalSettingsBridgeImpl*>(that);
-}
-
-static inline int
-compare_string(void const* a,
-               void const* b,
-               void* closure)
-{
-  return strcmp(reinterpret_cast<char const*>(a), reinterpret_cast<char const*>(b));
-}
-
-static void
-unref_variant0(void* data) noexcept
-{
-  if (data)
-    g_variant_unref(reinterpret_cast<GVariant*>(data));
 }
 
 static GVariantType*
@@ -216,7 +201,7 @@ terminal_settings_bridge_impl_get_writable(TerminalSettingsBridge* object,
                         key);
 
   auto const impl = IMPL(object);
-  auto const v = impl->backend_class->get_writable(impl->backend, key);
+  auto const v = terminal_g_settings_backend_get_writable(impl->backend, key);
   return success(invocation, v);
 }
 
@@ -236,10 +221,10 @@ terminal_settings_bridge_impl_read(TerminalSettingsBridge* object,
     return true;
 
   auto const impl = IMPL(object);
-  gs_unref_variant auto v = impl->backend_class->read(impl->backend, key, vtype, default_value);
-  if (v)
-    g_variant_take_ref(v);
-
+  gs_unref_variant auto v = terminal_g_settings_backend_read(impl->backend,
+                                                             key,
+                                                             vtype,
+                                                             default_value);
   g_variant_type_free(vtype);
   return wrap(invocation, v);
 }
@@ -259,10 +244,9 @@ terminal_settings_bridge_impl_read_user_value(TerminalSettingsBridge* object,
     return true;
 
   auto const impl = IMPL(object);
-  gs_unref_variant auto v = impl->backend_class->read_user_value(impl->backend, key, vtype);
-  if (v)
-    g_variant_take_ref(v);
-
+  gs_unref_variant auto v = terminal_g_settings_backend_read_user_value(impl->backend,
+                                                                        key,
+                                                                        vtype);
   g_variant_type_free(vtype);
   return wrap(invocation, v);
 }
@@ -277,7 +261,7 @@ terminal_settings_bridge_impl_reset(TerminalSettingsBridge* object,
                         key);
 
   auto const impl = IMPL(object);
-  impl->backend_class->reset(impl->backend, key, impl->tag);
+  terminal_g_settings_backend_reset(impl->backend, key, impl->tag);
   return nothing(invocation);
 }
 
@@ -291,7 +275,7 @@ terminal_settings_bridge_impl_subscribe(TerminalSettingsBridge* object,
                         name);
 
   auto const impl = IMPL(object);
-  impl->backend_class->subscribe(impl->backend, name);
+  terminal_g_settings_backend_subscribe(impl->backend, name);
   return nothing(invocation);
 }
 
@@ -303,7 +287,7 @@ terminal_settings_bridge_impl_sync(TerminalSettingsBridge* object,
                         "Bridge impl ::sync\n");
 
   auto const impl = IMPL(object);
-  impl->backend_class->sync(impl->backend);
+  terminal_g_settings_backend_sync(impl->backend);
   return nothing(invocation);
 }
 
@@ -317,7 +301,7 @@ terminal_settings_bridge_impl_unsubscribe(TerminalSettingsBridge* object,
                         name);
 
   auto const impl = IMPL(object);
-  impl->backend_class->subscribe(impl->backend, name);
+  terminal_g_settings_backend_unsubscribe(impl->backend, name);
   return nothing(invocation);
 }
 
@@ -334,8 +318,10 @@ terminal_settings_bridge_impl_write(TerminalSettingsBridge* object,
                         "Bridge impl ::write key %s value %s\n",
                         key, v ? g_variant_print(v, true): "(null)");
 
-  gs_unref_variant auto holder = g_variant_ref_sink(v);
-  auto const r = impl->backend_class->write(impl->backend, key, v, impl->tag);
+  auto const r = terminal_g_settings_backend_write(impl->backend,
+                                                   key,
+                                                   v,
+                                                   impl->tag);
   return success(invocation, r);
 }
 
@@ -349,10 +335,7 @@ terminal_settings_bridge_impl_write_tree(TerminalSettingsBridge* object,
                         "Bridge impl ::write_tree path-prefix %s\n",
                         path_prefix);
 
-  auto const tree = g_tree_new_full(compare_string,
-                                    nullptr,
-                                    g_free,
-                                    unref_variant0);
+  auto const tree = terminal_g_settings_backend_create_tree();
 
   auto iter = GVariantIter{};
   g_variant_iter_init(&iter, tree_value);
@@ -366,7 +349,9 @@ terminal_settings_bridge_impl_write_tree(TerminalSettingsBridge* object,
   }
 
   auto const impl = IMPL(object);
-  auto const v = impl->backend_class->write_tree(impl->backend, tree, impl->tag);
+  auto const v = terminal_g_settings_backend_write_tree(impl->backend,
+                                                        tree,
+                                                        impl->tag);
 
   g_tree_unref(tree);
   return success(invocation, v);
@@ -410,15 +395,12 @@ terminal_settings_bridge_impl_constructed(GObject* object) noexcept
 
   auto const impl = IMPL(object);
   assert(impl->backend);
-  impl->backend_class = G_SETTINGS_BACKEND_GET_CLASS(impl->backend);
-  assert(impl->backend_class);
 }
 
 static void
 terminal_settings_bridge_impl_finalize(GObject* object) noexcept
 {
   auto const impl = IMPL(object);
-  impl->backend_class = nullptr;
   g_clear_object(&impl->backend);
 
   G_OBJECT_CLASS(terminal_settings_bridge_impl_parent_class)->finalize(object);
