@@ -363,6 +363,7 @@ G_DEFINE_TYPE_WITH_CODE(TerminalPrefsProcess,
 static void
 terminal_prefs_process_init(TerminalPrefsProcess* process) /* noexcept */
 {
+  g_application_hold(g_application_get_default());
 }
 
 static void
@@ -375,6 +376,8 @@ terminal_prefs_process_finalize(GObject* object) noexcept
   g_clear_object(&impl->subprocess);
 
   G_OBJECT_CLASS(terminal_prefs_process_parent_class)->finalize(object);
+
+  g_application_release(g_application_get_default());
 }
 
 static void
