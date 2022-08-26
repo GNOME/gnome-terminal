@@ -36,6 +36,7 @@
 #include "terminal-profiles-list.hh"
 #include "terminal-util.hh"
 #include "terminal-schemas.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
 

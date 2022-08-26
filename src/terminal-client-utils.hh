@@ -65,15 +65,6 @@ char const* const* terminal_client_get_environment_prefix_filters (void);
 
 char** terminal_client_filter_environment           (char** envv) G_GNUC_MALLOC;
 
-GSettings* terminal_g_settings_new (GSettingsBackend* backend,
-                                    GSettingsSchemaSource* source,
-                                    char const* schema_id);
-
-GSettings* terminal_g_settings_new_with_path (GSettingsBackend* backend,
-                                              GSettingsSchemaSource* source,
-                                              char const* schema_id,
-                                              char const* path);
-
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_UTILS_H */

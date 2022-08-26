@@ -1,4 +1,41 @@
 /*
+ * Copyright © 2008, 2010, 2022 Christian Persch
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#pragma once
+
+#include <gio/gio.h>
+#include <gio/gsettingsbackend.h>
+
+GSettings* terminal_g_settings_new (GSettingsBackend* backend,
+                                    GSettingsSchemaSource* source,
+                                    char const* schema_id);
+
+GSettings* terminal_g_settings_new_with_path (GSettingsBackend* backend,
+                                              GSettingsSchemaSource* source,
+                                              char const* schema_id,
+                                              char const* path);
+
+GSettingsSchemaSource* terminal_g_settings_schema_source_get_default(void);
+
+GTree* terminal_g_settings_backend_create_tree(void);
+
+// BEGIN copied from glib/gio/gsettingsbackendinternal.h
+
+/*
  * Copyright © 2009, 2010 Codethink Limited
  * Copyright © 2010 Red Hat, Inc.
  *
@@ -18,12 +55,6 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  *          Matthias Clasen <mclasen@redhat.com>
  */
-
-#pragma once
-
-#include <gio/gsettingsbackend.h>
-
-GTree* terminal_g_settings_backend_create_tree(void);
 
 GPermission* terminal_g_settings_backend_get_permission(GSettingsBackend* backend,
                                                         char const*path);
@@ -58,5 +89,7 @@ gboolean terminal_g_settings_backend_write(GSettingsBackend* backend,
                                            void* origin_tag);
 
 gboolean terminal_g_settings_backend_write_tree(GSettingsBackend* backend,
-                                                      GTree*tree,
-                                                      void* origin_tag);
+                                                GTree* tree,
+                                                void* origin_tag);
+
+// END copied from glib

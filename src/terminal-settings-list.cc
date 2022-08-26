@@ -27,6 +27,7 @@
 #include <gio/gsettingsbackend.h>
 
 #include "terminal-type-builtins.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-schemas.hh"
 #include "terminal-debug.hh"
 #include "terminal-dconf.hh"
