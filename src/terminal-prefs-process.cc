@@ -407,9 +407,8 @@ TerminalPrefsProcess*
 terminal_prefs_process_new_finish(GAsyncResult* result,
                                   GError** error)
 {
-  auto const source = G_ASYNC_INITABLE(g_async_result_get_source_object(result));
+  gs_unref_object auto source = G_ASYNC_INITABLE(g_async_result_get_source_object(result));
   auto const o = g_async_initable_new_finish(source, result, error);
-  g_object_unref(source);
   return reinterpret_cast<TerminalPrefsProcess*>(o);
 }
 
