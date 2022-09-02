@@ -270,6 +270,8 @@ uri_has_local_path (const char *uri)
 
 /* Nautilus menu item class */
 
+namespace {
+
 typedef struct {
   TerminalNautilus *nautilus;
   guint32 timestamp;
@@ -278,6 +280,8 @@ typedef struct {
   TerminalFileInfo info;
   gboolean remote;
 } ExecData;
+
+} // anon namespace
 
 static void
 exec_data_free (ExecData *data)
