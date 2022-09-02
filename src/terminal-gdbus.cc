@@ -84,10 +84,14 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
 
 /* Class implementation */
 
+namespace {
+
 typedef struct {
   TerminalReceiver *receiver;
   GDBusMethodInvocation *invocation;
 } ExecData;
+
+} // anon namespace
 
 static void
 exec_data_free (ExecData *data)

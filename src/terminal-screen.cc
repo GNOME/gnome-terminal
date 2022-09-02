@@ -64,6 +64,8 @@
 
 #define URL_MATCH_CURSOR_NAME "pointer"
 
+namespace {
+
 typedef struct {
   volatile int refcount;
   char **argv; /* as passed */
@@ -88,6 +90,8 @@ typedef struct {
   /* Cancellable */
   GCancellable *cancellable;
 } ExecData;
+
+} // anon namespace
 
 typedef struct
 {
