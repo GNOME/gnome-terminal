@@ -207,6 +207,14 @@ gtk_version_cxxflags = [
 
 version_cxxflags = glib_version_cxxflags + gtk_version_cxxflags
 
+# Asserts must not be disabled
+
+assert(get_option('b_ndebug') == 'false', 'assertions may not be disabled')
+
+# LTO very much NOT supported
+
+assert(get_option('b_lto') == false, 'LTO not supported')
+
 # Compiler flags
 
 compiler_flags_common = [
