@@ -88,7 +88,6 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY          "new-terminal-mode"
 #define TERMINAL_SETTING_NEW_TAB_POSITION_KEY           "new-tab-position"
 #define TERMINAL_SETTING_SCHEMA_VERSION                 "schema-version"
-#define TERMINAL_SETTING_SHELL_INTEGRATION_KEY          "shell-integration-enabled"
 #define TERMINAL_SETTING_TAB_POLICY_KEY                 "tab-policy"
 #define TERMINAL_SETTING_TAB_POSITION_KEY               "tab-position"
 #define TERMINAL_SETTING_THEME_VARIANT_KEY              "theme-variant"

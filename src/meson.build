@@ -220,24 +220,6 @@ server_sources = app_sources + client_util_sources + debug_sources + dbus_source
   'terminal-window.hh',
 )
 
-if get_option('search_provider')
-
-  server_sources += files(
-    'terminal-search-provider.cc',
-    'terminal-search-provider.hh',
-  )
-
-  server_sources += gnome.gdbus_codegen(
-    'terminal-search-provider-gdbus-generated',
-    gt_prefix / gt_dbusinterfacedir / 'org.gnome.ShellSearchProvider2.xml',
-    autocleanup: 'none',
-    install_header: false,
-    interface_prefix: 'org.gnome.Shell',
-    namespace: 'Terminal',
-  )
-
-endif
-
 server_incs = [
   top_inc,
   src_inc,
@@ -292,18 +274,6 @@ configure_file(
   install: true,
   install_dir: gt_prefix / gt_systemduserdir
 )
-
-# Search provider
-
-if get_option('search_provider')
-
-  provider_ini = files(gt_name + '-search-provider.ini')
-
-  install_data(
-    provider_ini,
-    install_dir: gt_prefix / gt_searchproviderdir,
-  )
-endif # option 'search_provider'
 
 # Preferences
 

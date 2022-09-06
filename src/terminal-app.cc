@@ -52,14 +52,6 @@
 #include "terminal-prefs.hh"
 #endif
 
-#ifndef TERMINAL_SERVER
-#undef ENABLE_SEARCH_PROVIDER
-#endif
-
-#ifdef ENABLE_SEARCH_PROVIDER
-#include "terminal-search-provider.hh"
-#endif /* ENABLE_SEARCH_PROVIDER */
-
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
@@ -123,10 +115,6 @@ struct _TerminalApp
 #ifdef TERMINAL_SERVER
   GDBusObjectManagerServer *object_manager;
   GHashTable *screen_map;
-
-#ifdef ENABLE_SEARCH_PROVIDER
-  TerminalSearchProvider *search_provider;
-#endif /* ENABLE_SEARCH_PROVIDER */
 
   GMenuModel *menubar;
   GMenu *menubar_new_terminal_section;
@@ -1091,22 +1079,6 @@ terminal_app_dbus_register (GApplication    *application,
                                                                        error))
     return FALSE;
 
-#ifdef ENABLE_SEARCH_PROVIDER
-  if (g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_SHELL_INTEGRATION_KEY)) {
-    gs_unref_object TerminalSearchProvider *search_provider;
-
-    search_provider = terminal_search_provider_new ();
-
-    if (!terminal_search_provider_dbus_register (search_provider,
-                                                 connection,
-                                                 TERMINAL_SEARCH_PROVIDER_PATH,
-                                                 error))
-      return FALSE;
-
-    gs_transfer_out_value (&app->search_provider, &search_provider);
-  }
-#endif /* ENABLE_SEARCH_PROVIDER */
-
   object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
   factory = terminal_factory_impl_new ();
   terminal_object_skeleton_set_factory (object, factory);
@@ -1131,14 +1103,6 @@ terminal_app_dbus_unregister (GApplication    *application,
     g_object_unref (app->object_manager);
     app->object_manager = nullptr;
   }
-
-#ifdef ENABLE_SEARCH_PROVIDER
-  if (app->search_provider) {
-    terminal_search_provider_dbus_unregister (app->search_provider, connection, TERMINAL_SEARCH_PROVIDER_PATH);
-    g_object_unref (app->search_provider);
-    app->search_provider = nullptr;
-  }
-#endif /* ENABLE_SEARCH_PROVIDER */
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_unregister (application,
                                                                     connection,

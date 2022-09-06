@@ -46,10 +46,7 @@ $ # Don't forget to make sure that pkg-config can find your self-build vte!
 $ # e.g. by doing:
 $ # export PKG_CONFIG_PATH=/some/where/lib64/pkg-config:$PKG_CONFIG_PATH
 $ #
-$ # If you compiled gnome-shell into the same prefix, you can omit disabling
-$ # the search provider.
-$ #
-$ meson _build --prefix=/some/where -Dsearch_provider=false
+$ meson _build --prefix=/some/where
 $
 $ # Build
 $ ninja -C _build

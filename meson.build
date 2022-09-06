@@ -83,8 +83,6 @@ gt_pkglibdir  = gt_libdir  / gt_name
 
 gt_schemadir = gt_datadir / 'glib-2.0' / 'schemas'
 
-gt_searchproviderdir = gt_datadir / 'gnome-shell' / 'search-providers'
-
 gt_nautilusextensiondir = gt_libdir / 'nautilus' / 'extensions-4'
 
 gt_dbusinterfacedir = gt_datadir / 'dbus-1' / 'interfaces'
@@ -157,7 +155,6 @@ config_h = configuration_data()
 config_h.set_quoted('GETTEXT_PACKAGE', gt_gettext_domain)
 config_h.set_quoted('VERSION', gt_version)
 config_h.set('ENABLE_DEBUG', enable_debug)
-config_h.set('ENABLE_SEARCH_PROVIDER', get_option('search_provider'))
 
 # Enable libc features
 
@@ -424,7 +421,6 @@ output += '\n'
 output += '  Prefix:             ' + get_option('prefix') + '\n'
 output += '\n'
 output += '  Nautilus extension: ' + get_option('nautilus_extension').to_string() + '\n'
-output += '  Search provider:    ' + get_option('search_provider').to_string() + '\n'
 message(output)
 
 # Done
