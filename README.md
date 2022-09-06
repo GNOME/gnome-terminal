@@ -68,14 +68,6 @@ you should also pass `--reconfigure` option to it.
 (i.e. `sudo ninja -C _build install`) if installing to system directories. Use a
 user-writable directory as `--prefix` instead to avoid that.
 
-* You may need to set the gsettings schema path so that gnome-terminal can find
-its schemas. E.g. use
-```
-$ export GSETTINGS_SCHEMA_DIR=/some/where/share/glib-2.0/schemas
-```
-and if you skipped the `ninja install` step, you need to create the
-gsettings schema cache yourself.
-
 * Since GNOME Terminal uses a D-Bus activated server, you cannot simply run
 the self-built gnome-terminal directly. Instead, you need to start the new `gnome-terminal-server` directly using
 ```
