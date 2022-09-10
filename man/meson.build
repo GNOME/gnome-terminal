@@ -32,5 +32,6 @@ man1 = custom_target(
   input: files(gt_name + '.xml'),
   install: true,
   install_dir: gt_prefix / man1dir,
+  install_tag: 'man',
   output: gt_name + '.1',
 )

@@ -184,6 +184,7 @@ server_resources_sources = gnome.compile_resources(
     menubar_ui_nomnemonics,
   ],
   export: false,
+  install: false,
 )
 
 server_sources = app_sources + client_util_sources + debug_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
@@ -267,6 +268,7 @@ server = executable(
   include_directories: server_incs,
   install: true,
   install_dir: gt_prefix / gt_libexecdir,
+  install_tag: 'runtime',
   sources: server_sources,
 )
 
@@ -283,6 +285,7 @@ configure_file(
   configuration: server_conf,
   install: true,
   install_dir: gt_prefix / gt_dbusservicedir,
+  install_tag: 'runtime',
 )
 
 configure_file(
@@ -290,7 +293,8 @@ configure_file(
   output: gt_name + '-server.service',
   configuration: server_conf,
   install: true,
-  install_dir: gt_prefix / gt_systemduserdir
+  install_dir: gt_prefix / gt_systemduserdir,
+  install_tag: 'runtime',
 )
 
 # Search provider
@@ -302,6 +306,7 @@ if get_option('search_provider')
   install_data(
     provider_ini,
     install_dir: gt_prefix / gt_searchproviderdir,
+    install_tag: 'runtime',
   )
 endif # option 'search_provider'
 
@@ -312,6 +317,7 @@ prefs_resources_sources = gnome.compile_resources(
   'prefs.gresource.xml',
   c_name: 'terminal',
   export: false,
+  install: false,
 )
 
 prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
@@ -338,6 +344,7 @@ prefs_main = executable(
   dependencies: prefs_main_deps,
   install: true,
   install_dir: gt_prefix / gt_pkglibdir,
+  install_tag: 'runtime',
   sources: prefs_main_sources,
 )
 
@@ -379,6 +386,7 @@ client = executable(
   include_directories: client_incs,
   dependencies: client_deps,
   install: true,
+  install_tag: 'runtime',
   sources: client_sources,
 )
 
@@ -387,6 +395,7 @@ client = executable(
 install_data(
   gt_dns_name + '.gschema.xml',
   install_dir: gt_prefix / gt_schemadir,
+  install_tag: 'runtime',
 )
 
 meson.add_install_script(
@@ -404,6 +413,7 @@ reference_schemas = custom_target(
   ],
   install: true,
   install_dir: gt_prefix / gt_pkglibdir,
+  install_tag: 'runtime',
   output: 'gschemas.compiled',
 )
 
@@ -444,6 +454,7 @@ if get_option('nautilus_extension')
      include_directories: nautilus_incs,
      install: true,
      install_dir: gt_prefix / gt_nautilusextensiondir,
+     install_tag: 'runtime',
      link_args: nautilus_ldflags,
      link_depends: nautilus_map,
      sources: nautilus_sources,

@@ -36,6 +36,7 @@ install_data(
   sources: public_icons_sources,
   rename: public_icons_renames,
   install_dir: icondir,
+  install_tag: 'runtime',
 )
 
 foreach theme : public_icons_themes

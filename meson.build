@@ -363,6 +363,7 @@ endif
 configure_file(
   output: 'config.h',
   configuration: config_h,
+  install: false,
 )
 
 # Utilities
@@ -397,6 +398,7 @@ configure_file(
   input: 'Makefile.meson',
   output: '@BASENAME@',
   configuration: makefile_conf,
+  install: false,
 )
 
 # .gitignore everything in the build directory

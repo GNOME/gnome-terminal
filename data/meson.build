@@ -23,6 +23,7 @@ i18n.merge_file(
   po_dir: po_dir,
   install: true,
   install_dir: gt_prefix / metainfodir,
+  install_tag: 'metadata',
 )
 
 i18n.merge_file(
@@ -31,6 +32,7 @@ i18n.merge_file(
   po_dir: po_dir,
   install: true,
   install_dir: gt_prefix / metainfodir,
+  install_tag: 'metadata',
 )
 
 # Desktop file
@@ -44,6 +46,7 @@ i18n.merge_file(
   po_dir: po_dir,
   install: true,
   install_dir: desktopdatadir,
+  install_tag: 'runtime',
 )
 
 meson.add_install_script(
