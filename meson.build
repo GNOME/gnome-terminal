@@ -26,7 +26,7 @@ project(
     'GPL-3.0-only', 'CC-BY-SA-3.0', # the documentation
     'GFDL-1.3-only',                # the appstream data
   ],
-  meson_version: '>= 0.49.0',
+  meson_version: '>= 0.60.0',
   version: '3.47.1',
 )
 
