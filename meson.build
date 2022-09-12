@@ -352,7 +352,7 @@ else
   libnautilus_extension_dep = dependency('', required: false,)
 endif
 
-if gtk_dep.get_pkgconfig_variable('targets').contains('x11')
+if gtk_dep.get_variable('targets').contains('x11')
   x11_dep = dependency('x11')
 else
   x11_dep = dependency('', required: false)
