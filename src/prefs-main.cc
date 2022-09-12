@@ -238,9 +238,10 @@ main(int argc,
   if (!connection) {
     gs_unref_object GSettings* profile = profile_from_uuid(TERMINAL_APP(app),
                                                            arg_profile_uuid);
-    if (arg_profile_uuid && !profile)
+    if (arg_profile_uuid && !profile) {
       g_printerr("No profile with UUID \"%s\": %s\n", arg_profile_uuid, error->message);
-    return EXIT_FAILURE;
+      return EXIT_FAILURE;
+    }
 
     terminal_app_edit_preferences(TERMINAL_APP(app),
                                   profile,
