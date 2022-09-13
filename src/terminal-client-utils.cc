@@ -40,6 +40,8 @@
 #include <gdk/gdkx.h>
 #endif
 
+#ifdef ENABLE_DEBUG
+
 static char*
 get_binary_path_if_uninstalled(char const* install_dir) noexcept
 {
@@ -79,6 +81,8 @@ get_path_if_uninstalled(char const* exe_install_dir,
 
   return reinterpret_cast<char*>(g_steal_pointer(&path));
 }
+
+#endif /* ENABLE_DEBUG */
 
 /**
  * terminal_client_find_file_uninstalled:
