@@ -35,9 +35,11 @@
 
 #include <gio/gio.h>
 
+#ifndef TERMINAL_NAUTILUS
 #include <gdk/gdk.h>
 #if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
 #include <gdk/gdkx.h>
+#endif
 #endif
 
 #ifdef ENABLE_DEBUG
@@ -370,6 +372,8 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
   }
 }
 
+#ifndef TERMINAL_NAUTILUS
+
 /**
  * terminal_client_get_fallback_startup_id:
  *
@@ -434,3 +438,5 @@ out:
 #endif
   return nullptr;
 }
+
+#endif /* !TERMINAL_NAUTILUS */

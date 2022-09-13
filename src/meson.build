@@ -433,6 +433,7 @@ if get_option('nautilus_extension')
   ]
 
   nautilus_cxxflags = glib_version_cxxflags + [
+    '-DTERMINAL_NAUTILUS',
     '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
   ]
 
