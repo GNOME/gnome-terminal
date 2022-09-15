@@ -23,15 +23,11 @@
 #include <string.h>
 #include <uuid.h>
 
-// See https://gitlab.gnome.org/GNOME/dconf/-/issues/23
-extern "C" {
-#include <dconf.h>
-}
-
 #define G_SETTINGS_ENABLE_BACKEND
 #include <gio/gsettingsbackend.h>
 
 #include "terminal-type-builtins.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-schemas.hh"
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
@@ -39,6 +35,7 @@ extern "C" {
 struct _TerminalSettingsList {
   GSettings parent;
 
+  GSettingsBackend* settings_backend;
   GSettingsSchemaSource* schema_source;
   char *path;
   char *child_schema_id;
@@ -129,6 +126,8 @@ strv_find (char **strv,
   return -1;
 }
 
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
+
 static char **
 strv_dupv_insert (char **strv,
                   const char *str)
@@ -176,6 +175,8 @@ strv_dupv_remove (char **strv,
   return nstrv;
 }
 
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
+
 gboolean
 terminal_settings_list_valid_uuid (const char *str)
 {
@@ -187,15 +188,7 @@ terminal_settings_list_valid_uuid (const char *str)
   return uuid_parse ((char *) str, u) == 0;
 }
 
-static gboolean
-settings_backend_is_dconf (void)
-{
-  gs_unref_object GSettingsBackend *backend;
-
-  backend = g_settings_backend_get_default ();
-
-  return g_str_equal (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend");
-}
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
 static char *
 new_list_entry (void)
@@ -208,6 +201,8 @@ new_list_entry (void)
 
   return g_strdup (name);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 static gboolean
 validate_list (TerminalSettingsList *list,
@@ -245,9 +240,9 @@ list_map_func (GVariant *value,
   return FALSE;
 }
 
-static char *
+static char*
 path_new (TerminalSettingsList *list,
-          const char *uuid)
+          char const* uuid)
 {
   return g_strdup_printf ("%s:%s/", list->path, uuid);
 }
@@ -270,7 +265,8 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
     goto done;
 
   path = path_new (list, uuid);
-  child = terminal_g_settings_new_with_path(list->schema_source,
+  child = terminal_g_settings_new_with_path(list->settings_backend,
+                                            list->schema_source,
                                             list->child_schema_id,
                                             path);
   g_hash_table_insert (list->children, g_strdup (uuid), child /* adopted */);
@@ -279,104 +275,48 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
   return (GSettings*)g_object_ref(child);
 }
 
-static char *
-new_child (TerminalSettingsList *list,
-           const char *name)
-{
-  char *new_uuid = new_list_entry ();
-
-  if (name != nullptr) {
-    gs_free char *new_path = path_new (list, new_uuid);
-    gs_unref_object GSettings *child =
-      terminal_g_settings_new_with_path(list->schema_source,
-                                        list->child_schema_id,
-                                        new_path);
-    g_settings_set_string (child, TERMINAL_PROFILE_VISIBLE_NAME_KEY, name);
-  }
-
-  return new_uuid;
-}
-
-static char *
-clone_child (TerminalSettingsList *list,
-             const char *uuid,
-             const char *name)
-{
-  char *new_uuid;
-  gs_free char *path;
-  gs_free char *new_path;
-  guint i;
-  gs_unref_object DConfClient *client;
-  DConfChangeset *changeset;
-
-  new_uuid = new_list_entry ();
-
-  _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
-                         "%s UUID %s NEW UUID %s \n", G_STRFUNC, uuid ? uuid : "(null)", new_uuid);
-
-  path = path_new (list, uuid);
-  new_path = path_new (list, new_uuid);
-
-  client = dconf_client_new ();
-  changeset = dconf_changeset_new ();
-
-  gs_unref_settings_schema GSettingsSchema* schema = g_settings_schema_source_lookup (list->schema_source,
-                                                                                      list->child_schema_id,
-                                                                                      TRUE);
-   /* shouldn't really happen ever */
-  if (schema == nullptr)
-    return new_uuid;
-
-  gs_strfreev char **keys = g_settings_schema_list_keys (schema);
-
-  for (i = 0; keys[i]; i++) {
-    gs_free char *rkey;
-    gs_unref_variant GVariant *value;
-
-    rkey = g_strconcat (path, keys[i], nullptr);
-    value = dconf_client_read (client, rkey);
-    if (value) {
-      gs_free char *wkey;
-      wkey = g_strconcat (new_path, keys[i], nullptr);
-      dconf_changeset_set (changeset, wkey, value);
-    }
-  }
-
-  if (name != nullptr) {
-    GVariant *value;
-    value = g_variant_new_string (name);
-    if (value) {
-      gs_free char *wkey;
-      wkey = g_strconcat (new_path, TERMINAL_PROFILE_VISIBLE_NAME_KEY, nullptr);
-      dconf_changeset_set (changeset, wkey, value);
-    }
-  }
-
-  dconf_client_change_sync (client, changeset, nullptr, nullptr, nullptr);
-  dconf_changeset_unref (changeset);
-
-  return new_uuid;
-}
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
 
 static char *
 terminal_settings_list_add_child_internal (TerminalSettingsList *list,
                                            const char *uuid,
                                            const char *name)
 {
-  char *new_uuid;
-  gs_strfreev char **new_uuids;
 
-  if (uuid && settings_backend_is_dconf ())
-    new_uuid = clone_child (list, uuid, name);
-  else
-    new_uuid = new_child (list, name);
-
+  auto const new_uuid = new_list_entry();
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s NEW UUID %s\n", G_STRFUNC, new_uuid);
 
-  new_uuids = strv_dupv_insert (list->uuids, new_uuid);
-  g_settings_set_strv (&list->parent, TERMINAL_SETTINGS_LIST_LIST_KEY,
-                       (const char * const *) new_uuids);
+  gs_free auto path = path_new(list, uuid);
+  gs_free auto new_path = path_new(list, new_uuid);
+
+  auto tree = terminal_g_settings_backend_create_tree();
+  terminal_g_settings_backend_clone_schema(list->settings_backend,
+                                           list->schema_source,
+                                           list->child_schema_id,
+                                           path,
+                                           new_path,
+                                           tree);
+  if (name) {
+    g_tree_insert(tree,
+                  g_strconcat(new_path, TERMINAL_PROFILE_VISIBLE_NAME_KEY, nullptr), // transfer
+                  g_variant_take_ref(g_variant_new_string(name))); // transfer
+  }
+
+#ifdef ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF(TERMINAL_DEBUG_SETTINGS_LIST) {
+    g_printerr("Cloning schema %s from %s -> %s\n", list->child_schema_id, path, new_path);
+    terminal_g_settings_backend_print_tree(tree);
+  }
+#endif
+
+  auto const tag = &list;
+  (void)terminal_g_settings_backend_write_tree(list->settings_backend, tree, tag);
+  g_tree_unref(tree);
+
+  gs_strfreev auto new_uuids = strv_dupv_insert(list->uuids, new_uuid);
+  g_settings_set_strv(&list->parent, TERMINAL_SETTINGS_LIST_LIST_KEY,
+                      (char const* const*)new_uuids);
 
   return new_uuid;
 }
@@ -403,15 +343,14 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
     g_settings_set_string (&list->parent, TERMINAL_SETTINGS_LIST_DEFAULT_KEY, "");
 
   /* Now we unset all keys under the child */
-  if (settings_backend_is_dconf ()) {
-    gs_free char *path;
-    gs_unref_object DConfClient *client;
-
-    path = path_new (list, uuid);
-    client = dconf_client_new ();
-    dconf_client_write_sync (client, path, nullptr, nullptr, nullptr, nullptr);
-  }
+  gs_free auto path = path_new(list, uuid);
+  terminal_g_settings_backend_erase_path(list->settings_backend,
+                                         list->schema_source,
+                                         list->child_schema_id,
+                                         path);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 static void
 terminal_settings_list_update_list (TerminalSettingsList *list)
@@ -500,7 +439,7 @@ terminal_settings_list_changed (GSettings *list_settings,
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s key %s", G_STRFUNC, key ? key : "(null)");
 
-  if (key == nullptr || 
+  if (key == nullptr ||
       g_str_equal (key, TERMINAL_SETTINGS_LIST_LIST_KEY)) {
     terminal_settings_list_update_list (list);
     terminal_settings_list_update_default (list);
@@ -527,6 +466,12 @@ terminal_settings_list_constructed (GObject *object)
 
   G_OBJECT_CLASS (terminal_settings_list_parent_class)->constructed (object);
 
+  g_object_get(object, "backend", &list->settings_backend, nullptr);
+  g_assert(list->settings_backend);
+
+  if (list->schema_source == nullptr)
+    list->schema_source = g_settings_schema_source_get_default();
+
   g_assert (list->schema_source != nullptr);
   g_assert (list->child_schema_id != nullptr);
 
@@ -550,6 +495,7 @@ terminal_settings_list_finalize (GObject *object)
   g_free (list->default_uuid);
   g_hash_table_unref (list->children);
   g_settings_schema_source_unref(list->schema_source);
+  g_clear_object(&list->settings_backend);
 
   G_OBJECT_CLASS (terminal_settings_list_parent_class)->finalize (object);
 }
@@ -665,6 +611,7 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
 
 /**
  * terminal_settings_list_new:
+ * @backend: (nullable): a #GSettingsBackend, or %NULL
  * @schema_source: a #GSettingsSchemaSource
  * @path: the settings path for the list
  * @schema_id: the schema of the list, equal to or derived from "org.gnome.Terminal.SettingsList"
@@ -674,12 +621,14 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
  * Returns: (transfer full): the newly created #TerminalSettingsList
  */
 TerminalSettingsList *
-terminal_settings_list_new (GSettingsSchemaSource* schema_source,
+terminal_settings_list_new (GSettingsBackend* backend,
+                            GSettingsSchemaSource* schema_source,
                             const char *path,
                             const char *schema_id,
                             const char *child_schema_id,
                             TerminalSettingsListFlags flags)
 {
+  g_return_val_if_fail (backend == nullptr || G_IS_SETTINGS_BACKEND (backend), nullptr);
   g_return_val_if_fail (schema_source != nullptr, nullptr);
   g_return_val_if_fail (path != nullptr, nullptr);
   g_return_val_if_fail (schema_id != nullptr, nullptr);
@@ -687,6 +636,7 @@ terminal_settings_list_new (GSettingsSchemaSource* schema_source,
   g_return_val_if_fail (g_str_has_suffix (path, ":/"), nullptr);
 
   return reinterpret_cast<TerminalSettingsList*>(g_object_new (TERMINAL_TYPE_SETTINGS_LIST,
+                                                               "backend", backend,
                                                                "schema-source", schema_source,
 							       "schema-id", schema_id,
 							       "child-schema-id", child_schema_id,
@@ -728,7 +678,7 @@ terminal_settings_list_dup_default_child (TerminalSettingsList *list)
     return g_strdup (list->default_uuid);
 
   /* Just randomly designate the first child as default, but don't write that
-   * to dconf.
+   * to the settings.
    */
   if (list->uuids == nullptr || list->uuids[0] == nullptr) {
     g_warn_if_fail ((list->flags & TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY));
@@ -824,6 +774,8 @@ terminal_settings_list_ref_default_child (TerminalSettingsList *list)
   return terminal_settings_list_ref_child_internal (list, uuid);
 }
 
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
+
 /**
  * terminal_settings_list_add_child:
  * @list: a #TerminalSettingsList
@@ -880,6 +832,8 @@ terminal_settings_list_remove_child (TerminalSettingsList *list,
 
   terminal_settings_list_remove_child_internal (list, uuid);
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 /**
  * terminal_settings_list_dup_uuid_from_child:

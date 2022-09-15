@@ -3,7 +3,7 @@
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
- * Copyright © 2008, 2010, 2011, 2015, 2017 Christian Persch
+ * Copyright © 2008, 2010, 2011, 2015, 2017, 2022 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,17 +33,28 @@
 #include "terminal-app.hh"
 #include "terminal-accels.hh"
 #include "terminal-client-utils.hh"
-#include "terminal-screen.hh"
-#include "terminal-screen-container.hh"
-#include "terminal-window.hh"
 #include "terminal-profiles-list.hh"
 #include "terminal-util.hh"
-#include "profile-editor.hh"
 #include "terminal-schemas.hh"
-#include "terminal-gdbus.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-defines.hh"
-#include "terminal-prefs.hh"
 #include "terminal-libgsystem.hh"
+
+#ifdef TERMINAL_SERVER
+#include "terminal-gdbus.hh"
+#include "terminal-prefs-process.hh"
+#include "terminal-screen-container.hh"
+#include "terminal-screen.hh"
+#include "terminal-window.hh"
+#endif
+
+#ifdef TERMINAL_PREFERENCES
+#include "terminal-prefs.hh"
+#endif
+
+#ifndef TERMINAL_SERVER
+#undef ENABLE_SEARCH_PROVIDER
+#endif
 
 #ifdef ENABLE_SEARCH_PROVIDER
 #include "terminal-search-provider.hh"
@@ -75,6 +86,10 @@
 #error Use a gsettings override instead
 #endif
 
+enum {
+  PROP_SETTINGS_BACKEND = 1,
+};
+
 /*
  * Session state is stored entirely in the RestartCommand command line.
  *
@@ -95,18 +110,19 @@ struct _TerminalApp
 {
   GtkApplication parent_instance;
 
-  GDBusObjectManagerServer *object_manager;
-
   TerminalSettingsList *profiles_list;
 
-  GHashTable *screen_map;
-
+  GSettingsBackend* settings_backend;
   GSettingsSchemaSource* schema_source;
   GSettings *global_settings;
   GSettings *desktop_interface_settings;
   GSettings *system_proxy_settings;
   GSettings* system_proxy_protocol_settings[4];
   GSettings *gtk_debug_settings;
+
+#ifdef TERMINAL_SERVER
+  GDBusObjectManagerServer *object_manager;
+  GHashTable *screen_map;
 
 #ifdef ENABLE_SEARCH_PROVIDER
   TerminalSearchProvider *search_provider;
@@ -125,6 +141,9 @@ struct _TerminalApp
   GtkClipboard *clipboard;
   GdkAtom *clipboard_targets;
   int n_clipboard_targets;
+
+  GWeakRef prefs_process_ref;
+#endif /* TERMINAL_SERVER */
 
   gboolean unified_menu;
   gboolean use_headerbar;
@@ -345,6 +364,7 @@ terminal_app_remove_profile (TerminalApp *app,
   if (default_profile == profile)
     return;
 
+#ifdef TERMINAL_SERVER
   /* First, we need to switch any screen using this profile to the default profile */
   gs_free_list GList *screens = g_hash_table_get_values (app->screen_map);
   for (GList *l = screens; l != nullptr; l = l->next) {
@@ -354,6 +374,7 @@ terminal_app_remove_profile (TerminalApp *app,
 
     terminal_screen_set_profile (screen, default_profile);
   }
+#endif /* TERMINAL_SERVER */
 
   /* Now we can safely remove the profile */
   gs_free char *uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
@@ -379,7 +400,10 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
+#ifdef TERMINAL_SERVER
+
 static void terminal_app_update_profile_menus (TerminalApp *app);
+
 
 typedef struct {
   char *uuid;
@@ -698,6 +722,70 @@ clipboard_owner_change_cb (GtkClipboard *clipboard,
                                  app);
 }
 
+/* Preferences */
+
+struct PrefsLaunchData {
+  GWeakRef app_ref;
+  char* profile_uuid;
+  char* hint;
+  unsigned timestamp;
+};
+
+static auto
+prefs_launch_data_new(TerminalApp* app,
+                      char const* profile_uuid,
+                      char const* hint,
+                      unsigned timestamp)
+{
+  auto data = g_new(PrefsLaunchData, 1);
+  g_weak_ref_init(&data->app_ref, app);
+  data->profile_uuid = g_strdup(profile_uuid);
+  data->hint = g_strdup(hint);
+  data->timestamp = timestamp;
+
+  return data;
+}
+
+static void
+prefs_launch_data_free(PrefsLaunchData* data)
+{
+  g_weak_ref_clear(&data->app_ref);
+  g_free(data->profile_uuid);
+  g_free(data->hint);
+  g_free(data);
+}
+
+static void
+launch_prefs_cb(GObject* source,
+                GAsyncResult* result,
+                void* user_data)
+{
+  auto const data = reinterpret_cast<PrefsLaunchData*>(user_data);
+  auto const app = reinterpret_cast<TerminalApp*>(g_weak_ref_get(&data->app_ref));
+
+  // @process holds a ref on itself via the g_subprocess_wait_async() call,
+  // so we only keep a weak ref that gets cleared when the process exits.
+  gs_free_error GError* error = nullptr;
+  gs_unref_object auto process = terminal_prefs_process_new_finish(result, &error);
+  if (app)
+    g_weak_ref_init(&app->prefs_process_ref, process);
+
+  if (process) {
+    _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                          "Preferences process launched successfully.\n");
+
+    terminal_prefs_process_show(process,
+                                data->profile_uuid,
+                                data->hint,
+                                data->timestamp);
+  } else {
+    _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                          "Failed to launch preferences process: %s\n", error->message);
+  }
+
+  prefs_launch_data_free(data);
+}
+
 /* Callbacks from former app menu.
  * The preferences one is still used with the "--preferences" cmdline option. */
 
@@ -708,7 +796,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, nullptr, nullptr);
+  terminal_app_edit_preferences (app, nullptr, nullptr, gtk_get_current_event_time());
 }
 
 static void
@@ -742,6 +830,8 @@ app_menu_quit_cb (GSimpleAction *action,
     gtk_widget_destroy (GTK_WIDGET (window));
 }
 
+#endif /* TERMINAL_SERVER */
+
 /* Class implementation */
 
 G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
@@ -757,14 +847,6 @@ terminal_app_activate (GApplication *application)
 static void
 terminal_app_startup (GApplication *application)
 {
-  TerminalApp *app = TERMINAL_APP (application);
-  const GActionEntry action_entries[] = {
-    { "preferences", app_menu_preferences_cb,   nullptr, nullptr, nullptr },
-    { "help",        app_menu_help_cb,          nullptr, nullptr, nullptr },
-    { "about",       app_menu_about_cb,         nullptr, nullptr, nullptr },
-    { "quit",        app_menu_quit_cb,          nullptr, nullptr, nullptr }
-  };
-
   g_application_set_resource_base_path (application, TERMINAL_RESOURCES_PATH_PREFIX);
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
@@ -772,11 +854,21 @@ terminal_app_startup (GApplication *application)
   /* Need to set the WM class (bug #685742) */
   gdk_set_program_class("Gnome-terminal");
 
+  app_load_css (application);
+
+#ifdef TERMINAL_SERVER
+  GActionEntry const action_entries[] = {
+    { "preferences", app_menu_preferences_cb,   nullptr, nullptr, nullptr },
+    { "help",        app_menu_help_cb,          nullptr, nullptr, nullptr },
+    { "about",       app_menu_about_cb,         nullptr, nullptr, nullptr },
+    { "quit",        app_menu_quit_cb,          nullptr, nullptr, nullptr }
+  };
+
   g_action_map_add_action_entries (G_ACTION_MAP (application),
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    application);
 
-  app_load_css (application);
+  auto const app = TERMINAL_APP(application);
 
   /* Figure out whether the shell shows the menubar */
   gboolean shell_shows_menubar;
@@ -796,22 +888,42 @@ terminal_app_startup (GApplication *application)
     gtk_application_set_menubar (GTK_APPLICATION (app),
                                  terminal_app_get_menubar (app));
 
+#endif /* TERMINAL_SERVER */
+
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
 
 /* GObjectClass impl */
 
 static void
-terminal_app_init (TerminalApp *app)
+terminal_app_init (TerminalApp* app)
 {
+#ifdef TERMINAL_SERVER
+  g_weak_ref_init(&app->prefs_process_ref, nullptr);
+
+  app->screen_map = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, nullptr);
+#endif
+}
+
+static void
+terminal_app_constructed(GObject *object)
+{
+  auto app = TERMINAL_APP(object);
+
+  G_OBJECT_CLASS(terminal_app_parent_class)->constructed(object);
+
   terminal_app_init_debug ();
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
+  if (app->settings_backend == nullptr)
+    app->settings_backend = g_settings_backend_get_default ();
+
   app->schema_source = terminal_g_settings_schema_source_get_default();
 
   /* Desktop proxy settings */
-  app->system_proxy_settings = terminal_g_settings_new(app->schema_source,
+  app->system_proxy_settings = terminal_g_settings_new(app->settings_backend,
+                                                       app->schema_source,
                                                        SYSTEM_PROXY_SETTINGS_SCHEMA);
 
   /* Since there is no way to get the schema ID of a child schema, we cannot
@@ -822,28 +934,35 @@ terminal_app_init (TerminalApp *app)
    * we construct the child GSettings directly.
    */
   app->system_proxy_protocol_settings[TERMINAL_PROXY_HTTP] =
-    terminal_g_settings_new(app->schema_source,
+    terminal_g_settings_new(app->settings_backend,
+                            app->schema_source,
                             SYSTEM_HTTP_PROXY_SETTINGS_SCHEMA);
   app->system_proxy_protocol_settings[TERMINAL_PROXY_HTTPS] =
-    terminal_g_settings_new(app->schema_source,
+    terminal_g_settings_new(app->settings_backend,
+                            app->schema_source,
                             SYSTEM_HTTPS_PROXY_SETTINGS_SCHEMA);
   app->system_proxy_protocol_settings[TERMINAL_PROXY_FTP] =
-    terminal_g_settings_new(app->schema_source,
+    terminal_g_settings_new(app->settings_backend,
+                            app->schema_source,
                             SYSTEM_FTP_PROXY_SETTINGS_SCHEMA);
   app->system_proxy_protocol_settings[TERMINAL_PROXY_SOCKS] =
-    terminal_g_settings_new(app->schema_source,
+    terminal_g_settings_new(app->settings_backend,
+                            app->schema_source,
                             SYSTEM_SOCKS_PROXY_SETTINGS_SCHEMA);
 
   /* Desktop Interface settings */
-  app->desktop_interface_settings = terminal_g_settings_new(app->schema_source,
+  app->desktop_interface_settings = terminal_g_settings_new(app->settings_backend,
+                                                            app->schema_source,
                                                             DESKTOP_INTERFACE_SETTINGS_SCHEMA);
 
   /* Terminal global settings */
-  app->global_settings = terminal_g_settings_new(app->schema_source,
+  app->global_settings = terminal_g_settings_new(app->settings_backend,
+                                                 app->schema_source,
                                                  TERMINAL_SETTING_SCHEMA);
 
   /* Gtk debug settings */
-  app->gtk_debug_settings = terminal_g_settings_new(app->schema_source,
+  app->gtk_debug_settings = terminal_g_settings_new(app->settings_backend,
+                                                    app->schema_source,
                                                     GTK_DEBUG_SETTING_SCHEMA);
 
   /* These are internal settings that exists only for distributions
@@ -860,6 +979,7 @@ terminal_app_init (TerminalApp *app)
                     G_CALLBACK (terminal_app_theme_variant_changed_cb),
                     gtk_settings);
 
+#ifdef TERMINAL_SERVER
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();
   app->clipboard = gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);
@@ -872,14 +992,15 @@ terminal_app_init (TerminalApp *app)
       !gdk_display_supports_selection_notification (display))
     g_printerr ("Display does not support owner-change; copy/paste will be broken!\n");
 #endif
+#endif /* TERMINAL_SERVER */
 
   /* Get the profiles */
-  app->profiles_list = terminal_profiles_list_new(app->schema_source);
+  app->profiles_list = terminal_profiles_list_new(app->settings_backend,
+                                                  app->schema_source);
 
-  app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
-
-  gs_unref_object GSettings *settings =
-    terminal_g_settings_new_with_path(app->schema_source,
+  gs_unref_object auto settings =
+    terminal_g_settings_new_with_path(app->settings_backend,
+                                      app->schema_source,
                                       TERMINAL_KEYBINDINGS_SCHEMA,
                                       TERMINAL_KEYBINDINGS_SCHEMA_PATH);
   terminal_accels_init (G_APPLICATION (app), settings, app->use_headerbar);
@@ -888,8 +1009,9 @@ terminal_app_init (TerminalApp *app)
 static void
 terminal_app_finalize (GObject *object)
 {
-  TerminalApp *app = TERMINAL_APP (object);
+  auto app = TERMINAL_APP(object);
 
+#ifdef TERMINAL_SERVER
   g_signal_handlers_disconnect_by_func (app->clipboard,
                                         (void*)clipboard_owner_change_cb,
                                         app);
@@ -899,6 +1021,7 @@ terminal_app_finalize (GObject *object)
                                         (void*)terminal_app_update_profile_menus,
                                         app);
   g_hash_table_destroy (app->screen_map);
+#endif
 
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
@@ -907,7 +1030,9 @@ terminal_app_finalize (GObject *object)
     g_object_unref(app->system_proxy_protocol_settings[i]);
   g_clear_object (&app->gtk_debug_settings);
   g_settings_schema_source_unref(app->schema_source);
+  g_clear_object (&app->settings_backend);
 
+#ifdef TERMINAL_SERVER
   g_clear_object (&app->menubar);
   g_clear_object (&app->menubar_new_terminal_section);
   g_clear_object (&app->menubar_set_profile_section);
@@ -916,10 +1041,39 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->headermenu_set_profile_section);
   g_clear_object (&app->set_profile_menu);
 
+  {
+    gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
+    if (process)
+      terminal_prefs_process_abort(process);
+  }
+
+  g_weak_ref_clear(&app->prefs_process_ref);
+#endif /* TERMINAL_SERVER */
+
   terminal_accels_shutdown ();
 
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 }
+
+static void
+terminal_app_set_property(GObject* object,
+                          guint prop_id,
+                          GValue const* value,
+                          GParamSpec* pspec)
+{
+  auto app = TERMINAL_APP(object);
+
+  switch (prop_id) {
+  case PROP_SETTINGS_BACKEND:
+    app->settings_backend = G_SETTINGS_BACKEND(g_value_dup_object(value));
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
+  }
+}
+
+#ifdef TERMINAL_SERVER
 
 static gboolean
 terminal_app_dbus_register (GApplication    *application,
@@ -991,18 +1145,33 @@ terminal_app_dbus_unregister (GApplication    *application,
                                                                     object_path);
 }
 
+#endif /* TERMINAL_SERVER */
+
 static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GApplicationClass *g_application_class = G_APPLICATION_CLASS (klass);
 
+  object_class->constructed = terminal_app_constructed;
   object_class->finalize = terminal_app_finalize;
+  object_class->set_property = terminal_app_set_property;
+
+  g_object_class_install_property
+    (object_class,
+     PROP_SETTINGS_BACKEND,
+     g_param_spec_object("settings-backend", nullptr, nullptr,
+                         G_TYPE_SETTINGS_BACKEND,
+                         GParamFlags(G_PARAM_WRITABLE |
+                                     G_PARAM_CONSTRUCT_ONLY |
+                                     G_PARAM_STATIC_STRINGS)));
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
+#ifdef TERMINAL_SERVER
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
+#endif
 
   signals[CLIPBOARD_TARGETS_CHANGED] =
     g_signal_new (I_("clipboard-targets-changed"),
@@ -1016,17 +1185,20 @@ terminal_app_class_init (TerminalAppClass *klass)
 
 /* Public API */
 
-GApplication *
-terminal_app_new (const char *app_id)
+GApplication*
+terminal_app_new(char const* app_id,
+                 GApplicationFlags flags,
+                 GSettingsBackend* backend)
 {
-  const GApplicationFlags flags = G_APPLICATION_IS_SERVICE;
-
   return reinterpret_cast<GApplication*>
     (g_object_new (TERMINAL_TYPE_APP,
 		   "application-id", app_id ? app_id : TERMINAL_APPLICATION_ID,
 		   "flags", flags,
+                   "settings-backend", backend,
 		   nullptr));
 }
+
+#ifdef TERMINAL_SERVER
 
 TerminalScreen *
 terminal_app_get_screen_by_uuid (TerminalApp *app,
@@ -1149,12 +1321,34 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
   return app->clipboard_targets;
 }
 
+#endif /* TERMINAL_SERVER */
+
 void
-terminal_app_edit_preferences (TerminalApp     *app,
-                               GSettings       *profile,
-                               const char      *widget_name)
+terminal_app_edit_preferences(TerminalApp* app,
+                              GSettings* profile,
+                              char const* hint,
+                              unsigned timestamp)
 {
-  terminal_prefs_show_preferences (profile, widget_name);
+#ifdef TERMINAL_SERVER
+  gs_free char* uuid = nullptr;
+  if (profile)
+    uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+
+  gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
+  if (process) {
+    terminal_prefs_process_show(process,
+                                uuid,
+                                hint,
+                                timestamp);
+  } else {
+    terminal_prefs_process_new_async(nullptr, // cancellable,
+                                     GAsyncReadyCallback(launch_prefs_cb),
+                                     prefs_launch_data_new(app, uuid, hint, timestamp));
+  }
+#endif /* TERMINAL_SERVER */
+#ifdef TERMINAL_PREFERENCES
+  terminal_prefs_show_preferences(profile, hint, timestamp);
+#endif
 }
 
 /**
@@ -1167,6 +1361,8 @@ terminal_app_get_profiles_list (TerminalApp *app)
 {
   return app->profiles_list;
 }
+
+#ifdef TERMINAL_SERVER
 
 /**
  * terminal_app_get_menubar:
@@ -1220,6 +1416,20 @@ GMenuModel *
 terminal_app_get_profile_section (TerminalApp *app)
 {
   return G_MENU_MODEL (app->set_profile_menu);
+}
+
+#endif /* TERMINAL_SERVER */
+
+/**
+ * terminal_app_get_settings_backend:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the #GSettingsBackend to use for all #GSettings instances
+ */
+GSettingsBackend*
+terminal_app_get_settings_backend(TerminalApp *app)
+{
+  return app->settings_backend;
 }
 
 /**
@@ -1310,15 +1520,16 @@ terminal_app_get_system_font (TerminalApp *app)
   return pango_font_description_from_string (font);
 }
 
-/**
- * FIXME
- */
+#ifdef TERMINAL_SERVER
+
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
   g_warn_if_fail (app->object_manager != nullptr);
   return app->object_manager;
 }
+
+#endif /* TERMINAL_SERVER */
 
 gboolean
 terminal_app_get_menu_unified (TerminalApp *app)

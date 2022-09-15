@@ -1516,7 +1516,8 @@ info_bar_response_cb (GtkWidget *info_bar,
     case RESPONSE_EDIT_PREFERENCES:
       terminal_app_edit_preferences (terminal_app_get (),
                                      terminal_screen_get_profile (screen),
-                                     "custom-command-entry");
+                                     "custom-command-entry",
+                                     gtk_get_current_event_time());
       break;
     default:
       gtk_widget_destroy (info_bar);

@@ -21,7 +21,6 @@
 #include <string.h>
 
 #include <uuid.h>
-#include <dconf.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -716,7 +715,9 @@ prefs_dialog_destroy_cb (GtkWidget *widget,
 }
 
 void
-terminal_prefs_show_preferences (GSettings *profile, const char *widget_name)
+terminal_prefs_show_preferences(GSettings* profile,
+                                char const* widget_name,
+                                unsigned timestamp)
 {
   TerminalApp *app = terminal_app_get ();
   PrefData *data;
@@ -920,5 +921,5 @@ done:
 
   terminal_util_dialog_focus_widget (the_pref_data->builder, widget_name);
 
-  gtk_window_present (GTK_WINDOW (the_pref_data->dialog));
+  gtk_window_present_with_time(GTK_WINDOW(the_pref_data->dialog), timestamp);
 }

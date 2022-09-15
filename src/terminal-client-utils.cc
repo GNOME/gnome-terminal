@@ -21,9 +21,15 @@
 
 #include "config.h"
 
+#include <unistd.h>
 #include "terminal-client-utils.hh"
+#include "terminal-debug.hh"
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
+
+#ifdef TERMINAL_PREFERENCES
+#include "terminal-debug.hh"
+#endif
 
 #include <string.h>
 
@@ -35,6 +41,102 @@
 #include <gdk/gdkx.h>
 #endif
 #endif
+
+#ifdef ENABLE_DEBUG
+
+static char*
+get_binary_path_if_uninstalled(char const* install_dir) noexcept
+{
+#ifdef __linux__
+  char buf[1024];
+  auto const r = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
+  if (r < 0 || r >= ssize_t(sizeof(buf)))
+    return nullptr;
+
+  buf[r] = '\0'; // nul terminate
+
+  gs_free auto path = g_path_get_dirname(buf);
+  if (!path)
+    return nullptr;
+
+  if (g_str_equal(path, install_dir))
+    return nullptr;
+
+  return reinterpret_cast<char*>(g_steal_pointer(&path));
+#else
+  return nullptr;
+#endif /* __linux__ */
+}
+
+static char*
+get_path_if_uninstalled(char const* exe_install_dir,
+                        char const* file_name,
+                        GFileTest tests)
+{
+  gs_free auto path = get_binary_path_if_uninstalled(exe_install_dir);
+  if (!path)
+    return nullptr;
+
+  gs_free auto file = g_build_filename(path, file_name, nullptr);
+  if (!g_file_test(file, GFileTest(tests | G_FILE_TEST_EXISTS)))
+    return nullptr;
+
+  return reinterpret_cast<char*>(g_steal_pointer(&path));
+}
+
+#endif /* ENABLE_DEBUG */
+
+/**
+ * terminal_client_find_file_uninstalled:
+ * @exe_install_dir: the directory where the current exe is installed
+ * @file_install_dir: the directory where the file to locate is installed
+ * @file_name: the name of the file to locate
+ * @tests: extra tests from #GFileTest
+ *
+ * Tries to locate the directory that contains @file_name in a build directory,
+ * and returns the directory.  If @file_name is not found, returns the
+ * installed location for it.
+ */
+char*
+terminal_client_get_directory_uninstalled(char const* exe_install_dir,
+                                          char const *file_install_dir,
+                                          char const* file_name,
+                                          GFileTest tests)
+{
+#ifdef ENABLE_DEBUG
+  auto path = get_path_if_uninstalled(exe_install_dir, file_name, tests);
+  if (path)
+    return path;
+#endif /* ENABLE_DEBUG */
+
+  return g_strdup(file_install_dir);
+}
+
+/**
+ * terminal_client_find_file_uninstalled:
+ * @exe_install_dir: the directory where the current exe is installed
+ * @file_install_dir: the directory where the file to locate is installed
+ * @file_name: the name of the file to locate
+ * @tests: extra tests from #GFileTest
+ *
+ * Tries to locate the file @file_name in a build directory, and
+ * returns a full path to it.  If @file_name is not found, returns the
+ * installed location for it.
+ */
+char*
+terminal_client_get_file_uninstalled(char const* exe_install_dir,
+                                     char const *file_install_dir,
+                                     char const* file_name,
+                                     GFileTest tests)
+{
+#ifdef ENABLE_DEBUG
+  gs_free auto path = get_path_if_uninstalled(exe_install_dir, file_name, tests);
+  if (path)
+    return g_build_filename(path, file_name, nullptr);
+#endif /* ENABLE_DEBUG */
+
+  return g_build_filename(file_install_dir, file_name, nullptr);
+}
 
 /**
  * terminal_client_append_create_instance_options:
@@ -338,26 +440,3 @@ out:
 }
 
 #endif /* !TERMINAL_NAUTILUS */
-
-GSettings*
-terminal_g_settings_new_with_path (GSettingsSchemaSource* source,
-                                   char const* schema_id,
-                                   char const* path)
-{
-  gs_unref_settings_schema GSettingsSchema* schema =
-    g_settings_schema_source_lookup(source,
-                                    schema_id,
-                                    TRUE /* recursive */);
-  g_assert_nonnull(schema);
-
-  return g_settings_new_full(schema,
-                             nullptr /* default backend */,
-                             path);
-}
-
-GSettings*
-terminal_g_settings_new(GSettingsSchemaSource* source,
-                        char const* schema_id)
-{
-  return terminal_g_settings_new_with_path(source, schema_id, nullptr);
-}

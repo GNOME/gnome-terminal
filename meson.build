@@ -55,7 +55,6 @@ gtk_req_version              = '3.22.27'
 gtk_min_req_version          = '3.18'
 gtk_max_allowed_version      = '3.24'
 
-dconf_req_version            = '0.14.0'
 libnautilus_ext_req_version  = '43'
 pcre2_req_version            = '10.00'
 schemas_req_version          = '0.1.0'
@@ -71,6 +70,7 @@ gt_micro_version = version_split[2].to_int()
 
 # Directories
 
+gt_bindir     = get_option('bindir')
 gt_datadir    = get_option('datadir')
 gt_includedir = get_option('includedir')
 gt_libdir     = get_option('libdir')
@@ -336,7 +336,6 @@ add_project_arguments(global_cxxflags, language: 'cpp')
 
 vte_dep       = dependency(vte_req,        version: '>=' + vte_req_version)
 
-dconf_dep     = dependency('dconf',        version: '>=' + dconf_req_version)
 gio_dep       = dependency('gio-2.0',      version: '>=' + glib_req_version)
 gio_unix_dep  = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
 glib_dep      = dependency('glib-2.0',     version: '>=' + glib_req_version)

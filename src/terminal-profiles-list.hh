@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-TerminalSettingsList *terminal_profiles_list_new(GSettingsSchemaSource* schema_source);
+TerminalSettingsList *terminal_profiles_list_new(GSettingsBackend* backend,
+                                                 GSettingsSchemaSource* schema_source);
 
 GList *terminal_profiles_list_ref_children_sorted (TerminalSettingsList *list);
 

@@ -65,14 +65,17 @@ valid_uuid (const char *str,
 
 /**
  * terminal_profiles_list_new:
+ * @backend: a #GSettingsBackend
  * @schema_source: a #GSettingsSchemaSource
  *
  * Returns: (transfer full): a new #TerminalSettingsList for the profiles list
  */
 TerminalSettingsList *
-terminal_profiles_list_new(GSettingsSchemaSource* schema_source)
+terminal_profiles_list_new(GSettingsBackend* backend,
+                           GSettingsSchemaSource* schema_source)
 {
-  return terminal_settings_list_new (schema_source,
+  return terminal_settings_list_new (backend,
+                                     schema_source,
                                      TERMINAL_PROFILES_PATH_PREFIX,
                                      TERMINAL_PROFILES_LIST_SCHEMA,
                                      TERMINAL_PROFILE_SCHEMA,

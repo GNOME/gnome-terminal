@@ -157,6 +157,7 @@ init_server (int argc,
       g_printerr ("Failed to parse arguments: %s\n", error->message);
       g_error_free (error);
     }
+
     return _EXIT_FAILURE_GTK_INIT;
   }
 
@@ -166,7 +167,7 @@ init_server (int argc,
   }
 
   /* Now we can create the app */
-  GApplication *app = terminal_app_new (app_id);
+  auto const app = terminal_app_new (app_id, G_APPLICATION_IS_SERVICE, nullptr);
   g_free (app_id);
   app_id = nullptr;
 

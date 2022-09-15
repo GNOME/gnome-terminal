@@ -71,8 +71,6 @@ char **terminal_util_get_etc_shells (void);
 
 gboolean terminal_util_get_is_shell (const char *command);
 
-GSettingsSchemaSource* terminal_g_settings_schema_source_get_default(void);
-
 const GdkRGBA *terminal_g_settings_get_rgba (GSettings  *settings,
                                              const char *key,
                                              GdkRGBA    *rgba);

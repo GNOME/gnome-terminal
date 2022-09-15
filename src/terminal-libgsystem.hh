@@ -58,6 +58,7 @@ GS_DEFINE_CLEANUP_FUNCTION0(GKeyFile*, gs_local_key_file_unref, g_key_file_unref
 GS_DEFINE_CLEANUP_FUNCTION0(GList*, gs_local_list_free, g_list_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GMatchInfo*, gs_local_match_info_free, g_match_info_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GObject*, gs_local_obj_unref, g_object_unref)
+GS_DEFINE_CLEANUP_FUNCTION0(GOptionContext*, gs_local_option_context_free, g_option_context_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GPtrArray*, gs_local_ptrarray_unref, g_ptr_array_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GRegex*, gs_local_regex_unref, g_regex_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GSettingsSchema*, gs_local_settings_schema_unref, g_settings_schema_unref)
@@ -262,6 +263,16 @@ static inline void gs_local_gstring_free (void *v) \
  * be %nullptr.
  */
 #define gs_free_gstring __attribute__ ((cleanup(gs_local_gstring_free)))
+
+/**
+ * gs_free_option_context:
+ *
+ * Call g_regex_unref() on a variable location when it goes out of
+ * scope.  Note that unlike g_option_context_free(), the variable may be
+ * %NULL.
+
+ */
+#define gs_free_option_context __attribute__ ((cleanup(gs_local_option_context_free)))
 
 G_END_DECLS
 
