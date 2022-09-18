@@ -255,7 +255,7 @@ terminal_prefs_process_initable_init(GInitable* initable,
   socket_fds[1] = -1;
 
   gs_free auto exe = terminal_client_get_file_uninstalled(TERM_LIBEXECDIR,
-                                                          TERM_PKGLIBDIR,
+                                                          TERM_LIBEXECDIR,
                                                           TERMINAL_PREFERENCES_BINARY_NAME,
                                                           G_FILE_TEST_IS_EXECUTABLE);
 

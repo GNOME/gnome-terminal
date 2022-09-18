@@ -385,7 +385,7 @@ handle_show_preferences(TerminalOptions *options,
   // If that isn't possible, launch the prefs binary directly
   auto launcher = g_subprocess_launcher_new(GSubprocessFlags(0));
   gs_free auto exe = terminal_client_get_file_uninstalled(TERM_BINDIR,
-                                                          TERM_PKGLIBDIR,
+                                                          TERM_LIBEXECDIR,
                                                           TERMINAL_PREFERENCES_BINARY_NAME,
                                                           G_FILE_TEST_IS_EXECUTABLE);
   char *argv[2] = {exe, nullptr};

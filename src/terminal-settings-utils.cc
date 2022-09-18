@@ -557,7 +557,7 @@ terminal_g_settings_schema_source_get_default(void)
 #if defined(TERMINAL_SERVER)
                                               TERM_LIBEXECDIR,
 #elif defined(TERMINAL_PREFERENCES)
-                                              TERM_PKGLIBDIR,
+                                              TERM_LIBEXECDIR,
 #else
 #error Need to define installed location
 #endif
