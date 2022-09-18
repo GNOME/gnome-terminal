@@ -18,6 +18,8 @@
 #include "config.h"
 #define G_SETTINGS_ENABLE_BACKEND
 
+#include <gio/gsettingsbackend.h>
+
 #include "terminal-settings-utils.hh"
 #include "terminal-client-utils.hh"
 #include "terminal-debug.hh"
@@ -216,6 +218,8 @@ terminal_g_settings_backend_erase_path(GSettingsBackend* backend,
   g_tree_unref(tree);
   return r;
 }
+
+#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 #define TERMINAL_SCHEMA_VERIFIER_ERROR (g_quark_from_static_string("TerminalSchemaVerifier"))
 
@@ -558,6 +562,8 @@ terminal_g_settings_schema_source_get_default(void)
                                               TERM_LIBEXECDIR,
 #elif defined(TERMINAL_PREFERENCES)
                                               TERM_LIBEXECDIR,
+#elif defined(TERMINAL_CLIENT)
+                                              TERM_BINDIR,
 #else
 #error Need to define installed location
 #endif
@@ -592,8 +598,6 @@ terminal_g_settings_schema_source_get_default(void)
   g_settings_schema_source_unref(reference_source);
   return g_settings_schema_source_ref(default_source);
 }
-
-#endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
 
 // BEGIN copied from glib/gio/gsettingsbackend.c
 

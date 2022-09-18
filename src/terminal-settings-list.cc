@@ -468,9 +468,7 @@ terminal_settings_list_constructed (GObject *object)
 
   g_object_get(object, "backend", &list->settings_backend, nullptr);
   g_assert(list->settings_backend);
-
-  if (list->schema_source == nullptr)
-    list->schema_source = g_settings_schema_source_get_default();
+  g_assert(list->schema_source);
 
   g_assert (list->schema_source != nullptr);
   g_assert (list->child_schema_id != nullptr);

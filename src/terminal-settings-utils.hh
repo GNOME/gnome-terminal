@@ -18,7 +18,6 @@
 #pragma once
 
 #include <gio/gio.h>
-#include <gio/gsettingsbackend.h>
 
 GSettings* terminal_g_settings_new (GSettingsBackend* backend,
                                     GSettingsSchemaSource* source,
