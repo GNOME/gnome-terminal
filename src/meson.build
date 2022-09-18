@@ -343,7 +343,7 @@ prefs_main = executable(
   include_directories: prefs_main_incs,
   dependencies: prefs_main_deps,
   install: true,
-  install_dir: gt_prefix / gt_pkglibdir,
+  install_dir: gt_prefix / gt_libexecdir,
   install_tag: 'runtime',
   sources: prefs_main_sources,
 )
