@@ -38,6 +38,7 @@
 #include "terminal-util.hh"
 #include "terminal-version.hh"
 #include "terminal-libgsystem.hh"
+#include "terminal-settings-utils.hh"
 
 static int verbosity = 1;
 
@@ -107,11 +108,23 @@ terminal_log_writer (GLogLevelFlags log_level,
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
+static void
+terminal_options_ensure_schema_source(TerminalOptions* options)
+{
+  if (options->schema_source)
+    return;
+
+  options->schema_source = terminal_g_settings_schema_source_get_default();
+}
+
 static TerminalSettingsList *
 terminal_options_ensure_profiles_list (TerminalOptions *options)
 {
-  if (options->profiles_list == nullptr)
-    options->profiles_list = terminal_profiles_list_new(nullptr, nullptr);
+  if (options->profiles_list == nullptr) {
+    terminal_options_ensure_schema_source(options);
+    options->profiles_list = terminal_profiles_list_new(nullptr /* default backend */,
+                                                        options->schema_source);
+  }
 
   return options->profiles_list;
 }
@@ -1264,8 +1277,11 @@ terminal_options_merge_config (TerminalOptions *options,
 void
 terminal_options_ensure_window (TerminalOptions *options)
 {
-  gs_unref_object GSettings *global_settings =
-    g_settings_new (TERMINAL_SETTING_SCHEMA);
+  terminal_options_ensure_schema_source(options);
+  gs_unref_object auto global_settings =
+    terminal_g_settings_new(nullptr, // default backend
+                            options->schema_source,
+                            TERMINAL_SETTING_SCHEMA);
 
   gs_free char *mode_str = g_settings_get_string (global_settings,
                                                   TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY);
@@ -1304,6 +1320,7 @@ terminal_options_free (TerminalOptions *options)
   g_free (options->sm_config_prefix);
 
   g_clear_object (&options->profiles_list);
+  g_clear_pointer (&options->schema_source, g_settings_schema_source_unref);
 
   g_free (options);
 }

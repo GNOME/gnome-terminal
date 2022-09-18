@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <stdio.h>
 
+#include <gio/gio.h>
 #include <gio/gunixfdlist.h>
 
 #include "terminal-profiles-list.hh"
@@ -63,6 +64,7 @@ enum
 
 typedef struct
 {
+  GSettingsSchemaSource* schema_source; /* may be nullptr */
   TerminalSettingsList *profiles_list; /* may be nullptr */
 
   gboolean print_environment;
