@@ -46,6 +46,16 @@ i18n.merge_file(
   install_dir: desktopdatadir,
 )
 
+i18n.merge_file(
+  input: gt_dns_name + '.Preferences.desktop.in',
+  install: true,
+  install_dir: desktopdatadir,
+  install_tag: 'runtime',
+  output: '@BASENAME@',
+  po_dir: po_dir,
+  type: 'desktop',
+)
+
 meson.add_install_script(
   'meson_desktopfile.py',
   desktopdatadir,
