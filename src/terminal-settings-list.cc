@@ -633,10 +633,14 @@ terminal_settings_list_new (GSettingsBackend* backend,
   g_return_val_if_fail (child_schema_id != nullptr, nullptr);
   g_return_val_if_fail (g_str_has_suffix (path, ":/"), nullptr);
 
+  gs_unref_settings_schema auto schema =
+    g_settings_schema_source_lookup(schema_source, schema_id, true);
+  g_assert_nonnull(schema);
+
   return reinterpret_cast<TerminalSettingsList*>(g_object_new (TERMINAL_TYPE_SETTINGS_LIST,
                                                                "backend", backend,
                                                                "schema-source", schema_source,
-							       "schema-id", schema_id,
+							       "settings-schema", schema,
 							       "child-schema-id", child_schema_id,
 							       "path", path,
 							       "flags", flags,
