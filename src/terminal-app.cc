@@ -852,7 +852,13 @@ terminal_app_startup (GApplication *application)
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
   /* Need to set the WM class (bug #685742) */
+#if defined(TERMINAL_SERVER)
   gdk_set_program_class("Gnome-terminal");
+#elif defined(TERMINAL_PREFERENCES)
+  gdk_set_program_class("Gnome-terminal-preferences");
+#else
+#error
+#endif
 
   app_load_css (application);
 
