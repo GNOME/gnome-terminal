@@ -70,6 +70,8 @@
 #include <gdk/gdkx.h>
 #endif
 
+#define GNOME_TERMINAL_PREFERENCES_ICON_NAME    "org.gnome.Terminal.Preferences"
+
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
@@ -920,7 +922,13 @@ terminal_app_constructed(GObject *object)
 
   terminal_app_init_debug ();
 
+#if defined(TERMINAL_SERVER)
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
+#elif defined(TERMINAL_PREFERENCES)
+  gtk_window_set_default_icon_name(GNOME_TERMINAL_PREFERENCES_ICON_NAME);
+#else
+#error
+#endif
 
   if (app->settings_backend == nullptr)
     app->settings_backend = g_settings_backend_get_default ();
