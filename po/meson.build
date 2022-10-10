@@ -13,7 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this programme.  If not, see <https://www.gnu.org/licenses/>.
 
-i18n.gettext(
+po_dir = meson.current_source_dir()
+
+gettext_targets = i18n.gettext(
   gt_gettext_domain,
   preset: 'glib',
 )

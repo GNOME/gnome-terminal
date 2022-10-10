@@ -26,7 +26,7 @@ project(
     'GPL-3.0-only', 'CC-BY-SA-3.0', # the documentation
     'GFDL-1.3-only',                # the appstream data
   ],
-  meson_version: '>= 0.60.0',
+  meson_version: '>= 0.62.0',
   version: '3.47.1',
 )
 
@@ -107,7 +107,6 @@ pkg   = import('pkgconfig')
 # i18n
 
 gt_gettext_domain = gt_name
-po_dir = meson.current_source_dir() / 'po'
 
 # Compilers
 
@@ -380,8 +379,8 @@ xsltproc = find_program('xsltproc')
 # Subdirs
 
 subdir('src')
-subdir('data')
 subdir('po')
+subdir('data')
 
 if get_option('docs')
   subdir('help')
