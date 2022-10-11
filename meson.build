@@ -18,7 +18,7 @@ project(
   ['c', 'cpp',],
   default_options: [
     'buildtype=release',
-    'warning_level=' + (meson.version().version_compare('>= 0.50.0') ? '0' : '1'),
+    'warning_level=0',
     'b_ndebug=false',
   ],
   license: [
