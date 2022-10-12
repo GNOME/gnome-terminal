@@ -238,6 +238,7 @@ terminal_client_get_environment_filters (void)
     "WATCHDOG_PID",
     "WATCHDOG_USEC",
     "WINDOWID",
+    "XDG_ACTIVATION_TOKEN",
     nullptr
   };
 
