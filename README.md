@@ -83,21 +83,21 @@ Also see https://wiki.gnome.org/Apps/Terminal/Debugging for more information.
 Debugging
 ---------
 
-After installing GNOME-TERMINAL with `-Ddebugg=true` flag, you can use `GNOME-TERMINAL_DEBUG` variable to control
+After installing GNOME-TERMINAL with `-Ddebugg=true` flag, you can use `GNOME_TERMINAL_DEBUG` variable to control
 GNOME-TERMINAL to print out the debug information
 
 ```
 # You should change gnome-terminal-[2.91] to the version you build
-$ GNOME-TERMINAL_DEBUG=selection ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=selection ./_build/src/app/gnome-terminal-2.91
 
 # Or, you can mixup with multiple logging level
-$ GNOME-TERMINAL_DEBUG=selection,draw,cell ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=selection,draw,cell ./_build/src/app/gnome-terminal-2.91
 
 $ Or, you can use `all` to print out all logging message
-$ GNOME-TERMINAL_DEBUG=all ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=all ./_build/src/app/gnome-terminal-2.91
 ```
 
-For logging level information, please refer to enum [Gnome-TerminalDebugFlags](src/debug.h).
+For logging level information, please refer to enum [TerminalDebugFlags](src/terminal-debug.hh).
 
 Contributing
 ------------
