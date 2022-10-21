@@ -87,14 +87,13 @@ After installing GNOME-TERMINAL with `-Ddebugg=true` flag, you can use `GNOME_TE
 GNOME-TERMINAL to print out the debug information
 
 ```
-# You should change gnome-terminal-[2.91] to the version you build
-$ GNOME_TERMINAL_DEBUG=selection ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=selection ./_build/src/gnome-terminal-server [...]
 
 # Or, you can mixup with multiple logging level
-$ GNOME_TERMINAL_DEBUG=selection,draw,cell ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=selection,draw,cell ./_build/src/gnome-terminal-server [...]
 
 $ Or, you can use `all` to print out all logging message
-$ GNOME_TERMINAL_DEBUG=all ./_build/src/app/gnome-terminal-2.91
+$ GNOME_TERMINAL_DEBUG=all ./_build/src/gnome-terminal-server [...]
 ```
 
 For logging level information, please refer to enum [TerminalDebugFlags](src/terminal-debug.hh).
