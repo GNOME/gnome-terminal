@@ -714,6 +714,13 @@ prefs_dialog_destroy_cb (GtkWidget *widget,
   g_free (data);
 }
 
+static void
+make_default_button_clicked_cb(GtkWidget* button,
+                               PrefData* data)
+{
+  terminal_app_make_default_terminal(terminal_app_get());
+}
+
 void
 terminal_prefs_show_preferences(GSettings* profile,
                                 char const* widget_name,
@@ -729,6 +736,7 @@ terminal_prefs_show_preferences(GSettings* profile,
   GtkWidget *new_tab_position_combo;
   GtkWidget *close_button, *help_button;
   GtkWidget *content_box, *general_frame, *keybindings_frame;
+  GtkWidget *always_check_default_button, *make_default_button;
   GSettings *settings;
 
   const GActionEntry action_entries[] = {
@@ -764,6 +772,8 @@ terminal_prefs_show_preferences(GSettings* profile,
                                        "disable-shortcuts-checkbutton", &disable_shortcuts_button,
                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
                                        "new-tab-position-combobox", &new_tab_position_combo,
+                                       "always-check-default-checkbutton", &always_check_default_button,
+                                       "make-default-button", &make_default_button,
                                        "accelerators-treeview", &tree_view,
                                        "the-stack", &data->stack,
                                        "the-listbox", &data->listbox,
@@ -855,6 +865,21 @@ terminal_prefs_show_preferences(GSettings* profile,
                    disable_menu_accel_button,
                    "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
+
+  g_settings_bind(settings,
+                  TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY,
+                  always_check_default_button,
+                  "active",
+                  GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
+
+  g_signal_connect(make_default_button, "clicked",
+                   G_CALLBACK(make_default_button_clicked_cb), data);
+
+  g_object_bind_property(app, "is-default-terminal",
+                         make_default_button, "sensitive",
+                         GBindingFlags(G_BINDING_DEFAULT |
+                                       G_BINDING_SYNC_CREATE |
+                                       G_BINDING_INVERT_BOOLEAN));
 
   /* Shortcuts page */
 

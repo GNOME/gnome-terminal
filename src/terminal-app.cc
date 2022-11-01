@@ -90,6 +90,8 @@
 
 enum {
   PROP_SETTINGS_BACKEND = 1,
+  PROP_IS_DEFAULT_TERMINAL,
+  PROP_ASK_DEFAULT_TERMINAL,
 };
 
 /*
@@ -145,8 +147,11 @@ struct _TerminalApp
   int n_clipboard_targets;
 
   GWeakRef prefs_process_ref;
+
 #endif /* TERMINAL_SERVER */
 
+  gboolean ask_default;
+  gboolean xte_is_default;
   gboolean unified_menu;
   gboolean use_headerbar;
 };
@@ -271,15 +276,8 @@ terminal_app_should_use_headerbar (TerminalApp *app)
   if (set)
     return use;
 
-  const char *desktop = g_getenv ("XDG_CURRENT_DESKTOP");
-  if (desktop == nullptr)
-    return FALSE;
-
-  char **desktops = g_strsplit (desktop, G_SEARCHPATH_SEPARATOR_S, -1);
-  use = strv_contains_gnome (desktops);
-  g_strfreev (desktops);
-
-  return use;
+  gs_strfreev auto desktops = terminal_util_get_desktops();
+  return strv_contains_gnome(desktops);
 }
 
 static gboolean
@@ -402,10 +400,28 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
+static void
+terminal_app_check_default(TerminalApp* app)
+{
+  // Only do this for the default app ID
+  gs_free char* app_id = nullptr;
+  g_object_get(app, "application-id", &app_id, nullptr);
+  if (!_terminal_debug_on(TERMINAL_DEBUG_DEFAULT) &&
+      !g_str_equal(app_id, TERMINAL_APPLICATION_ID))
+    return;
+
+  // Check whether gnome-terminal is the default terminal
+  // as per XDG-Terminal-Exec.
+  app->xte_is_default = terminal_util_is_default_terminal();
+
+  gboolean ask = false;
+  g_settings_get(app->global_settings, TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY, "b", &ask);
+  app->ask_default = (ask != false) && !app->xte_is_default;
+}
+
 #ifdef TERMINAL_SERVER
 
 static void terminal_app_update_profile_menus (TerminalApp *app);
-
 
 typedef struct {
   char *uuid;
@@ -849,6 +865,8 @@ terminal_app_activate (GApplication *application)
 static void
 terminal_app_startup (GApplication *application)
 {
+  auto const app = TERMINAL_APP(application);
+
   g_application_set_resource_base_path (application, TERMINAL_RESOURCES_PATH_PREFIX);
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
@@ -876,8 +894,6 @@ terminal_app_startup (GApplication *application)
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    application);
 
-  auto const app = TERMINAL_APP(application);
-
   /* Figure out whether the shell shows the menubar */
   gboolean shell_shows_menubar;
   g_object_get (gtk_settings_get_default (),
@@ -897,6 +913,8 @@ terminal_app_startup (GApplication *application)
                                  terminal_app_get_menubar (app));
 
 #endif /* TERMINAL_SERVER */
+
+  terminal_app_check_default(app);
 
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
@@ -1070,6 +1088,30 @@ terminal_app_finalize (GObject *object)
 }
 
 static void
+terminal_app_get_property(GObject* object,
+                          guint prop_id,
+                          GValue* value,
+                          GParamSpec* pspec)
+{
+  auto app = TERMINAL_APP(object);
+
+  switch (prop_id) {
+  case PROP_SETTINGS_BACKEND:
+    g_value_set_object(value, app->settings_backend);
+    break;
+  case PROP_IS_DEFAULT_TERMINAL:
+    g_value_set_boolean(value, app->xte_is_default);
+    break;
+  case PROP_ASK_DEFAULT_TERMINAL:
+    g_value_set_boolean(value, app->ask_default);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    break;
+  }
+}
+
+static void
 terminal_app_set_property(GObject* object,
                           guint prop_id,
                           GValue const* value,
@@ -1081,6 +1123,10 @@ terminal_app_set_property(GObject* object,
   case PROP_SETTINGS_BACKEND:
     app->settings_backend = G_SETTINGS_BACKEND(g_value_dup_object(value));
     break;
+  case PROP_ASK_DEFAULT_TERMINAL:
+    app->ask_default = g_value_get_boolean(value);
+    break;
+  case PROP_IS_DEFAULT_TERMINAL: // not writable
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -1169,6 +1215,7 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   object_class->constructed = terminal_app_constructed;
   object_class->finalize = terminal_app_finalize;
+  object_class->get_property = terminal_app_get_property;
   object_class->set_property = terminal_app_set_property;
 
   g_object_class_install_property
@@ -1176,9 +1223,25 @@ terminal_app_class_init (TerminalAppClass *klass)
      PROP_SETTINGS_BACKEND,
      g_param_spec_object("settings-backend", nullptr, nullptr,
                          G_TYPE_SETTINGS_BACKEND,
-                         GParamFlags(G_PARAM_WRITABLE |
+                         GParamFlags(G_PARAM_READWRITE |
                                      G_PARAM_CONSTRUCT_ONLY |
                                      G_PARAM_STATIC_STRINGS)));
+
+  g_object_class_install_property
+    (object_class,
+     PROP_IS_DEFAULT_TERMINAL,
+     g_param_spec_boolean("is-default-terminal", nullptr, nullptr,
+                          false,
+                          GParamFlags(G_PARAM_READABLE |
+                                      G_PARAM_STATIC_STRINGS)));
+
+  g_object_class_install_property
+    (object_class,
+     PROP_ASK_DEFAULT_TERMINAL,
+     g_param_spec_boolean("ask-default-terminal", nullptr, nullptr,
+                          false,
+                          GParamFlags(G_PARAM_READWRITE |
+                                      G_PARAM_STATIC_STRINGS)));
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
@@ -1572,4 +1635,35 @@ terminal_app_get_dialog_use_headerbar (TerminalApp *app)
                 nullptr);
 
   return dialog_use_header && app->use_headerbar;
+}
+
+gboolean
+terminal_app_is_default_terminal(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), false);
+  return app->xte_is_default;
+}
+
+gboolean
+terminal_app_get_ask_default_terminal(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), false);
+  return app->ask_default;
+}
+
+void
+terminal_app_unset_ask_default_terminal(TerminalApp* app)
+{
+  g_return_if_fail(TERMINAL_IS_APP(app));
+  app->ask_default = false;
+  g_object_notify(G_OBJECT(app), "ask-default-terminal");
+}
+
+void
+terminal_app_make_default_terminal(TerminalApp* app)
+{
+  g_return_if_fail(TERMINAL_IS_APP(app));
+  terminal_util_make_default_terminal();
+  app->xte_is_default = terminal_util_is_default_terminal();
+  g_object_notify(G_OBJECT(app), "is-default-terminal");
 }

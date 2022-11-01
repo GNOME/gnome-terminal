@@ -93,6 +93,7 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_TAB_POSITION_KEY               "tab-position"
 #define TERMINAL_SETTING_THEME_VARIANT_KEY              "theme-variant"
 #define TERMINAL_SETTING_UNIFIED_MENU_KEY               "unified-menu"
+#define TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY       "always-check-default-terminal"
 
 #define TERMINAL_SETTINGS_LIST_LIST_KEY                 "list"
 #define TERMINAL_SETTINGS_LIST_DEFAULT_KEY              "default"

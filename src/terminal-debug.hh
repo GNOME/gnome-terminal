@@ -36,6 +36,7 @@ typedef enum {
   TERMINAL_DEBUG_SETTINGS_LIST = 1 << 8,
   TERMINAL_DEBUG_SEARCH        = 1 << 9,
   TERMINAL_DEBUG_BRIDGE        = 1 << 10,
+  TERMINAL_DEBUG_DEFAULT       = 1 << 11,
 } TerminalDebugFlags;
 
 void _terminal_debug_init(void);

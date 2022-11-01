@@ -56,6 +56,7 @@ struct _TerminalWindowPrivate
   GtkWidget *menubar;
   TerminalMdiContainer *mdi_container;
   GtkWidget *main_vbox;
+  GtkWidget* ask_default_infobar;
   TerminalScreen *active_screen;
 
   /* Size of a character cell in pixels */
@@ -1938,6 +1939,44 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window,
   gtk_widget_show (tabs_menu_button);
 }
 
+static void
+window_hide_ask_default_terminal(TerminalWindow* window)
+{
+  auto const priv = window->priv;
+
+  if (!priv->ask_default_infobar ||
+      !gtk_widget_get_visible(priv->ask_default_infobar))
+    return;
+
+  gtk_widget_hide(priv->ask_default_infobar);
+  terminal_window_update_size(window);
+}
+
+static void
+window_sync_ask_default_terminal_cb(TerminalApp* app,
+                                    GParamSpec* pspect,
+                                    TerminalWindow* window)
+{
+  window_hide_ask_default_terminal(window);
+}
+
+static void
+default_infobar_response_cb(GtkInfoBar* infobar,
+                            int response,
+                            TerminalWindow* window)
+{
+  auto const app = terminal_app_get();
+
+  if (response == GTK_RESPONSE_YES) {
+    terminal_app_make_default_terminal(app);
+    terminal_app_unset_ask_default_terminal(app);
+  } else if (response == GTK_RESPONSE_NO) {
+    terminal_app_unset_ask_default_terminal(app);
+  } else { // GTK_RESPONSE_CLOSE
+    window_hide_ask_default_terminal(window);
+  }
+}
+
 /*****************************************/
 
 static void
@@ -2243,6 +2282,31 @@ terminal_window_init (TerminalWindow *window)
     priv->use_default_menubar_visibility = !use_headerbar;
   }
 
+  /* Add "Set as default terminal" infobar */
+  if (terminal_app_get_ask_default_terminal(app)) {
+    auto const infobar = priv->ask_default_infobar = gtk_info_bar_new();
+    gtk_info_bar_set_show_close_button(GTK_INFO_BAR(infobar), true);
+    gtk_info_bar_set_message_type(GTK_INFO_BAR(infobar), GTK_MESSAGE_QUESTION);
+
+    auto const question = gtk_label_new (_("Set GNOME Terminal as your default terminal?"));
+    gtk_label_set_line_wrap(GTK_LABEL(question), true);
+    auto const box = gtk_info_bar_get_content_area(GTK_INFO_BAR(infobar));
+    gtk_container_add(GTK_CONTAINER(box), question);
+    gtk_widget_show(question);
+
+    gtk_info_bar_add_button(GTK_INFO_BAR(infobar), _("_Yes"), GTK_RESPONSE_YES);
+    gtk_info_bar_add_button(GTK_INFO_BAR(infobar), _("_No"), GTK_RESPONSE_NO);
+
+    g_signal_connect (infobar, "response",
+                      G_CALLBACK(default_infobar_response_cb), window);
+
+    gtk_box_pack_start(GTK_BOX(priv->main_vbox), infobar, false, true, 0);
+
+    gtk_widget_show(infobar);
+    g_signal_connect(app, "notify::ask-default-terminal",
+                     G_CALLBACK(window_sync_ask_default_terminal_cb), window);
+  }
+
   /* Maybe make Inspector available */
   action = lookup_action (window, "inspector");
   gtk_debug_settings = terminal_app_get_gtk_debug_settings (app);
@@ -2338,6 +2402,13 @@ terminal_window_dispose (GObject *object)
                                           (void*)clipboard_targets_changed_cb,
                                           window);
     priv->clipboard = nullptr;
+  }
+
+  if (priv->ask_default_infobar) {
+    g_signal_handlers_disconnect_by_func(app,
+                                         (void*)window_sync_ask_default_terminal_cb,
+                                         window);
+    priv->ask_default_infobar = nullptr;
   }
 
   remove_popup_info (window);
@@ -2647,6 +2718,9 @@ terminal_window_update_size (TerminalWindow *window)
        * around otherwise tiled windows. */
       return;
     }
+
+  if (!priv->active_screen)
+    return;
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
