@@ -52,6 +52,7 @@ GS_DEFINE_CLEANUP_FUNCTION0(GArray*, gs_local_array_unref, g_array_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GBytes*, gs_local_bytes_unref, g_bytes_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GChecksum*, gs_local_checksum_free, g_checksum_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GDateTime*, gs_local_date_time_unref, g_date_time_unref)
+GS_DEFINE_CLEANUP_FUNCTION0(GDir*, gs_local_dir_close, g_dir_close)
 GS_DEFINE_CLEANUP_FUNCTION0(GError*, gs_local_free_error, g_error_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GKeyFile*, gs_local_key_file_unref, g_key_file_unref)
@@ -273,6 +274,34 @@ static inline void gs_local_gstring_free (void *v) \
 
  */
 #define gs_free_option_context __attribute__ ((cleanup(gs_local_option_context_free)))
+
+/**
+ * gs_close_dir:
+ *
+ * Call g_dir_close() on a variable location when it goes out of
+ * scope.
+
+ */
+#define gs_close_dir __attribute__ ((cleanup(gs_local_dir_close)))
+
+static inline void gs_local_fd_close (void *v)
+{
+  auto fd = *reinterpret_cast<int*>(v);
+  if (fd != -1) {
+    auto const errsv = errno;
+    close(fd);
+    errno = errsv;
+  }
+}
+
+/**
+ * gs_free_close:
+ *
+ * Call close() on a variable location when it goes out of
+ * scope.
+
+ */
+#define gs_close_fd __attribute__ ((cleanup(gs_local_fd_close)))
 
 G_END_DECLS
 

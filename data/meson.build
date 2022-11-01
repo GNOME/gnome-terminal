@@ -62,6 +62,14 @@ meson.add_install_script(
   gt_dns_name + '.desktop',
 )
 
+# Install a symlink for xdg-terminal-exec
+install_symlink(
+  gt_dns_name + '.desktop',
+  install_dir: gt_datadir / 'xdg-terminals',
+  install_tag: 'runtime',
+  pointing_to: '..' / 'applications' / (gt_dns_name + '.desktop'),
+)
+
 # Subdirs
 
 subdir('icons')

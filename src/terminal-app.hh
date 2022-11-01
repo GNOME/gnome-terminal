@@ -129,6 +129,14 @@ GSettings *terminal_app_get_gtk_debug_settings (TerminalApp *app);
 
 PangoFontDescription *terminal_app_get_system_font (TerminalApp *app);
 
+gboolean terminal_app_is_default_terminal(TerminalApp* app);
+
+gboolean terminal_app_get_ask_default_terminal(TerminalApp* app);
+
+void terminal_app_unset_ask_default_terminal(TerminalApp* app);
+
+void terminal_app_make_default_terminal(TerminalApp* app);
+
 G_END_DECLS
 
 #endif /* !TERMINAL_APP_H */

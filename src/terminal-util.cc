@@ -21,10 +21,12 @@
 
 #include "config.h"
 
+#include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <langinfo.h>
 #include <errno.h>
@@ -40,6 +42,8 @@
 #include "terminal-accels.hh"
 #include "terminal-app.hh"
 #include "terminal-client-utils.hh"
+#include "terminal-debug.hh"
+#include "terminal-defines.hh"
 #include "terminal-intl.hh"
 #include "terminal-util.hh"
 #include "terminal-version.hh"
@@ -1569,4 +1573,358 @@ terminal_util_check_envv(char const* const* strv)
   }
 
   return TRUE;
+}
+
+char**
+terminal_util_get_desktops(void)
+{
+  auto const desktop = g_getenv("XDG_CURRENT_DESKTOP");
+  if (!desktop)
+    return nullptr;
+
+  return g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
+}
+
+#define XTE_CONFIG_DIRNAME  "xdg-terminals"
+#define XTE_CONFIG_FILENAME "xdg-terminals.list"
+
+#define NEWLINE '\n'
+#define DOT_DESKTOP ".desktop"
+#define TERMINAL_DESKTOP_FILENAME TERMINAL_APPLICATION_ID DOT_DESKTOP
+
+static bool
+xte_data_check_one(char const* file,
+                   bool full)
+{
+  if (!g_file_test(file, G_FILE_TEST_EXISTS)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Desktop file \"%s\" does not exist.\n",
+                          file);
+    return false;
+  }
+
+  if (!full)
+    return true;
+
+  gs_free_error GError* error = nullptr;
+  gs_unref_key_file auto kf = g_key_file_new();
+  if (!g_key_file_load_from_file(kf,
+                                 file,
+                                 GKeyFileFlags(G_KEY_FILE_NONE),
+                                 &error)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to load  \"%s\" as keyfile: %s\n",
+                          file, error->message);
+
+    return false;
+  }
+
+  if (!g_key_file_has_group(kf, G_KEY_FILE_DESKTOP_GROUP)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Keyfile file \"%s\" is not a desktop file.\n",
+                          file);
+    return false;
+  }
+
+  // As per the XDG desktop entry spec, the TryExec key contains the name
+  // of an executable that can be used to determine if the programme is
+  // actually present.
+  gs_free auto try_exec = g_key_file_get_string(kf,
+                                                G_KEY_FILE_DESKTOP_GROUP,
+                                                G_KEY_FILE_DESKTOP_KEY_TRY_EXEC,
+                                                nullptr);
+  if (!try_exec) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Desktop file \"%s\" has no TryExec field.\n",
+                          file);
+
+    return false;
+  }
+
+  gs_free auto exec_path = g_find_program_in_path(try_exec);
+  auto const exists = exec_path != nullptr;
+
+  _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                        "Desktop file \"%s\" is %sinstalled.\n",
+                        file, exists ? "" : "not ");
+
+  return exists;
+}
+
+static bool
+xte_data_check(char const* name,
+               bool full)
+{
+  gs_free auto user_path = g_build_filename(g_get_user_data_dir(),
+                                            XTE_CONFIG_DIRNAME,
+                                            name,
+                                            nullptr);
+  if (xte_data_check_one(user_path, full))
+    return true;
+
+  gs_free auto local_path = g_build_filename(TERM_PREFIX, "local", "share",
+                                             XTE_CONFIG_DIRNAME,
+                                             name,
+                                             nullptr);
+  if (xte_data_check_one(local_path, full))
+    return true;
+
+  gs_free auto sys_path = g_build_filename(TERM_DATADIR,
+                                           XTE_CONFIG_DIRNAME,
+                                           name,
+                                           nullptr);
+  if (xte_data_check_one(sys_path, full))
+    return true;
+
+  return false;
+}
+
+static bool
+xte_data_ensure(void)
+{
+  if (xte_data_check(TERMINAL_DESKTOP_FILENAME, false))
+    return true;
+
+  // If we get here, there wasn't a desktop file in any of the paths. Install
+  // a symlink to the system-installed desktop file into the user path.
+
+  gs_free auto user_dir = g_build_filename(g_get_user_data_dir(),
+                                           XTE_CONFIG_DIRNAME,
+                                           nullptr);
+  if (g_mkdir_with_parents(user_dir, 0700) != 0 &&
+      errno != EEXIST) {
+    auto const errsv = errno;
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to create directory %s: %s\n",
+                          user_dir, g_strerror(errsv));
+    return false;
+  }
+
+  gs_free auto link_path = g_build_filename(user_dir,
+                                            TERMINAL_DESKTOP_FILENAME,
+                                            nullptr);
+  gs_free auto target_path = g_build_filename(TERM_DATADIR,
+                                              "applications",
+                                              TERMINAL_DESKTOP_FILENAME,
+                                              nullptr);
+
+  auto const r = symlink(target_path, link_path);
+  if (r != -1) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Installed symlink %s -> %s\n",
+                          link_path, target_path);
+
+  } else {
+    auto const errsv = errno;
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to create symlink %s: %s\n",
+                          link_path, g_strerror(errsv));
+  }
+
+  return r != -1;
+}
+
+static char**
+xte_config_read(char const* path,
+                GError** error)
+{
+  gs_close_fd auto fd = open(path, O_RDONLY | O_NONBLOCK | O_CLOEXEC);
+  if (fd == -1)
+    return nullptr;
+
+  // This is a small config file, so shouldn't be any bigger than this.
+  // If it is bigger, we'll discard the rest. That's why we're not using
+  // g_file_get_contents() here.
+  char buf[8192];
+  auto r = ssize_t{};
+  do {
+    r = read(fd, buf, sizeof(buf) - 1); // reserve one byte in buf
+  } while (r == -1 && errno == EINTR);
+  if (r < 0)
+    return nullptr;
+
+  buf[r] = '\0'; // NUL terminator; note that r < sizeof(buf)
+
+  auto lines = g_strsplit_set(buf, "\r\n", -1);
+  if (!lines)
+    return nullptr;
+
+  for (auto i = 0; lines[i]; ++i)
+    lines[i] = g_strstrip(lines[i]);
+
+  return lines;
+}
+
+static bool
+xte_config_rewrite(char const* path)
+{
+  gs_free_gstring auto str = g_string_sized_new(1024);
+  g_string_append(str, TERMINAL_DESKTOP_FILENAME);
+  g_string_append_c(str, NEWLINE);
+
+  gs_strfreev auto lines = xte_config_read(path, nullptr);
+  if (lines) {
+    for (auto i = 0; lines[i]; ++i) {
+      if (lines[i][0] == '\0')
+        continue;
+      if (strcmp(lines[i], TERMINAL_DESKTOP_FILENAME) == 0)
+        continue;
+
+      g_string_append(str, lines[i]);
+      g_string_append_c(str, NEWLINE);
+    }
+  }
+
+  gs_free_error GError* error = nullptr;
+  auto const r = g_file_set_contents(path, str->str, str->len, &error);
+  if (!r) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to rewrite XTE config %s: %s\n",
+                          path, error->message);
+  }
+
+  return r;
+}
+
+static void
+xte_config_rewrite(void)
+{
+  auto const user_dir = g_get_user_config_dir();
+  if (g_mkdir_with_parents(user_dir, 0700) != 0 &&
+      errno != EEXIST) {
+    auto const errsv = errno;
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to create directory %s: %s\n",
+                          user_dir, g_strerror(errsv));
+   // Nothing to do if we can't even create the directory
+    return;
+  }
+
+  // Install as default for all current desktops
+  gs_strfreev auto desktops = terminal_util_get_desktops();
+  if (desktops) {
+    for (auto i = 0; desktops[i]; ++i) {
+      gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
+                                          desktops[i]);
+      gs_free auto path = g_build_filename(user_dir, name, nullptr);
+
+      xte_config_rewrite(path);
+    }
+  }
+
+  // Install as non-desktop specific default too
+  gs_free auto path = g_build_filename(user_dir, XTE_CONFIG_FILENAME, nullptr);
+  xte_config_rewrite(path);
+}
+
+static bool
+xte_config_is_foreign(char const* name)
+{
+  return !g_str_equal(name, TERMINAL_DESKTOP_FILENAME);
+}
+
+static char*
+xte_config_get_default(char const* path)
+{
+  gs_strfreev auto lines = xte_config_read(path, nullptr);
+  if (!lines)
+    return nullptr;
+
+  // A terminal is the default if it's the first non-comment line in the file
+  for (auto i = 0; lines[i]; ++i) {
+    auto const line = lines[i];
+    if (!line[0] || line[0] == '#')
+      continue;
+
+    // If a foreign terminal is default, check whether it is actually installed.
+    // (We always ensure our own desktop file exists.)
+    if (xte_config_is_foreign(line) &&
+        !xte_data_check(line, true)) {
+      _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                            "Default entry \"%s\" from config \"%s\" is not installed, skipping.\n",
+                            line, path);
+      return nullptr;
+    }
+
+    return g_strdup(line);
+  }
+
+  return nullptr;
+}
+
+static char*
+xte_config_get_default(void)
+{
+  auto const user_dir = g_get_user_config_dir();
+  gs_strfreev auto desktops = terminal_util_get_desktops();
+  if (desktops) {
+    for (auto i = 0; desktops[i]; ++i) {
+      gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
+                                          desktops[i]);
+      gs_free auto path = g_build_filename(user_dir, name, nullptr);
+      if (auto term = xte_config_get_default(path))
+        return term;
+    }
+  }
+
+  gs_free auto user_path = g_build_filename(user_dir, XTE_CONFIG_FILENAME, nullptr);
+  if (auto term = xte_config_get_default(user_path))
+    return term;
+
+  if (desktops) {
+    for (auto i = 0; desktops[i]; ++i) {
+      gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
+                                          desktops[i]);
+      gs_free auto path = g_build_filename("/etc/xdg", name, nullptr);
+      if (auto term = xte_config_get_default(path))
+        return term;
+    }
+  }
+
+  gs_free auto sys_path = g_build_filename("/etc/xdg", XTE_CONFIG_FILENAME, nullptr);
+  if (auto term = xte_config_get_default(sys_path))
+    return term;
+
+  return nullptr;
+}
+
+static bool
+xte_config_is_default(bool* set = nullptr)
+{
+  gs_free auto term = xte_config_get_default();
+
+  auto const is_default = term && g_str_equal(term, TERMINAL_DESKTOP_FILENAME);
+  if (set)
+    *set = term != nullptr;
+  return is_default;
+}
+
+gboolean
+terminal_util_is_default_terminal(void)
+{
+  auto set = false;
+  auto const is_default = xte_config_is_default(&set);
+  if (!set) {
+    // No terminal is default yet, so we claim the default.
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "No default terminal, claiming default.\n");
+    return terminal_util_make_default_terminal();
+  }
+
+  if (is_default) {
+    // If we're the default terminal, ensure our desktop file is installed
+    // in the right location.
+    xte_data_ensure();
+  }
+
+  return is_default;
+}
+
+gboolean
+terminal_util_make_default_terminal(void)
+{
+  xte_config_rewrite();
+  xte_data_ensure();
+
+  return xte_config_is_default();
 }

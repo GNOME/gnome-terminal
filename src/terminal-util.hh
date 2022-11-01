@@ -109,6 +109,12 @@ char *terminal_util_find_program_in_path (const char *path,
 
 gboolean terminal_util_check_envv(char const* const* strv);
 
+char** terminal_util_get_desktops(void);
+
+gboolean terminal_util_is_default_terminal(void);
+
+gboolean terminal_util_make_default_terminal(void);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */

@@ -164,6 +164,7 @@ util_sources = files(
 
 common_cxxflags = version_cxxflags + [
   '-DTERMINAL_COMPILATION',
+  '-DTERM_PREFIX="@0@"'.format(gt_prefix),
   '-DTERM_BINDIR="@0@"'.format(gt_prefix / gt_bindir),
   '-DTERM_DATADIR="@0@"'.format(gt_prefix / gt_datadir),
   '-DTERM_LIBEXECDIR="@0@"'.format(gt_prefix / gt_libexecdir),
