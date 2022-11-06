@@ -1626,29 +1626,44 @@ xte_data_check_one(char const* file,
     return false;
   }
 
-  // As per the XDG desktop entry spec, the TryExec key contains the name
-  // of an executable that can be used to determine if the programme is
-  // actually present.
+  // As per the XDG desktop entry spec, the (optional) TryExec key contains
+  // the name of an executable that can be used to determine if the programme
+  // is actually present.
   gs_free auto try_exec = g_key_file_get_string(kf,
                                                 G_KEY_FILE_DESKTOP_GROUP,
                                                 G_KEY_FILE_DESKTOP_KEY_TRY_EXEC,
                                                 nullptr);
-  if (!try_exec) {
+  if (try_exec && try_exec[0]) {
     _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
                           "Desktop file \"%s\" has no TryExec field.\n",
                           file);
 
-    return false;
+    // TryExec may be an abolute path, or be searched in $PATH
+    gs_free char* exec_path = nullptr;
+    if (g_path_is_absolute(try_exec))
+      exec_path = g_strdup(try_exec);
+    else
+      exec_path = g_find_program_in_path(try_exec);
+
+    auto const exists = exec_path != nullptr &&
+      g_file_test(exec_path, GFileTest(G_FILE_TEST_IS_EXECUTABLE));
+
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Desktop file \"%s\" is %sinstalled (TryExec).\n",
+                          file, exists ? "" : "not ");
+
+    if (!exists)
+      return false;
+  } else {
+    // TryExec is not present. We could fall back to parsing the Exec
+    // key and look if its first argument points to an executable that
+    // exists on the system, but that may also fail if the desktop file
+    // is DBusActivatable=true in which case we would need to find
+    // out if the D-Bus service corresponding to the name of the desktop
+    // file (without the .desktop extension) is activatable.
   }
 
-  gs_free auto exec_path = g_find_program_in_path(try_exec);
-  auto const exists = exec_path != nullptr;
-
-  _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
-                        "Desktop file \"%s\" is %sinstalled.\n",
-                        file, exists ? "" : "not ");
-
-  return exists;
+  return true;
 }
 
 static bool
