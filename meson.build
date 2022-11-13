@@ -434,4 +434,10 @@ output += '  Nautilus extension: ' + get_option('nautilus_extension').to_string(
 output += '  Search provider:    ' + get_option('search_provider').to_string() + '\n'
 message(output)
 
+# Check stable/unstable status
+
+if (gt_minor_version % 2) != 0
+  warning('This is an unstable development release!\n')
+endif
+
 # Done
