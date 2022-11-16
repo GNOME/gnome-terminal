@@ -41,6 +41,13 @@ i18n.itstool_join(
   output: '@BASENAME@',
 )
 
+meson.add_install_script(
+  'meson_metainfofile.py',
+  metainfodir,
+  gt_dns_name + '.metainfo.xml',
+  gt_dns_name + '.Nautilus.metainfo.xml',
+)
+
 # Desktop file
 
 desktopdatadir = gt_datadir / 'applications'
