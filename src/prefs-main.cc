@@ -31,6 +31,11 @@
 #include "terminal-settings-bridge-backend.hh"
 #include "terminal-settings-bridge-generated.h"
 
+// Reduce the default timeout to something that should still always work,
+// but not hang the process for long periods of time if something does
+// go wrong. See issue #7935.
+#define BRIDGE_TIMEOUT 5000 /* ms */
+
 static char* arg_profile_uuid = nullptr;
 static char* arg_hint = nullptr;
 static int arg_bus_fd = -1;
@@ -211,6 +216,8 @@ main(int argc,
       g_printerr("Failed to create settings bridge proxy: %s\n", error->message);
       return EXIT_FAILURE;
     }
+
+    g_dbus_proxy_set_default_timeout(G_DBUS_PROXY(bridge), BRIDGE_TIMEOUT);
 
     backend = terminal_settings_bridge_backend_new(bridge);
 
