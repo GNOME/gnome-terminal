@@ -69,6 +69,7 @@ meson.add_install_script(
   'meson_desktopfile.py',
   desktopdatadir,
   gt_dns_name + '.desktop',
+  gt_dns_name + '.Preferences.desktop',
 )
 
 # Install a symlink for xdg-terminal-exec

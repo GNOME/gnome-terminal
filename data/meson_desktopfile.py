@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright © 2019 Christian Persch
+# Copyright © 2019, 2022 Christian Persch
 #
 # This programme is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -21,8 +21,25 @@ import sys
 if os.environ.get('DESTDIR'):
     sys.exit(0)
 
-prefix = os.environ['MESON_INSTALL_PREFIX']
-desktopfile = os.path.join(prefix, sys.argv[1], sys.argv[2])
+argc = len(sys.argv)
+if argc < 3:
+    sys.exit(1)
 
-rv = subprocess.call(['desktop-file-validate', desktopfile])
-sys.exit(rv)
+prefix = os.environ['MESON_INSTALL_PREFIX']
+desktopdatadir = sys.argv[1]
+
+exit_code = 0
+
+for i in range(2, argc):
+    try:
+        desktopfile = os.path.join(prefix, desktopdatadir, sys.argv[i])
+        result = subprocess.run(['desktop-file-validate',
+                                 desktopfile])
+        if result.returncode != 0:
+            exit_code = 1
+
+    except FileNotFoundError:
+        # desktop-file-validate not installed
+        pass
+
+sys.exit(exit_code)
