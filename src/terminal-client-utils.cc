@@ -207,8 +207,10 @@ char const* const*
 terminal_client_get_environment_filters (void)
 {
   static char const* filters[] = {
+    "COLORFGBG",
     "COLORTERM",
     "COLUMNS",
+    "DEFAULT_COLORS",
     "DESKTOP_STARTUP_ID",
     "EXIT_CODE",
     "EXIT_STATUS",
@@ -233,10 +235,15 @@ terminal_client_get_environment_filters (void)
     "REMOTE_PORT",
     "SERVICE_RESULT",
     "SHLVL",
+    "STY",
     "TERM",
+    "TERMCAP",
+    "TMUX",
+    "TMUX_PANE",
     "VTE_VERSION",
     "WATCHDOG_PID",
     "WATCHDOG_USEC",
+    "WCWIDTH_CJK_LEGACY",
     "WINDOWID",
     "XDG_ACTIVATION_TOKEN",
     nullptr
@@ -250,6 +257,7 @@ terminal_client_get_environment_prefix_filters (void)
 {
   static char const* filters[] = {
     "GNOME_TERMINAL_",
+    // "VTE_", ?
 
     /* other terminals */
     "FOOT_",
@@ -263,6 +271,18 @@ terminal_client_get_environment_prefix_filters (void)
     "WEZTERM_",
     "XTERM_",
     nullptr
+  };
+
+  return filters;
+}
+
+static char const* const*
+terminal_client_get_environment_prefix_filters_excludes(void)
+{
+  static char const* filters[] = {
+    "MC_XDG_OPEN",
+
+    nullptr,
   };
 
   return filters;
@@ -282,6 +302,20 @@ terminal_environ_unsetenv_prefix (char** envv,
     auto const equal = strchr(envv[i], '=');
     g_assert(equal != nullptr);
     gs_free char* env = g_strndup(envv[i], equal - envv[i]);
+
+    auto excluded = false;
+    auto const excludes = terminal_client_get_environment_prefix_filters_excludes();
+    for (auto j = 0; excludes[j]; ++j) {
+      if (!g_str_equal(excludes[j], env))
+        continue;
+
+      excluded = true;
+      break;
+    }
+
+    if (excluded)
+      continue;
+
     envv = g_environ_unsetenv (envv, env);
   }
 
