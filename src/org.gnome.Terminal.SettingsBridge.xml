@@ -35,13 +35,17 @@
       <arg type="s" name="key" direction="in" />
       <arg type="s" name="type" direction="in" />
       <arg type="b" name="default" direction="in" />
-      <arg type="av" name="value" direction="out" />
+      <arg type="ay" name="value" direction="out">
+        <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
+      </arg>
     </method>
 
     <method name="read_user_value">
       <arg type="s" name="key" direction="in" />
       <arg type="s" name="type" direction="in" />
-      <arg type="av" name="value" direction="out" />
+      <arg type="ay" name="value" direction="out">
+        <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
+      </arg>
     </method>
 
     <method name="reset">
@@ -61,13 +65,15 @@
 
     <method name="write">
       <arg type="s" name="key" direction="in" />
-      <arg type="av" name="value" direction="in" />
+      <arg type="ay" name="value" direction="in">
+        <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
+      </arg>
       <arg type="b" name="success" direction="out" />
     </method>
 
     <method name="write_tree">
       <arg type="s" name="path_prefix" direction="in" />
-      <arg type="a(sav)" name="tree" direction="in">
+      <arg type="ay" name="tree" direction="in">
         <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
       </arg>
       <arg type="b" name="success" direction="out" />

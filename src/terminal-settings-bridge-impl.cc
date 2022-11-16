@@ -46,10 +46,6 @@ struct _TerminalSettingsBridgeImplClass {
   TerminalSettingsBridgeSkeletonClass parent_class;
 };
 
-// Note that since D-Bus doesn't support maybe values, we use
-// arrays with either zero or one item to send/receive a maybe.
-// If we get more than one item, just use the first one.
-
 /* helper functions */
 
 template<typename T>
@@ -76,21 +72,6 @@ type_from_string(GDBusMethodInvocation* invocation,
 }
 
 static auto
-unwrap(GVariantIter* iter) noexcept
-{
-  gs_unref_variant auto iv = g_variant_iter_next_value(iter);
-  return iv ? g_variant_get_variant(iv) : nullptr;
-}
-
-static auto
-unwrap(GVariant* value) noexcept
-{
-  auto iter = GVariantIter{};
-  g_variant_iter_init(&iter, value);
-  return unwrap(&iter);
-}
-
-static auto
 value(GDBusMethodInvocation* invocation,
       char const* format,
       ...) noexcept
@@ -101,18 +82,6 @@ value(GDBusMethodInvocation* invocation,
   va_end(args);
   g_dbus_method_invocation_return_value(invocation, v);
   return true;
-}
-
-static auto
-wrap(GDBusMethodInvocation* invocation,
-     GVariant* variant) noexcept
-{
-  auto builder = GVariantBuilder{};
-  g_variant_builder_init(&builder, G_VARIANT_TYPE("av"));
-  if (variant)
-    g_variant_builder_add(&builder, "v", variant);
-
-  return value(invocation, "(av)", &builder);
 }
 
 static auto
@@ -177,7 +146,7 @@ terminal_settings_bridge_impl_read(TerminalSettingsBridge* object,
                         "Bridge impl ::read key %s type %s default %d\n",
                         key, type, default_value);
 
-  auto const vtype = type_from_string(invocation, type);
+  gs_free_variant_type auto vtype = type_from_string(invocation, type);
   if (!vtype)
     return true;
 
@@ -186,8 +155,7 @@ terminal_settings_bridge_impl_read(TerminalSettingsBridge* object,
                                                              key,
                                                              vtype,
                                                              default_value);
-  g_variant_type_free(vtype);
-  return wrap(invocation, v);
+  return value(invocation, "(@ay)", terminal_g_variant_wrap(v));
 }
 
 static gboolean
@@ -200,7 +168,7 @@ terminal_settings_bridge_impl_read_user_value(TerminalSettingsBridge* object,
                         "Bridge impl ::read_user_value key %s type %s\n",
                         key, type);
 
-  auto const vtype = type_from_string(invocation, type);
+  gs_free_variant_type auto vtype = type_from_string(invocation, type);
   if (!vtype)
     return true;
 
@@ -208,8 +176,7 @@ terminal_settings_bridge_impl_read_user_value(TerminalSettingsBridge* object,
   gs_unref_variant auto v = terminal_g_settings_backend_read_user_value(impl->backend,
                                                                         key,
                                                                         vtype);
-  g_variant_type_free(vtype);
-  return wrap(invocation, v);
+  return value(invocation, "(@ay)", terminal_g_variant_wrap(v));
 }
 
 static gboolean
@@ -273,7 +240,7 @@ terminal_settings_bridge_impl_write(TerminalSettingsBridge* object,
                                     GVariant* value) noexcept
 {
   auto const impl = IMPL(object);
-  gs_unref_variant auto v = unwrap(value);
+  gs_unref_variant auto v = terminal_g_variant_unwrap(value);
 
   _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
                         "Bridge impl ::write key %s value %s\n",
@@ -290,11 +257,27 @@ static gboolean
 terminal_settings_bridge_impl_write_tree(TerminalSettingsBridge* object,
                                          GDBusMethodInvocation* invocation,
                                          char const* path_prefix,
-                                         GVariant* tree_value) noexcept
+                                         GVariant* variant) noexcept
 {
   _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
                         "Bridge impl ::write_tree path-prefix %s\n",
                         path_prefix);
+
+  gs_unref_variant auto tree_value = terminal_g_variant_unwrap(variant);
+  if (!tree_value ||
+      !g_variant_is_of_type(tree_value, G_VARIANT_TYPE("a(smv)"))) {
+    _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
+                          "Bridge impl ::write_tree got type %s expected type a(smv)\n",
+                          tree_value ? g_variant_get_type_string(tree_value) : "(null)");
+
+    g_dbus_method_invocation_return_error
+      (invocation,
+       G_DBUS_ERROR,
+       G_DBUS_ERROR_INVALID_ARGS,
+       "Invalid type: got type \"%s\" expected type \"a(smv)\"",
+       tree_value ? g_variant_get_type_string(tree_value) : "(null)");
+    return true;
+  }
 
   auto const tree = terminal_g_settings_backend_create_tree();
 
@@ -302,11 +285,11 @@ terminal_settings_bridge_impl_write_tree(TerminalSettingsBridge* object,
   g_variant_iter_init(&iter, tree_value);
 
   char const* key = nullptr;
-  GVariantIter* viter = nullptr;
-  while (g_variant_iter_loop(&iter, "(&sav)", &key, &viter)) {
+  GVariant* value = nullptr;
+  while (g_variant_iter_loop(&iter, "(&smv)", &key, &value)) {
     g_tree_insert(tree,
                   g_strconcat(path_prefix, key, nullptr), // adopts
-                  unwrap(viter)); // adopts
+                  value ? g_variant_get_variant(value) : nullptr);
   }
 
   auto const impl = IMPL(object);

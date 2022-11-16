@@ -67,6 +67,7 @@ GS_DEFINE_CLEANUP_FUNCTION0(GSettingsSchemaKey*, gs_local_settings_schema_key_un
 GS_DEFINE_CLEANUP_FUNCTION0(GVariant*, gs_local_variant_unref, g_variant_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantBuilder*, gs_local_variant_builder_unref, g_variant_builder_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantIter*, gs_local_variant_iter_free, g_variant_iter_free)
+GS_DEFINE_CLEANUP_FUNCTION0(GVariantType*, gs_local_variant_type_free, g_variant_type_free)
 
 GS_DEFINE_CLEANUP_FUNCTION(char**, gs_local_strfreev, g_strfreev)
 GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
@@ -119,6 +120,14 @@ static inline void gs_local_gstring_free (void *v) \
  * scope.
  */
 #define gs_unref_variant_builder __attribute__ ((cleanup(gs_local_variant_builder_unref)))
+
+/**
+ * gs_free_variant_type:
+ *
+ * Call g_variant_type_free() on a variable location when it goes out of
+ * scope.
+ */
+#define gs_free_variant_type __attribute__ ((cleanup(gs_local_variant_type_free)))
 
 /**
  * gs_unref_array:

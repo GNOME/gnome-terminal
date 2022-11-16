@@ -108,3 +108,7 @@ gboolean terminal_g_settings_backend_write_tree(GSettingsBackend* backend,
                                                 void* origin_tag);
 
 // END copied from glib
+
+GVariant* terminal_g_variant_wrap(GVariant* variant);
+
+GVariant* terminal_g_variant_unwrap(GVariant* variant);

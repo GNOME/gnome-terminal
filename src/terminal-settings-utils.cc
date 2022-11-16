@@ -938,4 +938,55 @@ terminal_g_settings_backend_sync(GSettingsBackend* backend)
 
 // END copied from glib
 
+// Note: Since D-Bus/GDBus does not support GVariant maybe types (not even
+// on private peer-to-peer connections), we need to wrap the variants
+// for transport over the bus.  The format is a "mv" variant whose inner
+// value is the variant to transport, or Nothing for a nullptr GVariant.
+// We then transport that variant in serialised form as a byte array over
+// the bus.
+
+/*
+ * terminal_g_variant_wrap:
+ * @variant: (nullable): a #GVariant, or %NULL
+ *
+ * Wraps @variant for transport over D-Bus.
+ * if @variant is floating, it is consumed.
+ *
+ * Returns: (transfer full): a floating variant wrapping @variant
+ */
+GVariant*
+terminal_g_variant_wrap(GVariant* variant)
+{
+  auto const value = variant ? g_variant_new_variant(variant) : nullptr;
+  auto const maybe = g_variant_new_maybe(G_VARIANT_TYPE_VARIANT, value);
+
+  return g_variant_new_from_data(G_VARIANT_TYPE("ay"),
+                                 g_variant_get_data(maybe),
+                                 g_variant_get_size(maybe),
+                                 false, // trusted
+                                 GDestroyNotify(g_variant_unref),
+                                 g_variant_ref_sink(maybe)); // adopts
+}
+
+/*
+ * terminal_g_variant_unwrap:
+ * @variant: a "ay" #GVariant
+ *
+ * Unwraps a variant transported over D-Bus.
+ * If @variant is floating, it is NOT consumed.
+ *
+ * Returns: (transfer full): a non-floating variant unwrapping @variant
+ */
+GVariant*
+terminal_g_variant_unwrap(GVariant* variant)
+{
+  g_return_val_if_fail(g_variant_is_of_type(variant, G_VARIANT_TYPE("ay")), nullptr);
+
+  gs_unref_bytes auto bytes = g_variant_get_data_as_bytes(variant);
+  gs_unref_variant auto maybe = g_variant_new_from_bytes(G_VARIANT_TYPE("mv"), bytes, false);
+  gs_unref_variant auto value = g_variant_get_maybe(maybe);
+  return value ? g_variant_get_variant(value) : nullptr;
+}
+
+
 #endif /* TERMINAL_SERVER || TERMINAL_PREFERENCES */
