@@ -217,7 +217,9 @@ main(int argc,
       return EXIT_FAILURE;
     }
 
-    g_dbus_proxy_set_default_timeout(G_DBUS_PROXY(bridge), BRIDGE_TIMEOUT);
+    if (!_terminal_debug_on(TERMINAL_DEBUG_BRIDGE)) {
+      g_dbus_proxy_set_default_timeout(G_DBUS_PROXY(bridge), BRIDGE_TIMEOUT);
+    }
 
     backend = terminal_settings_bridge_backend_new(bridge);
 
