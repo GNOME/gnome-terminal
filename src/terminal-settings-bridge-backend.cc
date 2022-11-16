@@ -23,6 +23,7 @@
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
 #include "terminal-settings-bridge-backend.hh"
+#include "terminal-settings-utils.hh"
 #include "terminal-settings-bridge-generated.h"
 
 #include <gio/gio.h>
@@ -175,25 +176,6 @@ cache_remove_writable(TerminalSettingsBridgeBackend* impl,
   ce->writable_set = false;
 }
 
-static auto
-wrap(GVariant* value) noexcept
-{
-  auto builder = GVariantBuilder{};
-  g_variant_builder_init(&builder, G_VARIANT_TYPE("av"));
-  if (value)
-    g_variant_builder_add(&builder, "v", value);
-  return g_variant_builder_end(&builder);
-}
-
-static auto
-unwrap(GVariant* value) noexcept
-{
-  auto iter = GVariantIter{};
-  g_variant_iter_init(&iter, value);
-  gs_unref_variant auto cv = g_variant_iter_next_value(&iter);
-  return cv ? g_variant_get_variant(cv) : nullptr;
-}
-
 /* GSettingsBackend class implementation */
 
 static GPermission*
@@ -260,7 +242,7 @@ terminal_settings_bridge_backend_read(GSettingsBackend* backend,
                                             impl->cancellable,
                                             nullptr);
 
-  auto const value = r ? unwrap(rv) : nullptr;
+  auto const value = r ? terminal_g_variant_unwrap(rv) : nullptr;
 
   if (r && value && !g_variant_is_of_type(value, type)) {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
@@ -288,7 +270,7 @@ terminal_settings_bridge_backend_read(GSettingsBackend* backend,
 static GVariant*
 terminal_settings_bridge_backend_read_user_value(GSettingsBackend* backend,
                                                  char const* key,
-                                                 const GVariantType* type) noexcept
+                                                 GVariantType const* type) noexcept
 {
   auto const impl = IMPL(backend);
 
@@ -305,7 +287,7 @@ terminal_settings_bridge_backend_read_user_value(GSettingsBackend* backend,
                                                        impl->cancellable,
                                                        nullptr);
 
-  auto const value = r ? unwrap(rv) : nullptr;
+  auto const value = r ? terminal_g_variant_unwrap(rv) : nullptr;
 
   if (r && value && !g_variant_is_of_type(value, type)) {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
@@ -405,7 +387,7 @@ terminal_settings_bridge_backend_write(GSettingsBackend* backend,
   auto const r =
     terminal_settings_bridge_call_write_sync(impl->bridge,
                                              key,
-                                             wrap(value),
+                                             terminal_g_variant_wrap(value),
                                              &success,
                                              impl->cancellable,
                                              nullptr);
@@ -437,14 +419,14 @@ terminal_settings_bridge_backend_write_tree(GSettingsBackend* backend,
                                   &values);
 
   auto builder = GVariantBuilder{};
-  g_variant_builder_init(&builder, G_VARIANT_TYPE("a(sav)"));
+  g_variant_builder_init(&builder, G_VARIANT_TYPE("a(smv)"));
   for (auto i = 0; keys[i]; ++i) {
     gs_unref_variant auto value = values[i] ? g_variant_ref_sink(values[i]) : nullptr;
 
     g_variant_builder_add(&builder,
-                          "(s@av)",
+                          "(smv)",
                           keys[i],
-                          wrap(value));
+                          value ? g_variant_new_variant(value) : nullptr);
 
     gs_free auto wkey = g_strconcat(path_prefix, keys[i], nullptr);
     // Directory reset?
@@ -456,11 +438,13 @@ terminal_settings_bridge_backend_write_tree(GSettingsBackend* backend,
     }
   }
 
+  auto const tree_value = terminal_g_variant_wrap(g_variant_builder_end(&builder));
+
   auto success = gboolean{false};
   auto const r =
     terminal_settings_bridge_call_write_tree_sync(impl->bridge,
                                                   path_prefix,
-                                                  g_variant_builder_end(&builder),
+                                                  tree_value, // consumed
                                                   &success,
                                                   impl->cancellable,
                                                   nullptr);
