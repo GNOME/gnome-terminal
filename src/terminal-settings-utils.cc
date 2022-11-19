@@ -983,7 +983,7 @@ terminal_g_variant_unwrap(GVariant* variant)
   g_return_val_if_fail(g_variant_is_of_type(variant, G_VARIANT_TYPE("ay")), nullptr);
 
   gs_unref_bytes auto bytes = g_variant_get_data_as_bytes(variant);
-  gs_unref_variant auto maybe = g_variant_new_from_bytes(G_VARIANT_TYPE("mv"), bytes, false);
+  gs_unref_variant auto maybe = g_variant_take_ref(g_variant_new_from_bytes(G_VARIANT_TYPE("mv"), bytes, false));
   gs_unref_variant auto value = g_variant_get_maybe(maybe);
   return value ? g_variant_get_variant(value) : nullptr;
 }
