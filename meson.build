@@ -187,6 +187,11 @@ elif system == 'netbsd'
   libc_feature_defines += [
     ['_NETBSD_SOURCE', '1'],
   ]
+
+elif system == 'openbsd'
+  libc_feature_defines += [
+    ['_BSD_SOURCE', '1'],
+  ]
 endif
 
 foreach f: libc_feature_defines
