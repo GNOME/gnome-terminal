@@ -1044,7 +1044,7 @@ terminal_options_parse (int *argcp,
   options->execute = FALSE;
 
   options->startup_id = getenv_utf8("DESKTOP_STARTUP_ID");
-  options->startup_id = getenv_utf8("XDG_ACTIVATION_TOKEN");
+  options->activation_token = getenv_utf8("XDG_ACTIVATION_TOKEN");
   options->display_name = nullptr;
   options->initial_windows = nullptr;
   options->default_role = nullptr;
