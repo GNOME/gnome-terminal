@@ -999,6 +999,18 @@ digest_options_callback (GOptionContext *context,
   return TRUE;
 }
 
+static char*
+getenv_utf8(char const* env)
+{
+  auto const value = g_getenv(env);
+  if (!value ||
+      !value[0] ||
+      !g_utf8_validate(value, -1, nullptr))
+    return nullptr;
+
+  return g_strdup(value);
+}
+
 /**
  * terminal_options_parse:
  * @argcp: (inout) address of the argument count. Changed if any arguments were handled
@@ -1031,12 +1043,8 @@ terminal_options_parse (int *argcp,
   options->default_maximize = FALSE;
   options->execute = FALSE;
 
-  const char *startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id && startup_id[0] &&
-      g_utf8_validate (startup_id, -1, nullptr))
-    options->startup_id = g_strdup (startup_id);
-  else
-    options->startup_id = nullptr;
+  options->startup_id = getenv_utf8("DESKTOP_STARTUP_ID");
+  options->activation_token = getenv_utf8("XDG_ACTIVATION_TOKEN");
   options->display_name = nullptr;
   options->initial_windows = nullptr;
   options->default_role = nullptr;
@@ -1113,12 +1121,12 @@ terminal_options_parse (int *argcp,
     return nullptr;
   }
 
+#ifdef GDK_WINDOWING_X11
   /* Do this here so that gdk_display is initialized */
-  if (options->startup_id == nullptr)
+  if (options->startup_id == nullptr) {
     options->startup_id = terminal_client_get_fallback_startup_id ();
-  /* Still nullptr? */
-  if (options->startup_id == nullptr)
-    terminal_printerr_detail ("Warning: DESKTOP_STARTUP_ID not set and no fallback available.\n");
+  }
+#endif /* X11 */
 
   GdkDisplay *display = gdk_display_get_default ();
   if (display != nullptr)
@@ -1314,6 +1322,7 @@ terminal_options_free (TerminalOptions *options)
 
   g_free (options->display_name);
   g_free (options->startup_id);
+  g_free (options->activation_token);
   g_free (options->server_app_id);
 
   g_free (options->sm_client_id);
@@ -1641,6 +1650,15 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_STRING,
       &options->startup_id,
+      nullptr,
+      nullptr
+    },
+    {
+      "activation-token",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING,
+      &options->activation_token,
       nullptr,
       nullptr
     },

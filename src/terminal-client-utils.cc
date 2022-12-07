@@ -142,7 +142,8 @@ terminal_client_get_file_uninstalled(char const* exe_install_dir,
  * terminal_client_append_create_instance_options:
  * @builder: a #GVariantBuilder of #GVariantType "a{sv}"
  * @display: (array element-type=guint8):
- * @startup_id: (array element-type=guint8):
+ * @startup_id:
+ * @activation_token:
  * @geometry:
  * @role:
  * @profile:
@@ -156,6 +157,7 @@ void
 terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                 const char      *display_name,
                                                 const char      *startup_id,
+                                                const char      *activation_token,
                                                 const char      *geometry,
                                                 const char      *role,
                                                 const char      *profile,
@@ -172,6 +174,9 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
   if (startup_id)
     g_variant_builder_add (builder, "{sv}",
                            "desktop-startup-id", g_variant_new_bytestring (startup_id));
+  if (activation_token)
+    g_variant_builder_add (builder, "{sv}",
+                           "activation-token", g_variant_new_string (activation_token));
 
   /* String options */
   if (profile)

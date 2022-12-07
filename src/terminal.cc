@@ -354,6 +354,9 @@ handle_show_preferences_remote (TerminalOptions *options,
   if (options->startup_id)
     g_variant_builder_add (&builder, "{sv}",
                            "desktop-startup-id", g_variant_new_string (options->startup_id));
+  if (options->activation_token)
+    g_variant_builder_add (&builder, "{sv}",
+                           "activation-token", g_variant_new_string (options->activation_token));
   g_variant_builder_close (&builder);
 
   if (!g_dbus_connection_call_sync (bus,
@@ -454,6 +457,7 @@ handle_options (TerminalOptions *options,
           terminal_client_append_create_instance_options (&builder,
                                                           options->display_name,
                                                           options->startup_id,
+                                                          options->activation_token,
                                                           iw->geometry,
                                                           iw->role,
                                                           it->profile ? it->profile : options->default_profile,

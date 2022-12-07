@@ -439,13 +439,15 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   /* Still no parent window? Create a new one */
   if (window == nullptr) {
-    const char *startup_id, *role;
+    const char *startup_id, *role, *activation_token;
     gboolean start_maximized, start_fullscreen;
 
     window = terminal_window_new (G_APPLICATION (app));
     have_new_window = TRUE;
 
-    if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
+    if (g_variant_lookup (options, "activation-token", "&s", &activation_token))
+      gtk_window_set_startup_id (GTK_WINDOW (window), activation_token);
+    else if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
       gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
 
     /* Overwrite the default, unique window role set in terminal_window_init */

@@ -74,6 +74,7 @@ typedef struct
 
   char    *server_app_id;
   char    *startup_id;
+  char    *activation_token;
   char    *display_name;
   gboolean show_preferences;
   GList   *initial_windows;
