@@ -332,6 +332,7 @@ create_terminal (ExecData *data /* transfer full */)
   terminal_client_append_create_instance_options (&builder,
                                                   nullptr, // display name. FIXMEgtk4?
                                                   startup_id,
+                                                  nullptr, /* activation_token */
                                                   nullptr /* geometry */,
                                                   nullptr /* role */,
                                                   nullptr /* use default profile */,
