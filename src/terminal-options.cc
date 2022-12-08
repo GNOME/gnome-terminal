@@ -97,6 +97,18 @@ terminal_log_writer (GLogLevelFlags log_level,
                      gsize n_fields,
                      gpointer user_data)
 {
+#if GLIB_CHECK_VERSION(2, 68, 0)
+  char const* domain = nullptr;
+  for (auto i = gsize{0}; i < n_fields; i++) {
+    if (g_str_equal(fields[i].key, "GLIB_DOMAIN")) {
+      domain = (char const*)fields[i].value;
+      break;
+    }
+  }
+  if (g_log_writer_default_would_drop(log_level, domain))
+    return G_LOG_WRITER_HANDLED;
+#endif /* glib 2.68 */
+
   TerminalVerbosity level = verbosity_from_log_level(log_level);
   for (gsize i = 0; i < n_fields; i++) {
     if (g_str_equal (fields[i].key, "MESSAGE"))
