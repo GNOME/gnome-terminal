@@ -76,6 +76,7 @@ gt_includedir = get_option('includedir')
 gt_libdir     = get_option('libdir')
 gt_libexecdir = get_option('libexecdir')
 gt_localedir  = get_option('localedir')
+gt_mandir     = get_option('mandir')
 gt_prefix     = get_option('prefix')
 
 gt_pkgdatadir = gt_datadir / gt_name
