@@ -1461,7 +1461,7 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
   for (i = 0; filters[i]; ++i)
     g_hash_table_remove (env_table, filters[i]);
 
-  auto const pfilters = terminal_client_get_environment_filters ();
+  auto const pfilters = terminal_client_get_environment_prefix_filters ();
   for (i = 0; pfilters[i]; ++i) {
     g_hash_table_foreach_remove (env_table,
                                  GHRFunc(remove_prefixed_cb),
