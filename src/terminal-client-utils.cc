@@ -293,6 +293,18 @@ terminal_client_get_environment_prefix_filters_excludes(void)
   return filters;
 }
 
+bool
+terminal_client_get_environment_prefix_filters_is_excluded(char const* env)
+{
+  auto const excludes = terminal_client_get_environment_prefix_filters_excludes();
+  for (auto j = 0; excludes[j]; ++j) {
+    if (g_str_equal(excludes[j], env))
+      return true;
+  }
+
+  return false;
+}
+
 static char**
 terminal_environ_unsetenv_prefix (char** envv,
                                   char const* prefix)
@@ -308,17 +320,7 @@ terminal_environ_unsetenv_prefix (char** envv,
     g_assert(equal != nullptr);
     gs_free char* env = g_strndup(envv[i], equal - envv[i]);
 
-    auto excluded = false;
-    auto const excludes = terminal_client_get_environment_prefix_filters_excludes();
-    for (auto j = 0; excludes[j]; ++j) {
-      if (!g_str_equal(excludes[j], env))
-        continue;
-
-      excluded = true;
-      break;
-    }
-
-    if (excluded)
+    if (terminal_client_get_environment_prefix_filters_is_excluded(env))
       continue;
 
     envv = g_environ_unsetenv (envv, env);

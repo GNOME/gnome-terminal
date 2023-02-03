@@ -64,6 +64,8 @@ char const* const* terminal_client_get_environment_filters (void);
 
 char const* const* terminal_client_get_environment_prefix_filters (void);
 
+bool terminal_client_get_environment_prefix_filters_is_excluded(char const* env);
+
 char** terminal_client_filter_environment           (char** envv) G_GNUC_MALLOC;
 
 G_END_DECLS

@@ -1416,6 +1416,9 @@ remove_prefixed_cb(void* key,
   auto const env = reinterpret_cast<char const*>(key);
   auto const prefix = reinterpret_cast<char const*>(user_data);
 
+  if (terminal_client_get_environment_prefix_filters_is_excluded(env))
+    return false;
+
   return g_str_has_prefix(env, prefix);
 }
 
