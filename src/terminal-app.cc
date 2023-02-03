@@ -403,12 +403,14 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
 static void
 terminal_app_check_default(TerminalApp* app)
 {
+#ifdef TERMINAL_SERVER
   // Only do this for the default app ID
   gs_free char* app_id = nullptr;
   g_object_get(app, "application-id", &app_id, nullptr);
   if (!_terminal_debug_on(TERMINAL_DEBUG_DEFAULT) &&
       !g_str_equal(app_id, TERMINAL_APPLICATION_ID))
     return;
+#endif /* TERMINAL_SERVER */
 
   // Check whether gnome-terminal is the default terminal
   // as per XDG-Terminal-Exec.
