@@ -10,16 +10,16 @@
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2016.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2017.
 # Burak Kahraman <burakkaankhrmn@gmail.com>, 2018.
-# Sabri Ünal <libreajans@gmail.com>, 2014, 2019, 2020, 2023.
 # Ahmet Elgün <ahmetelgn@gmail.com>, 2020.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2021.
+# Sabri Ünal <libreajans@gmail.com>, 2014, 2019, 2020, 2023.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-18 23:54+0000\n"
-"PO-Revision-Date: 2022-11-07 17:31+0300\n"
+"POT-Creation-Date: 2023-02-12 18:41+0000\n"
+"PO-Revision-Date: 2023-02-14 03:32+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1498,6 +1498,7 @@ msgid "Palette entry %u"
 msgstr "Palet girdisi %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Bul"
 
@@ -1527,9 +1528,9 @@ msgstr "Düzenli ifade olarak eşleşti_r"
 
 #: src/search-popover.ui:222
 msgid "_Wrap around"
-msgstr "_Böl"
+msgstr "Başa _sar"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Yeni Sekme"
 
@@ -1686,30 +1687,34 @@ msgstr "_Eylem"
 msgid "Shortcut _Key"
 msgstr "Kısayol _Tuşu"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:552
 msgid "New Terminal"
 msgstr "Yeni Uçbirim"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:562 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "Yeni _Uçbirim"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:564 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Yeni _Sekme"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:565 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Yeni Pe_ncere"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:614
 msgid "Change _Profile"
 msgstr "_Profil Değiştir"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:627
 msgid "_Profile"
 msgstr "_Profil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profiller"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1765,7 +1770,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_İnceleyici"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Tercihler"
@@ -2216,7 +2221,7 @@ msgstr "%s (Kopya)"
 
 #: src/terminal-prefs.cc:387
 msgid "Clone Profile"
-msgstr "Profili Kopyala"
+msgstr "Profili Klonla"
 
 #: src/terminal-prefs.cc:390
 msgid "Clone"
@@ -2229,11 +2234,11 @@ msgstr "“%s“ profili için yeni ad gir:"
 
 #: src/terminal-prefs.cc:408
 msgid "Rename Profile"
-msgstr "Profili yeniden adlandır"
+msgstr "Profili Yeniden Adlandır"
 
 #: src/terminal-prefs.cc:411
 msgid "Rename"
-msgstr "Yeniden adlandır"
+msgstr "Yeniden Adlandır"
 
 #: src/terminal-prefs.cc:426
 #, c-format
@@ -2260,33 +2265,29 @@ msgstr "Genel"
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profiller"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Ne bir komut sağlandı ne de kabuk istendi"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "_Yeniden başlat"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Bu uçbirim için çocuk süreç oluştururken hata oluştu"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Çocuk süreç %d durum kodu ile olağan biçimde çıkış yaptı."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Çocuk süreç %d sinyaliyle iptal edildi."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Çocuk süreç iptal edildi."
 
