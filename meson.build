@@ -226,6 +226,18 @@ assert(get_option('b_ndebug') == 'false', 'assertions may not be disabled')
 
 assert(get_option('b_lto') == false, 'LTO not supported')
 
+# Check for functions
+
+libdl_dep = cxx.find_library('dl')
+
+check_dl_functions_required = [
+  'dlsym',
+]
+
+foreach func: check_dl_functions_required
+  assert(cxx.has_function(func, dependencies: libdl_dep), func + ' not found')
+endforeach
+
 # Compiler flags
 
 compiler_flags_common = [

@@ -25,6 +25,7 @@
 #include <locale.h>
 #include <pthread.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 #include <sys/resource.h>
@@ -45,6 +46,36 @@
 static char *app_id = nullptr;
 
 #define INACTIVITY_TIMEOUT (100 /* ms */)
+
+
+#include <dlfcn.h>
+
+// We need to block the pk-gtk module that tries to automagically
+// install fonts.
+// Since there appears to be no way to blocklist a gtk module,
+// we resort to this gross hack.
+
+extern "C" __attribute__((__visibility__("default"))) GModule*
+g_module_open (char const* file_name,
+               GModuleFlags flags);
+
+GModule*
+g_module_open (char const* file_name,
+               GModuleFlags flags)
+{
+  static decltype(&g_module_open) _g_module_open;
+  if (!_g_module_open)
+    _g_module_open = reinterpret_cast<decltype(_g_module_open)>(dlsym(RTLD_NEXT, "g_module_open"));
+
+  if (file_name) {
+    gs_free auto basename = g_path_get_basename(file_name);
+    if (basename && strstr(basename, "pk-gtk-module")) {
+      return _g_module_open("/dev/null", flags);
+    }
+  }
+
+  return _g_module_open(file_name, flags);
+}
 
 static gboolean
 option_app_id_cb (const gchar *option_name,

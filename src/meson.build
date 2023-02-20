@@ -254,6 +254,7 @@ server_deps = [
   gio_unix_dep,
   glib_dep,
   gtk_dep,
+  libdl_dep,
   pcre2_dep,
   pthreads_dep,
   schemas_dep,
