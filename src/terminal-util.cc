@@ -1839,7 +1839,7 @@ xte_config_is_foreign(char const* name)
 }
 
 static char*
-xte_config_get_default(char const* path)
+xte_config_get_default_for_path(char const* path)
 {
   gs_strfreev auto lines = xte_config_read(path, nullptr);
   if (!lines)
@@ -1868,36 +1868,36 @@ xte_config_get_default(char const* path)
 }
 
 static char*
-xte_config_get_default(void)
+xte_config_get_default_for_path_and_desktops(char const* base_path,
+                                             char const* const* desktops)
 {
-  auto const user_dir = g_get_user_config_dir();
-  gs_strfreev auto desktops = terminal_util_get_desktops();
   if (desktops) {
     for (auto i = 0; desktops[i]; ++i) {
       gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
                                           desktops[i]);
-      gs_free auto path = g_build_filename(user_dir, name, nullptr);
-      if (auto term = xte_config_get_default(path))
+      gs_free auto path = g_build_filename(base_path, name, nullptr);
+      if (auto term = xte_config_get_default_for_path(path))
         return term;
     }
   }
 
-  gs_free auto user_path = g_build_filename(user_dir, XTE_CONFIG_FILENAME, nullptr);
-  if (auto term = xte_config_get_default(user_path))
+  gs_free auto sys_path = g_build_filename(base_path, XTE_CONFIG_FILENAME, nullptr);
+  if (auto term = xte_config_get_default_for_path(sys_path))
     return term;
 
-  if (desktops) {
-    for (auto i = 0; desktops[i]; ++i) {
-      gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
-                                          desktops[i]);
-      gs_free auto path = g_build_filename("/etc/xdg", name, nullptr);
-      if (auto term = xte_config_get_default(path))
-        return term;
-    }
-  }
+  return nullptr;
+}
 
-  gs_free auto sys_path = g_build_filename("/etc/xdg", XTE_CONFIG_FILENAME, nullptr);
-  if (auto term = xte_config_get_default(sys_path))
+static char*
+xte_config_get_default(void)
+{
+  gs_strfreev auto desktops = terminal_util_get_desktops();
+  auto const user_dir = g_get_user_config_dir();
+  if (auto term = xte_config_get_default_for_path_and_desktops(user_dir, desktops))
+    return term;
+  if (auto term = xte_config_get_default_for_path_and_desktops("/etc/xdg", desktops))
+    return term;
+  if (auto term = xte_config_get_default_for_path_and_desktops("/usr/etc/xdg", desktops))
     return term;
 
   return nullptr;
