@@ -126,7 +126,7 @@ terminal_options_ensure_schema_source(TerminalOptions* options)
   if (options->schema_source)
     return;
 
-  options->schema_source = terminal_g_settings_schema_source_get_default();
+  options->schema_source = terminal_g_settings_schema_source_get_default(nullptr);
 }
 
 static TerminalSettingsList *

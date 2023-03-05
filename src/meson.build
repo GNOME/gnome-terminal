@@ -46,6 +46,33 @@ menubar_ui_nomnemonics = custom_target(
   output: 'terminal-menubar-without-mnemonics.ui',
 )
 
+# Settings schemas
+
+install_data(
+  gt_dns_name + '.gschema.xml',
+  install_dir: gt_prefix / gt_schemadir,
+  install_tag: 'runtime',
+)
+
+meson.add_install_script(
+  'meson_compileschemas.py',
+  gt_prefix / gt_schemadir,
+)
+
+reference_schemas = custom_target(
+  'gschemas.compiled',
+  command: [
+    glib_compile_schemas,
+    '--targetdir', meson.current_build_dir(),
+    '--schema-file', files(gt_dns_name + '.gschema.xml'),
+    '--schema-file', files('external.gschema.xml'),
+  ],
+  install: glib_dep.version().version_compare('< 2.75.90'), # FIXME
+  install_dir: gt_prefix / gt_pkglibdir,
+  install_tag: 'runtime',
+  output: 'gschemas.compiled',
+)
+
 # Common sources
 
 app_sources = files(
@@ -181,6 +208,7 @@ server_resources_sources = gnome.compile_resources(
   'terminal.gresource.xml',
   c_name: 'terminal',
   dependencies: [
+    reference_schemas,
     menubar_ui_mnemonics,
     menubar_ui_nomnemonics,
   ],
@@ -318,6 +346,9 @@ prefs_resources_sources = gnome.compile_resources(
   'terminal-prefs-resources',
   'prefs.gresource.xml',
   c_name: 'terminal',
+  dependencies: [
+    reference_schemas,
+  ],
   export: false,
   install: false,
 )
@@ -358,6 +389,20 @@ client_sources = client_util_sources + debug_sources + dbus_sources + i18n_sourc
   'terminal.cc',
 )
 
+client_sources += gnome.compile_resources(
+  'terminal-client-resources',
+  'client.gresource.xml',
+  c_name: 'terminal',
+  dependencies: [
+    reference_schemas,
+    menubar_ui_mnemonics,
+    menubar_ui_nomnemonics,
+  ],
+  export: false,
+  install: false,
+)
+
+
 client_incs = [
   top_inc,
   src_inc,
@@ -377,6 +422,7 @@ client_deps = [
   gio_unix_dep,
   glib_dep,
   gtk_dep,
+  libdl_dep,
   x11_dep,
   uuid_dep,
   vte_dep,
@@ -390,33 +436,6 @@ client = executable(
   install: true,
   install_tag: 'runtime',
   sources: client_sources,
-)
-
-# Settings schemas
-
-install_data(
-  gt_dns_name + '.gschema.xml',
-  install_dir: gt_prefix / gt_schemadir,
-  install_tag: 'runtime',
-)
-
-meson.add_install_script(
-  'meson_compileschemas.py',
-  gt_prefix / gt_schemadir,
-)
-
-reference_schemas = custom_target(
-  'gschemas.compiled',
-  command: [
-    glib_compile_schemas,
-    '--targetdir', meson.current_build_dir(),
-    '--schema-file', files(gt_dns_name + '.gschema.xml'),
-    '--schema-file', files('external.gschema.xml'),
-  ],
-  install: true,
-  install_dir: gt_prefix / gt_pkglibdir,
-  install_tag: 'runtime',
-  output: 'gschemas.compiled',
 )
 
 # Nautilus extension

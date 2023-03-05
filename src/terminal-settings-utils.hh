@@ -44,7 +44,7 @@ GTree* terminal_g_settings_backend_create_tree(void);
 
 void terminal_g_settings_backend_print_tree(GTree* tree);
 
-GSettingsSchemaSource* terminal_g_settings_schema_source_get_default(void);
+GSettingsSchemaSource* terminal_g_settings_schema_source_get_default(char const* base_path);
 
 GTree* terminal_g_settings_backend_create_tree(void);
 

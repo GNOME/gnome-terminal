@@ -63,7 +63,7 @@ GModule*
 g_module_open (char const* file_name,
                GModuleFlags flags)
 {
-  static decltype(&g_module_open) _g_module_open;
+  static decltype(&g_module_open) _g_module_open = nullptr;
   if (!_g_module_open)
     _g_module_open = reinterpret_cast<decltype(_g_module_open)>(dlsym(RTLD_NEXT, "g_module_open"));
 

@@ -51,6 +51,9 @@ enum {
 
 #define TERMINAL_PREFERENCES_BINARY_NAME        "gnome-terminal-preferences"
 
+#define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal"
+
+
 G_END_DECLS
 
 #endif /* !TERMINAL_DEFINES_H */

@@ -953,7 +953,7 @@ terminal_app_constructed(GObject *object)
   if (app->settings_backend == nullptr)
     app->settings_backend = g_settings_backend_get_default ();
 
-  app->schema_source = terminal_g_settings_schema_source_get_default();
+  app->schema_source = terminal_g_settings_schema_source_get_default(g_application_get_resource_base_path(G_APPLICATION(app)));
 
   /* Desktop proxy settings */
   app->system_proxy_settings = terminal_g_settings_new(app->settings_backend,

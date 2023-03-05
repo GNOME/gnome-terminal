@@ -304,7 +304,7 @@ static inline void gs_local_fd_close (void *v)
 }
 
 /**
- * gs_free_close:
+ * gs_close_fd:
  *
  * Call close() on a variable location when it goes out of
  * scope.

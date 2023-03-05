@@ -18,12 +18,119 @@
 #include "config.h"
 #define G_SETTINGS_ENABLE_BACKEND
 
+#include <cassert>
 #include <gio/gsettingsbackend.h>
 
 #include "terminal-settings-utils.hh"
 #include "terminal-client-utils.hh"
 #include "terminal-debug.hh"
+#include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
+
+
+#ifdef __linux__
+
+// We want to load a schema from a built-in compiled schema source.
+// However, glib offers no public API to do so (see
+// https://gitlab.gnome.org/GNOME/glib/-/issues/499).
+//
+// This is the simplest and 'least' hacky work-around I could think of.
+// Using the knowledge of how g_settings_schema_source_new_from_directory()
+// works internally by using g_mapped_file_new() on the gschemas.compiled
+// file in the passed directory, we interpose g_mapped_file_new() (which
+// works despite -Bsymbolic_functions since libgio and libglib are distinct
+// libraries) and when passed the correct (fake) file path, instead of
+// creating the mapped file normally, we instead load the gschemas.compiled
+// from resources, create a memfd, write the data to it, and then return
+// g_mapped_file_new_from_fd() on the memfd.
+//
+// Then we can use g_settings_schema_source_lookup() to find our schema,
+// and g_settings_new_full() to create a GSettings for our build-in schema.
+
+#include <dlfcn.h>
+#include <sys/mman.h>
+
+#define GSCHEMAS_DOT_COMPILED "gschemas.compiled"
+#define RESOURCE_SCHEMA_DIR "/.a69bd5bd-36fd-4cc2-839f-d198d78f56b6"
+#define RESOURCE_SCHEMA_FILE RESOURCE_SCHEMA_DIR G_DIR_SEPARATOR_S GSCHEMAS_DOT_COMPILED
+#define SCHEMA_RESOURCE_PATH TERMINAL_RESOURCES_PATH_PREFIX "/schemas/compiled"
+
+extern "C" __attribute__((__visibility__("default")))
+GMappedFile* g_mapped_file_new(char const* filename,
+                               gboolean writable,
+                               GError** error);
+
+
+static GMappedFile*
+_g_mapped_file_new_from_resource(char const* resource_path,
+                                 char const* memfd_basename,
+                                 gboolean writable,
+                                 GError** error)
+{
+  if (writable) {
+    g_set_error(error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                "Cannot create writable resource mapping");
+    return nullptr;
+  }
+
+  gs_unref_bytes auto bytes = g_resources_lookup_data(resource_path,
+                                                      GResourceLookupFlags(0),
+                                                      error);
+  if (!bytes)
+    return nullptr;
+
+  gs_close_fd auto fd = memfd_create(memfd_basename, MFD_CLOEXEC);
+  if (fd == -1) {
+    auto const errsv = errno;
+    g_set_error(error, G_IO_ERROR, g_io_error_from_errno(errsv),
+                "memfd_create failed: %s", g_strerror(errsv));
+    return nullptr;
+  }
+
+  auto size = gsize{};
+  auto const data  = g_bytes_get_data(bytes, &size);
+  auto const r = write(fd, data, size);
+  if (r == -1) {
+    auto const errsv = errno;
+    g_set_error(error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                "Failed to write all data to memfd: %s", g_strerror(errsv));
+    return nullptr;
+  }
+
+  return g_mapped_file_new_from_fd(fd, writable, error);
+}
+
+static struct MapResourceEntry {
+  char const* filename;
+  char const* resource_path;
+  char const* memfd_basename;
+} const filename_to_resource_maps[] = {
+  { RESOURCE_SCHEMA_FILE, SCHEMA_RESOURCE_PATH, GSCHEMAS_DOT_COMPILED },
+  { nullptr, nullptr },
+};
+
+GMappedFile*
+g_mapped_file_new(char const* filename,
+                  gboolean writable,
+                  GError** error)
+{
+  static decltype(&g_mapped_file_new) _g_mapped_file_new = nullptr;
+  if (!_g_mapped_file_new)
+    _g_mapped_file_new = reinterpret_cast<decltype(&g_mapped_file_new)>(dlsym(RTLD_NEXT, "g_mapped_file_new"));
+  assert(_g_mapped_file_new);
+
+  for (auto i = 0; filename_to_resource_maps[i].filename; ++i) {
+    if (strcmp(filename, filename_to_resource_maps[i].filename) == 0)
+      return _g_mapped_file_new_from_resource(filename_to_resource_maps[i].resource_path,
+                                              filename_to_resource_maps[i].memfd_basename,
+                                              writable,
+                                              error);
+  }
+
+  return _g_mapped_file_new(filename, writable, error);
+}
+
+#endif // __linux__
 
 #ifdef ENABLE_DEBUG
 
@@ -552,31 +659,69 @@ schemas_source_verify(GSettingsSchemaSource* source,
 }
 
 GSettingsSchemaSource*
-terminal_g_settings_schema_source_get_default(void)
+terminal_g_settings_schema_source_get_default(char const* base_path)
 {
   GSettingsSchemaSource* default_source = g_settings_schema_source_get_default();
+  GSettingsSchemaSource* reference_source = nullptr;
 
-  gs_free auto schema_dir =
-    terminal_client_get_directory_uninstalled(
+  gs_free_error GError* error = nullptr;
+
+#if 0 // GLIB_CHECK_VERSION(2, ?, 0)
+  gs_free auto schema_path = g_strjoin("/",
+                                       base_path ? base_path : TERMINAL_RESOURCES_PATH_PREFIX,
+                                       "schemas",
+                                       "compiled",
+                                       nullptr);
+  reference_source =
+    g_settings_schema_source_new_from_resource(schemas_path,
+                                               G_RESOURCE_LOOKUP_FLAGS_NONE,
+                                               nullptr /* parent source */,
+                                               true /* trusted */,
+                                               &error);
+
+#else
+
+#ifdef __linux__
+
+  reference_source =
+    g_settings_schema_source_new_from_directory(RESOURCE_SCHEMA_DIR,
+                                                nullptr, // parent source,
+                                                true, // trusted,
+                                                &error);
+  if (!reference_source) {
+    g_printerr("Failed to load built-in schema source from resource: %s\n",
+               error->message);
+    g_clear_error(&error);
+
+    // fall back to the installed file
+  }
+
+#endif // __linux__
+
+  if (!reference_source) {
+    gs_free auto schema_dir =
+      terminal_client_get_directory_uninstalled(
 #if defined(TERMINAL_SERVER)
-                                              TERM_LIBEXECDIR,
+                                                TERM_LIBEXECDIR,
 #elif defined(TERMINAL_PREFERENCES)
-                                              TERM_LIBEXECDIR,
+                                                TERM_LIBEXECDIR,
 #elif defined(TERMINAL_CLIENT)
-                                              TERM_BINDIR,
+                                                TERM_BINDIR,
 #else
 #error Need to define installed location
 #endif
-                                              TERM_PKGLIBDIR,
-                                              "gschemas.compiled",
-                                              GFileTest(0));
+                                                TERM_PKGLIBDIR,
+                                                "gschemas.compiled",
+                                                GFileTest(0));
 
-  gs_free_error GError* error = nullptr;
-  GSettingsSchemaSource* reference_source =
-    g_settings_schema_source_new_from_directory(schema_dir,
-                                                nullptr /* parent source */,
-                                                FALSE /* trusted */,
-                                                &error);
+    reference_source =
+      g_settings_schema_source_new_from_directory(schema_dir,
+                                                  nullptr /* parent source */,
+                                                  FALSE /* trusted */,
+                                                  &error);
+  }
+#endif // glib 2.?
+
   if (!reference_source)  {
     /* Can only use the installed schemas, or abort here. */
     g_printerr("Failed to load reference schemas: %s\n"
