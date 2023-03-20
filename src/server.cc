@@ -153,6 +153,7 @@ init_server (int argc,
   terminal_i18n_init (TRUE);
 
   g_unsetenv ("CHARSET");
+  g_unsetenv ("OUTPUT_CHARSET");
   const char *charset;
   if (!g_get_charset (&charset)) {
     g_printerr ("Non UTF-8 locale (%s) is not supported!\n", charset);
