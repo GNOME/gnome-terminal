@@ -1634,10 +1634,6 @@ xte_data_check_one(char const* file,
                                                 G_KEY_FILE_DESKTOP_KEY_TRY_EXEC,
                                                 nullptr);
   if (try_exec && try_exec[0]) {
-    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
-                          "Desktop file \"%s\" has no TryExec field.\n",
-                          file);
-
     // TryExec may be an abolute path, or be searched in $PATH
     gs_free char* exec_path = nullptr;
     if (g_path_is_absolute(try_exec))
@@ -1661,6 +1657,10 @@ xte_data_check_one(char const* file,
     // is DBusActivatable=true in which case we would need to find
     // out if the D-Bus service corresponding to the name of the desktop
     // file (without the .desktop extension) is activatable.
+
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Desktop file \"%s\" has no TryExec field.\n",
+                          file);
   }
 
   return true;
