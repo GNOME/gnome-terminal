@@ -46,6 +46,8 @@
 #include "terminal-screen-container.hh"
 #include "terminal-screen.hh"
 #include "terminal-window.hh"
+
+#include <handy.h>
 #endif
 
 #ifdef TERMINAL_PREFERENCES
@@ -148,6 +150,8 @@ struct _TerminalApp
 
   GWeakRef prefs_process_ref;
 
+  HdyStyleManager* style_manager;
+
 #endif /* TERMINAL_SERVER */
 
   gboolean ask_default;
@@ -244,6 +248,8 @@ terminal_app_init_debug (void)
 
 /* Helper functions */
 
+#ifdef TERMINAL_SERVER
+
 static gboolean
 strv_contains_gnome (char **strv)
 {
@@ -279,6 +285,8 @@ terminal_app_should_use_headerbar (TerminalApp *app)
   gs_strfreev auto desktops = terminal_util_get_desktops();
   return strv_contains_gnome(desktops);
 }
+
+#endif /* TERMINAL_SERVER */
 
 static gboolean
 load_css_from_resource (GApplication *application,
@@ -381,22 +389,42 @@ terminal_app_remove_profile (TerminalApp *app,
   terminal_settings_list_remove_child (app->profiles_list, uuid);
 }
 
+#ifdef TERMINAL_SERVER
+
 static void
 terminal_app_theme_variant_changed_cb (GSettings   *settings,
                                        const char  *key,
                                        GtkSettings *gtk_settings)
 {
-  TerminalThemeVariant theme;
+  auto const theme = TerminalThemeVariant(g_settings_get_enum(settings, key));
 
-  theme = TerminalThemeVariant(g_settings_get_enum (settings, key));
-  if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
-    gtk_settings_reset_property (gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
-  else
-    g_object_set (gtk_settings,
-                  GTK_SETTING_PREFER_DARK_THEME,
-                  theme == TERMINAL_THEME_VARIANT_DARK,
-                  nullptr);
+  auto const app = terminal_app_get();
+  if (hdy_style_manager_get_system_supports_color_schemes(app->style_manager)) {
+    switch (theme) {
+    case TERMINAL_THEME_VARIANT_SYSTEM:
+      hdy_style_manager_set_color_scheme(app->style_manager,
+                                         HDY_COLOR_SCHEME_PREFER_LIGHT);
+      break;
+    case TERMINAL_THEME_VARIANT_LIGHT:
+      hdy_style_manager_set_color_scheme(app->style_manager,
+                                         HDY_COLOR_SCHEME_FORCE_LIGHT);
+      break;
+    case TERMINAL_THEME_VARIANT_DARK:
+      hdy_style_manager_set_color_scheme(app->style_manager,
+                                         HDY_COLOR_SCHEME_FORCE_DARK);
+    }
+  } else {
+    if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
+      gtk_settings_reset_property(gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
+    else
+      g_object_set(gtk_settings,
+                   GTK_SETTING_PREFER_DARK_THEME,
+                   theme == TERMINAL_THEME_VARIANT_DARK,
+                   nullptr);
+  }
 }
+
+#endif /* TERMINAL_SERVER */
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
@@ -927,6 +955,8 @@ static void
 terminal_app_init (TerminalApp* app)
 {
 #ifdef TERMINAL_SERVER
+  hdy_init ();
+
   g_weak_ref_init(&app->prefs_process_ref, nullptr);
 
   app->screen_map = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, nullptr);
@@ -999,21 +1029,29 @@ terminal_app_constructed(GObject *object)
                                                     app->schema_source,
                                                     GTK_DEBUG_SETTING_SCHEMA);
 
+#ifdef TERMINAL_SERVER
+
   /* These are internal settings that exists only for distributions
    * to override, so we cache them on startup and don't react to changes.
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
   app->use_headerbar = terminal_app_should_use_headerbar (app);
 
-  GtkSettings *gtk_settings = gtk_settings_get_default ();
+  app->style_manager = hdy_style_manager_get_default();
+
+  auto const gtk_settings = gtk_settings_get_default ();
   terminal_app_theme_variant_changed_cb (app->global_settings,
                                          TERMINAL_SETTING_THEME_VARIANT_KEY, gtk_settings);
+
   g_signal_connect (app->global_settings,
                     "changed::" TERMINAL_SETTING_THEME_VARIANT_KEY,
                     G_CALLBACK (terminal_app_theme_variant_changed_cb),
                     gtk_settings);
+  g_signal_connect(app->style_manager,
+                   "notify::system-supports-color-schemes",
+                   G_CALLBACK(terminal_app_theme_variant_changed_cb),
+                   gtk_settings);
 
-#ifdef TERMINAL_SERVER
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();
   app->clipboard = gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);

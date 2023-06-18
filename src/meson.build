@@ -255,6 +255,7 @@ server_deps = [
   glib_dep,
   gtk_dep,
   libdl_dep,
+  libhandy_dep,
   pcre2_dep,
   pthreads_dep,
   schemas_dep,
