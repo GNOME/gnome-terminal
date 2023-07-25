@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-25 19:54+0000\n"
-"PO-Revision-Date: 2023-01-30 11:39+0700\n"
+"POT-Creation-Date: 2023-07-23 21:46+0000\n"
+"PO-Revision-Date: 2023-07-25 16:15+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -754,8 +754,8 @@ msgid ""
 "with some applications run inside the terminal so it’s possible to turn them "
 "off."
 msgstr ""
-"Menentukan apakah tombol akses ke bilah menu dapat menggunakan kombinasi Alt"
-"+huruf. Ini mungkin dapat mengganggu aplikasi yang berjalan di dalam "
+"Menentukan apakah tombol akses ke bilah menu dapat menggunakan kombinasi "
+"Alt+huruf. Ini mungkin dapat mengganggu aplikasi yang berjalan di dalam "
 "terminal sehingga mungkin mematikannya."
 
 #: src/org.gnome.Terminal.gschema.xml:643
@@ -851,18 +851,18 @@ msgstr "Selanjutnya"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Baku"
+msgid "Follow system style"
+msgstr "Ikuti gaya sistem"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Terang"
+msgid "Light style"
+msgstr "Gaya terang"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Gelap"
+msgid "Dark style"
+msgstr "Gaya gelap"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1493,6 +1493,7 @@ msgid "Palette entry %u"
 msgstr "Entri palet %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Cari"
 
@@ -1524,7 +1525,7 @@ msgstr "Sesuai ekspresi _reguler"
 msgid "_Wrap around"
 msgstr "_Lipat kata"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Tab Baru"
 
@@ -1681,30 +1682,34 @@ msgstr "_Aksi"
 msgid "Shortcut _Key"
 msgstr "_Tombol Pintas"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Terminal Baru"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Terminal Baru"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "_Tab Baru"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "_Jendela Baru"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Ubah _Profil"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profil"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1760,7 +1765,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "Pemer_iksa"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Preferensi"
@@ -2064,8 +2069,8 @@ msgstr "Membuat jendela sepenuh layar"
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
-"Atur ukuran jendela; sebagai contoh: 80x24, atau 80x24+200+200 (KOLOMxBARIS+X"
-"+Y)"
+"Atur ukuran jendela; sebagai contoh: 80x24, atau 80x24+200+200 "
+"(KOLOMxBARIS+X+Y)"
 
 #: src/terminal-options.cc:1511
 msgid "GEOMETRY"
@@ -2258,33 +2263,29 @@ msgstr "Umum"
 msgid "Shortcuts"
 msgstr "Pintas"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profil"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Tak ada perintah yang diberikan maupun shell yang diminta"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "Luncu_rkan Ulang"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Terjadi galat ketika membuat proses anak terminal"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Proses anak keluar secara normal dengan status %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Proses anak digugurkan oleh sinyal %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Proses anak digugurkan."
 
@@ -2467,6 +2468,14 @@ msgstr "Tutup Jende_la"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Gagal mengurai argumen: \"%s\"\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Baku"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Gelap"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
