@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-18 23:54+0000\n"
-"PO-Revision-Date: 2023-01-20 17:01+0100\n"
+"POT-Creation-Date: 2023-07-23 21:46+0000\n"
+"PO-Revision-Date: 2023-07-26 11:19+0200\n"
 "Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -29,10 +29,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -905,18 +905,18 @@ msgstr "Nächste"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Vorgabe"
+msgid "Follow system style"
+msgstr "Systemstil folgen"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Hell"
+msgid "Light style"
+msgstr "Heller Stil"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Dunkel"
+msgid "Dark style"
+msgstr "Dunkler Stil"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1554,6 +1554,7 @@ msgid "Palette entry %u"
 msgstr "Paletteneintrag %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Suchen"
 
@@ -1585,7 +1586,7 @@ msgstr "Als _regulären Ausdruck verarbeiten"
 msgid "_Wrap around"
 msgstr "Suche beim Erreichen des Endes am Anfang _fortsetzen"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Neuer Reiter"
 
@@ -1743,30 +1744,34 @@ msgstr "_Aktion"
 msgid "Shortcut _Key"
 msgstr "Tasten_kombination"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Neues Terminal"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "Neues _Terminal"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Neuer _Reiter"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Neues _Fenster"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "_Profil wechseln"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profile"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1822,7 +1827,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspekteur"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Einstellungen"
@@ -2131,8 +2136,8 @@ msgstr "In den Vollbildmodus wechseln"
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
-"Fenstergröße festlegen; Beispiel: 80x24, oder 80x24+200+200 (SPALTENxZEILEN+X"
-"+Y)"
+"Fenstergröße festlegen; Beispiel: 80x24, oder 80x24+200+200 "
+"(SPALTENxZEILEN+X+Y)"
 
 #: src/terminal-options.cc:1511
 msgid "GEOMETRY"
@@ -2324,37 +2329,33 @@ msgstr "Allgemein"
 
 #: src/terminal-prefs.cc:520
 msgid "Shortcuts"
-msgstr "Tastenkürzel"
-
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profile"
+msgstr "Tastenkombinationen"
 
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Kein Befehl angegeben oder Shell angefordert"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "Erneut sta_rten"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Beim Erzeugen des Kindprozesses für dieses Terminal ist ein Fehler "
 "aufgetreten"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Der Kindprozess wurde normal mit Status %d beendet."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Der Kindprozess wurde mit Signal %d beendet."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Der Kindprozess wurde beendet."
 
@@ -2547,6 +2548,14 @@ msgstr "Fenster _schließen"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Einlesen der Argumente schlug fehl: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Vorgabe"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Dunkel"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
