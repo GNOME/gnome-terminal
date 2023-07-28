@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-24 23:02+0000\n"
-"PO-Revision-Date: 2023-01-25 10:22+0200\n"
+"POT-Creation-Date: 2023-07-23 21:46+0000\n"
+"PO-Revision-Date: 2023-07-28 10:26+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
-"Language-Team: Hebrew <>\n"
+"Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Generator: Gtranslator 42.0\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -834,18 +834,19 @@ msgstr "הבא"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "ברירת מחדל"
+msgid "Follow system style"
+msgstr "שימוש בסגנון המערכת"
 
 #: src/preferences.ui:54
+# msgctxt "theme variant"
 msgctxt "theme variant"
-msgid "Light"
-msgstr "בהיר"
+msgid "Light style"
+msgstr "סגנון בהיר"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "כהה"
+msgid "Dark style"
+msgstr "סגנון כהה"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1476,6 +1477,7 @@ msgid "Palette entry %u"
 msgstr "רשומה %u בערכת הצבעים"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "חיפוש"
 
@@ -1507,7 +1509,7 @@ msgstr "התאמה כביטוי _רגולרי"
 msgid "_Wrap around"
 msgstr "_גלישה מסביב"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "לשונית חדשה"
 
@@ -1664,30 +1666,34 @@ msgstr "_פעולה"
 msgid "Shortcut _Key"
 msgstr "_מקש קיצור"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "מסוף חדש"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "מסוף _חדש"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "_לשונית חדשה"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "_חלון חדש"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "החלפת _פרופיל"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_פרופיל"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "פרופילים"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1743,7 +1749,7 @@ msgstr "‏_4. ‎132×43"
 msgid "_Inspector"
 msgstr "_מפקח"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "ה_עדפות"
@@ -2240,33 +2246,29 @@ msgstr "כללי"
 msgid "Shortcuts"
 msgstr "מקשי קיצור"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "פרופילים"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "לא סופקה פקודה או שהתבקשה מעטפת"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "טעינה _מחדש"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "ארעה שגיאה ביצירת תהליך בן במסוף זה"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "תהליך הצאצא הסתיים כרגיל עם מצב %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "תהליך הצאצא בוטל עם האות %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "תהליך הצאצא בוטל."
 
@@ -2447,6 +2449,14 @@ msgstr "סגירת ה_חלון"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Failed to parse arguments: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "ברירת מחדל"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "כהה"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
@@ -3534,14 +3544,14 @@ msgstr "Failed to parse arguments: %s\n"
 #~ "considered the correct setting for the Backspace key."
 
 #~ msgid ""
-#~ "Sets what code the delete key generates. Possible values are \"ascii-"
-#~ "del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
+#~ "Sets what code the delete key generates. Possible values are \"ascii-del"
+#~ "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
 #~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
 #~ "typically bound to backspace or delete. \"escape-sequence\" is normally "
 #~ "considered the correct setting for the Delete key."
 #~ msgstr ""
-#~ "Sets what code the delete key generates. Possible values are \"ascii-"
-#~ "del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
+#~ "Sets what code the delete key generates. Possible values are \"ascii-del"
+#~ "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
 #~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
 #~ "typically bound to backspace or delete. \"escape-sequence\" is normally "
 #~ "considered the correct setting for the Delete key."
@@ -3563,22 +3573,20 @@ msgstr "Failed to parse arguments: %s\n"
 #~ "a vertical line cursor, or \"underline\" to use an underline cursor."
 
 #~ msgid ""
-#~ "Type of terminal background. May be \"solid\" for a solid color, "
-#~ "\"image\" for an image, or \"transparent\" for either real transparency "
-#~ "if a compositing window manager is running, or pseudo-transparency "
-#~ "otherwise."
+#~ "Type of terminal background. May be \"solid\" for a solid color, \"image"
+#~ "\" for an image, or \"transparent\" for either real transparency if a "
+#~ "compositing window manager is running, or pseudo-transparency otherwise."
 #~ msgstr ""
-#~ "Type of terminal background. May be \"solid\" for a solid color, "
-#~ "\"image\" for an image, or \"transparent\" for either real transparency "
-#~ "if a compositing window manager is running, or pseudo-transparency "
-#~ "otherwise."
+#~ "Type of terminal background. May be \"solid\" for a solid color, \"image"
+#~ "\" for an image, or \"transparent\" for either real transparency if a "
+#~ "compositing window manager is running, or pseudo-transparency otherwise."
 
 #~ msgid ""
-#~ "Where to put the terminal scrollbar. Possibilities are \"left\", "
-#~ "\"right\", and \"hidden\"."
+#~ "Where to put the terminal scrollbar. Possibilities are \"left\", \"right"
+#~ "\", and \"hidden\"."
 #~ msgstr ""
-#~ "Where to put the terminal scrollbar. Possibilities are \"left\", "
-#~ "\"right\", and \"hidden\"."
+#~ "Where to put the terminal scrollbar. Possibilities are \"left\", \"right"
+#~ "\", and \"hidden\"."
 
 #~ msgid ""
 #~ "Whether to ask for confirmation when closing a terminal window which has "
