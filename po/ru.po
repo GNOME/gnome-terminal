@@ -15,9 +15,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2022-11-01 19:36+0000\n"
-"PO-Revision-Date: 2022-11-01 22:59+0300\n"
-"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
+"POT-Creation-Date: 2023-07-23 21:46+0000\n"
+"PO-Revision-Date: 2023-07-28 20:34+1000\n"
+"Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -25,13 +25,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
-#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:594
+#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -57,11 +57,12 @@ msgstr "Параметры"
 msgid "Configure the command line"
 msgstr "Настроить командную строку"
 
-#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:138
+#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:143
 msgid "Terminal Preferences"
 msgstr "Параметры терминала"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:34
+#: data/org.gnome.Terminal.metainfo.xml.in:63
 msgid "org.gnome.Terminal.desktop"
 msgstr "org.gnome.Terminal.desktop"
 
@@ -863,18 +864,18 @@ msgstr "Следующая"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "По умолчанию"
+msgid "Follow system style"
+msgstr "Системный стиль"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Светлый"
+msgid "Light style"
+msgstr "Светлый стиль"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Тёмный"
+msgid "Dark style"
+msgstr "Тёмный стиль"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1505,6 +1506,7 @@ msgid "Palette entry %u"
 msgstr "Элемент палитры %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Поиск"
 
@@ -1536,7 +1538,7 @@ msgstr "По _регулярному выражению"
 msgid "_Wrap around"
 msgstr "_Автоматически переходить к началу"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Создать вкладку"
 
@@ -1693,30 +1695,34 @@ msgstr "_Действие"
 msgid "Shortcut _Key"
 msgstr "К_омбинация клавиш"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Создать терминал"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Создать терминал"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Создать _вкладку"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Создать _окно"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Изменить _профиль"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Профиль"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Профили"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1772,7 +1778,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Инспектор"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Параметры"
@@ -1901,31 +1907,31 @@ msgstr "_Открепить терминал"
 msgid "_Contents"
 msgstr "_Содержание"
 
-#: src/terminal-nautilus.cc:539
+#: src/terminal-nautilus.cc:542
 msgid "Open in _Remote Terminal"
 msgstr "Открыть в _удалённом терминале"
 
-#: src/terminal-nautilus.cc:541
+#: src/terminal-nautilus.cc:544
 msgid "Open in _Local Terminal"
 msgstr "Открыть в _локальном терминале"
 
-#: src/terminal-nautilus.cc:545 src/terminal-nautilus.cc:556
+#: src/terminal-nautilus.cc:548 src/terminal-nautilus.cc:559
 msgid "Open the currently selected folder in a terminal"
 msgstr "Открыть выбранную папку в терминале"
 
-#: src/terminal-nautilus.cc:547 src/terminal-nautilus.cc:558
+#: src/terminal-nautilus.cc:550 src/terminal-nautilus.cc:561
 msgid "Open the currently open folder in a terminal"
 msgstr "Открыть текущую папку в терминале"
 
-#: src/terminal-nautilus.cc:553
+#: src/terminal-nautilus.cc:556
 msgid "Open in T_erminal"
 msgstr "Открыть в _терминале"
 
-#: src/terminal-nautilus.cc:563
+#: src/terminal-nautilus.cc:566
 msgid "Open T_erminal"
 msgstr "Открыть _терминал"
 
-#: src/terminal-nautilus.cc:564
+#: src/terminal-nautilus.cc:567
 msgid "Open a terminal"
 msgstr "Открыть терминал"
 
@@ -1933,7 +1939,7 @@ msgstr "Открыть терминал"
 msgid "C_lose Terminal"
 msgstr "_Закрыть терминал"
 
-#: src/terminal-options.cc:320
+#: src/terminal-options.cc:332
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1942,7 +1948,7 @@ msgstr ""
 "Параметр «%s» устарел и может быть удалён в будущих версиях gnome-terminal."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: src/terminal-options.cc:331
+#: src/terminal-options.cc:343
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1951,46 +1957,46 @@ msgstr ""
 "Используйте «%s» для указания завершения параметров, а затем укажите строку "
 "команды."
 
-#: src/terminal-options.cc:341 src/terminal-options.cc:354
+#: src/terminal-options.cc:353 src/terminal-options.cc:366
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "Параметр «%s» не поддерживается в этой версии gnome-terminal."
 
-#: src/terminal-options.cc:426
+#: src/terminal-options.cc:438
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Аргумент для «%s» не является допустимой командой: %s"
 
-#: src/terminal-options.cc:599
+#: src/terminal-options.cc:611
 msgid "Two roles given for one window"
 msgstr "Две роли заданы для одного окна"
 
-#: src/terminal-options.cc:620 src/terminal-options.cc:653
+#: src/terminal-options.cc:632 src/terminal-options.cc:665
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "Параметр «%s» указан дважды для одного и того же окна\n"
 
-#: src/terminal-options.cc:872
+#: src/terminal-options.cc:884
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Невозможно передать дважды файловый дескриптор %d"
 
-#: src/terminal-options.cc:934
+#: src/terminal-options.cc:946
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "Недопустимый масштаб «%s»"
 
-#: src/terminal-options.cc:941
+#: src/terminal-options.cc:953
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Масштаб %g слишком мал, используется масштаб %g\n"
 
-#: src/terminal-options.cc:949
+#: src/terminal-options.cc:961
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Масштаб %g слишком велик, используется масштаб %g\n"
 
-#: src/terminal-options.cc:987
+#: src/terminal-options.cc:999
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -1999,19 +2005,19 @@ msgstr ""
 "Параметр «%s» требует указания команды для запуска в оставшейся части "
 "командной строки"
 
-#: src/terminal-options.cc:1140
+#: src/terminal-options.cc:1160
 msgid "Can only use --wait once"
 msgstr "Можно использовать только --wait once"
 
-#: src/terminal-options.cc:1176
+#: src/terminal-options.cc:1196
 msgid "Not a valid terminal config file."
 msgstr "Неверный формат файла конфигурации терминала."
 
-#: src/terminal-options.cc:1189
+#: src/terminal-options.cc:1209
 msgid "Incompatible terminal config file version."
 msgstr "Версия файла конфигурации и терминала не совместимы."
 
-#: src/terminal-options.cc:1347
+#: src/terminal-options.cc:1368
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -2019,144 +2025,144 @@ msgstr ""
 "Не регистрировать с помощью сервера имён активации, не использовать повторно "
 "терминал"
 
-#: src/terminal-options.cc:1356
+#: src/terminal-options.cc:1377
 msgid "Load a terminal configuration file"
 msgstr "Загрузить конфигурацию терминала из файла"
 
-#: src/terminal-options.cc:1357
+#: src/terminal-options.cc:1378
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: src/terminal-options.cc:1373
+#: src/terminal-options.cc:1394
 msgid "Do not pass the environment"
 msgstr "Не передавать окружения"
 
-#: src/terminal-options.cc:1382
+#: src/terminal-options.cc:1403
 msgid "Show preferences window"
 msgstr "Показать окно параметров"
 
-#: src/terminal-options.cc:1391
+#: src/terminal-options.cc:1412
 msgid "Print environment variables to interact with the terminal"
 msgstr "Вывести переменные среды для взаимодействия с терминалом"
 
-#: src/terminal-options.cc:1409
+#: src/terminal-options.cc:1430
 msgid "Increase diagnostic verbosity"
 msgstr "Увеличить детализацию диагностики"
 
-#: src/terminal-options.cc:1418
+#: src/terminal-options.cc:1439
 msgid "Suppress output"
 msgstr "Ничего не выводить"
 
-#: src/terminal-options.cc:1431
+#: src/terminal-options.cc:1452
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Открыть новое окно, содержащее вкладку с профилем по умолчанию"
 
-#: src/terminal-options.cc:1440
+#: src/terminal-options.cc:1461
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "Открыть новую вкладку с профилем по умолчанию в последнем открытом окне"
 
-#: src/terminal-options.cc:1453
+#: src/terminal-options.cc:1474
 msgid "Turn on the menubar"
 msgstr "Включить панель меню"
 
-#: src/terminal-options.cc:1462
+#: src/terminal-options.cc:1483
 msgid "Turn off the menubar"
 msgstr "Выключить панель меню"
 
-#: src/terminal-options.cc:1471
+#: src/terminal-options.cc:1492
 msgid "Maximize the window"
 msgstr "Окно максимального размера"
 
-#: src/terminal-options.cc:1480
+#: src/terminal-options.cc:1501
 msgid "Full-screen the window"
 msgstr "Окно на полный экран"
 
-#: src/terminal-options.cc:1489
+#: src/terminal-options.cc:1510
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Установить размер окна. Например: 80x24 или 80x24+200+200 "
 "(СТРОКxСТОЛБЦОВ+X+Y)"
 
-#: src/terminal-options.cc:1490
+#: src/terminal-options.cc:1511
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРИЯ"
 
-#: src/terminal-options.cc:1498
+#: src/terminal-options.cc:1519
 msgid "Set the window role"
 msgstr "Установить роль окна"
 
-#: src/terminal-options.cc:1499
+#: src/terminal-options.cc:1520
 msgid "ROLE"
 msgstr "РОЛЬ"
 
-#: src/terminal-options.cc:1507
+#: src/terminal-options.cc:1528
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Сделать последнюю указанную вкладку в этом окне активной"
 
-#: src/terminal-options.cc:1520
+#: src/terminal-options.cc:1541
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Выполнить в терминале аргумент к этому параметру"
 
-#: src/terminal-options.cc:1529
+#: src/terminal-options.cc:1550
 msgid "Use the given profile instead of the default profile"
 msgstr "Использовать указанный профиль вместо профиля по умолчанию"
 
-#: src/terminal-options.cc:1530
+#: src/terminal-options.cc:1551
 msgid "PROFILE-NAME"
 msgstr "ИМЯ-ПРОФИЛЯ"
 
-#: src/terminal-options.cc:1538
+#: src/terminal-options.cc:1559
 msgid "Set the initial terminal title"
 msgstr "Установить начальный заголовок терминала"
 
-#: src/terminal-options.cc:1539
+#: src/terminal-options.cc:1560
 msgid "TITLE"
 msgstr "ЗАГОЛОВОК"
 
-#: src/terminal-options.cc:1547
+#: src/terminal-options.cc:1568
 msgid "Set the working directory"
 msgstr "Установить рабочий каталог"
 
-#: src/terminal-options.cc:1548
+#: src/terminal-options.cc:1569
 msgid "DIRNAME"
 msgstr "КАТАЛОГ"
 
-#: src/terminal-options.cc:1556
+#: src/terminal-options.cc:1577
 msgid "Wait until the child exits"
 msgstr "Ждать завершения работы потомков"
 
-#: src/terminal-options.cc:1565
+#: src/terminal-options.cc:1586
 msgid "Forward file descriptor"
 msgstr "Перенаправить файловый дескриптор"
 
 #. FD = file descriptor
-#: src/terminal-options.cc:1567
+#: src/terminal-options.cc:1588
 msgid "FD"
 msgstr "Файловый дескриптор"
 
-#: src/terminal-options.cc:1575
+#: src/terminal-options.cc:1596
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Установить масштаб терминала (1.0 = обычный размер)"
 
-#: src/terminal-options.cc:1576
+#: src/terminal-options.cc:1597
 msgid "ZOOM"
 msgstr "МАСШТАБ"
 
-#: src/terminal-options.cc:1663
+#: src/terminal-options.cc:1693
 msgid "COMMAND"
 msgstr "КОМАНДА"
 
-#: src/terminal-options.cc:1671
+#: src/terminal-options.cc:1701
 msgid "GNOME Terminal Emulator"
 msgstr "Эмулятор терминала GNOME"
 
-#: src/terminal-options.cc:1672
+#: src/terminal-options.cc:1702
 msgid "Show GNOME Terminal options"
 msgstr "Показать параметры терминала GNOME"
 
-#: src/terminal-options.cc:1682
+#: src/terminal-options.cc:1712
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2164,11 +2170,11 @@ msgstr ""
 "Параметры для открытия новых окон или вкладов терминала; эти параметры могут "
 "быть использованы несколько раз:"
 
-#: src/terminal-options.cc:1683
+#: src/terminal-options.cc:1713
 msgid "Show terminal options"
 msgstr "Показать параметры терминала"
 
-#: src/terminal-options.cc:1691
+#: src/terminal-options.cc:1721
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2176,11 +2182,11 @@ msgstr ""
 "Параметры окна; если используются до первого аргумента --window или --tab, "
 "устанавливаются по умолчанию для всех окон:"
 
-#: src/terminal-options.cc:1692
+#: src/terminal-options.cc:1722
 msgid "Show per-window options"
 msgstr "Показать параметры, применяемые к окну"
 
-#: src/terminal-options.cc:1700
+#: src/terminal-options.cc:1730
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2188,7 +2194,7 @@ msgstr ""
 "Параметры терминала; Если используются до первого аргумента --window или --"
 "tab, устанавливаются по умолчанию для всех терминалов:"
 
-#: src/terminal-options.cc:1701
+#: src/terminal-options.cc:1731
 msgid "Show per-terminal options"
 msgstr "Показать параметры, применяемые к терминалу"
 
@@ -2270,33 +2276,29 @@ msgstr "Основное"
 msgid "Shortcuts"
 msgstr "Комбинации клавиш"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Профили"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Не задана команда или оболочка"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "Пере_запустить"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Произошла ошибка при создании дочернего процесса для этого терминала"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Дочерний процесс корректно завершился с кодом %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Работа дочернего процесса прервана по сигналу %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Работа дочернего процесса прервана."
 
@@ -2475,10 +2477,18 @@ msgstr ""
 msgid "C_lose Window"
 msgstr "_Закрыть окно"
 
-#: src/terminal.cc:590
+#: src/terminal.cc:594
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Не удалось разобрать аргументы: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "По умолчанию"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Тёмный"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
