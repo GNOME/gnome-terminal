@@ -1,10 +1,10 @@
 # Swedish messages for gnome-terminal.
-# Copyright © 2002-2012, 2014-2022 Free Software Foundation, Inc.
+# Copyright © 2002-2012, 2014-2023 Free Software Foundation, Inc.
 # Christian Rose <menthos@menthos.com>, 2002, 2003, 2004, 2005.
 # Richard Hult <richard@imendio.com>, 2004.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
 # Mattias Eriksson <snaggen@gmail.com>, 2014.
-# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Anders Jonsson <anders.jonsson@norsjovallen.se>, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 # Sebastian Rasmussen <sebras@gmail.com>, 2015.
 # Luna Jernberg <droidbittin@gmail.com>, 2020, 2021.
 #
@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2022-11-01 19:36+0000\n"
-"PO-Revision-Date: 2022-11-01 22:55+0100\n"
+"POT-Creation-Date: 2023-07-23 21:46+0000\n"
+"PO-Revision-Date: 2023-07-24 00:43+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -21,13 +21,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
-#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:594
+#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -53,11 +53,12 @@ msgstr "Inställningar"
 msgid "Configure the command line"
 msgstr "Konfigurera kommandoraden"
 
-#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:138
+#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:143
 msgid "Terminal Preferences"
 msgstr "Terminalinställningar"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:34
+#: data/org.gnome.Terminal.metainfo.xml.in:63
 msgid "org.gnome.Terminal.desktop"
 msgstr "org.gnome.Terminal.desktop"
 
@@ -859,18 +860,18 @@ msgstr "Nästa"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Standard"
+msgid "Follow system style"
+msgstr "Följ systemets stil"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Ljust"
+msgid "Light style"
+msgstr "Ljus stil"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Mörkt"
+msgid "Dark style"
+msgstr "Mörk stil"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1504,6 +1505,7 @@ msgid "Palette entry %u"
 msgstr "Palettpost %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Sök"
 
@@ -1535,7 +1537,7 @@ msgstr "Matcha som _reguljärt uttryck"
 msgid "_Wrap around"
 msgstr "_Börja om från början"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Ny flik"
 
@@ -1693,30 +1695,34 @@ msgstr "_Åtgärd"
 msgid "Shortcut _Key"
 msgstr "Snabb_tangent"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Ny terminal"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "Ny _terminal"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Ny f_lik"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Nytt _fönster"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Ändra _profil"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profiler"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1772,7 +1778,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspekterare"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Inställningar"
@@ -1903,35 +1909,35 @@ msgid "_Contents"
 msgstr "_Innehåll"
 
 # _t krockar med "s_täng flik"
-#: src/terminal-nautilus.cc:539
+#: src/terminal-nautilus.cc:542
 msgid "Open in _Remote Terminal"
 msgstr "Öppna i fjä_rrterminal"
 
 # _t krockar med "s_täng flik"
-#: src/terminal-nautilus.cc:541
+#: src/terminal-nautilus.cc:544
 msgid "Open in _Local Terminal"
 msgstr "Öppna i _lokal terminal"
 
-#: src/terminal-nautilus.cc:545 src/terminal-nautilus.cc:556
+#: src/terminal-nautilus.cc:548 src/terminal-nautilus.cc:559
 msgid "Open the currently selected folder in a terminal"
 msgstr "Öppna den markerade mappen i en terminal"
 
-#: src/terminal-nautilus.cc:547 src/terminal-nautilus.cc:558
+#: src/terminal-nautilus.cc:550 src/terminal-nautilus.cc:561
 msgid "Open the currently open folder in a terminal"
 msgstr "Öppna den för tillfället öppna mappen i en terminal"
 
 # _t krockar med "s_täng flik"
-#: src/terminal-nautilus.cc:553
+#: src/terminal-nautilus.cc:556
 msgid "Open in T_erminal"
 msgstr "Öppna i _terminal"
 
 # _t krockar med "s_täng flik"
-#: src/terminal-nautilus.cc:563
+#: src/terminal-nautilus.cc:566
 msgid "Open T_erminal"
 msgstr "Öppna t_erminal"
 
 # _t krockar med "s_täng flik"
-#: src/terminal-nautilus.cc:564
+#: src/terminal-nautilus.cc:567
 msgid "Open a terminal"
 msgstr "Öppna en terminal"
 
@@ -1939,7 +1945,7 @@ msgstr "Öppna en terminal"
 msgid "C_lose Terminal"
 msgstr "S_täng terminal"
 
-#: src/terminal-options.cc:320
+#: src/terminal-options.cc:332
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1949,7 +1955,7 @@ msgstr ""
 "terminal."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: src/terminal-options.cc:331
+#: src/terminal-options.cc:343
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1958,46 +1964,46 @@ msgstr ""
 "Använd ”%s” för att visa att inga fler flaggor kommer och få kommandoraden "
 "att exekvera."
 
-#: src/terminal-options.cc:341 src/terminal-options.cc:354
+#: src/terminal-options.cc:353 src/terminal-options.cc:366
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "Flaggan ”%s” stöds inte längre i denna version av gnome-terminal."
 
-#: src/terminal-options.cc:426
+#: src/terminal-options.cc:438
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "Argumentet till ”%s” är inte ett giltigt kommando: %s"
 
-#: src/terminal-options.cc:599
+#: src/terminal-options.cc:611
 msgid "Two roles given for one window"
 msgstr "Två roller angivna för ett fönster"
 
-#: src/terminal-options.cc:620 src/terminal-options.cc:653
+#: src/terminal-options.cc:632 src/terminal-options.cc:665
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "Flaggan ”%s” angavs två gånger för samma fönster\n"
 
-#: src/terminal-options.cc:872
+#: src/terminal-options.cc:884
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Kan inte skicka FD %d två gånger"
 
-#: src/terminal-options.cc:934
+#: src/terminal-options.cc:946
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "”%s” är inte en giltig zoomfaktor"
 
-#: src/terminal-options.cc:941
+#: src/terminal-options.cc:953
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "Zoomfaktorn ”%g” är för liten, använder %g\n"
 
-#: src/terminal-options.cc:949
+#: src/terminal-options.cc:961
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "Zoomfaktorn ”%g” är för stor, använder %g\n"
 
-#: src/terminal-options.cc:987
+#: src/terminal-options.cc:999
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -2006,163 +2012,163 @@ msgstr ""
 "Flaggan ”%s” kräver att det kommando som ska köras anges på resten av "
 "kommandoraden"
 
-#: src/terminal-options.cc:1140
+#: src/terminal-options.cc:1160
 msgid "Can only use --wait once"
 msgstr "Kan endast använda --wait en gång"
 
-#: src/terminal-options.cc:1176
+#: src/terminal-options.cc:1196
 msgid "Not a valid terminal config file."
 msgstr "Inte en giltig terminalkonfigurationsfil."
 
-#: src/terminal-options.cc:1189
+#: src/terminal-options.cc:1209
 msgid "Incompatible terminal config file version."
 msgstr "Inkompatibel version för terminalkonfigurationsfil."
 
-#: src/terminal-options.cc:1347
+#: src/terminal-options.cc:1368
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Registrera inte i aktiveringsnamnservern, återanvänd inte en aktiv terminal"
 
-#: src/terminal-options.cc:1356
+#: src/terminal-options.cc:1377
 msgid "Load a terminal configuration file"
 msgstr "Läs in en terminalkonfigurationsfil"
 
-#: src/terminal-options.cc:1357
+#: src/terminal-options.cc:1378
 msgid "FILE"
 msgstr "FIL"
 
-#: src/terminal-options.cc:1373
+#: src/terminal-options.cc:1394
 msgid "Do not pass the environment"
 msgstr "Skicka inte med miljön"
 
-#: src/terminal-options.cc:1382
+#: src/terminal-options.cc:1403
 msgid "Show preferences window"
 msgstr "Visa inställningsfönster"
 
-#: src/terminal-options.cc:1391
+#: src/terminal-options.cc:1412
 msgid "Print environment variables to interact with the terminal"
 msgstr "Skriv ut miljövariabler som interagerar med terminalen"
 
-#: src/terminal-options.cc:1409
+#: src/terminal-options.cc:1430
 msgid "Increase diagnostic verbosity"
 msgstr "Öka diagnostisk informationsnivå"
 
-#: src/terminal-options.cc:1418
+#: src/terminal-options.cc:1439
 msgid "Suppress output"
 msgstr "Undertryck utmatning"
 
-#: src/terminal-options.cc:1431
+#: src/terminal-options.cc:1452
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Öppna ett nytt fönster som innehåller en flik med standardprofilen"
 
-#: src/terminal-options.cc:1440
+#: src/terminal-options.cc:1461
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Öppna en ny flik i det senast öppnade fönstret med standardprofilen"
 
-#: src/terminal-options.cc:1453
+#: src/terminal-options.cc:1474
 msgid "Turn on the menubar"
 msgstr "Aktivera menyraden"
 
-#: src/terminal-options.cc:1462
+#: src/terminal-options.cc:1483
 msgid "Turn off the menubar"
 msgstr "Stäng av menyraden"
 
-#: src/terminal-options.cc:1471
+#: src/terminal-options.cc:1492
 msgid "Maximize the window"
 msgstr "Maximera fönstret"
 
-#: src/terminal-options.cc:1480
+#: src/terminal-options.cc:1501
 msgid "Full-screen the window"
 msgstr "Helskärm för fönstret"
 
-#: src/terminal-options.cc:1489
+#: src/terminal-options.cc:1510
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Ställ in fönsterstorleken; till exempel: 80x24 eller 80x24+200+200 "
 "(KOLxRAD+X+Y)"
 
-#: src/terminal-options.cc:1490
+#: src/terminal-options.cc:1511
 msgid "GEOMETRY"
 msgstr "GEOMETRI"
 
-#: src/terminal-options.cc:1498
+#: src/terminal-options.cc:1519
 msgid "Set the window role"
 msgstr "Ställ in fönsterrollen"
 
-#: src/terminal-options.cc:1499
+#: src/terminal-options.cc:1520
 msgid "ROLE"
 msgstr "ROLL"
 
-#: src/terminal-options.cc:1507
+#: src/terminal-options.cc:1528
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Ställ in den senast angivna fliken som den aktiva i dess fönster"
 
-#: src/terminal-options.cc:1520
+#: src/terminal-options.cc:1541
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Kör argumentet till denna flagga inuti terminalen"
 
-#: src/terminal-options.cc:1529
+#: src/terminal-options.cc:1550
 msgid "Use the given profile instead of the default profile"
 msgstr "Använd angiven profil i stället för standardprofilen"
 
-#: src/terminal-options.cc:1530
+#: src/terminal-options.cc:1551
 msgid "PROFILE-NAME"
 msgstr "PROFILNAMN"
 
-#: src/terminal-options.cc:1538
+#: src/terminal-options.cc:1559
 msgid "Set the initial terminal title"
 msgstr "Ställ in initial terminalstorlek"
 
-#: src/terminal-options.cc:1539
+#: src/terminal-options.cc:1560
 msgid "TITLE"
 msgstr "TITEL"
 
-#: src/terminal-options.cc:1547
+#: src/terminal-options.cc:1568
 msgid "Set the working directory"
 msgstr "Ställ in arbetskatalogen"
 
-#: src/terminal-options.cc:1548
+#: src/terminal-options.cc:1569
 msgid "DIRNAME"
 msgstr "KATNAMN"
 
-#: src/terminal-options.cc:1556
+#: src/terminal-options.cc:1577
 msgid "Wait until the child exits"
 msgstr "Vänta tills barnet avslutar"
 
-#: src/terminal-options.cc:1565
+#: src/terminal-options.cc:1586
 msgid "Forward file descriptor"
 msgstr "Vidarebefordra filhandtag"
 
 #. FD = file descriptor
-#: src/terminal-options.cc:1567
+#: src/terminal-options.cc:1588
 msgid "FD"
 msgstr "FD"
 
 # /* Tries reading a locale-style double first*/
-#: src/terminal-options.cc:1575
+#: src/terminal-options.cc:1596
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Ställ in terminalens zoomfaktor (1,0 = normal storlek)"
 
-#: src/terminal-options.cc:1576
+#: src/terminal-options.cc:1597
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: src/terminal-options.cc:1663
+#: src/terminal-options.cc:1693
 msgid "COMMAND"
 msgstr "KOMMANDO"
 
-#: src/terminal-options.cc:1671
+#: src/terminal-options.cc:1701
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME-terminalemulator"
 
-#: src/terminal-options.cc:1672
+#: src/terminal-options.cc:1702
 msgid "Show GNOME Terminal options"
 msgstr "Visa flaggor för GNOME-terminal"
 
-#: src/terminal-options.cc:1682
+#: src/terminal-options.cc:1712
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2170,11 +2176,11 @@ msgstr ""
 "Flaggor för att öppna nya fönster eller terminalflikar; fler än en av dessa "
 "kan anges:"
 
-#: src/terminal-options.cc:1683
+#: src/terminal-options.cc:1713
 msgid "Show terminal options"
 msgstr "Visa terminalflaggor"
 
-#: src/terminal-options.cc:1691
+#: src/terminal-options.cc:1721
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2182,11 +2188,11 @@ msgstr ""
 "Fönsterflaggor; om används innan första argumentet --window eller --tab, "
 "ställer in standarden för alla fönster:"
 
-#: src/terminal-options.cc:1692
+#: src/terminal-options.cc:1722
 msgid "Show per-window options"
 msgstr "Visa flaggor för per-fönster"
 
-#: src/terminal-options.cc:1700
+#: src/terminal-options.cc:1730
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2194,7 +2200,7 @@ msgstr ""
 "Terminalflaggor; om används innan första argumentet --window eller --tab, "
 "ställer in standarden för alla terminaler:"
 
-#: src/terminal-options.cc:1701
+#: src/terminal-options.cc:1731
 msgid "Show per-terminal options"
 msgstr "Visa flaggor för per-terminal"
 
@@ -2276,33 +2282,29 @@ msgstr "Allmänt"
 msgid "Shortcuts"
 msgstr "Snabbtangenter"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profiler"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Inget kommando tillhandahölls, inte heller efterfrågades ett skal"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "Sta_rta igen"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ett fel uppstod vid skapande av barnprocessen för denna terminal"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Barnprocessen avslutades normalt med status %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Barnprocessen terminerades av signal %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Barnprocessen terminerades."
 
@@ -2486,10 +2488,18 @@ msgstr ""
 msgid "C_lose Window"
 msgstr "Stän_g fönster"
 
-#: src/terminal.cc:590
+#: src/terminal.cc:594
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Misslyckades med att tolka argument: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Standard"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Mörkt"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
