@@ -18,29 +18,30 @@
 # Mingcong Bai <jeffbai@aosc.xyz>, 2016, 2017, 2018.
 # Dingzhong Chen <wsxy162@gmail.com>, 2016, 2018, 2019.
 # 王滋涵 <wi24rd@fedoraproject.org>, 2020.
+# lumingzh <lumingzh@qq.com>, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2022-11-22 08:43+0000\n"
-"PO-Revision-Date: 2023-01-13 10:03-0500\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"POT-Creation-Date: 2023-08-09 23:31+0000\n"
+"PO-Revision-Date: 2023-08-10 17:11+0800\n"
+"Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "X-Language: zh_CN\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
-#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:594
+#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
 msgid "Terminal"
 msgstr "终端"
 
@@ -71,6 +72,7 @@ msgid "Terminal Preferences"
 msgstr "终端首选项"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:34
+#: data/org.gnome.Terminal.metainfo.xml.in:63
 msgid "org.gnome.Terminal.desktop"
 msgstr "org.gnome.Terminal.desktop"
 
@@ -821,18 +823,18 @@ msgstr "下一个"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "默认"
+msgid "Follow system style"
+msgstr "遵循系统样式"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "亮色"
+msgid "Light style"
+msgstr "亮色样式"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "暗色"
+msgid "Dark style"
+msgstr "暗色样式"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1463,6 +1465,7 @@ msgid "Palette entry %u"
 msgstr "调色板项 %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "查找"
 
@@ -1494,7 +1497,7 @@ msgstr "使用正则表达式匹配(_R)"
 msgid "_Wrap around"
 msgstr "回到文档头部继续搜索(_W)"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "新建标签页"
 
@@ -1651,30 +1654,34 @@ msgstr "动作(_A)"
 msgid "Shortcut _Key"
 msgstr "快捷键(_K)"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "新建终端"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "新建终端(_T)"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "新建标签页(_T)"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "新建窗口(_W)"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "更改配置文件(_P)"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "配置文件(_P)"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "配置文件"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1730,7 +1737,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "检查器(_I)"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "配置文件首选项(_P)"
@@ -1859,31 +1866,31 @@ msgstr "分离终端(_D)"
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: src/terminal-nautilus.cc:539
+#: src/terminal-nautilus.cc:542
 msgid "Open in _Remote Terminal"
 msgstr "在远程终端打开(_R)"
 
-#: src/terminal-nautilus.cc:541
+#: src/terminal-nautilus.cc:544
 msgid "Open in _Local Terminal"
 msgstr "在本地终端打开(_L)"
 
-#: src/terminal-nautilus.cc:545 src/terminal-nautilus.cc:556
+#: src/terminal-nautilus.cc:548 src/terminal-nautilus.cc:559
 msgid "Open the currently selected folder in a terminal"
 msgstr "在终端中打开当前选中的文件夹"
 
-#: src/terminal-nautilus.cc:547 src/terminal-nautilus.cc:558
+#: src/terminal-nautilus.cc:550 src/terminal-nautilus.cc:561
 msgid "Open the currently open folder in a terminal"
 msgstr "在终端中打开当前打开的文件夹"
 
-#: src/terminal-nautilus.cc:553
+#: src/terminal-nautilus.cc:556
 msgid "Open in T_erminal"
 msgstr "在终端打开(_E)"
 
-#: src/terminal-nautilus.cc:563
+#: src/terminal-nautilus.cc:566
 msgid "Open T_erminal"
 msgstr "打开终端(_E)"
 
-#: src/terminal-nautilus.cc:564
+#: src/terminal-nautilus.cc:567
 msgid "Open a terminal"
 msgstr "打开终端"
 
@@ -1891,7 +1898,7 @@ msgstr "打开终端"
 msgid "C_lose Terminal"
 msgstr "关闭终端(_L)"
 
-#: src/terminal-options.cc:320
+#: src/terminal-options.cc:332
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1899,222 +1906,222 @@ msgid ""
 msgstr "选项“%s”已弃用并可能在 gnome-terminal 的后续版本中移除。"
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: src/terminal-options.cc:331
+#: src/terminal-options.cc:343
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
 "it."
 msgstr "使用“%s”以结束选项并将要执行的命令行追加至其后。"
 
-#: src/terminal-options.cc:341 src/terminal-options.cc:354
+#: src/terminal-options.cc:353 src/terminal-options.cc:366
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "选项“%s”在这个版本的 gnome-terminal 中不再支持。"
 
-#: src/terminal-options.cc:426
+#: src/terminal-options.cc:438
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "“%s”的参数为无效的命令：%s"
 
-#: src/terminal-options.cc:599
+#: src/terminal-options.cc:611
 msgid "Two roles given for one window"
 msgstr "给一个窗口指定了两种角色"
 
-#: src/terminal-options.cc:620 src/terminal-options.cc:653
+#: src/terminal-options.cc:632 src/terminal-options.cc:665
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "为同一窗口指定了两次“%s”选项\n"
 
-#: src/terminal-options.cc:872
+#: src/terminal-options.cc:884
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "不能二次传递 FD %d"
 
-#: src/terminal-options.cc:934
+#: src/terminal-options.cc:946
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "“%s”不是有效的缩放系数"
 
-#: src/terminal-options.cc:941
+#: src/terminal-options.cc:953
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "缩放系数“%g”太小，将使用 %g\n"
 
-#: src/terminal-options.cc:949
+#: src/terminal-options.cc:961
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "缩放系数“%g”太大，将使用 %g\n"
 
-#: src/terminal-options.cc:987
+#: src/terminal-options.cc:999
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
 "command line"
 msgstr "选项“%s”需要在剩余的命令行中指定要执行的命令"
 
-#: src/terminal-options.cc:1140
+#: src/terminal-options.cc:1160
 msgid "Can only use --wait once"
 msgstr "只能使用 --wait 一次"
 
-#: src/terminal-options.cc:1176
+#: src/terminal-options.cc:1196
 msgid "Not a valid terminal config file."
 msgstr "不是有效的终端配置文件。"
 
-#: src/terminal-options.cc:1189
+#: src/terminal-options.cc:1209
 msgid "Incompatible terminal config file version."
 msgstr "终端配置文件版本不兼容。"
 
-#: src/terminal-options.cc:1347
+#: src/terminal-options.cc:1368
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr "不用激活名称服务器注册，不重用激活终端"
 
-#: src/terminal-options.cc:1356
+#: src/terminal-options.cc:1377
 msgid "Load a terminal configuration file"
 msgstr "载入一个终端配置文件"
 
-#: src/terminal-options.cc:1357
+#: src/terminal-options.cc:1378
 msgid "FILE"
 msgstr "文件"
 
-#: src/terminal-options.cc:1373
+#: src/terminal-options.cc:1394
 msgid "Do not pass the environment"
 msgstr "不传递环境变量"
 
-#: src/terminal-options.cc:1382
+#: src/terminal-options.cc:1403
 msgid "Show preferences window"
 msgstr "显示首选项窗口"
 
-#: src/terminal-options.cc:1391
+#: src/terminal-options.cc:1412
 msgid "Print environment variables to interact with the terminal"
 msgstr "打印与终端交互的环境变量"
 
-#: src/terminal-options.cc:1409
+#: src/terminal-options.cc:1430
 msgid "Increase diagnostic verbosity"
 msgstr "增加诊断详细程度"
 
-#: src/terminal-options.cc:1418
+#: src/terminal-options.cc:1439
 msgid "Suppress output"
 msgstr "抑制输出"
 
-#: src/terminal-options.cc:1431
+#: src/terminal-options.cc:1452
 msgid "Open a new window containing a tab with the default profile"
 msgstr "打开包含默认配置下一个标签页的一个新窗口"
 
-#: src/terminal-options.cc:1440
+#: src/terminal-options.cc:1461
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "在最后一个打开的窗口中打开一个默认配置下的新标签页"
 
-#: src/terminal-options.cc:1453
+#: src/terminal-options.cc:1474
 msgid "Turn on the menubar"
 msgstr "打开菜单栏"
 
-#: src/terminal-options.cc:1462
+#: src/terminal-options.cc:1483
 msgid "Turn off the menubar"
 msgstr "关闭菜单栏"
 
-#: src/terminal-options.cc:1471
+#: src/terminal-options.cc:1492
 msgid "Maximize the window"
 msgstr "最大化窗口"
 
-#: src/terminal-options.cc:1480
+#: src/terminal-options.cc:1501
 msgid "Full-screen the window"
 msgstr "全屏幕窗口"
 
-#: src/terminal-options.cc:1489
+#: src/terminal-options.cc:1510
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr "设置窗口大小；例如：80x24，或者 80x24+200+200（列x行+X坐标+Y坐标）"
 
-#: src/terminal-options.cc:1490
+#: src/terminal-options.cc:1511
 msgid "GEOMETRY"
 msgstr "几何形状"
 
-#: src/terminal-options.cc:1498
+#: src/terminal-options.cc:1519
 msgid "Set the window role"
 msgstr "设置窗口角色"
 
-#: src/terminal-options.cc:1499
+#: src/terminal-options.cc:1520
 msgid "ROLE"
 msgstr "角色"
 
-#: src/terminal-options.cc:1507
+#: src/terminal-options.cc:1528
 msgid "Set the last specified tab as the active one in its window"
 msgstr "将上次指定的标签页设定为所在窗口的当前标签页"
 
-#: src/terminal-options.cc:1520
+#: src/terminal-options.cc:1541
 msgid "Execute the argument to this option inside the terminal"
 msgstr "在终端中执行此选项的参数"
 
-#: src/terminal-options.cc:1529
+#: src/terminal-options.cc:1550
 msgid "Use the given profile instead of the default profile"
 msgstr "使用提供的配置文件而非默认配置"
 
-#: src/terminal-options.cc:1530
+#: src/terminal-options.cc:1551
 msgid "PROFILE-NAME"
 msgstr "配置文件名"
 
-#: src/terminal-options.cc:1538
+#: src/terminal-options.cc:1559
 msgid "Set the initial terminal title"
 msgstr "设置初始终端标题"
 
-#: src/terminal-options.cc:1539
+#: src/terminal-options.cc:1560
 msgid "TITLE"
 msgstr "标题"
 
-#: src/terminal-options.cc:1547
+#: src/terminal-options.cc:1568
 msgid "Set the working directory"
 msgstr "设置工作目录"
 
-#: src/terminal-options.cc:1548
+#: src/terminal-options.cc:1569
 msgid "DIRNAME"
 msgstr "目录名"
 
-#: src/terminal-options.cc:1556
+#: src/terminal-options.cc:1577
 msgid "Wait until the child exits"
 msgstr "等待子进程退出"
 
-#: src/terminal-options.cc:1565
+#: src/terminal-options.cc:1586
 msgid "Forward file descriptor"
 msgstr "转发文件描述符"
 
 #. FD = file descriptor
-#: src/terminal-options.cc:1567
+#: src/terminal-options.cc:1588
 msgid "FD"
 msgstr "文件描述符"
 
-#: src/terminal-options.cc:1575
+#: src/terminal-options.cc:1596
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "设置终端的缩放系数（1.0 = 正常大小）"
 
-#: src/terminal-options.cc:1576
+#: src/terminal-options.cc:1597
 msgid "ZOOM"
 msgstr "缩放"
 
-#: src/terminal-options.cc:1663
+#: src/terminal-options.cc:1693
 msgid "COMMAND"
 msgstr "命令"
 
-#: src/terminal-options.cc:1671
+#: src/terminal-options.cc:1701
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME 终端模拟器"
 
-#: src/terminal-options.cc:1672
+#: src/terminal-options.cc:1702
 msgid "Show GNOME Terminal options"
 msgstr "显示 GNOME 终端选项"
 
-#: src/terminal-options.cc:1682
+#: src/terminal-options.cc:1712
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr "打开新窗口或终端标签页的选项；可指定多个："
 
-#: src/terminal-options.cc:1683
+#: src/terminal-options.cc:1713
 msgid "Show terminal options"
 msgstr "显示终端选项"
 
-#: src/terminal-options.cc:1691
+#: src/terminal-options.cc:1721
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2122,11 +2129,11 @@ msgstr ""
 "窗口选项；如果在第一个 --window 或 --tab 参数前使用，将设定为所有窗口的默认配"
 "置："
 
-#: src/terminal-options.cc:1692
+#: src/terminal-options.cc:1722
 msgid "Show per-window options"
 msgstr "显示每个窗口的选项"
 
-#: src/terminal-options.cc:1700
+#: src/terminal-options.cc:1730
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2134,7 +2141,7 @@ msgstr ""
 "终端选项；如果在第一个 --window 或 --tab 参数前使用，将设定为所有终端的默认配"
 "置："
 
-#: src/terminal-options.cc:1701
+#: src/terminal-options.cc:1731
 msgid "Show per-terminal options"
 msgstr "显示每个终端的选项"
 
@@ -2216,33 +2223,29 @@ msgstr "常规"
 msgid "Shortcuts"
 msgstr "快捷键"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "配置文件"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "未提供命令，也未指定 shell"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "重新启动(_R)"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子进程以状态%d正常的退出。"
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "子进程被信号%d中断。"
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "子进程被中断。"
 
@@ -2292,7 +2295,8 @@ msgstr ""
 "Mingcong Bai <jeffbai@aosc.xyz>, 2016, 2017, 2018\n"
 "Dingzhong Chen <wsxy162@gmail.com>, 2016, 2018, 2019\n"
 "王滋涵 <wi24rd@fedoraproject.org>, 2020\n"
-"Weiyi Xu <xuweiyi0923@gmail.com>, 2020"
+"Weiyi Xu <xuweiyi0923@gmail.com>, 2020\n"
+"lumingzh <lumingzh@qq.com>, 2023"
 
 #: src/terminal-util.cc:337
 #, c-format
@@ -2424,10 +2428,18 @@ msgstr "该终端中仍然有一个进程在运行。关闭终端将杀死该进
 msgid "C_lose Window"
 msgstr "关闭窗口(_L)"
 
-#: src/terminal.cc:590
+#: src/terminal.cc:594
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "无法处理参数：%s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "默认"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "暗色"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
