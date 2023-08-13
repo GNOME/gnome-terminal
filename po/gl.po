@@ -19,16 +19,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2022-11-01 19:36+0000\n"
-"PO-Revision-Date: 2022-12-21 20:19+0100\n"
+"POT-Creation-Date: 2023-08-09 23:31+0000\n"
+"PO-Revision-Date: 2023-08-13 12:44+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gnome-terminal\n"
@@ -37,10 +37,10 @@ msgstr ""
 "X-DL-State: None\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
-#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:594
+#: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -66,11 +66,12 @@ msgstr "Preferencias"
 msgid "Configure the command line"
 msgstr "Configurar a liña de ordes"
 
-#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:138
+#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:143
 msgid "Terminal Preferences"
 msgstr "Preferencias de Terminal"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:34
+#: data/org.gnome.Terminal.metainfo.xml.in:63
 msgid "org.gnome.Terminal.desktop"
 msgstr "org.gnome.Terminal.desktop"
 
@@ -879,18 +880,18 @@ msgstr "Seguinte"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Predeterminado"
+msgid "Follow system style"
+msgstr "Seguir o estilo do sistema"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Claro"
+msgid "Light style"
+msgstr "Estilo claro"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Escuro"
+msgid "Dark style"
+msgstr "Estilo escuro"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1522,6 +1523,7 @@ msgid "Palette entry %u"
 msgstr "Entrada da paleta %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Buscar"
 
@@ -1553,7 +1555,7 @@ msgstr "Coincidir coa expresión _regular"
 msgid "_Wrap around"
 msgstr "_Volver ao principio"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Nova lapela"
 
@@ -1710,30 +1712,34 @@ msgstr "_Acción"
 msgid "Shortcut _Key"
 msgstr "_Tecla de atallo"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Novo Terminal"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "Novo _Terminal"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Nova _lapela"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Nova _xanela"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Modificar o _perfil"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Perfil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Perfís"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1789,7 +1795,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspector"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Preferencias"
@@ -1918,31 +1924,31 @@ msgstr "_Desprender terminal"
 msgid "_Contents"
 msgstr "_Contidos"
 
-#: src/terminal-nautilus.cc:539
+#: src/terminal-nautilus.cc:542
 msgid "Open in _Remote Terminal"
 msgstr "Abrir un _terminal remoto"
 
-#: src/terminal-nautilus.cc:541
+#: src/terminal-nautilus.cc:544
 msgid "Open in _Local Terminal"
 msgstr "Abrir un _terminal local"
 
-#: src/terminal-nautilus.cc:545 src/terminal-nautilus.cc:556
+#: src/terminal-nautilus.cc:548 src/terminal-nautilus.cc:559
 msgid "Open the currently selected folder in a terminal"
 msgstr "Abre o cartafol seleccionado actualmente nunha terminal"
 
-#: src/terminal-nautilus.cc:547 src/terminal-nautilus.cc:558
+#: src/terminal-nautilus.cc:550 src/terminal-nautilus.cc:561
 msgid "Open the currently open folder in a terminal"
 msgstr "Abre o cartafol aberto actualmente nunha terminal"
 
-#: src/terminal-nautilus.cc:553
+#: src/terminal-nautilus.cc:556
 msgid "Open in T_erminal"
 msgstr "Abrir na _terminal"
 
-#: src/terminal-nautilus.cc:563
+#: src/terminal-nautilus.cc:566
 msgid "Open T_erminal"
 msgstr "Abrir t_erminal"
 
-#: src/terminal-nautilus.cc:564
+#: src/terminal-nautilus.cc:567
 msgid "Open a terminal"
 msgstr "Abrir un terminal"
 
@@ -1950,7 +1956,7 @@ msgstr "Abrir un terminal"
 msgid "C_lose Terminal"
 msgstr "_Pechar o terminal"
 
-#: src/terminal-options.cc:320
+#: src/terminal-options.cc:332
 #, c-format
 msgid ""
 "Option “%s” is deprecated and might be removed in a later version of gnome-"
@@ -1960,7 +1966,7 @@ msgstr ""
 "terminal."
 
 #. %s is being replaced with "-- " (without quotes), which must be used literally, not translatable
-#: src/terminal-options.cc:331
+#: src/terminal-options.cc:343
 #, c-format
 msgid ""
 "Use “%s” to terminate the options and put the command line to execute after "
@@ -1968,46 +1974,46 @@ msgid ""
 msgstr ""
 "Use «%s» para terminar as opcións e coloque a orde que executar despois."
 
-#: src/terminal-options.cc:341 src/terminal-options.cc:354
+#: src/terminal-options.cc:353 src/terminal-options.cc:366
 #, c-format
 msgid "Option “%s” is no longer supported in this version of gnome-terminal."
 msgstr "A opción «%s» xa non se admite nesta versión de gnome-terminal."
 
-#: src/terminal-options.cc:426
+#: src/terminal-options.cc:438
 #, c-format
 msgid "Argument to “%s” is not a valid command: %s"
 msgstr "O argumento para «%s» non é unha orde válida: %s"
 
-#: src/terminal-options.cc:599
+#: src/terminal-options.cc:611
 msgid "Two roles given for one window"
 msgstr "Indicáronse dous roles para unha xanela"
 
-#: src/terminal-options.cc:620 src/terminal-options.cc:653
+#: src/terminal-options.cc:632 src/terminal-options.cc:665
 #, c-format
 msgid "“%s” option given twice for the same window\n"
 msgstr "A opción «%s» indicouse dúas veces para a mesma xanela\n"
 
-#: src/terminal-options.cc:872
+#: src/terminal-options.cc:884
 #, c-format
 msgid "Cannot pass FD %d twice"
 msgstr "Non é posíbel pasar o FD %d dúas veces"
 
-#: src/terminal-options.cc:934
+#: src/terminal-options.cc:946
 #, c-format
 msgid "“%s” is not a valid zoom factor"
 msgstr "«%s» non é un factor de ampliación válido"
 
-#: src/terminal-options.cc:941
+#: src/terminal-options.cc:953
 #, c-format
 msgid "Zoom factor “%g” is too small, using %g\n"
 msgstr "O factor de ampliación \"%g\" é demasiado pequeno, usarase %g\n"
 
-#: src/terminal-options.cc:949
+#: src/terminal-options.cc:961
 #, c-format
 msgid "Zoom factor “%g” is too large, using %g\n"
 msgstr "O factor de ampliación \"%g\" é demasiado grande, usarase %g\n"
 
-#: src/terminal-options.cc:987
+#: src/terminal-options.cc:999
 #, c-format
 msgid ""
 "Option “%s” requires specifying the command to run on the rest of the "
@@ -2016,19 +2022,19 @@ msgstr ""
 "A opción «%s» require especificar a orde para executar no resto da liña de "
 "ordes"
 
-#: src/terminal-options.cc:1140
+#: src/terminal-options.cc:1160
 msgid "Can only use --wait once"
 msgstr "Só se pode usar --wait unha vez"
 
-#: src/terminal-options.cc:1176
+#: src/terminal-options.cc:1196
 msgid "Not a valid terminal config file."
 msgstr "O ficheiro de configuración do terminal non é válido."
 
-#: src/terminal-options.cc:1189
+#: src/terminal-options.cc:1209
 msgid "Incompatible terminal config file version."
 msgstr "O ficheiro de configuración do terminal non é válido."
 
-#: src/terminal-options.cc:1347
+#: src/terminal-options.cc:1368
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -2036,145 +2042,145 @@ msgstr ""
 "Non rexistrar co servidor de nomes de activación; non reutilizar un terminal "
 "activo"
 
-#: src/terminal-options.cc:1356
+#: src/terminal-options.cc:1377
 msgid "Load a terminal configuration file"
 msgstr "Cargar un ficheiro de configuración do terminal"
 
-#: src/terminal-options.cc:1357
+#: src/terminal-options.cc:1378
 msgid "FILE"
 msgstr "FICHEIRO"
 
-#: src/terminal-options.cc:1373
+#: src/terminal-options.cc:1394
 msgid "Do not pass the environment"
 msgstr "Non pasar o ambiente"
 
-#: src/terminal-options.cc:1382
+#: src/terminal-options.cc:1403
 msgid "Show preferences window"
 msgstr "Mostrar a xanela de preferencias"
 
-#: src/terminal-options.cc:1391
+#: src/terminal-options.cc:1412
 msgid "Print environment variables to interact with the terminal"
 msgstr "Imprimir as variábeis de ambiente para interactuar coa terminal"
 
-#: src/terminal-options.cc:1409
+#: src/terminal-options.cc:1430
 msgid "Increase diagnostic verbosity"
 msgstr "Incrementar a verbosidade de diagnóstico"
 
-#: src/terminal-options.cc:1418
+#: src/terminal-options.cc:1439
 msgid "Suppress output"
 msgstr "Suprimir saída"
 
-#: src/terminal-options.cc:1431
+#: src/terminal-options.cc:1452
 msgid "Open a new window containing a tab with the default profile"
 msgstr ""
 "Abrir unha xanela nova que conteña unha lapela co perfil predeterminado"
 
-#: src/terminal-options.cc:1440
+#: src/terminal-options.cc:1461
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "Abrir unha lapela nova na última xanela aberta co perfil predeterminado"
 
-#: src/terminal-options.cc:1453
+#: src/terminal-options.cc:1474
 msgid "Turn on the menubar"
 msgstr "Activar a barra de menú"
 
-#: src/terminal-options.cc:1462
+#: src/terminal-options.cc:1483
 msgid "Turn off the menubar"
 msgstr "Desactivar a barra de menú"
 
-#: src/terminal-options.cc:1471
+#: src/terminal-options.cc:1492
 msgid "Maximize the window"
 msgstr "Maximizar a xanela"
 
-#: src/terminal-options.cc:1480
+#: src/terminal-options.cc:1501
 msgid "Full-screen the window"
 msgstr "Pór a xanela no modo de pantalla completa"
 
-#: src/terminal-options.cc:1489
+#: src/terminal-options.cc:1510
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Establece o tamaño da xanela, por exemplo: 80x24 ou 80x24+200+200 "
 "(FILASxCOLUMNAS+X+Y)"
 
-#: src/terminal-options.cc:1490
+#: src/terminal-options.cc:1511
 msgid "GEOMETRY"
 msgstr "XEOMETRÍA"
 
-#: src/terminal-options.cc:1498
+#: src/terminal-options.cc:1519
 msgid "Set the window role"
 msgstr "Definir o rol da xanela"
 
-#: src/terminal-options.cc:1499
+#: src/terminal-options.cc:1520
 msgid "ROLE"
 msgstr "ROL"
 
-#: src/terminal-options.cc:1507
+#: src/terminal-options.cc:1528
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Definir á última lapela especificada como a activa na súa xanela"
 
-#: src/terminal-options.cc:1520
+#: src/terminal-options.cc:1541
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Executar o argumento para esta opción dentro do terminal"
 
-#: src/terminal-options.cc:1529
+#: src/terminal-options.cc:1550
 msgid "Use the given profile instead of the default profile"
 msgstr "Usar o perfil proporcionado en vez do perfil predeterminado"
 
-#: src/terminal-options.cc:1530
+#: src/terminal-options.cc:1551
 msgid "PROFILE-NAME"
 msgstr "NOME DO PERFIL"
 
-#: src/terminal-options.cc:1538
+#: src/terminal-options.cc:1559
 msgid "Set the initial terminal title"
 msgstr "Estabelecer o título inicial do Terminal"
 
-#: src/terminal-options.cc:1539
+#: src/terminal-options.cc:1560
 msgid "TITLE"
 msgstr "TÍTULO"
 
-#: src/terminal-options.cc:1547
+#: src/terminal-options.cc:1568
 msgid "Set the working directory"
 msgstr "Definir o directorio de traballo"
 
-#: src/terminal-options.cc:1548
+#: src/terminal-options.cc:1569
 msgid "DIRNAME"
 msgstr "NOME DO DIRECTORIO"
 
-#: src/terminal-options.cc:1556
+#: src/terminal-options.cc:1577
 msgid "Wait until the child exits"
 msgstr "Agardar até que exista o fillo"
 
-#: src/terminal-options.cc:1565
+#: src/terminal-options.cc:1586
 msgid "Forward file descriptor"
 msgstr "Redirixir descritor de ficheiro"
 
 #. FD = file descriptor
-#: src/terminal-options.cc:1567
+#: src/terminal-options.cc:1588
 msgid "FD"
 msgstr "DF"
 
-#: src/terminal-options.cc:1575
+#: src/terminal-options.cc:1596
 msgid "Set the terminal’s zoom factor (1.0 = normal size)"
 msgstr "Definir o factor ampliación do terminal (1.0 = tamaño normal)"
 
-#: src/terminal-options.cc:1576
+#: src/terminal-options.cc:1597
 msgid "ZOOM"
 msgstr "AMPLIACIÓN"
 
-#: src/terminal-options.cc:1663
+#: src/terminal-options.cc:1693
 msgid "COMMAND"
 msgstr "ORDE"
 
-#: src/terminal-options.cc:1671
+#: src/terminal-options.cc:1701
 msgid "GNOME Terminal Emulator"
 msgstr "Emulador do Terminal de GNOME"
 
-#: src/terminal-options.cc:1672
+#: src/terminal-options.cc:1702
 msgid "Show GNOME Terminal options"
 msgstr "Mostrar as opcións do Terminal do GNOME"
 
-#: src/terminal-options.cc:1682
+#: src/terminal-options.cc:1712
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2182,11 +2188,11 @@ msgstr ""
 "Opcións para abrir unha nova xanela ou lapela de terminal; pode ser "
 "especificada máis dunha:"
 
-#: src/terminal-options.cc:1683
+#: src/terminal-options.cc:1713
 msgid "Show terminal options"
 msgstr "Mostrar opcións do terminal"
 
-#: src/terminal-options.cc:1691
+#: src/terminal-options.cc:1721
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2194,11 +2200,11 @@ msgstr ""
 "Opcións de xanela; se se usan antes do primeiro argumento --window or --tab, "
 "estabelécense os valores predeterminado para todas as xanelas:"
 
-#: src/terminal-options.cc:1692
+#: src/terminal-options.cc:1722
 msgid "Show per-window options"
 msgstr "Mostrar as opcións por xanela"
 
-#: src/terminal-options.cc:1700
+#: src/terminal-options.cc:1730
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2206,7 +2212,7 @@ msgstr ""
 "Opcións de terminal, se se usan antes do primeiro argumento --window or --"
 "tab, estabelécense os valores predeterminados para todos os terminais:"
 
-#: src/terminal-options.cc:1701
+#: src/terminal-options.cc:1731
 msgid "Show per-terminal options"
 msgstr "Mostrar opcións por terminal"
 
@@ -2288,33 +2294,29 @@ msgstr "Xeral"
 msgid "Shortcuts"
 msgstr "Atallos"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Perfís"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Non se forneceu ningunha orde nin se solicitou unha shell"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "Volve_r iniciar"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Produciuse un erro ao crear o proceso fillo para este terminal"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "O proceso fillo saíu de forma normal co estado %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "O proceso fillo foi abortado polo sinal %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "O proceso fillo foi abortado."
 
@@ -2351,7 +2353,7 @@ msgstr "Terminal do GNOME"
 #: src/terminal-util.cc:262
 msgid "translator-credits"
 msgstr ""
-"Fran Diéguez <frandieguez@gnome.org>, 2009, 2021.\n"
+"Fran Diéguez <frandieguez@gnome.org>, 2009-2023.\n"
 "Antón Méixome <meixome@mancomun.org>, 2009.\n"
 "Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun."
 "org>, 2009.\n"
@@ -2495,10 +2497,18 @@ msgstr ""
 msgid "C_lose Window"
 msgstr "P_echar a xanela"
 
-#: src/terminal.cc:590
+#: src/terminal.cc:594
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Produciuse un erro ao analizar os argumentos: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Predeterminado"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Escuro"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
