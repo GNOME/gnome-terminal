@@ -22,19 +22,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-03-05 17:20+0000\n"
-"PO-Revision-Date: 2023-03-26 15:49+0200\n"
+"POT-Creation-Date: 2023-08-06 13:24+0000\n"
+"PO-Revision-Date: 2023-08-27 20:45+0200\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
-"Language-Team: Dutch <https://matrix.to/#/#nl:gnome.org>\n"
+"Language-Team: GNOME-NL https://matrix.to/#/#nl:gnome.org\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -877,18 +877,18 @@ msgstr "Volgende"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Standaard"
+msgid "Follow system style"
+msgstr "Systeemstijl volgen"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Licht"
+msgid "Light style"
+msgstr "Lichte stijl"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Donker"
+msgid "Dark style"
+msgstr "Donkere stijl"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1520,6 +1520,7 @@ msgid "Palette entry %u"
 msgstr "Palet-item %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Zoeken"
 
@@ -1552,7 +1553,7 @@ msgstr "Als _reguliere expressie gebruiken"
 msgid "_Wrap around"
 msgstr "Doorgaan na document_einde"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Nieuw tabblad"
 
@@ -1709,30 +1710,34 @@ msgstr "_Actie"
 msgid "Shortcut _Key"
 msgstr "_Sneltoets"
 
-#: src/terminal-app.cc:552
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Nieuw terminalvenster"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Nieuw terminalvenster"
 
-#: src/terminal-app.cc:564 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Nieuw tab_blad"
 
-#: src/terminal-app.cc:565 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Nieuw _venster"
 
-#: src/terminal-app.cc:614
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "_Profiel wijzigen"
 
-#: src/terminal-app.cc:627
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profiel"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profielen"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -2297,10 +2302,6 @@ msgstr "Algemeen"
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profielen"
-
 #: src/terminal-screen.cc:1405
 msgid "No command supplied nor shell requested"
 msgstr "Geen opdracht opgegeven en ook niet om een shell gevraagd"
@@ -2520,6 +2521,14 @@ msgstr "Venster sl_uiten"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Argumenten ontleden is mislukt: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Standaard"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Donker"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
