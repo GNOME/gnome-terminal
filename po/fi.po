@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-25 19:54+0000\n"
-"PO-Revision-Date: 2023-02-28 22:45+0200\n"
+"POT-Creation-Date: 2023-08-18 17:57+0000\n"
+"PO-Revision-Date: 2023-08-27 19:51+0300\n"
 "Last-Translator: Jiri Grönroos <jiri.gronroos+l10n@iki.fi>\n"
 "Language-Team: suomi <lokalisointi-lista@googlegroups.com>\n"
 "Language: fi\n"
@@ -28,10 +28,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-POT-Import-Date: 2012-02-19 15:25:13+0000\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -893,18 +893,18 @@ msgstr "Seuraava"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Oletus"
+msgid "Follow system style"
+msgstr "Seuraa järjestelmän tyyliä"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Vaalea"
+msgid "Light style"
+msgstr "Vaalea tyyli"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Tumma"
+msgid "Dark style"
+msgstr "Tumma tyyli"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1535,6 +1535,7 @@ msgid "Palette entry %u"
 msgstr "Paletin väri %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Etsi"
 
@@ -1566,7 +1567,7 @@ msgstr "Etsi _säännöllisenä lausekkeena"
 msgid "_Wrap around"
 msgstr "Jatka _alusta"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Uusi välilehti"
 
@@ -1723,30 +1724,34 @@ msgstr "_Toiminto"
 msgid "Shortcut _Key"
 msgstr "Pika_näppäin"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Uusi pääte"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Uusi pääte"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Uusi _välilehti"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Uusi _ikkuna"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Vaihda pro_fiilia"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profiili"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profiilit"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1802,7 +1807,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "Ta_rkastelija"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Asetukset"
@@ -2298,33 +2303,29 @@ msgstr "Yleistä"
 msgid "Shortcuts"
 msgstr "Pikanäppäimet"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profiilit"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "Komentoa ei annettu eikä komentotulkkia pyydetty"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "_Uudelleenkäynnistä"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "Virhe luodessa lapsiprosessia tätä päätettä varten"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Lapsiprosessi lopetti normaalisti tilaan %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Lapsiprosessi lopetettiin signaalilla %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "Lapsiprosessi lopetettiin."
 
@@ -2509,6 +2510,14 @@ msgstr "_Sulje ikkuna"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Virhe tulkittaessa argumentteja: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Oletus"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Tumma"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
