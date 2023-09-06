@@ -46,6 +46,8 @@
 #include <gdk/gdkx.h>
 #endif
 
+#include <handy.h>
+
 #include "terminal-accels.hh"
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
@@ -1129,34 +1131,62 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 static void
 update_color_scheme (TerminalScreen *screen)
 {
-  GtkWidget *widget = GTK_WIDGET (screen);
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
   gs_free GdkRGBA *colors;
-  gsize n_colors;
-  GdkRGBA fg, bg, bold, theme_fg, theme_bg;
+  gsize n_colors = 0;
+  GdkRGBA fg, bg, bold;
   GdkRGBA cursor_bg, cursor_fg;
   GdkRGBA highlight_bg, highlight_fg;
   GdkRGBA *boldp;
   GdkRGBA *cursor_bgp = nullptr, *cursor_fgp = nullptr;
   GdkRGBA *highlight_bgp = nullptr, *highlight_fgp = nullptr;
-  GtkStyleContext *context;
   gboolean use_theme_colors;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &theme_fg);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &theme_bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+  colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
 
   use_theme_colors = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY);
-  if (use_theme_colors ||
-      (!terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg) ||
-       !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg)))
-    {
-      fg = theme_fg;
-      bg = theme_bg;
+  if (!terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg) ||
+      !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg)) {
+    use_theme_colors = true;
+  }
+
+  if (use_theme_colors) {
+    auto const app = terminal_app_get();
+    auto const style_manager = reinterpret_cast<HdyStyleManager*>(terminal_app_get_hdy_style_manager(app));
+
+    switch (hdy_style_manager_get_color_scheme(style_manager)) {
+    default:
+    case HDY_COLOR_SCHEME_DEFAULT:
+    case HDY_COLOR_SCHEME_FORCE_LIGHT:
+    case HDY_COLOR_SCHEME_PREFER_LIGHT:
+      if (n_colors >= 16) {
+        fg = colors[0];
+        bg = colors[15];
+      } else if (n_colors >= 8) {
+        fg = colors[0];
+        bg = colors[7];
+      } else {
+        fg = {0, 0, 0, 1};
+        bg = {1, 1, 1, 0};
+      }
+      break;
+
+    case HDY_COLOR_SCHEME_PREFER_DARK:
+    case HDY_COLOR_SCHEME_FORCE_DARK:
+      if (n_colors >= 16) {
+        fg = colors[15];
+        bg = colors[0];
+      } else if (n_colors >= 8) {
+        fg = colors[7];
+        bg = colors[0];
+      } else {
+        fg = {1, 1, 1, 1};
+        bg = {0, 0, 0, 1};
+      }
+      break;
     }
+  }
 
   if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) &&
       !use_theme_colors &&
@@ -1183,7 +1213,6 @@ update_color_scheme (TerminalScreen *screen)
         highlight_fgp = &highlight_fg;
     }
 
-  colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
   vte_terminal_set_color_bold (VTE_TERMINAL (screen), boldp);

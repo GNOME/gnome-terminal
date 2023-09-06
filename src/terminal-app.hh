@@ -137,6 +137,8 @@ void terminal_app_unset_ask_default_terminal(TerminalApp* app);
 
 void terminal_app_make_default_terminal(TerminalApp* app);
 
+void* terminal_app_get_hdy_style_manager(TerminalApp* app);
+
 G_END_DECLS
 
 #endif /* !TERMINAL_APP_H */

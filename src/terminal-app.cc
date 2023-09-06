@@ -1646,6 +1646,13 @@ terminal_app_get_object_manager (TerminalApp *app)
   return app->object_manager;
 }
 
+void*
+terminal_app_get_hdy_style_manager(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
+  return app->style_manager;
+}
+
 #endif /* TERMINAL_SERVER */
 
 gboolean
