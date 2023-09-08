@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-25 19:54+0000\n"
-"PO-Revision-Date: 2023-04-02 13:50+0200\n"
+"POT-Creation-Date: 2023-08-27 21:48+0000\n"
+"PO-Revision-Date: 2023-09-08 16:58+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -25,10 +25,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -859,18 +859,18 @@ msgstr "vedle aktuální"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "výchozí"
+msgid "Follow system style"
+msgstr "Řídit se systémovým stylem"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "světlá"
+msgid "Light style"
+msgstr "Světlý styl"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "tmavá"
+msgid "Dark style"
+msgstr "Tmavý styl"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1501,6 +1501,7 @@ msgid "Palette entry %u"
 msgstr "%u. položka palety"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Hledání"
 
@@ -1532,7 +1533,7 @@ msgstr "Porovnávat jako _regulární výraz"
 msgid "_Wrap around"
 msgstr "P_okračovat od začátku"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Nová karta"
 
@@ -1689,30 +1690,34 @@ msgstr "_Akce"
 msgid "Shortcut _Key"
 msgstr "_Klávesová zkratka"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Nový terminál"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "Nový _terminál"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Nová kar_ta"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Nové ok_no"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Změnit _profil"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profily"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1768,7 +1773,7 @@ msgstr "_4. 132 × 42"
 msgid "_Inspector"
 msgstr "_Inspektor"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1542
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Předvolby"
@@ -2261,33 +2266,29 @@ msgstr "Obecné"
 msgid "Shortcuts"
 msgstr "Klávesové zkratky"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profily"
-
-#: src/terminal-screen.cc:1402
+#: src/terminal-screen.cc:1405
 msgid "No command supplied nor shell requested"
 msgstr "Není ani zadán příkaz ani požadován shell"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1543 src/terminal-screen.cc:1890
 msgid "_Relaunch"
 msgstr "_Spustit znovu"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1546
 msgid "There was an error creating the child process for this terminal"
 msgstr "Při vytváření procesu potomka pro tento terminál došlo k chybě"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Proces potomka skončil normálně se stavovým kódem %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1897
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Proces potomka byl zrušen na základě signálu %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1900
 msgid "The child process was aborted."
 msgstr "Proces potomka byl zrušen."
 
@@ -2472,6 +2473,14 @@ msgstr "_Zavřít okno"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Selhala analýza argumentů: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "výchozí"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "tmavá"
 
 #~ msgid "Armenian"
 #~ msgstr "Arménské"
