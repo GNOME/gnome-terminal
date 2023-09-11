@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-25 19:54+0000\n"
-"PO-Revision-Date: 2023-03-02 00:07+0900\n"
+"POT-Creation-Date: 2023-08-18 17:57+0000\n"
+"PO-Revision-Date: 2023-09-06 23:57+0530\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -24,7 +24,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -833,18 +833,18 @@ msgstr "다음"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "기본값"
+msgid "Follow system style"
+msgstr "시스템 스타일 따르기"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "밝음"
+msgid "Light style"
+msgstr "밝은 스타일"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "어두움"
+msgid "Dark style"
+msgstr "어두운 스타일"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1476,6 +1476,7 @@ msgid "Palette entry %u"
 msgstr "팔레트 항목 %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "찾기"
 
@@ -1507,7 +1508,7 @@ msgstr "정규식(_R)"
 msgid "_Wrap around"
 msgstr "끝까지 가면 처음부터(_W)"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "새 탭"
 
@@ -1664,30 +1665,34 @@ msgstr "행동(_A)"
 msgid "Shortcut _Key"
 msgstr "바로 가기 키(_K)"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "새 터미널"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "새 터미널(_T)"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "새 탭(_T)"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "새 창(_W)"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "프로파일 바꾸기(_P)"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "프로파일(_P)"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "프로파일"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1744,7 +1749,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "인스펙터(_I)"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1539
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "기본 설정(_P)"
@@ -2250,33 +2255,29 @@ msgstr "일반"
 msgid "Shortcuts"
 msgstr "바로 가기"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "프로파일"
-
 #: src/terminal-screen.cc:1402
 msgid "No command supplied nor shell requested"
 msgstr "명령어나 지정하지 않았거나 셸을 요청하지 않았습니다"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1540 src/terminal-screen.cc:1887
 msgid "_Relaunch"
 msgstr "다시 실행(_R)"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1543
 msgid "There was an error creating the child process for this terminal"
 msgstr "터미널을 만드려고 하위 프로세스를 만드는 중 오류가 발생했습니다"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1891
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "하위 프로세스가 상태 %d번으로 정상적으로 끝났습니다."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "하위 프로세스가 시그널 %d번으로 중단되었습니다."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1897
 msgid "The child process was aborted."
 msgstr "하위 프로세스가 중단되었습니다."
 
@@ -2459,6 +2460,14 @@ msgstr "창 닫기(_L)"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "인자 파싱에 실패했습니다: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "기본값"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "어두움"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
