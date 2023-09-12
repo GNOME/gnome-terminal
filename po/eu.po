@@ -11,8 +11,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-25 19:54+0000\n"
-"PO-Revision-Date: 2023-02-12 19:007+0100\n"
+"POT-Creation-Date: 2023-08-27 18:46+0000\n"
+"PO-Revision-Date: 2023-09-12 19:007+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -23,7 +23,7 @@ msgstr "Project-Id-Version: gnome-terminal master\n"
 "\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -765,18 +765,18 @@ msgstr "Hurrengoa"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Lehenetsia"
+msgid "Follow system style"
+msgstr "Jarraitu sistemaren estiloa"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Argia"
+msgid "Light style"
+msgstr "Estilo argia"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Iluna"
+msgid "Dark style"
+msgstr "Estilo iluna"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1407,6 +1407,7 @@ msgid "Palette entry %u"
 msgstr "%u paleta-sarrera"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Bilatu"
 
@@ -1438,7 +1439,7 @@ msgstr "Bat etorri _adierazpen erregularrarekin"
 msgid "_Wrap around"
 msgstr "_Bilaketa jarraitua"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Fitxa berria"
 
@@ -1595,30 +1596,34 @@ msgstr "_Ekintza"
 msgid "Shortcut _Key"
 msgstr "_Laster-teklak"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:580
 msgid "New Terminal"
 msgstr "Terminal berria"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:590 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Terminal berria"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:592 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "_Fitxa berria"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:593 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Leiho _berria"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:642
 msgid "Change _Profile"
 msgstr "Aldatu p_rofila"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:655
 msgid "_Profile"
 msgstr "_Profila"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Profilak"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1674,7 +1679,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Ikuskatzailea"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1542
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Hobespenak"
@@ -2156,33 +2161,29 @@ msgstr "Orokorra"
 msgid "Shortcuts"
 msgstr "Lasterbideak"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Profilak"
-
-#: src/terminal-screen.cc:1402
+#: src/terminal-screen.cc:1405
 msgid "No command supplied nor shell requested"
 msgstr "Ez da komandorik eman edo shell-ik eskatu"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1543 src/terminal-screen.cc:1890
 msgid "_Relaunch"
 msgstr "_Berriro abiarazi"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1546
 msgid "There was an error creating the child process for this terminal"
 msgstr "Errorea gertatu da terminal honetako prozesu haurra sortzean"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Prozesu haurra normal irten da %d egoerarekin."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1897
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Prozesu haurra %d seinalearekin abortatu da."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1900
 msgid "The child process was aborted."
 msgstr "Prozesu haurra abortatu egin da."
 
@@ -2347,6 +2348,14 @@ msgstr "It_xi leihoa"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Huts egin du argumentuak analizatzean: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Lehenetsia"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Iluna"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
