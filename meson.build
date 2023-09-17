@@ -45,7 +45,7 @@ clangxx_req_version       = '3.3'
 # Requirements
 
 vte_req                      = 'vte-2.91'
-vte_req_version              = '0.72.2'
+vte_req_version              = '0.74.0'
 
 glib_req_version             = '2.52.0'
 glib_min_req_version         = '2.52'
