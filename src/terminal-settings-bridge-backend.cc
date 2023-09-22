@@ -242,7 +242,7 @@ terminal_settings_bridge_backend_read(GSettingsBackend* backend,
                                             impl->cancellable,
                                             nullptr);
 
-  auto const value = r ? terminal_g_variant_unwrap(rv) : nullptr;
+  auto value = r ? terminal_g_variant_unwrap(rv) : nullptr;
 
   if (r && value && !g_variant_is_of_type(value, type)) {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
@@ -287,7 +287,7 @@ terminal_settings_bridge_backend_read_user_value(GSettingsBackend* backend,
                                                        impl->cancellable,
                                                        nullptr);
 
-  auto const value = r ? terminal_g_variant_unwrap(rv) : nullptr;
+  auto value = r ? terminal_g_variant_unwrap(rv) : nullptr;
 
   if (r && value && !g_variant_is_of_type(value, type)) {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
