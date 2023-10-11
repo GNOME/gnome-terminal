@@ -18,7 +18,7 @@
 #ifndef TERMINAL_WINDOW_H
 #define TERMINAL_WINDOW_H
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "terminal-screen.hh"
 
@@ -36,23 +36,23 @@ typedef struct _TerminalWindowPrivate TerminalWindowPrivate;
 
 struct _TerminalWindow
 {
-  GtkApplicationWindow parent_instance;
+  AdwApplicationWindow parent_instance;
 
   TerminalWindowPrivate *priv;
 };
 
 struct _TerminalWindowClass
 {
-  GtkApplicationWindowClass parent_class;
+  AdwApplicationWindowClass parent_class;
 };
 
 GType terminal_window_get_type (void) G_GNUC_CONST;
 
 TerminalWindow* terminal_window_new (GApplication *app);
 
-GtkUIManager *terminal_window_get_ui_manager (TerminalWindow *window);
-
 int terminal_window_get_active_screen_num (TerminalWindow *window);
+void terminal_window_set_titlebar (TerminalWindow *window,
+                                   GtkWidget *titlebar);
 
 void terminal_window_add_screen (TerminalWindow *window,
                                  TerminalScreen *screen,

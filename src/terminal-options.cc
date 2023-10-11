@@ -1695,8 +1695,6 @@ get_goption_context (TerminalOptions *options)
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_set_ignore_unknown_options (context, FALSE);
 
-  g_option_context_add_group (context, gtk_get_option_group (TRUE));
-
   group = g_option_group_new ("gnome-terminal",
                               N_("GNOME Terminal Emulator"),
                               N_("Show GNOME Terminal options"),

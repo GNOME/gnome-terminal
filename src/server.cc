@@ -183,15 +183,8 @@ init_server (int argc,
   g_set_prgname ("gnome-terminal-server");
   g_set_application_name (_("Terminal"));
 
-  GError *error = nullptr;
-  if (!gtk_init_with_args (&argc, &argv, nullptr, options, nullptr, &error)) {
-    if (error != nullptr) {
-      g_printerr ("Failed to parse arguments: %s\n", error->message);
-      g_error_free (error);
-    }
-
+  if (!gtk_init_check ())
     return _EXIT_FAILURE_GTK_INIT;
-  }
 
   if (!increase_rlimit_nofile ()) {
     auto const errsv = errno;

@@ -16,112 +16,55 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <interface>
-  <template class="TerminalHeaderbar" parent="GtkHeaderBar">
-    <property name="can-focus">False</property>
-    <property name="visible">True</property>
-    <property name="show-close-button">True</property>
+  <template class="TerminalHeaderbar" parent="GtkWidget">
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <style>
-          <class name="linked"/>
-        </style>
-        <child>
+      <object class="AdwHeaderBar" id="headerbar">
+        <child type="start">
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">win.new-terminal</property>
+                <property name="action-target">('tab-default','current')</property>
+                <property name="icon-name">tab-new-symbolic</property>
+                <accessibility>
+                  <property name="label" translatable="yes">New Tab</property>
+                </accessibility>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="profilebutton">
+                <property name="icon-name">pan-down-symbolic</property>
+                <style>
+                  <class name="disclosure-button"/>
+                </style>
+                <accessibility>
+                  <property name="label" translatable="yes">Profiles</property>
+                </accessibility>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton" id="menubutton">
+            <property name="receives-default">True</property>
+            <!-- property name="action-name">win.header-menu</property-->
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+        <child type="end">
           <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="focus_on_click">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="action-name">win.new-terminal</property>
-            <property name="action-target">('tab-default','current')</property>
-            <style>
-              <class name="image-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="icon_name">tab-new-symbolic</property>
-              </object>
-            </child>
-            <child internal-child="accessible">
-              <object class="AtkObject">
-                <property name="accessible-name" translatable="yes">New Tab</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="profilebutton">
-            <property name="visible">True</property>
-            <property name="focus_on_click">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use-popover">False</property>
-            <style>
-              <class name="image-button"/>
-              <class name="disclosure-button"/>
-            </style>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="icon_name">pan-down-symbolic</property>
-              </object>
-            </child>
-            <child internal-child="accessible">
-              <object class="AtkObject">
-                <property name="accessible-name" translatable="yes">Profiles</property>
-              </object>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuButton" id="menubutton">
-        <property name="visible">True</property>
-        <property name="focus_on_click">False</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="action-name">win.header-menu</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="icon_name">open-menu-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack_type">end</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="focus_on_click">False</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="action-name">win.find</property>
-        <style>
-          <class name="image-button"/>
-        </style>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
+            <property name="action-name">win.find</property>
             <property name="icon_name">edit-find-symbolic</property>
-          </object>
-        </child>
-        <child internal-child="accessible">
-          <object class="AtkObject">
-            <property name="accessible-name" translatable="yes">Find</property>
+            <accessibility>
+              <property name="label" translatable="yes">Find</property>
+            </accessibility>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="pack_type">end</property>
-      </packing>
     </child>
   </template>
 </interface>

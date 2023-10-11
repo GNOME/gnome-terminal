@@ -1,5 +1,6 @@
 /*
  * Copyright © 2008, 2010 Christian Persch
+ * Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,43 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_SCREEN_CONTAINER_H
-#define TERMINAL_SCREEN_CONTAINER_H
+#pragma once
 
 #include <gtk/gtk.h>
+
 #include "terminal-screen.hh"
 
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_SCREEN_CONTAINER         (terminal_screen_container_get_type ())
-#define TERMINAL_SCREEN_CONTAINER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainer))
-#define TERMINAL_SCREEN_CONTAINER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainerClass))
-#define TERMINAL_IS_SCREEN_CONTAINER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_SCREEN_CONTAINER))
-#define TERMINAL_IS_SCREEN_CONTAINER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_SCREEN_CONTAINER))
-#define TERMINAL_SCREEN_CONTAINER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainerClass))
+#define TERMINAL_TYPE_SCREEN_CONTAINER (terminal_screen_container_get_type())
 
-typedef struct _TerminalScreenContainer        TerminalScreenContainer;
-typedef struct _TerminalScreenContainerClass   TerminalScreenContainerClass;
-typedef struct _TerminalScreenContainerPrivate TerminalScreenContainerPrivate;
-
-struct _TerminalScreenContainer
-{
-  GtkOverlay parent_instance;
-
-  /*< private >*/
-  TerminalScreenContainerPrivate *priv;
-};
-
-struct _TerminalScreenContainerClass
-{
-  GtkOverlayClass parent_class;
-};
-
-GType terminal_screen_container_get_type (void);
+G_DECLARE_FINAL_TYPE (TerminalScreenContainer, terminal_screen_container, TERMINAL, SCREEN_CONTAINER, GtkWidget)
 
 GtkWidget *terminal_screen_container_new (TerminalScreen *screen);
 
 TerminalScreen *terminal_screen_container_get_screen (TerminalScreenContainer *container);
+void terminal_screen_container_destroy (TerminalScreenContainer *container);
 
 TerminalScreenContainer *terminal_screen_container_get_from_screen (TerminalScreen *screen);
 
@@ -59,6 +39,9 @@ void terminal_screen_container_set_policy (TerminalScreenContainer *container,
                                            GtkPolicyType hpolicy,
                                            GtkPolicyType vpolicy);
 
-G_END_DECLS
+void terminal_screen_container_add_overlay (TerminalScreenContainer *container,
+                                            GtkWidget *child);
+void terminal_screen_container_remove_overlay (TerminalScreenContainer *container,
+                                               GtkWidget *child);
 
-#endif /* TERMINAL_SCREEN_CONTAINER_H */
+G_END_DECLS

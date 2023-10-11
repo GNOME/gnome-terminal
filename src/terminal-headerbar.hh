@@ -1,5 +1,6 @@
 /*
  *  Copyright © 2018 Christian Persch
+ *  Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +20,12 @@
 
 #include <gtk/gtk.h>
 
-#include "terminal-screen.hh"
-
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_HEADERBAR         (terminal_headerbar_get_type ())
-#define TERMINAL_HEADERBAR(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_HEADERBAR, TerminalHeaderbar))
-#define TERMINAL_HEADERBAR_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_HEADERBAR, TerminalHeaderbarClass))
-#define TERMINAL_IS_HEADERBAR(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_HEADERBAR))
-#define TERMINAL_IS_HEADERBAR_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_HEADERBAR))
-#define TERMINAL_HEADERBAR_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_HEADERBAR, TerminalHeaderbarClass))
+#define TERMINAL_TYPE_HEADERBAR (terminal_headerbar_get_type ())
 
-typedef struct _TerminalHeaderbar        TerminalHeaderbar;
-typedef struct _TerminalHeaderbarClass   TerminalHeaderbarClass;
+G_DECLARE_FINAL_TYPE (TerminalHeaderbar, terminal_headerbar, TERMINAL, HEADERBAR, GtkWidget)
 
-GType      terminal_headerbar_get_type (void);
-
-GtkWidget *terminal_headerbar_new      (void);
+GtkWidget *terminal_headerbar_new (void);
 
 G_END_DECLS

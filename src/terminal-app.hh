@@ -54,9 +54,8 @@ GApplication *terminal_app_new (const char *app_id,
 
 GDBusObjectManagerServer *terminal_app_get_object_manager (TerminalApp *app);
 
-GdkAtom *terminal_app_get_clipboard_targets (TerminalApp *app,
-                                             GtkClipboard *clipboard,
-                                             int *n_targets);
+GdkContentFormats *terminal_app_get_clipboard_targets (TerminalApp *app,
+                                                       GdkClipboard *clipboard);
 
 void terminal_app_edit_preferences (TerminalApp *app,
                                     GSettings   *profile,
@@ -137,7 +136,7 @@ void terminal_app_unset_ask_default_terminal(TerminalApp* app);
 
 void terminal_app_make_default_terminal(TerminalApp* app);
 
-void* terminal_app_get_hdy_style_manager(TerminalApp* app);
+void* terminal_app_get_adw_style_manager(TerminalApp* app);
 
 G_END_DECLS
 

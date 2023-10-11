@@ -571,7 +571,7 @@ custom_command_entry_changed_cb (GtkEntry *entry)
   const char *command;
   gs_free_error GError *error = nullptr;
 
-  command = gtk_entry_get_text (entry);
+  command = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   if (command[0] == '\0' ||
       g_shell_parse_argv (command, nullptr, nullptr, &error))

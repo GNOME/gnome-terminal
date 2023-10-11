@@ -22,31 +22,9 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_INFO_BAR         (terminal_info_bar_get_type ())
-#define TERMINAL_INFO_BAR(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_INFO_BAR, TerminalInfoBar))
-#define TERMINAL_INFO_BAR_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_INFO_BAR, TerminalInfoBarClass))
-#define TERMINAL_IS_INFO_BAR(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_INFO_BAR))
-#define TERMINAL_IS_INFO_BAR_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_INFO_BAR))
-#define TERMINAL_INFO_BAR_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_INFO_BAR, TerminalInfoBarClass))
+#define TERMINAL_TYPE_INFO_BAR (terminal_info_bar_get_type ())
 
-typedef struct _TerminalInfoBar        TerminalInfoBar;
-typedef struct _TerminalInfoBarClass   TerminalInfoBarClass;
-typedef struct _TerminalInfoBarPrivate TerminalInfoBarPrivate;
-
-struct _TerminalInfoBar
-{
-  GtkInfoBar parent_instance;
-
-  /*< private >*/
-  TerminalInfoBarPrivate *priv;
-};
-
-struct _TerminalInfoBarClass
-{
-  GtkInfoBarClass parent_class;
-};
-
-GType terminal_info_bar_get_type (void);
+G_DECLARE_FINAL_TYPE (TerminalInfoBar, terminal_info_bar, TERMINAL, INFO_BAR, GtkWidget)
 
 GtkWidget *terminal_info_bar_new (GtkMessageType type,
                                   const char *first_button_text,

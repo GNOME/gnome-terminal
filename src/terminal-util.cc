@@ -94,7 +94,7 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                   "%s", error->message);
 
-      g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), nullptr);
+      g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_window_destroy), nullptr);
 
       if (weak_ptr != nullptr)
         {
@@ -104,7 +104,7 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
 
       gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
       
-      gtk_widget_show_all (dialog);
+      gtk_window_present (GTK_WINDOW (dialog));
     }
   else 
     {
@@ -123,19 +123,14 @@ open_url (GtkWindow *parent,
           guint32 user_time,
           GError **error)
 {
-  GdkScreen *screen;
-  gs_free char *uri_fixed;
+  g_autofree char *uri_fixed = terminal_util_uri_fixup (uri, error);
 
-  if (parent)
-    screen = gtk_widget_get_screen (GTK_WIDGET (parent));
-  else
-    screen = gdk_screen_get_default ();
-
-  uri_fixed = terminal_util_uri_fixup (uri, error);
   if (uri_fixed == nullptr)
     return FALSE;
 
-  return gtk_show_uri (screen, uri_fixed, user_time, error);
+  gtk_show_uri (parent, uri_fixed, user_time);
+
+  return TRUE;
 }
 
 void
@@ -150,7 +145,7 @@ terminal_util_show_help (const char *topic)
     uri = g_strdup ("help:gnome-terminal");
   }
 
-  if (!open_url (nullptr, uri, gtk_get_current_event_time (), &error))
+  if (!open_url (nullptr, uri, GDK_CURRENT_TIME, &error))
     {
       terminal_util_show_error_dialog (nullptr, nullptr, error,
                                        _("There was an error displaying help"));
@@ -263,7 +258,7 @@ terminal_util_show_about (void)
                          "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
                          nullptr);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), nullptr);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), nullptr);
   gtk_window_present (dialog);
 
   g_strfreev (array_strv);
@@ -279,25 +274,10 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
                                         const char *name,
                                         const char *desc)
 {
-  AtkObject *obj;
-  
-  obj = gtk_widget_get_accessible (widget);
-
-  if (obj == nullptr)
-    {
-      g_warning ("%s: for some reason widget has no GtkAccessible",
-                 G_STRFUNC);
-      return;
-    }
-
-  if (!GTK_IS_ACCESSIBLE (obj))
-    return; /* This means GAIL is not loaded so we have the NoOp accessible */
-
-  g_return_if_fail (GTK_IS_ACCESSIBLE (obj));
-  if (desc)
-    atk_object_set_description (obj, desc);
-  if (name)
-    atk_object_set_name (obj, name);
+  gtk_accessible_update_property (GTK_ACCESSIBLE (widget),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, name,
+                                  GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, desc,
+                                  -1);
 }
 
 void
@@ -930,11 +910,15 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
   }
   g_list_free (list);
 
+#if 1
+  g_printerr ("%s: WIDGET TYPE: %s\n", G_STRLOC, G_OBJECT_TYPE_NAME (widget));
+#else
   if (GTK_IS_CONTAINER (widget))
     gtk_container_foreach (GTK_CONTAINER (widget),
                            /* See #96 for double casting. */
                            (GtkCallback) (GCallback) terminal_util_bind_mnemonic_label_sensitivity,
                            nullptr);
+#endif
 }
 
 /*

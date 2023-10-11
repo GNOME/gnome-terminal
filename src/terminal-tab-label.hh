@@ -25,34 +25,9 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_TAB_LABEL         (terminal_tab_label_get_type ())
-#define TERMINAL_TAB_LABEL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabel))
-#define TERMINAL_TAB_LABEL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelClass))
-#define TERMINAL_IS_TAB_LABEL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_TAB_LABEL))
-#define TERMINAL_IS_TAB_LABEL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_TAB_LABEL))
-#define TERMINAL_TAB_LABEL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelClass))
+#define TERMINAL_TYPE_TAB_LABEL (terminal_tab_label_get_type ())
 
-typedef struct _TerminalTabLabel        TerminalTabLabel;
-typedef struct _TerminalTabLabelClass   TerminalTabLabelClass;
-typedef struct _TerminalTabLabelPrivate TerminalTabLabelPrivate;
-
-struct _TerminalTabLabel
-{
-  GtkBox parent_instance;
-
-  /*< private >*/
-  TerminalTabLabelPrivate *priv;
-};
-
-struct _TerminalTabLabelClass
-{
-  GtkBoxClass parent_class;
-
-  /* Signals */
-  void (* close_button_clicked) (TerminalTabLabel *tab_label);
-};
-
-GType           terminal_tab_label_get_type   (void);
+G_DECLARE_FINAL_TYPE (TerminalTabLabel, terminal_tab_label, TERMINAL, TAB_LABEL, GtkWidget)
 
 GtkWidget *     terminal_tab_label_new        (TerminalScreen *screen);
 
