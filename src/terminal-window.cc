@@ -2433,6 +2433,8 @@ terminal_window_add_screen (TerminalWindow *window,
   }
 
   terminal_mdi_container_add_screen (priv->mdi_container, screen, position);
+
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
 void
