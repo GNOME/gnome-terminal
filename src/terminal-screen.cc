@@ -144,6 +144,9 @@ enum
 static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
+static void terminal_screen_profile_changed_cb (GSettings     *profile,
+                                                const char    *prop_name,
+                                                TerminalScreen *screen);
 #ifdef GTK4_TODO
 static void terminal_screen_drag_data_received (GtkWidget        *widget,
                                                 GdkDragContext   *context,
@@ -471,6 +474,18 @@ terminal_screen_css_changed (GtkWidget *widget,
 }
 
 static void
+terminal_screen_root (GtkWidget *widget)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->root (widget);
+
+  if (priv->profile != nullptr)
+    terminal_screen_profile_changed_cb (priv->profile, nullptr, screen);
+}
+
+static void
 terminal_screen_init (TerminalScreen *screen)
 {
 #if 0
@@ -606,6 +621,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   widget_class->realize = terminal_screen_realize;
   widget_class->css_changed = terminal_screen_css_changed;
+  widget_class->root = terminal_screen_root;
 #ifdef GTK4_TODO
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
