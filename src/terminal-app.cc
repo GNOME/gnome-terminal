@@ -1055,7 +1055,7 @@ terminal_app_finalize (GObject *object)
   g_signal_handlers_disconnect_by_func (app->clipboard,
                                         (void*)clipboard_owner_change_cb,
                                         app);
-  g_clear_object (&app->clipboard_targets);
+  g_clear_pointer (&app->clipboard_targets, gdk_content_formats_unref);
 
   g_signal_handlers_disconnect_by_func (app->profiles_list,
                                         (void*)terminal_app_update_profile_menus,
