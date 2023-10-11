@@ -1809,6 +1809,7 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window,
 
   /* Create Tabs menu button */
   tabs_menu_button = gtk_menu_button_new ();
+  gtk_widget_add_css_class (tabs_menu_button, "flat");
   gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (tabs_menu_button),
                                          notebook_update_tabs_menu_cb,
                                          window, NULL);
