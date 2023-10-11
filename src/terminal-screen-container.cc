@@ -243,6 +243,8 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
                                       GtkPolicyType vpolicy)
 {
   GObject *object;
+  GtkSettings *settings;
+  gboolean overlay_scrolling;
 
   g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
 
@@ -259,9 +261,17 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
     g_object_notify (object, "vscrollbar-policy");
   }
 
+  settings = gtk_settings_get_default ();
+  g_object_get (settings,
+                "gtk-overlay-scrolling", &overlay_scrolling,
+                nullptr);
+
   switch (vpolicy) {
   case GTK_POLICY_NEVER:
-    vpolicy = GTK_POLICY_EXTERNAL;
+    if (overlay_scrolling)
+      vpolicy = GTK_POLICY_AUTOMATIC;
+    else
+      vpolicy = GTK_POLICY_EXTERNAL;
     break;
   case GTK_POLICY_AUTOMATIC:
   case GTK_POLICY_ALWAYS:
@@ -272,6 +282,8 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
   }
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (container->scrolled_window), hpolicy, vpolicy);
+  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (container->scrolled_window),
+                                             vpolicy == GTK_POLICY_AUTOMATIC);
 
   g_object_thaw_notify (object);
 }
