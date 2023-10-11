@@ -65,12 +65,14 @@ terminal_screen_container_constructed (GObject *object)
   container->overlay = gtk_overlay_new ();
   gtk_widget_set_parent (GTK_WIDGET (container->overlay), GTK_WIDGET (container));
 
-  container->scrolled_window = gtk_scrolled_window_new ();
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (container->scrolled_window),
-                                  container->hscrollbar_policy,
-                                  container->vscrollbar_policy);
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container->scrolled_window),
-                                 GTK_WIDGET (container->screen));
+  container->scrolled_window =
+    (GtkWidget *)g_object_new (GTK_TYPE_SCROLLED_WINDOW,
+                               "hscrollbar-policy", container->hscrollbar_policy,
+                               "vscrollbar-policy", container->vscrollbar_policy,
+                               "child", container->screen,
+                               "propagate-natural-width", TRUE,
+                               "propagate-natural-height", TRUE,
+                               nullptr);
   gtk_overlay_set_child (GTK_OVERLAY (container->overlay),
                          container->scrolled_window);
 }
