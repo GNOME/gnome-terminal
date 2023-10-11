@@ -910,15 +910,10 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
   }
   g_list_free (list);
 
-#if 1
-  g_printerr ("%s: WIDGET TYPE: %s\n", G_STRLOC, G_OBJECT_TYPE_NAME (widget));
-#else
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-                           /* See #96 for double casting. */
-                           (GtkCallback) (GCallback) terminal_util_bind_mnemonic_label_sensitivity,
-                           nullptr);
-#endif
+  for (GtkWidget *child = gtk_widget_get_first_child (widget);
+       child != nullptr;
+       child = gtk_widget_get_next_sibling (child))
+    terminal_util_bind_mnemonic_label_sensitivity (child);
 }
 
 /*
