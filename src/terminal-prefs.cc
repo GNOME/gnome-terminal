@@ -25,6 +25,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "profile-editor.hh"
 #include "terminal-prefs.hh"
@@ -38,20 +39,12 @@
 
 PrefData *the_pref_data = nullptr;  /* global */
 
-/* Bottom */
-
 static void
-prefs_dialog_help_button_clicked_cb (GtkWidget *button,
-                                     PrefData *data)
+preferences_help_cb (GSimpleAction *action,
+                     GVariant *param,
+                     gpointer user_data)
 {
   terminal_util_show_help ("pref");
-}
-
-static void
-prefs_dialog_close_button_clicked_cb (GtkWidget *button,
-                                      PrefData *data)
-{
-  gtk_window_destroy (GTK_WINDOW (data->dialog));
 }
 
 /* Sidebar */
@@ -119,14 +112,19 @@ update_window_title (void)
 
   GSettings *profile = (GSettings*)g_object_get_data (G_OBJECT (row), "gsettings");
   GtkLabel *label = (GtkLabel*)g_object_get_data (G_OBJECT (row), "label");
+  AdwWindowTitle *section_title = ADW_WINDOW_TITLE (gtk_builder_get_object (the_pref_data->builder, "section_title"));
   const char *text = gtk_label_get_text (label);
   gs_free char *subtitle;
   gs_free char *title;
 
   if (profile == nullptr) {
     subtitle = g_strdup (text);
+    adw_window_title_set_title (section_title, text);
+    adw_window_title_set_subtitle (section_title, nullptr);
   } else {
     subtitle = g_strdup_printf (_("Profile “%s”"), text);
+    adw_window_title_set_title (section_title, _("Profile"));
+    adw_window_title_set_subtitle (section_title, text);
   }
 
   title = g_strdup_printf (_("Preferences – %s"), subtitle);
@@ -730,8 +728,7 @@ terminal_prefs_show_preferences(GSettings* profile,
   GtkWidget *theme_variant_label, *theme_variant_combo;
   GtkWidget *new_terminal_mode_label, *new_terminal_mode_combo;
   GtkWidget *new_tab_position_combo;
-  GtkWidget *close_button, *help_button;
-  GtkWidget *content_box, *general_frame, *keybindings_frame;
+  GtkWidget *general_frame, *keybindings_frame;
   GtkWidget *always_check_default_button, *make_default_button;
   GSettings *settings;
 
@@ -740,6 +737,7 @@ terminal_prefs_show_preferences(GSettings* profile,
     { "rename",         profile_rename_cb,         nullptr, nullptr, nullptr },
     { "delete",         profile_delete_cb,         nullptr, nullptr, nullptr },
     { "set-as-default", profile_set_as_default_cb, nullptr, nullptr, nullptr },
+    { "help",           preferences_help_cb,       nullptr, nullptr, nullptr },
   };
 
   if (the_pref_data != nullptr)
@@ -754,11 +752,8 @@ terminal_prefs_show_preferences(GSettings* profile,
   data->builder = terminal_util_load_widgets_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
-                                       "dialogue-content-box", &content_box,
                                        "general-frame", &general_frame,
                                        "keybindings-frame", &keybindings_frame,
-                                       "close-button", &close_button,
-                                       "help-button", &help_button,
                                        "default-show-menubar-checkbutton", &show_menubar_button,
                                        "theme-variant-label", &theme_variant_label,
                                        "theme-variant-combobox", &theme_variant_combo,
@@ -894,38 +889,8 @@ terminal_prefs_show_preferences(GSettings* profile,
 
   profile_prefs_init ();
 
-  /* Move action widgets to titlebar when headerbar is used */
-  if (terminal_app_get_dialog_use_headerbar (app)) {
-    GtkWidget *headerbar;
-    GtkWidget *bbox;
-
-    headerbar = (GtkWidget*)g_object_new (GTK_TYPE_HEADER_BAR,
-					  "show-close-button", TRUE,
-					  nullptr);
-    bbox = gtk_widget_get_parent (help_button);
-
-    gtk_box_remove (GTK_BOX (bbox), (GtkWidget*)g_object_ref (help_button));
-    gtk_header_bar_pack_start (GTK_HEADER_BAR (headerbar), help_button);
-    g_object_unref (help_button);
-
-    gtk_style_context_add_class (gtk_widget_get_style_context (help_button),
-                                 "text-button");
-
-    gtk_widget_show (headerbar);
-    gtk_widget_hide (bbox);
-
-    gtk_window_set_titlebar (GTK_WINDOW (dialog), headerbar);
-
-    /* Remove extra spacing around the content, and extra frames */
-    g_object_set (G_OBJECT (content_box), "margin", 0, nullptr);
-    gtk_widget_add_css_class (GTK_WIDGET (general_frame), "flat");
-    gtk_widget_add_css_class (GTK_WIDGET (keybindings_frame), "flat");
-  }
-
   /* misc */
 
-  g_signal_connect (close_button, "clicked", G_CALLBACK (prefs_dialog_close_button_clicked_cb), data);
-  g_signal_connect (help_button, "clicked", G_CALLBACK (prefs_dialog_help_button_clicked_cb), data);
   g_signal_connect (dialog, "destroy", G_CALLBACK (prefs_dialog_destroy_cb), data);
 
   g_object_add_weak_pointer (G_OBJECT (dialog), (gpointer *) &the_pref_data);
