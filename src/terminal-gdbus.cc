@@ -30,9 +30,11 @@
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"
 
-/* ------------------------------------------------------------------------- */
+#ifdef GDK_WINDOWING_X11
+# include <gdk/x11/gdkx.h>
+#endif
 
-#define TERMINAL_RECEIVER_IMPL_GET_PRIVATE(impl)(G_TYPE_INSTANCE_GET_PRIVATE ((impl), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImplPrivate))
+/* ------------------------------------------------------------------------- */
 
 struct _TerminalReceiverImplPrivate {
   TerminalScreen *screen; /* unowned! */
@@ -249,12 +251,13 @@ terminal_receiver_impl_iface_init (TerminalReceiverIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalReceiverImpl, terminal_receiver_impl, TERMINAL_TYPE_RECEIVER_SKELETON,
+                         G_ADD_PRIVATE (TerminalReceiverImpl)
                          G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_RECEIVER, terminal_receiver_impl_iface_init))
 
 static void
 terminal_receiver_impl_init (TerminalReceiverImpl *impl)
 {
-  impl->priv = TERMINAL_RECEIVER_IMPL_GET_PRIVATE (impl);
+  impl->priv = (TerminalReceiverImplPrivate *)terminal_receiver_impl_get_instance_private (impl);
 }
 
 static void
@@ -320,8 +323,6 @@ terminal_receiver_impl_class_init (TerminalReceiverImplClass *klass)
 			   GParamFlags(G_PARAM_READWRITE |
 				       G_PARAM_CONSTRUCT_ONLY |
 				       G_PARAM_STATIC_STRINGS)));
-
-  g_type_class_add_private (gobject_class, sizeof (TerminalReceiverImplPrivate));
 }
 
 /* public API */
@@ -416,7 +417,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
       return TRUE;
     }
 
-    GtkWidget *win = gtk_widget_get_toplevel (GTK_WIDGET (window_screen));
+    GtkWidget *win = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (window_screen)));
     if (TERMINAL_IS_WINDOW (win))
       window = TERMINAL_WINDOW (win);
   }
@@ -450,9 +451,18 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     else if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
       gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
 
+#ifdef GDK_WINDOWING_X11
     /* Overwrite the default, unique window role set in terminal_window_init */
-    if (g_variant_lookup (options, "role", "&s", &role))
-      gtk_window_set_role (GTK_WINDOW (window), role);
+    if (g_variant_lookup (options, "role", "&s", &role) && role[0]) {
+      if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+        gtk_widget_realize (GTK_WIDGET (window));
+
+      auto const surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+      if (GDK_IS_X11_SURFACE (surface))
+        gdk_x11_surface_set_utf8_property (surface, "WM_WINDOW_ROLE", role);
+    }
+#endif
 
     gboolean show_menubar;
     if (g_variant_lookup (options, "show-menubar", "b", &show_menubar))
@@ -546,18 +556,18 @@ terminal_factory_impl_iface_init (TerminalFactoryIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalFactoryImpl, terminal_factory_impl, TERMINAL_TYPE_FACTORY_SKELETON,
+                         G_ADD_PRIVATE (TerminalFactoryImpl)
                          G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_FACTORY, terminal_factory_impl_iface_init))
 
 static void
 terminal_factory_impl_init (TerminalFactoryImpl *impl)
 {
-  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl, TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImplPrivate);
+  impl->priv = (TerminalFactoryImplPrivate *)terminal_factory_impl_get_instance_private (impl);
 }
 
 static void
 terminal_factory_impl_class_init (TerminalFactoryImplClass *klass)
 {
-  /* g_type_class_add_private (klass, sizeof (TerminalFactoryImplPrivate)); */
 }
 
 /**

@@ -295,7 +295,7 @@ handle_activate_result_cb (TerminalSearchProvider2  *skeleton,
                            guint                     timestamp,
                            gpointer                  user_data)
 {
-  GtkWidget *toplevel;
+  GtkRoot *toplevel;
   TerminalApp *app;
   TerminalScreen *screen;
 
@@ -304,8 +304,8 @@ handle_activate_result_cb (TerminalSearchProvider2  *skeleton,
   if (screen == nullptr)
     goto out;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
-  if (!gtk_widget_is_toplevel (toplevel))
+  toplevel = gtk_widget_get_root (GTK_WIDGET (screen));
+  if (toplevel == nullptr)
     goto out;
 
   terminal_window_switch_screen (TERMINAL_WINDOW (toplevel), screen);

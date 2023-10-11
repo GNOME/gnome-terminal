@@ -44,19 +44,19 @@ clangxx_req_version       = '3.3'
 
 # Requirements
 
-vte_req                      = 'vte-2.91'
+vte_req                      = 'vte-2.91-gtk4'
 vte_req_version              = '0.72.2'
 
 glib_req_version             = '2.77.0'
 glib_min_req_version         = '2.77'
 glib_max_allowed_version     = '2.77'
 
-gtk_req_version              = '3.22.27'
-gtk_min_req_version          = '3.18'
-gtk_max_allowed_version      = '3.24'
+gtk_req_version              = '4.12.0'
+gtk_min_req_version          = '4.12'
+gtk_max_allowed_version      = '4.12'
 
-libhandy_req_version         = '1.6.0'
-libnautilus_ext_req_version  = '43'
+libadwaita_req_version       = '1.4'
+libnautilus_ext_req_version  = '45'
 pcre2_req_version            = '10.00'
 schemas_req_version          = '0.1.0'
 
@@ -242,6 +242,7 @@ endforeach
 # Compiler flags
 
 compiler_flags_common = [
+  '-Wno-deprecated-declarations',
   '-Waggregate-return',
   '-Wall',
   '-Wcast-align',
@@ -358,17 +359,17 @@ add_project_arguments(global_cxxflags, language: 'cpp')
 
 # Dependencies
 
-vte_dep       = dependency(vte_req,        version: '>=' + vte_req_version)
+vte_dep         = dependency(vte_req,        version: '>=' + vte_req_version)
 
-gio_dep       = dependency('gio-2.0',      version: '>=' + glib_req_version)
-gio_unix_dep  = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
-glib_dep      = dependency('glib-2.0',     version: '>=' + glib_req_version)
-gtk_dep       = dependency('gtk+-3.0',     version: '>=' + gtk_req_version)
-libhandy_dep  = dependency('libhandy-1',   version: '>=' + libhandy_req_version)
-pcre2_dep     = dependency('libpcre2-8',   version: '>=' + pcre2_req_version)
-pthreads_dep  = dependency('threads')
-schemas_dep   = dependency('gsettings-desktop-schemas',
-                                           version: '>=' + schemas_req_version)
+gio_dep         = dependency('gio-2.0',      version: '>=' + glib_req_version)
+gio_unix_dep    = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
+glib_dep        = dependency('glib-2.0',     version: '>=' + glib_req_version)
+gtk_dep         = dependency('gtk4',         version: '>=' + gtk_req_version)
+libadwaita_dep  = dependency('libadwaita-1', version: '>=' + libadwaita_req_version)
+pcre2_dep       = dependency('libpcre2-8',   version: '>=' + pcre2_req_version)
+pthreads_dep    = dependency('threads')
+schemas_dep     = dependency('gsettings-desktop-schemas',
+                                             version: '>=' + schemas_req_version)
 uuid_dep      = dependency('uuid')
 
 if get_option('nautilus_extension')

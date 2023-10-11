@@ -38,7 +38,7 @@
 #ifndef TERMINAL_NAUTILUS
 #include <gdk/gdk.h>
 #if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
 #endif
 #endif
 

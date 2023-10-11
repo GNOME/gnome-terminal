@@ -22,33 +22,13 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_NOTEBOOK         (terminal_notebook_get_type ())
-#define TERMINAL_NOTEBOOK(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NOTEBOOK, TerminalNotebook))
-#define TERMINAL_NOTEBOOK_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NOTEBOOK, TerminalNotebookClass))
-#define TERMINAL_IS_NOTEBOOK(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NOTEBOOK))
-#define TERMINAL_IS_NOTEBOOK_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NOTEBOOK))
-#define TERMINAL_NOTEBOOK_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NOTEBOOK, TerminalNotebookClass))
+#define TERMINAL_TYPE_NOTEBOOK (terminal_notebook_get_type ())
 
-typedef struct _TerminalNotebook        TerminalNotebook;
-typedef struct _TerminalNotebookClass   TerminalNotebookClass;
-typedef struct _TerminalNotebookPrivate TerminalNotebookPrivate;
-
-struct _TerminalNotebook
-{
-  GtkNotebook parent_instance;
-
-  /*< private >*/
-  TerminalNotebookPrivate *priv;
-};
-
-struct _TerminalNotebookClass
-{
-  GtkNotebookClass parent_class;
-};
-
-GType terminal_notebook_get_type (void);
+G_DECLARE_FINAL_TYPE (TerminalNotebook, terminal_notebook, TERMINAL, NOTEBOOK, GtkWidget)
 
 GtkWidget *terminal_notebook_new (void);
+
+GtkNotebook *terminal_notebook_get_notebook (TerminalNotebook *self);
 
 void terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
                                        GtkPolicyType policy);

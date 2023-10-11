@@ -4,6 +4,7 @@
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
  * Copyright © 2008, 2010, 2011, 2015, 2017, 2022 Christian Persch
+ * Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +25,8 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+
+#include <adwaita.h>
 
 #define G_SETTINGS_ENABLE_BACKEND
 #include <gio/gsettingsbackend.h>
@@ -47,7 +50,7 @@
 #include "terminal-screen.hh"
 #include "terminal-window.hh"
 
-#include <handy.h>
+#include <adwaita.h>
 #endif
 
 #ifdef TERMINAL_PREFERENCES
@@ -62,15 +65,15 @@
 #include "terminal-search-provider.hh"
 #endif /* ENABLE_SEARCH_PROVIDER */
 
+#ifdef GDK_WINDOWING_X11
+# include <gdk/x11/gdkx.h>
+#endif
+
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 
 #define GNOME_TERMINAL_PREFERENCES_ICON_NAME    "org.gnome.Terminal.Preferences"
 
@@ -106,15 +109,15 @@ enum {
  */
 
 struct _TerminalAppClass {
-  GtkApplicationClass parent_class;
+  AdwApplicationClass parent_class;
 
   void (* clipboard_targets_changed) (TerminalApp *app,
-                                      GtkClipboard *clipboard);
+                                      GdkClipboard *clipboard);
 };
 
 struct _TerminalApp
 {
-  GtkApplication parent_instance;
+  AdwApplication parent_instance;
 
   TerminalSettingsList *profiles_list;
 
@@ -144,13 +147,12 @@ struct _TerminalApp
 
   GMenu *set_profile_menu;
 
-  GtkClipboard *clipboard;
-  GdkAtom *clipboard_targets;
-  int n_clipboard_targets;
+  GdkClipboard *clipboard;
+  GdkContentFormats *clipboard_targets;
 
   GWeakRef prefs_process_ref;
 
-  HdyStyleManager* style_manager;
+  AdwStyleManager* style_manager;
 
 #endif /* TERMINAL_SERVER */
 
@@ -292,7 +294,6 @@ load_css_from_resource (GApplication *application,
   const char *base_path;
   gs_free char *uri;
   gs_unref_object GFile *file;
-  gs_free_error GError *error = nullptr;
 
   base_path = g_application_get_resource_base_path (application);
 
@@ -310,8 +311,7 @@ load_css_from_resource (GApplication *application,
   if (!g_file_query_exists (file, nullptr /* cancellable */))
     return FALSE;
 
-  if (!gtk_css_provider_load_from_file (provider, file, &error))
-    g_assert_no_error (error);
+  gtk_css_provider_load_from_file (provider, file);
 
   return TRUE;
 }
@@ -326,9 +326,9 @@ add_css_provider (GApplication *application,
   if (!load_css_from_resource (application, provider, theme))
     return;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 static void
@@ -395,19 +395,19 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
   auto const theme = TerminalThemeVariant(g_settings_get_enum(settings, key));
 
   auto const app = terminal_app_get();
-  if (hdy_style_manager_get_system_supports_color_schemes(app->style_manager)) {
+  if (adw_style_manager_get_system_supports_color_schemes(app->style_manager)) {
     switch (theme) {
     case TERMINAL_THEME_VARIANT_SYSTEM:
-      hdy_style_manager_set_color_scheme(app->style_manager,
-                                         HDY_COLOR_SCHEME_PREFER_LIGHT);
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_PREFER_LIGHT);
       break;
     case TERMINAL_THEME_VARIANT_LIGHT:
-      hdy_style_manager_set_color_scheme(app->style_manager,
-                                         HDY_COLOR_SCHEME_FORCE_LIGHT);
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_FORCE_LIGHT);
       break;
     case TERMINAL_THEME_VARIANT_DARK:
-      hdy_style_manager_set_color_scheme(app->style_manager,
-                                         HDY_COLOR_SCHEME_FORCE_DARK);
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_FORCE_DARK);
     }
   } else {
     if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
@@ -704,66 +704,35 @@ terminal_app_create_profilemenu (TerminalApp *app)
 /* Clipboard */
 
 static void
-free_clipboard_targets (TerminalApp *app)
-{
-  g_free (app->clipboard_targets);
-  app->clipboard_targets = nullptr;
-  app->n_clipboard_targets = 0;
-}
-
-static void
-update_clipboard_targets (TerminalApp *app,
-                          GdkAtom *targets,
-                          int n_targets)
-{
-  free_clipboard_targets (app);
-
-  /* Sometimes we receive targets == nullptr but n_targets == -1 */
-  if (targets != nullptr && n_targets < 255) {
-    app->clipboard_targets = reinterpret_cast<GdkAtom*>
-      (g_memdup (targets, sizeof (targets[0]) * n_targets));
-    app->n_clipboard_targets = n_targets;
-  }
-}
-
-static void
-clipboard_targets_received_cb (GtkClipboard *clipboard,
-                               GdkAtom *targets,
-                               int n_targets,
-                               TerminalApp *app)
-{
-  update_clipboard_targets (app, targets, n_targets);
-
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_CLIPBOARD) {
-    g_printerr ("Clipboard has %d targets:", app->n_clipboard_targets);
-
-    int i;
-    for (i = 0; i < app->n_clipboard_targets; i++) {
-      gs_free char *atom_name = gdk_atom_name (app->clipboard_targets[i]);
-      g_printerr (" %s", atom_name);
-    }
-    g_printerr ("\n");
-  }
-
-  g_signal_emit (app, signals[CLIPBOARD_TARGETS_CHANGED], 0, clipboard);
-}
-
-static void
-clipboard_owner_change_cb (GtkClipboard *clipboard,
-                           GdkEvent *event G_GNUC_UNUSED,
+clipboard_owner_change_cb (GdkClipboard *clipboard,
                            TerminalApp *app)
 {
+  GdkContentFormats *formats;
+
+  g_assert (GDK_IS_CLIPBOARD (clipboard));
+  g_assert (TERMINAL_IS_APP (app));
+
   _terminal_debug_print (TERMINAL_DEBUG_CLIPBOARD,
                          "Clipboard owner changed\n");
 
-  clipboard_targets_received_cb (clipboard, nullptr, 0, app); /* clear */
+  formats = gdk_clipboard_get_formats (clipboard);
 
-  /* We can do this without holding a reference to @app since
-   * the app lives as long as the process.
-   */
-  gtk_clipboard_request_targets (clipboard,
-                                 (GtkClipboardTargetsReceivedFunc) clipboard_targets_received_cb,
-                                 app);
+  if (app->clipboard_targets != formats) {
+    if (formats)
+      gdk_content_formats_ref (formats);
+
+    g_clear_pointer (&app->clipboard_targets, gdk_content_formats_unref);
+    app->clipboard_targets = formats;
+
+    _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_CLIPBOARD) {
+      GString *string = g_string_new (NULL);
+      if (formats != nullptr)
+        gdk_content_formats_print (formats, string);
+      g_printerr ("Clipboard has targets: %s\n", string->str);
+    }
+
+    g_signal_emit (app, signals[CLIPBOARD_TARGETS_CHANGED], 0, clipboard);
+  }
 }
 
 /* Preferences */
@@ -840,7 +809,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, nullptr, nullptr, gtk_get_current_event_time());
+  terminal_app_edit_preferences (app, nullptr, nullptr, GDK_CURRENT_TIME);
 }
 
 static void
@@ -871,14 +840,14 @@ app_menu_quit_cb (GSimpleAction *action,
   if (TERMINAL_IS_WINDOW (window))
     terminal_window_request_close (TERMINAL_WINDOW (window));
   else /* a dialogue */
-    gtk_widget_destroy (GTK_WIDGET (window));
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 #endif /* TERMINAL_SERVER */
 
 /* Class implementation */
 
-G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE (TerminalApp, terminal_app, ADW_TYPE_APPLICATION)
 
 /* GApplicationClass impl */
 
@@ -897,13 +866,18 @@ terminal_app_startup (GApplication *application)
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
-  /* Need to set the WM class (bug #685742) */
-#if defined(TERMINAL_SERVER)
-  gdk_set_program_class("Gnome-terminal");
-#elif defined(TERMINAL_PREFERENCES)
-  gdk_set_program_class("Gnome-terminal-preferences");
-#else
-#error
+#ifdef GDK_WINDOWING_X11
+  auto const display = gdk_display_get_default ();
+  if (GDK_IS_X11_DISPLAY (display)) {
+    /* Need to set the WM class (bug #685742) */
+# if defined(TERMINAL_SERVER)
+    gdk_x11_display_set_program_class (display, "Gnome-terminal");
+# elif defined(TERMINAL_PREFERENCES)
+    gdk_x11_display_set_program_class (display, "Gnome-terminal-preferences");
+# else
+#  error
+# endif
+  }
 #endif
 
   app_load_css (application);
@@ -951,7 +925,7 @@ static void
 terminal_app_init (TerminalApp* app)
 {
 #ifdef TERMINAL_SERVER
-  hdy_init ();
+  adw_init ();
 
   g_weak_ref_init(&app->prefs_process_ref, nullptr);
 
@@ -1037,7 +1011,7 @@ terminal_app_constructed(GObject *object)
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
 
-  app->style_manager = hdy_style_manager_get_default();
+  app->style_manager = adw_style_manager_get_default();
 
   auto const gtk_settings = gtk_settings_get_default ();
   terminal_app_theme_variant_changed_cb (app->global_settings,
@@ -1054,16 +1028,10 @@ terminal_app_constructed(GObject *object)
 
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();
-  app->clipboard = gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);
-  clipboard_owner_change_cb (app->clipboard, nullptr, app);
-  g_signal_connect (app->clipboard, "owner-change",
+  app->clipboard = gdk_display_get_clipboard (display);
+  clipboard_owner_change_cb (app->clipboard, app);
+  g_signal_connect (app->clipboard, "changed",
                     G_CALLBACK (clipboard_owner_change_cb), app);
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY(display) &&
-      !gdk_display_supports_selection_notification (display))
-    g_printerr ("Display does not support owner-change; copy/paste will be broken!\n");
-#endif
 #endif /* TERMINAL_SERVER */
 
   /* Get the profiles */
@@ -1087,7 +1055,7 @@ terminal_app_finalize (GObject *object)
   g_signal_handlers_disconnect_by_func (app->clipboard,
                                         (void*)clipboard_owner_change_cb,
                                         app);
-  free_clipboard_targets (app);
+  g_clear_object (&app->clipboard_targets);
 
   g_signal_handlers_disconnect_by_func (app->profiles_list,
                                         (void*)terminal_app_update_profile_menus,
@@ -1296,8 +1264,8 @@ terminal_app_class_init (TerminalAppClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalAppClass, clipboard_targets_changed),
                   nullptr, nullptr,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, G_TYPE_OBJECT);
+                  nullptr,
+                  G_TYPE_NONE, 1, GDK_TYPE_CLIPBOARD);
 }
 
 /* Public API */
@@ -1421,20 +1389,15 @@ terminal_app_unregister_screen (TerminalApp *app,
   g_dbus_object_manager_server_unexport (app->object_manager, object_path);
 }
 
-GdkAtom *
+GdkContentFormats *
 terminal_app_get_clipboard_targets (TerminalApp *app,
-                                    GtkClipboard *clipboard,
-                                    int *n_targets)
+                                    GdkClipboard *clipboard)
 {
   g_return_val_if_fail (TERMINAL_IS_APP (app), nullptr);
-  g_return_val_if_fail (n_targets != nullptr, nullptr);
 
-  if (clipboard != app->clipboard) {
-    *n_targets = 0;
+  if (clipboard != app->clipboard)
     return nullptr;
-  }
 
-  *n_targets = app->n_clipboard_targets;
   return app->clipboard_targets;
 }
 
@@ -1647,7 +1610,7 @@ terminal_app_get_object_manager (TerminalApp *app)
 }
 
 void*
-terminal_app_get_hdy_style_manager(TerminalApp* app)
+terminal_app_get_adw_style_manager(TerminalApp* app)
 {
   g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
   return app->style_manager;

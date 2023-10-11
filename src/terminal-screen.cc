@@ -43,10 +43,10 @@
 #include <gtk/gtk.h>
 
 #ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
+#include <gdk/x11/gdkx.h>
 #endif
 
-#include <handy.h>
+#include <adwaita.h>
 
 #include "terminal-accels.hh"
 #include "terminal-app.hh"
@@ -144,6 +144,7 @@ enum
 static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
+#ifdef GTK4_TODO
 static void terminal_screen_drag_data_received (GtkWidget        *widget,
                                                 GdkDragContext   *context,
                                                 gint              x,
@@ -151,13 +152,16 @@ static void terminal_screen_drag_data_received (GtkWidget        *widget,
                                                 GtkSelectionData *selection_data,
                                                 guint             info,
                                                 guint             time);
+#endif
 static void terminal_screen_set_font (TerminalScreen *screen);
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
                                                     TerminalScreen *screen);
+#ifdef GTK4_TODO
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
+#endif
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
@@ -166,6 +170,7 @@ static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
+#ifdef GTK4_TODO
 static char* terminal_screen_check_hyperlink   (TerminalScreen            *screen,
                                                 GdkEvent                  *event);
 static void terminal_screen_check_extra (TerminalScreen *screen,
@@ -175,6 +180,7 @@ static void terminal_screen_check_extra (TerminalScreen *screen,
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 GdkEvent                  *event,
                                                 int                  *flavor);
+#endif
 
 static void terminal_screen_show_info_bar (TerminalScreen *screen,
                                            GError *error,
@@ -356,7 +362,7 @@ terminal_screen_clear_exec_data (TerminalScreen *screen,
   priv->exec_data = nullptr;
 }
 
-G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
+G_DEFINE_TYPE_WITH_PRIVATE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
 static void
 free_tag_data (TagData *tagdata)
@@ -399,6 +405,7 @@ terminal_screen_class_enable_menu_bar_accel_notify_cb (GSettings *settings,
                                                        const char *key,
                                                        TerminalScreenClass *klass)
 {
+#ifdef GTK4_TODO
   static gboolean is_enabled = TRUE; /* the binding is enabled by default since GtkWidgetClass installs it */
   gboolean enable;
   GtkBindingSet *binding_set;
@@ -416,17 +423,14 @@ terminal_screen_class_enable_menu_bar_accel_notify_cb (GSettings *settings,
     gtk_binding_entry_remove (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK);
   else
     gtk_binding_entry_skip (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK);
+#endif
 }
 
 static TerminalWindow *
 terminal_screen_get_window (TerminalScreen *screen)
 {
   GtkWidget *widget = GTK_WIDGET (screen);
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (!gtk_widget_is_toplevel (toplevel))
-    return nullptr;
+  GtkRoot *toplevel = gtk_widget_get_root (widget);
 
   return TERMINAL_WINDOW (toplevel);
 }
@@ -456,11 +460,12 @@ terminal_screen_update_style (TerminalScreen *screen)
 }
 
 static void
-terminal_screen_style_updated (GtkWidget *widget)
+terminal_screen_css_changed (GtkWidget *widget,
+                             GtkCssStyleChange *change)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
 
-  GTK_WIDGET_CLASS (terminal_screen_parent_class)->style_updated (widget);
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->css_changed (widget, change);
 
   terminal_screen_update_style (screen);
 }
@@ -468,24 +473,26 @@ terminal_screen_style_updated (GtkWidget *widget)
 static void
 terminal_screen_init (TerminalScreen *screen)
 {
-  const GtkTargetEntry target_table[] = {
+#if 0
+  static const GtkTargetEntry target_table[] = {
     { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
     { (char *) "application/x-color", 0, TARGET_COLOR },
     { (char *) "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
     { (char *) "text/x-moz-url",  0, TARGET_MOZ_URL },
     { (char *) "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
   };
-  VteTerminal *terminal = VTE_TERMINAL (screen);
-  TerminalScreenPrivate *priv;
-  TerminalApp *app;
   GtkTargetList *target_list;
   GtkTargetEntry *targets;
   int n_targets;
+#endif
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+  TerminalScreenPrivate *priv;
+  TerminalApp *app;
   guint i;
   uuid_t u;
   char uuidstr[37];
 
-  priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
+  priv = screen->priv = (TerminalScreenPrivate*)terminal_screen_get_instance_private (screen);
 
   uuid_generate (u);
   uuid_unparse (u, uuidstr);
@@ -496,6 +503,7 @@ terminal_screen_init (TerminalScreen *screen)
   priv->child_pid = -1;
 
   vte_terminal_set_allow_hyperlink (terminal, TRUE);
+  vte_terminal_set_scroll_unit_is_pixels (terminal, TRUE);
 
   for (i = 0; i < n_url_regexes; ++i)
     {
@@ -509,6 +517,7 @@ terminal_screen_init (TerminalScreen *screen)
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
 
+#ifdef GTK4_TODO
   /* Setup DND */
   target_list = gtk_target_list_new (nullptr, 0);
   gtk_target_list_add_uri_targets (target_list, 0);
@@ -526,6 +535,7 @@ terminal_screen_init (TerminalScreen *screen)
 
   gtk_target_table_free (targets, n_targets);
   gtk_target_list_unref (target_list);
+#endif
 
   g_signal_connect (screen, "window-title-changed",
                     G_CALLBACK (terminal_screen_window_title_changed),
@@ -595,10 +605,12 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->set_property = terminal_screen_set_property;
 
   widget_class->realize = terminal_screen_realize;
-  widget_class->style_updated = terminal_screen_style_updated;
+  widget_class->css_changed = terminal_screen_css_changed;
+#ifdef GTK4_TODO
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
+#endif
 
   terminal_class->child_exited = terminal_screen_child_exited;
 
@@ -662,8 +674,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 				      G_PARAM_STATIC_NAME |
 				      G_PARAM_STATIC_NICK |
 				      G_PARAM_STATIC_BLURB)));
-
-  g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
@@ -1153,13 +1163,13 @@ update_color_scheme (TerminalScreen *screen)
 
   if (use_theme_colors) {
     auto const app = terminal_app_get();
-    auto const style_manager = reinterpret_cast<HdyStyleManager*>(terminal_app_get_hdy_style_manager(app));
+    auto const style_manager = reinterpret_cast<AdwStyleManager*>(terminal_app_get_adw_style_manager(app));
 
-    switch (hdy_style_manager_get_color_scheme(style_manager)) {
+    switch (adw_style_manager_get_color_scheme(style_manager)) {
     default:
-    case HDY_COLOR_SCHEME_DEFAULT:
-    case HDY_COLOR_SCHEME_FORCE_LIGHT:
-    case HDY_COLOR_SCHEME_PREFER_LIGHT:
+    case ADW_COLOR_SCHEME_DEFAULT:
+    case ADW_COLOR_SCHEME_FORCE_LIGHT:
+    case ADW_COLOR_SCHEME_PREFER_LIGHT:
       if (n_colors >= 16) {
         fg = colors[0];
         bg = colors[15];
@@ -1172,8 +1182,8 @@ update_color_scheme (TerminalScreen *screen)
       }
       break;
 
-    case HDY_COLOR_SCHEME_PREFER_DARK:
-    case HDY_COLOR_SCHEME_FORCE_DARK:
+    case ADW_COLOR_SCHEME_PREFER_DARK:
+    case ADW_COLOR_SCHEME_FORCE_DARK:
       if (n_colors >= 16) {
         fg = colors[15];
         bg = colors[0];
@@ -1531,25 +1541,29 @@ info_bar_response_cb (GtkWidget *info_bar,
                       int response,
                       TerminalScreen *screen)
 {
+  TerminalScreenContainer *container;
+
   gtk_widget_grab_focus (GTK_WIDGET (screen));
+
+  container = TERMINAL_SCREEN_CONTAINER (gtk_widget_get_ancestor (info_bar, TERMINAL_TYPE_SCREEN_CONTAINER));
 
   switch (response) {
     case GTK_RESPONSE_CANCEL:
-      gtk_widget_destroy (info_bar);
+      terminal_screen_container_remove_overlay (container, info_bar);
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
     case RESPONSE_RELAUNCH:
-      gtk_widget_destroy (info_bar);
+      terminal_screen_container_remove_overlay (container, info_bar);
       terminal_screen_reexec (screen, nullptr, nullptr, nullptr, nullptr);
       break;
     case RESPONSE_EDIT_PREFERENCES:
       terminal_app_edit_preferences (terminal_app_get (),
                                      terminal_screen_get_profile (screen),
                                      "custom-command-entry",
-                                     gtk_get_current_event_time());
+                                     GDK_CURRENT_TIME);
       break;
     default:
-      gtk_widget_destroy (info_bar);
+      terminal_screen_container_remove_overlay (container, info_bar);
       break;
   }
 }
@@ -1577,8 +1591,8 @@ terminal_screen_show_info_bar (TerminalScreen *screen,
 
   gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
   gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
-  gtk_overlay_add_overlay (GTK_OVERLAY (terminal_screen_container_get_from_screen (screen)),
-                           info_bar);
+  terminal_screen_container_add_overlay(terminal_screen_container_get_from_screen (screen),
+                                        info_bar);
   gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
   gtk_widget_show (info_bar);
 }
@@ -1720,6 +1734,7 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
   g_slice_free (TerminalScreenPopupInfo, info);
 }
 
+#ifdef GTK4_TODO
 static gboolean
 terminal_screen_popup_menu (GtkWidget *widget)
 {
@@ -1845,6 +1860,7 @@ terminal_screen_button_press (GtkWidget      *widget,
 
   return FALSE;
 }
+#endif
 
 /**
  * terminal_screen_get_current_dir:
@@ -1930,8 +1946,8 @@ terminal_screen_child_exited (VteTerminal *terminal,
 
       gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
       gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
-      gtk_overlay_add_overlay (GTK_OVERLAY (terminal_screen_container_get_from_screen (screen)),
-                               info_bar);
+      terminal_screen_container_add_overlay(terminal_screen_container_get_from_screen (screen),
+                                            info_bar);
       gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
       gtk_widget_show (info_bar);
       break;
@@ -1942,6 +1958,7 @@ terminal_screen_child_exited (VteTerminal *terminal,
     }
 }
 
+#ifdef GTK4_TODO
 static void
 terminal_screen_drag_data_received (GtkWidget        *widget,
                                     GdkDragContext   *context,
@@ -2127,6 +2144,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       g_assert_not_reached ();
     }
 }
+#endif
 
 void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
@@ -2166,13 +2184,16 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
   *cell_height_pixels = vte_terminal_get_char_height (terminal);
 }
 
+#ifdef GTK4_TODO
 static char*
 terminal_screen_check_hyperlink (TerminalScreen *screen,
                                  GdkEvent       *event)
 {
   return vte_terminal_hyperlink_check_event (VTE_TERMINAL (screen), event);
 }
+#endif
 
+#if 0
 static char*
 terminal_screen_check_match (TerminalScreen *screen,
                              GdkEvent       *event,
@@ -2198,7 +2219,9 @@ terminal_screen_check_match (TerminalScreen *screen,
   g_free (match);
   return nullptr;
 }
+#endif
 
+#ifdef GTK4_TODO
 static void
 terminal_screen_check_extra (TerminalScreen *screen,
                              GdkEvent       *event,
@@ -2243,6 +2266,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
         }
     }
 }
+#endif
 
 /**
  * terminal_screen_has_foreground_process:

@@ -51,7 +51,7 @@ static void
 prefs_dialog_close_button_clicked_cb (GtkWidget *button,
                                       PrefData *data)
 {
-  gtk_widget_destroy (data->dialog);
+  gtk_window_destroy (GTK_WINDOW (data->dialog));
 }
 
 /* Sidebar */
@@ -106,7 +106,6 @@ listbox_update (GtkListBox *box)
       GtkPopover *popover_menu = GTK_POPOVER (gtk_builder_get_object (the_pref_data->builder, "popover-menu"));
       button = (GtkMenuButton*)g_object_get_data (G_OBJECT (row), "popover-button");
       gtk_menu_button_set_popover (button, GTK_WIDGET (popover_menu));
-      gtk_popover_set_relative_to (popover_menu, GTK_WIDGET (button));
     }
   }
 }
@@ -276,7 +275,7 @@ popover_dialog_ok_clicked_cb (GtkButton *button,
                               void (*fn) (const char *))
 {
   GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
-  const char *name = gtk_entry_get_text (entry);
+  const char *name = gtk_editable_get_text (GTK_EDITABLE (entry));
 
   /* Perform what we came for */
   (*fn) (name);
@@ -291,7 +290,7 @@ popover_dialog_closed_cb (GtkPopover *popover,
 {
 
   GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
-  gtk_entry_set_text (entry, "");
+  gtk_editable_set_text (GTK_EDITABLE (entry), "");
 
   GtkButton *ok = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-ok"));
   GtkButton *cancel = GTK_BUTTON (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-cancel"));
@@ -312,7 +311,7 @@ popover_dialog_notify_text_cb (GtkEntry   *entry,
                                GParamSpec *pspec,
                                GtkWidget  *ok)
 {
-  gs_free char *text = g_strchomp (g_strdup (gtk_entry_get_text (entry)));
+  gs_free char *text = g_strchomp (g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
   gtk_widget_set_sensitive (ok, text[0] != '\0');
 }
 
@@ -334,10 +333,10 @@ profile_popup_dialog (GtkWidget *relative_to,
 
   GtkEntry *entry = GTK_ENTRY (gtk_builder_get_object (the_pref_data->builder, "popover-dialog-entry"));
   if (entry_text != nullptr) {
-    gtk_entry_set_text (entry, entry_text);
+    gtk_editable_set_text (GTK_EDITABLE (entry), entry_text);
     gtk_widget_show (GTK_WIDGET (entry));
   } else {
-    gtk_entry_set_text (entry, ".");  /* to make the OK button sensitive */
+    gtk_editable_set_text (GTK_EDITABLE (entry), ".");  /* to make the OK button sensitive */
     gtk_widget_hide (GTK_WIDGET (entry));
   }
 
@@ -350,7 +349,6 @@ profile_popup_dialog (GtkWidget *relative_to,
   g_signal_connect (cancel, "clicked", G_CALLBACK (popover_dialog_cancel_clicked_cb), nullptr);
   g_signal_connect (popover_dialog, "closed", G_CALLBACK (popover_dialog_closed_cb), nullptr);
 
-  gtk_popover_set_relative_to (popover_dialog, relative_to);
   gtk_popover_set_position (popover_dialog, GTK_POS_BOTTOM);
   gtk_popover_set_default_widget (popover_dialog, GTK_WIDGET (ok));
 
@@ -465,7 +463,8 @@ listbox_create_row (const char *name,
                      G_SETTINGS_BIND_GET);
   }
   gtk_label_set_xalign (label, 0);
-  gtk_box_pack_start (hbox, GTK_WIDGET (label), TRUE, TRUE, 0);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_box_prepend (hbox, GTK_WIDGET (label));
   g_object_set_data (G_OBJECT (row), "label", label);
 
   /* Always add the "default" symbol and the "menu" button, even on rows of global prefs.
@@ -476,29 +475,27 @@ listbox_create_row (const char *name,
   GtkStack *popover_stack = GTK_STACK (gtk_stack_new ());
   gtk_widget_set_margin_start (GTK_WIDGET (popover_stack), 6);
   GtkMenuButton *popover_button = GTK_MENU_BUTTON (gtk_menu_button_new ());
-  gtk_button_set_relief (GTK_BUTTON (popover_button), GTK_RELIEF_NONE);
+  gtk_widget_add_css_class (GTK_WIDGET (popover_button), "flat");
   gtk_stack_add_named (popover_stack, GTK_WIDGET (popover_button), "button");
   GtkLabel *popover_label = GTK_LABEL (gtk_label_new (""));
   gtk_stack_add_named (popover_stack, GTK_WIDGET (popover_label), "placeholder");
   g_object_set_data (G_OBJECT (row), "popover-stack", popover_stack);
   g_object_set_data (G_OBJECT (row), "popover-button", popover_button);
 
-  gtk_box_pack_end (hbox, GTK_WIDGET (popover_stack), FALSE, FALSE, 0);
+  gtk_box_append (hbox, GTK_WIDGET (popover_stack));
 
   GtkStack *home_stack = GTK_STACK (gtk_stack_new ());
   gtk_widget_set_margin_start (GTK_WIDGET (home_stack), 12);
-  GtkImage *home_image = GTK_IMAGE (gtk_image_new_from_icon_name ("emblem-default-symbolic", GTK_ICON_SIZE_BUTTON));
+  GtkImage *home_image = GTK_IMAGE (gtk_image_new_from_icon_name ("emblem-default-symbolic"));
   gtk_widget_set_tooltip_text (GTK_WIDGET (home_image), _("This is the default profile"));
   gtk_stack_add_named (home_stack, GTK_WIDGET (home_image), "home");
   GtkLabel *home_label = GTK_LABEL (gtk_label_new (""));
   gtk_stack_add_named (home_stack, GTK_WIDGET (home_label), "placeholder");
   g_object_set_data (G_OBJECT (row), "home-stack", home_stack);
 
-  gtk_box_pack_end (hbox, GTK_WIDGET (home_stack), FALSE, FALSE, 0);
+  gtk_box_append (hbox, GTK_WIDGET (home_stack));
 
-  gtk_container_add (GTK_CONTAINER (row), GTK_WIDGET (hbox));
-
-  gtk_widget_show_all (GTK_WIDGET (row));
+  gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), GTK_WIDGET (hbox));
 
   gtk_stack_set_visible_child_name (popover_stack, "placeholder");
   gtk_stack_set_visible_child_name (home_stack, "placeholder");
@@ -539,7 +536,7 @@ listbox_remove_all_profiles (PrefData *data)
 
   while ((row = gtk_list_box_get_row_at_index (data->listbox, i)) != nullptr) {
     if (g_object_get_data (G_OBJECT (row), "gsettings") != nullptr) {
-      gtk_widget_destroy (GTK_WIDGET (row));
+      gtk_list_box_remove (data->listbox, GTK_WIDGET (row));
     } else {
       i++;
     }
@@ -607,21 +604,20 @@ listboxrow_create_header (const char *text,
   gs_free char *markup = g_markup_printf_escaped ("<b>%s</b>", text);
   gtk_label_set_markup (label, markup);
   gtk_label_set_xalign (label, 0);
-  gtk_box_pack_start (hbox, GTK_WIDGET (label), TRUE, TRUE, 0);
+  gtk_widget_set_hexpand (GTK_WIDGET (label), TRUE);
+  gtk_box_prepend (hbox, GTK_WIDGET (label));
 
   /* Always add a "new profile" button. Use GtkStack to possible achieve visibility:hidden on it.
    * This is so that both header rows have the same dimensions. */
 
   GtkStack *stack = GTK_STACK (gtk_stack_new ());
-  GtkButton *button = GTK_BUTTON (gtk_button_new_from_icon_name ("list-add-symbolic", GTK_ICON_SIZE_BUTTON));
-  gtk_button_set_relief (button, GTK_RELIEF_NONE);
+  GtkButton *button = GTK_BUTTON (gtk_button_new_from_icon_name ("list-add-symbolic"));
+  gtk_widget_add_css_class (GTK_WIDGET (button), "flat");
   gtk_stack_add_named (stack, GTK_WIDGET (button), "button");
   GtkLabel *labelx = GTK_LABEL (gtk_label_new (""));
   gtk_stack_add_named (stack, GTK_WIDGET (labelx), "placeholder");
 
-  gtk_box_pack_end (hbox, GTK_WIDGET (stack), FALSE, FALSE, 0);
-
-  gtk_widget_show_all (GTK_WIDGET (hbox));
+  gtk_box_append (hbox, GTK_WIDGET (stack));
 
   if (visible_button) {
     gtk_stack_set_visible_child_name (stack, "button");
@@ -908,7 +904,7 @@ terminal_prefs_show_preferences(GSettings* profile,
 					  nullptr);
     bbox = gtk_widget_get_parent (help_button);
 
-    gtk_container_remove (GTK_CONTAINER (bbox), (GtkWidget*)g_object_ref (help_button));
+    gtk_box_remove (GTK_BOX (bbox), (GtkWidget*)g_object_ref (help_button));
     gtk_header_bar_pack_start (GTK_HEADER_BAR (headerbar), help_button);
     g_object_unref (help_button);
 
@@ -922,8 +918,8 @@ terminal_prefs_show_preferences(GSettings* profile,
 
     /* Remove extra spacing around the content, and extra frames */
     g_object_set (G_OBJECT (content_box), "margin", 0, nullptr);
-    gtk_frame_set_shadow_type (GTK_FRAME (general_frame), GTK_SHADOW_NONE);
-    gtk_frame_set_shadow_type (GTK_FRAME (keybindings_frame), GTK_SHADOW_NONE);
+    gtk_widget_add_css_class (GTK_WIDGET (general_frame), "flat");
+    gtk_widget_add_css_class (GTK_WIDGET (keybindings_frame), "flat");
   }
 
   /* misc */

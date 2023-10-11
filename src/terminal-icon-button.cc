@@ -26,21 +26,13 @@
 GtkWidget *
 terminal_icon_button_new (const char *gicon_name)
 {
-  GtkWidget *button, *image;
-  gs_unref_object GIcon *icon;
+  static const char * const css_classes[] = {"flat", NULL};
 
-  button = (GtkWidget *) g_object_new (GTK_TYPE_BUTTON,
-                                       "relief", GTK_RELIEF_NONE,
-                                       "focus-on-click", FALSE,
-                                       nullptr);
-
-  icon = g_themed_icon_new_with_default_fallbacks (gicon_name);
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
-
-  gtk_widget_show (image);
-  gtk_container_add (GTK_CONTAINER (button), image);
-
-  return button;
+  return (GtkWidget *) g_object_new (GTK_TYPE_BUTTON,
+                                     "css-classes", css_classes,
+                                     "focus-on-click", FALSE,
+                                     "icon-name", gicon_name,
+                                     nullptr);
 }
 
 GtkWidget *

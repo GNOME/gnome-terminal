@@ -201,7 +201,7 @@ perform_search (TerminalSearchPopover *popover,
   if (priv->search_text_changed) {
     const char *search_text;
 
-    search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+    search_text = gtk_editable_get_text (GTK_EDITABLE (priv->search_entry));
     history_insert_item (search_text);
 
     priv->search_text_changed = FALSE;
@@ -242,11 +242,13 @@ search_button_clicked_cb (GtkWidget *button,
 
 static gboolean
 key_press_cb (GtkWidget *popover,
-              GdkEventKey *event,
-              gpointer user_data G_GNUC_UNUSED)
+              guint keyval,
+              guint keycode,
+              GdkModifierType modifer,
+              GtkEventControllerKey *key G_GNUC_UNUSED)
 {
-  if (event->keyval == GDK_KEY_Escape) {
-    gtk_widget_hide (popover);
+  if (keyval == GDK_KEY_Escape) {
+    gtk_widget_set_visible (popover, FALSE);
     return TRUE;
   }
   return FALSE;
@@ -261,7 +263,7 @@ update_regex (TerminalSearchPopover *popover)
   gs_free char *pattern;
   gs_free_error GError *error = nullptr;
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE(priv->search_entry));
 
   caseless = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->match_case_checkbutton));
 
@@ -343,13 +345,13 @@ wrap_around_toggled_cb (GtkToggleButton *button,
 
 /* Class implementation */
 
-static void
+static gboolean
 terminal_search_popover_grab_focus (GtkWidget *widget)
 {
   TerminalSearchPopover *popover = TERMINAL_SEARCH_POPOVER (widget);
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
 
-  gtk_widget_grab_focus (priv->search_entry);
+  return gtk_widget_grab_focus (priv->search_entry);
 }
 
 static void
@@ -357,6 +359,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
 {
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
+  GtkEventController *key;
 
   priv->regex_pattern = 0;
   priv->regex_caseless = TRUE;
@@ -386,12 +389,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
     gtk_entry_set_completion (GTK_ENTRY (priv->search_entry), completion);
   }
 
-#if 0
-  gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_prev_button);
-#else
-  GtkWindow *window = GTK_WINDOW (popover);
-  gtk_window_set_default (window, priv->search_prev_button);
-#endif
+  gtk_window_set_default_widget (GTK_WINDOW (popover), priv->search_prev_button);
 
   g_signal_connect (priv->search_entry, "previous-match", G_CALLBACK (previous_match_cb), popover);
   g_signal_connect (priv->search_entry, "next-match", G_CALLBACK (next_match_cb), popover);
@@ -414,20 +412,25 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
 
   g_signal_connect (priv->wrap_around_checkbutton, "toggled", G_CALLBACK (wrap_around_toggled_cb), popover);
 
-  g_signal_connect (popover, "key-press-event", G_CALLBACK (key_press_cb), nullptr);
+  key = gtk_event_controller_key_new ();
+  g_signal_connect_swapped (key,
+                            "key-pressed",
+                            G_CALLBACK (key_press_cb),
+                            popover);
+  gtk_widget_add_controller (GTK_WIDGET (popover), key);
 
   if (terminal_app_get_dialog_use_headerbar (terminal_app_get ())) {
     GtkWidget *headerbar;
 
     headerbar = (GtkWidget*)g_object_new (GTK_TYPE_HEADER_BAR,
-					  "title", gtk_window_get_title (window),
+					  "title", gtk_window_get_title (GTK_WINDOW (popover)),
 					  "has-subtitle", FALSE,
 					  "show-close-button", TRUE,
 					  "visible", TRUE,
 					  nullptr);
-    gtk_style_context_add_class (gtk_widget_get_style_context (headerbar),
-                                 "default-decoration");
-    gtk_window_set_titlebar (window, headerbar);
+    gtk_widget_add_css_class (GTK_WIDGET (headerbar),
+                              "default-decoration");
+    gtk_window_set_titlebar (GTK_WINDOW (popover), headerbar);
   }
 }
 
@@ -553,7 +556,7 @@ terminal_search_popover_new (GtkWidget *relative_to_widget)
 #if 0
 		   "relative-to", relative_to_widget,
 #else
-		   "transient-for", gtk_widget_get_toplevel (relative_to_widget),
+		   "transient-for", gtk_widget_get_root (relative_to_widget),
 #endif
 		   nullptr));
 }

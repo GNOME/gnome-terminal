@@ -22,36 +22,46 @@
 
 #include <gtk/gtk.h>
 
-#define TERMINAL_INFO_BAR_GET_PRIVATE(info_bar)(G_TYPE_INSTANCE_GET_PRIVATE ((info_bar), TERMINAL_TYPE_INFO_BAR, TerminalInfoBarPrivate))
-
-struct _TerminalInfoBarPrivate
+struct _TerminalInfoBar
 {
+  GtkWidget  parent_instance;
+  GtkWidget *info_bar;
   GtkWidget *content_box;
 };
 
-G_DEFINE_TYPE (TerminalInfoBar, terminal_info_bar, GTK_TYPE_INFO_BAR)
+G_DEFINE_FINAL_TYPE (TerminalInfoBar, terminal_info_bar, GTK_TYPE_INFO_BAR)
 
 /* helper functions */
 
 static void
+terminal_info_bar_dispose (GObject *object)
+{
+  TerminalInfoBar *bar = TERMINAL_INFO_BAR (object);
+
+  g_clear_pointer (&bar->info_bar, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (terminal_info_bar_parent_class)->dispose (object);
+}
+
+static void
 terminal_info_bar_init (TerminalInfoBar *bar)
 {
-  GtkInfoBar *info_bar = GTK_INFO_BAR (bar);
-  TerminalInfoBarPrivate *priv;
+  bar->info_bar = gtk_info_bar_new ();
+  gtk_widget_set_parent (GTK_WIDGET (bar->info_bar), GTK_WIDGET (bar));
 
-  priv = bar->priv = TERMINAL_INFO_BAR_GET_PRIVATE (bar);
-
-  priv->content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (info_bar)),
-                      priv->content_box, TRUE, TRUE, 0);
+  bar->content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+  gtk_info_bar_add_child (GTK_INFO_BAR (bar->info_bar), bar->content_box);
 }
 
 static void
 terminal_info_bar_class_init (TerminalInfoBarClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  g_type_class_add_private (gobject_class, sizeof (TerminalInfoBarPrivate));
+  object_class->dispose = terminal_info_bar_dispose;
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 /* public API */
@@ -67,10 +77,10 @@ terminal_info_bar_new (GtkMessageType type,
                        const char *first_button_text,
                        ...)
 {
-  GtkWidget *info_bar;
+  TerminalInfoBar *info_bar;
   va_list args;
 
-  info_bar = reinterpret_cast<GtkWidget*>
+  info_bar = reinterpret_cast<TerminalInfoBar*>
     (g_object_new (TERMINAL_TYPE_INFO_BAR,
 		   "message-type", type,
                    "show-close-button", true,
@@ -81,14 +91,14 @@ terminal_info_bar_new (GtkMessageType type,
     int response_id;
 
     response_id = va_arg (args, int);
-    gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
+    gtk_info_bar_add_button (GTK_INFO_BAR (info_bar->info_bar),
                              first_button_text, response_id);
 
     first_button_text = va_arg (args, const char *);
   }
   va_end (args);
 
-  return info_bar;
+  return GTK_WIDGET (info_bar);
 }
 
 void
@@ -96,14 +106,11 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
                                const char *format,
                                ...)
 {
-  TerminalInfoBarPrivate *priv;
   gs_free char *text = nullptr;
   GtkWidget *label;
   va_list args;
 
   g_return_if_fail (TERMINAL_IS_INFO_BAR (bar));
-
-  priv = bar->priv;
 
   va_start (args, format);
   text = g_strdup_vprintf (format, args);
@@ -111,11 +118,10 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
 
   label = gtk_label_new (text);
 
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_natural_wrap_mode (GTK_LABEL (label), GTK_NATURAL_WRAP_INHERIT);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_label_set_yalign (GTK_LABEL (label), 0.0);
 
-  gtk_box_pack_start (GTK_BOX (priv->content_box), label, FALSE, FALSE, 0);
-  gtk_widget_show_all (priv->content_box);
+  gtk_box_prepend (GTK_BOX (bar->content_box), label);
 }
