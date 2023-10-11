@@ -453,7 +453,7 @@ accel_set_func (GtkTreeViewColumn *tree_column,
     gtk_accelerator_parse (value, &key, &mods);
 
     writable = g_settings_is_writable (keybinding_settings, ke->settings_key) &&
-               gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+               gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 
     g_object_set (cell,
                   "visible", TRUE,
