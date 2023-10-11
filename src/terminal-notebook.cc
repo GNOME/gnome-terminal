@@ -362,7 +362,7 @@ terminal_notebook_page_removed (GtkNotebook      *gtk_notebook,
                                 TerminalNotebook *notebook)
 {
   update_tab_visibility (notebook, 0);
-  g_signal_emit_by_name (gtk_notebook, "screen-removed",
+  g_signal_emit_by_name (notebook, "screen-removed",
                          terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
 }
 
