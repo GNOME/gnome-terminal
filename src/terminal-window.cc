@@ -1466,11 +1466,9 @@ screen_resize_window_cb (TerminalScreen *screen,
 {
   auto const priv = window->priv;
 
-#ifdef GTK4_TODO
   if (priv->realized &&
       window_state_is_snapped(priv->window_state))
     return;
-#endif
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), columns, rows);
 
@@ -2526,7 +2524,6 @@ terminal_window_update_size (TerminalWindow *window)
   int grid_width, grid_height;
   int pixel_width, pixel_height;
 
-#ifdef GTK4_TODO
   if (priv->realized &&
       window_state_is_snapped(priv->window_state))
     {
@@ -2535,7 +2532,6 @@ terminal_window_update_size (TerminalWindow *window)
        * around otherwise tiled windows. */
       return;
     }
-#endif
 
   if (!priv->active_screen)
     return;
@@ -3004,13 +3000,11 @@ terminal_window_update_geometry (TerminalWindow *window)
        * until we've done that. */
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "not realized yet\n");
     }
-#ifdef GTK4_TODO
   else if (window_state_is_snapped(priv->window_state))
     {
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                              "Not applying geometry in snapped state\n");
     }
-#endif
   else if (char_width != priv->old_char_width ||
       char_height != priv->old_char_height ||
       padding.left + padding.right != priv->old_padding_width ||
