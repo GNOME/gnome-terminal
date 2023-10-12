@@ -85,8 +85,8 @@ struct _TerminalWindowPrivate
   /* For restoring hints after unmaximizing etc */
 #ifdef GTK4_TODO
   GdkGeometry hints;
-  GdkWindowState window_state;
 #endif
+  GdkToplevelState window_state;
 
   GtkWidget *confirm_close_dialog;
   TerminalSearchPopover *search_popover;
@@ -117,26 +117,24 @@ struct _TerminalWindowPrivate
 #endif
 
 /* See bug #789356 and issue gnome-terminal#129*/
-#ifdef GTK4_TODO
 static inline constexpr auto
-window_state_is_snapped(GdkWindowState state) noexcept
+window_state_is_snapped(GdkToplevelState state) noexcept
 {
-  return (state & (GDK_WINDOW_STATE_FULLSCREEN |
-                   GDK_WINDOW_STATE_MAXIMIZED |
-                   GDK_WINDOW_STATE_BOTTOM_TILED |
-                   GDK_WINDOW_STATE_LEFT_TILED |
-                   GDK_WINDOW_STATE_RIGHT_TILED |
-                   GDK_WINDOW_STATE_TOP_TILED |
-                   GDK_WINDOW_STATE_TILED)) != 0;
+  return (state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                   GDK_TOPLEVEL_STATE_MAXIMIZED |
+                   GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                   GDK_TOPLEVEL_STATE_LEFT_TILED |
+                   GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                   GDK_TOPLEVEL_STATE_TOP_TILED |
+                   GDK_TOPLEVEL_STATE_TILED)) != 0;
 }
-#endif
 
-static void terminal_window_dispose     (GObject             *object);
-static void terminal_window_finalize    (GObject             *object);
-#ifdef GTK4_TODO
-static gboolean terminal_window_state_event (GtkWidget            *widget,
-                                             GdkEventWindowState  *event);
-#endif
+static void terminal_window_dispose  (GObject *object);
+static void terminal_window_finalize (GObject *object);
+
+static void terminal_window_state_event (GtkWidget  *widget,
+                                         GParamSpec *pspec,
+                                         GdkToplevel *surface);
 
 static gboolean terminal_window_close_request (GtkWindow *widget,
                                                gpointer data);
@@ -1011,25 +1009,14 @@ action_copy_hyperlink_cb (GSimpleAction *action,
 }
 
 static void
-action_enter_fullscreen_cb (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
+action_toggle_fullscreen_cb (GSimpleAction *action,
+                             GVariant      *parameter,
+                             gpointer       user_data)
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
 
   g_action_group_change_action_state (G_ACTION_GROUP (window), "fullscreen",
-                                      g_variant_new_boolean (TRUE));
-}
-
-static void
-action_leave_fullscreen_cb (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
-{
-  TerminalWindow *window = (TerminalWindow*)user_data;
-
-  g_action_group_change_action_state (G_ACTION_GROUP (window), "fullscreen",
-                                      g_variant_new_boolean (FALSE));
+                                      g_variant_new_boolean (!gtk_window_is_fullscreen (GTK_WINDOW (window))));
 }
 
 static void
@@ -1710,8 +1697,8 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   /* Only show this if the WM doesn't show the menubar */
   if (g_action_get_enabled (G_ACTION (lookup_action (window, "menubar-visible"))))
     g_menu_append (section7, _("Show _Menubar"), "win.menubar-visible");
-  if (g_action_get_enabled (G_ACTION (lookup_action (window, "leave-fullscreen"))))
-    g_menu_append (section7, _("L_eave Full Screen"), "win.leave-fullscreen");
+  if (g_action_get_enabled (G_ACTION (lookup_action (window, "toggle-fullscreen"))))
+    g_menu_append (section7, _("Full Screen"), "win.toggle-fullscreen");
 
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section7));
 
@@ -1862,6 +1849,7 @@ terminal_window_realize (GtkWidget *widget)
   TerminalWindow *window = TERMINAL_WINDOW (widget);
   TerminalWindowPrivate *priv = window->priv;
   GtkAllocation widget_allocation;
+  GdkSurface *surface;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
 
@@ -1873,6 +1861,14 @@ terminal_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
 
+  surface = gtk_native_get_surface (GTK_NATIVE (window));
+
+  g_signal_connect_object (surface,
+                           "notify::state",
+                           G_CALLBACK (terminal_window_state_event),
+                           window,
+                           G_CONNECT_SWAPPED);
+
   /* Now that we've been realized, we should know precisely how large the
    * client-side decorations are going to be. Recalculate the geometry hints,
    * export them to the windowing system, and resize the window accordingly. */
@@ -1880,64 +1876,60 @@ terminal_window_realize (GtkWidget *widget)
   terminal_window_update_size (window);
 }
 
-#ifdef GTK4_TODO
-static gboolean
-terminal_window_state_event (GtkWidget            *widget,
-                             GdkEventWindowState  *event)
+static void
+terminal_window_state_event (GtkWidget *widget,
+                             GParamSpec *pspec,
+                             GdkToplevel *surface)
 {
-  auto const window_state_event =
-    GTK_WIDGET_CLASS(terminal_window_parent_class)->window_state_event;
   auto const window = TERMINAL_WINDOW(widget);
   auto const priv = window->priv;
-
-  priv->window_state = event->new_window_state;
+  auto window_state = gdk_toplevel_get_state (surface);
+  auto changed_mask = GdkToplevelState(unsigned(priv->window_state) ^ unsigned(window_state));
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "Window state changed mask %x old state %x new state %x\n",
-                         unsigned(event->changed_mask),
+                         unsigned(changed_mask),
                          unsigned(priv->window_state),
-                         unsigned(event->new_window_state));
+                         unsigned(window_state));
 
-  if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+  priv->window_state = window_state;
+
+  if (changed_mask & GDK_TOPLEVEL_STATE_FULLSCREEN)
     {
-      auto const is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+      auto const is_fullscreen = (priv->window_state & GDK_TOPLEVEL_STATE_FULLSCREEN) != 0;
 
       g_simple_action_set_state (lookup_action (window, "fullscreen"),
                                  g_variant_new_boolean (is_fullscreen));
-      g_simple_action_set_enabled (lookup_action (window, "leave-fullscreen"),
-                                   is_fullscreen);
       g_simple_action_set_enabled (lookup_action (window, "size-to"),
                                    !is_fullscreen);
     }
 
-  if (window_state_is_snapped(event->changed_mask))
+  if (window_state_is_snapped(changed_mask))
     {
-      if (window_state_is_snapped(event->new_window_state))
+      if (window_state_is_snapped(window_state))
         {
           _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                                  "Disapplying geometry hints entering snapped state\n");
+#ifdef GTK4_TODO
           gtk_window_set_geometry_hints(GTK_WINDOW(widget), nullptr, nullptr,
                                         GdkWindowHints(0));
+#endif
         }
       else
         {
           _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                                  "Reapplying geometry hints after leaving snapped state\n");
+#ifdef GTK4_TODO
           gtk_window_set_geometry_hints (GTK_WINDOW (window),
                                          nullptr,
                                          &priv->hints,
                                          GdkWindowHints(GDK_HINT_RESIZE_INC |
                                                         GDK_HINT_MIN_SIZE |
                                                         GDK_HINT_BASE_SIZE));
+#endif
         }
     }
-
-  if (window_state_event)
-    return window_state_event (widget, event);
-
-  return false;
 }
-#endif
 
 static void
 terminal_window_init (TerminalWindow *window)
@@ -1950,14 +1942,13 @@ terminal_window_init (TerminalWindow *window)
     { "copy-hyperlink",      action_copy_hyperlink_cb,   nullptr,   nullptr, nullptr },
     { "copy-match",          action_copy_match_cb,       nullptr,   nullptr, nullptr },
     { "edit-preferences",    action_edit_preferences_cb, nullptr,   nullptr, nullptr },
-    { "enter-fullscreen",    action_enter_fullscreen_cb, nullptr,   nullptr, nullptr },
+    { "toggle-fullscreen",   action_toggle_fullscreen_cb,nullptr,   nullptr, nullptr },
     { "find",                action_find_cb,             nullptr,   nullptr, nullptr },
     { "find-backward",       action_find_backward_cb,    nullptr,   nullptr, nullptr },
     { "find-clear",          action_find_clear_cb,       nullptr,   nullptr, nullptr },
     { "find-forward",        action_find_forward_cb,     nullptr,   nullptr, nullptr },
     { "help",                action_help_cb,             nullptr,   nullptr, nullptr },
     { "inspector",           action_inspector_cb,        nullptr,   nullptr, nullptr },
-    { "leave-fullscreen",    action_leave_fullscreen_cb, nullptr,   nullptr, nullptr },
     { "new-terminal",        action_new_terminal_cb,     "(ss)", nullptr, nullptr },
     { "open-match",          action_open_match_cb,       nullptr,   nullptr, nullptr },
     { "open-hyperlink",      action_open_hyperlink_cb,   nullptr,   nullptr, nullptr },
@@ -2087,8 +2078,6 @@ terminal_window_init (TerminalWindow *window)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    window);
-
-  g_simple_action_set_enabled (lookup_action (window, "leave-fullscreen"), FALSE);
 
   GSettings *global_settings = terminal_app_get_global_settings (app);
   enable_mnemonics_changed_cb (global_settings, TERMINAL_SETTING_ENABLE_MNEMONICS_KEY, window);
