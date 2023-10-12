@@ -248,8 +248,6 @@ terminal_app_init_debug (void)
 
 /* Helper functions */
 
-#ifdef TERMINAL_SERVER
-
 static gboolean
 strv_contains_gnome (char **strv)
 {
@@ -285,8 +283,6 @@ terminal_app_should_use_headerbar (TerminalApp *app)
   gs_strfreev auto desktops = terminal_util_get_desktops();
   return strv_contains_gnome(desktops);
 }
-
-#endif /* TERMINAL_SERVER */
 
 static gboolean
 load_css_from_resource (GApplication *application,
@@ -1029,13 +1025,17 @@ terminal_app_constructed(GObject *object)
                                                     app->schema_source,
                                                     GTK_DEBUG_SETTING_SCHEMA);
 
+  /* These are internal settings that exists only for distributions
+   * to override, so we cache them on startup and don't react to changes.
+   */
+  app->use_headerbar = terminal_app_should_use_headerbar (app);
+
 #ifdef TERMINAL_SERVER
 
   /* These are internal settings that exists only for distributions
    * to override, so we cache them on startup and don't react to changes.
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
-  app->use_headerbar = terminal_app_should_use_headerbar (app);
 
   app->style_manager = hdy_style_manager_get_default();
 
