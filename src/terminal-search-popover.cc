@@ -265,15 +265,15 @@ update_regex (TerminalSearchPopover *popover)
 
   search_text = gtk_editable_get_text (GTK_EDITABLE(priv->search_entry));
 
-  caseless = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->match_case_checkbutton));
+  caseless = !gtk_check_button_get_active (GTK_CHECK_BUTTON (priv->match_case_checkbutton));
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->regex_checkbutton))) {
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (priv->regex_checkbutton))) {
     pattern = g_strdup (search_text);
   } else {
     pattern = g_regex_escape_string (search_text, -1);
   }
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->entire_word_checkbutton))) {
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (priv->entire_word_checkbutton))) {
     char *new_pattern;
     new_pattern = g_strdup_printf ("\\b%s\\b", pattern);
     g_free (pattern);
@@ -318,10 +318,13 @@ update_regex (TerminalSearchPopover *popover)
 }
 
 static void
-search_text_changed_cb (GtkToggleButton *button,
+search_text_changed_cb (GtkWidget *search_entry,
                         TerminalSearchPopover *popover)
 {
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
+
+  g_assert (GTK_IS_WIDGET (search_entry));
+  g_assert (TERMINAL_IS_SEARCH_POPOVER (popover));
 
   update_regex (popover);
   priv->search_text_changed = TRUE;
@@ -423,10 +426,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
     GtkWidget *headerbar;
 
     headerbar = (GtkWidget*)g_object_new (GTK_TYPE_HEADER_BAR,
-					  "title", gtk_window_get_title (GTK_WINDOW (popover)),
-					  "has-subtitle", FALSE,
-					  "show-close-button", TRUE,
-					  "visible", TRUE,
+					  "show-title-buttons", TRUE,
 					  nullptr);
     gtk_widget_add_css_class (GTK_WIDGET (headerbar),
                               "default-decoration");
@@ -586,5 +586,5 @@ terminal_search_popover_get_wrap_around (TerminalSearchPopover *popover)
 {
   g_return_val_if_fail (TERMINAL_IS_SEARCH_POPOVER (popover), FALSE);
 
-  return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (PRIV (popover)->wrap_around_checkbutton));
+  return gtk_check_button_get_active (GTK_CHECK_BUTTON (PRIV (popover)->wrap_around_checkbutton));
 }
