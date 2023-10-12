@@ -3071,6 +3071,14 @@ terminal_window_update_geometry (TerminalWindow *window)
   priv->old_padding_height = padding.top + padding.bottom;
 }
 
+static gboolean
+destroy_window_in_main (gpointer user_data)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (user_data);
+  gtk_window_destroy (GTK_WINDOW (window));
+  return G_SOURCE_REMOVE;
+}
+
 static void
 confirm_close_response_cb (GtkWidget *dialog,
                            int response,
@@ -3088,7 +3096,10 @@ confirm_close_response_cb (GtkWidget *dialog,
   if (screen)
     terminal_window_remove_screen (window, screen);
   else
-    gtk_window_destroy (GTK_WINDOW (window));
+    g_idle_add_full (G_PRIORITY_DEFAULT,
+                     destroy_window_in_main,
+                     g_object_ref (window),
+                     g_object_unref);
 }
 
 /* Returns: TRUE if closing needs to wait until user confirmation;
