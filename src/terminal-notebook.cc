@@ -274,7 +274,7 @@ terminal_notebook_reorder_screen (TerminalMdiContainer *container,
                                   int new_position)
 {
   TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
-  GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook);
+  GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   GtkWidget *child;
   int n, pos;
 
@@ -365,14 +365,14 @@ terminal_notebook_page_removed (GtkNotebook      *gtk_notebook,
                                 TerminalNotebook *notebook)
 {
   update_tab_visibility (notebook, 0);
-  g_signal_emit_by_name (notebook, "screen-removed",
-                         terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
+ g_signal_emit_by_name (notebook, "screen-removed", terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
 }
 
 static void
-terminal_notebook_page_reordered (GtkNotebook     *notebook,
-                                  GtkWidget       *child,
-                                  guint            page_num)
+terminal_notebook_page_reordered (GtkNotebook      *gtk_notebook,
+                                  GtkWidget        *child,
+                                  guint             page_num,
+                                  TerminalNotebook *notebook)
 {
   g_signal_emit_by_name (notebook, "screens-reordered");
 }
