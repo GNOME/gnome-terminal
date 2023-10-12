@@ -37,6 +37,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+#include <adwaita.h>
+
 #include <gdesktop-enums.h>
 
 #include "terminal-accels.hh"
@@ -48,6 +50,8 @@
 #include "terminal-util.hh"
 #include "terminal-version.hh"
 #include "terminal-libgsystem.hh"
+
+#define GNOME_TERMINAL_ISSUE_URL "https://gitlab.gnome.org/GNOME/gnome-terminal/issues"
 
 /**
  * terminal_util_show_error_dialog:
@@ -164,7 +168,8 @@ terminal_util_show_about (void)
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
     "Copyright © 2007–2019 Christian Persch\n"
-    "Copyright © 2013–2019 Egmont Koblinger";
+    "Copyright © 2013–2019 Egmont Koblinger\n"
+    "Copyright © 2023 Christian Hergert";
   char *licence_text;
   GKeyFile *key_file;
   GBytes *bytes;
@@ -241,24 +246,23 @@ terminal_util_show_about (void)
                             vte_version,
                             vte_get_features ());
 
-  dialog = (GtkWindow*)g_object_new (GTK_TYPE_ABOUT_DIALOG,
+  dialog = (GtkWindow*)g_object_new (ADW_TYPE_ABOUT_WINDOW,
                          /* Hold the application while the window is shown */
                          "application", terminal_app_get (),
-                         "program-name", _("GNOME Terminal"),
+                         "application-name", _("GNOME Terminal"),
                          "copyright", copyright,
                          "comments", comment,
                          "version", version,
-                         "authors", array_strv,
-                         "artists", artists,
+                         "developers", array_strv,
+                         "designers", artists,
                          "documenters", documenters,
                          "license", licence_text,
-                         "wrap-license", TRUE,
                          "website", ABOUT_URL,
                          "translator-credits", _("translator-credits"),
-                         "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
+                         "application-icon", GNOME_TERMINAL_ICON_NAME,
+                         "issue-url", GNOME_TERMINAL_ISSUE_URL,
                          nullptr);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), nullptr);
   gtk_window_present (dialog);
 
   g_strfreev (array_strv);
@@ -392,7 +396,7 @@ terminal_util_get_licence_text (void)
        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
        "GNU General Public License for more details."),
     N_("You should have received a copy of the GNU General Public License "
-       "along with GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>.")
+       "along with GNOME Terminal.  If not, see &lt;http://www.gnu.org/licenses/&gt;.")
   };
 
   return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), nullptr);
