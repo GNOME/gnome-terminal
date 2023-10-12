@@ -1109,7 +1109,7 @@ action_find_cb (GSimpleAction *action,
   search_popover_notify_wrap_around_cb (priv->search_popover, nullptr, window);
   g_signal_connect (priv->search_popover, "notify::wrap-around", G_CALLBACK (search_popover_notify_wrap_around_cb), window);
 
-  g_signal_connect (priv->search_popover, "destroy", G_CALLBACK (g_nullify_pointer), &priv->search_popover);
+  g_signal_connect_swapped (priv->search_popover, "destroy", G_CALLBACK (g_nullify_pointer), &priv->search_popover);
 
   gtk_window_present (GTK_WINDOW (priv->search_popover));
   gtk_widget_grab_focus (GTK_WIDGET (priv->search_popover));
@@ -2229,6 +2229,8 @@ terminal_window_dispose (GObject *object)
     {
       g_signal_handlers_disconnect_matched (priv->search_popover, G_SIGNAL_MATCH_DATA,
                                             0, 0, nullptr, nullptr, window);
+      g_signal_handlers_disconnect_matched (priv->search_popover, G_SIGNAL_MATCH_DATA,
+                                            0, 0, nullptr, nullptr, &priv->search_popover);
       gtk_window_destroy (GTK_WINDOW (priv->search_popover));
       priv->search_popover = nullptr;
     }
@@ -3169,10 +3171,13 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
   g_object_set_data (G_OBJECT (dialog), "close-screen", screen);
 
-  g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (g_nullify_pointer), &priv->confirm_close_dialog);
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (confirm_close_response_cb), window);
+  g_signal_connect_swapped (dialog, "destroy",
+                            G_CALLBACK (g_nullify_pointer),
+                            &priv->confirm_close_dialog);
+  g_signal_connect (dialog,
+                    "response",
+                    G_CALLBACK (confirm_close_response_cb),
+                    window);
 
   gtk_window_present (GTK_WINDOW (dialog));
 
