@@ -817,6 +817,7 @@ action_zoom_in_cb (GSimpleAction *action,
   if (!find_larger_zoom_factor (&zoom))
     return;
 
+  gtk_window_set_default_size (GTK_WINDOW (window), -1, -1);
   vte_terminal_set_font_scale (VTE_TERMINAL (priv->active_screen), zoom);
   terminal_window_update_zoom_sensitivity (window);
 }
@@ -837,6 +838,7 @@ action_zoom_out_cb (GSimpleAction *action,
   if (!find_smaller_zoom_factor (&zoom))
     return;
 
+  gtk_window_set_default_size (GTK_WINDOW (window), -1, -1);
   vte_terminal_set_font_scale (VTE_TERMINAL (priv->active_screen), zoom);
   terminal_window_update_zoom_sensitivity (window);
 }
