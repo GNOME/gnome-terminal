@@ -136,8 +136,7 @@ static void terminal_window_state_event (GtkWidget  *widget,
                                          GParamSpec *pspec,
                                          GdkToplevel *surface);
 
-static gboolean terminal_window_close_request (GtkWindow *widget,
-                                               gpointer data);
+static gboolean terminal_window_close_request (GtkWindow *window);
 
 #ifdef GTK4_TODO
 static void notebook_button_press_cb         (GtkGestureClick *click,
@@ -2013,10 +2012,6 @@ terminal_window_init (TerminalWindow *window)
   uuid_unparse (u, uuidstr);
   priv->uuid = g_strdup (uuidstr);
 
-  g_signal_connect (G_OBJECT (window), "close-request",
-                    G_CALLBACK(terminal_window_close_request),
-                    nullptr);
-
   use_headerbar = terminal_app_get_use_headerbar (app);
   if (use_headerbar) {
     GtkWidget *headerbar;
@@ -2170,6 +2165,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
   object_class->dispose = terminal_window_dispose;
   object_class->finalize = terminal_window_finalize;
@@ -2177,6 +2173,8 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
   widget_class->css_changed = terminal_window_css_changed;
+
+  window_class->close_request = terminal_window_close_request;
 
 #ifdef GTK4_TODO
   GtkWindowClass *window_klass;
@@ -2254,8 +2252,7 @@ terminal_window_finalize (GObject *object)
 }
 
 static gboolean
-terminal_window_close_request (GtkWindow *window,
-                               gpointer data)
+terminal_window_close_request (GtkWindow *window)
 {
    return confirm_close_window_or_tab (TERMINAL_WINDOW (window), nullptr);
 }
