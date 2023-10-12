@@ -342,6 +342,9 @@ terminal_notebook_switch_page (GtkNotebook      *gtk_notebook,
 
   g_signal_emit_by_name (notebook, "screen-switched", old_active_screen, screen);
   g_object_notify (G_OBJECT (notebook), "active-screen");
+
+  if (screen != nullptr)
+    gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
 static void
