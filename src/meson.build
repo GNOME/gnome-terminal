@@ -199,8 +199,6 @@ server_sources = app_sources + client_util_sources + debug_sources + dbus_source
   'terminal-icon-button.hh',
   'terminal-info-bar.cc',
   'terminal-info-bar.hh',
-  'terminal-mdi-container.cc',
-  'terminal-mdi-container.hh',
   'terminal-notebook.cc',
   'terminal-notebook.hh',
   'terminal-pcre2.hh',

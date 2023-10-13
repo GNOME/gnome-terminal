@@ -15,10 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_NOTEBOOK_H
-#define TERMINAL_NOTEBOOK_H
+#pragma once
 
 #include <gtk/gtk.h>
+
+#include "terminal-screen.hh"
 
 G_BEGIN_DECLS
 
@@ -26,17 +27,31 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalNotebook, terminal_notebook, TERMINAL, NOTEBOOK, GtkWidget)
 
-GtkWidget *terminal_notebook_new (void);
-
-GtkNotebook *terminal_notebook_get_notebook (TerminalNotebook *self);
-
-void terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
-                                       GtkPolicyType policy);
-GtkPolicyType terminal_notebook_get_tab_policy (TerminalNotebook *notebook);
-
-GtkWidget *terminal_notebook_get_action_box (TerminalNotebook *notebook,
-                                             GtkPackType pack_type);
+GtkWidget      *terminal_notebook_new                    (void);
+GtkNotebook    *terminal_notebook_get_notebook           (TerminalNotebook *self);
+void            terminal_notebook_set_tab_policy         (TerminalNotebook *notebook,
+                                                          GtkPolicyType     policy);
+GtkPolicyType   terminal_notebook_get_tab_policy         (TerminalNotebook *notebook);
+GtkWidget      *terminal_notebook_get_action_box         (TerminalNotebook *notebook,
+                                                          GtkPackType       pack_type);
+void            terminal_notebook_add_screen             (TerminalNotebook *notebook,
+                                                          TerminalScreen   *screen,
+                                                          int               position);
+void            terminal_notebook_remove_screen          (TerminalNotebook *notebook,
+                                                          TerminalScreen   *screen);
+TerminalScreen *terminal_notebook_get_active_screen      (TerminalNotebook *notebook);
+void            terminal_notebook_set_active_screen      (TerminalNotebook *notebook,
+                                                          TerminalScreen   *screen);
+void            terminal_notebook_set_active_screen_num  (TerminalNotebook *notebook,
+                                                          int               position);
+GList          *terminal_notebook_list_screens           (TerminalNotebook *notebook);
+GList          *terminal_notebook_list_screen_containers (TerminalNotebook *notebook);
+int             terminal_notebook_get_n_screens          (TerminalNotebook *notebook);
+int             terminal_notebook_get_active_screen_num  (TerminalNotebook *notebook);
+void            terminal_notebook_reorder_screen         (TerminalNotebook *notebook,
+                                                          TerminalScreen   *screen,
+                                                          int               new_position);
+void            terminal_notebook_change_screen          (TerminalNotebook *notebook,
+                                                          int               change);
 
 G_END_DECLS
-
-#endif /* TERMINAL_NOTEBOOK_H */

@@ -26,7 +26,6 @@
 #include "terminal-debug.hh"
 #include "terminal-app.hh"
 #include "terminal-intl.hh"
-#include "terminal-mdi-container.hh"
 #include "terminal-screen-container.hh"
 #include "terminal-tab-label.hh"
 #include "terminal-schemas.hh"
@@ -47,6 +46,17 @@ enum
   PROP_TAB_POLICY
 };
 
+enum {
+  SCREEN_ADDED,
+  SCREEN_REMOVED,
+  SCREEN_SWITCHED,
+  SCREENS_REORDERED,
+  SCREEN_CLOSE_REQUEST,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 #define ACTION_AREA_BORDER_WIDTH (2)
 #define ACTION_BUTTON_SPACING (6)
 
@@ -54,7 +64,7 @@ enum
 
 static void
 update_tab_visibility (TerminalNotebook *notebook,
-                       int change)
+                       int               change)
 {
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   int new_n_pages;
@@ -87,7 +97,7 @@ update_tab_visibility (TerminalNotebook *notebook,
 
 static void
 close_button_clicked_cb (TerminalTabLabel *tab_label,
-                         gpointer user_data)
+                         gpointer          user_data)
 {
   TerminalScreen *screen;
   TerminalNotebook *notebook;
@@ -105,9 +115,9 @@ close_button_clicked_cb (TerminalTabLabel *tab_label,
 }
 
 static void
-remove_binding (GtkWidgetClass *widget_class,
-                guint           keysym,
-                GdkModifierType modifier)
+remove_binding (GtkWidgetClass  *widget_class,
+                guint            keysym,
+                GdkModifierType  modifier)
 {
   GtkShortcut *shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keysym, modifier),
                                             g_object_ref (gtk_nothing_action_get ()));
@@ -125,19 +135,18 @@ remove_reorder_bindings (GtkWidgetClass *widget_class,
   remove_binding (widget_class, keypad_keysym, GDK_ALT_MASK);
 }
 
-/* TerminalMdiContainer impl */
-
-static void
-terminal_notebook_add_screen (TerminalMdiContainer *container,
-                              TerminalScreen *screen,
-                              int position)
+void
+terminal_notebook_add_screen (TerminalNotebook *notebook,
+                              TerminalScreen   *screen,
+                              int               position)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkWidget *screen_container, *tab_label;
   GtkNotebook *gtk_notebook;
   GtkNotebookPage *page;
 
-  g_warn_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) == nullptr);
+  g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (screen)) == nullptr);
 
   gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   screen_container = terminal_screen_container_new (screen);
@@ -163,16 +172,17 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
 #endif
 }
 
-static void
-terminal_notebook_remove_screen (TerminalMdiContainer *container,
-                                 TerminalScreen *screen)
+void
+terminal_notebook_remove_screen (TerminalNotebook *notebook,
+                                 TerminalScreen   *screen)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   TerminalScreenContainer *screen_container;
   GtkNotebook *gtk_notebook;
   int page_num;
 
-  g_warn_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
+  g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+  g_return_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
 
   update_tab_visibility (notebook, -1);
 
@@ -182,10 +192,9 @@ terminal_notebook_remove_screen (TerminalMdiContainer *container,
   gtk_notebook_remove_page (gtk_notebook, page_num);
 }
 
-static TerminalScreen *
-terminal_notebook_get_active_screen (TerminalMdiContainer *container)
+TerminalScreen *
+terminal_notebook_get_active_screen (TerminalNotebook *notebook)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   GtkWidget *widget;
 
@@ -193,11 +202,10 @@ terminal_notebook_get_active_screen (TerminalMdiContainer *container)
   return terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (widget));
 }
 
-static void
-terminal_notebook_set_active_screen (TerminalMdiContainer *container,
-                                     TerminalScreen *screen)
+void
+terminal_notebook_set_active_screen (TerminalNotebook *notebook,
+                                     TerminalScreen   *screen)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   TerminalScreenContainer *screen_container;
   GtkWidget *widget;
@@ -209,10 +217,9 @@ terminal_notebook_set_active_screen (TerminalMdiContainer *container,
                                  gtk_notebook_page_num (gtk_notebook, widget));
 }
 
-static GList *
-terminal_notebook_list_screen_containers (TerminalMdiContainer *container)
+GList *
+terminal_notebook_list_screen_containers (TerminalNotebook *notebook)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   GQueue queue = G_QUEUE_INIT;
   int n_pages;
@@ -230,50 +237,44 @@ terminal_notebook_list_screen_containers (TerminalMdiContainer *container)
   return queue.head;
 }
 
-static GList *
-terminal_notebook_list_screens (TerminalMdiContainer *container)
+GList *
+terminal_notebook_list_screens (TerminalNotebook *notebook)
 {
   GList *list, *l;
 
-  list = terminal_notebook_list_screen_containers (container);
+  list = terminal_notebook_list_screen_containers (notebook);
   for (l = list; l != nullptr; l = l->next)
     l->data = terminal_screen_container_get_screen ((TerminalScreenContainer *) l->data);
 
   return list;
 }
 
-static int
-terminal_notebook_get_n_screens (TerminalMdiContainer *container)
+int
+terminal_notebook_get_n_screens (TerminalNotebook *notebook)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
-
   return gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook->notebook));
 }
 
-static int
-terminal_notebook_get_active_screen_num (TerminalMdiContainer *container)
+int
+terminal_notebook_get_active_screen_num (TerminalNotebook *notebook)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
-
   return gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook->notebook));
 }
 
-static void
-terminal_notebook_set_active_screen_num (TerminalMdiContainer *container,
-                                         int position)
+void
+terminal_notebook_set_active_screen_num (TerminalNotebook *notebook,
+                                         int               position)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
 
   gtk_notebook_set_current_page (gtk_notebook, position);
 }
 
-static void
-terminal_notebook_reorder_screen (TerminalMdiContainer *container,
-                                  TerminalScreen *screen,
-                                  int new_position)
+void
+terminal_notebook_reorder_screen (TerminalNotebook *notebook,
+                                  TerminalScreen   *screen,
+                                  int               new_position)
 {
-  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (container);
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
   GtkWidget *child;
   int n, pos;
@@ -289,23 +290,7 @@ terminal_notebook_reorder_screen (TerminalMdiContainer *container,
                               pos < 0 ? n - 1 : pos < n ? pos : 0);
 }
 
-static void
-terminal_notebook_mdi_iface_init (TerminalMdiContainerInterface *iface)
-{
-  iface->add_screen = terminal_notebook_add_screen;
-  iface->remove_screen = terminal_notebook_remove_screen;
-  iface->get_active_screen = terminal_notebook_get_active_screen;
-  iface->set_active_screen = terminal_notebook_set_active_screen;
-  iface->list_screens = terminal_notebook_list_screens;
-  iface->list_screen_containers = terminal_notebook_list_screen_containers;
-  iface->get_n_screens = terminal_notebook_get_n_screens;
-  iface->get_active_screen_num = terminal_notebook_get_active_screen_num;
-  iface->set_active_screen_num = terminal_notebook_set_active_screen_num;
-  iface->reorder_screen = terminal_notebook_reorder_screen;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (TerminalNotebook, terminal_notebook, GTK_TYPE_WIDGET,
-                               G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_MDI_CONTAINER, terminal_notebook_mdi_iface_init))
+G_DEFINE_FINAL_TYPE (TerminalNotebook, terminal_notebook, GTK_TYPE_WIDGET)
 
 /* GtkNotebookClass impl */
 
@@ -384,7 +369,7 @@ terminal_notebook_grab_focus (GtkWidget *widget)
 {
   TerminalScreen *screen;
 
-  screen = terminal_mdi_container_get_active_screen (TERMINAL_MDI_CONTAINER (widget));
+  screen = terminal_notebook_get_active_screen (TERMINAL_NOTEBOOK (widget));
   return gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
@@ -466,19 +451,19 @@ terminal_notebook_constructed (GObject *object)
 }
 
 static void
-terminal_notebook_get_property (GObject *object,
-                                guint prop_id,
-                                GValue *value,
+terminal_notebook_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
                                 GParamSpec *pspec)
 {
-  TerminalMdiContainer *mdi_container = TERMINAL_MDI_CONTAINER (object);
+  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (object);
 
   switch (prop_id) {
     case PROP_ACTIVE_SCREEN:
-      g_value_set_object (value, terminal_notebook_get_active_screen (mdi_container));
+      g_value_set_object (value, terminal_notebook_get_active_screen (notebook));
       break;
     case PROP_TAB_POLICY:
-      g_value_set_enum (value, terminal_notebook_get_tab_policy (TERMINAL_NOTEBOOK (mdi_container)));
+      g_value_set_enum (value, terminal_notebook_get_tab_policy (notebook));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -487,19 +472,19 @@ terminal_notebook_get_property (GObject *object,
 }
 
 static void
-terminal_notebook_set_property (GObject *object,
-                                guint prop_id,
+terminal_notebook_set_property (GObject      *object,
+                                guint         prop_id,
                                 const GValue *value,
-                                GParamSpec *pspec)
+                                GParamSpec   *pspec)
 {
-  TerminalMdiContainer *mdi_container = TERMINAL_MDI_CONTAINER (object);
+  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (object);
 
   switch (prop_id) {
     case PROP_ACTIVE_SCREEN:
-      terminal_notebook_set_active_screen (mdi_container, (TerminalScreen*)g_value_get_object (value));
+      terminal_notebook_set_active_screen (notebook, (TerminalScreen*)g_value_get_object (value));
       break;
     case PROP_TAB_POLICY:
-      terminal_notebook_set_tab_policy (TERMINAL_NOTEBOOK (mdi_container), GtkPolicyType(g_value_get_enum (value)));
+      terminal_notebook_set_tab_policy (notebook, GtkPolicyType(g_value_get_enum (value)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -518,9 +503,14 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   gobject_class->get_property = terminal_notebook_get_property;
   gobject_class->set_property = terminal_notebook_set_property;
 
-  g_object_class_override_property (gobject_class, PROP_ACTIVE_SCREEN, "active-screen");
-
   widget_class->grab_focus = terminal_notebook_grab_focus;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_ACTIVE_SCREEN,
+     g_param_spec_object ("active-screen", nullptr, nullptr,
+                          TERMINAL_TYPE_SCREEN,
+                          GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
   g_object_class_install_property
     (gobject_class,
@@ -529,6 +519,57 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
+
+  signals[SCREEN_ADDED] =
+    g_signal_new (I_("screen-added"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TERMINAL_TYPE_SCREEN);
+
+  signals[SCREEN_ADDED] =
+    g_signal_new (I_("screen-removed"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TERMINAL_TYPE_SCREEN);
+
+  signals[SCREEN_ADDED] =
+    g_signal_new (I_("screen-switched"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  nullptr,
+                  G_TYPE_NONE,
+                  2, TERMINAL_TYPE_SCREEN, TERMINAL_TYPE_SCREEN);
+
+  signals[SCREENS_REORDERED] =
+    g_signal_new (I_("screens-reordered"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+
+  signals[SCREEN_CLOSE_REQUEST] =
+    g_signal_new (I_("screen-close-request"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TERMINAL_TYPE_SCREEN);
+
 
   /* Remove unwanted and interfering keybindings */
   remove_binding (widget_class, GDK_KEY_Page_Up, GdkModifierType(GDK_CONTROL_MASK));
@@ -563,7 +604,7 @@ terminal_notebook_new (void)
 
 void
 terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
-                                  GtkPolicyType policy)
+                                  GtkPolicyType     policy)
 {
   if (notebook->policy == policy)
     return;
@@ -582,7 +623,7 @@ terminal_notebook_get_tab_policy (TerminalNotebook *notebook)
 
 GtkWidget *
 terminal_notebook_get_action_box (TerminalNotebook *notebook,
-                                  GtkPackType pack_type)
+                                  GtkPackType       pack_type)
 {
   GtkNotebook *gtk_notebook;
   GtkWidget *box, *inner_box;
@@ -620,4 +661,25 @@ terminal_notebook_get_notebook (TerminalNotebook *notebook)
   g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), NULL);
 
   return GTK_NOTEBOOK (notebook->notebook);
+}
+
+void
+terminal_notebook_change_screen (TerminalNotebook *notebook,
+                                 int               change)
+{
+  int active, n;
+
+  g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
+  g_return_if_fail (change == -1 || change == 1);
+
+  n = terminal_notebook_get_n_screens (notebook);
+  active = terminal_notebook_get_active_screen_num (notebook);
+
+  active += change;
+  if (active < 0)
+    active = n - 1;
+  else if (active >= n)
+    active = 0;
+
+  terminal_notebook_set_active_screen_num (notebook, active);
 }

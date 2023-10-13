@@ -25,7 +25,6 @@
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
 #include "terminal-defines.hh"
-#include "terminal-mdi-container.hh"
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"
