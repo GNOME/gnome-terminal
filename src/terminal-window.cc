@@ -58,6 +58,7 @@ struct _TerminalWindow
   TerminalScreenPopupInfo *popup_info;
 
   GtkWidget *titlebar;
+  TerminalHeaderbar *headerbar;
   TerminalNotebook *notebook;
   GtkWidget *main_vbox;
   GtkWidget* ask_default_infobar;
@@ -1868,7 +1869,6 @@ terminal_window_init (TerminalWindow *window)
   GtkWindowGroup *window_group;
   //  GtkAccelGroup *accel_group;
   uuid_t u;
-  gboolean use_headerbar;
   char uuidstr[37];
   GSimpleAction *action;
 
@@ -1893,14 +1893,6 @@ terminal_window_init (TerminalWindow *window)
   window->uuid = g_strdup (uuidstr);
 
   gtk_widget_init_template (GTK_WIDGET (window));
-
-  use_headerbar = terminal_app_get_use_headerbar (app);
-  if (use_headerbar) {
-    GtkWidget *headerbar;
-
-    headerbar = terminal_headerbar_new ();
-    terminal_window_set_titlebar (window, headerbar);
-  }
 
   /* GAction setup */
   g_action_map_add_action_entries (G_ACTION_MAP (window),
@@ -1949,7 +1941,7 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (app, "clipboard-targets-changed",
                     G_CALLBACK (clipboard_targets_changed_cb), window);
 
-  terminal_window_fill_notebook_action_box (window, !use_headerbar);
+  terminal_window_fill_notebook_action_box (window, FALSE);
 
   window_group = gtk_window_group_new ();
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
@@ -2014,9 +2006,11 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_update_geometry);
   gtk_widget_class_bind_template_callback (widget_class, handle_tab_droped_on_desktop);
 
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, headerbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, main_vbox);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, notebook);
 
+  g_type_ensure (TERMINAL_TYPE_HEADERBAR);
   g_type_ensure (TERMINAL_TYPE_NOTEBOOK);
 }
 
@@ -2965,23 +2959,4 @@ terminal_window_get_uuid (TerminalWindow *window)
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), nullptr);
 
   return window->uuid;
-}
-
-void
-terminal_window_set_titlebar (TerminalWindow *window,
-                              GtkWidget      *child)
-{
-  g_return_if_fail (TERMINAL_IS_WINDOW (window));
-  g_return_if_fail (!child || GTK_IS_WIDGET (child));
-
-  if (window->titlebar == child)
-    return;
-
-  if (window->titlebar)
-    gtk_box_remove (GTK_BOX (window->main_vbox), window->titlebar);
-
-  window->titlebar = child;
-
-  if (child)
-    gtk_box_prepend (GTK_BOX (window->main_vbox), child);
 }
