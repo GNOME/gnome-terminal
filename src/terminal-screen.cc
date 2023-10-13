@@ -22,6 +22,7 @@
 #include "terminal-regex.hh"
 #include "terminal-screen.hh"
 #include "terminal-client-utils.hh"
+#include "terminal-notebook.hh"
 
 #include <errno.h>
 #include <string.h>
@@ -2422,4 +2423,19 @@ terminal_screen_paste_text (TerminalScreen* screen,
   /* Note that @text MUST be NUL-terminated */
 
   vte_terminal_paste_text (VTE_TERMINAL (screen), text);
+}
+
+gboolean
+terminal_screen_is_active (TerminalScreen *screen)
+{
+  TerminalNotebook *notebook;
+
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), FALSE);
+
+  notebook = TERMINAL_NOTEBOOK (gtk_widget_get_ancestor (GTK_WIDGET (screen),
+                                                         TERMINAL_TYPE_NOTEBOOK));
+  if (notebook == nullptr)
+    return FALSE;
+
+  return terminal_notebook_get_active_screen (notebook) == screen;
 }
