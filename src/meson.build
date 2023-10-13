@@ -208,6 +208,8 @@ server_sources = app_sources + client_util_sources + debug_sources + dbus_source
   'terminal-screen-container.hh',
   'terminal-screen.cc',
   'terminal-screen.hh',
+  'terminal-search-entry.cc',
+  'terminal-search-entry.hh',
   'terminal-search-popover.cc',
   'terminal-search-popover.hh',
   'terminal-settings-bridge-impl.cc',

@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 
 #include "terminal-pcre2.hh"
+#include "terminal-search-entry.hh"
 #include "terminal-search-popover.hh"
 #include "terminal-intl.hh"
 #include "terminal-window.hh"
@@ -539,6 +540,8 @@ terminal_search_popover_class_init (TerminalSearchPopoverClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, TerminalSearchPopover, entire_word_checkbutton);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalSearchPopover, regex_checkbutton);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalSearchPopover, wrap_around_checkbutton);
+
+  g_type_ensure (TERMINAL_TYPE_SEARCH_ENTRY);
 }
 
 /* public API */
