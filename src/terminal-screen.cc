@@ -66,6 +66,7 @@
 #include "eggshell.hh"
 
 #define URL_MATCH_CURSOR_NAME "pointer"
+#define SIZE_DISMISS_TIMEOUT_MSEC 1000
 
 namespace {
 
@@ -115,6 +116,10 @@ struct _TerminalScreenPrivate
   gboolean exec_on_realize;
   guint idle_exec_source;
   ExecData *exec_data;
+
+  GtkRevealer *size_revealer;
+  GtkLabel *size_label;
+  guint size_dismiss_source;
 };
 
 enum
@@ -487,6 +492,110 @@ terminal_screen_root (GtkWidget *widget)
 }
 
 static void
+terminal_screen_measure (GtkWidget      *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
+  int min_revealer;
+  int nat_revealer;
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->measure (widget,
+                                                            orientation,
+                                                            for_size,
+                                                            minimum, natural,
+                                                            minimum_baseline, natural_baseline);
+
+  gtk_widget_measure (GTK_WIDGET (priv->size_revealer),
+                      orientation, for_size,
+                      &min_revealer, &nat_revealer, NULL, NULL);
+
+  *minimum = MAX (*minimum, min_revealer);
+  *natural = MAX (*natural, nat_revealer);
+}
+
+static gboolean
+dismiss_size_label_cb (gpointer user_data)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (user_data);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  gtk_revealer_set_reveal_child (priv->size_revealer, FALSE);
+  priv->size_dismiss_source = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+terminal_screen_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
+  GtkRequisition min;
+  GtkAllocation revealer_alloc;
+  GtkRoot *root;
+  int prev_column_count, column_count;
+  int prev_row_count, row_count;
+
+  prev_column_count = vte_terminal_get_column_count (VTE_TERMINAL (screen));
+  prev_row_count = vte_terminal_get_row_count (VTE_TERMINAL (screen));
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->size_allocate (widget, width, height, baseline);
+
+  column_count = vte_terminal_get_column_count (VTE_TERMINAL (screen));
+  row_count = vte_terminal_get_row_count (VTE_TERMINAL (screen));
+
+  root = gtk_widget_get_root (widget);
+
+  if (terminal_screen_is_active (screen) &&
+      GTK_IS_WINDOW (root) &&
+      !gtk_window_is_maximized (GTK_WINDOW (root)) &&
+      !gtk_window_is_fullscreen (GTK_WINDOW (root)) &&
+      (prev_column_count != column_count || prev_row_count != row_count)) {
+    char format[32];
+
+    g_snprintf (format, sizeof format, "%ld × %ld",
+                vte_terminal_get_column_count (VTE_TERMINAL (screen)),
+                vte_terminal_get_row_count (VTE_TERMINAL (screen)));
+    gtk_label_set_label (priv->size_label, format);
+
+    gtk_revealer_set_reveal_child (priv->size_revealer, TRUE);
+
+    g_clear_handle_id (&priv->size_dismiss_source, g_source_remove);
+    priv->size_dismiss_source = g_timeout_add (SIZE_DISMISS_TIMEOUT_MSEC,
+                                               dismiss_size_label_cb,
+                                               screen);
+  }
+
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->size_revealer), &min, NULL);
+  revealer_alloc.x = width - min.width;
+  revealer_alloc.y = height - min.height;
+  revealer_alloc.width = min.width;
+  revealer_alloc.height = min.height;
+  gtk_widget_size_allocate (GTK_WIDGET (priv->size_revealer), &revealer_alloc, -1);
+}
+
+static void
+terminal_screen_snapshot (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->snapshot (widget, snapshot);
+
+  gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->size_revealer), snapshot);
+}
+
+static void
 terminal_screen_init (TerminalScreen *screen)
 {
 #if 0
@@ -514,10 +623,11 @@ terminal_screen_init (TerminalScreen *screen)
   uuid_unparse (u, uuidstr);
   priv->uuid = g_strdup (uuidstr);
 
-  vte_terminal_set_mouse_autohide (terminal, TRUE);
-
   priv->child_pid = -1;
 
+  gtk_widget_init_template (GTK_WIDGET (screen));
+
+  vte_terminal_set_mouse_autohide (terminal, TRUE);
   vte_terminal_set_allow_hyperlink (terminal, TRUE);
   vte_terminal_set_scroll_unit_is_pixels (terminal, TRUE);
   vte_terminal_set_enable_fallback_scrolling (terminal, FALSE);
@@ -621,9 +731,12 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->get_property = terminal_screen_get_property;
   object_class->set_property = terminal_screen_set_property;
 
-  widget_class->realize = terminal_screen_realize;
   widget_class->css_changed = terminal_screen_css_changed;
+  widget_class->measure = terminal_screen_measure;
+  widget_class->realize = terminal_screen_realize;
   widget_class->root = terminal_screen_root;
+  widget_class->size_allocate = terminal_screen_size_allocate;
+  widget_class->snapshot = terminal_screen_snapshot;
 #ifdef GTK4_TODO
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
@@ -693,6 +806,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 				      G_PARAM_STATIC_NICK |
 				      G_PARAM_STATIC_BLURB)));
 
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/screen.ui");
+
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_revealer);
+
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
@@ -723,6 +841,10 @@ terminal_screen_dispose (GObject *object)
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
   GtkSettings *settings;
+
+  g_clear_handle_id (&priv->size_dismiss_source, g_source_remove);
+
+  gtk_widget_dispose_template (GTK_WIDGET (object), TERMINAL_TYPE_SCREEN);
 
   /* Unset child PID so that when an eventual child-exited signal arrives,
    * we don't emit "close".

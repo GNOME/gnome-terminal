@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="TerminalScreen" parent="VteTerminal">
+    <property name="pointer-autohide">true</property>
+    <property name="allow-hyperlink">true</property>
+    <property name="scroll-unit-is-pixels">true</property>
+    <property name="enable-fallback-scrolling">false</property>
+    <child>
+      <object class="GtkRevealer" id="size_revealer">
+        <property name="transition-type">crossfade</property>
+        <property name="reveal-child">false</property>
+        <style>
+          <class name="size"/>
+        </style>
+        <property name="halign">end</property>
+        <property name="valign">end</property>
+        <child>
+          <object class="GtkLabel" id="size_label">
+            <attributes>
+              <attribute name="font-features" value="tnum"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
