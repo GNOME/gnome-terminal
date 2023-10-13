@@ -2,6 +2,7 @@
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2007, 2008, 2009, 2011, 2017 Christian Persch
+ * Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,6 +59,7 @@ struct _TerminalWindow
   TerminalScreenPopupInfo *popup_info;
 
   GtkWidget *titlebar;
+  AdwTabBar *tab_bar;
   TerminalHeaderbar *headerbar;
   TerminalNotebook *notebook;
   GtkWidget *main_vbox;
@@ -162,9 +164,10 @@ static void notebook_screen_removed_cb    (TerminalNotebook *notebook,
                                            TerminalWindow   *window);
 static void notebook_screens_reordered_cb (TerminalNotebook *notebook,
                                            TerminalWindow   *window);
-static void screen_close_request_cb       (TerminalNotebook *notebook,
-                                           TerminalScreen   *screen,
-                                           TerminalWindow   *window);
+
+static gboolean screen_close_request_cb (TerminalNotebook *notebook,
+                                         TerminalScreen   *screen,
+                                         TerminalWindow   *window);
 
 /* Menu action callbacks */
 static gboolean find_larger_zoom_factor                   (double         *zoom);
@@ -1430,23 +1433,23 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
   g_simple_action_set_enabled (lookup_action (window, "tab-detach"), not_only);
 }
 
-static GtkNotebook *
-handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
-                              GtkWidget   *container,
-                              gint         x,
-                              gint         y,
-                              gpointer     data G_GNUC_UNUSED)
+static AdwTabView *
+handle_tab_dropped_on_desktop (AdwTabView     *tab_view,
+                               TerminalWindow *window)
 {
   TerminalWindow *source_window;
   TerminalWindow *new_window;
 
-  source_window = TERMINAL_WINDOW (gtk_widget_get_root (GTK_WIDGET (source_notebook)));
+  g_assert (ADW_IS_TAB_VIEW (tab_view));
+  g_assert (TERMINAL_IS_WINDOW (window));
+
+  source_window = TERMINAL_WINDOW (gtk_widget_get_root (GTK_WIDGET (tab_view)));
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), nullptr);
 
   new_window = terminal_window_new (G_APPLICATION (terminal_app_get ()));
   new_window->present_on_insert = TRUE;
 
-  return GTK_NOTEBOOK (new_window->notebook);
+  return terminal_notebook_get_tab_view (new_window->notebook);
 }
 
 /* Terminal screen popup menu handling */
@@ -1663,7 +1666,8 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window,
 {
   GtkWidget *box, *new_tab_button, *tabs_menu_button;
 
-  box = terminal_notebook_get_action_box (TERMINAL_NOTEBOOK (window->notebook), GTK_PACK_END);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  adw_tab_bar_set_end_action_widget (window->tab_bar, box);
 
   /* Create the NewTerminal button */
   if (add_new_tab_button)
@@ -2004,11 +2008,12 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, notebook_screen_removed_cb);
   gtk_widget_class_bind_template_callback (widget_class, notebook_screens_reordered_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_update_geometry);
-  gtk_widget_class_bind_template_callback (widget_class, handle_tab_droped_on_desktop);
+  gtk_widget_class_bind_template_callback (widget_class, handle_tab_dropped_on_desktop);
 
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, headerbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, main_vbox);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, notebook);
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, tab_bar);
 
   g_type_ensure (TERMINAL_TYPE_HEADERBAR);
   g_type_ensure (TERMINAL_TYPE_NOTEBOOK);
@@ -2086,16 +2091,6 @@ terminal_window_show (GtkWidget *widget)
                          widget,
                          widget_allocation.width, widget_allocation.height,
                          widget_allocation.x, widget_allocation.y);
-
-  /* Because of the unexpected reentrancy caused by adding the tab to the notebook
-   * showing the TerminalWindow, we can get here when the first page has been
-   * added but not yet set current. By setting the page current, we get the
-   * right size when we first show the window */
-  GtkNotebook *gtk_notebook = nullptr;
-  if (TERMINAL_IS_NOTEBOOK (window->notebook) &&
-      (gtk_notebook = terminal_notebook_get_notebook (TERMINAL_NOTEBOOK (window->notebook))) &&
-      gtk_notebook_get_current_page (gtk_notebook) == -1)
-    gtk_notebook_set_current_page (gtk_notebook, 0);
 
   if (window->active_screen != nullptr)
     {
@@ -2177,15 +2172,14 @@ screen_hyperlink_hover_uri_changed (TerminalScreen *screen,
 
 /* MDI container callbacks */
 
-static void
+static gboolean
 screen_close_request_cb (TerminalNotebook *container,
                          TerminalScreen   *screen,
                          TerminalWindow   *window)
 {
   if (confirm_close_window_or_tab (window, screen))
-    return;
-
-  terminal_window_remove_screen (window, screen);
+    return GDK_EVENT_STOP;
+  return GDK_EVENT_PROPAGATE;
 }
 
 int
@@ -2607,7 +2601,9 @@ notebook_screen_removed_cb (TerminalNotebook *notebook,
   if (pages == 1)
     {
       TerminalScreen *active_screen = terminal_notebook_get_active_screen (notebook);
-      gtk_widget_grab_focus (GTK_WIDGET(active_screen));  /* bug 742422 */
+
+      if (active_screen != nullptr)
+        gtk_widget_grab_focus (GTK_WIDGET (active_screen));  /* bug 742422 */
 
       terminal_window_update_size (window);
     }
@@ -2828,22 +2824,24 @@ destroy_window_in_main (gpointer user_data)
 }
 
 static void
-confirm_close_response_cb (GtkWidget *dialog,
-                           int response,
+confirm_close_response_cb (GtkWidget      *dialog,
+                           int             response,
                            TerminalWindow *window)
 {
   TerminalScreen *screen;
 
+  g_assert (GTK_IS_WINDOW (dialog));
+  g_assert (TERMINAL_IS_WINDOW (window));
+
   screen = (TerminalScreen*)g_object_get_data (G_OBJECT (dialog), "close-screen");
+
+  terminal_notebook_confirm_close (window->notebook,
+                                   screen,
+                                   response == GTK_RESPONSE_ACCEPT);
 
   gtk_window_destroy (GTK_WINDOW (dialog));
 
-  if (response != GTK_RESPONSE_ACCEPT)
-    return;
-    
-  if (screen)
-    terminal_window_remove_screen (window, screen);
-  else
+  if (screen == nullptr)
     g_idle_add_full (G_PRIORITY_DEFAULT,
                      destroy_window_in_main,
                      g_object_ref (window),
@@ -2907,7 +2905,7 @@ confirm_close_window_or_tab (TerminalWindow *window,
   dialog = window->confirm_close_dialog =
     gtk_message_dialog_new (GTK_WINDOW (window),
                             GtkDialogFlags(GTK_DIALOG_MODAL |
-					   GTK_DIALOG_DESTROY_WITH_PARENT),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT),
                             GTK_MESSAGE_WARNING,
                             GTK_BUTTONS_CANCEL,
                             "%s", n_tabs > 1 ? _("Close this window?") : _("Close this terminal?"));
