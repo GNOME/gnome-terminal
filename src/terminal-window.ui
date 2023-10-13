@@ -9,6 +9,10 @@
       <object class="GtkBox" id="main_vbox">
         <property name="orientation">vertical</property>
         <child>
+          <object class="TerminalHeaderbar" id="headerbar">
+          </object>
+        </child>
+        <child>
           <object class="TerminalNotebook" id="notebook">
             <property name="vexpand">true</property>
             <signal name="screen-close-request" handler="screen_close_request_cb" swapped="0" object="TerminalWindow"/>
