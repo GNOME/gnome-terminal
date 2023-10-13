@@ -290,7 +290,25 @@ terminal_notebook_reorder_screen (TerminalNotebook *notebook,
                               pos < 0 ? n - 1 : pos < n ? pos : 0);
 }
 
-G_DEFINE_FINAL_TYPE (TerminalNotebook, terminal_notebook, GTK_TYPE_WIDGET)
+static GObject *
+terminal_notebook_get_internal_child (GtkBuildable *buildable,
+                                      GtkBuilder   *builder,
+                                      const char   *name)
+{
+  if (g_strcmp0 (name, "notebook") == 0)
+    return G_OBJECT (TERMINAL_NOTEBOOK (buildable)->notebook);
+
+  return NULL;
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->get_internal_child = terminal_notebook_get_internal_child;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (TerminalNotebook, terminal_notebook, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 /* GtkNotebookClass impl */
 
