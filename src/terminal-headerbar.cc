@@ -30,7 +30,9 @@ struct _TerminalHeaderbar
   GtkWidget parent_instance;
   AdwHeaderBar *headerbar;
   GtkWidget *profilebutton;
+  GtkWidget *new_tab_button;
   GtkWidget *menubutton;
+  GtkPopoverMenu *profiles_popover_menu;
   gulong items_changed_handler;
 };
 
@@ -43,6 +45,8 @@ profilemenu_items_changed_cb (GMenuModel *menu,
                               int added G_GNUC_UNUSED,
                               TerminalHeaderbar *headerbar)
 {
+  gtk_widget_set_visible (headerbar->new_tab_button,
+                          g_menu_model_get_n_items (menu) == 0);
   gtk_widget_set_visible (headerbar->profilebutton,
                           g_menu_model_get_n_items (menu) > 0);
 }
@@ -63,7 +67,7 @@ terminal_headerbar_init (TerminalHeaderbar *headerbar)
                                   terminal_app_get_headermenu (app));
 
   profilemenu = terminal_app_get_profilemenu (app);
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (headerbar->profilebutton),
+  adw_split_button_set_menu_model (ADW_SPLIT_BUTTON (headerbar->profilebutton),
                                   profilemenu);
 
   headerbar->items_changed_handler =
@@ -102,6 +106,7 @@ terminal_headerbar_class_init (TerminalHeaderbarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalHeaderbar, headerbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalHeaderbar, menubutton);
   gtk_widget_class_bind_template_child (widget_class, TerminalHeaderbar, profilebutton);
+  gtk_widget_class_bind_template_child (widget_class, TerminalHeaderbar, new_tab_button);
 }
 
 /**
