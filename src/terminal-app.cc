@@ -87,7 +87,7 @@
 
 #define GTK_SETTING_PREFER_DARK_THEME           "gtk-application-prefer-dark-theme"
 
-#define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.Settings.Debug"
+#define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.gtk4.Settings.Debug"
 
 #ifdef DISUNIFY_NEW_TERMINAL_SECTION
 #error Use a gsettings override instead
