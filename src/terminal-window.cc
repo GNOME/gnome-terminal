@@ -28,6 +28,10 @@
 #include <gtk/gtk.h>
 #include <uuid.h>
 
+#ifdef GDK_WINDOWING_X11
+# include <gdk/x11/gdkx.h>
+#endif
+
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
 #include "terminal-enums.hh"
@@ -2040,9 +2044,13 @@ terminal_window_init (TerminalWindow *window)
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
   g_object_unref (window_group);
 
-#ifdef GTK4_TODO
-  g_snprintf (role, sizeof (role), "gnome-terminal-window-%s", uuidstr);
-  gtk_window_set_role (GTK_WINDOW (window), role);
+#ifdef GDK_WINDOWING_X11
+  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (window));
+  if (GDK_IS_X11_SURFACE (surface)) {
+    char role[64];
+    g_snprintf (role, sizeof (role), "gnome-terminal-window-%s", uuidstr);
+    gdk_x11_surface_set_utf8_property (surface, "WM_WINDOW_ROLE", role);
+  }
 #endif
 }
 
