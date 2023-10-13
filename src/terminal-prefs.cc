@@ -47,6 +47,22 @@ preferences_help_cb (GSimpleAction *action,
   terminal_util_show_help ("pref");
 }
 
+static void
+preferences_about_cb (GSimpleAction *action,
+                      GVariant *parameter,
+                      gpointer user_data)
+{
+  terminal_util_show_about ();
+}
+
+static void
+preferences_inspector_cb (GSimpleAction *action,
+                          GVariant      *parameter,
+                          gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (true);
+}
+
 /* Sidebar */
 
 static inline GSimpleAction *
@@ -738,6 +754,8 @@ terminal_prefs_show_preferences(GSettings* profile,
     { "delete",         profile_delete_cb,         nullptr, nullptr, nullptr },
     { "set-as-default", profile_set_as_default_cb, nullptr, nullptr, nullptr },
     { "help",           preferences_help_cb,       nullptr, nullptr, nullptr },
+    { "about",          preferences_about_cb,      nullptr, nullptr, nullptr },
+    { "inspector",      preferences_inspector_cb,  nullptr, nullptr, nullptr },
   };
 
   if (the_pref_data != nullptr)
@@ -781,6 +799,20 @@ terminal_prefs_show_preferences(GSettings* profile,
   g_action_map_add_action_entries (G_ACTION_MAP (dialog),
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    data);
+
+  /* Maybe make Inspector available */
+  auto const inspector_action =
+    g_action_map_lookup_action(G_ACTION_MAP (dialog), "inspector");
+  auto const gtk_debug_settings = terminal_app_get_gtk_debug_settings(app);
+  if (gtk_debug_settings)
+    g_settings_bind(gtk_debug_settings,
+                    "enable-inspector-keybinding",
+                    inspector_action,
+                    "enabled",
+                    GSettingsBindFlags(G_SETTINGS_BIND_GET |
+                                       G_SETTINGS_BIND_NO_SENSITIVITY));
+  else
+    g_simple_action_set_enabled(G_SIMPLE_ACTION(inspector_action), false);
 
   /* Sidebar */
 
