@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="TerminalWindow" parent="AdwApplicationWindow">
+    <style>
+      <class name="terminal-window"/>
+    </style>
+    <property name="title" translatable="yes">Terminal</property>
     <property name="content">
       <object class="GtkBox" id="main_vbox">
         <property name="orientation">vertical</property>
+        <child>
+          <object class="TerminalNotebook" id="notebook">
+            <property name="vexpand">true</property>
+            <signal name="screen-close-request" handler="screen_close_request_cb" swapped="0" object="TerminalWindow"/>
+            <signal name="screen-switched" handler="notebook_screen_switched_cb" after="1" swapped="0" object="TerminalWindow"/>
+            <signal name="screen-added" handler="notebook_screen_added_cb" after="1" swapped="0" object="TerminalWindow"/>
+            <signal name="screen-removed" handler="notebook_screen_removed_cb" after="1" swapped="0" object="TerminalWindow"/>
+            <signal name="screens-reordered" handler="notebook_screens_reordered_cb" after="1" swapped="0" object="TerminalWindow"/>
+            <signal name="notify::tab-pos" handler="terminal_window_update_geometry" swapped="1" object="TerminalWindow"/>
+            <signal name="notify::show-tabs" handler="terminal_window_update_geometry" swapped="1" object="TerminalWindow"/>
+            <child internal-child="notebook">
+              <object class="GtkNotebook">
+                <signal name="create-window" handler="handle_tab_droped_on_desktop" object="TerminalWindow"/>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </property>
   </template>
