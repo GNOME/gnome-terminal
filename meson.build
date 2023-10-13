@@ -47,9 +47,9 @@ clangxx_req_version       = '3.3'
 vte_req                      = 'vte-2.91-gtk4'
 vte_req_version              = '0.72.2'
 
-glib_req_version             = '2.77.0'
-glib_min_req_version         = '2.77'
-glib_max_allowed_version     = '2.77'
+glib_req_version             = '2.76.0'
+glib_min_req_version         = '2.76'
+glib_max_allowed_version     = '2.76'
 
 gtk_req_version              = '4.12.0'
 gtk_min_req_version          = '4.12'
