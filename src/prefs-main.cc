@@ -142,10 +142,22 @@ main(int argc,
   g_set_prgname("gnome-terminal-preferences");
   g_set_application_name(_("Terminal Preferences"));
 
-  if (!gtk_init_check ())
-    return _EXIT_FAILURE_GTK_INIT;
+  gs_free_option_context auto context = g_option_context_new(nullptr);
+  g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
+  g_option_context_set_ignore_unknown_options(context, false);
+  g_option_context_add_main_entries(context, options, GETTEXT_PACKAGE);
 
-  gs_free_error GError *error = nullptr;
+  gs_free_error GError* error = nullptr;
+  if (!g_option_context_parse(context, &argc, &argv, &error)) {
+    g_printerr ("Failed to parse arguments: %s\n", error ? error->message : "");
+    return _EXIT_FAILURE_ARGPARSE;
+  }
+
+  if (!gtk_init_check ()) {
+    g_printerr ("Failed to init GTK\n");
+    return _EXIT_FAILURE_GTK_INIT;
+  }
+
   gs_unref_object GDBusConnection* connection = nullptr;
   gs_unref_object GSettingsBackend* backend = nullptr;
   gs_unref_object GSimpleActionGroup* action_group = nullptr;
