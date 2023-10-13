@@ -41,12 +41,6 @@ void            terminal_window_move_screen            (TerminalWindow *source_w
                                                         TerminalWindow *dest_window,
                                                         TerminalScreen *screen,
                                                         int             dest_position);
-/* Menubar visibility is part of session state, except that
- * if it isn't restored from session, the window gets the setting
- * from the profile of the first screen added to the window
- */
-void            terminal_window_set_menubar_visible    (TerminalWindow *window,
-                                                        gboolean        setting);
 void            terminal_window_update_size            (TerminalWindow *window);
 void            terminal_window_switch_screen          (TerminalWindow *window,
                                                         TerminalScreen *screen);
