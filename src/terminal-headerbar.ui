@@ -20,32 +20,23 @@
     <child>
       <object class="AdwHeaderBar" id="headerbar">
         <child type="start">
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <style>
-              <class name="linked"/>
-            </style>
-            <child>
-              <object class="GtkButton">
-                <property name="action-name">win.new-terminal</property>
-                <property name="action-target">('tab-default','current')</property>
-                <property name="icon-name">tab-new-symbolic</property>
-                <accessibility>
-                  <property name="label" translatable="yes">New Tab</property>
-                </accessibility>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuButton" id="profilebutton">
-                <property name="icon-name">pan-down-symbolic</property>
-                <style>
-                  <class name="disclosure-button"/>
-                </style>
-                <accessibility>
-                  <property name="label" translatable="yes">Profiles</property>
-                </accessibility>
-              </object>
-            </child>
+          <object class="GtkButton" id="new_tab_button">
+            <property name="action-name">win.new-terminal</property>
+            <property name="action-target">('tab-default','current')</property>
+            <property name="icon-name">tab-new-symbolic</property>
+            <accessibility>
+              <property name="label" translatable="yes">New Tab</property>
+            </accessibility>
+          </object>
+        </child>
+        <child type="start">
+          <object class="AdwSplitButton" id="profilebutton">
+            <property name="action-name">win.new-terminal</property>
+            <property name="action-target">('tab-default','current')</property>
+            <property name="icon-name">tab-new-symbolic</property>
+            <accessibility>
+              <property name="label" translatable="yes">New Tab from Profile</property>
+            </accessibility>
           </object>
         </child>
         <child type="end">
