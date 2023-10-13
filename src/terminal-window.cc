@@ -58,7 +58,6 @@ struct _TerminalWindow
   TerminalScreenPopupInfo *popup_info;
 
   GtkWidget *titlebar;
-  GtkWidget *menubar;
   TerminalNotebook *notebook;
   GtkWidget *main_vbox;
   GtkWidget* ask_default_infobar;
@@ -95,8 +94,6 @@ struct _TerminalWindow
 
   GtkWidget *confirm_close_dialog;
   TerminalSearchPopover *search_popover;
-
-  guint use_default_menubar_visibility : 1;
 
   guint disposed : 1;
   guint present_on_insert : 1;
@@ -1151,18 +1148,6 @@ action_shadow_activate_cb (GSimpleAction *action,
 }
 
 static void
-action_menubar_visible_state_cb (GSimpleAction *action,
-                                 GVariant *state,
-                                 gpointer user_data)
-{
-  TerminalWindow *window = (TerminalWindow*)user_data;
-  gboolean active;
-
-  active = g_variant_get_boolean (state);
-  terminal_window_set_menubar_visible (window, active); /* this also sets the action state */
-}
-
-static void
 action_fullscreen_state_cb (GSimpleAction *action,
                             GVariant *state,
                             gpointer user_data)
@@ -1256,48 +1241,6 @@ action_active_tab_state_cb (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 
   terminal_notebook_set_active_screen_num (window->notebook, g_variant_get_int32 (state));
-}
-
-/* Menubar mnemonics & accel settings handling */
-
-static void
-enable_menubar_accel_changed_cb (GSettings *settings,
-                                 const char *key,
-                                 GtkSettings *gtk_settings)
-{
-  if (g_settings_get_boolean (settings, key))
-    gtk_settings_reset_property (gtk_settings, "gtk-menu-bar-accel");
-  else
-    g_object_set (gtk_settings, "gtk-menu-bar-accel", nullptr, nullptr);
-}
-
-/* The menubar is shown by the app, and the use of mnemonics (e.g. Alt+F for File) is toggled.
- * The mnemonic modifier is per window, so it doesn't affect the Find or Preferences windows.
- * If the menubar is shown by the shell, a non-mnemonic variant of the menu is loaded instead
- * in terminal-app.c. See over there for further details. */
-static void
-enable_mnemonics_changed_cb (GSettings *settings,
-                             const char *key,
-                             TerminalWindow *window)
-{
-#ifdef GTK4_TODO
-  gboolean enabled = g_settings_get_boolean (settings, key);
-
-  //gtk_shortcut_controller_set_mnemonics_modifiers();
-
-  if (enabled)
-    gtk_window_set_mnemonic_modifier (GTK_WINDOW (window), GDK_ALT_MASK);
-  else
-    gtk_window_set_mnemonic_modifier (GTK_WINDOW (window), GdkModifierType(GDK_MODIFIER_MASK & ~GDK_RELEASE_MASK));
-#endif
-}
-
-static void
-app_setting_notify_destroy_cb (GtkSettings *gtk_settings)
-{
-  g_signal_handlers_disconnect_by_func (terminal_app_get_global_settings (terminal_app_get ()),
-                                        (void*)enable_menubar_accel_changed_cb,
-                                        gtk_settings);
 }
 
 /* utility functions */
@@ -1642,17 +1585,6 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   }
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section6));
 
-  /* Window section */
-  gs_unref_object GMenu *section7 = g_menu_new ();
-
-  /* Only show this if the WM doesn't show the menubar */
-  if (g_action_get_enabled (G_ACTION (lookup_action (window, "menubar-visible"))))
-    g_menu_append (section7, _("Show _Menubar"), "win.menubar-visible");
-  if (g_action_get_enabled (G_ACTION (lookup_action (window, "toggle-fullscreen"))))
-    g_menu_append (section7, _("Full Screen"), "win.toggle-fullscreen");
-
-  g_menu_append_section (menu, nullptr, G_MENU_MODEL (section7));
-
   /* Now create the popup menu and show it */
   GtkWidget *popup_menu = context_menu_new (G_MENU_MODEL (menu), GTK_WIDGET (window));
   gtk_popover_popup (GTK_POPOVER (popup_menu));
@@ -1928,7 +1860,6 @@ terminal_window_init (TerminalWindow *window)
     { "active-tab",          action_active_tab_set_cb,   "i",  "@i 0",    action_active_tab_state_cb      },
     { "header-menu",         nullptr /* toggles state */,   nullptr, "false",   nullptr },
     { "fullscreen",          nullptr /* toggles state */,   nullptr, "false",   action_fullscreen_state_cb      },
-    { "menubar-visible",     nullptr /* toggles state */,   nullptr, "true",    action_menubar_visible_state_cb },
     { "profile",             nullptr /* changes state */,   "s",  "''",      action_profile_state_cb         },
     { "read-only",           nullptr /* toggles state */,   nullptr, "false",   action_read_only_state_cb       },
   };
@@ -1937,9 +1868,8 @@ terminal_window_init (TerminalWindow *window)
   GtkWindowGroup *window_group;
   //  GtkAccelGroup *accel_group;
   uuid_t u;
-  char uuidstr[37], role[64];
-  gboolean shell_shows_menubar;
   gboolean use_headerbar;
+  char uuidstr[37];
   GSimpleAction *action;
 
   app = terminal_app_get ();
@@ -1976,25 +1906,6 @@ terminal_window_init (TerminalWindow *window)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    window);
-
-  GSettings *global_settings = terminal_app_get_global_settings (app);
-  enable_mnemonics_changed_cb (global_settings, TERMINAL_SETTING_ENABLE_MNEMONICS_KEY, window);
-  g_signal_connect (global_settings, "changed::" TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
-                    G_CALLBACK (enable_mnemonics_changed_cb), window);
-
-  /* Hide "menubar-visible" when the menubar is shown by the shell */
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-shell-shows-menubar", &shell_shows_menubar,
-                nullptr);
-  if (shell_shows_menubar) {
-    g_simple_action_set_enabled (lookup_action (window, "menubar-visible"), FALSE);
-  } else {
-    window->menubar = gtk_popover_menu_bar_new_from_model (terminal_app_get_menubar (app));
-    gtk_box_prepend (GTK_BOX (window->main_vbox), window->menubar);
-
-    terminal_window_set_menubar_visible (window, !use_headerbar);
-    window->use_default_menubar_visibility = !use_headerbar;
-  }
 
   /* Add "Set as default terminal" infobar */
   if (terminal_app_get_ask_default_terminal(app)) {
@@ -2115,13 +2026,6 @@ terminal_window_dispose (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalApp *app = terminal_app_get ();
 
-  if (!window->disposed) {
-    GSettings *global_settings = terminal_app_get_global_settings (app);
-    g_signal_handlers_disconnect_by_func (global_settings,
-                                          (void*)enable_mnemonics_changed_cb,
-                                          window);
-  }
-
   window->disposed = TRUE;
 
   gtk_widget_dispose_template (GTK_WIDGET (window), TERMINAL_TYPE_WINDOW);
@@ -2215,7 +2119,6 @@ terminal_window_new (GApplication *app)
   return reinterpret_cast<TerminalWindow*>
     (g_object_new (TERMINAL_TYPE_WINDOW,
 		   "application", app,
-		   "show-menubar", FALSE,
 		   nullptr));
 }
 
@@ -2384,34 +2287,6 @@ terminal_window_list_screen_containers (TerminalWindow *window)
 }
 
 void
-terminal_window_set_menubar_visible (TerminalWindow *window,
-                                     gboolean        setting)
-{
-  if (window->menubar == nullptr)
-    return;
-
-  /* it's been set now, so don't override when adding a screen.
-   * this side effect must happen before we short-circuit below.
-   */
-  window->use_default_menubar_visibility = FALSE;
-
-  g_simple_action_set_state (lookup_action (window, "menubar-visible"),
-                             g_variant_new_boolean (setting));
-
-  g_object_set (window->menubar, "visible", setting, nullptr);
-
-  /* FIXMEchpe: use gtk_widget_get_realized instead? */
-  if (window->active_screen)
-    {
-      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                             "[window %p] setting size after toggling menubar visibility\n",
-                             window);
-
-      terminal_window_update_size (window);
-    }
-}
-
-void
 terminal_window_update_size (TerminalWindow *window)
 {
   int grid_width, grid_height;
@@ -2566,16 +2441,6 @@ notebook_screen_switched_cb (TerminalNotebook *container,
   }
 
   window->active_screen = screen;
-
-  /* Override menubar setting if it wasn't restored from session */
-  if (window->use_default_menubar_visibility)
-    {
-      gboolean setting =
-        g_settings_get_boolean (terminal_app_get_global_settings (terminal_app_get ()),
-                                TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY);
-
-      terminal_window_set_menubar_visible (window, setting);
-    }
 
   sync_screen_title (screen, nullptr, window);
 

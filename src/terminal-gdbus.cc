@@ -464,8 +464,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 #endif
 
     gboolean show_menubar;
-    if (g_variant_lookup (options, "show-menubar", "b", &show_menubar))
-      terminal_window_set_menubar_visible (window, show_menubar);
+    if (g_variant_lookup (options, "show-menubar", "b", &show_menubar) && show_menubar) {
+      g_warning ("show-menubar is no longer supported");
+    }
 
     if (g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen) &&
         start_fullscreen) {
