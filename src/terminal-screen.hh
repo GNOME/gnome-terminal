@@ -134,6 +134,8 @@ gboolean terminal_screen_has_foreground_process (TerminalScreen *screen,
                                                  char           **process_name,
                                                  char           **cmdline);
 
+gboolean terminal_screen_is_active (TerminalScreen *screen);
+
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)
 #define TERMINAL_SCALE_XXXX_SMALL  (TERMINAL_SCALE_XXX_SMALL/1.2)
