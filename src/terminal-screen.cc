@@ -166,11 +166,16 @@ static void terminal_screen_set_font (TerminalScreen *screen);
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
                                                     TerminalScreen *screen);
-#ifdef GTK4_TODO
-static gboolean terminal_screen_popup_menu (GtkWidget *widget);
-static gboolean terminal_screen_button_press (GtkWidget *widget,
-                                              GdkEventButton *event);
-#endif
+static void terminal_screen_capture_click_pressed_cb (TerminalScreen  *screen,
+                                                      int              n_press,
+                                                      double           x,
+                                                      double           y,
+                                                      GtkGestureClick *click);
+static void terminal_screen_bubble_click_pressed_cb (TerminalScreen  *screen,
+                                                     int              n_press,
+                                                     double           x,
+                                                     double           y,
+                                                     GtkGestureClick *click);
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
@@ -179,17 +184,15 @@ static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
-#ifdef GTK4_TODO
-static char* terminal_screen_check_hyperlink   (TerminalScreen            *screen,
-                                                GdkEvent                  *event);
 static void terminal_screen_check_extra (TerminalScreen *screen,
-                                         GdkEvent       *event,
+                                         double          x,
+                                         double          y,
                                          char           **number_info,
                                          char           **timestamp_info);
-static char* terminal_screen_check_match       (TerminalScreen            *screen,
-                                                GdkEvent                  *event,
-                                                int                  *flavor);
-#endif
+static char* terminal_screen_check_match (TerminalScreen *screen,
+                                          double          x,
+                                          double          y,
+                                          int            *flavor);
 
 static void terminal_screen_show_info_bar (TerminalScreen *screen,
                                            GError *error,
@@ -739,8 +742,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->snapshot = terminal_screen_snapshot;
 #ifdef GTK4_TODO
   widget_class->drag_data_received = terminal_screen_drag_data_received;
-  widget_class->button_press_event = terminal_screen_button_press;
-  widget_class->popup_menu = terminal_screen_popup_menu;
 #endif
 
   terminal_class->child_exited = terminal_screen_child_exited;
@@ -810,6 +811,9 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_revealer);
+
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_capture_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_bubble_click_pressed_cb);
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
@@ -1874,26 +1878,11 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
   g_slice_free (TerminalScreenPopupInfo, info);
 }
 
-#ifdef GTK4_TODO
-static gboolean
-terminal_screen_popup_menu (GtkWidget *widget)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPopupInfo *info;
-
-  info = terminal_screen_popup_info_new (screen);
-  info->button = 0;
-  info->timestamp = gtk_get_current_event_time ();
-
-  g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
-  terminal_screen_popup_info_unref (info);
-
-  return TRUE;
-}
-
 static void
 terminal_screen_do_popup (TerminalScreen *screen,
-                          GdkEventButton *event,
+                          int state,
+                          guint button,
+                          guint time,
                           char *hyperlink,
                           char *url,
                           int url_flavor,
@@ -1903,9 +1892,9 @@ terminal_screen_do_popup (TerminalScreen *screen,
   TerminalScreenPopupInfo *info;
 
   info = terminal_screen_popup_info_new (screen);
-  info->button = event->button;
-  info->state = event->state & gtk_accelerator_get_default_mod_mask ();
-  info->timestamp = event->time;
+  info->button = button;
+  info->state = state;
+  info->timestamp = time;
   info->hyperlink = hyperlink; /* adopted */
   info->url = url; /* adopted */
   info->url_flavor = TerminalURLFlavor(url_flavor);
@@ -1916,91 +1905,102 @@ terminal_screen_do_popup (TerminalScreen *screen,
   terminal_screen_popup_info_unref (info);
 }
 
-static gboolean
-terminal_screen_button_press (GtkWidget      *widget,
-                              GdkEventButton *event)
+static void
+terminal_screen_bubble_click_pressed_cb (TerminalScreen  *screen,
+                                         int              n_press,
+                                         double           x,
+                                         double           y,
+                                         GtkGestureClick *click)
 {
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
-    GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
+  if (n_press == 1) {
+    gs_free char *hyperlink = nullptr;
+    gs_free char *url = nullptr;
+    int url_flavor = 0;
+    gs_free char *number_info = nullptr;
+    gs_free char *timestamp_info = nullptr;
+
+    auto event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (click));
+    auto state = gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ();
+    auto button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
+    auto time = gdk_event_get_time (event);
+
+    hyperlink = vte_terminal_check_hyperlink_at (VTE_TERMINAL (screen), x, y);
+    url = terminal_screen_check_match (screen, x, y, &url_flavor);
+    terminal_screen_check_extra (screen, x, y, &number_info, &timestamp_info);
+
+    if (button == 3)
+      {
+        if (!(state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_ALT_MASK)) ||
+            !(state & (GDK_CONTROL_MASK | GDK_ALT_MASK)))
+          {
+            terminal_screen_do_popup (screen, state, button, time,
+                                      g_steal_pointer (&hyperlink),
+                                      g_steal_pointer (&url),
+                                      url_flavor,
+                                      g_steal_pointer (&number_info),
+                                      g_steal_pointer (&timestamp_info));
+            gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+            return;
+          }
+      }
+  }
+
+  gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_DENIED);
+}
+
+static void
+terminal_screen_capture_click_pressed_cb (TerminalScreen  *screen,
+                                          int              n_press,
+                                          double           x,
+                                          double           y,
+                                          GtkGestureClick *click)
+{
   gs_free char *hyperlink = nullptr;
   gs_free char *url = nullptr;
   int url_flavor = 0;
   gs_free char *number_info = nullptr;
   gs_free char *timestamp_info = nullptr;
-  guint state;
+  gboolean handled = FALSE;
 
-  state = event->state & gtk_accelerator_get_default_mod_mask ();
+  auto event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (click));
+  auto state = gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ();
+  auto button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
 
-  hyperlink = terminal_screen_check_hyperlink (screen, (GdkEvent*)event);
-  url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
-  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info, &timestamp_info);
+  hyperlink = vte_terminal_check_hyperlink_at (VTE_TERMINAL (screen), x, y);
+  url = terminal_screen_check_match (screen, x, y, &url_flavor);
+  terminal_screen_check_extra (screen, x, y, &number_info, &timestamp_info);
 
-  if (hyperlink != nullptr &&
-      (event->button == 1 || event->button == 2) &&
+  if (n_press == 1 &&
+      !handled &&
+      hyperlink != nullptr &&
+      (button == 1 || button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
-      gboolean handled = FALSE;
-
       g_signal_emit (screen, signals[MATCH_CLICKED], 0,
                      hyperlink,
                      FLAVOR_AS_IS,
                      state,
                      &handled);
-      if (handled)
-        return TRUE; /* don't do anything else such as select with the click */
     }
 
-  if (url != nullptr &&
-      (event->button == 1 || event->button == 2) &&
+  if (n_press == 1 &&
+      !handled &&
+      url != nullptr &&
+      (button == 1 || button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
-      gboolean handled = FALSE;
-
       g_signal_emit (screen, signals[MATCH_CLICKED], 0,
                      url,
                      url_flavor,
                      state,
                      &handled);
-      if (handled)
-        return TRUE; /* don't do anything else such as select with the click */
     }
 
-  if (event->type == GDK_BUTTON_PRESS && event->button == 3)
-    {
-      if (!(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)))
-        {
-          /* on right-click, we should first try to send the mouse event to
-           * the client, and popup only if that's not handled. */
-          if (button_press_event && button_press_event (widget, event))
-            return TRUE;
-
-          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
-          hyperlink = nullptr; /* adopted to the popup info */
-          url = nullptr; /* ditto */
-          number_info = nullptr; /* ditto */
-          timestamp_info = nullptr; /* ditto */
-          return TRUE;
-        }
-      else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
-        {
-          /* do popup on shift+right-click */
-          terminal_screen_do_popup (screen, event, hyperlink, url, url_flavor, number_info, timestamp_info);
-          hyperlink = nullptr; /* adopted to the popup info */
-          url = nullptr; /* ditto */
-          number_info = nullptr; /* ditto */
-          timestamp_info = nullptr; /* ditto */
-          return TRUE;
-        }
-    }
-
-  /* default behavior is to let the terminal widget deal with it */
-  if (button_press_event)
-    return button_press_event (widget, event);
-
-  return FALSE;
+  if (handled)
+    gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+  else
+    gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_DENIED);
 }
-#endif
 
 /**
  * terminal_screen_get_current_dir:
@@ -2324,27 +2324,18 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
   *cell_height_pixels = vte_terminal_get_char_height (terminal);
 }
 
-#ifdef GTK4_TODO
-static char*
-terminal_screen_check_hyperlink (TerminalScreen *screen,
-                                 GdkEvent       *event)
-{
-  return vte_terminal_hyperlink_check_event (VTE_TERMINAL (screen), event);
-}
-#endif
-
-#if 0
 static char*
 terminal_screen_check_match (TerminalScreen *screen,
-                             GdkEvent       *event,
-                             int       *flavor)
+                             double          x,
+                             double          y,
+                             int            *flavor)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSList *tags;
   int tag;
   char *match;
 
-  match = vte_terminal_match_check_event (VTE_TERMINAL (screen), event, &tag);
+  match = vte_terminal_check_match_at (VTE_TERMINAL (screen), x, y, &tag);
   for (tags = priv->match_tags; tags != nullptr; tags = tags->next)
     {
       TagData *tag_data = (TagData*) tags->data;
@@ -2359,12 +2350,11 @@ terminal_screen_check_match (TerminalScreen *screen,
   g_free (match);
   return nullptr;
 }
-#endif
 
-#ifdef GTK4_TODO
 static void
-terminal_screen_check_extra (TerminalScreen *screen,
-                             GdkEvent       *event,
+terminal_screen_check_extra (TerminalScreen  *screen,
+                             double           x,
+                             double           y,
                              char           **number_info,
                              char           **timestamp_info)
 {
@@ -2376,12 +2366,12 @@ terminal_screen_check_extra (TerminalScreen *screen,
   memset(matches, 0, sizeof(char*) * n_extra_regexes);
 
   if (
-      vte_terminal_event_check_regex_simple (VTE_TERMINAL (screen),
-                                             event,
-                                             extra_regexes,
-                                             n_extra_regexes,
-                                             0,
-                                             matches))
+      vte_terminal_check_regex_simple_at (VTE_TERMINAL (screen),
+                                          x, y,
+                                          extra_regexes,
+                                          n_extra_regexes,
+                                          0,
+                                          matches))
     {
       for (i = 0; i < n_extra_regexes; i++)
         {
@@ -2406,7 +2396,6 @@ terminal_screen_check_extra (TerminalScreen *screen,
         }
     }
 }
-#endif
 
 /**
  * terminal_screen_has_foreground_process:
