@@ -37,10 +37,11 @@
 
 struct _TerminalNotebook
 {
-  GtkWidget parent_instance;
-  AdwTabView *tab_view;
+  GtkWidget       parent_instance;
+  AdwTabView     *tab_view;
+  GMenu          *page_menu;
   TerminalScreen *active_screen;
-  GtkPolicyType policy;
+  GtkPolicyType   policy;
 };
 
 enum
@@ -296,15 +297,18 @@ terminal_notebook_reorder_screen (TerminalNotebook *notebook,
                                   TerminalScreen   *screen,
                                   int               new_position)
 {
+  TerminalScreenContainer *screen_container;
   AdwTabPage *page;
 
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (new_position == 1 || new_position == -1);
 
-  page = adw_tab_view_get_page (notebook->tab_view,
-                                gtk_widget_get_parent (GTK_WIDGET (screen)));
+  screen_container = terminal_screen_container_get_from_screen (screen);
+  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (screen_container));
   new_position += adw_tab_view_get_page_position (notebook->tab_view, page);
-  adw_tab_view_reorder_page (notebook->tab_view, page, new_position);
+
+  if (new_position < adw_tab_view_get_n_pages (notebook->tab_view))
+    adw_tab_view_reorder_page (notebook->tab_view, page, new_position);
 }
 
 static GObject *
@@ -444,15 +448,19 @@ terminal_notebook_setup_menu (AdwTabView       *tab_view,
                               AdwTabPage       *page,
                               TerminalNotebook *notebook)
 {
+  TerminalScreen *screen;
+  GtkWidget *child;
+
   g_assert (ADW_IS_TAB_VIEW (tab_view));
-  g_assert (ADW_IS_TAB_PAGE (page));
+  g_assert (!page || ADW_IS_TAB_PAGE (page));
   g_assert (TERMINAL_IS_NOTEBOOK (notebook));
 
-  gs_unref_object GMenu *menu;
-  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/notebook-menu.ui",
-                                       "notebook-popup", &menu,
-                                       nullptr);
-  adw_tab_view_set_menu_model (tab_view, G_MENU_MODEL (menu));
+  if (page != nullptr &&
+      (child = adw_tab_page_get_child (page)) &&
+      (screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child))) &&
+      !terminal_screen_is_active (screen)) {
+    terminal_notebook_set_active_screen (notebook, screen);
+  }
 }
 
 /* GObjectClass impl */
@@ -463,40 +471,7 @@ terminal_notebook_init (TerminalNotebook *notebook)
   notebook->active_screen = nullptr;
   notebook->policy = GTK_POLICY_AUTOMATIC;
 
-  notebook->tab_view = ADW_TAB_VIEW (adw_tab_view_new ());
-  gtk_widget_set_parent (GTK_WIDGET (notebook->tab_view),
-                         GTK_WIDGET (notebook));
-
-  g_signal_connect_object (notebook->tab_view,
-                           "setup-menu",
-                           G_CALLBACK (terminal_notebook_setup_menu),
-                           notebook,
-                           GConnectFlags(0));
-  g_signal_connect_object (notebook->tab_view,
-                           "notify::selected-page",
-                           G_CALLBACK (terminal_notebook_switch_page),
-                           notebook,
-                           G_CONNECT_AFTER);
-  g_signal_connect_object (notebook->tab_view,
-                           "page-attached",
-                           G_CALLBACK (terminal_notebook_page_added),
-                           notebook,
-                           G_CONNECT_AFTER);
-  g_signal_connect_object (notebook->tab_view,
-                           "page-detached",
-                           G_CALLBACK (terminal_notebook_page_removed),
-                           notebook,
-                           G_CONNECT_AFTER);
-  g_signal_connect_object (notebook->tab_view,
-                           "page-reordered",
-                           G_CALLBACK (terminal_notebook_page_reordered),
-                           notebook,
-                           G_CONNECT_AFTER);
-  g_signal_connect_object (notebook->tab_view,
-                           "close-page",
-                           G_CALLBACK (terminal_notebook_close_page),
-                           notebook,
-                           GConnectFlags(0));
+  gtk_widget_init_template (GTK_WIDGET (notebook));
 }
 
 static void
@@ -504,10 +479,9 @@ terminal_notebook_dispose (GObject *object)
 {
   TerminalNotebook *notebook = TERMINAL_NOTEBOOK (object);
 
-  if (notebook->tab_view != nullptr) {
-    gtk_widget_unparent (GTK_WIDGET (notebook->tab_view));
-    notebook->tab_view = nullptr;
-  }
+  gtk_widget_dispose_template (GTK_WIDGET (notebook), TERMINAL_TYPE_NOTEBOOK);
+
+  notebook->active_screen = nullptr;
 
   G_OBJECT_CLASS (terminal_notebook_parent_class)->dispose (object);
 }
@@ -678,6 +652,17 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   remove_reorder_bindings (widget_class, GDK_KEY_End);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/notebook.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, TerminalNotebook, tab_view);
+  gtk_widget_class_bind_template_child (widget_class, TerminalNotebook, page_menu);
+
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_setup_menu);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_switch_page);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_page_added);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_page_removed);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_page_reordered);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_close_page);
 }
 
 /* public API */
@@ -711,43 +696,6 @@ GtkPolicyType
 terminal_notebook_get_tab_policy (TerminalNotebook *notebook)
 {
   return notebook->policy;
-}
-
-GtkWidget *
-terminal_notebook_get_action_box (TerminalNotebook *notebook,
-                                  GtkPackType       pack_type)
-{
-#if 0
-  GtkNotebook *gtk_notebook;
-  GtkWidget *box, *inner_box;
-
-  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), nullptr);
-
-  gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
-  box = gtk_notebook_get_action_widget (gtk_notebook, pack_type);
-  if (box != nullptr)
-    return gtk_widget_get_first_child (box);
-
-  /* Create container for the buttons */
-  box = (GtkWidget *)g_object_new (GTK_TYPE_BOX,
-                                   "orientation", GTK_ORIENTATION_VERTICAL,
-                                   "margin-top", ACTION_AREA_BORDER_WIDTH,
-                                   "margin-bottom", ACTION_AREA_BORDER_WIDTH,
-                                   "margin-start", ACTION_AREA_BORDER_WIDTH,
-                                   "margin-end", ACTION_AREA_BORDER_WIDTH,
-                                   nullptr);
-
-  inner_box = (GtkWidget *)g_object_new (GTK_TYPE_BOX,
-                                         "orientation", GTK_ORIENTATION_HORIZONTAL,
-                                         "spacing", ACTION_BUTTON_SPACING,
-                                         nullptr);
-  gtk_box_prepend (GTK_BOX (box), inner_box);
-
-  gtk_notebook_set_action_widget (gtk_notebook, box, pack_type);
-
-  return inner_box;
-#endif
-  return nullptr;
 }
 
 void
