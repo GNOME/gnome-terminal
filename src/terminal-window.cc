@@ -1963,6 +1963,54 @@ terminal_window_css_changed (GtkWidget *widget,
   terminal_window_update_size (window);
 }
 
+static gboolean
+policy_type_to_autohide (GValue   *value,
+                         GVariant *variant,
+                         gpointer  user_data)
+{
+  auto policy_type = g_variant_get_string (variant, nullptr);
+  gboolean autohide = g_strcmp0 (policy_type, "automatic") == 0;
+  g_value_set_boolean (value, autohide);
+  return TRUE;
+}
+
+static gboolean
+policy_type_to_visible (GValue   *value,
+                        GVariant *variant,
+                        gpointer  user_data)
+{
+  auto policy_type = g_variant_get_string (variant, nullptr);
+  gboolean visible = g_strcmp0 (policy_type, "never") != 0;
+  g_value_set_boolean (value, visible);
+  return TRUE;
+}
+
+static void
+terminal_window_constructed (GObject *object)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (object);
+  GSettings *settings;
+
+  G_OBJECT_CLASS (terminal_window_parent_class)->constructed (object);
+
+  settings = terminal_app_get_global_settings (terminal_app_get ());
+
+  g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_TAB_POLICY_KEY,
+                                window->tab_bar,
+                                "autohide",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET |
+                                                   G_SETTINGS_BIND_NO_SENSITIVITY),
+                                policy_type_to_autohide, NULL, NULL, NULL);
+  g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_TAB_POLICY_KEY,
+                                window->tab_bar,
+                                "visible",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET |
+                                                   G_SETTINGS_BIND_NO_SENSITIVITY),
+                                policy_type_to_visible, NULL, NULL, NULL);
+}
+
 static void
 terminal_window_class_init (TerminalWindowClass *klass)
 {
@@ -1970,6 +2018,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
+  object_class->constructed = terminal_window_constructed;
   object_class->dispose = terminal_window_dispose;
   object_class->finalize = terminal_window_finalize;
 
