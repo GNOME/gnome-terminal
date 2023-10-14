@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Copyright © 2012 Christian Persch
+  Copyright © 2023 Christian Hergert
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,7 +17,20 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <interface>
-  <menu id="notebook-popup">
+  <template class="TerminalNotebook" parent="GtkWidget">
+    <child>
+      <object class="AdwTabView" id="tab_view">
+        <property name="menu-model">page_menu</property>
+        <signal name="setup-menu" handler="terminal_notebook_setup_menu" swapped="0" object="TerminalNotebook"/>
+        <signal name="notify::selected-page" handler="terminal_notebook_switch_page" after="1" swapped="0" object="TerminalNotebook"/>
+        <signal name="page-attached" handler="terminal_notebook_page_added" after="1" swapped="0" object="TerminalNotebook"/>
+        <signal name="page-detached" handler="terminal_notebook_page_removed" after="1" swapped="0" object="TerminalNotebook"/>
+        <signal name="page-reordered" handler="terminal_notebook_page_reordered" after="1" swapped="0" object="TerminalNotebook"/>
+        <signal name="close-page" handler="terminal_notebook_close_page" swapped="0" object="TerminalNotebook"/>
+      </object>
+    </child>
+  </template>
+  <menu id="page_menu">
     <section>
       <item>
         <attribute name="label" translatable="yes">Move Terminal _Left</attribute>
