@@ -28,9 +28,6 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (TerminalNotebook, terminal_notebook, TERMINAL, NOTEBOOK, GtkWidget)
 
 GtkWidget      *terminal_notebook_new                    (void);
-void            terminal_notebook_set_tab_policy         (TerminalNotebook *notebook,
-                                                          GtkPolicyType     policy);
-GtkPolicyType   terminal_notebook_get_tab_policy         (TerminalNotebook *notebook);
 void            terminal_notebook_add_screen             (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen,
                                                           int               position);
