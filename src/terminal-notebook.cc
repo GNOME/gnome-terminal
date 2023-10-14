@@ -41,7 +41,6 @@ struct _TerminalNotebook
   AdwTabView     *tab_view;
   GMenu          *page_menu;
   TerminalScreen *active_screen;
-  GtkPolicyType   policy;
 };
 
 enum
@@ -49,7 +48,6 @@ enum
   PROP_0,
   PROP_ACTIVE_SCREEN,
   PROP_ACTIVE_SCREEN_NUM,
-  PROP_TAB_POLICY
 };
 
 enum {
@@ -67,41 +65,6 @@ static guint signals[LAST_SIGNAL];
 #define ACTION_BUTTON_SPACING (6)
 
 /* helper functions */
-
-static void
-update_tab_visibility (TerminalNotebook *notebook,
-                       int               change)
-{
-#if 0
-  GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook->notebook);
-  int new_n_pages;
-  gboolean show_tabs;
-
-  if (gtk_widget_in_destruction (GTK_WIDGET (notebook)))
-    return;
-
-  new_n_pages = gtk_notebook_get_n_pages (gtk_notebook) + change;
-  /* Don't do anything if we're going to have zero pages (and thus close the window) */
-  if (new_n_pages == 0)
-    return;
-
-  switch (notebook->policy) {
-  case GTK_POLICY_ALWAYS:
-    show_tabs = TRUE;
-    break;
-  case GTK_POLICY_AUTOMATIC:
-    show_tabs = new_n_pages > 1;
-    break;
-  case GTK_POLICY_NEVER:
-  case GTK_POLICY_EXTERNAL:
-  default:
-    show_tabs = FALSE;
-    break;
-  }
-
-  gtk_notebook_set_show_tabs (gtk_notebook, show_tabs);
-#endif
-}
 
 static void
 remove_binding (GtkWidgetClass  *widget_class,
@@ -468,9 +431,6 @@ terminal_notebook_setup_menu (AdwTabView       *tab_view,
 static void
 terminal_notebook_init (TerminalNotebook *notebook)
 {
-  notebook->active_screen = nullptr;
-  notebook->policy = GTK_POLICY_AUTOMATIC;
-
   gtk_widget_init_template (GTK_WIDGET (notebook));
 }
 
@@ -487,23 +447,6 @@ terminal_notebook_dispose (GObject *object)
 }
 
 static void
-terminal_notebook_constructed (GObject *object)
-{
-  GSettings *settings;
-
-  G_OBJECT_CLASS (terminal_notebook_parent_class)->constructed (object);
-
-  settings = terminal_app_get_global_settings (terminal_app_get ());
-
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_TAB_POLICY_KEY,
-                   object,
-                   "tab-policy",
-                   GSettingsBindFlags(G_SETTINGS_BIND_GET |
-                                      G_SETTINGS_BIND_NO_SENSITIVITY));
-}
-
-static void
 terminal_notebook_get_property (GObject    *object,
                                 guint       prop_id,
                                 GValue     *value,
@@ -517,9 +460,6 @@ terminal_notebook_get_property (GObject    *object,
       break;
     case PROP_ACTIVE_SCREEN_NUM:
       g_value_set_int (value, terminal_notebook_get_active_screen_num (notebook));
-      break;
-    case PROP_TAB_POLICY:
-      g_value_set_enum (value, terminal_notebook_get_tab_policy (notebook));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -542,9 +482,6 @@ terminal_notebook_set_property (GObject      *object,
     case PROP_ACTIVE_SCREEN_NUM:
       terminal_notebook_set_active_screen_num (notebook, g_value_get_int (value));
       break;
-    case PROP_TAB_POLICY:
-      terminal_notebook_set_tab_policy (notebook, GtkPolicyType(g_value_get_enum (value)));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -557,7 +494,6 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructed = terminal_notebook_constructed;
   gobject_class->dispose = terminal_notebook_dispose;
   gobject_class->get_property = terminal_notebook_get_property;
   gobject_class->set_property = terminal_notebook_set_property;
@@ -577,14 +513,6 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
      g_param_spec_int ("active-screen-num", nullptr, nullptr,
                        -1, G_MAXINT, -1,
                        GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
-
-  g_object_class_install_property
-    (gobject_class,
-     PROP_TAB_POLICY,
-     g_param_spec_enum ("tab-policy", nullptr, nullptr,
-                        GTK_TYPE_POLICY_TYPE,
-                        GTK_POLICY_AUTOMATIC,
-                        GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS)));
 
   signals[SCREEN_ADDED] =
     g_signal_new (I_("screen-added"),
@@ -677,25 +605,6 @@ terminal_notebook_new (void)
 {
   return reinterpret_cast<GtkWidget*>
     (g_object_new (TERMINAL_TYPE_NOTEBOOK, nullptr));
-}
-
-void
-terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
-                                  GtkPolicyType     policy)
-{
-  if (notebook->policy == policy)
-    return;
-
-  notebook->policy = policy;
-  update_tab_visibility (notebook, 0);
-
-  g_object_notify (G_OBJECT (notebook), "tab-policy");
-}
-
-GtkPolicyType
-terminal_notebook_get_tab_policy (TerminalNotebook *notebook)
-{
-  return notebook->policy;
 }
 
 void
