@@ -143,15 +143,6 @@ static void terminal_window_state_event (GtkWidget  *widget,
 
 static gboolean terminal_window_close_request (GtkWindow *window);
 
-#ifdef GTK4_TODO
-static void notebook_button_press_cb         (GtkGestureClick *click,
-                                              int n_presses,
-                                              double x,
-                                              double y,
-                                              TerminalWindow *window);
-static gboolean notebook_popup_menu_cb       (GtkWidget *notebook,
-                                              TerminalWindow *window);
-#endif
 static void notebook_screen_switched_cb   (TerminalNotebook *notebook,
                                            TerminalScreen   *old_active_screen,
                                            TerminalScreen   *screen,
@@ -2328,73 +2319,6 @@ terminal_window_get_active (TerminalWindow *window)
 {
   return terminal_notebook_get_active_screen (window->notebook);
 }
-
-static void
-notebook_show_context_menu (TerminalWindow *window,
-                            GdkEvent *event,
-                            guint button,
-                            guint32 timestamp)
-{
-  /* Load the UI */
-  gs_unref_object GMenu *menu;
-  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/notebook-menu.ui",
-                                       "notebook-popup", &menu,
-                                       nullptr);
-
-  GtkWidget *popup_menu = context_menu_new (G_MENU_MODEL (menu), GTK_WIDGET (window));
-
-  gtk_widget_set_halign (popup_menu, GTK_ALIGN_START);
-  gtk_popover_popup (GTK_POPOVER (popup_menu));
-}
-
-static void
-notebook_button_press_cb (GtkGestureClick *click,
-                          int n_pressed,
-                          double x,
-                          double y,
-                          TerminalWindow *window)
-{
-#ifdef GTK4_TODO
-  GtkNotebook *notebook = GTK_NOTEBOOK (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (click)));
-  int tab_clicked;
-  int button = 
-
-  if (button != GDK_BUTTON_SECONDARY ||
-      (event->state & gtk_accelerator_get_default_mod_mask ()) != 0)
-    return FALSE;
-
-  if (!(pick = gtk_widget_pick (GTK_WIDGET (notebook), x, y, 0)))
-    return FALSE;
-
-  // TODO: Get tab using pick()
-  tab_clicked = find_tab_num_at_pos (notebook, event->x_root, event->y_root);
-  if (tab_clicked < 0)
-    return FALSE;
-
-  /* switch to the page the mouse is over */
-  gtk_notebook_set_current_page (notebook, tab_clicked);
-
-  notebook_show_context_menu (window, (GdkEvent*)event, event->button, event->time);
-  return TRUE;
-#endif
-}
-
-#ifdef GTK4_TODO
-static gboolean
-notebook_popup_menu_cb (GtkWidget *widget,
-                        TerminalWindow *window)
-{
-  GtkWidget *focus_widget;
-
-  focus_widget = gtk_window_get_focus (GTK_WINDOW (window));
-  /* Only respond if the notebook is the actual focus */
-  if (focus_widget != GTK_WIDGET (window->notebook))
-    return FALSE;
-
-  notebook_show_context_menu (window, nullptr, 0, GDK_CURRENT_TIME);
-  return TRUE;
-}
-#endif
 
 static void
 notebook_screen_switched_cb (TerminalNotebook *container,

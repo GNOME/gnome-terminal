@@ -33,6 +33,7 @@
 #include "terminal-tab-label.hh"
 #include "terminal-schemas.hh"
 #include "terminal-libgsystem.hh"
+#include "terminal-util.hh"
 
 struct _TerminalNotebook
 {
@@ -438,6 +439,22 @@ terminal_notebook_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
+static void
+terminal_notebook_setup_menu (AdwTabView       *tab_view,
+                              AdwTabPage       *page,
+                              TerminalNotebook *notebook)
+{
+  g_assert (ADW_IS_TAB_VIEW (tab_view));
+  g_assert (ADW_IS_TAB_PAGE (page));
+  g_assert (TERMINAL_IS_NOTEBOOK (notebook));
+
+  gs_unref_object GMenu *menu;
+  terminal_util_load_objects_resource ("/org/gnome/terminal/ui/notebook-menu.ui",
+                                       "notebook-popup", &menu,
+                                       nullptr);
+  adw_tab_view_set_menu_model (tab_view, G_MENU_MODEL (menu));
+}
+
 /* GObjectClass impl */
 
 static void
@@ -450,6 +467,11 @@ terminal_notebook_init (TerminalNotebook *notebook)
   gtk_widget_set_parent (GTK_WIDGET (notebook->tab_view),
                          GTK_WIDGET (notebook));
 
+  g_signal_connect_object (notebook->tab_view,
+                           "setup-menu",
+                           G_CALLBACK (terminal_notebook_setup_menu),
+                           notebook,
+                           GConnectFlags(0));
   g_signal_connect_object (notebook->tab_view,
                            "notify::selected-page",
                            G_CALLBACK (terminal_notebook_switch_page),
