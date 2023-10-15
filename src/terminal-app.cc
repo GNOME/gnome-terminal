@@ -721,7 +721,7 @@ clipboard_owner_change_cb (GdkClipboard *clipboard,
     app->clipboard_targets = formats;
 
     _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_CLIPBOARD) {
-      GString *string = g_string_new (NULL);
+      GString *string = g_string_new (nullptr);
       if (formats != nullptr)
         gdk_content_formats_print (formats, string);
       g_printerr ("Clipboard has targets: %s\n", string->str);

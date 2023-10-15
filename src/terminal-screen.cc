@@ -516,7 +516,7 @@ terminal_screen_measure (GtkWidget      *widget,
 
   gtk_widget_measure (GTK_WIDGET (priv->size_revealer),
                       orientation, for_size,
-                      &min_revealer, &nat_revealer, NULL, NULL);
+                      &min_revealer, &nat_revealer, nullptr, nullptr);
 
   *minimum = MAX (*minimum, min_revealer);
   *natural = MAX (*natural, nat_revealer);
@@ -578,7 +578,7 @@ terminal_screen_size_allocate (GtkWidget *widget,
                                                screen);
   }
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (priv->size_revealer), &min, NULL);
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->size_revealer), &min, nullptr);
   revealer_alloc.x = width - min.width;
   revealer_alloc.y = height - min.height;
   revealer_alloc.width = min.width;

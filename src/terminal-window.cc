@@ -418,7 +418,7 @@ action_save_contents_cb (GSimpleAction *action,
                                         nullptr);
 
   file = g_file_new_for_path (g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS));
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), file, NULL);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), file, nullptr);
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
@@ -1675,7 +1675,7 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window,
   gtk_widget_add_css_class (tabs_menu_button, "flat");
   gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (tabs_menu_button),
                                          notebook_update_tabs_menu_cb,
-                                         window, NULL);
+                                         window, nullptr);
   gtk_box_prepend (GTK_BOX (box), tabs_menu_button);
 }
 
@@ -2001,14 +2001,14 @@ terminal_window_constructed (GObject *object)
                                 "autohide",
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET |
                                                    G_SETTINGS_BIND_NO_SENSITIVITY),
-                                policy_type_to_autohide, NULL, NULL, NULL);
+                                policy_type_to_autohide, nullptr, nullptr, nullptr);
   g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_TAB_POLICY_KEY,
                                 window->tab_bar,
                                 "visible",
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET |
                                                    G_SETTINGS_BIND_NO_SENSITIVITY),
-                                policy_type_to_visible, NULL, NULL, NULL);
+                                policy_type_to_visible, nullptr, nullptr, nullptr);
 }
 
 static void
