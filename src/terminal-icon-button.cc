@@ -26,7 +26,7 @@
 GtkWidget *
 terminal_icon_button_new (const char *gicon_name)
 {
-  static const char * const css_classes[] = {"flat", NULL};
+  static const char * const css_classes[] = {"flat", nullptr};
 
   return (GtkWidget *) g_object_new (GTK_TYPE_BUTTON,
                                      "css-classes", css_classes,

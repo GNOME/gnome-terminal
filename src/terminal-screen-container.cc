@@ -313,6 +313,6 @@ terminal_screen_container_destroy (TerminalScreenContainer *container)
 {
   g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
 
-  container->screen = NULL;
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container->scrolled_window), NULL);
+  container->screen = nullptr;
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container->scrolled_window), nullptr);
 }

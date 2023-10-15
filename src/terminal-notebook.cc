@@ -282,7 +282,7 @@ terminal_notebook_get_internal_child (GtkBuildable *buildable,
   if (g_strcmp0 (name, "tab_view") == 0)
     return G_OBJECT (TERMINAL_NOTEBOOK (buildable)->tab_view);
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -631,7 +631,7 @@ terminal_notebook_change_screen (TerminalNotebook *notebook,
 AdwTabView *
 terminal_notebook_get_tab_view (TerminalNotebook *notebook)
 {
-  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), NULL);
+  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), nullptr);
 
   return notebook->tab_view;
 }
