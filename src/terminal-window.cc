@@ -283,22 +283,18 @@ action_new_terminal_cb (GSimpleAction *action,
   }
 
   if (can_toggle) {
-#ifdef GTK4_TODO
-    GdkEvent *event = gtk_get_current_event ();
-    if (event != nullptr) {
-      GdkModifierType modifiers;
+    GdkDisplay *display = gdk_display_get_default ();
+    GdkSeat *seat = gdk_display_get_default_seat (display);
+    GdkDevice *keyboard = gdk_seat_get_keyboard (seat);
+    GdkModifierType modifiers = GdkModifierType(gdk_device_get_modifier_state (keyboard) & gtk_accelerator_get_default_mod_mask ());
 
-      if ((gdk_event_get_state (event, &modifiers) &&
-           (modifiers & gtk_accelerator_get_default_mod_mask () & GDK_CONTROL_MASK))) {
-        /* Invert */
-        if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
-          mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
-        else
-          mode = TERMINAL_NEW_TERMINAL_MODE_WINDOW;
-      }
-      gdk_event_free (event);
+    if (modifiers & GDK_CONTROL_MASK) {
+      /* Invert */
+      if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
+        mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
+      else
+        mode = TERMINAL_NEW_TERMINAL_MODE_WINDOW;
     }
-#endif
   }
 
   TerminalScreen *parent_screen = window->active_screen;
