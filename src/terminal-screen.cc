@@ -214,6 +214,10 @@ static gboolean terminal_screen_get_child_command (TerminalScreen *screen,
                                                    char         ***argv_p,
                                                    GError        **err);
 
+static void terminal_screen_menu_popup_action (GtkWidget  *widget,
+                                               const char *action_name,
+                                               GVariant   *param);
+
 static void terminal_screen_queue_idle_exec (TerminalScreen *screen);
 
 static guint signals[LAST_SIGNAL];
@@ -413,29 +417,17 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 }
 
 static void
-terminal_screen_class_enable_menu_bar_accel_notify_cb (GSettings *settings,
-                                                       const char *key,
-                                                       TerminalScreenClass *klass)
+terminal_screen_enable_menu_bar_accel_notify_cb (GSettings *settings,
+                                                 const char *key,
+                                                 TerminalScreen *screen)
 {
-#ifdef GTK4_TODO
-  static gboolean is_enabled = TRUE; /* the binding is enabled by default since GtkWidgetClass installs it */
-  gboolean enable;
-  GtkBindingSet *binding_set;
+  g_assert (G_IS_SETTINGS (settings));
+  g_assert (key != nullptr);
+  g_assert (TERMINAL_IS_SCREEN (screen));
 
-  enable = g_settings_get_boolean (settings, key);
-
-  /* Only remove the 'skip' entry when we have added it previously! */
-  if (enable == is_enabled)
-    return;
-
-  is_enabled = enable;
-
-  binding_set = gtk_binding_set_by_class (klass);
-  if (enable)
-    gtk_binding_entry_remove (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK);
-  else
-    gtk_binding_entry_skip (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK);
-#endif
+  gtk_widget_action_set_enabled (GTK_WIDGET (screen),
+                                 "menu.popup",
+                                 g_settings_get_boolean (settings, key));
 }
 
 static TerminalWindow *
@@ -726,7 +718,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
   VteTerminalClass *terminal_class = VTE_TERMINAL_CLASS (klass);
-  GSettings *settings;
 
   object_class->constructed = terminal_screen_constructed;
   object_class->dispose = terminal_screen_dispose;
@@ -807,6 +798,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 				      G_PARAM_STATIC_NICK |
 				      G_PARAM_STATIC_BLURB)));
 
+  gtk_widget_class_install_action (widget_class,
+                                   "menu.popup",
+                                   nullptr,
+                                   terminal_screen_menu_popup_action);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/screen.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
@@ -819,12 +815,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
   precompile_regexes (extra_regex_patterns, n_extra_regexes, &extra_regexes, &extra_regex_flavors);
-
-  /* This fixes bug #329827 */
-  settings = terminal_app_get_global_settings (terminal_app_get ());
-  terminal_screen_class_enable_menu_bar_accel_notify_cb (settings, TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY, klass);
-  g_signal_connect (settings, "changed::" TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
-                    G_CALLBACK (terminal_screen_class_enable_menu_bar_accel_notify_cb), klass);
 }
 
 static void
@@ -832,11 +822,21 @@ terminal_screen_constructed (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
+  GSettings *settings;
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->constructed (object);
 
   terminal_app_register_screen (terminal_app_get (), screen);
   priv->registered = TRUE;
+
+  /* This fixes bug #329827 */
+  settings = terminal_app_get_global_settings (terminal_app_get ());
+  g_signal_connect_object (settings,
+                           "changed::" TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
+                           G_CALLBACK (terminal_screen_enable_menu_bar_accel_notify_cb),
+                           screen,
+                           GConnectFlags(0));
+  terminal_screen_enable_menu_bar_accel_notify_cb (settings, TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY, screen);
 }
 
 static void
@@ -1907,6 +1907,17 @@ terminal_screen_do_popup (TerminalScreen *screen,
 
   g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
   terminal_screen_popup_info_unref (info);
+}
+
+static void
+terminal_screen_menu_popup_action (GtkWidget *widget,
+                                   const char *action_name,
+                                   GVariant *param)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+
+  terminal_screen_do_popup (screen, 0, 0, GDK_CURRENT_TIME, 0, 0,
+                            nullptr, nullptr, 0, nullptr, nullptr);
 }
 
 static void
