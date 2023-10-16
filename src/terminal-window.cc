@@ -62,6 +62,7 @@ struct _TerminalWindow
   AdwTabBar *tab_bar;
   TerminalHeaderbar *headerbar;
   TerminalNotebook *notebook;
+  AdwToolbarView *toolbar_view;
   GtkWidget *main_vbox;
   GtkWidget* ask_default_infobar;
   TerminalScreen *active_screen;
@@ -90,9 +91,6 @@ struct _TerminalWindow
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
 
   /* For restoring hints after unmaximizing etc */
-#ifdef GTK4_TODO
-  GdkGeometry hints;
-#endif
   GdkToplevelState window_state;
 
   GtkWidget *confirm_close_dialog;
@@ -1757,32 +1755,6 @@ terminal_window_state_event (GtkWidget *widget,
       g_simple_action_set_enabled (lookup_action (window, "size-to"),
                                    !is_fullscreen);
     }
-
-  if (window_state_is_snapped(changed_mask))
-    {
-      if (window_state_is_snapped(window_state))
-        {
-          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                                 "Disapplying geometry hints entering snapped state\n");
-#ifdef GTK4_TODO
-          gtk_window_set_geometry_hints(GTK_WINDOW(widget), nullptr, nullptr,
-                                        GdkWindowHints(0));
-#endif
-        }
-      else
-        {
-          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                                 "Reapplying geometry hints after leaving snapped state\n");
-#ifdef GTK4_TODO
-          gtk_window_set_geometry_hints (GTK_WINDOW (window),
-                                         nullptr,
-                                         &window->hints,
-                                         GdkWindowHints(GDK_HINT_RESIZE_INC |
-                                                        GDK_HINT_MIN_SIZE |
-                                                        GDK_HINT_BASE_SIZE));
-#endif
-        }
-    }
 }
 
 static void
@@ -2041,6 +2013,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, main_vbox);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, notebook);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, tab_bar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, toolbar_view);
 
   g_type_ensure (TERMINAL_TYPE_HEADERBAR);
   g_type_ensure (TERMINAL_TYPE_NOTEBOOK);
@@ -2340,9 +2313,7 @@ terminal_window_update_size (TerminalWindow *window)
                          window->old_chrome_width, window->old_chrome_height,
                          pixel_width, pixel_height);
 
-#ifdef GTK4_TODO
-  gtk_window_resize (GTK_WINDOW (window), pixel_width, pixel_height);
-#endif
+  gtk_window_set_default_size (GTK_WINDOW (window), pixel_width, pixel_height);
 }
 
 void
@@ -2585,37 +2556,25 @@ gboolean
 terminal_window_parse_geometry (TerminalWindow *window,
                                 const char     *geometry)
 {
+  int grid_width, grid_height;
+
   g_assert (TERMINAL_IS_WINDOW (window));
 
-#ifdef GTK4_TODO
-  /* gtk_window_parse_geometry() needs to have the right base size
-   * and width/height increment to compute the window size from
-   * the geometry.
-   */
   terminal_window_update_geometry (window);
 
-  if (!gtk_window_parse_geometry (GTK_WINDOW (window), geometry))
+  if (geometry == nullptr ||
+      sscanf (geometry, "%d,%d", &grid_width, &grid_height) != 2)
     return FALSE;
 
-  /* We won't actually get allocated at the size parsed out of the
-   * geometry until the window is shown. If terminal_window_update_size()
-   * is called between now and then, that could result in us getting
-   * snapped back to the old grid size. So we need to immediately
-   * update the size of the active terminal to grid size from the
-   * geometry.
+  /* Set the size of the active screen and then reset our default-size
+   * so that GtkWindow will run through layout and reallocate to the
+   * newly requested size.
    */
-  if (window->active_screen)
-    {
-      int grid_width, grid_height;
-
-      /* After parse_geometry(), the default size is in units of the
-       * width/height increment, not a pixel size */
-      gtk_window_get_default_size (GTK_WINDOW (window), &grid_width, &grid_height);
-
-      vte_terminal_set_size (VTE_TERMINAL (window->active_screen),
-			     grid_width, grid_height);
-    }
-#endif
+  if (window->active_screen) {
+    vte_terminal_set_size (VTE_TERMINAL (window->active_screen),
+                           grid_width, grid_height);
+    gtk_window_set_default_size (GTK_WINDOW (window), -1, -1);
+  }
 
   return TRUE;
 }
@@ -2624,11 +2583,8 @@ void
 terminal_window_update_geometry (TerminalWindow *window)
 {
   GtkWidget *widget;
-#ifdef GTK4_TODO
-  GdkGeometry *hints = &window->hints;
-#endif
   GtkBorder padding;
-  GtkRequisition vbox_request, widget_request;
+  GtkRequisition contents_request, widget_request;
   int grid_width, grid_height;
   int char_width, char_height;
   int chrome_width, chrome_height;
@@ -2661,13 +2617,12 @@ terminal_window_update_geometry (TerminalWindow *window)
                          padding.left + padding.right,
                          padding.top + padding.bottom);
 
-  gtk_widget_get_preferred_size (window->main_vbox, nullptr, &vbox_request);
+  gtk_widget_get_preferred_size (GTK_WIDGET (window->toolbar_view), nullptr, &contents_request);
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "content area requests %dx%d px\n",
-                         vbox_request.width, vbox_request.height);
+                         contents_request.width, contents_request.height);
 
-
-  chrome_width = vbox_request.width - (char_width * grid_width);
-  chrome_height = vbox_request.height - (char_height * grid_height);
+  chrome_width = contents_request.width - (char_width * grid_width);
+  chrome_height = contents_request.height - (char_height * grid_height);
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "chrome: %dx%d px\n",
                          chrome_width, chrome_height);
 
@@ -2678,19 +2633,19 @@ terminal_window_update_geometry (TerminalWindow *window)
        * the preferred size takes the natural size of e.g. the title bar into
        * account which can be far wider then the contents size when using a
        * very long title */
-      GtkAllocation toplevel_allocation, vbox_allocation;
+      GtkAllocation toplevel_allocation, toolbar_view_allocation;
 
-      gtk_widget_get_allocation (GTK_WIDGET (window->main_vbox), &vbox_allocation);
+      gtk_widget_get_allocation (GTK_WIDGET (window->toolbar_view), &toolbar_view_allocation);
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "terminal widget allocation %dx%d px\n",
-                         vbox_allocation.width, vbox_allocation.height);
+                             "terminal widget allocation %dx%d px\n",
+                             toolbar_view_allocation.width, toolbar_view_allocation.height);
 
       gtk_widget_get_allocation (GTK_WIDGET (window), &toplevel_allocation);
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "window allocation %dx%d px\n",
-                         toplevel_allocation.width, toplevel_allocation.height);
+                             toplevel_allocation.width, toplevel_allocation.height);
 
-      csd_width =  toplevel_allocation.width - vbox_allocation.width;
-      csd_height = toplevel_allocation.height - vbox_allocation.height;
+      csd_width =  toplevel_allocation.width - toolbar_view_allocation.width;
+      csd_height = toplevel_allocation.height - toolbar_view_allocation.height;
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY, "CSDs: %dx%d px\n",
                              csd_width, csd_height);
     }
@@ -2727,35 +2682,6 @@ terminal_window_update_geometry (TerminalWindow *window)
       csd_height != window->old_csd_height ||
       widget != (GtkWidget*) window->old_geometry_widget)
     {
-#ifdef GTK4_TODO
-      hints->base_width = chrome_width + csd_width;
-      hints->base_height = chrome_height + csd_height;
-
-      hints->width_inc = char_width;
-      hints->height_inc = char_height;
-
-      /* min size is min size of the whole window, remember. */
-      hints->min_width = hints->base_width + hints->width_inc * MIN_WIDTH_CHARS;
-      hints->min_height = hints->base_height + hints->height_inc * MIN_HEIGHT_CHARS;
-
-      gtk_window_set_geometry_hints (GTK_WINDOW (window),
-                                     nullptr,
-                                     hints,
-                                     GdkWindowHints(GDK_HINT_RESIZE_INC |
-						    GDK_HINT_MIN_SIZE |
-						    GDK_HINT_BASE_SIZE));
-
-      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                             "[window %p] hints: base %dx%d min %dx%d inc %d %d\n",
-                             window,
-                             hints->base_width,
-                             hints->base_height,
-                             hints->min_width,
-                             hints->min_height,
-                             hints->width_inc,
-                             hints->height_inc);
-#endif
-
       window->old_csd_width = csd_width;
       window->old_csd_height = csd_height;
       window->old_geometry_widget = widget;
