@@ -2027,18 +2027,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   window_class->close_request = terminal_window_close_request;
 
-#ifdef GTK4_TODO
-  GtkWindowClass *window_klass;
-  GtkBindingSet *binding_set;
-
-  window_klass = (GtkWindowClass*)g_type_class_ref (GTK_TYPE_WINDOW);
-
-  binding_set = gtk_binding_set_by_class (window_klass);
-  gtk_binding_entry_skip (binding_set, GDK_KEY_I, GdkModifierType(GDK_CONTROL_MASK|GDK_SHIFT_MASK));
-  gtk_binding_entry_skip (binding_set, GDK_KEY_D, GdkModifierType(GDK_CONTROL_MASK|GDK_SHIFT_MASK));
-  g_type_class_unref (window_klass);
-#endif
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/window.ui");
 
   gtk_widget_class_bind_template_callback (widget_class, screen_close_request_cb);
