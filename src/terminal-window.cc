@@ -705,18 +705,10 @@ tab_switch_relative (TerminalWindow *window,
   n_screens = terminal_notebook_get_n_screens (window->notebook);
   value = terminal_notebook_get_active_screen_num (window->notebook) + change;
 
-  gboolean keynav_wrap_around = true;
-#if 0
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-keynav-wrap-around", &keynav_wrap_around,
-                nullptr);
-#endif
-  if (keynav_wrap_around) {
-    if (value < 0)
-      value += n_screens;
-    else if (value >= n_screens)
-      value -= n_screens;
-  }
+  if (value < 0)
+    value += n_screens;
+  else if (value >= n_screens)
+    value -= n_screens;
 
   if (value < 0 || value >= n_screens)
     return;
@@ -1394,15 +1386,7 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
   g_simple_action_set_state (lookup_action (window, "active-tab"),
                              g_variant_new_int32 (page_num));
 
-  /* Keynav wraps around? See bug #92139 */
-  gboolean keynav_wrap_around = TRUE;
-#ifdef GTK4_TODO
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-keynav-wrap-around", &keynav_wrap_around,
-                nullptr);
-#endif
-
-  gboolean wrap = keynav_wrap_around && not_only;
+  gboolean wrap = not_only;
   g_simple_action_set_enabled (lookup_action (window, "tab-switch-left"), not_first || wrap);
   g_simple_action_set_enabled (lookup_action (window, "tab-switch-right"), not_last || wrap);
   g_simple_action_set_enabled (lookup_action (window, "tab-move-left"), not_first_lr || wrap);
