@@ -181,8 +181,8 @@ static const TerminalColorScheme color_schemes[] = {
   },
   /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
   { N_("GNOME dark"),
-    COLOR (0xd0, 0xcf, 0xcc), /* Palette entry 7 */
-    COLOR (0x17, 0x14, 0x21)  /* Palette entry 0 */
+    COLOR (0xff, 0xff, 0xff), /* Palette entry 7 */
+    COLOR (0x1e, 0x1e, 0x1e)  /* Palette entry 0 */
   },
   /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
   { N_("Tango light"),
@@ -223,14 +223,14 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PAL
 {
   /* Based on GNOME 3.32 palette: https://developer.gnome.org/hig/stable/icon-design.html.en#palette */
   {
-    COLOR (0x17, 0x14, 0x21),  /* Blend of Dark 4 and Black */
+    COLOR (0x1e, 0x1e, 0x1e),  /* Suggested background for contrast */
     COLOR (0xc0, 0x1c, 0x28),  /* Red 4 */
     COLOR (0x26, 0xa2, 0x69),  /* Green 5 */
     COLOR (0xa2, 0x73, 0x4c),  /* Blend of Brown 2 and Brown 3 */
     COLOR (0x12, 0x48, 0x8b),  /* Blend of Blue 5 and Dark 4 */
     COLOR (0xa3, 0x47, 0xba),  /* Purple 3 */
     COLOR (0x2a, 0xa1, 0xb3),  /* Linear addition Blue 5 + Green 5, darkened slightly */
-    COLOR (0xd0, 0xcf, 0xcc),  /* Blend of Light 3 and Light 4 */
+    COLOR (0xff, 0xff, 0xff),  /* Light 1 */
     COLOR (0x5e, 0x5c, 0x64),  /* Dark 2 */
     COLOR (0xf6, 0x61, 0x51),  /* Red 1 */
     COLOR (0x33, 0xd1, 0x7a),  /* Green 3 */
@@ -238,7 +238,7 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PAL
     COLOR (0x2a, 0x7b, 0xde),  /* Blend of Blue 3 and Blue 4 */
     COLOR (0xc0, 0x61, 0xcb),  /* Purple 2 */
     COLOR (0x33, 0xc7, 0xde),  /* Linear addition Blue 4 + Green 4, darkened slightly */
-    COLOR (0xff, 0xff, 0xff)   /* Light 1 */
+    COLOR (0xd0, 0xcf, 0xcc)   /* Blend of Light 3 and Light 4 */
   },
 
   /* Tango palette */
