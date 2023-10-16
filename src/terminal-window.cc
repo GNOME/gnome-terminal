@@ -97,6 +97,9 @@ struct _TerminalWindow
   TerminalSearchPopover *search_popover;
   GtkPopoverMenu *context_menu;
 
+  /* A GSource delaying transition until animations complete */
+  guint fullscreen_transition;
+
   guint disposed : 1;
   guint present_on_insert : 1;
 
@@ -1128,20 +1131,51 @@ action_shadow_activate_cb (GSimpleAction *action,
    */
 }
 
+static gboolean
+terminal_window_do_fullscreen (gpointer data)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (data);
+
+  window->fullscreen_transition = 0;
+
+  if (!window->disposed) {
+    if (gtk_window_is_fullscreen (GTK_WINDOW (window)))
+      gtk_window_unfullscreen (GTK_WINDOW (window));
+    else
+      gtk_window_fullscreen (GTK_WINDOW (window));
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 action_fullscreen_state_cb (GSimpleAction *action,
                             GVariant *state,
                             gpointer user_data)
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
+  gboolean fullscreen = g_variant_get_boolean (state);
 
   if (!gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
-  if (g_variant_get_boolean (state))
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  else
-    gtk_window_unfullscreen (GTK_WINDOW (window));
+  adw_toolbar_view_set_reveal_top_bars (window->toolbar_view, !fullscreen);
+
+  /* Wait for the revealer transition to finish plus a small amount
+   * of time, then do fullscreen state change. This helps ensure that
+   * the compositor can animate the approprate screen contents between
+   * the two state changes.
+   *
+   * Since the headerbar is relatively short in height, only a few
+   * frames of transition is necessary for the eyes to catch up.
+   */
+  g_clear_handle_id (&window->fullscreen_transition, g_source_remove);
+  window->fullscreen_transition =
+    g_timeout_add_full (G_PRIORITY_DEFAULT,
+                        275, /* 250msec for revealer + delay */
+                        terminal_window_do_fullscreen,
+                        g_object_ref (window),
+                        g_object_unref);
 
   /* The window-state-changed callback will update the action's actual state */
 }
@@ -2036,6 +2070,7 @@ terminal_window_dispose (GObject *object)
   gtk_widget_dispose_template (GTK_WIDGET (window), TERMINAL_TYPE_WINDOW);
 
   g_clear_pointer ((GtkWidget **)&window->context_menu, gtk_widget_unparent);
+  g_clear_handle_id (&window->fullscreen_transition, g_source_remove);
 
   if (window->clipboard != nullptr) {
     g_signal_handlers_disconnect_by_func (app,
@@ -2851,4 +2886,12 @@ terminal_window_get_uuid (TerminalWindow *window)
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), nullptr);
 
   return window->uuid;
+}
+
+gboolean
+terminal_window_in_fullscreen_transition (TerminalWindow *window)
+{
+  g_return_val_if_fail (TERMINAL_IS_WINDOW (window), FALSE);
+
+  return window->fullscreen_transition != 0;
 }

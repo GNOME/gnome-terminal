@@ -568,6 +568,11 @@ terminal_screen_size_allocate (GtkWidget *widget,
     priv->size_dismiss_source = g_timeout_add (SIZE_DISMISS_TIMEOUT_MSEC,
                                                dismiss_size_label_cb,
                                                screen);
+  } else if (gtk_window_is_maximized (GTK_WINDOW (root)) ||
+             gtk_window_is_fullscreen (GTK_WINDOW (root)) ||
+             terminal_window_in_fullscreen_transition (TERMINAL_WINDOW (root))) {
+    g_clear_handle_id (&priv->size_dismiss_source, g_source_remove);
+    gtk_revealer_set_reveal_child (priv->size_revealer, FALSE);
   }
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->size_revealer), &min, nullptr);
