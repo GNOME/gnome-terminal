@@ -7,6 +7,23 @@
     <property name="scroll-unit-is-pixels">true</property>
     <property name="enable-fallback-scrolling">false</property>
     <child>
+      <object class="GtkShortcutController" id="shortcuts">
+        <property name="propagation-phase">capture</property>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">&lt;shift&gt;F10</property>
+            <property name="action">action(menu.popup)</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkShortcut">
+            <property name="trigger">Menu</property>
+            <property name="action">action(menu.popup)</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="GtkGestureClick" id="click_capture">
         <signal name="pressed" handler="terminal_screen_capture_click_pressed_cb" swapped="1" object="TerminalScreen"/>
         <property name="button">0</property>
