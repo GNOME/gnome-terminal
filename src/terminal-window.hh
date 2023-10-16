@@ -28,28 +28,29 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalWindow, terminal_window, TERMINAL, WINDOW, AdwApplicationWindow)
 
-TerminalWindow *terminal_window_new                    (GApplication   *app);
-int             terminal_window_get_active_screen_num  (TerminalWindow *window);
-void            terminal_window_set_titlebar           (TerminalWindow *window,
-                                                        GtkWidget      *titlebar);
-void            terminal_window_add_screen             (TerminalWindow *window,
-                                                        TerminalScreen *screen,
-                                                        int             position);
-void            terminal_window_remove_screen          (TerminalWindow *window,
-                                                        TerminalScreen *screen);
-void            terminal_window_move_screen            (TerminalWindow *source_window,
-                                                        TerminalWindow *dest_window,
-                                                        TerminalScreen *screen,
-                                                        int             dest_position);
-void            terminal_window_update_size            (TerminalWindow *window);
-void            terminal_window_switch_screen          (TerminalWindow *window,
-                                                        TerminalScreen *screen);
-TerminalScreen *terminal_window_get_active             (TerminalWindow *window);
-GList          *terminal_window_list_screen_containers (TerminalWindow *window);
-gboolean        terminal_window_parse_geometry         (TerminalWindow *window,
-                                                        const char     *geometry);
-void            terminal_window_update_geometry        (TerminalWindow *window);
-void            terminal_window_request_close          (TerminalWindow *window);
-const char     *terminal_window_get_uuid               (TerminalWindow *window);
+TerminalWindow *terminal_window_new                      (GApplication   *app);
+int             terminal_window_get_active_screen_num    (TerminalWindow *window);
+void            terminal_window_set_titlebar             (TerminalWindow *window,
+                                                          GtkWidget      *titlebar);
+void            terminal_window_add_screen               (TerminalWindow *window,
+                                                          TerminalScreen *screen,
+                                                          int             position);
+void            terminal_window_remove_screen            (TerminalWindow *window,
+                                                          TerminalScreen *screen);
+void            terminal_window_move_screen              (TerminalWindow *source_window,
+                                                          TerminalWindow *dest_window,
+                                                          TerminalScreen *screen,
+                                                          int             dest_position);
+void            terminal_window_update_size              (TerminalWindow *window);
+void            terminal_window_switch_screen            (TerminalWindow *window,
+                                                          TerminalScreen *screen);
+TerminalScreen *terminal_window_get_active               (TerminalWindow *window);
+GList          *terminal_window_list_screen_containers   (TerminalWindow *window);
+gboolean        terminal_window_parse_geometry           (TerminalWindow *window,
+                                                          const char     *geometry);
+void            terminal_window_update_geometry          (TerminalWindow *window);
+void            terminal_window_request_close            (TerminalWindow *window);
+const char     *terminal_window_get_uuid                 (TerminalWindow *window);
+gboolean        terminal_window_in_fullscreen_transition (TerminalWindow *window);
 
 G_END_DECLS
