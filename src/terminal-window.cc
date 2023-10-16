@@ -570,29 +570,46 @@ action_copy_cb (GSimpleAction *action,
 }
 
 /* Clipboard helpers */
-#ifdef GTK4_TODO
 
 typedef struct {
   GWeakRef screen_weak_ref;
 } PasteData;
 
 static void
-clipboard_uris_received_cb (GtkClipboard *clipboard,
-                            /* const */ char **uris,
-                            PasteData *data)
+clipboard_uris_received_cb (GObject *object,
+                            GAsyncResult *result,
+                            gpointer user_data)
 {
+  GdkClipboard *clipboard = GDK_CLIPBOARD (object);
+  PasteData *data = (PasteData *)user_data;
   gs_unref_object TerminalScreen *screen = nullptr;
+  const GValue *value;
 
-  if (uris != nullptr && uris[0] != nullptr &&
+  if ((value = gdk_clipboard_read_value_finish (clipboard, result, nullptr)) &&
+      G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST) &&
       (screen = (TerminalScreen*)g_weak_ref_get (&data->screen_weak_ref))) {
-    gs_free char *text;
-    gsize len;
+    const GList *uris = (const GList *)g_value_get_boxed (value);
+    GString *string = g_string_new (NULL);
 
-    /* This potentially modifies the strings in |uris| but that's ok */
-    terminal_util_transform_uris_to_quoted_fuse_paths (uris);
-    text = terminal_util_concat_uris (uris, &len);
+    for (const GList *iter = uris; iter; iter = iter->next) {
+      GFile *file = G_FILE (iter->data);
 
-    terminal_screen_paste_text (screen, text, len);
+      if (g_file_is_native (file)) {
+        g_autofree char *quoted = g_shell_quote (g_file_peek_path (file));
+
+        g_string_append (string, quoted);
+        g_string_append_c (string, ' ');
+      } else {
+        g_autofree char *uri = g_file_get_uri (file);
+        g_autofree char *quoted = g_shell_quote (uri);
+
+        g_string_append (string, quoted);
+        g_string_append_c (string, ' ');
+      }
+    }
+
+    terminal_screen_paste_text (screen, string->str, string->len);
+    g_string_free (string, TRUE);
   }
 
   g_weak_ref_clear (&data->screen_weak_ref);
@@ -603,42 +620,40 @@ static void
 request_clipboard_contents_for_paste (TerminalWindow *window,
                                       gboolean paste_as_uris)
 {
-  GdkAtom *targets;
-  int n_targets;
+  GdkContentFormats *targets;
 
   if (window->active_screen == nullptr)
     return;
 
   targets = terminal_app_get_clipboard_targets (terminal_app_get (),
-                                                window->clipboard,
-                                                &n_targets);
+                                                window->clipboard);
   if (targets == nullptr)
     return;
 
-  if (paste_as_uris && gtk_targets_include_uri (targets, n_targets)) {
+  if (paste_as_uris && gdk_content_formats_contain_gtype (targets, GDK_TYPE_FILE_LIST)) {
     PasteData *data = g_slice_new (PasteData);
     g_weak_ref_init (&data->screen_weak_ref, window->active_screen);
 
-    gtk_clipboard_request_uris (window->clipboard,
-                                (GtkClipboardURIReceivedFunc) clipboard_uris_received_cb,
-                                data);
+    gdk_clipboard_read_value_async (window->clipboard,
+                                    GDK_TYPE_FILE_LIST,
+                                    G_PRIORITY_DEFAULT,
+                                    nullptr,
+                                    clipboard_uris_received_cb,
+                                    data);
     return;
-  } else if (gtk_targets_include_text (targets, n_targets)) {
+  } else if (gdk_content_formats_contain_gtype (targets, G_TYPE_STRING)) {
     vte_terminal_paste_clipboard (VTE_TERMINAL (window->active_screen));
   }
 }
-#endif
 
 static void
 action_paste_text_cb (GSimpleAction *action,
                       GVariant *parameter,
                       gpointer user_data)
 {
-#ifdef GTK4_TODO
   TerminalWindow *window = (TerminalWindow*)user_data;
 
   request_clipboard_contents_for_paste (window, FALSE);
-#endif
 }
 
 static void
@@ -646,11 +661,9 @@ action_paste_uris_cb (GSimpleAction *action,
                       GVariant *parameter,
                       gpointer user_data)
 {
-#ifdef GTK4_TODO
   TerminalWindow *window = (TerminalWindow*)user_data;
 
   request_clipboard_contents_for_paste (window, TRUE);
-#endif
 }
 
 static void
