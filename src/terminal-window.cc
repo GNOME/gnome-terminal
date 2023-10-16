@@ -97,6 +97,7 @@ struct _TerminalWindow
 
   GtkWidget *confirm_close_dialog;
   TerminalSearchPopover *search_popover;
+  GtkPopoverMenu *context_menu;
 
   guint disposed : 1;
   guint present_on_insert : 1;
@@ -244,24 +245,6 @@ lookup_action (TerminalWindow *window,
   g_return_val_if_fail (action != nullptr, nullptr);
 
   return G_SIMPLE_ACTION (action);
-}
-
-static void
-popover_closed_cb (GtkPopover *popover)
-{
-  gtk_widget_unparent (GTK_WIDGET (popover));
-}
-
-static GtkWidget *
-context_menu_new (GMenuModel *menu,
-                  GtkWidget *widget)
-{
-  GtkWidget *popover = gtk_popover_menu_new_from_model (menu);
-  gtk_widget_set_parent (popover, widget);
-  g_signal_connect (popover, "closed",
-                    G_CALLBACK (popover_closed_cb),
-                    nullptr);
-  return popover;
 }
 
 /* GAction callbacks */
@@ -1580,9 +1563,21 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   }
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section6));
 
-  /* Now create the popup menu and show it */
-  GtkWidget *popup_menu = context_menu_new (G_MENU_MODEL (menu), GTK_WIDGET (window));
-  gtk_popover_popup (GTK_POPOVER (popup_menu));
+  if (window->context_menu == nullptr) {
+    window->context_menu = GTK_POPOVER_MENU (gtk_popover_menu_new_from_model (nullptr));
+    gtk_popover_set_has_arrow (GTK_POPOVER (window->context_menu), FALSE);
+    gtk_popover_set_position (GTK_POPOVER (window->context_menu), GTK_POS_BOTTOM);
+    gtk_widget_set_halign (GTK_WIDGET (window->context_menu), GTK_ALIGN_START);
+    gtk_widget_set_parent (GTK_WIDGET (window->context_menu), GTK_WIDGET (window));
+  }
+
+  graphene_point_t point = {float(info->x), float(info->y)};
+  if (gtk_widget_compute_point (GTK_WIDGET (screen), GTK_WIDGET (window), &point, &point)) {
+    cairo_rectangle_int_t rect = {int(point.x), int(point.y), 1, 1};
+    gtk_popover_menu_set_menu_model (window->context_menu, G_MENU_MODEL (menu));
+    gtk_popover_set_pointing_to (GTK_POPOVER (window->context_menu), &rect);
+    gtk_popover_popup (GTK_POPOVER (window->context_menu));
+  }
 }
 
 static gboolean
@@ -1986,6 +1981,22 @@ policy_type_to_visible (GValue   *value,
 }
 
 static void
+terminal_window_size_allocate (GtkWidget *widget,
+                               int width,
+                               int height,
+                               int baseline)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+
+  GTK_WIDGET_CLASS (terminal_window_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (window->context_menu != nullptr) {
+    gtk_popover_present (GTK_POPOVER (window->context_menu));
+  }
+
+}
+
+static void
 terminal_window_constructed (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
@@ -2025,6 +2036,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
   widget_class->css_changed = terminal_window_css_changed;
+  widget_class->size_allocate = terminal_window_size_allocate;
 
   window_class->close_request = terminal_window_close_request;
 
@@ -2068,6 +2080,8 @@ terminal_window_dispose (GObject *object)
   window->disposed = TRUE;
 
   gtk_widget_dispose_template (GTK_WIDGET (window), TERMINAL_TYPE_WINDOW);
+
+  g_clear_pointer ((GtkWidget **)&window->context_menu, gtk_widget_unparent);
 
   if (window->clipboard != nullptr) {
     g_signal_handlers_disconnect_by_func (app,

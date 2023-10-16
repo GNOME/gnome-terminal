@@ -153,6 +153,8 @@ struct _TerminalScreenPopupInfo {
   char *hyperlink;
   char *number_info;
   char *timestamp_info;
+  double x;
+  double y;
   guint button;
   guint state;
   guint32 timestamp;
