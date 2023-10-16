@@ -1883,6 +1883,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
                           int state,
                           guint button,
                           guint time,
+                          double x,
+                          double y,
                           char *hyperlink,
                           char *url,
                           int url_flavor,
@@ -1895,6 +1897,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
   info->button = button;
   info->state = state;
   info->timestamp = time;
+  info->x = x;
+  info->y = y;
   info->hyperlink = hyperlink; /* adopted */
   info->url = url; /* adopted */
   info->url_flavor = TerminalURLFlavor(url_flavor);
@@ -1933,7 +1937,7 @@ terminal_screen_bubble_click_pressed_cb (TerminalScreen  *screen,
         if (!(state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_ALT_MASK)) ||
             !(state & (GDK_CONTROL_MASK | GDK_ALT_MASK)))
           {
-            terminal_screen_do_popup (screen, state, button, time,
+            terminal_screen_do_popup (screen, state, button, time, x, y,
                                       g_steal_pointer (&hyperlink),
                                       g_steal_pointer (&url),
                                       url_flavor,

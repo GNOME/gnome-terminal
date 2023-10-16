@@ -9,12 +9,14 @@
     <child>
       <object class="GtkGestureClick" id="click_capture">
         <signal name="pressed" handler="terminal_screen_capture_click_pressed_cb" swapped="1" object="TerminalScreen"/>
+        <property name="button">0</property>
         <property name="propagation-phase">capture</property>
       </object>
     </child>
     <child>
       <object class="GtkGestureClick" id="click_bubble">
         <signal name="pressed" handler="terminal_screen_bubble_click_pressed_cb" swapped="1" object="TerminalScreen"/>
+        <property name="button">0</property>
         <property name="propagation-phase">bubble</property>
       </object>
     </child>
