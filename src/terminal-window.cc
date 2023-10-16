@@ -1548,6 +1548,12 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   }
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section6));
 
+  /* Window section */
+  gs_unref_object GMenu *section7 = g_menu_new ();
+  if (gtk_window_is_fullscreen (GTK_WINDOW (window)))
+    g_menu_append (section7, _("Leave Full Screen"), "win.toggle-fullscreen");
+  g_menu_append_section (menu, nullptr, G_MENU_MODEL (section7));
+
   if (window->context_menu == nullptr) {
     window->context_menu = GTK_POPOVER_MENU (gtk_popover_menu_new_from_model (nullptr));
     gtk_popover_set_has_arrow (GTK_POPOVER (window->context_menu), FALSE);
