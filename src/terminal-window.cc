@@ -586,7 +586,7 @@ clipboard_uris_received_cb (GObject *object,
       G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST) &&
       (screen = (TerminalScreen*)g_weak_ref_get (&data->screen_weak_ref))) {
     const GList *uris = (const GList *)g_value_get_boxed (value);
-    GString *string = g_string_new (NULL);
+    g_autoptr(GString) string = g_string_new (nullptr);
 
     for (const GList *iter = uris; iter; iter = iter->next) {
       GFile *file = G_FILE (iter->data);
@@ -606,7 +606,6 @@ clipboard_uris_received_cb (GObject *object,
     }
 
     terminal_screen_paste_text (screen, string->str, string->len);
-    g_string_free (string, TRUE);
   }
 
   g_weak_ref_clear (&data->screen_weak_ref);

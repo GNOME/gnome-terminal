@@ -120,6 +120,8 @@ struct _TerminalScreenPrivate
   GtkRevealer *size_revealer;
   GtkLabel *size_label;
   guint size_dismiss_source;
+
+  GtkDropTargetAsync *drop_target;
 };
 
 enum
@@ -137,31 +139,17 @@ enum {
   PROP_TITLE,
 };
 
-enum
-{
-  TARGET_COLOR,
-  TARGET_BGIMAGE,
-  TARGET_RESET_BG,
-  TARGET_MOZ_URL,
-  TARGET_NETSCAPE_URL,
-  TARGET_TAB
-};
-
 static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_profile_changed_cb (GSettings     *profile,
                                                 const char    *prop_name,
                                                 TerminalScreen *screen);
-#ifdef GTK4_TODO
-static void terminal_screen_drag_data_received (GtkWidget        *widget,
-                                                GdkDragContext   *context,
-                                                gint              x,
-                                                gint              y,
-                                                GtkSelectionData *selection_data,
-                                                guint             info,
-                                                guint             time);
-#endif
+static gboolean terminal_screen_drop_target_drop (TerminalScreen     *screen,
+                                                  GdkDrop            *drop,
+                                                  double              x,
+                                                  double              y,
+                                                  GtkDropTargetAsync *drop_target);
 static void terminal_screen_set_font (TerminalScreen *screen);
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
@@ -598,18 +586,6 @@ terminal_screen_snapshot (GtkWidget   *widget,
 static void
 terminal_screen_init (TerminalScreen *screen)
 {
-#if 0
-  static const GtkTargetEntry target_table[] = {
-    { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
-    { (char *) "application/x-color", 0, TARGET_COLOR },
-    { (char *) "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
-    { (char *) "text/x-moz-url",  0, TARGET_MOZ_URL },
-    { (char *) "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
-  };
-  GtkTargetList *target_list;
-  GtkTargetEntry *targets;
-  int n_targets;
-#endif
   VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalScreenPrivate *priv;
   TerminalApp *app;
@@ -644,25 +620,17 @@ terminal_screen_init (TerminalScreen *screen)
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
 
-#ifdef GTK4_TODO
-  /* Setup DND */
-  target_list = gtk_target_list_new (nullptr, 0);
-  gtk_target_list_add_uri_targets (target_list, 0);
-  gtk_target_list_add_text_targets (target_list, 0);
-  gtk_target_list_add_table (target_list, target_table, G_N_ELEMENTS (target_table));
+  GdkContentFormatsBuilder *builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_RGBA);
+  gdk_content_formats_builder_add_mime_type (builder, "text/x-moz-url");
+  gdk_content_formats_builder_add_mime_type (builder, "x-special/gnome-reset-background");
+  g_autoptr(GdkContentFormats) formats = gdk_content_formats_builder_free_to_formats (builder);
 
-  targets = gtk_target_table_new_from_list (target_list, &n_targets);
-
-  gtk_drag_dest_set (GTK_WIDGET (screen),
-                     GtkDestDefaults(GTK_DEST_DEFAULT_MOTION |
-				     GTK_DEST_DEFAULT_HIGHLIGHT |
-				     GTK_DEST_DEFAULT_DROP),
-                     targets, n_targets,
-                     GdkDragAction(GDK_ACTION_COPY | GDK_ACTION_MOVE));
-
-  gtk_target_table_free (targets, n_targets);
-  gtk_target_list_unref (target_list);
-#endif
+  gtk_drop_target_async_set_actions (priv->drop_target,
+                                     GdkDragAction(GDK_ACTION_COPY|GDK_ACTION_MOVE));
+  gtk_drop_target_async_set_formats (priv->drop_target, formats);
 
   g_signal_connect (screen, "window-title-changed",
                     G_CALLBACK (terminal_screen_window_title_changed),
@@ -736,9 +704,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->root = terminal_screen_root;
   widget_class->size_allocate = terminal_screen_size_allocate;
   widget_class->snapshot = terminal_screen_snapshot;
-#ifdef GTK4_TODO
-  widget_class->drag_data_received = terminal_screen_drag_data_received;
-#endif
 
   terminal_class->child_exited = terminal_screen_child_exited;
 
@@ -810,11 +775,13 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/screen.ui");
 
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, drop_target);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_revealer);
 
-  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_capture_click_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_bubble_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_capture_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drop);
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
@@ -2118,46 +2085,162 @@ terminal_screen_child_exited (VteTerminal *terminal,
     }
 }
 
-#ifdef GTK4_TODO
 static void
-terminal_screen_drag_data_received (GtkWidget        *widget,
-                                    GdkDragContext   *context,
-                                    gint              x,
-                                    gint              y,
-                                    GtkSelectionData *selection_data,
-                                    guint             info,
-                                    guint             timestamp)
+terminal_screen_drop_file_list_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPrivate *priv = screen->priv;
-  const guchar *selection_data_data;
-  GdkAtom selection_data_target;
-  gint selection_data_length, selection_data_format;
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GError) error = nullptr;
+  const GValue *value;
+  const GList *file_list;
 
-  selection_data_data = gtk_selection_data_get_data (selection_data);
-  selection_data_target = gtk_selection_data_get_target (selection_data);
-  selection_data_length = gtk_selection_data_get_length (selection_data);
-  selection_data_format = gtk_selection_data_get_format (selection_data);
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(value = gdk_drop_read_value_finish (drop, result, &error))) {
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
+
+  g_assert (value != nullptr);
+  g_assert (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST));
+
+  file_list = (const GList *)g_value_get_boxed (value);
+
+  g_autoptr(GString) string = g_string_new (nullptr);
+
+  for (const GList *iter = file_list; iter; iter = iter->next) {
+    GFile *file = G_FILE (iter->data);
+
+    if (g_file_is_native (file)) {
+      g_autofree char *quoted = g_shell_quote (g_file_peek_path (file));
+
+      g_string_append (string, quoted);
+      g_string_append_c (string, ' ');
+    } else {
+      g_autofree char *uri = g_file_get_uri (file);
+      g_autofree char *quoted = g_shell_quote (uri);
+
+      g_string_append (string, quoted);
+      g_string_append_c (string, ' ');
+    }
+  }
+
+  terminal_screen_paste_text (screen, string->str, string->len);
+
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
+}
+
+static void
+terminal_screen_drop_string_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GError) error = nullptr;
+  const GValue *value;
+  const char *string;
+
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(value = gdk_drop_read_value_finish (drop, result, &error))) {
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
+
+  g_assert (value != nullptr);
+  g_assert (G_VALUE_HOLDS_STRING (value));
+
+  string = g_value_get_string (value);
+
+  if (string != nullptr && string[0] != 0)
+    terminal_screen_paste_text (screen, string, -1);
+
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
+}
+
+static void
+terminal_screen_drop_color_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  TerminalScreenPrivate *priv = screen->priv;
+  g_autoptr(GError) error = nullptr;
+  const GValue *value;
+  const GdkRGBA *color;
+
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(value = gdk_drop_read_value_finish (drop, result, &error))) {
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
+
+  g_assert (value != nullptr);
+  g_assert (G_VALUE_HOLDS (value, GDK_TYPE_RGBA));
+
+  color = (const GdkRGBA *)g_value_get_boxed (value);
+  terminal_g_settings_set_rgba (priv->profile,
+                                TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
+                                color);
+  g_settings_set_boolean (priv->profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY, FALSE);
+
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
+}
+
+static void
+terminal_screen_read_moz_url_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+}
+
+static void
+terminal_screen_drop_moz_url_cb (GObject      *object,
+                                 GAsyncResult *result,
+                                 gpointer      user_data)
+{
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GInputStream) stream = nullptr;
+  g_autoptr(GError) error = nullptr;
+  const char *mime_type = nullptr;
+
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(stream = gdk_drop_read_finish (drop, result, &mime_type, &error))) {
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
+
+  g_assert (G_IS_INPUT_STREAM (stream));
 
 #if 0
-  {
-    GList *tmp;
-
-    g_print ("info: %d\n", info);
-    tmp = context->targets;
-    while (tmp != nullptr)
-      {
-        GdkAtom atom = GDK_POINTER_TO_ATOM (tmp->data);
-
-        g_print ("Target: %s\n", gdk_atom_name (atom));        
-        
-        tmp = tmp->next;
-      }
-
-    g_print ("Chosen target: %s\n", gdk_atom_name (selection_data->target));
-  }
+  /* TODO: need screen + drop_target */
+  g_input_stream_read_bytes_async (stream,
+                                   4096,
+                                   G_PRIORITY_DEFAULT,
+                                   nullptr,
+                                   terminal_screen_read_moz_url_cb,
+                                   g_object_ref (screen);
 #endif
 
+  gdk_drop_finish (drop, GDK_ACTION_COPY);
+}
+
+#ifdef GTK4_TODO
   if (gtk_targets_include_uri (&selection_data_target, 1))
     {
       gs_strfreev char **uris;
@@ -2181,33 +2264,6 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       if (text && text[0])
         terminal_screen_paste_text (screen, text, -1);
     }
-  else switch (info)
-    {
-    case TARGET_COLOR:
-      {
-        guint16 *data = (guint16 *)selection_data_data;
-        GdkRGBA color;
-
-        /* We accept drops with the wrong format, since the KDE color
-         * chooser incorrectly drops application/x-color with format 8.
-         * So just check for the data length.
-         */
-        if (selection_data_length != 8)
-          return;
-
-        color.red = (double) data[0] / 65535.;
-        color.green = (double) data[1] / 65535.;
-        color.blue = (double) data[2] / 65535.;
-        color.alpha = 1.;
-        /* FIXME: use opacity from data[3] */
-
-        terminal_g_settings_set_rgba (priv->profile,
-                                      TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
-                                      &color);
-        g_settings_set_boolean (priv->profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY, FALSE);
-      }
-      break;
-
     case TARGET_MOZ_URL:
       {
         char *utf8_data, *text;
@@ -2243,68 +2299,64 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         g_free (uris[0]);
       }
       break;
-
-    case TARGET_NETSCAPE_URL:
-      {
-        char *utf8_data, *newline, *text;
-        char *uris[2];
-        gsize len;
-        
-        /* The data contains the URL, a \n, then the
-         * title of the web page.
-         */
-        if (selection_data_length < 0 || selection_data_format != 8)
-          return;
-
-        utf8_data = g_strndup ((char *) selection_data_data, selection_data_length);
-        newline = strchr (utf8_data, '\n');
-        if (newline)
-          *newline = '\0';
-
-        uris[0] = utf8_data;
-        uris[1] = nullptr;
-        terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
-
-        text = terminal_util_concat_uris (uris, &len);
-        terminal_screen_paste_text (screen, text, len);
-        g_free (text);
-        g_free (uris[0]);
-      }
-      break;
-
-    case TARGET_RESET_BG:
-      g_settings_reset (priv->profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY);
-      break;
-
-    case TARGET_TAB:
-      {
-        GtkWidget *container;
-        TerminalScreen *moving_screen;
-        TerminalWindow *source_window;
-        TerminalWindow *dest_window;
-
-        container = *(GtkWidget**) selection_data_data;
-        if (!GTK_IS_WIDGET (container))
-          return;
-
-        moving_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
-        g_warn_if_fail (TERMINAL_IS_SCREEN (moving_screen));
-        if (!TERMINAL_IS_SCREEN (moving_screen))
-          return;
-
-        source_window = terminal_screen_get_window (moving_screen);
-        dest_window = terminal_screen_get_window (screen);
-        terminal_window_move_screen (source_window, dest_window, moving_screen, -1);
-
-        gtk_drag_finish (context, TRUE, TRUE, timestamp);
-      }
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
 #endif
+
+static gboolean
+terminal_screen_drop_target_drop (TerminalScreen     *screen,
+                                  GdkDrop            *drop,
+                                  double              x,
+                                  double              y,
+                                  GtkDropTargetAsync *drop_target)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  GdkContentFormats *formats;
+
+  g_assert (TERMINAL_IS_SCREEN (screen));
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (GTK_IS_DROP_TARGET_ASYNC (drop_target));
+
+  formats = gdk_drop_get_formats (drop);
+
+  if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_FILE_LIST)) {
+    gdk_drop_read_value_async (drop,
+                               GDK_TYPE_FILE_LIST,
+                               G_PRIORITY_DEFAULT,
+                               nullptr,
+                               terminal_screen_drop_file_list_cb,
+                               g_object_ref (screen));
+    return TRUE;
+  } else if (gdk_content_formats_contain_gtype (formats, G_TYPE_STRING)) {
+    gdk_drop_read_value_async (drop,
+                               G_TYPE_STRING,
+                               G_PRIORITY_DEFAULT,
+                               nullptr,
+                               terminal_screen_drop_string_cb,
+                               g_object_ref (screen));
+    return TRUE;
+  } else if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_RGBA)) {
+    gdk_drop_read_value_async (drop,
+                               GDK_TYPE_RGBA,
+                               G_PRIORITY_DEFAULT,
+                               nullptr,
+                               terminal_screen_drop_color_cb,
+                               g_object_ref (screen));
+    return TRUE;
+  } else if (gdk_content_formats_contain_mime_type (formats, "text/x-moz-url")) {
+    gdk_drop_read_async (drop,
+                         (const char **)((const char * const []){"text/x-moz-url", nullptr}),
+                         G_PRIORITY_DEFAULT,
+                         nullptr,
+                         terminal_screen_drop_moz_url_cb,
+                         g_object_ref (screen));
+    return TRUE;
+  } else if (gdk_content_formats_contain_mime_type (formats, "x-special/gnome-reset-background")) {
+      g_settings_reset (priv->profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY);
+      gdk_drop_finish (drop, GDK_ACTION_COPY);
+      return TRUE;
+  }
+
+  return FALSE;
+}
 
 void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
