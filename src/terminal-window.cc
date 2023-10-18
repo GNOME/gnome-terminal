@@ -1453,6 +1453,23 @@ remove_popup_info (TerminalWindow *window)
 }
 
 static void
+menu_append_item(GMenu* menu,
+                 GMenuItem* item)
+{
+  g_menu_item_set_attribute(item, "accel", "s", "");
+  g_menu_append_item(menu, item);
+}
+
+static void
+menu_append(GMenu* menu,
+            char const* label,
+            char const* detailed_action)
+{
+  gs_unref_object auto item = g_menu_item_new(label, detailed_action);
+  menu_append_item(menu, item);
+}
+
+static void
 screen_show_popup_menu_cb (TerminalScreen *screen,
                            TerminalScreenPopupInfo *info,
                            TerminalWindow *window)
@@ -1471,8 +1488,8 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   if (info->hyperlink != nullptr) {
     gs_unref_object GMenu *section1 = g_menu_new ();
 
-    g_menu_append (section1, _("Open _Hyperlink"), "win.open-hyperlink");
-    g_menu_append (section1, _("Copy Hyperlink _Address"), "win.copy-hyperlink");
+    menu_append (section1, _("Open _Hyperlink"), "win.open-hyperlink");
+    menu_append (section1, _("Copy Hyperlink _Address"), "win.copy-hyperlink");
     g_menu_append_section (menu, nullptr, G_MENU_MODEL (section1));
   }
   /* Matched link section */
@@ -1497,8 +1514,8 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
       break;
     }
 
-    g_menu_append (section2, open_label, "win.open-match");
-    g_menu_append (section2, copy_label, "win.copy-match");
+    menu_append (section2, open_label, "win.open-match");
+    menu_append (section2, copy_label, "win.copy-match");
     g_menu_append_section (menu, nullptr, G_MENU_MODEL (section2));
   }
 
@@ -1515,14 +1532,14 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
         info->number_info != nullptr) {
       /* Non-existent action will make this item insensitive */
       gs_unref_object GMenuItem *item3 = g_menu_item_new (info->number_info, "win.notexist");
-      g_menu_append_item (section3, item3);
+      menu_append_item (section3, item3);
     }
 
     if (g_str_equal (citem, "timestamps") &&
         info->timestamp_info != nullptr) {
       /* Non-existent action will make this item insensitive */
       gs_unref_object GMenuItem *item3 = g_menu_item_new (info->timestamp_info, "win.notexist");
-      g_menu_append_item (section3, item3);
+      menu_append_item (section3, item3);
     }
   }
 
@@ -1532,17 +1549,17 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   /* Clipboard section */
   gs_unref_object GMenu *section4 = g_menu_new ();
 
-  g_menu_append (section4, _("_Copy"), "win.copy::text");
-  g_menu_append (section4, _("Copy as _HTML"), "win.copy::html");
-  g_menu_append (section4, _("_Paste"), "win.paste-text");
+  menu_append (section4, _("_Copy"), "win.copy::text");
+  menu_append (section4, _("Copy as _HTML"), "win.copy::html");
+  menu_append (section4, _("_Paste"), "win.paste-text");
   if (g_action_get_enabled (G_ACTION (lookup_action (window, "paste-uris"))))
-    g_menu_append (section4, _("Paste as _Filenames"), "win.paste-uris");
+    menu_append (section4, _("Paste as _Filenames"), "win.paste-uris");
 
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section4));
 
   /* Profile and property section */
   gs_unref_object GMenu *section5 = g_menu_new ();
-  g_menu_append (section5, _("Read-_Only"), "win.read-only");
+  menu_append (section5, _("Read-_Only"), "win.read-only");
 
   GMenuModel *profiles_menu = terminal_app_get_profile_section (app);
   if (profiles_menu != nullptr && g_menu_model_get_n_items (profiles_menu) > 1) {
@@ -1554,7 +1571,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     g_menu_append_item (section5, item5);
   }
 
-  g_menu_append (section5, _("_Preferences"), "win.edit-preferences");
+  menu_append (section5, _("_Preferences"), "win.edit-preferences");
 
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section5));
 
@@ -1564,7 +1581,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     gs_unref_object GMenuItem *item6 = g_menu_item_new (_("New _Terminal"), nullptr);
     g_menu_item_set_action_and_target (item6, "win.new-terminal",
                                        "(ss)", "default", "current");
-    g_menu_append_item (section6, item6);
+    menu_append_item (section6, item6);
   } else {
     gs_unref_object GMenuItem *item61 = g_menu_item_new (_("New _Window"), nullptr);
     g_menu_item_set_action_and_target (item61, "win.new-terminal",
@@ -1573,14 +1590,14 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     gs_unref_object GMenuItem *item62 = g_menu_item_new (_("New _Tab"), nullptr);
     g_menu_item_set_action_and_target (item62, "win.new-terminal",
                                        "(ss)", "tab", "current");
-    g_menu_append_item (section6, item62);
+    menu_append_item (section6, item62);
   }
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section6));
 
   /* Window section */
   gs_unref_object GMenu *section7 = g_menu_new ();
   if (gtk_window_is_fullscreen (GTK_WINDOW (window)))
-    g_menu_append (section7, _("Leave Full Screen"), "win.toggle-fullscreen");
+    menu_append (section7, _("Leave Full Screen"), "win.toggle-fullscreen");
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section7));
 
   if (window->context_menu == nullptr) {
