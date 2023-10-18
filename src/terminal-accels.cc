@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 #include "terminal-accels.hh"
+#include "terminal-accel-row.hh"
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
 #include "terminal-schemas.hh"
@@ -248,16 +249,6 @@ static GSettings *keybinding_settings = nullptr;
 GS_DEFINE_CLEANUP_FUNCTION(GtkTreePath*, _terminal_local_free_tree_path, gtk_tree_path_free)
 #define terminal_free_tree_path __attribute__((__cleanup__(_terminal_local_free_tree_path)))
 
-static char*
-binding_name (guint            keyval,
-              GdkModifierType  mask)
-{
-  if (keyval != 0)
-    return gtk_accelerator_name (keyval, mask);
-
-  return g_strdup ("disabled");
-}
-
 static void
 key_changed_cb (GSettings *settings,
                 const char *settings_key,
@@ -395,221 +386,39 @@ terminal_accels_shutdown (void)
   g_clear_object (&keybinding_settings);
 }
 
-static gboolean
-foreach_row_cb (GtkTreeModel *model,
-                GtkTreePath  *path,
-                GtkTreeIter  *iter,
-                gpointer      data)
+GSettings *
+terminal_accels_get_settings (void)
 {
-  const char *key = (char const*)data;
-  KeyEntry *key_entry;
+  g_return_val_if_fail (keybinding_settings != nullptr, nullptr);
 
-  gtk_tree_model_get (model, iter,
-		      KEYVAL_COLUMN, &key_entry,
-		      -1);
-
-  if (key_entry == nullptr ||
-      !g_str_equal (key_entry->settings_key, key))
-    return FALSE;
-
-  gtk_tree_model_row_changed (model, path, iter);
-  return TRUE;
+  return keybinding_settings;
 }
 
-static void
-treeview_key_changed_cb (GSettings *settings,
-                         const char *key,
-                         GtkTreeView *tree_view)
-{
-  gtk_tree_model_foreach (gtk_tree_view_get_model (tree_view), foreach_row_cb, (gpointer) key);
-}
-
-static void
-accel_set_func (GtkTreeViewColumn *tree_column,
-                GtkCellRenderer   *cell,
-                GtkTreeModel      *model,
-                GtkTreeIter       *iter,
-                gpointer           data)
-{
-  KeyEntry *ke;
-
-  gtk_tree_model_get (model, iter,
-                      KEYVAL_COLUMN, &ke,
-                      -1);
-
-  if (ke == nullptr) {
-    /* This is a title row */
-    g_object_set (cell,
-                  "visible", FALSE,
-		  nullptr);
-  } else {
-    gs_free char *value;
-    guint key;
-    GdkModifierType mods;
-    gboolean writable;
-    GtkWidget *button = (GtkWidget*)data;
-
-    value = g_settings_get_string (keybinding_settings, ke->settings_key);
-    gtk_accelerator_parse (value, &key, &mods);
-
-    writable = g_settings_is_writable (keybinding_settings, ke->settings_key) &&
-               gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
-
-    g_object_set (cell,
-                  "visible", TRUE,
-                  "sensitive", writable,
-                  "editable", writable,
-                  "accel-key", key,
-                  "accel-mods", mods,
-		  nullptr);
-  }
-}
-
-static void
-accel_update (GtkTreeView          *view,
-              GtkCellRendererAccel *cell,
-              gchar                *path_string,
-              guint                 keyval,
-              GdkModifierType       mask)
-{
-  GtkTreeModel *model;
-  terminal_free_tree_path GtkTreePath *path = nullptr;
-  GtkTreeIter iter;
-  KeyEntry *ke;
-  gs_free char *str = nullptr;
-
-  model = gtk_tree_view_get_model (view);
-
-  path = gtk_tree_path_new_from_string (path_string);
-  if (!path)
-    return;
-
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    return;
-
-  gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
-
-  /* sanity check */
-  if (ke == nullptr)
-    return;
-
-  str = binding_name (keyval, mask);
-  g_settings_set_string (keybinding_settings, ke->settings_key, str);
-}
-
-static void
-accel_edited_callback (GtkCellRendererAccel *cell,
-                       gchar                *path_string,
-                       guint                 keyval,
-                       GdkModifierType       mask,
-                       guint                 hardware_keycode,
-                       GtkTreeView          *view)
-{
-  accel_update (view, cell, path_string, keyval, mask);
-}
-
-static void
-accel_cleared_callback (GtkCellRendererAccel *cell,
-                        gchar                *path_string,
-                        GtkTreeView          *view)
-{
-  accel_update (view, cell, path_string, 0, GdkModifierType(0));
-}
-
-static void
-treeview_destroy_cb (GtkWidget *tree_view,
-                     gpointer user_data)
-{
-  g_signal_handlers_disconnect_by_func (keybinding_settings,
-                                        (void*)treeview_key_changed_cb,
-                                        tree_view);
-}
-
-#ifdef ENABLE_DEBUG
-static void
-row_changed (GtkTreeModel *tree_model,
-             GtkTreePath  *path,
-             GtkTreeIter  *iter,
-             gpointer      user_data)
-{
-  _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
-                         "ROW-CHANGED [%s]\n", gtk_tree_path_to_string (path) /* leak */);
-}
-#endif
-
+#ifdef TERMINAL_PREFERENCES
 void
-terminal_accels_fill_treeview (GtkWidget *tree_view,
-                               GtkWidget *disable_shortcuts_button)
+terminal_accels_populate_preferences (AdwPreferencesPage *page)
 {
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *cell_renderer;
-  gs_unref_object GtkTreeStore *tree = nullptr;
-  guint i;
+  g_return_if_fail (ADW_IS_PREFERENCES_PAGE (page));
 
-  /* Column 1 */
-  cell_renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("_Action"),
-						     cell_renderer,
-						     "text", ACTION_COLUMN,
-						     nullptr);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-
-  /* Column 2 */
-  cell_renderer = gtk_cell_renderer_accel_new ();
-  g_object_set (cell_renderer,
-                "editable", TRUE,
-                "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
-                nullptr);
-
-  g_signal_connect (cell_renderer, "accel-edited",
-                    G_CALLBACK (accel_edited_callback), tree_view);
-  g_signal_connect (cell_renderer, "accel-cleared",
-                    G_CALLBACK (accel_cleared_callback), tree_view);
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
-  gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func,
-                                           disable_shortcuts_button, nullptr);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-
-  /* Add the data */
-
-  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
-
-#ifdef ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
-    g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), nullptr);
-#endif
-
-  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
+  for (guint i = 0; i < G_N_ELEMENTS (all_entries); i++)
     {
-      GtkTreeIter parent_iter;
-      guint j;
+      AdwPreferencesGroup *group = ADW_PREFERENCES_GROUP (adw_preferences_group_new ());
 
-      gtk_tree_store_insert_with_values (tree, &parent_iter, nullptr, -1,
-                                         ACTION_COLUMN, _(all_entries[i].user_visible_name),
-                                         KEYVAL_COLUMN, nullptr,
-                                         -1);
+      adw_preferences_group_set_title (group, all_entries[i].user_visible_name);
 
-      for (j = 0; j < all_entries[i].n_elements; ++j)
-	{
-	  KeyEntry *key_entry = &(all_entries[i].key_entry[j]);
-	  GtkTreeIter iter;
+      for (guint j = 0; j < all_entries[i].n_elements; ++j)
+        {
+          const KeyEntry *key_entry = &(all_entries[i].key_entry[j]);
+          TerminalAccelRow *row;
 
-          gtk_tree_store_insert_with_values (tree, &iter, &parent_iter, -1,
-                                             ACTION_COLUMN, _(key_entry->user_visible_name),
-                                             KEYVAL_COLUMN, key_entry,
-                                             -1);
-	}
+          row = (TerminalAccelRow *)g_object_new (TERMINAL_TYPE_ACCEL_ROW,
+                                                  "key", key_entry->settings_key,
+                                                  "title", key_entry->user_visible_name,
+                                                  nullptr);
+          adw_preferences_group_add (group, GTK_WIDGET (row));
+        }
+
+      adw_preferences_page_add (page, group);
     }
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (tree));
-
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-
-  g_signal_connect (keybinding_settings, "changed",
-                    G_CALLBACK (treeview_key_changed_cb), tree_view);
-  g_signal_connect (tree_view, "destroy",
-                    G_CALLBACK (treeview_destroy_cb), tree);
 }
+#endif
