@@ -170,6 +170,8 @@ void terminal_screen_paste_text (TerminalScreen* screen,
                                  char const* text,
                                  gssize len);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (TerminalScreen, g_object_unref)
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_H */
