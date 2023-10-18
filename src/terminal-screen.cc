@@ -41,6 +41,7 @@
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
 
+#include <adwaita.h>
 #include <gtk/gtk.h>
 
 #ifdef GDK_WINDOWING_X11
@@ -136,6 +137,7 @@ struct _TerminalScreenPrivate
   guint size_dismiss_source;
 
   GtkDropTargetAsync *drop_target;
+  GtkWidget *drop_highlight;
 };
 
 enum
@@ -164,6 +166,14 @@ static gboolean terminal_screen_drop_target_drop (TerminalScreen     *screen,
                                                   double              x,
                                                   double              y,
                                                   GtkDropTargetAsync *drop_target);
+static GdkDragAction terminal_screen_drop_target_drag_enter (TerminalScreen     *screen,
+                                                             GdkDrop            *drop,
+                                                             double              x,
+                                                             double              y,
+                                                             GtkDropTargetAsync *drop_target);
+static void terminal_screen_drop_target_drag_leave (TerminalScreen     *screen,
+                                                    GdkDrop            *drop,
+                                                    GtkDropTargetAsync *drop_target);
 static void terminal_screen_set_font (TerminalScreen *screen);
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
@@ -586,6 +596,9 @@ terminal_screen_size_allocate (GtkWidget *widget,
   revealer_alloc.width = min.width;
   revealer_alloc.height = min.height;
   gtk_widget_size_allocate (GTK_WIDGET (priv->size_revealer), &revealer_alloc, -1);
+
+  gtk_widget_get_preferred_size (GTK_WIDGET (priv->drop_highlight), &min, nullptr);
+  gtk_widget_allocate (priv->drop_highlight, width, height, baseline, nullptr);
 }
 
 static void
@@ -597,6 +610,7 @@ terminal_screen_snapshot (GtkWidget   *widget,
 
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->snapshot (widget, snapshot);
 
+  gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->drop_highlight), snapshot);
   gtk_widget_snapshot_child (widget, GTK_WIDGET (priv->size_revealer), snapshot);
 }
 
@@ -796,17 +810,22 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/screen.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, drop_target);
+  gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, drop_highlight);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_bubble_click_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_capture_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drag_enter);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drag_leave);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drop);
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
   precompile_regexes (extra_regex_patterns, n_extra_regexes, &extra_regexes, &extra_regex_flavors);
+
+  g_type_ensure (ADW_TYPE_BIN);
 }
 
 static void
@@ -2457,6 +2476,36 @@ terminal_screen_drop_target_drop (TerminalScreen     *screen,
   }
 
   return FALSE;
+}
+
+static GdkDragAction
+terminal_screen_drop_target_drag_enter (TerminalScreen     *screen,
+                                        GdkDrop            *drop,
+                                        double              x,
+                                        double              y,
+                                        GtkDropTargetAsync *drop_target)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  g_assert (TERMINAL_IS_SCREEN (screen));
+  g_assert (GTK_IS_DROP_TARGET_ASYNC (drop_target));
+
+  gtk_widget_show (priv->drop_highlight);
+
+  return GDK_ACTION_COPY;
+}
+
+static void
+terminal_screen_drop_target_drag_leave (TerminalScreen     *screen,
+                                        GdkDrop            *drop,
+                                        GtkDropTargetAsync *drop_target)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  g_assert (TERMINAL_IS_SCREEN (screen));
+  g_assert (GTK_IS_DROP_TARGET_ASYNC (drop_target));
+
+  gtk_widget_hide (priv->drop_highlight);
 }
 
 void
