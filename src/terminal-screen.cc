@@ -68,6 +68,13 @@
 #define URL_MATCH_CURSOR_NAME "pointer"
 #define SIZE_DISMISS_TIMEOUT_MSEC 1000
 
+#define DROP_REQUEST_PRIORITY               G_PRIORITY_DEFAULT
+#define APPLICATION_VND_PORTAL_FILETRANSFER "application/vnd.portal.filetransfer"
+#define APPLICATION_VND_PORTAL_FILES        "application/vnd.portal.files"
+#define TEXT_X_MOZ_URL                      "text/x-moz-url"
+#define TEXT_URI_LIST                       "text/uri-list"
+#define X_SPECIAL_GNOME_RESET_BACKGROUND    "x-special/gnome-reset-background"
+
 namespace {
 
 typedef struct {
@@ -102,6 +109,13 @@ typedef struct
   int tag;
   TerminalURLFlavor flavor;
 } TagData;
+
+typedef struct {
+  TerminalScreen *screen;
+  GdkDrop *drop;
+  GList *files;
+  const char *mime_type;
+} TextUriList;
 
 struct _TerminalScreenPrivate
 {
@@ -207,6 +221,9 @@ static void terminal_screen_menu_popup_action (GtkWidget  *widget,
                                                GVariant   *param);
 
 static void terminal_screen_queue_idle_exec (TerminalScreen *screen);
+
+static void text_uri_list_free (TextUriList *uri_list);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (TextUriList, text_uri_list_free)
 
 static guint signals[LAST_SIGNAL];
 
@@ -624,8 +641,11 @@ terminal_screen_init (TerminalScreen *screen)
   gdk_content_formats_builder_add_gtype (builder, G_TYPE_STRING);
   gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
   gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_RGBA);
-  gdk_content_formats_builder_add_mime_type (builder, "text/x-moz-url");
-  gdk_content_formats_builder_add_mime_type (builder, "x-special/gnome-reset-background");
+  gdk_content_formats_builder_add_mime_type (builder, APPLICATION_VND_PORTAL_FILES);
+  gdk_content_formats_builder_add_mime_type (builder, APPLICATION_VND_PORTAL_FILETRANSFER);
+  gdk_content_formats_builder_add_mime_type (builder, TEXT_URI_LIST);
+  gdk_content_formats_builder_add_mime_type (builder, TEXT_X_MOZ_URL);
+  gdk_content_formats_builder_add_mime_type (builder, X_SPECIAL_GNOME_RESET_BACKGROUND);
   g_autoptr(GdkContentFormats) formats = gdk_content_formats_builder_free_to_formats (builder);
 
   gtk_drop_target_async_set_actions (priv->drop_target,
@@ -2086,33 +2106,25 @@ terminal_screen_child_exited (VteTerminal *terminal,
 }
 
 static void
-terminal_screen_drop_file_list_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+text_uri_list_free (TextUriList *uri_list)
 {
-  GdkDrop *drop = (GdkDrop *)object;
-  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
-  g_autoptr(GError) error = nullptr;
-  const GValue *value;
-  const GList *file_list;
+  g_clear_object (&uri_list->screen);
+  g_clear_object (&uri_list->drop);
+  g_clear_list (&uri_list->files, g_object_unref);
+  uri_list->mime_type = nullptr;
+  g_free (uri_list);
+}
 
-  g_assert (GDK_IS_DROP (drop));
-  g_assert (G_IS_ASYNC_RESULT (result));
+static void
+terminal_screen_drop_file_list (TerminalScreen *screen,
+                                const GList    *files)
+{
   g_assert (TERMINAL_IS_SCREEN (screen));
-
-  if (!(value = gdk_drop_read_value_finish (drop, result, &error))) {
-    gdk_drop_finish (drop, GdkDragAction(0));
-    return;
-  }
-
-  g_assert (value != nullptr);
-  g_assert (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST));
-
-  file_list = (const GList *)g_value_get_boxed (value);
+  g_assert (files == nullptr || G_IS_FILE (files->data));
 
   g_autoptr(GString) string = g_string_new (nullptr);
 
-  for (const GList *iter = file_list; iter; iter = iter->next) {
+  for (const GList *iter = files; iter; iter = iter->next) {
     GFile *file = G_FILE (iter->data);
 
     if (g_file_is_native (file)) {
@@ -2129,8 +2141,140 @@ terminal_screen_drop_file_list_cb (GObject      *object,
     }
   }
 
-  terminal_screen_paste_text (screen, string->str, string->len);
+  if (string->len > 0)
+    terminal_screen_paste_text (screen, string->str, string->len);
+}
 
+static void
+terminal_screen_drop_uri_list_line_cb (GObject      *object,
+                                       GAsyncResult *result,
+                                       gpointer      user_data)
+{
+  GDataInputStream *line_reader = G_DATA_INPUT_STREAM (object);
+  g_autoptr(TextUriList) state = (TextUriList*)user_data;
+  g_autoptr(GError) error = nullptr;
+  g_autofree char *line = nullptr;
+  gsize len = 0;
+
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state != nullptr);
+  g_assert (TERMINAL_IS_SCREEN (state->screen));
+  g_assert (GDK_IS_DROP (state->drop));
+
+  line = g_data_input_stream_read_line_finish_utf8 (line_reader, result, &len, &error);
+
+  if (error != nullptr) {
+    g_debug ("Failed to receive '%s': %s", state->mime_type, error->message);
+    gdk_drop_finish (state->drop, GdkDragAction(0));
+    return;
+  }
+
+  if (line != nullptr && line[0] != 0 && line[0] != '#') {
+    GFile *file = g_file_new_for_uri (line);
+
+    if (file != nullptr) {
+      state->files = g_list_append (state->files, file);
+    }
+  }
+
+  if (line == nullptr || g_strcmp0 (state->mime_type, TEXT_X_MOZ_URL) == 0) {
+    terminal_screen_drop_file_list (state->screen, state->files);
+    gdk_drop_finish (state->drop, GDK_ACTION_COPY);
+    return;
+  }
+
+  g_data_input_stream_read_line_async (line_reader,
+                                       DROP_REQUEST_PRIORITY,
+                                       nullptr,
+                                       terminal_screen_drop_uri_list_line_cb,
+                                       g_steal_pointer (&state));
+}
+
+static void
+terminal_screen_drop_uri_list_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GError) error = nullptr;
+  g_autoptr(GInputStream) stream = nullptr;
+  g_autoptr(GDataInputStream) line_reader = nullptr;
+  g_autoptr(TextUriList) state = nullptr;
+  const char *mime_type = nullptr;
+
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(stream = gdk_drop_read_finish (drop, result, &mime_type, &error))) {
+    g_debug ("Failed to receive text/uri-list offer: %s", error->message);
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
+
+  g_assert (g_strcmp0 (mime_type, TEXT_URI_LIST) == 0);
+  g_assert (G_IS_INPUT_STREAM (stream));
+
+  line_reader = g_data_input_stream_new (stream);
+  g_data_input_stream_set_newline_type (line_reader,
+                                        G_DATA_STREAM_NEWLINE_TYPE_CR_LF);
+
+  state = g_new0 (TextUriList, 1);
+  state->screen = g_object_ref (screen);
+  state->drop = g_object_ref (drop);
+  state->mime_type = g_intern_string (mime_type);
+
+  g_data_input_stream_read_line_async (line_reader,
+                                       DROP_REQUEST_PRIORITY,
+                                       nullptr,
+                                       terminal_screen_drop_uri_list_line_cb,
+                                       g_steal_pointer (&state));
+}
+
+static void
+terminal_screen_drop_file_list_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  GdkDrop *drop = (GdkDrop *)object;
+  g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GError) error = nullptr;
+  const GValue *value;
+  const GList *file_list;
+
+  g_assert (GDK_IS_DROP (drop));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (TERMINAL_IS_SCREEN (screen));
+
+  if (!(value = gdk_drop_read_value_finish (drop, result, &error))) {
+    g_debug ("Failed to receive file-list offer: %s", error->message);
+
+    /* If the user dragged a directory from Nautilus or another
+     * new-style application, a portal request would be made. But
+     * GTK won't be able to open the directory so the request for
+     * APPLICATION_VND_PORTAL_FILETRANSFER will fail. Fallback to
+     * opening the request via TEXT_URI_LIST gracefully.
+     */
+    if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_FOUND) ||
+        g_error_matches (error, G_IO_ERROR, G_DBUS_ERROR_ACCESS_DENIED))
+      gdk_drop_read_async (drop,
+                           (const char **)(const char * const[]){TEXT_URI_LIST, nullptr},
+                           DROP_REQUEST_PRIORITY,
+                           nullptr,
+                           terminal_screen_drop_uri_list_cb,
+                           g_object_ref (screen));
+    else
+      gdk_drop_finish (drop, GdkDragAction(0));
+
+    return;
+  }
+
+  g_assert (value != nullptr);
+  g_assert (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST));
+
+  file_list = (const GList *)g_value_get_boxed (value);
+  terminal_screen_drop_file_list (screen, file_list);
   gdk_drop_finish (drop, GDK_ACTION_COPY);
 }
 
@@ -2199,22 +2343,19 @@ terminal_screen_drop_color_cb (GObject      *object,
 }
 
 static void
-terminal_screen_read_moz_url_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
-{
-}
-
-static void
 terminal_screen_drop_moz_url_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
   GdkDrop *drop = (GdkDrop *)object;
   g_autoptr(TerminalScreen) screen = TERMINAL_SCREEN (user_data);
+  g_autoptr(GCharsetConverter) converter = nullptr;
+  g_autoptr(GDataInputStream) line_reader = nullptr;
+  g_autoptr(GInputStream) converter_stream = nullptr;
   g_autoptr(GInputStream) stream = nullptr;
   g_autoptr(GError) error = nullptr;
   const char *mime_type = nullptr;
+  TextUriList *state;
 
   g_assert (GDK_IS_DROP (drop));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -2227,79 +2368,35 @@ terminal_screen_drop_moz_url_cb (GObject      *object,
 
   g_assert (G_IS_INPUT_STREAM (stream));
 
-#if 0
-  /* TODO: need screen + drop_target */
-  g_input_stream_read_bytes_async (stream,
-                                   4096,
-                                   G_PRIORITY_DEFAULT,
-                                   nullptr,
-                                   terminal_screen_read_moz_url_cb,
-                                   g_object_ref (screen);
-#endif
+  if (!(converter = g_charset_converter_new ("UTF-8", "UCS-2", &error))) {
+    g_debug ("Failed to create UTF-8 decoder: %s", error->message);
+    gdk_drop_finish (drop, GdkDragAction(0));
+    return;
+  }
 
-  gdk_drop_finish (drop, GDK_ACTION_COPY);
+  /* TEXT_X_MOZ_URL is in UCS-2 so convert it to UTF-8.
+   *
+   * The data is expected to be URL, a \n, then the title of the web page.
+   *
+   * However, some applications (e.g. dolphin) delimit with a \r\n (see
+   * issue#293) so handle that generically with the line reader.
+   */
+  converter_stream = g_converter_input_stream_new (stream, G_CONVERTER (converter));
+  line_reader = g_data_input_stream_new (converter_stream);
+  g_data_input_stream_set_newline_type (line_reader,
+                                        G_DATA_STREAM_NEWLINE_TYPE_ANY);
+
+  state = g_new0 (TextUriList, 1);
+  state->screen = g_object_ref (screen);
+  state->drop = g_object_ref (drop);
+  state->mime_type = g_intern_string (TEXT_X_MOZ_URL);
+
+  g_data_input_stream_read_line_async (line_reader,
+                                       DROP_REQUEST_PRIORITY,
+                                       nullptr,
+                                       terminal_screen_drop_uri_list_line_cb,
+                                       g_steal_pointer (&state));
 }
-
-#ifdef GTK4_TODO
-  if (gtk_targets_include_uri (&selection_data_target, 1))
-    {
-      gs_strfreev char **uris;
-      gs_free char *text = nullptr;
-      gsize len;
-
-      uris = gtk_selection_data_get_uris (selection_data);
-      if (!uris)
-        return;
-
-      terminal_util_transform_uris_to_quoted_fuse_paths (uris);
-
-      text = terminal_util_concat_uris (uris, &len);
-      terminal_screen_paste_text (screen, text, len);
-    }
-  else if (gtk_targets_include_text (&selection_data_target, 1))
-    {
-      gs_free char *text;
-
-      text = (char *) gtk_selection_data_get_text (selection_data);
-      if (text && text[0])
-        terminal_screen_paste_text (screen, text, -1);
-    }
-    case TARGET_MOZ_URL:
-      {
-        char *utf8_data, *text;
-        char *uris[2];
-        gsize len;
-        
-        /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
-         *
-         * The data contains the URL, a \n, then the
-         * title of the web page.
-         *
-         * Note that some producers (e.g. dolphin) delimit with a \r\n
-         * (see issue#293), so we need to handle that, too.
-         */
-        if (selection_data_format != 8 ||
-            selection_data_length == 0 ||
-            (selection_data_length % 2) != 0)
-          return;
-
-        utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data_data,
-                                     selection_data_length / 2,
-                                     nullptr, nullptr, nullptr);
-        if (!utf8_data)
-          return;
-
-        uris[0] = g_strdelimit(utf8_data, "\r\n", 0);
-        uris[1] = nullptr;
-        terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
-
-        text = terminal_util_concat_uris (uris, &len);
-        terminal_screen_paste_text (screen, text, len);
-        g_free (text);
-        g_free (uris[0]);
-      }
-      break;
-#endif
 
 static gboolean
 terminal_screen_drop_target_drop (TerminalScreen     *screen,
@@ -2317,42 +2414,46 @@ terminal_screen_drop_target_drop (TerminalScreen     *screen,
 
   formats = gdk_drop_get_formats (drop);
 
-  if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_FILE_LIST)) {
+  if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_FILE_LIST) ||
+      gdk_content_formats_contain_gtype (formats, G_TYPE_FILE) ||
+      gdk_content_formats_contain_mime_type (formats, TEXT_URI_LIST) ||
+      gdk_content_formats_contain_mime_type (formats, APPLICATION_VND_PORTAL_FILETRANSFER) ||
+      gdk_content_formats_contain_mime_type (formats, APPLICATION_VND_PORTAL_FILES)) {
     gdk_drop_read_value_async (drop,
                                GDK_TYPE_FILE_LIST,
-                               G_PRIORITY_DEFAULT,
+                               DROP_REQUEST_PRIORITY,
                                nullptr,
                                terminal_screen_drop_file_list_cb,
-                               g_object_ref (screen));
-    return TRUE;
-  } else if (gdk_content_formats_contain_gtype (formats, G_TYPE_STRING)) {
-    gdk_drop_read_value_async (drop,
-                               G_TYPE_STRING,
-                               G_PRIORITY_DEFAULT,
-                               nullptr,
-                               terminal_screen_drop_string_cb,
                                g_object_ref (screen));
     return TRUE;
   } else if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_RGBA)) {
     gdk_drop_read_value_async (drop,
                                GDK_TYPE_RGBA,
-                               G_PRIORITY_DEFAULT,
+                               DROP_REQUEST_PRIORITY,
                                nullptr,
                                terminal_screen_drop_color_cb,
                                g_object_ref (screen));
     return TRUE;
-  } else if (gdk_content_formats_contain_mime_type (formats, "text/x-moz-url")) {
+  } else if (gdk_content_formats_contain_mime_type (formats, TEXT_X_MOZ_URL)) {
     gdk_drop_read_async (drop,
-                         (const char **)((const char * const []){"text/x-moz-url", nullptr}),
-                         G_PRIORITY_DEFAULT,
+                         (const char **)((const char * const []){TEXT_X_MOZ_URL, nullptr}),
+                         DROP_REQUEST_PRIORITY,
                          nullptr,
                          terminal_screen_drop_moz_url_cb,
                          g_object_ref (screen));
     return TRUE;
-  } else if (gdk_content_formats_contain_mime_type (formats, "x-special/gnome-reset-background")) {
+  } else if (gdk_content_formats_contain_mime_type (formats, X_SPECIAL_GNOME_RESET_BACKGROUND)) {
       g_settings_reset (priv->profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY);
       gdk_drop_finish (drop, GDK_ACTION_COPY);
       return TRUE;
+  } else if (gdk_content_formats_contain_gtype (formats, G_TYPE_STRING)) {
+    gdk_drop_read_value_async (drop,
+                               G_TYPE_STRING,
+                               DROP_REQUEST_PRIORITY,
+                               nullptr,
+                               terminal_screen_drop_string_cb,
+                               g_object_ref (screen));
+    return TRUE;
   }
 
   return FALSE;
