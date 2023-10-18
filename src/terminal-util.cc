@@ -1677,6 +1677,16 @@ xte_data_check(char const* name,
   if (xte_data_check_one(user_path, full))
     return true;
 
+  gs_free auto flatpak_user_path = g_build_filename(g_get_user_data_dir(),
+                                                    "flatpak",
+                                                    "exports",
+                                                    "share",
+                                                    "applications",
+                                                    name,
+                                                    nullptr);
+  if (xte_data_check_one(flatpak_user_path, full))
+    return true;
+
   gs_free auto local_path = g_build_filename(TERM_PREFIX, "local", "share",
                                              XTE_CONFIG_DIRNAME,
                                              name,
@@ -1689,6 +1699,12 @@ xte_data_check(char const* name,
                                            name,
                                            nullptr);
   if (xte_data_check_one(sys_path, full))
+    return true;
+
+  gs_free auto flatpak_system_path = g_build_filename("/var/lib/flatpak/exports/share/applications",
+                                                      name,
+                                                      nullptr);
+  if (xte_data_check_one(flatpak_system_path, full))
     return true;
 
   return false;
