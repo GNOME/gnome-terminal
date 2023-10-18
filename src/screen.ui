@@ -40,6 +40,8 @@
     <child>
       <object class="GtkDropTargetAsync" id="drop_target">
         <signal name="drop" handler="terminal_screen_drop_target_drop" swapped="1" object="TerminalScreen"/>
+        <signal name="drag-enter" handler="terminal_screen_drop_target_drag_enter" swapped="1" object="TerminalScreen"/>
+        <signal name="drag-leave" handler="terminal_screen_drop_target_drag_leave" swapped="1" object="TerminalScreen"/>
       </object>
     </child>
     <child>
@@ -59,6 +61,14 @@
             </attributes>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBin" id="drop_highlight">
+        <property name="visible">false</property>
+        <style>
+          <class name="drop-highlight"/>
+        </style>
       </object>
     </child>
   </template>
