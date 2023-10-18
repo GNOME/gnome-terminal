@@ -54,7 +54,7 @@
 #endif
 
 #ifdef TERMINAL_PREFERENCES
-#include "terminal-prefs.hh"
+#include "terminal-preferences-window.hh"
 #endif
 
 #ifndef TERMINAL_SERVER
@@ -1429,7 +1429,12 @@ terminal_app_edit_preferences(TerminalApp* app,
   }
 #endif /* TERMINAL_SERVER */
 #ifdef TERMINAL_PREFERENCES
-  terminal_prefs_show_preferences(profile, hint, timestamp);
+  {
+    GtkWidget *window = terminal_preferences_window_new ();
+
+    gtk_window_set_application (GTK_WINDOW (window), GTK_APPLICATION (app));
+    gtk_window_present_with_time (GTK_WINDOW (window), timestamp);
+  }
 #endif
 }
 

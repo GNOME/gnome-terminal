@@ -323,10 +323,14 @@ prefs_resources_sources = gnome.compile_resources(
 
 prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'prefs-main.cc',
-  'profile-editor.cc',
-  'profile-editor.hh',
-  'terminal-prefs.cc',
-  'terminal-prefs.hh',
+  'terminal-accel-dialog.cc',
+  'terminal-accel-dialog.hh',
+  'terminal-accel-row.cc',
+  'terminal-accel-row.hh',
+  'terminal-preferences-list-item.cc',
+  'terminal-preferences-list-item.hh',
+  'terminal-preferences-window.cc',
+  'terminal-preferences-window.hh',
   'terminal-settings-bridge-backend.cc',
   'terminal-settings-bridge-backend.hh',
 )
