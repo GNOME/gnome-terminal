@@ -38,6 +38,11 @@
       </object>
     </child>
     <child>
+      <object class="GtkDropTargetAsync" id="drop_target">
+        <signal name="drop" handler="terminal_screen_drop_target_drop" swapped="1" object="TerminalScreen"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkRevealer" id="size_revealer">
         <property name="transition-type">crossfade</property>
         <property name="reveal-child">false</property>
