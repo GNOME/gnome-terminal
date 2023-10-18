@@ -522,6 +522,7 @@ menu_append_numbered (GMenu *menu,
 
   item = g_menu_item_new (str->str, nullptr);
   g_menu_item_set_action_and_target_value (item, action_name, target);
+  g_menu_item_set_attribute(item, "accel", "s", "");
   g_menu_append_item (menu, item);
 }
 
@@ -548,6 +549,7 @@ append_new_terminal_item (GMenu *section,
     g_menu_item_set_action_and_target (item, "win.new-terminal",
                                        "(ss)", target, "current");
   }
+  g_menu_item_set_attribute(item, "accel", "s", "");
   g_menu_append_item (section, item);
 }
 
