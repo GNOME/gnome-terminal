@@ -1723,7 +1723,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     gs_unref_object GMenuItem *item61 = g_menu_item_new (_("New _Window"), nullptr);
     g_menu_item_set_action_and_target (item61, "win.new-terminal",
                                        "(ss)", "window", "current");
-    g_menu_append_item (section6, item61);
+    menu_append_item (section6, item61);
     gs_unref_object GMenuItem *item62 = g_menu_item_new (_("New _Tab"), nullptr);
     g_menu_item_set_action_and_target (item62, "win.new-terminal",
                                        "(ss)", "tab", "current");
