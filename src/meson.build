@@ -331,8 +331,12 @@ prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_so
   'terminal-preferences-list-item.hh',
   'terminal-preferences-window.cc',
   'terminal-preferences-window.hh',
+  'terminal-profile-editor.cc',
+  'terminal-profile-editor.hh',
   'terminal-settings-bridge-backend.cc',
   'terminal-settings-bridge-backend.hh',
+  'terminal-shortcut-editor.cc',
+  'terminal-shortcut-editor.hh',
 )
 
 prefs_main_cxxflags = common_cxxflags + [
