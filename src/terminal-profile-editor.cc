@@ -25,7 +25,22 @@ struct _TerminalProfileEditor
 {
   AdwNavigationPage   parent_instance;
 
-  AdwPreferencesPage *page;
+  AdwSwitchRow       *audible_bell;
+  AdwSpinRow         *cell_height;
+  AdwSpinRow         *cell_width;
+  AdwSpinRow         *columns;
+  AdwActionRow       *custom_font;
+  AdwSwitchRow       *enable_bidi;
+  AdwSwitchRow       *enable_shaping;
+  AdwSwitchRow       *enable_sixel;
+  AdwSwitchRow       *limit_scrollback;
+  AdwSpinRow         *rows;
+  AdwSwitchRow       *scroll_on_keystroke;
+  AdwSwitchRow       *scroll_on_output;
+  AdwSpinRow         *scrollback_lines;
+  AdwSwitchRow       *show_scrollbar;
+  AdwSwitchRow       *use_system_font;
+  AdwEntryRow        *visible_name;
 
   GSettings          *settings;
 };
@@ -40,12 +55,105 @@ G_DEFINE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, ADW_TYPE_NA
 
 static GParamSpec *properties [N_PROPS];
 
+static gboolean
+scrollbar_policy_to_boolean (GValue   *value,
+                             GVariant *variant,
+                             gpointer  user_data)
+{
+  g_value_set_boolean (value,
+                       9 == g_strcmp0 ("always", g_variant_get_string (variant, nullptr)));
+  return TRUE;
+}
+
+static GVariant *
+boolean_to_scrollbar_policy (const GValue       *value,
+                             const GVariantType *type,
+                             gpointer            user_data)
+{
+  if (g_value_get_boolean (value))
+    return g_variant_new_string ("always");
+  else
+    return g_variant_new_string ("never");
+}
+
+static void
+terminal_profile_editor_reset_size (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *param)
+{
+  TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (widget);
+
+  g_settings_reset (self->settings, "default-size-columns");
+  g_settings_reset (self->settings, "default-size-rows");
+  g_settings_reset (self->settings, "cell-height-scale");
+  g_settings_reset (self->settings, "cell-width-scale");
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
 
   G_OBJECT_CLASS (terminal_profile_editor_parent_class)->constructed (object);
+
+  g_settings_bind (self->settings, "visible-name",
+                   self->visible_name, "text",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "use-system-font",
+                   self->use_system_font, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "use-system-font",
+                   self->custom_font, "sensitive",
+                   GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
+  g_settings_bind (self->settings, "enable-bidi",
+                   self->enable_bidi, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "enable-shaping",
+                   self->enable_shaping, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "enable-sixel",
+                   self->enable_sixel, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "audible-bell",
+                   self->audible_bell, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "default-size-columns",
+                   self->columns, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "default-size-rows",
+                   self->rows, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "cell-height-scale",
+                   self->cell_height, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "cell-width-scale",
+                   self->cell_width, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind_with_mapping (self->settings, "scrollbar-policy",
+                                self->show_scrollbar, "active",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                scrollbar_policy_to_boolean,
+                                boolean_to_scrollbar_policy,
+                                nullptr, nullptr);
+
+  g_settings_bind (self->settings, "scroll-on-keystroke",
+                   self->scroll_on_keystroke, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "scroll-on-output",
+                   self->scroll_on_output, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "scrollback-unlimited",
+                   self->limit_scrollback, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
+  g_settings_bind (self->settings, "scrollback-lines",
+                   self->scrollback_lines, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 }
 
 static void
@@ -114,9 +222,26 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_install_action (widget_class, "size.reset", nullptr, terminal_profile_editor_reset_size);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, page);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_keystroke);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_output);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scrollback_lines);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_scrollbar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, visible_name);
 }
 
 static void

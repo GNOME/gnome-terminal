@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "terminal-app.hh"
 #include "terminal-profile-row.hh"
 
 struct _TerminalProfileRow
@@ -44,6 +45,16 @@ terminal_profile_row_edit (GtkWidget  *widget,
                            GVariant   *param)
 {
   adw_action_row_activate (ADW_ACTION_ROW (widget));
+}
+
+static void
+terminal_profile_row_remove (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *param)
+{
+  TerminalProfileRow *self = TERMINAL_PROFILE_ROW (widget);
+
+  terminal_app_remove_profile (terminal_app_get (), self->settings);
 }
 
 static void
@@ -127,6 +138,10 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
                                    "profile.edit",
                                    nullptr,
                                    terminal_profile_row_edit);
+  gtk_widget_class_install_action (widget_class,
+                                   "profile.remove",
+                                   nullptr,
+                                   terminal_profile_row_remove);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-row.ui");
 }
