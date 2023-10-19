@@ -29,17 +29,23 @@ struct _TerminalProfileEditor
   AdwSpinRow         *cell_height;
   AdwSpinRow         *cell_width;
   AdwSpinRow         *columns;
+  AdwEntryRow        *custom_command;
   AdwActionRow       *custom_font;
   AdwSwitchRow       *enable_bidi;
   AdwSwitchRow       *enable_shaping;
   AdwSwitchRow       *enable_sixel;
   AdwSwitchRow       *limit_scrollback;
+  AdwSwitchRow       *login_shell;
+  AdwComboRow        *preserve_working_directory;
   AdwSpinRow         *rows;
   AdwSwitchRow       *scroll_on_keystroke;
   AdwSwitchRow       *scroll_on_output;
   AdwSpinRow         *scrollback_lines;
   AdwSwitchRow       *show_scrollbar;
+  AdwEntryRow        *title;
+  AdwSwitchRow       *use_custom_command;
   AdwSwitchRow       *use_system_font;
+  GtkLabel           *uuid;
   AdwEntryRow        *visible_name;
 
   GSettings          *settings;
@@ -90,11 +96,53 @@ terminal_profile_editor_reset_size (GtkWidget  *widget,
 }
 
 static void
+terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *param)
+{
+  TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (widget);
+
+  g_settings_reset (self->settings, "cjk-utf8-ambiguous-width");
+  g_settings_reset (self->settings, "encoding");
+  g_settings_reset (self->settings, "delete-binding");
+  g_settings_reset (self->settings, "backspace-binding");
+}
+
+static gboolean
+extract_uuid (const char  *path,
+              char       **uuid)
+{
+  g_autoptr(GString) str = g_string_new (path);
+
+  if (str->len > 0) {
+    if (str->str[str->len-1] == '/')
+      g_string_truncate (str, str->len-1);
+
+    const char *slash = strrchr (str->str, '/');
+
+    if (slash && slash[1] == ':') {
+      *uuid = g_strdup (slash+2);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static void
 terminal_profile_editor_constructed (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
+  g_autofree char *path = nullptr;
+  g_autofree char *uuid = nullptr;
 
   G_OBJECT_CLASS (terminal_profile_editor_parent_class)->constructed (object);
+
+  g_object_get (self->settings, "path", &path, nullptr);
+
+  if (extract_uuid (path, &uuid)) {
+    gtk_label_set_label (self->uuid, uuid);
+  }
 
   g_settings_bind (self->settings, "visible-name",
                    self->visible_name, "text",
@@ -153,6 +201,17 @@ terminal_profile_editor_constructed (GObject *object)
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
   g_settings_bind (self->settings, "scrollback-lines",
                    self->scrollback_lines, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "login-shell",
+                   self->login_shell, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "use-custom-command",
+                   self->use_custom_command, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "custom-command",
+                   self->custom_command, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 }
 
@@ -223,6 +282,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_install_action (widget_class, "size.reset", nullptr, terminal_profile_editor_reset_size);
+  gtk_widget_class_install_action (widget_class, "compatibility.reset", nullptr, terminal_profile_editor_reset_compatibility);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
@@ -230,17 +290,22 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_keystroke);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_output);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scrollback_lines);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_scrollbar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, uuid);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, visible_name);
 }
 
