@@ -171,4 +171,245 @@
       </object>
     </property>
   </object>
+  <object class="AdwNavigationPage" id="profile_page">
+    <property name="title" translatable="yes">Profile</property>
+    <property name="child">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+          </object>
+        </child>
+        <property name="content">
+          <object class="AdwPreferencesPage" id="profile_preferences">
+            <property name="title" translatable="yes">Profile</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Font</property>
+                <child>
+                  <object class="AdwSwitchRow" id="use_system_font">
+                    <property name="title" translatable="yes">Use System Font</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="custom_font">
+                    <property name="title" translatable="yes">Custom Font</property>
+                    <child type="suffix">
+                      <object class="GtkBox">
+                        <property name="hexpand">true</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="custom_font_label">
+                            <property name="label">Monospace 12pt</property>
+                            <property name="hexpand">true</property>
+                            <property name="xalign">1</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-next-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="allow_blinking_text">
+                    <property name="title" translatable="yes">Allow Blinking Text</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Always</property>
+                            <property name="value">'always'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Never</property>
+                            <property name="value">'never'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">When focused</property>
+                            <property name="value">'focused'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">When unfocused</property>
+                            <property name="value">'unfocused'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Terminal Size</property>
+                <child>
+                  <object class="AdwSpinRow" id="columns">
+                    <property name="title" translatable="yes">Columns</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="rows">
+                    <property name="title" translatable="yes">Rows</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSpinRow" id="cell_width">
+                    <property name="title" translatable="yes">Cell Width</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="cell_height">
+                    <property name="title" translatable="yes">Cell Height</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="width-request">125</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Sounds</property>
+                <child>
+                  <object class="AdwSwitchRow" id="terminal_bell">
+                    <property name="title" translatable="yes">Terminal Bell</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Cursor</property>
+                <child>
+                  <object class="AdwComboRow" id="cursor_shape">
+                    <property name="title" translatable="yes">Shape</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Block</property>
+                            <property name="value">'block'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">I-Beam</property>
+                            <property name="value">'ibeam'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Underline</property>
+                            <property name="value">'underline'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="cursor_blink">
+                    <property name="title" translatable="yes">Blinking</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Default</property>
+                            <property name="value">'system'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Enabled</property>
+                            <property name="value">'on'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Disabled</property>
+                            <property name="value">'off'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Scrolling</property>
+                <child>
+                  <object class="AdwSwitchRow" id="show_scrollbar">
+                    <property name="title" translatable="yes">Show Scrollbar</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="scroll_on_output">
+                    <property name="title" translatable="yes">Scroll on Output</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="scroll_on_keystroke">
+                    <property name="title" translatable="yes">Scroll on Keystroke</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSpinRow" id="scrollback_lines">
+                    <property name="title" translatable="yes">Limit Scrollback Lines</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </object>
 </interface>
