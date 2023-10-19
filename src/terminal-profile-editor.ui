@@ -31,6 +31,15 @@
             <property name="title" translatable="yes">Profile</property>
             <child>
               <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="visible_name">
+                    <property name="title" translatable="yes">Name</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Font</property>
                 <child>
                   <object class="AdwSwitchRow" id="use_system_font">
@@ -65,6 +74,11 @@
             </child>
             <child>
               <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="enable_sixel">
+                    <property name="title" translatable="yes">Allow Sixel Images</property>
+                  </object>
+                </child>
                 <child>
                   <object class="AdwComboRow" id="allow_blinking_text">
                     <property name="title" translatable="yes">Allow Blinking Text</property>
@@ -106,49 +120,9 @@
             </child>
             <child>
               <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Terminal Size</property>
-                <child>
-                  <object class="AdwSpinRow" id="columns">
-                    <property name="title" translatable="yes">Columns</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwSpinRow" id="rows">
-                    <property name="title" translatable="yes">Rows</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <child>
-                  <object class="AdwSpinRow" id="cell_width">
-                    <property name="title" translatable="yes">Cell Width</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwSpinRow" id="cell_height">
-                    <property name="title" translatable="yes">Cell Height</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Reset</property>
-                    <property name="width-request">125</property>
-                    <property name="halign">end</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Sounds</property>
                 <child>
-                  <object class="AdwSwitchRow" id="terminal_bell">
+                  <object class="AdwSwitchRow" id="audible_bell">
                     <property name="title" translatable="yes">Terminal Bell</property>
                   </object>
                 </child>
@@ -248,8 +222,116 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
+                  <object class="AdwSwitchRow" id="limit_scrollback">
+                    <property name="title" translatable="yes">Limit Scrollback</property>
+                  </object>
+                </child>
+                <child>
                   <object class="AdwSpinRow" id="scrollback_lines">
-                    <property name="title" translatable="yes">Limit Scrollback Lines</property>
+                    <binding name="sensitive">
+                      <lookup name="active">limit_scrollback</lookup>
+                    </binding>
+                    <property name="title" translatable="yes">Scrollback Lines</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0</property>
+                        <property name="upper">2147483647</property>
+                        <property name="step-increment">10</property>
+                        <property name="page-increment">100</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Terminal Size</property>
+                <child>
+                  <object class="AdwSpinRow" id="columns">
+                    <property name="title" translatable="yes">Columns</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">16</property>
+                        <property name="upper">511</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="rows">
+                    <property name="title" translatable="yes">Rows</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">4</property>
+                        <property name="upper">511</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSpinRow" id="cell_width">
+                    <property name="title" translatable="yes">Cell Width Scale</property>
+                    <property name="subtitle" translatable="yes">Increases the width of character cells</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">2.0</property>
+                        <property name="step-increment">.01</property>
+                        <property name="page-increment">.1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="cell_height">
+                    <property name="title" translatable="yes">Cell Height Scale</property>
+                    <property name="subtitle" translatable="yes">Increase the height of character cells</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">2.0</property>
+                        <property name="step-increment">.01</property>
+                        <property name="page-increment">.1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="action-name">size.reset</property>
+                    <property name="width-request">125</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Locale Options</property>
+                <child>
+                  <object class="AdwSwitchRow" id="enable_bidi">
+                    <property name="title" translatable="yes">Enable Bi-directional Text</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="enable_shaping">
+                    <property name="title" translatable="yes">Enable Arabic Shaping</property>
                   </object>
                 </child>
               </object>
