@@ -18,7 +18,8 @@
   SPDX-License-Identifier: GPL-3.0-or-later
 -->
 <interface>
-  <template class="TerminalProfileEditor" parent="GtkWidget">
+  <template class="TerminalProfileEditor" parent="AdwNavigationPage">
+    <property name="title" translatable="yes">Edit Profile</property>
     <child>
       <object class="AdwToolbarView">
         <child type="top">
@@ -26,7 +27,7 @@
           </object>
         </child>
         <property name="content">
-          <object class="AdwPreferencesPage" id="profile_preferences">
+          <object class="AdwPreferencesPage" id="page">
             <property name="title" translatable="yes">Profile</property>
             <child>
               <object class="AdwPreferencesGroup">

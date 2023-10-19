@@ -24,11 +24,15 @@
 struct _TerminalProfileEditor
 {
   AdwNavigationPage   parent_instance;
+
   AdwPreferencesPage *page;
+
+  GSettings          *settings;
 };
 
 enum {
   PROP_0,
+  PROP_SETTINGS,
   N_PROPS
 };
 
@@ -37,11 +41,21 @@ G_DEFINE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, ADW_TYPE_NA
 static GParamSpec *properties [N_PROPS];
 
 static void
+terminal_profile_editor_constructed (GObject *object)
+{
+  TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
+
+  G_OBJECT_CLASS (terminal_profile_editor_parent_class)->constructed (object);
+}
+
+static void
 terminal_profile_editor_dispose (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
 
   gtk_widget_dispose_template (GTK_WIDGET (self), TERMINAL_TYPE_PROFILE_EDITOR);
+
+  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (terminal_profile_editor_parent_class)->dispose (object);
 }
@@ -55,6 +69,9 @@ terminal_profile_editor_get_property (GObject    *object,
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
 
   switch (prop_id) {
+  case PROP_SETTINGS:
+    g_value_set_object (value, self->settings);
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -69,6 +86,9 @@ terminal_profile_editor_set_property (GObject      *object,
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
 
   switch (prop_id) {
+  case PROP_SETTINGS:
+    self->settings = G_SETTINGS (g_value_dup_object (value));
+    break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
   }
@@ -80,9 +100,19 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = terminal_profile_editor_constructed;
   object_class->dispose = terminal_profile_editor_dispose;
   object_class->get_property = terminal_profile_editor_get_property;
   object_class->set_property = terminal_profile_editor_set_property;
+
+  properties [PROP_SETTINGS] =
+    g_param_spec_object ("settings", nullptr, nullptr,
+                         G_TYPE_SETTINGS,
+                         GParamFlags(G_PARAM_READWRITE |
+                                     G_PARAM_CONSTRUCT_ONLY |
+                                     G_PARAM_STATIC_STRINGS));
+  
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
@@ -93,4 +123,14 @@ static void
 terminal_profile_editor_init (TerminalProfileEditor *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+}
+
+GtkWidget *
+terminal_profile_editor_new (GSettings *settings)
+{
+  g_return_val_if_fail (G_IS_SETTINGS (settings), nullptr);
+
+  return (GtkWidget *)g_object_new (TERMINAL_TYPE_PROFILE_EDITOR,
+                                    "settings", settings,
+                                    nullptr);
 }

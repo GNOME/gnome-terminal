@@ -133,3 +133,11 @@ terminal_profile_row_new (GSettings *settings)
                                     "settings", settings,
                                     nullptr);
 }
+
+GSettings *
+terminal_profile_row_get_settings (TerminalProfileRow *self)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE_ROW (self), nullptr);
+
+  return self->settings;
+}

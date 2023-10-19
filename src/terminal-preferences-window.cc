@@ -80,6 +80,23 @@ notify_is_default_terminal_cb (TerminalPreferencesWindow *self,
 }
 
 static void
+terminal_preferences_window_profile_row_activated_cb (TerminalPreferencesWindow *self,
+                                                      TerminalProfileRow        *row)
+{
+  GSettings *settings;
+  GtkWidget *editor;
+
+  g_assert (TERMINAL_IS_PREFERENCES_WINDOW (self));
+  g_assert (TERMINAL_IS_PROFILE_ROW (row));
+
+  settings = terminal_profile_row_get_settings (row);
+  editor = terminal_profile_editor_new (settings);
+
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (self),
+                                       ADW_NAVIGATION_PAGE (editor));
+}
+
+static void
 terminal_preferences_window_reload_profiles (TerminalPreferencesWindow *self)
 {
   g_autolist(GSettings) profiles_settings = nullptr;
@@ -108,6 +125,11 @@ terminal_preferences_window_reload_profiles (TerminalPreferencesWindow *self)
     GSettings *settings = G_SETTINGS (iter->data);
     GtkWidget *row = terminal_profile_row_new (settings);
 
+    g_signal_connect_object (row,
+                             "activated",
+                             G_CALLBACK (terminal_preferences_window_profile_row_activated_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
     gtk_list_box_prepend (self->profiles_list_box, row);
   }
 }

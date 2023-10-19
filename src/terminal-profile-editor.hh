@@ -27,4 +27,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, TERMINAL, PROFILE_EDITOR, AdwNavigationPage)
 
+GtkWidget *terminal_profile_editor_new (GSettings *settings);
+
 G_END_DECLS
