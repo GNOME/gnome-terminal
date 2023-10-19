@@ -17,24 +17,22 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "terminal-app.hh"
-#include "terminal-accel-row.hh"
-#include "terminal-accels.hh"
 #include "terminal-preferences-list-item.hh"
 #include "terminal-preferences-window.hh"
+#include "terminal-profile-editor.hh"
 #include "terminal-schemas.hh"
+#include "terminal-shortcut-editor.hh"
 
 struct _TerminalPreferencesWindow
 {
-  AdwPreferencesWindow parent_instance;
+  AdwPreferencesWindow  parent_instance;
 
-  AdwSwitchRow       *access_keys;
-  AdwSwitchRow       *accelerator_key;
-  AdwSwitchRow       *always_check_default;
-  AdwSwitchRow       *enable_shortcuts;
-  AdwNavigationPage  *profile_page;
-  AdwNavigationPage  *shortcuts_page;
-  AdwPreferencesPage *shortcuts_preferences;
+  AdwSwitchRow         *access_keys;
+  AdwSwitchRow         *accelerator_key;
+  AdwSwitchRow         *always_check_default;
 };
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
@@ -44,10 +42,8 @@ terminal_preferences_window_view_shortcuts (GtkWidget  *widget,
                                             const char *action_name,
                                             GVariant   *param)
 {
-  TerminalPreferencesWindow *self = TERMINAL_PREFERENCES_WINDOW (widget);
-
-  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (self),
-                                       self->shortcuts_page);
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (widget),
+                                       ADW_NAVIGATION_PAGE (terminal_shortcut_editor_new ()));
 }
 
 static void
@@ -102,13 +98,6 @@ terminal_preferences_window_constructed (GObject *object)
                    self->accelerator_key,
                    "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
-                   self->enable_shortcuts,
-                   "active",
-                   GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
-
-  terminal_accels_populate_preferences (self->shortcuts_preferences);
 }
 
 static void
@@ -135,10 +124,6 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, accelerator_key);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, access_keys);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
-  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, enable_shortcuts);
-  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profile_page);
-  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, shortcuts_page);
-  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, shortcuts_preferences);
 
   gtk_widget_class_install_action (widget_class,
                                    "terminal.set-as-default",
@@ -150,10 +135,9 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
                                    nullptr,
                                    terminal_preferences_window_view_shortcuts);
 
-  g_type_ensure (ADW_TYPE_PREFERENCES_PAGE);
-  g_type_ensure (ADW_TYPE_SWITCH_ROW);
-  g_type_ensure (TERMINAL_TYPE_ACCEL_ROW);
   g_type_ensure (TERMINAL_TYPE_PREFERENCES_LIST_ITEM);
+  g_type_ensure (TERMINAL_TYPE_PROFILE_EDITOR);
+  g_type_ensure (TERMINAL_TYPE_SHORTCUT_EDITOR);
 }
 
 static void
