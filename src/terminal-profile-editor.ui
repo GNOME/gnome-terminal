@@ -36,6 +36,19 @@
                     <property name="title" translatable="yes">Name</property>
                   </object>
                 </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Identifier</property>
+                    <child type="suffix">
+                      <object class="GtkLabel" id="uuid">
+                        <property name="selectable">true</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -323,6 +336,130 @@
             </child>
             <child>
               <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Command</property>
+                <child>
+                  <object class="AdwSwitchRow" id="login_shell">
+                    <property name="title" translatable="yes">Run command as a login shell</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="use_custom_command">
+                    <property name="title" translatable="yes">Use Custom Command</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="custom_command">
+                    <property name="title" translatable="yes">Custom Command</property>
+                    <binding name="sensitive">
+                      <lookup name="active">use_custom_command</lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="preserve_working_directory">
+                    <property name="title" translatable="yes">Preserve Working Directory</property>
+                    <property name="subtitle" translatable="yes">Preserve the working directory when opening a new terminal</property>
+                    <property name="model">preserve_directory_options</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="when_command_exists">
+                    <property name="title" translatable="yes">When Command Exits</property>
+                    <property name="model">exit_actions</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Compatibility</property>
+                <child>
+                  <object class="AdwComboRow" id="backspace">
+                    <property name="title" translatable="yes">Backspace Key</property>
+                    <property name="subtitle" translatable="yes">Sequence to send for Backspace key</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">erase_bindings</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="delete">
+                    <property name="title" translatable="yes">Delete Key</property>
+                    <property name="subtitle" translatable="yes">Sequence to send for Delete key</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">erase_bindings</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="encoding">
+                    <property name="title" translatable="yes">Encoding</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="ambiguous_width">
+                    <property name="title" translatable="yes">Ambiguous-width Characters</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Narrow</property>
+                            <property name="value">'narrow'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Wide</property>
+                            <property name="value">'wide'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="action-name">compatibility.reset</property>
+                    <property name="width-request">125</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Locale Options</property>
                 <child>
                   <object class="AdwSwitchRow" id="enable_bidi">
@@ -341,4 +478,79 @@
       </object>
     </child>
   </template>
+  <object class="GListStore" id="erase_bindings">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Automatic</property>
+        <property name="value">'auto'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Control-H</property>
+        <property name="value">'ascii-backspace'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">ASCII DEL</property>
+        <property name="value">'ascii-delete'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Escape Sequence</property>
+        <property name="value">'delete-sequence'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">TTY Erase</property>
+        <property name="value">'tty'</property>
+      </object>
+    </child>
+  </object>
+  <object class="GListStore" id="preserve_directory_options">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Never</property>
+        <property name="value">'never'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Safe</property>
+        <property name="value">'safe'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Always</property>
+        <property name="value">'always'</property>
+      </object>
+    </child>
+  </object>
+  <object class="GListStore" id="exit_actions">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Exit the Terminal</property>
+        <property name="value">'close'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Restart the Command</property>
+        <property name="value">'restart'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Hold the Terminal Open</property>
+        <property name="value">'hold'</property>
+      </object>
+    </child>
+  </object>
 </interface>
