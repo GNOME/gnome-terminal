@@ -27,6 +27,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalProfileRow, terminal_profile_row, TERMINAL, PROFILE_ROW, AdwActionRow)
 
-GtkWidget *terminal_profile_row_new (GSettings *settings);
+GtkWidget *terminal_profile_row_new          (GSettings          *settings);
+GSettings *terminal_profile_row_get_settings (TerminalProfileRow *self);
 
 G_END_DECLS
