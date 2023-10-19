@@ -23,6 +23,7 @@
 #include "terminal-preferences-list-item.hh"
 #include "terminal-preferences-window.hh"
 #include "terminal-profile-editor.hh"
+#include "terminal-profile-row.hh"
 #include "terminal-schemas.hh"
 #include "terminal-shortcut-editor.hh"
 
@@ -33,9 +34,20 @@ struct _TerminalPreferencesWindow
   AdwSwitchRow         *access_keys;
   AdwSwitchRow         *accelerator_key;
   AdwSwitchRow         *always_check_default;
+
+  GtkListBox           *profiles_list_box;
+  GtkListBoxRow        *add_profile_row;
 };
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
+
+static void
+terminal_preferences_window_add_profile (GtkWidget  *widget,
+                                         const char *action_name,
+                                         GVariant   *param)
+{
+  terminal_app_new_profile (terminal_app_get (), nullptr, _("New Profile"));
+}
 
 static void
 terminal_preferences_window_view_shortcuts (GtkWidget  *widget,
@@ -68,13 +80,51 @@ notify_is_default_terminal_cb (TerminalPreferencesWindow *self,
 }
 
 static void
+terminal_preferences_window_reload_profiles (TerminalPreferencesWindow *self)
+{
+  g_autolist(GSettings) profiles_settings = nullptr;
+  TerminalSettingsList *profiles;
+  TerminalApp *app;
+  GtkWidget *child;
+
+  g_assert (TERMINAL_IS_PREFERENCES_WINDOW (self));
+
+  app = terminal_app_get ();
+  profiles = terminal_app_get_profiles_list (app);
+  profiles_settings = terminal_profiles_list_ref_children_sorted (profiles);
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (self->profiles_list_box));
+
+  while (child != nullptr) {
+    GtkListBoxRow *row = GTK_LIST_BOX_ROW (child);
+
+    child = gtk_widget_get_next_sibling (child);
+
+    if (row != self->add_profile_row)
+      gtk_list_box_remove (self->profiles_list_box, GTK_WIDGET (row));
+  }
+
+  for (const GList *iter = g_list_last (profiles_settings); iter; iter = iter->prev) {
+    GSettings *settings = G_SETTINGS (iter->data);
+    GtkWidget *row = terminal_profile_row_new (settings);
+
+    gtk_list_box_prepend (self->profiles_list_box, row);
+  }
+}
+
+static void
 terminal_preferences_window_constructed (GObject *object)
 {
   TerminalPreferencesWindow *self = (TerminalPreferencesWindow *)object;
-  TerminalApp *app = terminal_app_get ();
-  GSettings *settings = terminal_app_get_global_settings (app);
+  TerminalSettingsList *profiles;
+  TerminalApp *app;
+  GSettings *settings;
 
   G_OBJECT_CLASS (terminal_preferences_window_parent_class)->constructed (object);
+
+  app = terminal_app_get ();
+  settings = terminal_app_get_global_settings (app);
+  profiles = terminal_app_get_profiles_list (app);
 
   g_signal_connect_object (app,
                            "notify::is-default-terminal",
@@ -98,6 +148,18 @@ terminal_preferences_window_constructed (GObject *object)
                    self->accelerator_key,
                    "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
+
+  g_signal_connect_object (profiles,
+                           "children-changed",
+                           G_CALLBACK (terminal_preferences_window_reload_profiles),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (profiles,
+                           "default-changed",
+                           G_CALLBACK (terminal_preferences_window_reload_profiles),
+                           self,
+                           G_CONNECT_SWAPPED);
+  terminal_preferences_window_reload_profiles (self);
 }
 
 static void
@@ -123,7 +185,9 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, accelerator_key);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, access_keys);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, add_profile_row);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profiles_list_box);
 
   gtk_widget_class_install_action (widget_class,
                                    "terminal.set-as-default",
@@ -134,6 +198,11 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
                                    "preferences.view-shortcuts",
                                    nullptr,
                                    terminal_preferences_window_view_shortcuts);
+
+  gtk_widget_class_install_action (widget_class,
+                                   "profile.add",
+                                   nullptr,
+                                   terminal_preferences_window_add_profile);
 
   g_type_ensure (TERMINAL_TYPE_PREFERENCES_LIST_ITEM);
   g_type_ensure (TERMINAL_TYPE_PROFILE_EDITOR);
