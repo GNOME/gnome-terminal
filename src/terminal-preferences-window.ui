@@ -153,6 +153,27 @@
         <child>
           <object class="AdwPreferencesGroup">
             <property name="title" translatable="yes">Profiles</property>
+            <child>
+              <object class="GtkListBox" id="profiles_list_box">
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+                <property name="selection-mode">none</property>
+                <child>
+                  <object class="AdwPreferencesRow" id="add_profile_row">
+                    <property name="action-name">profile.add</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="hexpand">true</property>
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="margin-top">16</property>
+                        <property name="margin-bottom">16</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>

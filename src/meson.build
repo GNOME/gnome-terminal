@@ -333,6 +333,8 @@ prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_so
   'terminal-preferences-window.hh',
   'terminal-profile-editor.cc',
   'terminal-profile-editor.hh',
+  'terminal-profile-row.cc',
+  'terminal-profile-row.hh',
   'terminal-settings-bridge-backend.cc',
   'terminal-settings-bridge-backend.hh',
   'terminal-shortcut-editor.cc',
