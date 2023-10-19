@@ -39,6 +39,14 @@ G_DEFINE_FINAL_TYPE (TerminalProfileRow, terminal_profile_row, ADW_TYPE_ACTION_R
 static GParamSpec *properties [N_PROPS];
 
 static void
+terminal_profile_row_edit (GtkWidget  *widget,
+                           const char *action_name,
+                           GVariant   *param)
+{
+  adw_action_row_activate (ADW_ACTION_ROW (widget));
+}
+
+static void
 terminal_profile_row_constructed (GObject *object)
 {
   TerminalProfileRow *self = (TerminalProfileRow *)object;
@@ -114,6 +122,11 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
                                      G_PARAM_STATIC_STRINGS));
   
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_install_action (widget_class,
+                                   "profile.edit",
+                                   nullptr,
+                                   terminal_profile_row_edit);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-row.ui");
 }
