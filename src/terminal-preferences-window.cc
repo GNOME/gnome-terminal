@@ -32,6 +32,7 @@ struct _TerminalPreferencesWindow
   AdwSwitchRow       *accelerator_key;
   AdwSwitchRow       *always_check_default;
   AdwSwitchRow       *enable_shortcuts;
+  AdwNavigationPage  *profile_page;
   AdwNavigationPage  *shortcuts_page;
   AdwPreferencesPage *shortcuts_preferences;
 };
@@ -135,6 +136,7 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, access_keys);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, enable_shortcuts);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profile_page);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, shortcuts_page);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, shortcuts_preferences);
 
