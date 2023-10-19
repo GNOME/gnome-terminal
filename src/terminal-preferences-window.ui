@@ -72,6 +72,31 @@
           <object class="AdwPreferencesGroup">
             <property name="title" translatable="yes">Behavior</property>
             <child>
+              <object class="AdwComboRow" id="new_terminal_mode">
+                <property name="title" translatable="yes">Open New Terminals</property>
+                <property name="expression">
+                  <lookup name="title" type="TerminalPreferencesListItem"/>
+                </property>
+                <property name="model">
+                  <object class="GListStore">
+                    <property name="item-type">TerminalPreferencesListItem</property>
+                    <child>
+                      <object class="TerminalPreferencesListItem">
+                        <property name="title" translatable="yes">In Tab</property>
+                        <property name="value">'tab'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalPreferencesListItem">
+                        <property name="title" translatable="yes">In Window</property>
+                        <property name="value">'window'</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
               <object class="AdwComboRow" id="tab_position">
                 <property name="title" translatable="yes">New Tab Position</property>
                 <property name="expression">
@@ -94,19 +119,6 @@
                     </child>
                   </object>
                 </property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwSwitchRow" id="always_check_default">
-                <property name="title" translatable="yes">Ask to Remain Default</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Set as Default Terminal</property>
-                <property name="action-name">terminal.set-as-default</property>
-                <property name="margin-top">12</property>
-                <property name="hexpand">true</property>
               </object>
             </child>
           </object>
@@ -141,6 +153,24 @@
         <child>
           <object class="AdwPreferencesGroup">
             <property name="title" translatable="yes">Profiles</property>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title" translatable="yes">Application</property>
+            <child>
+              <object class="AdwSwitchRow" id="always_check_default">
+                <property name="title" translatable="yes">Ask to Remain Default</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Set as Default Terminal</property>
+                <property name="action-name">terminal.set-as-default</property>
+                <property name="margin-top">12</property>
+                <property name="hexpand">true</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
