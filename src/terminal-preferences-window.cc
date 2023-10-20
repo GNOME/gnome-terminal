@@ -48,10 +48,17 @@ terminal_preferences_window_add_profile (GtkWidget  *widget,
 {
   TerminalApp *app = terminal_app_get ();
   g_autofree char *uuid = terminal_app_new_profile (app, nullptr, _("New Profile"));
+
+  /* Showing the new profile immediately is a bit jarring because we're
+   * not able to show the action that happened on the list. Just reload
+   * the list (happens externally) and let the user click the next action.
+   */
+#if 0
   TerminalSettingsList *profiles = terminal_app_get_profiles_list (app);
   g_autoptr(GSettings) settings = terminal_settings_list_ref_child (profiles, uuid);
 
   terminal_preferences_window_edit_profile (TERMINAL_PREFERENCES_WINDOW (widget), settings);
+#endif
 }
 
 static void
