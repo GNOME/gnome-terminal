@@ -48,7 +48,10 @@ terminal_preferences_window_add_profile (GtkWidget  *widget,
 {
   TerminalApp *app = terminal_app_get ();
   g_autofree char *uuid = terminal_app_new_profile (app, nullptr, _("New Profile"));
+  TerminalSettingsList *profiles = terminal_app_get_profiles_list (app);
+  g_autoptr(GSettings) settings = terminal_settings_list_ref_child (profiles, uuid);
 
+  terminal_preferences_window_edit_profile (TERMINAL_PREFERENCES_WINDOW (widget), settings);
 }
 
 static void
