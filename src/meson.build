@@ -15,37 +15,6 @@
 
 src_inc = include_directories('.')
 
-# UI files
-
-ui_xsltproc_command = [
-  xsltproc,
-  '--nonet',
-  '-o', '@OUTPUT@',
-  '@INPUT@',
-]
-
-menubar_ui_mnemonics = custom_target(
-  'terminal-menubar-with-mnemonics.ui',
-  command: ui_xsltproc_command,
-  input: files(
-    '..' / 'data' / 'ui-filter-mnemonics.xslt',
-    'terminal-menubar.ui.in',
-  ),
-  install: false,
-  output: 'terminal-menubar-with-mnemonics.ui',
-)
-
-menubar_ui_nomnemonics = custom_target(
-  'terminal-menubar-without-mnemonics.ui',
-  command: ui_xsltproc_command,
-  input: files(
-    '..' / 'data' / 'ui-filter-no-mnemonics.xslt',
-    'terminal-menubar.ui.in',
-  ),
-  install: false,
-  output: 'terminal-menubar-without-mnemonics.ui',
-)
-
 # Common sources
 
 app_sources = files(
@@ -180,10 +149,6 @@ server_resources_sources = gnome.compile_resources(
   'terminal-server-resources',
   'terminal.gresource.xml',
   c_name: 'terminal',
-  dependencies: [
-    menubar_ui_mnemonics,
-    menubar_ui_nomnemonics,
-  ],
   export: false,
   install: false,
 )

@@ -137,10 +137,6 @@ struct _TerminalApp
   TerminalSearchProvider *search_provider;
 #endif /* ENABLE_SEARCH_PROVIDER */
 
-  GMenuModel *menubar;
-  GMenu *menubar_new_terminal_section;
-  GMenu *menubar_set_profile_section;
-
   GMenuModel *profilemenu;
   GMenuModel *headermenu;
   GMenu *headermenu_set_profile_section;
@@ -529,6 +525,7 @@ menu_append_numbered (GMenu *menu,
   g_menu_append_item (menu, item);
 }
 
+#if 0
 static void
 append_new_terminal_item (GMenu *section,
                           const char *label,
@@ -555,6 +552,7 @@ append_new_terminal_item (GMenu *section,
   g_menu_item_set_attribute(item, "accel", "s", "");
   g_menu_append_item (section, item);
 }
+#endif
 
 static void
 fill_header_new_terminal_menu (GMenuModel *menu,
@@ -575,20 +573,6 @@ fill_header_new_terminal_menu (GMenuModel *menu,
   }
 
   g_menu_append_section (G_MENU (menu), _("New Terminal"), G_MENU_MODEL (section));
-}
-
-static void
-fill_new_terminal_section (TerminalApp *app,
-                           GMenu *section,
-                           ProfileData *profiles,
-                           guint n_profiles)
-{
-  if (terminal_app_get_menu_unified (app)) {
-    append_new_terminal_item (section, _("New _Terminal"), "default", profiles, n_profiles);
-  } else {
-    append_new_terminal_item (section, _("New _Tab"), "tab", profiles, n_profiles);
-    append_new_terminal_item (section, _("New _Window"), "window", profiles, n_profiles);
-  }
 }
 
 static GMenu *
@@ -630,17 +614,6 @@ terminal_app_update_profile_menus (TerminalApp *app)
 
   app->set_profile_menu = set_profile_submenu_new (profiles, n_profiles);
 
-  if (app->menubar != nullptr) {
-    g_menu_remove_all (G_MENU (app->menubar_new_terminal_section));
-    fill_new_terminal_section (app, app->menubar_new_terminal_section, profiles, n_profiles);
-
-    g_menu_remove_all (G_MENU (app->menubar_set_profile_section));
-    if (app->set_profile_menu != nullptr) {
-      g_menu_append_submenu (app->menubar_set_profile_section, _("Change _Profile"),
-                             G_MENU_MODEL (app->set_profile_menu));
-    }
-  }
-
   if (app->profilemenu != nullptr) {
     g_menu_remove_all (G_MENU (app->profilemenu));
     fill_header_new_terminal_menu (app->profilemenu, profiles, n_profiles);
@@ -653,32 +626,6 @@ terminal_app_update_profile_menus (TerminalApp *app)
                              G_MENU_MODEL (app->set_profile_menu));
     }
   }
-}
-
-static GMenuModel *
-terminal_app_create_menubar (TerminalApp *app,
-                             gboolean shell_shows_menubar)
-{
-  /* If the menubar is shown by the shell, omit mnemonics for the submenus. This is because Alt+F etc.
-   * are more important to be usable in the terminal, the menu cannot be replaced runtime (to toggle
-   * between mnemonic and non-mnemonic versions), gtk-enable-mnemonics or gtk_window_set_mnemonic_modifier()
-   * don't effect the menubar either, so there wouldn't be a way to disable Alt+F for File etc. otherwise.
-   * Furthermore, the menu would even grab mnemonics from the File and Preferences windows.
-   * In Unity, Alt+F10 opens the menubar, this should be good enough for keyboard navigation.
-   * If the menubar is shown by the app, toggling mnemonics is handled in terminal-window.c using
-   * gtk_window_set_mnemonic_modifier().
-   * See bug 792978 for details. */
-  terminal_util_load_objects_resource (shell_shows_menubar ? "/org/gnome/terminal/ui/menubar-without-mnemonics.ui"
-                                                           : "/org/gnome/terminal/ui/menubar-with-mnemonics.ui",
-                                       "menubar", &app->menubar,
-                                       "new-terminal-section", &app->menubar_new_terminal_section,
-                                       "set-profile-section", &app->menubar_set_profile_section,
-                                       nullptr);
-
-  /* Install profile sections */
-  terminal_app_update_profile_menus (app);
-
-  return app->menubar;
 }
 
 static void
@@ -895,23 +842,9 @@ terminal_app_startup (GApplication *application)
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    application);
 
-  /* Figure out whether the shell shows the menubar */
-  gboolean shell_shows_menubar;
-  g_object_get (gtk_settings_get_default (),
-                "gtk-shell-shows-menubar", &shell_shows_menubar,
-                nullptr);
-
-  /* Create menubar */
-  terminal_app_create_menubar (app, shell_shows_menubar);
-
   /* Keep dynamic menus updated */
   g_signal_connect_swapped (app->profiles_list, "children-changed",
                             G_CALLBACK (terminal_app_update_profile_menus), app);
-
-  /* Show/hide the menubar as appropriate: If the shell wants to show the menubar, make it available. */
-  if (shell_shows_menubar)
-    gtk_application_set_menubar (GTK_APPLICATION (app),
-                                 terminal_app_get_menubar (app));
 
 #endif /* TERMINAL_SERVER */
 
@@ -1078,9 +1011,6 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->settings_backend);
 
 #ifdef TERMINAL_SERVER
-  g_clear_object (&app->menubar);
-  g_clear_object (&app->menubar_new_terminal_section);
-  g_clear_object (&app->menubar_set_profile_section);
   g_clear_object (&app->profilemenu);
   g_clear_object (&app->headermenu);
   g_clear_object (&app->headermenu_set_profile_section);
@@ -1458,18 +1388,6 @@ terminal_app_get_profiles_list (TerminalApp *app)
 #ifdef TERMINAL_SERVER
 
 /**
- * terminal_app_get_menubar:
- * @app: a #TerminalApp
- *
- * Returns: (tranfer none): the main window menu bar as a #GMenuModel
- */
-GMenuModel *
-terminal_app_get_menubar (TerminalApp *app)
-{
-  return app->menubar;
-}
-
-/**
  * terminal_app_get_headermenu:
  * @app: a #TerminalApp
  *
@@ -1497,18 +1415,6 @@ terminal_app_get_profilemenu (TerminalApp *app)
     terminal_app_create_profilemenu (app);
 
   return app->profilemenu;
-}
-
-/**
- * terminal_app_get_profile_section:
- * @app: a #TerminalApp
- *
- * Returns: (tranfer none): the main window's menubar's profiles section as a #GMenuModel
- */
-GMenuModel *
-terminal_app_get_profile_section (TerminalApp *app)
-{
-  return G_MENU_MODEL (app->set_profile_menu);
 }
 
 #endif /* TERMINAL_SERVER */
