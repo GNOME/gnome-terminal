@@ -19,8 +19,12 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "terminal-app.hh"
 #include "terminal-profile-row.hh"
+#include "terminal-profiles-list.hh"
+#include "terminal-preferences-window.hh"
 
 struct _TerminalProfileRow
 {
@@ -38,6 +42,25 @@ enum {
 G_DEFINE_FINAL_TYPE (TerminalProfileRow, terminal_profile_row, ADW_TYPE_ACTION_ROW)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+terminal_profile_row_duplicate (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *param)
+{
+  GtkWidget *window = gtk_widget_get_ancestor (widget, TERMINAL_TYPE_PREFERENCES_WINDOW);
+  TerminalProfileRow *self = TERMINAL_PROFILE_ROW (widget);
+  TerminalApp *app = terminal_app_get ();
+  g_autofree char *name = g_settings_get_string (self->settings, "visible-name");
+  g_autofree char *new_name = g_strdup_printf ("%s %s", name, _("Duplicate"));
+  g_autofree char *uuid = terminal_app_new_profile (app, self->settings, new_name);
+  TerminalSettingsList *profiles_list = terminal_app_get_profiles_list (app);
+  g_autoptr(GSettings) settings = terminal_profiles_list_ref_profile_by_uuid (profiles_list, uuid, NULL);
+
+  if (settings != nullptr && window != nullptr) {
+    terminal_preferences_window_edit_profile (TERMINAL_PREFERENCES_WINDOW (window), settings);
+  }
+}
 
 static void
 terminal_profile_row_edit (GtkWidget  *widget,
@@ -134,6 +157,10 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
   
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_install_action (widget_class,
+                                   "profile.duplicate",
+                                   nullptr,
+                                   terminal_profile_row_duplicate);
   gtk_widget_class_install_action (widget_class,
                                    "profile.edit",
                                    nullptr,

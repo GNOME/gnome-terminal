@@ -46,7 +46,9 @@ terminal_preferences_window_add_profile (GtkWidget  *widget,
                                          const char *action_name,
                                          GVariant   *param)
 {
-  terminal_app_new_profile (terminal_app_get (), nullptr, _("New Profile"));
+  TerminalApp *app = terminal_app_get ();
+  g_autofree char *uuid = terminal_app_new_profile (app, nullptr, _("New Profile"));
+
 }
 
 static void
@@ -83,17 +85,11 @@ static void
 terminal_preferences_window_profile_row_activated_cb (TerminalPreferencesWindow *self,
                                                       TerminalProfileRow        *row)
 {
-  GSettings *settings;
-  GtkWidget *editor;
-
   g_assert (TERMINAL_IS_PREFERENCES_WINDOW (self));
   g_assert (TERMINAL_IS_PROFILE_ROW (row));
 
-  settings = terminal_profile_row_get_settings (row);
-  editor = terminal_profile_editor_new (settings);
-
-  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (self),
-                                       ADW_NAVIGATION_PAGE (editor));
+  terminal_preferences_window_edit_profile (self,
+                                            terminal_profile_row_get_settings (row));
 }
 
 static void
@@ -241,4 +237,19 @@ GtkWidget *
 terminal_preferences_window_new (void)
 {
   return (GtkWidget *)g_object_new (TERMINAL_TYPE_PREFERENCES_WINDOW, nullptr);
+}
+
+void
+terminal_preferences_window_edit_profile (TerminalPreferencesWindow *self,
+                                          GSettings                 *settings)
+{
+  GtkWidget *editor;
+
+  g_return_if_fail (TERMINAL_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (G_IS_SETTINGS (settings));
+
+  editor = terminal_profile_editor_new (settings);
+
+  adw_preferences_window_push_subpage (ADW_PREFERENCES_WINDOW (self),
+                                       ADW_NAVIGATION_PAGE (editor));
 }
