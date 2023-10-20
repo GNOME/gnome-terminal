@@ -316,7 +316,7 @@ add_accel_entries (GApplication*application,
       key_entry->parameter = g_variant_parse (key_entry->action_parameter_type,
                                               key_entry->action_parameter,
                                               nullptr, nullptr, &err);
-      g_assert_no_error (err);
+      terminal_assert_no_error (err);
 
       g_assert (key_entry->parameter != nullptr);
     }
