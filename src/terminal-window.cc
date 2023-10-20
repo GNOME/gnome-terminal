@@ -1561,7 +1561,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
   gs_unref_object GMenu *section5 = g_menu_new ();
   menu_append (section5, _("Read-_Only"), "win.read-only");
 
-  GMenuModel *profiles_menu = terminal_app_get_profile_section (app);
+  GMenuModel *profiles_menu = terminal_app_get_profilemenu (app);
   if (profiles_menu != nullptr && g_menu_model_get_n_items (profiles_menu) > 1) {
     gs_unref_object GMenu *submenu5 = g_menu_new ();
     g_menu_append_section (submenu5, nullptr, profiles_menu);
