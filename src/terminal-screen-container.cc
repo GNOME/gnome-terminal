@@ -280,7 +280,7 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
     vpolicy = GTK_POLICY_ALWAYS;
     break;
   default:
-    g_assert_not_reached ();
+    terminal_assert_not_reached ();
   }
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (container->scrolled_window), hpolicy, vpolicy);

@@ -129,13 +129,13 @@ get_factory_exit_status (const char *service_name,
   pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$",
                              service_name);
   regex = g_regex_new (pattern, GRegexCompileFlags(0), GRegexMatchFlags(0), &err);
-  g_assert_no_error (err);
+  terminal_assert_no_error (err);
 
   if (!g_regex_match (regex, message, GRegexMatchFlags(0), &match_info))
     return FALSE;
 
   number = g_match_info_fetch (match_info, 1);
-  g_assert_nonnull (number);
+  terminal_assert_nonnull (number);
 
   errno = 0;
   v = g_ascii_strtoll (number, &end, 10);
@@ -437,7 +437,7 @@ handle_options (TerminalOptions *options,
     {
       InitialWindow *iw = (InitialWindow*)lw->data;
 
-      g_assert_nonnull (iw);
+      terminal_assert_nonnull (iw);
 
       guint window_id = 0;
 
@@ -449,7 +449,7 @@ handle_options (TerminalOptions *options,
       for (GList *lt = iw->tabs; lt != nullptr; lt = lt->next)
         {
           InitialTab *it = (InitialTab*)lt->data;
-          g_assert_nonnull (it);
+          terminal_assert_nonnull (it);
 
           GVariantBuilder builder;
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));

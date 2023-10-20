@@ -419,7 +419,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
       (*regexes)[i] = vte_regex_new_for_match (regex_patterns[i].pattern, -1,
                                                PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_UCP | PCRE2_MULTILINE,
                                                &error);
-      g_assert_no_error (error);
+      terminal_assert_no_error (error);
 
       if (!vte_regex_jit ((*regexes)[i], PCRE2_JIT_COMPLETE, &error) ||
           !vte_regex_jit ((*regexes)[i], PCRE2_JIT_PARTIAL_SOFT, &error)) {
@@ -1120,7 +1120,7 @@ terminal_screen_exec (TerminalScreen *screen,
   data->fd_list = (GUnixFDList*)(fd_list ? g_object_ref(fd_list) : nullptr);
 
   if (fd_array) {
-    g_assert_nonnull(fd_list);
+    terminal_assert_nonnull(fd_list);
     int n_fds = g_unix_fd_list_get_length(fd_list);
 
     gsize fd_array_data_len;
@@ -1131,8 +1131,8 @@ terminal_screen_exec (TerminalScreen *screen,
     for (gsize i = 0; i < fd_array_data_len; i++) {
       const int fd = fd_array_data[2 * i];
       const int idx = fd_array_data[2 * i + 1];
-      g_assert_cmpint(idx, >=, 0);
-      g_assert_cmpuint(idx, <, n_fds);
+      terminal_assert_cmpint(idx, >=, 0);
+      terminal_assert_cmpuint(idx, <, n_fds);
 
       data->fd_map[idx] = fd;
     }

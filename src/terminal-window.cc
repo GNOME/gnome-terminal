@@ -479,7 +479,7 @@ action_print_cb (GSimpleAction *action,
                                     GTK_WINDOW (window),
                                     &error);
   /* VtePrintOperation always runs async */
-  g_assert_cmpint (result, ==, GTK_PRINT_OPERATION_RESULT_IN_PROGRESS);
+  terminal_assert_cmpint (result, ==, GTK_PRINT_OPERATION_RESULT_IN_PROGRESS);
 }
 
 #endif /* ENABLE_PRINT */
@@ -522,7 +522,7 @@ action_close_cb (GSimpleAction *action,
   TerminalScreen *screen;
   const char *mode_str;
 
-  g_assert_nonnull (parameter);
+  terminal_assert_nonnull (parameter);
   g_variant_get (parameter, "&s", &mode_str);
 
   if (g_str_equal (mode_str, "tab"))
@@ -553,7 +553,7 @@ action_copy_cb (GSimpleAction *action,
   if (window->active_screen == nullptr)
     return;
 
-  g_assert_nonnull (parameter);
+  terminal_assert_nonnull (parameter);
   g_variant_get (parameter, "&s", &format_str);
 
   if (g_str_equal (format_str, "text"))
@@ -682,7 +682,7 @@ action_reset_cb (GSimpleAction *action,
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
 
-  g_assert_nonnull (parameter);
+  terminal_assert_nonnull (parameter);
 
   if (window->active_screen == nullptr)
     return;
@@ -886,7 +886,7 @@ action_size_to_cb (GSimpleAction *action,
   TerminalWindow *window = (TerminalWindow*)user_data;
   guint width, height;
 
-  g_assert_nonnull (parameter);
+  terminal_assert_nonnull (parameter);
 
   if (window->active_screen == nullptr)
     return;
@@ -1182,7 +1182,7 @@ action_read_only_state_cb (GSimpleAction *action,
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
 
-  g_assert_nonnull (state);
+  terminal_assert_nonnull (state);
 
   g_simple_action_set_state (action, state);
 
@@ -1205,7 +1205,7 @@ action_profile_state_cb (GSimpleAction *action,
   const gchar *uuid;
   gs_unref_object GSettings *profile;
 
-  g_assert_nonnull (state);
+  terminal_assert_nonnull (state);
 
   uuid = g_variant_get_string (state, nullptr);
   profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
@@ -1226,7 +1226,7 @@ action_active_tab_set_cb (GSimpleAction *action,
   TerminalWindow *window = (TerminalWindow*)user_data;
   int value, n_screens;
 
-  g_assert_nonnull (parameter);
+  terminal_assert_nonnull (parameter);
 
   n_screens = terminal_notebook_get_n_screens (window->notebook);
 
@@ -1246,7 +1246,7 @@ action_active_tab_state_cb (GSimpleAction *action,
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
 
-  g_assert_nonnull (state);
+  terminal_assert_nonnull (state);
 
   g_simple_action_set_state (action, state);
 

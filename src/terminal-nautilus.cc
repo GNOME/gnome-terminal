@@ -457,7 +457,7 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
     }
 
     default:
-      g_assert_not_reached ();
+      terminal_assert_not_reached ();
   }
 
   if (path == nullptr && (info != FILE_INFO_SFTP || !menu_item->remote_terminal)) {
@@ -568,7 +568,7 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
       break;
 
     default:
-      g_assert_not_reached ();
+      terminal_assert_not_reached ();
   }
 
   item = (TerminalNautilusMenuItem*)g_object_new (TERMINAL_TYPE_NAUTILUS_MENU_ITEM,
@@ -697,7 +697,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
       break;
 
     default:
-      g_assert_not_reached ();
+      terminal_assert_not_reached ();
   }
 
   g_free (uri);

@@ -82,7 +82,7 @@ terminal_g_settings_new_with_path (GSettingsBackend* backend,
     g_settings_schema_source_lookup(source,
                                     schema_id,
                                     TRUE /* recursive */);
-  g_assert_nonnull(schema);
+  terminal_assert_nonnull(schema);
 
   auto const settings = g_settings_new_full(schema,
                                             backend,
@@ -304,7 +304,7 @@ schema_key_range_compatible(GSettingsSchema* source_schema,
     }
   } else if (g_str_equal(reference_type, "flags")) {
     /* Our schemas don't use flags. If that changes, need to implement this! */
-    g_assert_not_reached();
+    terminal_assert_not_reached();
   } else if (g_str_equal(reference_type, "range")) {
     if (!g_variant_is_of_type(source_data,
                               g_variant_get_type(reference_data))) {
@@ -363,11 +363,11 @@ schema_verify_key(GSettingsSchema* source_schema,
 
   gs_unref_settings_schema_key GSettingsSchemaKey* source_key =
     g_settings_schema_get_key(source_schema, key);
-  g_assert_nonnull(source_key);
+  terminal_assert_nonnull(source_key);
 
   gs_unref_settings_schema_key GSettingsSchemaKey* reference_key =
     g_settings_schema_get_key(reference_schema, key);
-  g_assert_nonnull(reference_key);
+  terminal_assert_nonnull(reference_key);
 
   GVariantType const* source_type = g_settings_schema_key_get_value_type(source_key);
   GVariantType const* reference_type = g_settings_schema_key_get_value_type(reference_key);
@@ -496,7 +496,7 @@ schemas_source_verify_schema_by_name(GSettingsSchemaSource* source,
     g_settings_schema_source_lookup(reference_source,
                                     schema_name,
                                     FALSE /* recursive */);
-  g_assert_nonnull(reference_schema);
+  terminal_assert_nonnull(reference_schema);
 
   return schema_verify(source_schema,
                        reference_schema,
