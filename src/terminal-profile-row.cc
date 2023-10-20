@@ -30,6 +30,8 @@ struct _TerminalProfileRow
 {
   AdwActionRow  parent_instance;
 
+  GtkImage     *checkmark;
+
   char         *uuid;
   GSettings    *settings;
 };
@@ -104,14 +106,18 @@ terminal_profile_row_constructed (GObject *object)
   TerminalApp *app = terminal_app_get ();
   TerminalSettingsList *list = terminal_app_get_profiles_list (app);
   g_autofree char *default_uuid = nullptr;
+  gboolean is_default;
 
   G_OBJECT_CLASS (terminal_profile_row_parent_class)->constructed (object);
 
   self->uuid = terminal_settings_list_dup_uuid_from_child (list, self->settings);
   default_uuid = terminal_settings_list_dup_default_child (list);
+  is_default = g_strcmp0 (self->uuid, default_uuid) == 0;
+
   gtk_widget_action_set_enabled (GTK_WIDGET (self),
                                  "profile.make-default",
-                                 g_strcmp0 (self->uuid, default_uuid) != 0);
+                                 is_default);
+  gtk_widget_set_visible (GTK_WIDGET (self->checkmark), is_default);
 
   g_settings_bind (self->settings, "visible-name", self, "title",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET));
@@ -202,6 +208,8 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
                                    terminal_profile_row_make_default);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-row.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileRow, checkmark);
 }
 
 static void
