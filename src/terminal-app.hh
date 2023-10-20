@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 
 #define GNOME_TERMINAL_ICON_NAME "org.gnome.Terminal"
 
+#define GNOME_TERMINAL_ICON_SYMBOLIC_NAME GNOME_TERMINAL_ICON_NAME "-symbolic"
+
 #define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal"
 
 #define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
@@ -137,6 +139,10 @@ void terminal_app_unset_ask_default_terminal(TerminalApp* app);
 void terminal_app_make_default_terminal(TerminalApp* app);
 
 void* terminal_app_get_adw_style_manager(TerminalApp* app);
+
+GIcon* terminal_app_get_default_icon(TerminalApp* app);
+
+GIcon* terminal_app_get_default_icon_symbolic(TerminalApp* app);
 
 G_END_DECLS
 

@@ -156,6 +156,9 @@ struct _TerminalApp
 
   AdwStyleManager* style_manager;
 
+  GIcon* default_icon;
+  GIcon* default_icon_symbolic;
+
   gboolean ask_default;
   gboolean xte_is_default;
   gboolean unified_menu;
@@ -1092,6 +1095,9 @@ terminal_app_finalize (GObject *object)
   g_weak_ref_clear(&app->prefs_process_ref);
 #endif /* TERMINAL_SERVER */
 
+  g_clear_object (&app->default_icon);
+  g_clear_object (&app->default_icon_symbolic);
+
   terminal_accels_shutdown ();
 
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
@@ -1683,4 +1689,26 @@ terminal_app_make_default_terminal(TerminalApp* app)
   terminal_util_make_default_terminal();
   app->xte_is_default = terminal_util_is_default_terminal();
   g_object_notify(G_OBJECT(app), "is-default-terminal");
+}
+
+GIcon*
+terminal_app_get_default_icon(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
+
+  if (!app->default_icon)
+    app->default_icon = g_themed_icon_new(GNOME_TERMINAL_ICON_NAME);
+
+  return app->default_icon;
+}
+
+GIcon*
+terminal_app_get_default_icon_symbolic(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
+
+  if (!app->default_icon_symbolic)
+    app->default_icon_symbolic = g_themed_icon_new(GNOME_TERMINAL_ICON_SYMBOLIC_NAME);
+
+  return app->default_icon_symbolic;
 }

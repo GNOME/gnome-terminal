@@ -432,6 +432,9 @@ static void
 terminal_notebook_init (TerminalNotebook *notebook)
 {
   gtk_widget_init_template (GTK_WIDGET (notebook));
+
+  adw_tab_view_set_default_icon(notebook->tab_view,
+                                terminal_app_get_default_icon_symbolic(terminal_app_get()));
 }
 
 static void
