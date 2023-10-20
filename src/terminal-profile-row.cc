@@ -30,6 +30,7 @@ struct _TerminalProfileRow
 {
   AdwActionRow  parent_instance;
 
+  char         *uuid;
   GSettings    *settings;
 };
 
@@ -81,11 +82,36 @@ terminal_profile_row_remove (GtkWidget  *widget,
 }
 
 static void
+terminal_profile_row_make_default (GtkWidget  *widget,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  TerminalProfileRow *self = TERMINAL_PROFILE_ROW (widget);
+  TerminalSettingsList *list;
+  TerminalApp *app;
+
+  g_assert (TERMINAL_IS_PROFILE_ROW (self));
+
+  app = terminal_app_get ();
+  list = terminal_app_get_profiles_list (app);
+  terminal_settings_list_set_default_child (list, self->uuid);
+}
+
+static void
 terminal_profile_row_constructed (GObject *object)
 {
   TerminalProfileRow *self = (TerminalProfileRow *)object;
+  TerminalApp *app = terminal_app_get ();
+  TerminalSettingsList *list = terminal_app_get_profiles_list (app);
+  g_autofree char *default_uuid = nullptr;
 
   G_OBJECT_CLASS (terminal_profile_row_parent_class)->constructed (object);
+
+  self->uuid = terminal_settings_list_dup_uuid_from_child (list, self->settings);
+  default_uuid = terminal_settings_list_dup_default_child (list);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self),
+                                 "profile.make-default",
+                                 g_strcmp0 (self->uuid, default_uuid) != 0);
 
   g_settings_bind (self->settings, "visible-name", self, "title",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET));
@@ -96,9 +122,10 @@ terminal_profile_row_dispose (GObject *object)
 {
   TerminalProfileRow *self = (TerminalProfileRow *)object;
 
-  g_clear_object (&self->settings);
-
   gtk_widget_dispose_template (GTK_WIDGET (self), TERMINAL_TYPE_PROFILE_ROW);
+
+  g_clear_object (&self->settings);
+  g_clear_pointer (&self->uuid, g_free);
 
   G_OBJECT_CLASS (terminal_profile_row_parent_class)->dispose (object);
 }
@@ -169,6 +196,10 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
                                    "profile.remove",
                                    nullptr,
                                    terminal_profile_row_remove);
+  gtk_widget_class_install_action (widget_class,
+                                   "profile.make-default",
+                                   nullptr,
+                                   terminal_profile_row_make_default);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-row.ui");
 }
