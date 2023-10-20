@@ -480,7 +480,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     have_new_window = TRUE;
   }
 
-  g_assert_nonnull (window);
+  terminal_assert_nonnull (window);
 
   const char *title;
   if (!g_variant_lookup (options, "title", "&s", &title))
@@ -514,7 +514,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     }
   }
 
-  g_assert_nonnull (profile);
+  terminal_assert_nonnull (profile);
 
   /* Now we can create the new screen */
   TerminalScreen *screen = terminal_screen_new (profile, title, zoom);

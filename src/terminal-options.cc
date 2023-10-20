@@ -31,6 +31,7 @@
 
 #include "terminal-options.hh"
 #include "terminal-client-utils.hh"
+#include "terminal-debug.hh"
 #include "terminal-defines.hh"
 #include "terminal-schemas.hh"
 #include "terminal-screen.hh"
@@ -304,7 +305,7 @@ ensure_top_window (TerminalOptions *options,
   else
     iw = (InitialWindow*)g_list_last (options->initial_windows)->data;
 
-  g_assert_nonnull (iw->tabs);
+  terminal_assert_nonnull (iw->tabs);
 
   return iw;
 }
@@ -317,7 +318,7 @@ ensure_top_tab (TerminalOptions *options)
 
   iw = ensure_top_window (options, TRUE);
 
-  g_assert_nonnull (iw->tabs);
+  terminal_assert_nonnull (iw->tabs);
 
   it = (InitialTab*)g_list_last (iw->tabs)->data;
 

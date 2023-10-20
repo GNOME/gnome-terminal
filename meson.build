@@ -352,6 +352,16 @@ foreach flags : compiler_flags_common_multi
   endif
 endforeach
 
+# Release flags
+
+release_cxxflags = []
+if not enable_debug
+  release_cxxflags += [
+    '-DG_DISABLE_ASSERT',
+    '-DG_DISABLE_CAST_CHECKS',
+  ]
+endif
+
 # ... and now make these flags the default
 
 add_project_arguments(global_cflags, language: 'c',)

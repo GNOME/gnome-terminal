@@ -44,6 +44,8 @@
 
 #include <glib.h>
 
+#include "terminal-debug.hh"
+
 /**
  * egg_shell:
  * @shell: the value of the SHELL env variable
@@ -91,7 +93,7 @@ egg_shell (const char *shell)
 	}
 
 	/* If /bin/sh doesn't exist, your system is truly broken.  */
-	g_assert_not_reached ();
+	terminal_assert_not_reached ();
 
 	/* Placate compiler.  */
 	return nullptr;

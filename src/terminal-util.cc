@@ -187,12 +187,12 @@ terminal_util_show_about (void)
   bytes = g_resources_lookup_data (TERMINAL_RESOURCES_PATH_PREFIX "/ui/terminal.about",
                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
                                    &error);
-  g_assert_no_error (error);
+  terminal_assert_no_error (error);
 
   data = (guint8 const*)g_bytes_get_data (bytes, &data_len);
   key_file = g_key_file_new ();
   g_key_file_load_from_data (key_file, (const char *) data, data_len, GKeyFileFlags(0), &error);
-  g_assert_no_error (error);
+  terminal_assert_no_error (error);
 
   authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, nullptr);
   contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, nullptr);
@@ -312,7 +312,7 @@ terminal_util_open_url (GtkWidget *parent,
       break;
     default:
       uri = nullptr;
-      g_assert_not_reached ();
+      terminal_assert_not_reached ();
     }
 
   if (!open_url (GTK_WINDOW (parent), uri, user_time, &error))
@@ -420,7 +420,7 @@ terminal_util_load_widgets_resource (const char *path,
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, path, &error);
-  g_assert_no_error (error);
+  terminal_assert_no_error (error);
 
   va_start (args, object_name);
 
@@ -468,7 +468,7 @@ terminal_util_load_objects_resource (const char *path,
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, path, &error);
-  g_assert_no_error (error);
+  terminal_assert_no_error (error);
 
   va_start (args, object_name);
 

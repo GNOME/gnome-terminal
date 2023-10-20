@@ -635,7 +635,7 @@ terminal_settings_list_new (GSettingsBackend* backend,
 
   gs_unref_settings_schema auto schema =
     g_settings_schema_source_lookup(schema_source, schema_id, true);
-  g_assert_nonnull(schema);
+  terminal_assert_nonnull(schema);
 
   return reinterpret_cast<TerminalSettingsList*>(g_object_new (TERMINAL_TYPE_SETTINGS_LIST,
                                                                "backend", backend,
