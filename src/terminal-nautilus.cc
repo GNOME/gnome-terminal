@@ -35,6 +35,7 @@ extern "C" {
 
 #include "terminal-i18n.hh"
 #include "terminal-client-utils.hh"
+#include "terminal-debug.hh"
 #include "terminal-defines.hh"
 #include "terminal-gdbus-generated.h"
 
