@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <vte/vte.h>
 
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
@@ -36,6 +37,7 @@ struct _TerminalProfileEditor
   AdwActionRow       *custom_font;
   AdwSwitchRow       *enable_bidi;
   AdwSwitchRow       *enable_shaping;
+  AdwPreferencesGroup*image_group;
   AdwSwitchRow       *enable_sixel;
   AdwComboRow        *encoding;
   AdwSwitchRow       *limit_scrollback;
@@ -275,6 +277,11 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, "enable-shaping",
                    self->enable_shaping, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  // Hide sixel pref when vte does not support images
+  gtk_widget_set_visible(GTK_WIDGET(self->image_group),
+                         (vte_get_feature_flags() & VTE_FEATURE_FLAG_SIXEL) != 0);
+
   g_settings_bind (self->settings, "enable-sixel",
                    self->enable_sixel, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
@@ -424,6 +431,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, encoding);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
