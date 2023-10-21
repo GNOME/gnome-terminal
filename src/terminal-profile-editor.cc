@@ -37,13 +37,16 @@ struct _TerminalProfileEditor
   AdwSwitchRow       *limit_scrollback;
   AdwSwitchRow       *login_shell;
   AdwComboRow        *preserve_working_directory;
+  AdwSwitchRow       *rewrap_on_resize;
   AdwSpinRow         *rows;
   AdwSwitchRow       *scroll_on_keystroke;
   AdwSwitchRow       *scroll_on_output;
   AdwSpinRow         *scrollback_lines;
+  AdwSwitchRow       *show_bold_in_bright;
   AdwSwitchRow       *show_scrollbar;
   AdwEntryRow        *title;
   AdwSwitchRow       *use_custom_command;
+  AdwSwitchRow       *use_system_colors;
   AdwSwitchRow       *use_system_font;
   GtkLabel           *uuid;
   AdwEntryRow        *visible_name;
@@ -213,6 +216,17 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, "custom-command",
                    self->custom_command, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "bold-is-bright",
+                   self->show_bold_in_bright, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "use-theme-colors",
+                   self->use_system_colors, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind (self->settings, "rewrap-on-resize",
+                   self->rewrap_on_resize, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 }
 
 static void
@@ -298,12 +312,15 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rewrap_on_resize);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_keystroke);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_output);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scrollback_lines);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_bold_in_bright);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_scrollbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_custom_command);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_colors);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, uuid);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, visible_name);
