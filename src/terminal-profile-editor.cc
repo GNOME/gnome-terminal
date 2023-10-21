@@ -19,7 +19,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "terminal-profile-editor.hh"
+#include "terminal-preferences-list-item.hh"
 
 struct _TerminalProfileEditor
 {
@@ -34,6 +37,7 @@ struct _TerminalProfileEditor
   AdwSwitchRow       *enable_bidi;
   AdwSwitchRow       *enable_shaping;
   AdwSwitchRow       *enable_sixel;
+  AdwComboRow        *encoding;
   AdwSwitchRow       *limit_scrollback;
   AdwSwitchRow       *login_shell;
   AdwComboRow        *preserve_working_directory;
@@ -63,6 +67,113 @@ enum {
 G_DEFINE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, ADW_TYPE_NAVIGATION_PAGE)
 
 static GParamSpec *properties [N_PROPS];
+
+typedef enum {
+        GROUP_UTF8,
+        GROUP_CJKV,
+        GROUP_OBSOLETE,
+        LAST_GROUP
+} EncodingGroup;
+
+typedef struct {
+  const char *charset;
+  const char *name;
+  EncodingGroup group;
+} EncodingEntry;
+
+/* These MUST be sorted by charset so that bsearch can work! */
+static const EncodingEntry encodings[] = {
+  { "BIG5",           N_("Chinese Traditional"), GROUP_CJKV },
+  { "BIG5-HKSCS",     N_("Chinese Traditional"), GROUP_CJKV },
+  { "CP866",          N_("Cyrillic/Russian"),    GROUP_OBSOLETE },
+  { "EUC-JP",         N_("Japanese"),            GROUP_CJKV },
+  { "EUC-KR",         N_("Korean"),              GROUP_CJKV },
+  { "EUC-TW",         N_("Chinese Traditional"), GROUP_CJKV },
+  { "GB18030",        N_("Chinese Simplified"),  GROUP_CJKV },
+  { "GB2312",         N_("Chinese Simplified"),  GROUP_CJKV },
+  { "GBK",            N_("Chinese Simplified"),  GROUP_CJKV },
+  { "IBM850",         N_("Western"),             GROUP_OBSOLETE },
+  { "IBM852",         N_("Central European"),    GROUP_OBSOLETE },
+  { "IBM855",         N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "IBM857",         N_("Turkish"),             GROUP_OBSOLETE },
+  { "IBM862",         N_("Hebrew"),              GROUP_OBSOLETE },
+  { "IBM864",         N_("Arabic"),              GROUP_OBSOLETE },
+  { "ISO-8859-1",     N_("Western"),             GROUP_OBSOLETE },
+  { "ISO-8859-10",    N_("Nordic"),              GROUP_OBSOLETE },
+  { "ISO-8859-13",    N_("Baltic"),              GROUP_OBSOLETE },
+  { "ISO-8859-14",    N_("Celtic"),              GROUP_OBSOLETE },
+  { "ISO-8859-15",    N_("Western"),             GROUP_OBSOLETE },
+  { "ISO-8859-16",    N_("Romanian"),            GROUP_OBSOLETE },
+  { "ISO-8859-2",     N_("Central European"),    GROUP_OBSOLETE },
+  { "ISO-8859-3",     N_("South European"),      GROUP_OBSOLETE },
+  { "ISO-8859-4",     N_("Baltic"),              GROUP_OBSOLETE },
+  { "ISO-8859-5",     N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "ISO-8859-6",     N_("Arabic"),              GROUP_OBSOLETE },
+  { "ISO-8859-7",     N_("Greek"),               GROUP_OBSOLETE },
+  { "ISO-8859-8",     N_("Hebrew Visual"),       GROUP_OBSOLETE },
+  { "ISO-8859-8-I",   N_("Hebrew"),              GROUP_OBSOLETE },
+  { "ISO-8859-9",     N_("Turkish"),             GROUP_OBSOLETE },
+  { "KOI8-R",         N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "KOI8-U",         N_("Cyrillic/Ukrainian"),  GROUP_OBSOLETE },
+  { "MAC-CYRILLIC",   N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "MAC_ARABIC",     N_("Arabic"),              GROUP_OBSOLETE },
+  { "MAC_CE",         N_("Central European"),    GROUP_OBSOLETE },
+  { "MAC_CROATIAN",   N_("Croatian"),            GROUP_OBSOLETE },
+  { "MAC_GREEK",      N_("Greek"),               GROUP_OBSOLETE },
+  { "MAC_HEBREW",     N_("Hebrew"),              GROUP_OBSOLETE },
+  { "MAC_ROMAN",      N_("Western"),             GROUP_OBSOLETE },
+  { "MAC_ROMANIAN",   N_("Romanian"),            GROUP_OBSOLETE },
+  { "MAC_TURKISH",    N_("Turkish"),             GROUP_OBSOLETE },
+  { "MAC_UKRAINIAN",  N_("Cyrillic/Ukrainian"),  GROUP_OBSOLETE },
+  { "SHIFT_JIS",      N_("Japanese"),            GROUP_CJKV },
+  { "TIS-620",        N_("Thai"),                GROUP_OBSOLETE },
+  { "UHC",            N_("Korean"),              GROUP_CJKV },
+  { "UTF-8",          N_("Unicode"),             GROUP_UTF8 },
+  { "WINDOWS-1250",   N_("Central European"),    GROUP_OBSOLETE },
+  { "WINDOWS-1251",   N_("Cyrillic"),            GROUP_OBSOLETE },
+  { "WINDOWS-1252",   N_("Western"),             GROUP_OBSOLETE },
+  { "WINDOWS-1253",   N_("Greek"),               GROUP_OBSOLETE },
+  { "WINDOWS-1254",   N_("Turkish"),             GROUP_OBSOLETE },
+  { "WINDOWS-1255",   N_("Hebrew"),              GROUP_OBSOLETE},
+  { "WINDOWS-1256",   N_("Arabic"),              GROUP_OBSOLETE },
+  { "WINDOWS-1257",   N_("Baltic"),              GROUP_OBSOLETE },
+  { "WINDOWS-1258",   N_("Vietnamese"),          GROUP_OBSOLETE },
+};
+
+static const struct {
+  EncodingGroup group;
+  const char *name;
+} encodings_group_names[] = {
+  { GROUP_UTF8,     N_("Unicode") },
+  { GROUP_CJKV,     N_("Legacy CJK Encodings") },
+  { GROUP_OBSOLETE, N_("Obsolete Encodings") },
+};
+
+static GListModel *
+create_encodings_model (void)
+{
+  GListStore *model = g_list_store_new (TERMINAL_TYPE_PREFERENCES_LIST_ITEM);
+
+  for (guint i = 0; i < G_N_ELEMENTS (encodings_group_names); i++) {
+    for (guint j = 0; j < G_N_ELEMENTS (encodings); j++) {
+      if (encodings[j].group == encodings_group_names[i].group) {
+        g_autofree char *title = g_strdup_printf ("%s (%s)",
+                                                  encodings[j].name,
+                                                  encodings[j].charset);
+        g_autoptr(GVariant) value = g_variant_ref_sink (g_variant_new_string (encodings[j].charset));
+        g_autoptr(TerminalPreferencesListItem) item =
+          (TerminalPreferencesListItem*)g_object_new (TERMINAL_TYPE_PREFERENCES_LIST_ITEM,
+                                                      "title", title,
+                                                      "value", value,
+                                                      nullptr);
+
+        g_list_store_append (model, G_OBJECT (item));
+      }
+    }
+  }
+
+  return G_LIST_MODEL (model);
+}
 
 static gboolean
 scrollbar_policy_to_boolean (GValue   *value,
@@ -136,6 +247,7 @@ static void
 terminal_profile_editor_constructed (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
+  g_autoptr(GListModel) encodings_model = nullptr;
   g_autofree char *path = nullptr;
   g_autofree char *uuid = nullptr;
 
@@ -227,6 +339,10 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, "rewrap-on-resize",
                    self->rewrap_on_resize, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  encodings_model = create_encodings_model ();
+  adw_combo_row_set_enable_search (self->encoding, TRUE);
+  adw_combo_row_set_model (self->encoding, encodings_model);
 }
 
 static void
@@ -309,6 +425,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, encoding);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
