@@ -43,7 +43,6 @@
 #include "terminal-schemas.hh"
 #include "terminal-tab.hh"
 #include "terminal-search-popover.hh"
-#include "terminal-tab-label.hh"
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"

@@ -30,7 +30,6 @@
 #include "terminal-app.hh"
 #include "terminal-intl.hh"
 #include "terminal-tab.hh"
-#include "terminal-tab-label.hh"
 #include "terminal-schemas.hh"
 #include "terminal-libgsystem.hh"
 #include "terminal-util.hh"
