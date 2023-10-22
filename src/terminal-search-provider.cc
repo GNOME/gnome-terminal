@@ -22,7 +22,7 @@
 #include "terminal-app.hh"
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-search-provider.hh"
 #include "terminal-search-provider-gdbus-generated.h"
 #include "terminal-window.hh"
@@ -120,18 +120,17 @@ handle_get_initial_result_set_cb (TerminalSearchProvider2  *skeleton,
   for (l = windows; l != nullptr; l = l->next)
     {
       TerminalWindow *window = (TerminalWindow*)(l->data);
-      GList *c, *containers;
 
       if (!TERMINAL_IS_WINDOW (l->data))
         continue;
 
-      containers = terminal_window_list_screen_containers (window);
-      for (c = containers; c != nullptr; c = c->next)
+      auto tabs = terminal_window_list_tabs (window);
+      for (auto t = tabs; t != nullptr; t = t->next)
         {
-          TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (c->data);
+          TerminalTab *tab = TERMINAL_TAB (t->data);
           TerminalScreen *screen;
 
-          screen = terminal_screen_container_get_screen (container);
+          screen = terminal_tab_get_screen (tab);
           screens = g_list_prepend (screens, screen);
         }
     }

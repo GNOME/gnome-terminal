@@ -29,7 +29,7 @@
 #include "terminal-debug.hh"
 #include "terminal-app.hh"
 #include "terminal-intl.hh"
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-tab-label.hh"
 #include "terminal-schemas.hh"
 #include "terminal-libgsystem.hh"
@@ -102,7 +102,7 @@ terminal_notebook_add_screen (TerminalNotebook *notebook,
     position = adw_tab_view_get_n_pages (notebook->tab_view);
 
   page = adw_tab_view_insert (notebook->tab_view,
-                              terminal_screen_container_new (screen),
+                              terminal_tab_new (screen),
                               position);
 
   g_object_bind_property (screen, "title",
@@ -115,14 +115,14 @@ terminal_notebook_confirm_close (TerminalNotebook *notebook,
                                  TerminalScreen   *screen,
                                  gboolean          confirm)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
   AdwTabPage *page;
 
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
 
-  screen_container = terminal_screen_container_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (screen_container));
+  tab = terminal_tab_get_from_screen (screen);
+  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
 
   if (page != nullptr)
     adw_tab_view_close_page_finish (notebook->tab_view, page, confirm);
@@ -132,15 +132,15 @@ void
 terminal_notebook_remove_screen (TerminalNotebook *notebook,
                                  TerminalScreen   *screen)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
   AdwTabPage *page;
 
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
   g_return_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
 
-  screen_container = terminal_screen_container_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (screen_container));
+  tab = terminal_tab_get_from_screen (screen);
+  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
 
   if (page != nullptr)
     adw_tab_view_close_page (notebook->tab_view, page);
@@ -162,27 +162,27 @@ terminal_notebook_get_active_screen (TerminalNotebook *notebook)
   if (child == nullptr)
     return nullptr;
 
-  return terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child));
+  return terminal_tab_get_screen (TERMINAL_TAB (child));
 }
 
 void
 terminal_notebook_set_active_screen (TerminalNotebook *notebook,
                                      TerminalScreen   *screen)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
   AdwTabPage *page;
 
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
   g_return_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
 
-  screen_container = terminal_screen_container_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (screen_container));
+  tab = terminal_tab_get_from_screen (screen);
+  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
   adw_tab_view_set_selected_page (notebook->tab_view, page);
 }
 
 GList *
-terminal_notebook_list_screen_containers (TerminalNotebook *notebook)
+terminal_notebook_list_tabs (TerminalNotebook *notebook)
 {
   g_autoptr(GtkSelectionModel) pages = nullptr;
   GQueue queue = G_QUEUE_INIT;
@@ -209,9 +209,9 @@ terminal_notebook_list_screens (TerminalNotebook *notebook)
 
   g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), nullptr);
 
-  list = terminal_notebook_list_screen_containers (notebook);
+  list = terminal_notebook_list_tabs (notebook);
   for (l = list; l != nullptr; l = l->next)
-    l->data = terminal_screen_container_get_screen ((TerminalScreenContainer *) l->data);
+    l->data = terminal_tab_get_screen ((TerminalTab *) l->data);
 
   return list;
 }
@@ -260,14 +260,14 @@ terminal_notebook_reorder_screen (TerminalNotebook *notebook,
                                   TerminalScreen   *screen,
                                   int               new_position)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
   AdwTabPage *page;
 
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (new_position == 1 || new_position == -1);
 
-  screen_container = terminal_screen_container_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (screen_container));
+  tab = terminal_tab_get_from_screen (screen);
+  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
   new_position += adw_tab_view_get_page_position (notebook->tab_view, page);
 
   if (new_position < adw_tab_view_get_n_pages (notebook->tab_view))
@@ -311,7 +311,7 @@ terminal_notebook_switch_page (AdwTabView       *tab_view,
   page = adw_tab_view_get_selected_page (tab_view);
   if (page != nullptr) {
     GtkWidget *child = adw_tab_page_get_child (page);
-    screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child));
+    screen = terminal_tab_get_screen (TERMINAL_TAB (child));
   }
 
   old_active_screen = notebook->active_screen;
@@ -341,7 +341,7 @@ terminal_notebook_page_added (AdwTabView       *tab_view,
 
   child = adw_tab_page_get_child (page);
   g_signal_emit (notebook, signals[SCREEN_ADDED], 0,
-                 terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
+                 terminal_tab_get_screen (TERMINAL_TAB (child)));
 }
 
 static void
@@ -358,7 +358,7 @@ terminal_notebook_page_removed (AdwTabView       *tab_view,
 
   child = adw_tab_page_get_child (page);
   g_signal_emit (notebook, signals[SCREEN_REMOVED], 0,
-                 terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
+                 terminal_tab_get_screen (TERMINAL_TAB (child)));
 }
 
 static void
@@ -379,7 +379,7 @@ terminal_notebook_close_page (AdwTabView       *tab_view,
                               AdwTabPage       *page,
                               TerminalNotebook *notebook)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
   TerminalScreen *screen;
   gboolean ret = GDK_EVENT_PROPAGATE;
 
@@ -387,8 +387,8 @@ terminal_notebook_close_page (AdwTabView       *tab_view,
   g_assert (ADW_IS_TAB_PAGE (page));
   g_assert (TERMINAL_IS_NOTEBOOK (notebook));
 
-  screen_container = TERMINAL_SCREEN_CONTAINER (adw_tab_page_get_child (page));
-  screen = terminal_screen_container_get_screen (screen_container);
+  tab = TERMINAL_TAB (adw_tab_page_get_child (page));
+  screen = terminal_tab_get_screen (tab);
 
   g_signal_emit (notebook, signals[SCREEN_CLOSE_REQUEST], 0, screen, &ret);
 
@@ -420,7 +420,7 @@ terminal_notebook_setup_menu (AdwTabView       *tab_view,
 
   if (page != nullptr &&
       (child = adw_tab_page_get_child (page)) &&
-      (screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child))) &&
+      (screen = terminal_tab_get_screen (TERMINAL_TAB (child))) &&
       !terminal_screen_is_active (screen)) {
     terminal_notebook_set_active_screen (notebook, screen);
   }
