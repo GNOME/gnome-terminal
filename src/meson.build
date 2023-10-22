@@ -179,8 +179,6 @@ server_sources = app_sources + client_util_sources + debug_sources + dbus_source
   'terminal-search-popover.hh',
   'terminal-settings-bridge-impl.cc',
   'terminal-settings-bridge-impl.hh',
-  'terminal-tab-label.cc',
-  'terminal-tab-label.hh',
   'terminal-window.cc',
   'terminal-window.hh',
 )
