@@ -18,12 +18,12 @@
 
 #include "config.h"
 
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-debug.hh"
 
 #include <gtk/gtk.h>
 
-struct _TerminalScreenContainer
+struct _TerminalTab
 {
   GtkWidget parent_instance;
 
@@ -42,68 +42,68 @@ enum
   PROP_VSCROLLBAR_POLICY
 };
 
-G_DEFINE_FINAL_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (TerminalTab, terminal_tab, GTK_TYPE_WIDGET)
 
-#define TERMINAL_SCREEN_CONTAINER_CSS_NAME "terminal-screen-container"
+#define TERMINAL_TAB_CSS_NAME "terminal-tab"
 
 static void
-terminal_screen_container_init (TerminalScreenContainer *container)
+terminal_tab_init (TerminalTab *tab)
 {
-  container->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
-  container->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
+  tab->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
+  tab->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
 }
 
 static void
-terminal_screen_container_constructed (GObject *object)
+terminal_tab_constructed (GObject *object)
 {
-  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+  TerminalTab *tab = TERMINAL_TAB (object);
 
-  G_OBJECT_CLASS (terminal_screen_container_parent_class)->constructed (object);
+  G_OBJECT_CLASS (terminal_tab_parent_class)->constructed (object);
 
-  g_assert (container->screen != nullptr);
+  g_assert (tab->screen != nullptr);
 
-  container->overlay = gtk_overlay_new ();
-  gtk_widget_set_parent (GTK_WIDGET (container->overlay), GTK_WIDGET (container));
+  tab->overlay = gtk_overlay_new ();
+  gtk_widget_set_parent (GTK_WIDGET (tab->overlay), GTK_WIDGET (tab));
 
-  container->scrolled_window =
+  tab->scrolled_window =
     (GtkWidget *)g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                               "hscrollbar-policy", container->hscrollbar_policy,
-                               "vscrollbar-policy", container->vscrollbar_policy,
-                               "child", container->screen,
+                               "hscrollbar-policy", tab->hscrollbar_policy,
+                               "vscrollbar-policy", tab->vscrollbar_policy,
+                               "child", tab->screen,
                                "propagate-natural-width", TRUE,
                                "propagate-natural-height", TRUE,
                                nullptr);
-  gtk_overlay_set_child (GTK_OVERLAY (container->overlay),
-                         container->scrolled_window);
+  gtk_overlay_set_child (GTK_OVERLAY (tab->overlay),
+                         tab->scrolled_window);
 }
 
 static void
-terminal_screen_container_dispose (GObject *object)
+terminal_tab_dispose (GObject *object)
 {
-  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+  TerminalTab *tab = TERMINAL_TAB (object);
 
-  g_clear_pointer (&container->overlay, gtk_widget_unparent);
+  g_clear_pointer (&tab->overlay, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (terminal_screen_container_parent_class)->dispose (object);
+  G_OBJECT_CLASS (terminal_tab_parent_class)->dispose (object);
 }
 
 static void
-terminal_screen_container_get_property (GObject *object,
+terminal_tab_get_property (GObject *object,
                                         guint prop_id,
                                         GValue *value,
                                         GParamSpec *pspec)
 {
-  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+  TerminalTab *tab = TERMINAL_TAB (object);
 
   switch (prop_id) {
     case PROP_SCREEN:
-      g_value_set_object (value, container->screen);
+      g_value_set_object (value, tab->screen);
       break;
     case PROP_HSCROLLBAR_POLICY:
-      g_value_set_enum (value, container->hscrollbar_policy);
+      g_value_set_enum (value, tab->hscrollbar_policy);
       break;
     case PROP_VSCROLLBAR_POLICY:
-      g_value_set_enum (value, container->vscrollbar_policy);
+      g_value_set_enum (value, tab->vscrollbar_policy);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -112,25 +112,25 @@ terminal_screen_container_get_property (GObject *object,
 }
 
 static void
-terminal_screen_container_set_property (GObject *object,
+terminal_tab_set_property (GObject *object,
                                         guint prop_id,
                                         const GValue *value,
                                         GParamSpec *pspec)
 {
-  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+  TerminalTab *tab = TERMINAL_TAB (object);
 
   switch (prop_id) {
     case PROP_SCREEN:
-      container->screen = (TerminalScreen*)g_value_get_object (value);
+      tab->screen = (TerminalScreen*)g_value_get_object (value);
       break;
     case PROP_HSCROLLBAR_POLICY:
-      terminal_screen_container_set_policy (container,
+      terminal_tab_set_policy (tab,
                                             GtkPolicyType(g_value_get_enum (value)),
-                                            container->vscrollbar_policy);
+                                            tab->vscrollbar_policy);
       break;
     case PROP_VSCROLLBAR_POLICY:
-      terminal_screen_container_set_policy (container,
-                                            container->hscrollbar_policy,
+      terminal_tab_set_policy (tab,
+                                            tab->hscrollbar_policy,
                                             GtkPolicyType(g_value_get_enum (value)));
       break;
     default:
@@ -140,18 +140,18 @@ terminal_screen_container_set_property (GObject *object,
 }
 
 static void
-terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
+terminal_tab_class_init (TerminalTabClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructed = terminal_screen_container_constructed;
-  gobject_class->dispose = terminal_screen_container_dispose;
-  gobject_class->get_property = terminal_screen_container_get_property;
-  gobject_class->set_property = terminal_screen_container_set_property;
+  gobject_class->constructed = terminal_tab_constructed;
+  gobject_class->dispose = terminal_tab_dispose;
+  gobject_class->get_property = terminal_tab_get_property;
+  gobject_class->set_property = terminal_tab_set_property;
 
   gtk_widget_class_set_layout_manager_type(widget_class, GTK_TYPE_BIN_LAYOUT);
-  gtk_widget_class_set_css_name(widget_class, TERMINAL_SCREEN_CONTAINER_CSS_NAME);
+  gtk_widget_class_set_css_name(widget_class, TERMINAL_TAB_CSS_NAME);
 
   g_object_class_install_property
     (gobject_class,
@@ -183,64 +183,64 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 /* public API */
 
 /**
- * terminal_screen_container_new:
+ * terminal_tab_new:
  * @screen: a #TerminalScreen
  *
- * Returns: a new #TerminalScreenContainer for @screen
+ * Returns: a new #TerminalTab for @screen
  */
 GtkWidget *
-terminal_screen_container_new (TerminalScreen *screen)
+terminal_tab_new (TerminalScreen *screen)
 {
   return reinterpret_cast<GtkWidget*>
-    (g_object_new (TERMINAL_TYPE_SCREEN_CONTAINER,
+    (g_object_new (TERMINAL_TYPE_TAB,
 		   "screen", screen,
 		   nullptr));
 }
 
 /**
- * terminal_screen_container_get_screen:
- * @container: a #TerminalScreenContainer
+ * terminal_tab_get_screen:
+ * @tab: a #TerminalTab
  *
- * Returns: @container's #TerminalScreen
+ * Returns: @tab's #TerminalScreen
  */
 TerminalScreen *
-terminal_screen_container_get_screen (TerminalScreenContainer *container)
+terminal_tab_get_screen (TerminalTab *tab)
 {
-  if (container == nullptr)
+  if (tab == nullptr)
     return nullptr;
 
-  g_return_val_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container), nullptr);
+  g_return_val_if_fail (TERMINAL_IS_TAB (tab), nullptr);
 
-  return container->screen;
+  return tab->screen;
 }
 
 /**
- * terminal_screen_container_get_from_screen:
+ * terminal_tab_get_from_screen:
  * @screen: a #TerminalScreen
  *
- * Returns the #TerminalScreenContainer containing @screen.
+ * Returns the #TerminalTab containing @screen.
  */
-TerminalScreenContainer *
-terminal_screen_container_get_from_screen (TerminalScreen *screen)
+TerminalTab *
+terminal_tab_get_from_screen (TerminalScreen *screen)
 {
   if (screen == nullptr)
     return nullptr;
 
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), nullptr);
 
-  return TERMINAL_SCREEN_CONTAINER (gtk_widget_get_ancestor (GTK_WIDGET (screen), TERMINAL_TYPE_SCREEN_CONTAINER));
+  return TERMINAL_TAB (gtk_widget_get_ancestor (GTK_WIDGET (screen), TERMINAL_TYPE_TAB));
 }
 
 /**
- * terminal_screen_container_set_policy:
- * @container: a #TerminalScreenContainer
+ * terminal_tab_set_policy:
+ * @tab: a #TerminalTab
  * @hpolicy: a #GtkPolicyType
  * @vpolicy: a #GtkPolicyType
  *
- * Sets @container's scrollbar policy.
+ * Sets @tab's scrollbar policy.
  */
 void
-terminal_screen_container_set_policy (TerminalScreenContainer *container,
+terminal_tab_set_policy (TerminalTab *tab,
                                       GtkPolicyType hpolicy,
                                       GtkPolicyType vpolicy)
 {
@@ -248,18 +248,18 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
   GtkSettings *settings;
   gboolean overlay_scrolling;
 
-  g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
+  g_return_if_fail (TERMINAL_IS_TAB (tab));
 
-  object = G_OBJECT (container);
+  object = G_OBJECT (tab);
 
   g_object_freeze_notify (object);
 
-  if (container->hscrollbar_policy != hpolicy) {
-    container->hscrollbar_policy = hpolicy;
+  if (tab->hscrollbar_policy != hpolicy) {
+    tab->hscrollbar_policy = hpolicy;
     g_object_notify (object, "hscrollbar-policy");
   }
-  if (container->vscrollbar_policy != vpolicy) {
-    container->vscrollbar_policy = vpolicy;
+  if (tab->vscrollbar_policy != vpolicy) {
+    tab->vscrollbar_policy = vpolicy;
     g_object_notify (object, "vscrollbar-policy");
   }
 
@@ -283,36 +283,36 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
     terminal_assert_not_reached ();
   }
 
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (container->scrolled_window), hpolicy, vpolicy);
-  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (container->scrolled_window),
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (tab->scrolled_window), hpolicy, vpolicy);
+  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (tab->scrolled_window),
                                              vpolicy == GTK_POLICY_AUTOMATIC);
 
   g_object_thaw_notify (object);
 }
 
 void
-terminal_screen_container_add_overlay (TerminalScreenContainer *container,
+terminal_tab_add_overlay (TerminalTab *tab,
                                        GtkWidget *child)
 {
-  g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
+  g_return_if_fail (TERMINAL_IS_TAB (tab));
 
-  gtk_overlay_add_overlay (GTK_OVERLAY (container->overlay), child);
+  gtk_overlay_add_overlay (GTK_OVERLAY (tab->overlay), child);
 }
 
 void
-terminal_screen_container_remove_overlay (TerminalScreenContainer *container,
+terminal_tab_remove_overlay (TerminalTab *tab,
                                           GtkWidget               *child)
 {
-  g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
+  g_return_if_fail (TERMINAL_IS_TAB (tab));
 
-  gtk_overlay_remove_overlay (GTK_OVERLAY (container->overlay), child);
+  gtk_overlay_remove_overlay (GTK_OVERLAY (tab->overlay), child);
 }
 
 void
-terminal_screen_container_destroy (TerminalScreenContainer *container)
+terminal_tab_destroy (TerminalTab *tab)
 {
-  g_return_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container));
+  g_return_if_fail (TERMINAL_IS_TAB (tab));
 
-  container->screen = nullptr;
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (container->scrolled_window), nullptr);
+  tab->screen = nullptr;
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (tab->scrolled_window), nullptr);
 }

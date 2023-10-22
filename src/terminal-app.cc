@@ -46,7 +46,7 @@
 #ifdef TERMINAL_SERVER
 #include "terminal-gdbus.hh"
 #include "terminal-prefs-process.hh"
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-screen.hh"
 #include "terminal-window.hh"
 

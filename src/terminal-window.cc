@@ -41,7 +41,7 @@
 #include "terminal-intl.hh"
 #include "terminal-notebook.hh"
 #include "terminal-schemas.hh"
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-search-popover.hh"
 #include "terminal-tab-label.hh"
 #include "terminal-util.hh"
@@ -1655,11 +1655,11 @@ notebook_update_tabs_menu_cb (GtkMenuButton *button,
   g_assert (TERMINAL_IS_WINDOW (window));
 
   menu = g_menu_new ();
-  tabs = terminal_window_list_screen_containers (window);
+  tabs = terminal_window_list_tabs (window);
 
   for (t = tabs, i = 0; t != nullptr; t = t->next, i++) {
-    TerminalScreenContainer *container = (TerminalScreenContainer*)t->data;
-    TerminalScreen *screen = terminal_screen_container_get_screen (container);
+    TerminalTab *tab = (TerminalTab*)t->data;
+    TerminalScreen *screen = terminal_tab_get_screen (tab);
     gs_unref_object GMenuItem *item;
     const char *title;
 
@@ -2225,10 +2225,10 @@ screen_hyperlink_hover_uri_changed (TerminalScreen *screen,
   gtk_widget_set_tooltip_text (GTK_WIDGET (screen), label);
 }
 
-/* MDI container callbacks */
+/* Tab view callbacks */
 
 static gboolean
-screen_close_request_cb (TerminalNotebook *container,
+screen_close_request_cb (TerminalNotebook *notebook,
                          TerminalScreen   *screen,
                          TerminalWindow   *window)
 {
@@ -2294,7 +2294,7 @@ terminal_window_move_screen (TerminalWindow *source_window,
                              TerminalScreen *screen,
                              int dest_position)
 {
-  TerminalScreenContainer *screen_container;
+  TerminalTab *tab;
 
   g_return_if_fail (TERMINAL_IS_WINDOW (source_window));
   g_return_if_fail (TERMINAL_IS_WINDOW (dest_window));
@@ -2302,21 +2302,21 @@ terminal_window_move_screen (TerminalWindow *source_window,
   g_return_if_fail (gtk_widget_get_root (GTK_WIDGET (screen)) == GTK_ROOT (source_window));
   g_return_if_fail (dest_position >= -1);
 
-  screen_container = terminal_screen_container_get_from_screen (screen);
-  g_assert (TERMINAL_IS_SCREEN_CONTAINER (screen_container));
+  tab = terminal_tab_get_from_screen (screen);
+  g_assert (TERMINAL_IS_TAB (tab));
 
-  /* We have to ref the screen container as well as the screen,
-   * because otherwise removing the screen container from the source
-   * window's notebook will cause the container and its containing
+  /* We have to ref the tab as well as the screen,
+   * because otherwise removing the tab from the source
+   * window's notebook will cause the tab and its containing
    * screen to be gtk_widget_destroy()ed!
    */
-  g_object_ref_sink (screen_container);
+  g_object_ref_sink (tab);
   g_object_ref_sink (screen);
   terminal_window_remove_screen (source_window, screen);
 
-  /* Now we can safely remove the screen from the container and let the container die */
-  terminal_screen_container_destroy (screen_container);
-  g_object_unref (screen_container);
+  /* Now we can safely remove the screen from the tab and let the tab die */
+  terminal_tab_destroy (tab);
+  g_object_unref (tab);
 
   terminal_window_add_screen (dest_window, screen, dest_position);
   terminal_notebook_set_active_screen (dest_window->notebook, screen);
@@ -2324,9 +2324,9 @@ terminal_window_move_screen (TerminalWindow *source_window,
 }
 
 GList*
-terminal_window_list_screen_containers (TerminalWindow *window)
+terminal_window_list_tabs (TerminalWindow *window)
 {
-  return terminal_notebook_list_screen_containers (window->notebook);
+  return terminal_notebook_list_tabs (window->notebook);
 }
 
 void
@@ -2383,10 +2383,10 @@ terminal_window_get_active (TerminalWindow *window)
 }
 
 static void
-notebook_screen_switched_cb (TerminalNotebook *container,
-                        TerminalScreen   *old_active_screen,
-                        TerminalScreen   *screen,
-                        TerminalWindow   *window)
+notebook_screen_switched_cb (TerminalNotebook *notebook,
+                             TerminalScreen   *old_active_screen,
+                             TerminalScreen   *screen,
+                             TerminalWindow   *window)
 {
   int old_grid_width, old_grid_height;
 
@@ -2823,14 +2823,14 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
       do_confirm = FALSE;
 
-      tabs = terminal_window_list_screen_containers (window);
+      tabs = terminal_window_list_tabs (window);
       n_tabs = g_list_length (tabs);
 
       for (t = tabs; t != nullptr; t = t->next)
         {
           TerminalScreen *terminal_screen;
 
-          terminal_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (t->data));
+          terminal_screen = terminal_tab_get_screen (TERMINAL_TAB (t->data));
           if (terminal_screen_has_foreground_process (terminal_screen, nullptr, nullptr))
             {
               do_confirm = TRUE;

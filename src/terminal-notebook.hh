@@ -39,7 +39,7 @@ void            terminal_notebook_set_active_screen      (TerminalNotebook *note
 void            terminal_notebook_set_active_screen_num  (TerminalNotebook *notebook,
                                                           int               position);
 GList          *terminal_notebook_list_screens           (TerminalNotebook *notebook);
-GList          *terminal_notebook_list_screen_containers (TerminalNotebook *notebook);
+GList          *terminal_notebook_list_tabs (TerminalNotebook *notebook);
 int             terminal_notebook_get_n_screens          (TerminalNotebook *notebook);
 int             terminal_notebook_get_active_screen_num  (TerminalNotebook *notebook);
 void            terminal_notebook_reorder_screen         (TerminalNotebook *notebook,

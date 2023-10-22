@@ -58,7 +58,7 @@
 #include "terminal-intl.hh"
 #include "terminal-marshal.h"
 #include "terminal-schemas.hh"
-#include "terminal-screen-container.hh"
+#include "terminal-tab.hh"
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-info-bar.hh"
@@ -1696,19 +1696,19 @@ info_bar_response_cb (GtkWidget *info_bar,
                       int response,
                       TerminalScreen *screen)
 {
-  TerminalScreenContainer *container;
+  TerminalTab *tab;
 
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
-  container = TERMINAL_SCREEN_CONTAINER (gtk_widget_get_ancestor (info_bar, TERMINAL_TYPE_SCREEN_CONTAINER));
+  tab = TERMINAL_TAB (gtk_widget_get_ancestor (info_bar, TERMINAL_TYPE_TAB));
 
   switch (response) {
     case GTK_RESPONSE_CANCEL:
-      terminal_screen_container_remove_overlay (container, info_bar);
+      terminal_tab_remove_overlay (tab, info_bar);
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
     case RESPONSE_RELAUNCH:
-      terminal_screen_container_remove_overlay (container, info_bar);
+      terminal_tab_remove_overlay (tab, info_bar);
       terminal_screen_reexec (screen, nullptr, nullptr, nullptr, nullptr);
       break;
     case RESPONSE_EDIT_PREFERENCES:
@@ -1718,7 +1718,7 @@ info_bar_response_cb (GtkWidget *info_bar,
                                      GDK_CURRENT_TIME);
       break;
     default:
-      terminal_screen_container_remove_overlay (container, info_bar);
+      terminal_tab_remove_overlay (tab, info_bar);
       break;
   }
 }
@@ -1746,7 +1746,7 @@ terminal_screen_show_info_bar (TerminalScreen *screen,
 
   gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
   gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
-  terminal_screen_container_add_overlay(terminal_screen_container_get_from_screen (screen),
+  terminal_tab_add_overlay(terminal_tab_get_from_screen (screen),
                                         info_bar);
   gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
   gtk_widget_show (info_bar);
@@ -2112,7 +2112,7 @@ terminal_screen_child_exited (VteTerminal *terminal,
 
       gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
       gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
-      terminal_screen_container_add_overlay(terminal_screen_container_get_from_screen (screen),
+      terminal_tab_add_overlay(terminal_tab_get_from_screen (screen),
                                             info_bar);
       gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
       gtk_widget_show (info_bar);
@@ -2512,16 +2512,15 @@ void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  TerminalScreenContainer *container;
   GtkPolicyType vpolicy;
 
-  container = terminal_screen_container_get_from_screen (screen);
-  if (container == nullptr)
+  auto const tab = terminal_tab_get_from_screen (screen);
+  if (tab == nullptr)
     return;
 
   vpolicy = GtkPolicyType(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
 
-  terminal_screen_container_set_policy (container, GTK_POLICY_NEVER, vpolicy);
+  terminal_tab_set_policy (tab, GTK_POLICY_NEVER, vpolicy);
 }
 
 void
