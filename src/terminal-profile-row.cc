@@ -119,6 +119,14 @@ terminal_profile_row_constructed (GObject *object)
                                  is_default);
   gtk_widget_set_visible (GTK_WIDGET (self->checkmark), is_default);
 
+  /* This handles both the "is-default" as well as a single profile
+   * (which is going to be the default) so you cannot remove the
+   * last item from the list.
+   */
+  gtk_widget_action_set_enabled (GTK_WIDGET (self),
+                                 "profile.remove",
+                                 !is_default);
+
   g_settings_bind (self->settings, "visible-name", self, "title",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET));
 }
