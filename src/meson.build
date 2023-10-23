@@ -290,6 +290,8 @@ prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_so
   'terminal-accel-dialog.hh',
   'terminal-accel-row.cc',
   'terminal-accel-row.hh',
+  'terminal-color-row.cc',
+  'terminal-color-row.hh',
   'terminal-preferences-list-item.cc',
   'terminal-preferences-list-item.hh',
   'terminal-preferences-window.cc',
