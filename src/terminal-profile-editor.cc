@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <vte/vte.h>
 
+#include "terminal-color-row.hh"
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
 
@@ -449,6 +450,8 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, uuid);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, visible_name);
+
+  g_type_ensure (TERMINAL_TYPE_COLOR_ROW);
 }
 
 static void
