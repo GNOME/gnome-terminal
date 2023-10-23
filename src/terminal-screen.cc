@@ -1121,7 +1121,7 @@ terminal_screen_exec (TerminalScreen *screen,
 
   if (fd_array) {
     terminal_assert_nonnull(fd_list);
-    int n_fds = g_unix_fd_list_get_length(fd_list);
+    G_GNUC_UNUSED int n_fds = g_unix_fd_list_get_length(fd_list);
 
     gsize fd_array_data_len;
     const int *fd_array_data = (int const*)g_variant_get_fixed_array (fd_array, &fd_array_data_len, 2 * sizeof (int));
