@@ -31,50 +31,67 @@
 
 struct _TerminalProfileEditor
 {
-  AdwNavigationPage    parent_instance;
+  AdwNavigationPage     parent_instance;
 
-  AdwSwitchRow        *audible_bell;
-  TerminalColorRow    *bold_color_set;
-  TerminalColorRow    *bold_color_text;
-  AdwSpinRow          *cell_height;
-  AdwSpinRow          *cell_width;
-  AdwComboRow         *color_palette;
-  AdwComboRow         *color_schemes;
-  AdwSpinRow          *columns;
-  TerminalColorRow    *cursor_color_text;
-  TerminalColorRow    *cursor_color_background;
-  GtkSwitch           *cursor_colors_set;
-  AdwEntryRow         *custom_command;
-  AdwActionRow        *custom_font;
-  GtkLabel            *custom_font_label;
-  TerminalColorRow    *default_color_text;
-  TerminalColorRow    *default_color_background;
-  AdwSwitchRow        *enable_bidi;
-  AdwSwitchRow        *enable_shaping;
-  TerminalColorRow    *highlight_color_text;
-  TerminalColorRow    *highlight_color_background;
-  GtkSwitch           *highlight_colors_set;
-  AdwPreferencesGroup *image_group;
-  AdwSwitchRow        *enable_sixel;
-  AdwComboRow         *encoding;
-  AdwSwitchRow        *limit_scrollback;
-  AdwSwitchRow        *login_shell;
-  AdwComboRow         *preserve_working_directory;
-  AdwSwitchRow        *rewrap_on_resize;
-  AdwSpinRow          *rows;
-  AdwSwitchRow        *scroll_on_keystroke;
-  AdwSwitchRow        *scroll_on_output;
-  AdwSpinRow          *scrollback_lines;
-  AdwSwitchRow        *show_bold_in_bright;
-  AdwSwitchRow        *show_scrollbar;
-  AdwEntryRow         *title;
-  AdwSwitchRow        *use_custom_command;
-  AdwSwitchRow        *use_system_colors;
-  AdwSwitchRow        *use_system_font;
-  GtkLabel            *uuid;
-  AdwEntryRow         *visible_name;
+  AdwSwitchRow         *audible_bell;
+  TerminalColorRow     *bold_color_set;
+  TerminalColorRow     *bold_color_text;
+  AdwSpinRow           *cell_height;
+  AdwSpinRow           *cell_width;
+  GtkColorDialog       *color_dialog;
+  AdwComboRow          *color_palette;
+  AdwComboRow          *color_schemes;
+  AdwSpinRow           *columns;
+  TerminalColorRow     *cursor_color_text;
+  TerminalColorRow     *cursor_color_background;
+  GtkSwitch            *cursor_colors_set;
+  AdwEntryRow          *custom_command;
+  AdwActionRow         *custom_font;
+  GtkLabel             *custom_font_label;
+  TerminalColorRow     *default_color_text;
+  TerminalColorRow     *default_color_background;
+  AdwSwitchRow         *enable_bidi;
+  AdwSwitchRow         *enable_shaping;
+  AdwSwitchRow         *enable_sixel;
+  AdwComboRow          *encoding;
+  TerminalColorRow     *highlight_color_text;
+  TerminalColorRow     *highlight_color_background;
+  GtkSwitch            *highlight_colors_set;
+  AdwPreferencesGroup  *image_group;
+  AdwSwitchRow         *limit_scrollback;
+  AdwSwitchRow         *login_shell;
+  GtkColorDialogButton *palette_0;
+  GtkColorDialogButton *palette_1;
+  GtkColorDialogButton *palette_2;
+  GtkColorDialogButton *palette_3;
+  GtkColorDialogButton *palette_4;
+  GtkColorDialogButton *palette_5;
+  GtkColorDialogButton *palette_6;
+  GtkColorDialogButton *palette_7;
+  GtkColorDialogButton *palette_8;
+  GtkColorDialogButton *palette_9;
+  GtkColorDialogButton *palette_10;
+  GtkColorDialogButton *palette_11;
+  GtkColorDialogButton *palette_12;
+  GtkColorDialogButton *palette_13;
+  GtkColorDialogButton *palette_14;
+  GtkColorDialogButton *palette_15;
+  AdwComboRow          *preserve_working_directory;
+  AdwSwitchRow         *rewrap_on_resize;
+  AdwSpinRow           *rows;
+  AdwSwitchRow         *scroll_on_keystroke;
+  AdwSwitchRow         *scroll_on_output;
+  AdwSpinRow           *scrollback_lines;
+  AdwSwitchRow         *show_bold_in_bright;
+  AdwSwitchRow         *show_scrollbar;
+  AdwEntryRow          *title;
+  AdwSwitchRow         *use_custom_command;
+  AdwSwitchRow         *use_system_colors;
+  AdwSwitchRow         *use_system_font;
+  GtkLabel             *uuid;
+  AdwEntryRow          *visible_name;
 
-  GSettings           *settings;
+  GSettings            *settings;
 };
 
 typedef struct _TerminalColorScheme
@@ -474,6 +491,87 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
 }
 
 static void
+terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
+                                               GParamSpec            *pspec,
+                                               GtkColorDialogButton  *button)
+{
+  g_auto(GStrv) palette = nullptr;
+  const GdkRGBA *color;
+  const char *child_name;
+  guint pos;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (pspec != nullptr);
+  g_assert (g_str_equal (pspec->name, "rgba"));
+  g_assert (GTK_IS_COLOR_DIALOG_BUTTON (button));
+
+  child_name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
+  color = gtk_color_dialog_button_get_rgba (button);
+
+  g_assert (color != nullptr);
+  g_assert (child_name != nullptr);
+  g_assert (g_str_has_prefix (child_name, "palette_"));
+
+  if (1 != sscanf (child_name, "palette_%u", &pos) || pos >= PALETTE_SIZE)
+    return;
+
+  /* If we come across an invalid palette, just reset the key and
+   * let the user try again.
+   */
+  palette = g_settings_get_strv (self->settings, "palette");
+  if (g_strv_length (palette) != PALETTE_SIZE) {
+    g_settings_reset (self->settings, "palette");
+    return;
+  }
+
+  g_free (palette[pos]);
+  palette[pos] = gdk_rgba_to_string (color);
+  g_settings_set_strv (self->settings, "palette", palette);
+}
+
+static void
+terminal_profile_editor_palette_changed_cb (TerminalProfileEditor *self,
+                                            const char            *key,
+                                            GSettings             *settings)
+{
+  g_auto(GStrv) palette = nullptr;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (g_str_equal (key, "palette"));
+  g_assert (G_IS_SETTINGS (settings));
+
+  palette = g_settings_get_strv (settings, key);
+
+  if (g_strv_length (palette) != PALETTE_SIZE) {
+    g_warning_once ("Palette must contain exactly 16 colors");
+    return;
+  }
+
+  for (guint i = 0; i < PALETTE_SIZE; i++) {
+    GObject *button;
+    GdkRGBA rgba;
+    char child_name[32];
+
+    if (!gdk_rgba_parse (&rgba, palette[i])) {
+      g_warning ("'%s' cannot be parsed into a color", palette[i]);
+      continue;
+    }
+
+    g_snprintf (child_name, sizeof child_name, "palette_%u", i);
+    button = gtk_widget_get_template_child (GTK_WIDGET (self),
+                                            TERMINAL_TYPE_PROFILE_EDITOR,
+                                            child_name);
+
+    g_assert (button != nullptr);
+    g_assert (GTK_IS_COLOR_DIALOG_BUTTON (button));
+
+    g_signal_handlers_block_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
+    gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (button), &rgba);
+    g_signal_handlers_unblock_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
+  }
+}
+
+static void
 terminal_profile_editor_select_custon_font_cb (GObject      *object,
                                                GAsyncResult *result,
                                                gpointer      user_data)
@@ -732,6 +830,13 @@ terminal_profile_editor_constructed (GObject *object)
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
 
+  g_signal_connect_object (self->settings,
+                           "changed::palette",
+                           G_CALLBACK (terminal_profile_editor_palette_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  terminal_profile_editor_palette_changed_cb (self, "palette", self->settings);
+
   encodings_model = create_encodings_model ();
   adw_combo_row_set_enable_search (self->encoding, TRUE);
   adw_combo_row_set_model (self->encoding, encodings_model);
@@ -815,11 +920,14 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
+  gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_index_changed);
+
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_dialog);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_palette);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
@@ -841,6 +949,22 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_0);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_1);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_10);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_11);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_12);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_13);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_14);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_15);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_2);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_3);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_4);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_5);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_6);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_7);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_8);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_9);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rewrap_on_resize);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
