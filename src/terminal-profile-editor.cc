@@ -38,6 +38,7 @@ struct _TerminalProfileEditor
   TerminalColorRow    *bold_color_text;
   AdwSpinRow          *cell_height;
   AdwSpinRow          *cell_width;
+  AdwComboRow         *color_palette;
   AdwComboRow         *color_schemes;
   AdwSpinRow          *columns;
   TerminalColorRow    *cursor_color_text;
@@ -155,6 +156,16 @@ enum
   TERMINAL_PALETTE_RXVT      = 4,
   TERMINAL_PALETTE_SOLARIZED = 5,
   TERMINAL_PALETTE_N_BUILTINS
+};
+
+static const char * const terminal_palette_names[] = {
+  "GNOME",
+  "Tango",
+  "Linux",
+  "xterm",
+  "rxvt",
+  "Solarized",
+  nullptr,
 };
 
 static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][PALETTE_SIZE] =
@@ -290,6 +301,19 @@ create_color_scheme_model (void)
 
   for (guint i = 0; i < G_N_ELEMENTS (color_schemes); i++)
     g_array_append_val (ar, color_schemes[i].name);
+  g_array_append_val (ar, custom);
+
+  return G_LIST_MODEL (gtk_string_list_new ((const char * const *)(gpointer)ar->data));
+}
+
+static GListModel *
+create_color_palette_model (void)
+{
+  g_autoptr(GArray) ar = g_array_new (TRUE, FALSE, sizeof (char *));
+  const char *custom = _("Custom");
+
+  for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++)
+    g_array_append_val (ar, terminal_palette_names[i]);
   g_array_append_val (ar, custom);
 
   return G_LIST_MODEL (gtk_string_list_new ((const char * const *)(gpointer)ar->data));
@@ -557,6 +581,7 @@ static void
 terminal_profile_editor_constructed (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
+  g_autoptr(GListModel) color_palette_model = nullptr;
   g_autoptr(GListModel) color_schemes_model = nullptr;
   g_autoptr(GListModel) encodings_model = nullptr;
   g_autofree char *path = nullptr;
@@ -713,6 +738,9 @@ terminal_profile_editor_constructed (GObject *object)
 
   color_schemes_model = create_color_scheme_model ();
   adw_combo_row_set_model (self->color_schemes, color_schemes_model);
+
+  color_palette_model = create_color_palette_model ();
+  adw_combo_row_set_model (self->color_palette, color_palette_model);
 }
 
 static void
@@ -792,6 +820,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_palette);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
