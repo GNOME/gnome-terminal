@@ -25,6 +25,8 @@
 #include "terminal-color-row.hh"
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
+#include "terminal-screen.hh"
+#include "terminal-util.hh"
 
 #define COLOR(r, g, b) { .red = (r) / 255.0, .green = (g) / 255.0, .blue = (b) / 255.0, .alpha = 1.0 }
 #define PALETTE_SIZE (16)
@@ -178,9 +180,9 @@ enum
 static const char * const terminal_palette_names[] = {
   "GNOME",
   "Tango",
-  "Linux",
-  "xterm",
-  "rxvt",
+  "Linux Console",
+  "XTerm",
+  "Rxvt",
   "Solarized",
   nullptr,
 };
@@ -488,6 +490,34 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
   g_settings_reset (self->settings, "encoding");
   g_settings_reset (self->settings, "delete-binding");
   g_settings_reset (self->settings, "backspace-binding");
+}
+
+static void
+terminal_profile_editor_palette_changed (TerminalProfileEditor *self,
+                                         GParamSpec            *pspec,
+                                         AdwComboRow           *row)
+{
+  GtkStringObject *item;
+  const char *name;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (ADW_IS_COMBO_ROW (row));
+
+  item = GTK_STRING_OBJECT (adw_combo_row_get_selected_item (row));
+  if (item == nullptr)
+    return;
+
+  name = gtk_string_object_get_string (item);
+
+  for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++) {
+    if (strcmp (name, terminal_palette_names[i]) == 0) {
+      terminal_g_settings_set_rgba_palette (self->settings,
+                                            "palette",
+                                            terminal_palettes[i],
+                                            PALETTE_SIZE);
+      break;
+    }
+  }
 }
 
 static void
@@ -920,6 +950,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
+  gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_changed);
   gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_index_changed);
 
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
