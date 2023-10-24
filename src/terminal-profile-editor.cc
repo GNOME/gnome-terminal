@@ -28,37 +28,47 @@
 
 struct _TerminalProfileEditor
 {
-  AdwNavigationPage   parent_instance;
+  AdwNavigationPage    parent_instance;
 
-  AdwSwitchRow       *audible_bell;
-  AdwSpinRow         *cell_height;
-  AdwSpinRow         *cell_width;
-  AdwSpinRow         *columns;
-  AdwEntryRow        *custom_command;
-  AdwActionRow       *custom_font;
-  AdwSwitchRow       *enable_bidi;
-  AdwSwitchRow       *enable_shaping;
-  AdwPreferencesGroup*image_group;
-  AdwSwitchRow       *enable_sixel;
-  AdwComboRow        *encoding;
-  AdwSwitchRow       *limit_scrollback;
-  AdwSwitchRow       *login_shell;
-  AdwComboRow        *preserve_working_directory;
-  AdwSwitchRow       *rewrap_on_resize;
-  AdwSpinRow         *rows;
-  AdwSwitchRow       *scroll_on_keystroke;
-  AdwSwitchRow       *scroll_on_output;
-  AdwSpinRow         *scrollback_lines;
-  AdwSwitchRow       *show_bold_in_bright;
-  AdwSwitchRow       *show_scrollbar;
-  AdwEntryRow        *title;
-  AdwSwitchRow       *use_custom_command;
-  AdwSwitchRow       *use_system_colors;
-  AdwSwitchRow       *use_system_font;
-  GtkLabel           *uuid;
-  AdwEntryRow        *visible_name;
+  AdwSwitchRow        *audible_bell;
+  TerminalColorRow    *bold_color_set;
+  TerminalColorRow    *bold_color_text;
+  AdwSpinRow          *cell_height;
+  AdwSpinRow          *cell_width;
+  AdwSpinRow          *columns;
+  TerminalColorRow    *cursor_color_text;
+  TerminalColorRow    *cursor_color_background;
+  GtkSwitch           *cursor_colors_set;
+  AdwEntryRow         *custom_command;
+  AdwActionRow        *custom_font;
+  TerminalColorRow    *default_color_text;
+  TerminalColorRow    *default_color_background;
+  AdwSwitchRow        *enable_bidi;
+  AdwSwitchRow        *enable_shaping;
+  TerminalColorRow    *highlight_color_text;
+  TerminalColorRow    *highlight_color_background;
+  GtkSwitch           *highlight_colors_set;
+  AdwPreferencesGroup *image_group;
+  AdwSwitchRow        *enable_sixel;
+  AdwComboRow         *encoding;
+  AdwSwitchRow        *limit_scrollback;
+  AdwSwitchRow        *login_shell;
+  AdwComboRow         *preserve_working_directory;
+  AdwSwitchRow        *rewrap_on_resize;
+  AdwSpinRow          *rows;
+  AdwSwitchRow        *scroll_on_keystroke;
+  AdwSwitchRow        *scroll_on_output;
+  AdwSpinRow          *scrollback_lines;
+  AdwSwitchRow        *show_bold_in_bright;
+  AdwSwitchRow        *show_scrollbar;
+  AdwEntryRow         *title;
+  AdwSwitchRow        *use_custom_command;
+  AdwSwitchRow        *use_system_colors;
+  AdwSwitchRow        *use_system_font;
+  GtkLabel            *uuid;
+  AdwEntryRow         *visible_name;
 
-  GSettings          *settings;
+  GSettings           *settings;
 };
 
 enum {
@@ -72,10 +82,10 @@ G_DEFINE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, ADW_TYPE_NA
 static GParamSpec *properties [N_PROPS];
 
 typedef enum {
-        GROUP_UTF8,
-        GROUP_CJKV,
-        GROUP_OBSOLETE,
-        LAST_GROUP
+  GROUP_UTF8,
+  GROUP_CJKV,
+  GROUP_OBSOLETE,
+  LAST_GROUP
 } EncodingGroup;
 
 typedef struct {
@@ -246,6 +256,29 @@ extract_uuid (const char  *path,
   return FALSE;
 }
 
+static gboolean
+string_to_rgba (GValue   *value,
+                GVariant *variant,
+                gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+  GdkRGBA rgba;
+  if (str && str[0] && gdk_rgba_parse (&rgba, str))
+    g_value_set_boxed (value, &rgba);
+  return TRUE;
+}
+
+static GVariant *
+rgba_to_string (const GValue       *value,
+                const GVariantType *type,
+                gpointer            user_data)
+{
+  const GdkRGBA *rgba = (const GdkRGBA *)g_value_get_boxed (value);
+  if (rgba != nullptr)
+    return g_variant_new_take_string (gdk_rgba_to_string (rgba));
+  return nullptr;
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
@@ -348,6 +381,52 @@ terminal_profile_editor_constructed (GObject *object)
                    self->rewrap_on_resize, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
+  g_settings_bind (self->settings, "bold-color-same-as-fg",
+                   self->bold_color_set, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
+  g_settings_bind (self->settings, "cursor-colors-set",
+                   self->cursor_colors_set, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, "highlight-colors-set",
+                   self->cursor_colors_set, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind_with_mapping (self->settings, "foreground-color",
+                                self->default_color_text, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "background-color",
+                                self->default_color_background, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "bold-color",
+                                self->bold_color_text, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "cursor-foreground-color",
+                                self->cursor_color_text, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "cursor-background-color",
+                                self->cursor_color_background, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "highlight-foreground-color",
+                                self->highlight_color_text, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, "highlight-background-color",
+                                self->highlight_color_background, "color",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                string_to_rgba, rgba_to_string,
+                                nullptr, nullptr);
+
   encodings_model = create_encodings_model ();
   adw_combo_row_set_enable_search (self->encoding, TRUE);
   adw_combo_row_set_model (self->encoding, encodings_model);
@@ -425,16 +504,26 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_set);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_text);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_colors_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_background);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, encoding);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_color_background);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_color_text);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_colors_set);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
