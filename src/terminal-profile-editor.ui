@@ -144,17 +144,17 @@
                     <property name="title" translatable="yes">Use Colors from System Theme</property>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="sensitive" bind-source="use_system_colors" bind-property="active" bind-flags="invert-boolean"/>
                 <child>
                   <object class="AdwComboRow" id="color_schemes">
                     <property name="sensitive" bind-source="use_system_colors" bind-property="active" bind-flags="invert-boolean"/>
                     <property name="title" translatable="yes">Use Colors from Scheme</property>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="sensitive" bind-source="use_system_colors" bind-property="active" bind-flags="invert-boolean"/>
                 <child>
                   <object class="AdwExpanderRow">
                     <property name="title" translatable="yes">Override Default Color</property>
