@@ -565,6 +565,7 @@ terminal_profile_editor_palette_changed_cb (TerminalProfileEditor *self,
                                             GSettings             *settings)
 {
   g_auto(GStrv) palette = nullptr;
+  GdkRGBA colors[PALETTE_SIZE];
 
   g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
   g_assert (g_str_equal (key, "palette"));
@@ -579,12 +580,11 @@ terminal_profile_editor_palette_changed_cb (TerminalProfileEditor *self,
 
   for (guint i = 0; i < PALETTE_SIZE; i++) {
     GObject *button;
-    GdkRGBA rgba;
     char child_name[32];
 
-    if (!gdk_rgba_parse (&rgba, palette[i])) {
+    if (!gdk_rgba_parse (&colors[i], palette[i])) {
       g_warning ("'%s' cannot be parsed into a color", palette[i]);
-      continue;
+      return;
     }
 
     g_snprintf (child_name, sizeof child_name, "palette_%u", i);
@@ -596,9 +596,19 @@ terminal_profile_editor_palette_changed_cb (TerminalProfileEditor *self,
     g_assert (GTK_IS_COLOR_DIALOG_BUTTON (button));
 
     g_signal_handlers_block_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
-    gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (button), &rgba);
+    gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (button), &colors[i]);
     g_signal_handlers_unblock_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
   }
+
+  for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++) {
+    if (memcmp (colors, terminal_palettes[i], sizeof (GdkRGBA) * PALETTE_SIZE) == 0) {
+      adw_combo_row_set_selected (self->color_palette, i);
+      return;
+    }
+  }
+
+  /* Set to "Custom" */
+  adw_combo_row_set_selected (self->color_palette, TERMINAL_PALETTE_N_BUILTINS);
 }
 
 static void
@@ -860,13 +870,6 @@ terminal_profile_editor_constructed (GObject *object)
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
 
-  g_signal_connect_object (self->settings,
-                           "changed::palette",
-                           G_CALLBACK (terminal_profile_editor_palette_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  terminal_profile_editor_palette_changed_cb (self, "palette", self->settings);
-
   encodings_model = create_encodings_model ();
   adw_combo_row_set_enable_search (self->encoding, TRUE);
   adw_combo_row_set_model (self->encoding, encodings_model);
@@ -876,6 +879,17 @@ terminal_profile_editor_constructed (GObject *object)
 
   color_palette_model = create_color_palette_model ();
   adw_combo_row_set_model (self->color_palette, color_palette_model);
+  terminal_profile_editor_palette_changed_cb (self, "palette", self->settings);
+  g_signal_connect_object (self->color_palette,
+                           "notify::selected-item",
+                           G_CALLBACK (terminal_profile_editor_palette_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
+                           "changed::palette",
+                           G_CALLBACK (terminal_profile_editor_palette_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
@@ -950,7 +964,6 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
-  gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_changed);
   gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_index_changed);
 
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
