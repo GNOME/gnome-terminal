@@ -26,6 +26,8 @@
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
 
+#define COLOR(r, g, b) { .red = (r) / 255.0, .green = (g) / 255.0, .blue = (b) / 255.0, .alpha = 1.0 }
+
 struct _TerminalProfileEditor
 {
   AdwNavigationPage    parent_instance;
@@ -35,6 +37,7 @@ struct _TerminalProfileEditor
   TerminalColorRow    *bold_color_text;
   AdwSpinRow          *cell_height;
   AdwSpinRow          *cell_width;
+  AdwComboRow         *color_schemes;
   AdwSpinRow          *columns;
   TerminalColorRow    *cursor_color_text;
   TerminalColorRow    *cursor_color_background;
@@ -71,6 +74,13 @@ struct _TerminalProfileEditor
   GSettings           *settings;
 };
 
+typedef struct _TerminalColorScheme
+{
+  const char *name;
+  const GdkRGBA foreground;
+  const GdkRGBA background;
+} TerminalColorScheme;
+
 enum {
   PROP_0,
   PROP_SETTINGS,
@@ -80,6 +90,72 @@ enum {
 G_DEFINE_FINAL_TYPE (TerminalProfileEditor, terminal_profile_editor, ADW_TYPE_NAVIGATION_PAGE)
 
 static GParamSpec *properties [N_PROPS];
+
+static const TerminalColorScheme color_schemes[] = {
+  { N_("Black on light yellow"),
+    COLOR (0x00, 0x00, 0x00),
+    COLOR (0xff, 0xff, 0xdd)
+  },
+  { N_("Black on white"),
+    COLOR (0x00, 0x00, 0x00),
+    COLOR (0xff, 0xff, 0xff)
+  },
+  { N_("Gray on black"),
+    COLOR (0xaa, 0xaa, 0xaa),
+    COLOR (0x00, 0x00, 0x00)
+  },
+  { N_("Green on black"),
+    COLOR (0x00, 0xff, 0x00),
+    COLOR (0x00, 0x00, 0x00)
+  },
+  { N_("White on black"),
+    COLOR (0xff, 0xff, 0xff),
+    COLOR (0x00, 0x00, 0x00)
+  },
+  /* Translators: "GNOME" is the name of a colour scheme, "light" can be translated */
+  { N_("GNOME light"),
+    COLOR (0x17, 0x14, 0x21), /* Palette entry 0 */
+    COLOR (0xff, 0xff, 0xff)  /* Palette entry 15 */
+  },
+  /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
+  { N_("GNOME dark"),
+    COLOR (0xff, 0xff, 0xff), /* Palette entry 7 */
+    COLOR (0x1e, 0x1e, 0x1e)  /* Palette entry 0 */
+  },
+  /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
+  { N_("Tango light"),
+    COLOR (0x2e, 0x34, 0x36),
+    COLOR (0xee, 0xee, 0xec)
+  },
+  /* Translators: "Tango" is the name of a colour scheme, "dark" can be translated */
+  { N_("Tango dark"),
+    COLOR (0xd3, 0xd7, 0xcf),
+    COLOR (0x2e, 0x34, 0x36)
+  },
+  /* Translators: "Solarized" is the name of a colour scheme, "light" can be translated */
+  { N_("Solarized light"),
+    COLOR (0x65, 0x7b, 0x83),  /* 11: base00 */
+    COLOR (0xfd, 0xf6, 0xe3)   /* 15: base3  */
+  },
+  /* Translators: "Solarized" is the name of a colour scheme, "dark" can be translated */
+  { N_("Solarized dark"),
+    COLOR (0x83, 0x94, 0x96),  /* 12: base0  */
+    COLOR (0x00, 0x2b, 0x36)   /*  8: base03 */
+  },
+};
+
+static GListModel *
+create_color_scheme_model (void)
+{
+  g_autoptr(GArray) ar = g_array_new (TRUE, FALSE, sizeof (char *));
+  const char *custom = _("Custom");
+
+  for (guint i = 0; i < G_N_ELEMENTS (color_schemes); i++)
+    g_array_append_val (ar, color_schemes[i].name);
+  g_array_append_val (ar, custom);
+
+  return G_LIST_MODEL (gtk_string_list_new ((const char * const *)(gpointer)ar->data));
+}
 
 typedef enum {
   GROUP_UTF8,
@@ -283,6 +359,7 @@ static void
 terminal_profile_editor_constructed (GObject *object)
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (object);
+  g_autoptr(GListModel) color_schemes_model = nullptr;
   g_autoptr(GListModel) encodings_model = nullptr;
   g_autofree char *path = nullptr;
   g_autofree char *uuid = nullptr;
@@ -430,6 +507,9 @@ terminal_profile_editor_constructed (GObject *object)
   encodings_model = create_encodings_model ();
   adw_combo_row_set_enable_search (self->encoding, TRUE);
   adw_combo_row_set_model (self->encoding, encodings_model);
+
+  color_schemes_model = create_color_scheme_model ();
+  adw_combo_row_set_model (self->color_schemes, color_schemes_model);
 }
 
 static void
@@ -508,6 +588,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_text);
