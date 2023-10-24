@@ -25,6 +25,7 @@
 #include "terminal-color-row.hh"
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
+#include "terminal-schemas.hh"
 #include "terminal-screen.hh"
 #include "terminal-util.hh"
 
@@ -493,6 +494,63 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
 }
 
 static void
+terminal_profile_editor_scheme_changed_from_selection (TerminalProfileEditor *self,
+                                                       GParamSpec            *pspec,
+                                                       AdwComboRow           *row)
+{
+  GtkStringObject *item;
+  const char *name;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (ADW_IS_COMBO_ROW (row));
+
+  item = GTK_STRING_OBJECT (adw_combo_row_get_selected_item (row));
+  if (item == nullptr)
+    return;
+
+  name = gtk_string_object_get_string (item);
+
+  for (guint i = 0; i < G_N_ELEMENTS (color_schemes); i++) {
+    if (strcmp (name, color_schemes[i].name) == 0) {
+      terminal_g_settings_set_rgba (self->settings,
+                                    TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
+                                    &color_schemes[i].foreground);
+      terminal_g_settings_set_rgba (self->settings,
+                                    TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
+                                    &color_schemes[i].background);
+      break;
+    }
+  }
+}
+
+static void
+terminal_profile_editor_scheme_changed_from_settings (TerminalProfileEditor *self,
+                                                      const char            *key,
+                                                      GSettings             *settings)
+{
+  GdkRGBA foreground;
+  GdkRGBA background;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  terminal_g_settings_get_rgba (self->settings,
+                                TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
+                                &foreground);
+  terminal_g_settings_get_rgba (self->settings,
+                                TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
+                                &background);
+
+  for (guint i = 0; i < G_N_ELEMENTS (color_schemes); i++) {
+    if (gdk_rgba_equal (&foreground, &color_schemes[i].foreground) &&
+        gdk_rgba_equal (&background, &color_schemes[i].background)) {
+      adw_combo_row_set_selected (self->color_schemes, i);
+      break;
+    }
+  }
+}
+
+static void
 terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
                                                GParamSpec            *pspec,
                                                GtkColorDialogButton  *button)
@@ -876,6 +934,22 @@ terminal_profile_editor_constructed (GObject *object)
 
   color_schemes_model = create_color_scheme_model ();
   adw_combo_row_set_model (self->color_schemes, color_schemes_model);
+  terminal_profile_editor_scheme_changed_from_settings (self, nullptr, self->settings);
+  g_signal_connect_object (self->color_schemes,
+                           "notify::selected-item",
+                           G_CALLBACK (terminal_profile_editor_scheme_changed_from_selection),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
+                           "changed::foreground-color",
+                           G_CALLBACK (terminal_profile_editor_scheme_changed_from_settings),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (self->settings,
+                           "changed::background-color",
+                           G_CALLBACK (terminal_profile_editor_scheme_changed_from_settings),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   color_palette_model = create_color_palette_model ();
   adw_combo_row_set_model (self->color_palette, color_palette_model);
