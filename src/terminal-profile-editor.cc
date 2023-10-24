@@ -474,10 +474,10 @@ terminal_profile_editor_reset_size (GtkWidget  *widget,
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (widget);
 
-  g_settings_reset (self->settings, "default-size-columns");
-  g_settings_reset (self->settings, "default-size-rows");
-  g_settings_reset (self->settings, "cell-height-scale");
-  g_settings_reset (self->settings, "cell-width-scale");
+  g_settings_reset (self->settings, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY);
 }
 
 static void
@@ -487,10 +487,10 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
 {
   TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (widget);
 
-  g_settings_reset (self->settings, "cjk-utf8-ambiguous-width");
-  g_settings_reset (self->settings, "encoding");
-  g_settings_reset (self->settings, "delete-binding");
-  g_settings_reset (self->settings, "backspace-binding");
+  g_settings_reset (self->settings, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_ENCODING_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_DELETE_BINDING_KEY);
+  g_settings_reset (self->settings, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY);
 }
 
 static void
@@ -578,15 +578,15 @@ terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
   /* If we come across an invalid palette, just reset the key and
    * let the user try again.
    */
-  palette = g_settings_get_strv (self->settings, "palette");
+  palette = g_settings_get_strv (self->settings, TERMINAL_PROFILE_PALETTE_KEY);
   if (g_strv_length (palette) != PALETTE_SIZE) {
-    g_settings_reset (self->settings, "palette");
+    g_settings_reset (self->settings, TERMINAL_PROFILE_PALETTE_KEY);
     return;
   }
 
   g_free (palette[pos]);
   palette[pos] = gdk_rgba_to_string (color);
-  g_settings_set_strv (self->settings, "palette", palette);
+  g_settings_set_strv (self->settings, TERMINAL_PROFILE_PALETTE_KEY, palette);
 }
 
 static void
@@ -609,7 +609,7 @@ terminal_profile_editor_palette_changed_from_selection (TerminalProfileEditor *s
   for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++) {
     if (strcmp (name, terminal_palette_names[i]) == 0) {
       terminal_g_settings_set_rgba_palette (self->settings,
-                                            "palette",
+                                            TERMINAL_PROFILE_PALETTE_KEY,
                                             terminal_palettes[i],
                                             PALETTE_SIZE);
       break;
@@ -683,7 +683,7 @@ terminal_profile_editor_select_custon_font_cb (GObject      *object,
     g_autofree char *font_string = pango_font_description_to_string (font_desc);
 
     if (font_string != nullptr)
-      g_settings_set (self->settings, "font", "s", font_string);
+      g_settings_set (self->settings, TERMINAL_PROFILE_FONT_KEY, "s", font_string);
   }
 }
 
@@ -697,7 +697,7 @@ terminal_profile_editor_select_custon_font (GtkWidget  *widget,
   g_autoptr(GtkFontDialog) dialog = nullptr;
   g_autofree char *font_string = nullptr;
 
-  if ((font_string = g_settings_get_string (self->settings, "font")))
+  if ((font_string = g_settings_get_string (self->settings, TERMINAL_PROFILE_FONT_KEY)))
     font_desc = pango_font_description_from_string (font_string);
 
   dialog = (GtkFontDialog *)g_object_new (GTK_TYPE_FONT_DIALOG,
@@ -791,7 +791,7 @@ terminal_profile_editor_constructed (GObject *object)
     gtk_label_set_label (self->uuid, uuid);
   }
 
-  g_settings_bind (self->settings, "visible-name",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY,
                    self->visible_name, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
@@ -800,16 +800,16 @@ terminal_profile_editor_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 sanitize_font_string, nullptr, nullptr, nullptr);
 
-  g_settings_bind (self->settings, "use-system-font",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    self->use_system_font, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "use-system-font",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    self->custom_font, "sensitive",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
-  g_settings_bind (self->settings, "enable-bidi",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_ENABLE_BIDI_KEY,
                    self->enable_bidi, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "enable-shaping",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_ENABLE_SHAPING_KEY,
                    self->enable_shaping, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
@@ -817,112 +817,112 @@ terminal_profile_editor_constructed (GObject *object)
   gtk_widget_set_visible(GTK_WIDGET(self->image_group),
                          (vte_get_feature_flags() & VTE_FEATURE_FLAG_SIXEL) != 0);
 
-  g_settings_bind (self->settings, "enable-sixel",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_ENABLE_SIXEL_KEY,
                    self->enable_sixel, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "audible-bell",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
                    self->audible_bell, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "default-size-columns",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY,
                    self->columns, "value",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "default-size-rows",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY,
                    self->rows, "value",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "cell-height-scale",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_CELL_HEIGHT_SCALE_KEY,
                    self->cell_height, "value",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "cell-width-scale",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_CELL_WIDTH_SCALE_KEY,
                    self->cell_width, "value",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind_with_mapping (self->settings, "scrollbar-policy",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
                                 self->show_scrollbar, "active",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 scrollbar_policy_to_boolean,
                                 boolean_to_scrollbar_policy,
                                 nullptr, nullptr);
 
-  g_settings_bind (self->settings, "scroll-on-keystroke",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
                    self->scroll_on_keystroke, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "scroll-on-output",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_OUTPUT_KEY,
                    self->scroll_on_output, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "scrollback-unlimited",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
                    self->limit_scrollback, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
-  g_settings_bind (self->settings, "scrollback-lines",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
                    self->scrollback_lines, "value",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "login-shell",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_LOGIN_SHELL_KEY,
                    self->login_shell, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "use-custom-command",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
                    self->use_custom_command, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "custom-command",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
                    self->custom_command, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "bold-is-bright",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_BOLD_IS_BRIGHT_KEY,
                    self->show_bold_in_bright, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "use-theme-colors",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
                    self->use_system_colors, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "rewrap-on-resize",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY,
                    self->rewrap_on_resize, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, "bold-color-same-as-fg",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    self->bold_color_set, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
-  g_settings_bind (self->settings, "cursor-colors-set",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
                    self->cursor_colors_set, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, "highlight-colors-set",
-                   self->cursor_colors_set, "active",
+  g_settings_bind (self->settings, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY,
+                   self->highlight_colors_set, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind_with_mapping (self->settings, "foreground-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
                                 self->default_color_text, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "background-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
                                 self->default_color_background, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "bold-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_BOLD_COLOR_KEY,
                                 self->bold_color_text, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "cursor-foreground-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY,
                                 self->cursor_color_text, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "cursor-background-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY,
                                 self->cursor_color_background, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "highlight-foreground-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY,
                                 self->highlight_color_text, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
-  g_settings_bind_with_mapping (self->settings, "highlight-background-color",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY,
                                 self->highlight_color_background, "color",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
@@ -941,12 +941,12 @@ terminal_profile_editor_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->settings,
-                           "changed::foreground-color",
+                           "changed::" TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
                            G_CALLBACK (terminal_profile_editor_scheme_changed_from_settings),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->settings,
-                           "changed::background-color",
+                           "changed::" TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
                            G_CALLBACK (terminal_profile_editor_scheme_changed_from_settings),
                            self,
                            G_CONNECT_SWAPPED);
@@ -960,7 +960,7 @@ terminal_profile_editor_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->settings,
-                           "changed::palette",
+                           "changed::" TERMINAL_PROFILE_PALETTE_KEY,
                            G_CALLBACK (terminal_profile_editor_palette_changed_from_settings),
                            self,
                            G_CONNECT_SWAPPED);
