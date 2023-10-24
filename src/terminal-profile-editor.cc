@@ -45,6 +45,7 @@ struct _TerminalProfileEditor
   GtkSwitch           *cursor_colors_set;
   AdwEntryRow         *custom_command;
   AdwActionRow        *custom_font;
+  GtkLabel            *custom_font_label;
   TerminalColorRow    *default_color_text;
   TerminalColorRow    *default_color_background;
   AdwSwitchRow        *enable_bidi;
@@ -448,6 +449,49 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
   g_settings_reset (self->settings, "backspace-binding");
 }
 
+static void
+terminal_profile_editor_select_custon_font_cb (GObject      *object,
+                                               GAsyncResult *result,
+                                               gpointer      user_data)
+{
+  GtkFontDialog *dialog = GTK_FONT_DIALOG (object);
+  g_autoptr(TerminalProfileEditor) self = TERMINAL_PROFILE_EDITOR (user_data);
+  g_autoptr(PangoFontDescription) font_desc = nullptr;
+  g_autoptr(GError) error = nullptr;
+
+  if ((font_desc = gtk_font_dialog_choose_font_finish (dialog, result, &error))) {
+    g_autofree char *font_string = pango_font_description_to_string (font_desc);
+
+    if (font_string != nullptr)
+      g_settings_set (self->settings, "font", "s", font_string);
+  }
+}
+
+static void
+terminal_profile_editor_select_custon_font (GtkWidget  *widget,
+                                            const char *action_name,
+                                            GVariant   *param)
+{
+  TerminalProfileEditor *self = TERMINAL_PROFILE_EDITOR (widget);
+  g_autoptr(PangoFontDescription) font_desc = nullptr;
+  g_autoptr(GtkFontDialog) dialog = nullptr;
+  g_autofree char *font_string = nullptr;
+
+  if ((font_string = g_settings_get_string (self->settings, "font")))
+    font_desc = pango_font_description_from_string (font_string);
+
+  dialog = (GtkFontDialog *)g_object_new (GTK_TYPE_FONT_DIALOG,
+                                          "title", _("Select Font"),
+                                          nullptr);
+
+  gtk_font_dialog_choose_font (dialog,
+                               GTK_WINDOW (gtk_widget_get_root (widget)),
+                               font_desc,
+                               nullptr,
+                               terminal_profile_editor_select_custon_font_cb,
+                               g_object_ref (self));
+}
+
 static gboolean
 extract_uuid (const char  *path,
               char       **uuid)
@@ -492,6 +536,23 @@ rgba_to_string (const GValue       *value,
   return nullptr;
 }
 
+static gboolean
+sanitize_font_string (GValue   *value,
+                      GVariant *variant,
+                      gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+
+  if (str && str[0]) {
+    g_autoptr(PangoFontDescription) font_desc = pango_font_description_from_string (str);
+
+    if (font_desc)
+      g_value_take_string (value, pango_font_description_to_string (font_desc));
+  }
+
+  return TRUE;
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
@@ -512,6 +573,11 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, "visible-name",
                    self->visible_name, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
+  g_settings_bind_with_mapping (self->settings, "font",
+                                self->custom_font_label, "label",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                sanitize_font_string, nullptr, nullptr, nullptr);
 
   g_settings_bind (self->settings, "use-system-font",
                    self->use_system_font, "active",
@@ -717,6 +783,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_install_action (widget_class, "size.reset", nullptr, terminal_profile_editor_reset_size);
   gtk_widget_class_install_action (widget_class, "compatibility.reset", nullptr, terminal_profile_editor_reset_compatibility);
+  gtk_widget_class_install_action (widget_class, "profile.select-custom-font", nullptr, terminal_profile_editor_select_custon_font);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-editor.ui");
 
@@ -732,6 +799,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_colors_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font_label);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
