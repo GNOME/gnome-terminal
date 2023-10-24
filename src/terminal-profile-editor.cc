@@ -493,34 +493,6 @@ terminal_profile_editor_reset_compatibility (GtkWidget  *widget,
 }
 
 static void
-terminal_profile_editor_palette_changed (TerminalProfileEditor *self,
-                                         GParamSpec            *pspec,
-                                         AdwComboRow           *row)
-{
-  GtkStringObject *item;
-  const char *name;
-
-  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
-  g_assert (ADW_IS_COMBO_ROW (row));
-
-  item = GTK_STRING_OBJECT (adw_combo_row_get_selected_item (row));
-  if (item == nullptr)
-    return;
-
-  name = gtk_string_object_get_string (item);
-
-  for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++) {
-    if (strcmp (name, terminal_palette_names[i]) == 0) {
-      terminal_g_settings_set_rgba_palette (self->settings,
-                                            "palette",
-                                            terminal_palettes[i],
-                                            PALETTE_SIZE);
-      break;
-    }
-  }
-}
-
-static void
 terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
                                                GParamSpec            *pspec,
                                                GtkColorDialogButton  *button)
@@ -560,9 +532,37 @@ terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
 }
 
 static void
-terminal_profile_editor_palette_changed_cb (TerminalProfileEditor *self,
-                                            const char            *key,
-                                            GSettings             *settings)
+terminal_profile_editor_palette_changed_from_selection (TerminalProfileEditor *self,
+                                                        GParamSpec            *pspec,
+                                                        AdwComboRow           *row)
+{
+  GtkStringObject *item;
+  const char *name;
+
+  g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
+  g_assert (ADW_IS_COMBO_ROW (row));
+
+  item = GTK_STRING_OBJECT (adw_combo_row_get_selected_item (row));
+  if (item == nullptr)
+    return;
+
+  name = gtk_string_object_get_string (item);
+
+  for (guint i = 0; i < TERMINAL_PALETTE_N_BUILTINS; i++) {
+    if (strcmp (name, terminal_palette_names[i]) == 0) {
+      terminal_g_settings_set_rgba_palette (self->settings,
+                                            "palette",
+                                            terminal_palettes[i],
+                                            PALETTE_SIZE);
+      break;
+    }
+  }
+}
+
+static void
+terminal_profile_editor_palette_changed_from_settings (TerminalProfileEditor *self,
+                                                       const char            *key,
+                                                       GSettings             *settings)
 {
   g_auto(GStrv) palette = nullptr;
   GdkRGBA colors[PALETTE_SIZE];
@@ -879,15 +879,15 @@ terminal_profile_editor_constructed (GObject *object)
 
   color_palette_model = create_color_palette_model ();
   adw_combo_row_set_model (self->color_palette, color_palette_model);
-  terminal_profile_editor_palette_changed_cb (self, "palette", self->settings);
+  terminal_profile_editor_palette_changed_from_settings (self, "palette", self->settings);
   g_signal_connect_object (self->color_palette,
                            "notify::selected-item",
-                           G_CALLBACK (terminal_profile_editor_palette_changed),
+                           G_CALLBACK (terminal_profile_editor_palette_changed_from_selection),
                            self,
                            G_CONNECT_SWAPPED);
   g_signal_connect_object (self->settings,
                            "changed::palette",
-                           G_CALLBACK (terminal_profile_editor_palette_changed_cb),
+                           G_CALLBACK (terminal_profile_editor_palette_changed_from_settings),
                            self,
                            G_CONNECT_SWAPPED);
 }
