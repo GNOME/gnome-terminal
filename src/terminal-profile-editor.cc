@@ -795,7 +795,7 @@ terminal_profile_editor_constructed (GObject *object)
                    self->visible_name, "text",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind_with_mapping (self->settings, "font",
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_FONT_KEY,
                                 self->custom_font_label, "label",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 sanitize_font_string, nullptr, nullptr, nullptr);
