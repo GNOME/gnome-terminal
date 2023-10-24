@@ -116,7 +116,7 @@ terminal_profile_row_constructed (GObject *object)
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self),
                                  "profile.make-default",
-                                 is_default);
+                                 !is_default);
   gtk_widget_set_visible (GTK_WIDGET (self->checkmark), is_default);
 
   /* This handles both the "is-default" as well as a single profile
