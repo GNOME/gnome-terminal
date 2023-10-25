@@ -816,6 +816,9 @@ SETTING_TO_INDEX_TRANSFORM(blink_mode_to_index,
 SETTING_TO_INDEX_TRANSFORM(exit_action_to_index,
                            index_to_exit_action,
                            {"close", "restart", "hold"})
+SETTING_TO_INDEX_TRANSFORM(preserve_working_directory_to_index,
+                           index_to_preserve_working_directory,
+                           {"never", "safe", "always"})
 
 static void
 terminal_profile_editor_constructed (GObject *object)
@@ -1031,6 +1034,13 @@ terminal_profile_editor_constructed (GObject *object)
                                 self->when_command_exits, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 exit_action_to_index, index_to_exit_action,
+                                nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY,
+                                self->preserve_working_directory, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                preserve_working_directory_to_index,
+                                index_to_preserve_working_directory,
                                 nullptr, nullptr);
 }
 
