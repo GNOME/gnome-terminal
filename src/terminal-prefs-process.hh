@@ -48,6 +48,6 @@ void terminal_prefs_process_abort(TerminalPrefsProcess* process);
 void terminal_prefs_process_show(TerminalPrefsProcess* process,
                                  char const* profile_uuid,
                                  char const* hint,
-                                 unsigned timestamp);
+                                 char const* activation_token);
 
 G_END_DECLS

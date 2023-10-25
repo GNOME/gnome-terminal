@@ -320,10 +320,12 @@ terminal_preferences_window_init (TerminalPreferencesWindow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-GtkWidget *
-terminal_preferences_window_new (void)
+GtkWindow*
+terminal_preferences_window_new (GtkApplication* application)
 {
-  return (GtkWidget *)g_object_new (TERMINAL_TYPE_PREFERENCES_WINDOW, nullptr);
+  return reinterpret_cast<GtkWindow*>(g_object_new(TERMINAL_TYPE_PREFERENCES_WINDOW,
+                                                   "application", application,
+                                                   nullptr));
 }
 
 void

@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, TERMINAL, PREFERENCES_WINDOW, AdwPreferencesWindow)
 
-GtkWidget *terminal_preferences_window_new          (void);
+GtkWindow *terminal_preferences_window_new          (GtkApplication* application);
 void       terminal_preferences_window_edit_profile (TerminalPreferencesWindow *self,
                                                      GSettings                 *settings);
 

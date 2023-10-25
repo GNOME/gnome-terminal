@@ -472,7 +472,7 @@ void
 terminal_prefs_process_show(TerminalPrefsProcess* process,
                             char const* profile_uuid,
                             char const* hint,
-                            unsigned timestamp)
+                            char const* activation_token)
 {
   auto const impl = IMPL(process);
 
@@ -486,7 +486,8 @@ terminal_prefs_process_show(TerminalPrefsProcess* process,
     g_variant_builder_add(&builder, "{sv}", "profile", g_variant_new_string(profile_uuid));
   if (hint)
     g_variant_builder_add(&builder, "{sv}", "hint", g_variant_new_string(hint));
-  g_variant_builder_add(&builder, "{sv}", "timestamp", g_variant_new_uint32(timestamp));
+  if (activation_token)
+    g_variant_builder_add(&builder, "{sv}", "activation-token", g_variant_new_string(activation_token));
   g_variant_builder_close(&builder); // a{sv}
   g_variant_builder_close(&builder); // v
   g_variant_builder_close(&builder); // av

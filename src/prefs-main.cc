@@ -38,14 +38,14 @@
 
 static char* arg_profile_uuid = nullptr;
 static char* arg_hint = nullptr;
+static char* arg_activation_token = nullptr;
 static int arg_bus_fd = -1;
-static int arg_timestamp = -1;
 
 static const GOptionEntry options[] = {
   {"profile", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_profile_uuid, "Profile", "UUID"},
   {"hint", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_hint, "Hint", "HINT"},
   {"bus-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &arg_bus_fd, "Bus FD", "FD"},
-  {"timestamp", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &arg_timestamp, "Timestamp", "VALUE"},
+  {"activation-token", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_activation_token, "Activation token", "TOKEN"},
   {nullptr}
 };
 
@@ -82,10 +82,10 @@ preferences_cb(GSimpleAction* action,
   gs_free char* hint_str = nullptr;
   g_variant_lookup(parameter, "hint", "s", &hint_str);
 
-  guint32 ts = 0;
-  g_variant_lookup(parameter, "timestamp", "u", &ts);
+  gs_free char* token_str = nullptr;
+  g_variant_lookup(parameter, "activation-token", "s", &token_str);
 
-  terminal_app_edit_preferences(app, profile, hint_str, ts);
+  terminal_app_edit_preferences(app, profile, hint_str, token_str);
 }
 
 static void
@@ -265,7 +265,7 @@ main(int argc,
     terminal_app_edit_preferences(TERMINAL_APP(app),
                                   profile,
                                   arg_hint,
-                                  unsigned(arg_timestamp));
+                                  arg_activation_token);
   }
 
   auto const r = g_application_run(app, 0, nullptr);

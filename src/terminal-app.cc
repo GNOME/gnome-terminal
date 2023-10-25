@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
@@ -149,6 +151,10 @@ struct _TerminalApp
   GWeakRef prefs_process_ref;
 
 #endif /* TERMINAL_SERVER */
+
+#ifdef TERMINAL_PREFERENCES
+  GtkWindow* prefs_window;
+#endif
 
   AdwStyleManager* style_manager;
 
@@ -689,20 +695,20 @@ struct PrefsLaunchData {
   GWeakRef app_ref;
   char* profile_uuid;
   char* hint;
-  unsigned timestamp;
+  char* activation_token;
 };
 
 static auto
 prefs_launch_data_new(TerminalApp* app,
                       char const* profile_uuid,
                       char const* hint,
-                      unsigned timestamp)
+                      char const* activation_token)
 {
   auto data = g_new(PrefsLaunchData, 1);
   g_weak_ref_init(&data->app_ref, app);
   data->profile_uuid = g_strdup(profile_uuid);
   data->hint = g_strdup(hint);
-  data->timestamp = timestamp;
+  data->activation_token = g_strdup(activation_token);
 
   return data;
 }
@@ -713,6 +719,7 @@ prefs_launch_data_free(PrefsLaunchData* data)
   g_weak_ref_clear(&data->app_ref);
   g_free(data->profile_uuid);
   g_free(data->hint);
+  g_free(data->activation_token);
   g_free(data);
 }
 
@@ -738,7 +745,7 @@ launch_prefs_cb(GObject* source,
     terminal_prefs_process_show(process,
                                 data->profile_uuid,
                                 data->hint,
-                                data->timestamp);
+                                data->activation_token);
   } else {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
                           "Failed to launch preferences process: %s\n", error->message);
@@ -757,7 +764,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, nullptr, nullptr, GDK_CURRENT_TIME);
+  terminal_app_edit_preferences (app, nullptr, nullptr, nullptr);
 }
 
 static void
@@ -852,6 +859,34 @@ terminal_app_startup (GApplication *application)
 
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
+
+static void
+terminal_app_shutdown (GApplication *application)
+{
+  G_APPLICATION_CLASS (terminal_app_parent_class)->shutdown (application);
+
+#ifdef TERMINAL_PREFERENCES
+  auto const app = TERMINAL_APP(application);
+
+  if (app->prefs_window)
+    gtk_window_destroy(app->prefs_window);
+#endif
+}
+
+#ifdef TERMINAL_PREFERENCES
+
+static void
+terminal_app_prefs_window_destroyed_cb(GtkWidget* window,
+                                       TerminalApp* app)
+{
+  g_signal_handlers_disconnect_by_func(window,
+                                       (void*)terminal_app_prefs_window_destroyed_cb,
+                                       app);
+
+  app->prefs_window = nullptr;
+}
+
+#endif /* TERMINAL_PREFERENCES */
 
 /* GObjectClass impl */
 
@@ -999,6 +1034,16 @@ terminal_app_finalize (GObject *object)
                                         (void*)terminal_app_update_profile_menus,
                                         app);
   g_hash_table_destroy (app->screen_map);
+#endif
+
+#ifdef TERMINAL_PREFERENCES
+  if (app->prefs_window) {
+    g_signal_handlers_disconnect_by_func(app->prefs_window,
+                                         (void*)terminal_app_prefs_window_destroyed_cb,
+                                         app);
+    gtk_window_destroy(app->prefs_window);
+    app->prefs_window = nullptr;
+  }
 #endif
 
   g_object_unref (app->global_settings);
@@ -1191,6 +1236,7 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
+  g_application_class->shutdown = terminal_app_shutdown;
 #ifdef TERMINAL_SERVER
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
@@ -1341,35 +1387,84 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
 
 #endif /* TERMINAL_SERVER */
 
+#ifdef TERMINAL_PREFERENCES
+
+static bool
+timestamp_from_activation_token(char const* token,
+                                guint32* timestamp)
+{
+  if (!token)
+    return false;
+
+  if (auto needle = g_strrstr(token, "_TIME")) {
+    needle += strlen("_TIME");
+
+    char* end = nullptr;
+    errno = 0;
+    auto const v = g_ascii_strtoull(needle, &end, 0);
+    if (errno || end == needle ||
+        v > G_MAXUINT32)
+      return false;
+
+    *timestamp = guint32(v);
+    return true;
+  }
+
+  return false;
+}
+
+#endif /* TERMINAL_PREFERENCES */
+
 void
 terminal_app_edit_preferences(TerminalApp* app,
                               GSettings* profile,
                               char const* hint,
-                              unsigned timestamp)
+                              [[maybe_unused]] char const* activation_token)
+
 {
 #ifdef TERMINAL_SERVER
   gs_free char* uuid = nullptr;
   if (profile)
     uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
 
+  auto const display = gdk_display_get_default();
+  gs_unref_object auto context = gdk_display_get_app_launch_context(display);
+
+  gs_free char* token =
+      G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id(G_APP_LAUNCH_CONTEXT(context),
+                                                                     nullptr, nullptr);
+  if (!token)
+    token = terminal_client_get_fallback_startup_id();
+
   gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
   if (process) {
     terminal_prefs_process_show(process,
                                 uuid,
                                 hint,
-                                timestamp);
+                                token);
   } else {
     terminal_prefs_process_new_async(nullptr, // cancellable,
                                      GAsyncReadyCallback(launch_prefs_cb),
-                                     prefs_launch_data_new(app, uuid, hint, timestamp));
+                                     prefs_launch_data_new(app, uuid, hint, token));
   }
 #endif /* TERMINAL_SERVER */
 #ifdef TERMINAL_PREFERENCES
   {
-    GtkWidget *window = terminal_preferences_window_new ();
+    if (!app->prefs_window) {
+      app->prefs_window = terminal_preferences_window_new(GTK_APPLICATION(app));
+      if (activation_token)
+        gtk_window_set_startup_id(app->prefs_window, activation_token);
 
-    gtk_window_set_application (GTK_WINDOW (window), GTK_APPLICATION (app));
-    gtk_window_present_with_time (GTK_WINDOW (window), timestamp);
+      g_signal_connect(app->prefs_window, "destroy",
+                       G_CALLBACK(terminal_app_prefs_window_destroyed_cb),
+                       app);
+    }
+
+    guint32 timestamp;
+    if (timestamp_from_activation_token(activation_token, &timestamp))
+        gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
+    else
+      gtk_window_present(GTK_WINDOW(app->prefs_window));
   }
 #endif
 }
