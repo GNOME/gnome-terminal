@@ -44,7 +44,6 @@ struct _TerminalProfileEditor
   TerminalColorRow     *bold_color_text;
   AdwSpinRow           *cell_height;
   AdwSpinRow           *cell_width;
-  GtkColorDialog       *color_dialog;
   AdwComboRow          *color_palette;
   AdwComboRow          *color_schemes;
   AdwSpinRow           *columns;
@@ -563,19 +562,18 @@ terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
                                                GtkColorDialogButton  *button)
 {
   g_auto(GStrv) palette = nullptr;
-  const GdkRGBA *color;
+  GdkRGBA color;
   const char *child_name;
   guint pos;
 
   g_assert (TERMINAL_IS_PROFILE_EDITOR (self));
   g_assert (pspec != nullptr);
   g_assert (g_str_equal (pspec->name, "rgba"));
-  g_assert (GTK_IS_COLOR_DIALOG_BUTTON (button));
+  g_assert (GTK_IS_COLOR_BUTTON (button));
 
   child_name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
-  color = gtk_color_dialog_button_get_rgba (button);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &color);
 
-  g_assert (color != nullptr);
   g_assert (child_name != nullptr);
   g_assert (g_str_has_prefix (child_name, "palette_"));
 
@@ -592,7 +590,7 @@ terminal_profile_editor_palette_index_changed (TerminalProfileEditor *self,
   }
 
   g_free (palette[pos]);
-  palette[pos] = gdk_rgba_to_string (color);
+  palette[pos] = gdk_rgba_to_string (&color);
   g_settings_set_strv (self->settings, TERMINAL_PROFILE_PALETTE_KEY, palette);
 }
 
@@ -658,10 +656,10 @@ terminal_profile_editor_palette_changed_from_settings (TerminalProfileEditor *se
                                             child_name);
 
     g_assert (button != nullptr);
-    g_assert (GTK_IS_COLOR_DIALOG_BUTTON (button));
+    g_assert (GTK_IS_COLOR_BUTTON (button));
 
     g_signal_handlers_block_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
-    gtk_color_dialog_button_set_rgba (GTK_COLOR_DIALOG_BUTTON (button), &colors[i]);
+    gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (button), &colors[i]);
     g_signal_handlers_unblock_by_func (button, (gpointer)G_CALLBACK (terminal_profile_editor_palette_index_changed), self);
   }
 
@@ -1216,7 +1214,6 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_width);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_dialog);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_palette);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
