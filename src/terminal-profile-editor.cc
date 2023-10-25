@@ -36,6 +36,7 @@ struct _TerminalProfileEditor
 {
   AdwNavigationPage     parent_instance;
 
+  AdwComboRow          *allow_blinking_text;
   AdwSwitchRow         *audible_bell;
   TerminalColorRow     *bold_color_set;
   TerminalColorRow     *bold_color_text;
@@ -45,6 +46,7 @@ struct _TerminalProfileEditor
   AdwComboRow          *color_palette;
   AdwComboRow          *color_schemes;
   AdwSpinRow           *columns;
+  AdwSpinRow           *cursor_blink;
   TerminalColorRow     *cursor_color_text;
   TerminalColorRow     *cursor_color_background;
   GtkSwitch            *cursor_colors_set;
@@ -773,6 +775,68 @@ sanitize_font_string (GValue   *value,
   return TRUE;
 }
 
+static const char * const cursor_blink_indexes[] = { "system", "on", "off" };
+
+static gboolean
+cursor_blink_to_index (GValue   *value,
+                       GVariant *variant,
+                       gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+
+  for (guint i = 0; i < G_N_ELEMENTS(cursor_blink_indexes); i++) {
+    if (strcmp (str, cursor_blink_indexes[i]) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_cursor_blink (const GValue       *value,
+                       const GVariantType *type,
+                       gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  if (index < G_N_ELEMENTS (cursor_blink_indexes))
+    return g_variant_new_string (cursor_blink_indexes[index]);
+  return nullptr;
+}
+
+static const char * const blink_mode_indexes[] = {
+  "always", "never", "focused", "unfocused"
+};
+
+static gboolean
+blink_mode_to_index (GValue   *value,
+                     GVariant *variant,
+                     gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+
+  for (guint i = 0; i < G_N_ELEMENTS(blink_mode_indexes); i++) {
+    if (strcmp (str, blink_mode_indexes[i]) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_blink_mode (const GValue       *value,
+                     const GVariantType *type,
+                     gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  if (index < G_N_ELEMENTS (blink_mode_indexes))
+    return g_variant_new_string (blink_mode_indexes[index]);
+  return nullptr;
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
@@ -964,6 +1028,18 @@ terminal_profile_editor_constructed (GObject *object)
                            G_CALLBACK (terminal_profile_editor_palette_changed_from_settings),
                            self,
                            G_CONNECT_SWAPPED);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY,
+                                self->allow_blinking_text, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                blink_mode_to_index, index_to_blink_mode,
+                                nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
+                                self->cursor_blink, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                cursor_blink_to_index, index_to_cursor_blink,
+                                nullptr, nullptr);
 }
 
 static void
@@ -1040,6 +1116,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_index_changed);
 
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, allow_blinking_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
@@ -1050,6 +1127,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_blink);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_colors_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_command);
