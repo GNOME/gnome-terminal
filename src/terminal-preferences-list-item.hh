@@ -26,4 +26,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalPreferencesListItem, terminal_preferences_list_item, TERMINAL, PREFERENCES_LIST_ITEM, GObject)
 
+GVariant *terminal_preferences_list_item_get_value (TerminalPreferencesListItem *self);
+
 G_END_DECLS
