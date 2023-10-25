@@ -38,10 +38,11 @@ struct _TerminalPreferencesWindow
   AdwComboRow          *new_terminal_mode;
   GListModel           *new_terminal_modes;
   GtkListBox           *profiles_list_box;
+  AdwComboRow          *tab_position;
+  GListModel           *tab_positions;
   AdwComboRow          *theme_variant;
+  GListModel           *theme_variants;
 };
-
-static const char *const theme_variants[] = {"system", "dark", "light"};
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
 
@@ -145,37 +146,9 @@ terminal_preferences_window_reload_profiles (TerminalPreferencesWindow *self)
 }
 
 static gboolean
-theme_variant_to_index (GValue   *value,
-                        GVariant *variant,
-                        gpointer  user_data)
-{
-  const char *str = g_variant_get_string (variant, nullptr);
-
-  for (guint i = 0; i < G_N_ELEMENTS (theme_variants); i++) {
-    if (strcmp (str, theme_variants[i]) == 0) {
-      g_value_set_uint (value, i);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-static GVariant *
-index_to_theme_variant (const GValue       *value,
-                        const GVariantType *type,
-                        gpointer            user_data)
-{
-  guint index = g_value_get_uint (value);
-  if (index < G_N_ELEMENTS (theme_variants))
-    return g_variant_new_string (theme_variants[index]);
-  return nullptr;
-}
-
-static gboolean
-new_terminal_mode_to_index (GValue   *value,
-                            GVariant *variant,
-                            gpointer  user_data)
+string_to_index (GValue   *value,
+                 GVariant *variant,
+                 gpointer  user_data)
 {
   GListModel *model = G_LIST_MODEL (user_data);
   guint n_items = g_list_model_get_n_items (model);
@@ -194,9 +167,9 @@ new_terminal_mode_to_index (GValue   *value,
 }
 
 static GVariant *
-index_to_new_terminal_mode (const GValue       *value,
-                            const GVariantType *type,
-                            gpointer            user_data)
+index_to_string (const GValue       *value,
+                 const GVariantType *type,
+                 gpointer            user_data)
 {
   guint index = g_value_get_uint (value);
   GListModel *model = G_LIST_MODEL (user_data);
@@ -262,18 +235,29 @@ terminal_preferences_window_constructed (GObject *object)
                                 self->theme_variant,
                                 "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
-                                theme_variant_to_index,
-                                index_to_theme_variant,
-                                nullptr, nullptr);
+                                string_to_index,
+                                index_to_string,
+                                g_object_ref (self->theme_variants),
+                                g_object_unref);
 
   g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
                                 self->new_terminal_mode,
                                 "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
-                                new_terminal_mode_to_index,
-                                index_to_new_terminal_mode,
+                                string_to_index,
+                                index_to_string,
                                 g_object_ref (self->new_terminal_modes),
+                                g_object_unref);
+
+  g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_NEW_TAB_POSITION_KEY,
+                                self->tab_position,
+                                "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
+                                string_to_index,
+                                index_to_string,
+                                g_object_ref (self->tab_positions),
                                 g_object_unref);
 }
 
@@ -305,7 +289,10 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_mode);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_modes);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profiles_list_box);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, tab_position);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, tab_positions);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variant);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variants);
 
   gtk_widget_class_install_action (widget_class,
                                    "terminal.set-as-default",
