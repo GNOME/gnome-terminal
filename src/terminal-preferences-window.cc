@@ -33,11 +33,12 @@ struct _TerminalPreferencesWindow
 
   AdwSwitchRow         *access_keys;
   AdwSwitchRow         *accelerator_key;
-  AdwSwitchRow         *always_check_default;
-  AdwComboRow          *theme_variant;
-
-  GtkListBox           *profiles_list_box;
   GtkListBoxRow        *add_profile_row;
+  AdwSwitchRow         *always_check_default;
+  AdwComboRow          *new_terminal_mode;
+  GListModel           *new_terminal_modes;
+  GtkListBox           *profiles_list_box;
+  AdwComboRow          *theme_variant;
 };
 
 static const char *const theme_variants[] = {"system", "dark", "light"};
@@ -171,6 +172,42 @@ index_to_theme_variant (const GValue       *value,
   return nullptr;
 }
 
+static gboolean
+new_terminal_mode_to_index (GValue   *value,
+                            GVariant *variant,
+                            gpointer  user_data)
+{
+  GListModel *model = G_LIST_MODEL (user_data);
+  guint n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++) {
+    g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, i));
+    GVariant *item_value = terminal_preferences_list_item_get_value (item);
+
+    if (g_variant_equal (variant, item_value)) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_new_terminal_mode (const GValue       *value,
+                            const GVariantType *type,
+                            gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  GListModel *model = G_LIST_MODEL (user_data);
+  g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, index));
+
+  if (item != nullptr)
+    return g_variant_ref (terminal_preferences_list_item_get_value (item));
+
+  return nullptr;
+}
+
 static void
 terminal_preferences_window_constructed (GObject *object)
 {
@@ -228,6 +265,16 @@ terminal_preferences_window_constructed (GObject *object)
                                 theme_variant_to_index,
                                 index_to_theme_variant,
                                 nullptr, nullptr);
+
+  g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
+                                self->new_terminal_mode,
+                                "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
+                                new_terminal_mode_to_index,
+                                index_to_new_terminal_mode,
+                                g_object_ref (self->new_terminal_modes),
+                                g_object_unref);
 }
 
 static void
@@ -255,6 +302,8 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, access_keys);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, add_profile_row);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_mode);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_modes);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profiles_list_box);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variant);
 
