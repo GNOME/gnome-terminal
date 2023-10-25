@@ -776,99 +776,42 @@ sanitize_font_string (GValue   *value,
   return TRUE;
 }
 
-static const char * const cursor_blink_indexes[] = { "system", "on", "off" };
-
-static gboolean
-cursor_blink_to_index (GValue   *value,
-                       GVariant *variant,
-                       gpointer  user_data)
-{
-  const char *str = g_variant_get_string (variant, nullptr);
-
-  for (guint i = 0; i < G_N_ELEMENTS(cursor_blink_indexes); i++) {
-    if (strcmp (str, cursor_blink_indexes[i]) == 0) {
-      g_value_set_uint (value, i);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
+#define SETTING_TO_INDEX_TRANSFORM(from, to, ...)             \
+static const char * const from##_indexes[] = __VA_ARGS__;     \
+static gboolean                                               \
+from (GValue   *value,                                        \
+      GVariant *variant,                                      \
+      gpointer  user_data)                                    \
+{                                                             \
+  const char *str = g_variant_get_string (variant, nullptr);  \
+  for (guint i = 0; i < G_N_ELEMENTS(from##_indexes); i++) {  \
+    if (strcmp (str, from##_indexes[i]) == 0) {               \
+      g_value_set_uint (value, i);                            \
+      return TRUE;                                            \
+    }                                                         \
+  }                                                           \
+  return FALSE;                                               \
+}                                                             \
+static GVariant *                                             \
+to (const GValue       *value,                                \
+    const GVariantType *type,                                 \
+    gpointer            user_data)                            \
+{                                                             \
+  guint index = g_value_get_uint (value);                     \
+  if (index < G_N_ELEMENTS (from##_indexes))                  \
+    return g_variant_new_string (from##_indexes[index]);      \
+  return nullptr;                                             \
 }
 
-static GVariant *
-index_to_cursor_blink (const GValue       *value,
-                       const GVariantType *type,
-                       gpointer            user_data)
-{
-  guint index = g_value_get_uint (value);
-  if (index < G_N_ELEMENTS (cursor_blink_indexes))
-    return g_variant_new_string (cursor_blink_indexes[index]);
-  return nullptr;
-}
-
-static const char * const blink_mode_indexes[] = {
-  "always", "never", "focused", "unfocused"
-};
-
-static gboolean
-blink_mode_to_index (GValue   *value,
-                     GVariant *variant,
-                     gpointer  user_data)
-{
-  const char *str = g_variant_get_string (variant, nullptr);
-
-  for (guint i = 0; i < G_N_ELEMENTS(blink_mode_indexes); i++) {
-    if (strcmp (str, blink_mode_indexes[i]) == 0) {
-      g_value_set_uint (value, i);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-static GVariant *
-index_to_blink_mode (const GValue       *value,
-                     const GVariantType *type,
-                     gpointer            user_data)
-{
-  guint index = g_value_get_uint (value);
-  if (index < G_N_ELEMENTS (blink_mode_indexes))
-    return g_variant_new_string (blink_mode_indexes[index]);
-  return nullptr;
-}
-
-static const char * const cursor_shape_indexes[] = {
-  "block", "ibeam", "underline"
-};
-
-static gboolean
-cursor_shape_to_index (GValue   *value,
-                       GVariant *variant,
-                       gpointer  user_data)
-{
-  const char *str = g_variant_get_string (variant, nullptr);
-
-  for (guint i = 0; i < G_N_ELEMENTS(cursor_shape_indexes); i++) {
-    if (strcmp (str, cursor_shape_indexes[i]) == 0) {
-      g_value_set_uint (value, i);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-static GVariant *
-index_to_cursor_shape (const GValue       *value,
-                       const GVariantType *type,
-                       gpointer            user_data)
-{
-  guint index = g_value_get_uint (value);
-  if (index < G_N_ELEMENTS (cursor_shape_indexes))
-    return g_variant_new_string (cursor_shape_indexes[index]);
-  return nullptr;
-}
+SETTING_TO_INDEX_TRANSFORM(cursor_shape_to_index,
+                           index_to_cursor_shape,
+                           {"block", "ibeam", "underline"})
+SETTING_TO_INDEX_TRANSFORM(cursor_blink_to_index,
+                           index_to_cursor_blink,
+                           {"system", "on", "off"})
+SETTING_TO_INDEX_TRANSFORM(blink_mode_to_index,
+                           index_to_blink_mode,
+                           {"always", "never", "focused", "unfocused"})
 
 static void
 terminal_profile_editor_constructed (GObject *object)
