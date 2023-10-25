@@ -96,6 +96,7 @@ struct _TerminalProfileEditor
   AdwSwitchRow         *use_system_font;
   GtkLabel             *uuid;
   AdwEntryRow          *visible_name;
+  AdwComboRow          *when_command_exits;
 
   GSettings            *settings;
 };
@@ -812,6 +813,9 @@ SETTING_TO_INDEX_TRANSFORM(cursor_blink_to_index,
 SETTING_TO_INDEX_TRANSFORM(blink_mode_to_index,
                            index_to_blink_mode,
                            {"always", "never", "focused", "unfocused"})
+SETTING_TO_INDEX_TRANSFORM(exit_action_to_index,
+                           index_to_exit_action,
+                           {"close", "restart", "hold"})
 
 static void
 terminal_profile_editor_constructed (GObject *object)
@@ -1022,6 +1026,12 @@ terminal_profile_editor_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 cursor_shape_to_index, index_to_cursor_shape,
                                 nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_EXIT_ACTION_KEY,
+                                self->when_command_exits, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                exit_action_to_index, index_to_exit_action,
+                                nullptr, nullptr);
 }
 
 static void
@@ -1157,6 +1167,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, uuid);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, visible_name);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, when_command_exits);
 
   g_type_ensure (TERMINAL_TYPE_COLOR_ROW);
 }
