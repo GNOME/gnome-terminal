@@ -37,6 +37,7 @@ struct _TerminalProfileEditor
   AdwNavigationPage     parent_instance;
 
   AdwComboRow          *allow_blinking_text;
+  AdwComboRow          *ambiguous_width;
   AdwSwitchRow         *audible_bell;
   AdwComboRow          *backspace_key;
   TerminalColorRow     *bold_color_set;
@@ -824,6 +825,9 @@ SETTING_TO_INDEX_TRANSFORM(preserve_working_directory_to_index,
 SETTING_TO_INDEX_TRANSFORM(erase_binding_to_index,
                            index_to_erase_binding,
                            {"auto", "ascii-backspace", "ascii-delete", "delete-sequence", "tty"})
+SETTING_TO_INDEX_TRANSFORM(ambiguous_width_to_index,
+                           index_to_ambiguous_width,
+                           {"narrow", "wide"})
 
 static gboolean
 encoding_to_index (GValue   *value,
@@ -1101,6 +1105,13 @@ terminal_profile_editor_constructed (GObject *object)
                                 index_to_encoding,
                                 g_object_ref (encodings_model),
                                 g_object_unref);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY,
+                                self->ambiguous_width, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                ambiguous_width_to_index,
+                                index_to_ambiguous_width,
+                                nullptr, nullptr);
 }
 
 static void
@@ -1178,6 +1189,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, terminal_profile_editor_palette_index_changed);
 
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, allow_blinking_text);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, ambiguous_width);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, backspace_key);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_set);
