@@ -34,10 +34,13 @@ struct _TerminalPreferencesWindow
   AdwSwitchRow         *access_keys;
   AdwSwitchRow         *accelerator_key;
   AdwSwitchRow         *always_check_default;
+  AdwComboRow          *theme_variant;
 
   GtkListBox           *profiles_list_box;
   GtkListBoxRow        *add_profile_row;
 };
+
+static const char *const theme_variants[] = {"system", "dark", "light"};
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
 
@@ -140,6 +143,34 @@ terminal_preferences_window_reload_profiles (TerminalPreferencesWindow *self)
   }
 }
 
+static gboolean
+theme_variant_to_index (GValue   *value,
+                        GVariant *variant,
+                        gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+
+  for (guint i = 0; i < G_N_ELEMENTS (theme_variants); i++) {
+    if (strcmp (str, theme_variants[i]) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_theme_variant (const GValue       *value,
+                        const GVariantType *type,
+                        gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  if (index < G_N_ELEMENTS (theme_variants))
+    return g_variant_new_string (theme_variants[index]);
+  return nullptr;
+}
+
 static void
 terminal_preferences_window_constructed (GObject *object)
 {
@@ -188,6 +219,15 @@ terminal_preferences_window_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
   terminal_preferences_window_reload_profiles (self);
+
+  g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_THEME_VARIANT_KEY,
+                                self->theme_variant,
+                                "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
+                                theme_variant_to_index,
+                                index_to_theme_variant,
+                                nullptr, nullptr);
 }
 
 static void
@@ -216,6 +256,7 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, add_profile_row);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profiles_list_box);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variant);
 
   gtk_widget_class_install_action (widget_class,
                                    "terminal.set-as-default",
