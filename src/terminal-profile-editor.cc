@@ -50,6 +50,7 @@ struct _TerminalProfileEditor
   TerminalColorRow     *cursor_color_text;
   TerminalColorRow     *cursor_color_background;
   GtkSwitch            *cursor_colors_set;
+  AdwComboRow          *cursor_shape;
   AdwEntryRow          *custom_command;
   AdwActionRow         *custom_font;
   GtkLabel             *custom_font_label;
@@ -837,6 +838,38 @@ index_to_blink_mode (const GValue       *value,
   return nullptr;
 }
 
+static const char * const cursor_shape_indexes[] = {
+  "block", "ibeam", "underline"
+};
+
+static gboolean
+cursor_shape_to_index (GValue   *value,
+                       GVariant *variant,
+                       gpointer  user_data)
+{
+  const char *str = g_variant_get_string (variant, nullptr);
+
+  for (guint i = 0; i < G_N_ELEMENTS(cursor_shape_indexes); i++) {
+    if (strcmp (str, cursor_shape_indexes[i]) == 0) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_cursor_shape (const GValue       *value,
+                       const GVariantType *type,
+                       gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  if (index < G_N_ELEMENTS (cursor_shape_indexes))
+    return g_variant_new_string (cursor_shape_indexes[index]);
+  return nullptr;
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
@@ -1040,6 +1073,12 @@ terminal_profile_editor_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 cursor_blink_to_index, index_to_cursor_blink,
                                 nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
+                                self->cursor_shape, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                cursor_shape_to_index, index_to_cursor_shape,
+                                nullptr, nullptr);
 }
 
 static void
@@ -1130,6 +1169,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_blink);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_colors_set);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_shape);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font_label);
