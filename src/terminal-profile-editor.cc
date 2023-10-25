@@ -825,6 +825,39 @@ SETTING_TO_INDEX_TRANSFORM(erase_binding_to_index,
                            index_to_erase_binding,
                            {"auto", "ascii-backspace", "ascii-delete", "delete-sequence", "tty"})
 
+static gboolean
+encoding_to_index (GValue   *value,
+                   GVariant *variant,
+                   gpointer  user_data)
+{
+  GListModel *model = G_LIST_MODEL (user_data);
+  guint n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++) {
+  g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, i));
+    GVariant *item_value = terminal_preferences_list_item_get_value (item);
+
+    if (g_variant_equal (variant, item_value)) {
+      g_value_set_uint (value, i);
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+static GVariant *
+index_to_encoding (const GValue       *value,
+                   const GVariantType *type,
+                   gpointer            user_data)
+{
+  guint index = g_value_get_uint (value);
+  GListModel *model = G_LIST_MODEL (user_data);
+  g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, index));
+
+  return g_variant_ref (terminal_preferences_list_item_get_value (item));
+}
+
 static void
 terminal_profile_editor_constructed (GObject *object)
 {
@@ -1060,6 +1093,14 @@ terminal_profile_editor_constructed (GObject *object)
                                 erase_binding_to_index,
                                 index_to_erase_binding,
                                 nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_ENCODING_KEY,
+                                self->encoding, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                encoding_to_index,
+                                index_to_encoding,
+                                g_object_ref (encodings_model),
+                                g_object_unref);
 }
 
 static void
