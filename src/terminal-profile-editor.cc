@@ -38,6 +38,7 @@ struct _TerminalProfileEditor
 
   AdwComboRow          *allow_blinking_text;
   AdwSwitchRow         *audible_bell;
+  AdwComboRow          *backspace_key;
   TerminalColorRow     *bold_color_set;
   TerminalColorRow     *bold_color_text;
   AdwSpinRow           *cell_height;
@@ -56,6 +57,7 @@ struct _TerminalProfileEditor
   GtkLabel             *custom_font_label;
   TerminalColorRow     *default_color_text;
   TerminalColorRow     *default_color_background;
+  AdwComboRow          *delete_key;
   AdwSwitchRow         *enable_bidi;
   AdwSwitchRow         *enable_shaping;
   AdwSwitchRow         *enable_sixel;
@@ -819,6 +821,9 @@ SETTING_TO_INDEX_TRANSFORM(exit_action_to_index,
 SETTING_TO_INDEX_TRANSFORM(preserve_working_directory_to_index,
                            index_to_preserve_working_directory,
                            {"never", "safe", "always"})
+SETTING_TO_INDEX_TRANSFORM(erase_binding_to_index,
+                           index_to_erase_binding,
+                           {"auto", "ascii-backspace", "ascii-delete", "delete-sequence", "tty"})
 
 static void
 terminal_profile_editor_constructed (GObject *object)
@@ -1042,6 +1047,19 @@ terminal_profile_editor_constructed (GObject *object)
                                 preserve_working_directory_to_index,
                                 index_to_preserve_working_directory,
                                 nullptr, nullptr);
+
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
+                                self->backspace_key, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                erase_binding_to_index,
+                                index_to_erase_binding,
+                                nullptr, nullptr);
+  g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_DELETE_BINDING_KEY,
+                                self->delete_key, "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
+                                erase_binding_to_index,
+                                index_to_erase_binding,
+                                nullptr, nullptr);
 }
 
 static void
@@ -1120,6 +1138,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
 
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, allow_blinking_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, audible_bell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, backspace_key);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, bold_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cell_height);
@@ -1128,8 +1147,8 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_palette);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, color_schemes);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, columns);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_blink);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_colors_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, cursor_shape);
@@ -1138,6 +1157,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, custom_font_label);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_text);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, delete_key);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
