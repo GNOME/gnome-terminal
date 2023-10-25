@@ -58,8 +58,6 @@ struct _TerminalProfileEditor
   TerminalColorRow     *default_color_text;
   TerminalColorRow     *default_color_background;
   AdwComboRow          *delete_key;
-  AdwSwitchRow         *enable_bidi;
-  AdwSwitchRow         *enable_shaping;
   AdwSwitchRow         *enable_sixel;
   AdwComboRow          *encoding;
   TerminalColorRow     *highlight_color_text;
@@ -913,12 +911,6 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    self->custom_font, "sensitive",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
-  g_settings_bind (self->settings, TERMINAL_PROFILE_ENABLE_BIDI_KEY,
-                   self->enable_bidi, "active",
-                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-  g_settings_bind (self->settings, TERMINAL_PROFILE_ENABLE_SHAPING_KEY,
-                   self->enable_shaping, "active",
-                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
   // Hide sixel pref when vte does not support images
   gtk_widget_set_visible(GTK_WIDGET(self->image_group),
@@ -1228,8 +1220,6 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_background);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, default_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, delete_key);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_bidi);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_shaping);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, enable_sixel);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, encoding);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_color_background);
