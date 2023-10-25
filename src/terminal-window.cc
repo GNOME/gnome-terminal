@@ -874,7 +874,7 @@ action_edit_preferences_cb (GSimpleAction *action,
   terminal_app_edit_preferences (terminal_app_get (),
                                  terminal_screen_get_profile (window->active_screen),
                                  nullptr,
-                                 GDK_CURRENT_TIME);
+                                 nullptr);
 }
 
 static void

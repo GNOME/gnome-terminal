@@ -62,7 +62,7 @@ GdkContentFormats *terminal_app_get_clipboard_targets (TerminalApp *app,
 void terminal_app_edit_preferences (TerminalApp *app,
                                     GSettings   *profile,
                                     const char  *widget_name,
-                                    unsigned timestamp);
+                                    char const* activation_token);
 
 char *terminal_app_new_profile (TerminalApp *app,
                                 GSettings   *default_base_profile,
