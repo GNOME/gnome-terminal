@@ -676,8 +676,23 @@ terminal_profile_editor_palette_changed_from_settings (TerminalProfileEditor *se
   adw_combo_row_set_selected (self->color_palette, TERMINAL_PALETTE_N_BUILTINS);
 }
 
+static gboolean
+monospace_filter (void* item,
+                  void* user_data)
+{
+  PangoFontFamily* family = nullptr;
+  if (PANGO_IS_FONT_FAMILY(item)) {
+    family = reinterpret_cast<PangoFontFamily*>(item);
+  } else if (PANGO_IS_FONT_FACE(item)) {
+    auto const face = reinterpret_cast<PangoFontFace*>(item);
+    family = pango_font_face_get_family(face);
+  }
+
+  return family ? pango_font_family_is_monospace (family) : false;
+}
+
 static void
-terminal_profile_editor_select_custon_font_cb (GObject      *object,
+terminal_profile_editor_select_custom_font_cb (GObject      *object,
                                                GAsyncResult *result,
                                                gpointer      user_data)
 {
@@ -707,15 +722,20 @@ terminal_profile_editor_select_custon_font (GtkWidget  *widget,
   if ((font_string = g_settings_get_string (self->settings, TERMINAL_PROFILE_FONT_KEY)))
     font_desc = pango_font_description_from_string (font_string);
 
+
+  g_autoptr(GtkCustomFilter) filter = gtk_custom_filter_new(GtkCustomFilterFunc(monospace_filter),
+                                                            nullptr, nullptr);
+
   dialog = (GtkFontDialog *)g_object_new (GTK_TYPE_FONT_DIALOG,
                                           "title", _("Select Font"),
+                                          "filter", filter,
                                           nullptr);
 
   gtk_font_dialog_choose_font (dialog,
                                GTK_WINDOW (gtk_widget_get_root (widget)),
                                font_desc,
                                nullptr,
-                               terminal_profile_editor_select_custon_font_cb,
+                               terminal_profile_editor_select_custom_font_cb,
                                g_object_ref (self));
 }
 
