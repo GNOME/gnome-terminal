@@ -33,6 +33,8 @@ GtkWidget *terminal_info_bar_new (GtkMessageType type,
 void terminal_info_bar_format_text (TerminalInfoBar *bar,
                                     const char *format,
                                     ...) G_GNUC_PRINTF (2, 3);
+void terminal_info_bar_set_default_response (TerminalInfoBar *bar,
+                                             int response_id);
 
 G_END_DECLS
 

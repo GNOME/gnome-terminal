@@ -29,9 +29,27 @@ struct _TerminalInfoBar
   GtkWidget *content_box;
 };
 
-G_DEFINE_FINAL_TYPE (TerminalInfoBar, terminal_info_bar, GTK_TYPE_INFO_BAR)
+G_DEFINE_FINAL_TYPE (TerminalInfoBar, terminal_info_bar, GTK_TYPE_WIDGET)
+
+enum {
+  RESPONSE,
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS];
 
 /* helper functions */
+
+static void
+terminal_info_bar_response_cb (TerminalInfoBar *info_bar,
+                               int response_id,
+                               GtkInfoBar *gtk_info_bar)
+{
+  g_assert (TERMINAL_IS_INFO_BAR (info_bar));
+  g_assert (GTK_IS_INFO_BAR (gtk_info_bar));
+
+  g_signal_emit (info_bar, signals[RESPONSE], 0, response_id);
+}
 
 static void
 terminal_info_bar_dispose (GObject *object)
@@ -61,6 +79,14 @@ terminal_info_bar_class_init (TerminalInfoBarClass *klass)
 
   object_class->dispose = terminal_info_bar_dispose;
 
+  signals[RESPONSE] = g_signal_new ("response",
+                                    G_TYPE_FROM_CLASS (klass),
+                                    G_SIGNAL_RUN_LAST,
+                                    0,
+                                    nullptr, nullptr,
+                                    nullptr,
+                                    G_TYPE_NONE, 1, G_TYPE_INT);
+
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
@@ -82,9 +108,18 @@ terminal_info_bar_new (GtkMessageType type,
 
   info_bar = reinterpret_cast<TerminalInfoBar*>
     (g_object_new (TERMINAL_TYPE_INFO_BAR,
-		   "message-type", type,
-                   "show-close-button", true,
 		   nullptr));
+
+  g_object_set (info_bar->info_bar,
+                "message-type", type,
+                "show-close-button", true,
+                nullptr);
+
+  g_signal_connect_object (info_bar->info_bar,
+                           "response",
+                           G_CALLBACK (terminal_info_bar_response_cb),
+                           info_bar,
+                           G_CONNECT_SWAPPED);
 
   va_start (args, first_button_text);
   while (first_button_text != nullptr) {
@@ -124,4 +159,13 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
   gtk_label_set_yalign (GTK_LABEL (label), 0.0);
 
   gtk_box_prepend (GTK_BOX (bar->content_box), label);
+}
+
+void
+terminal_info_bar_set_default_response (TerminalInfoBar *bar,
+                                        int response_id)
+{
+  g_return_if_fail (TERMINAL_IS_INFO_BAR (bar));
+
+  gtk_info_bar_set_default_response (GTK_INFO_BAR (bar->info_bar), response_id);
 }

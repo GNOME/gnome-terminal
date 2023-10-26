@@ -1748,7 +1748,7 @@ terminal_screen_show_info_bar (TerminalScreen *screen,
   gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
   terminal_tab_add_overlay(terminal_tab_get_from_screen (screen),
                                         info_bar);
-  gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
+  terminal_info_bar_set_default_response (TERMINAL_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
   gtk_widget_show (info_bar);
 }
 
@@ -2114,7 +2114,7 @@ terminal_screen_child_exited (VteTerminal *terminal,
       gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
       terminal_tab_add_overlay(terminal_tab_get_from_screen (screen),
                                             info_bar);
-      gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
+      terminal_info_bar_set_default_response (TERMINAL_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
       gtk_widget_show (info_bar);
       break;
     }
