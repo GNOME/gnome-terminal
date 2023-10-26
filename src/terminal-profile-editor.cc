@@ -48,7 +48,7 @@ struct _TerminalProfileEditor
   AdwComboRow          *color_palette;
   AdwComboRow          *color_schemes;
   AdwSpinRow           *columns;
-  AdwSpinRow           *cursor_blink;
+  AdwComboRow          *cursor_blink;
   TerminalColorRow     *cursor_color_text;
   TerminalColorRow     *cursor_color_background;
   GtkSwitch            *cursor_colors_set;
@@ -449,6 +449,21 @@ create_encodings_model (void)
   }
 
   return G_LIST_MODEL (model);
+}
+
+static void
+recurse_remove_emoji_hint (GtkWidget *widget)
+{
+  if (GTK_IS_TEXT (widget)) {
+    gtk_text_set_input_hints (GTK_TEXT (widget), GTK_INPUT_HINT_NO_EMOJI);
+    return;
+  }
+
+  for (auto child = gtk_widget_get_first_child (widget);
+       child != nullptr;
+       child = gtk_widget_get_next_sibling (child)) {
+    recurse_remove_emoji_hint (child);
+  }
 }
 
 static gboolean
@@ -1115,6 +1130,12 @@ terminal_profile_editor_constructed (GObject *object)
                                 ambiguous_width_to_index,
                                 index_to_ambiguous_width,
                                 nullptr, nullptr);
+
+  recurse_remove_emoji_hint (GTK_WIDGET (self->cell_height));
+  recurse_remove_emoji_hint (GTK_WIDGET (self->cell_width));
+  recurse_remove_emoji_hint (GTK_WIDGET (self->columns));
+  recurse_remove_emoji_hint (GTK_WIDGET (self->rows));
+  recurse_remove_emoji_hint (GTK_WIDGET (self->scrollback_lines));
 }
 
 static void
