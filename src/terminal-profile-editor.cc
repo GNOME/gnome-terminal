@@ -22,6 +22,7 @@
 #include <glib/gi18n.h>
 #include <vte/vte.h>
 
+#include "terminal-app.hh"
 #include "terminal-color-row.hh"
 #include "terminal-profile-editor.hh"
 #include "terminal-preferences-list-item.hh"
@@ -472,6 +473,21 @@ boolean_to_scrollbar_policy (const GValue       *value,
 }
 
 static void
+terminal_profile_editor_copy_uuid (GtkWidget  *widget,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  auto const self = TERMINAL_PROFILE_EDITOR (widget);
+  auto const app = terminal_app_get();
+  auto const profiles = terminal_app_get_profiles_list(app);
+  g_autofree auto uuid = terminal_settings_list_dup_uuid_from_child(profiles, self->settings);
+  if (!uuid)
+    return;
+
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (widget), uuid);
+}
+
+static void
 terminal_profile_editor_reset_size (GtkWidget  *widget,
                                     const char *action_name,
                                     GVariant   *param)
@@ -736,27 +752,6 @@ terminal_profile_editor_select_custon_font (GtkWidget  *widget,
 }
 
 static gboolean
-extract_uuid (const char  *path,
-              char       **uuid)
-{
-  g_autoptr(GString) str = g_string_new (path);
-
-  if (str->len > 0) {
-    if (str->str[str->len-1] == '/')
-      g_string_truncate (str, str->len-1);
-
-    const char *slash = strrchr (str->str, '/');
-
-    if (slash && slash[1] == ':') {
-      *uuid = g_strdup (slash+2);
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-static gboolean
 string_to_rgba (GValue   *value,
                 GVariant *variant,
                 gpointer  user_data)
@@ -885,16 +880,14 @@ terminal_profile_editor_constructed (GObject *object)
   g_autoptr(GListModel) color_palette_model = nullptr;
   g_autoptr(GListModel) color_schemes_model = nullptr;
   g_autoptr(GListModel) encodings_model = nullptr;
-  g_autofree char *path = nullptr;
-  g_autofree char *uuid = nullptr;
 
   G_OBJECT_CLASS (terminal_profile_editor_parent_class)->constructed (object);
 
-  g_object_get (self->settings, "path", &path, nullptr);
+  auto const app = terminal_app_get();
+  auto const profiles = terminal_app_get_profiles_list(app);
+  g_autofree auto uuid = terminal_settings_list_dup_uuid_from_child(profiles, self->settings);
 
-  if (extract_uuid (path, &uuid)) {
-    gtk_label_set_label (self->uuid, uuid);
-  }
+  gtk_label_set_label (self->uuid, uuid ? uuid : "");
 
   g_settings_bind (self->settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY,
                    self->visible_name, "text",
@@ -1187,9 +1180,10 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
                          GParamFlags(G_PARAM_READWRITE |
                                      G_PARAM_CONSTRUCT_ONLY |
                                      G_PARAM_STATIC_STRINGS));
-  
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_install_action (widget_class, "uuid.copy", nullptr, terminal_profile_editor_copy_uuid);
   gtk_widget_class_install_action (widget_class, "size.reset", nullptr, terminal_profile_editor_reset_size);
   gtk_widget_class_install_action (widget_class, "compatibility.reset", nullptr, terminal_profile_editor_reset_compatibility);
   gtk_widget_class_install_action (widget_class, "profile.select-custom-font", nullptr, terminal_profile_editor_select_custon_font);

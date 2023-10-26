@@ -41,12 +41,20 @@
                     <property name="title" translatable="yes">Identifier</property>
                     <child type="suffix">
                       <object class="GtkLabel" id="uuid">
-                        <property name="selectable">true</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
+                        <property name="selectable">false</property>
                       </object>
                     </child>
+		    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="valign">center</property>
+			<property name="action-name">uuid.copy</property>
+                        <property name="icon-name">edit-copy-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Copy</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+		    </child>
                   </object>
                 </child>
               </object>
