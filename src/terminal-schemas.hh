@@ -80,7 +80,6 @@ G_BEGIN_DECLS
 
 #define TERMINAL_SETTING_CONFIRM_CLOSE_KEY              "confirm-close"
 #define TERMINAL_SETTING_CONTEXT_INFO_KEY               "context-info"
-#define TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY       "default-show-menubar"
 #define TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY      "menu-accelerator-enabled"
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
 #define TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY           "shortcuts-enabled"
