@@ -1460,6 +1460,10 @@ terminal_app_edit_preferences(TerminalApp* app,
                      app);
   }
 
+  if (profile)
+    terminal_preferences_window_edit_profile(TERMINAL_PREFERENCES_WINDOW(app->prefs_window),
+                                             profile);
+
   guint32 timestamp;
   if (timestamp_from_activation_token(activation_token, &timestamp))
     gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
