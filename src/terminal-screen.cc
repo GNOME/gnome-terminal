@@ -1714,8 +1714,7 @@ info_bar_response_cb (GtkWidget *info_bar,
     case RESPONSE_EDIT_PREFERENCES:
       terminal_app_edit_preferences (terminal_app_get (),
                                      terminal_screen_get_profile (screen),
-                                     "custom-command-entry",
-                                     nullptr);
+                                     "custom-command-entry");
       break;
     default:
       terminal_tab_remove_overlay (tab, info_bar);

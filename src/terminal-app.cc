@@ -764,7 +764,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, nullptr, nullptr, nullptr);
+  terminal_app_edit_preferences (app, nullptr, nullptr);
 }
 
 static void
@@ -1385,6 +1385,37 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
   return app->clipboard_targets;
 }
 
+void
+terminal_app_edit_preferences(TerminalApp* app,
+                              GSettings* profile,
+                              char const* hint)
+{
+  gs_free char* uuid = nullptr;
+  if (profile)
+    uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+
+  auto const display = gdk_display_get_default();
+  gs_unref_object auto context = gdk_display_get_app_launch_context(display);
+
+  gs_free char* token =
+      G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id(G_APP_LAUNCH_CONTEXT(context),
+                                                                     nullptr, nullptr);
+  if (!token)
+    token = terminal_client_get_fallback_startup_id();
+
+  gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
+  if (process) {
+    terminal_prefs_process_show(process,
+                                uuid,
+                                hint,
+                                token);
+  } else {
+    terminal_prefs_process_new_async(nullptr, // cancellable,
+                                     GAsyncReadyCallback(launch_prefs_cb),
+                                     prefs_launch_data_new(app, uuid, hint, token));
+  }
+}
+
 #endif /* TERMINAL_SERVER */
 
 #ifdef TERMINAL_PREFERENCES
@@ -1413,61 +1444,30 @@ timestamp_from_activation_token(char const* token,
   return false;
 }
 
-#endif /* TERMINAL_PREFERENCES */
-
 void
 terminal_app_edit_preferences(TerminalApp* app,
                               GSettings* profile,
                               char const* hint,
-                              [[maybe_unused]] char const* activation_token)
-
+                              char const* activation_token)
 {
-#ifdef TERMINAL_SERVER
-  gs_free char* uuid = nullptr;
-  if (profile)
-    uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+  if (!app->prefs_window) {
+    app->prefs_window = terminal_preferences_window_new(GTK_APPLICATION(app));
+    if (activation_token)
+      gtk_window_set_startup_id(app->prefs_window, activation_token);
 
-  auto const display = gdk_display_get_default();
-  gs_unref_object auto context = gdk_display_get_app_launch_context(display);
-
-  gs_free char* token =
-      G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id(G_APP_LAUNCH_CONTEXT(context),
-                                                                     nullptr, nullptr);
-  if (!token)
-    token = terminal_client_get_fallback_startup_id();
-
-  gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
-  if (process) {
-    terminal_prefs_process_show(process,
-                                uuid,
-                                hint,
-                                token);
-  } else {
-    terminal_prefs_process_new_async(nullptr, // cancellable,
-                                     GAsyncReadyCallback(launch_prefs_cb),
-                                     prefs_launch_data_new(app, uuid, hint, token));
+    g_signal_connect(app->prefs_window, "destroy",
+                     G_CALLBACK(terminal_app_prefs_window_destroyed_cb),
+                     app);
   }
-#endif /* TERMINAL_SERVER */
-#ifdef TERMINAL_PREFERENCES
-  {
-    if (!app->prefs_window) {
-      app->prefs_window = terminal_preferences_window_new(GTK_APPLICATION(app));
-      if (activation_token)
-        gtk_window_set_startup_id(app->prefs_window, activation_token);
 
-      g_signal_connect(app->prefs_window, "destroy",
-                       G_CALLBACK(terminal_app_prefs_window_destroyed_cb),
-                       app);
-    }
-
-    guint32 timestamp;
-    if (timestamp_from_activation_token(activation_token, &timestamp))
-        gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
-    else
-      gtk_window_present(GTK_WINDOW(app->prefs_window));
-  }
-#endif
+  guint32 timestamp;
+  if (timestamp_from_activation_token(activation_token, &timestamp))
+    gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
+  else
+    gtk_window_present(GTK_WINDOW(app->prefs_window));
 }
+
+#endif /* TERMINAL_PREFERENCES */
 
 /**
  * terminal_app_get_profiles_list:
