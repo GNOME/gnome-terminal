@@ -20,8 +20,7 @@
 #include <adwaita.h>
 
 #include "terminal-screen.hh"
-
-G_BEGIN_DECLS
+#include "terminal-tab.hh"
 
 #define TERMINAL_TYPE_NOTEBOOK (terminal_notebook_get_type ())
 
@@ -44,12 +43,41 @@ int             terminal_notebook_get_n_screens          (TerminalNotebook *note
 int             terminal_notebook_get_active_screen_num  (TerminalNotebook *notebook);
 void            terminal_notebook_reorder_screen         (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen,
-                                                          int               new_position);
+                                                          int               direction);
+void            terminal_notebook_reorder_screen_limits  (TerminalNotebook *notebook,
+                                                          TerminalScreen   *screen,
+                                                          int               direction);
+void            terminal_notebook_reorder_tab            (TerminalNotebook* notebook,
+                                                          TerminalTab* tab,
+                                                          int direction);
+void            terminal_notebook_reorder_tab_limits     (TerminalNotebook* notebook,
+                                                          TerminalTab*      tab,
+                                                          int direction);
 void            terminal_notebook_change_screen          (TerminalNotebook *notebook,
                                                           int               change);
+void            terminal_notebook_close_tab(TerminalNotebook* notebook,
+                                            TerminalTab* tab);
 void            terminal_notebook_confirm_close          (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen,
                                                           gboolean          confirm);
 AdwTabView     *terminal_notebook_get_tab_view           (TerminalNotebook *notebook);
 
-G_END_DECLS
+void terminal_notebook_transfer_screen(TerminalNotebook* notebook,
+                                       TerminalScreen* screen,
+                                       TerminalNotebook* new_notebook,
+                                       int position);
+
+void terminal_notebook_set_tab_pinned(TerminalNotebook* notebook,
+                                      TerminalTab* tab,
+                                      bool pinned);
+
+void terminal_notebook_get_tab_actions(TerminalNotebook* notebook,
+                                       TerminalTab* tab,
+                                       bool* can_switch_left,
+                                       bool* can_switch_right,
+                                       bool* can_reorder_left,
+                                       bool* can_reorder_right,
+                                       bool* can_reorder_start,
+                                       bool* can_reorder_end,
+                                       bool* can_close,
+                                       bool* can_detach);

@@ -37,10 +37,6 @@ void            terminal_window_add_screen               (TerminalWindow *window
                                                           int             position);
 void            terminal_window_remove_screen            (TerminalWindow *window,
                                                           TerminalScreen *screen);
-void            terminal_window_move_screen              (TerminalWindow *source_window,
-                                                          TerminalWindow *dest_window,
-                                                          TerminalScreen *screen,
-                                                          int             dest_position);
 void            terminal_window_update_size              (TerminalWindow *window);
 void            terminal_window_switch_screen            (TerminalWindow *window,
                                                           TerminalScreen *screen);

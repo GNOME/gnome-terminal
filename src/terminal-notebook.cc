@@ -20,6 +20,8 @@
 
 #include <config.h>
 
+#include <algorithm>
+
 #include "terminal-notebook.hh"
 
 #include <gtk/gtk.h>
@@ -38,8 +40,7 @@ struct _TerminalNotebook
 {
   GtkWidget       parent_instance;
   AdwTabView     *tab_view;
-  GMenu          *page_menu;
-  TerminalScreen *active_screen;
+  TerminalScreen *active_screen; // unowned
 };
 
 enum
@@ -55,6 +56,7 @@ enum {
   SCREEN_SWITCHED,
   SCREENS_REORDERED,
   SCREEN_CLOSE_REQUEST,
+  SETUP_MENU,
   LAST_SIGNAL
 };
 
@@ -131,18 +133,25 @@ void
 terminal_notebook_remove_screen (TerminalNotebook *notebook,
                                  TerminalScreen   *screen)
 {
-  TerminalTab *tab;
-  AdwTabPage *page;
-
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
   g_return_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
 
-  tab = terminal_tab_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
+  terminal_notebook_close_tab(notebook, terminal_tab_get_from_screen (screen));
+}
 
-  if (page != nullptr)
-    adw_tab_view_close_page (notebook->tab_view, page);
+void
+terminal_notebook_close_tab(TerminalNotebook* notebook,
+                            TerminalTab* tab)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  auto const page = adw_tab_view_get_page(notebook->tab_view, GTK_WIDGET(tab));
+  if (!page)
+    return;
+
+  adw_tab_view_close_page(notebook->tab_view, page);
 }
 
 TerminalScreen *
@@ -255,22 +264,64 @@ terminal_notebook_set_active_screen_num (TerminalNotebook *notebook,
 }
 
 void
-terminal_notebook_reorder_screen (TerminalNotebook *notebook,
-                                  TerminalScreen   *screen,
-                                  int               new_position)
+terminal_notebook_reorder_screen(TerminalNotebook* notebook,
+                                 TerminalScreen* screen,
+                                 int direction)
 {
-  TerminalTab *tab;
-  AdwTabPage *page;
-
   g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
-  g_return_if_fail (new_position == 1 || new_position == -1);
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
 
-  tab = terminal_tab_get_from_screen (screen);
-  page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
-  new_position += adw_tab_view_get_page_position (notebook->tab_view, page);
+  auto const tab = terminal_tab_get_from_screen (screen);
+  terminal_notebook_reorder_tab(notebook, tab, direction);
+}
 
-  if (new_position < adw_tab_view_get_n_pages (notebook->tab_view))
-    adw_tab_view_reorder_page (notebook->tab_view, page, new_position);
+void
+terminal_notebook_reorder_screen_limits(TerminalNotebook* notebook,
+                                        TerminalScreen* screen,
+                                        int direction)
+{
+  g_return_if_fail (TERMINAL_IS_NOTEBOOK (notebook));
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+
+  auto const tab = terminal_tab_get_from_screen (screen);
+  terminal_notebook_reorder_tab_limits(notebook, tab, direction);
+}
+
+void
+terminal_notebook_reorder_tab(TerminalNotebook* notebook,
+                              TerminalTab* tab,
+                              int direction)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+  g_return_if_fail(direction == 1 || direction == -1);
+
+  if (gtk_widget_get_direction(GTK_WIDGET(notebook)) == GTK_TEXT_DIR_RTL)
+    direction = -direction;
+
+  auto const page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
+
+  if (direction > 0)
+    adw_tab_view_reorder_forward(notebook->tab_view, page);
+  else
+    adw_tab_view_reorder_backward(notebook->tab_view, page);
+}
+
+void
+terminal_notebook_reorder_tab_limits(TerminalNotebook* notebook,
+                                     TerminalTab*      tab,
+                                     int direction)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+  g_return_if_fail(direction == 1 || direction == -1);
+
+  auto const page = adw_tab_view_get_page(notebook->tab_view, GTK_WIDGET(tab));
+
+  if (direction > 0)
+    adw_tab_view_reorder_last(notebook->tab_view, page);
+  else
+    adw_tab_view_reorder_first(notebook->tab_view, page);
 }
 
 static GObject *
@@ -406,23 +457,12 @@ terminal_notebook_grab_focus (GtkWidget *widget)
 }
 
 static void
-terminal_notebook_setup_menu (AdwTabView       *tab_view,
-                              AdwTabPage       *page,
-                              TerminalNotebook *notebook)
+terminal_notebook_setup_menu(AdwTabView* tab_view,
+                             AdwTabPage* page,
+                             TerminalNotebook* notebook)
 {
-  TerminalScreen *screen;
-  GtkWidget *child;
-
-  g_assert (ADW_IS_TAB_VIEW (tab_view));
-  g_assert (!page || ADW_IS_TAB_PAGE (page));
-  g_assert (TERMINAL_IS_NOTEBOOK (notebook));
-
-  if (page != nullptr &&
-      (child = adw_tab_page_get_child (page)) &&
-      (screen = terminal_tab_get_screen (TERMINAL_TAB (child))) &&
-      !terminal_screen_is_active (screen)) {
-    terminal_notebook_set_active_screen (notebook, screen);
-  }
+  auto const tab = page ? TERMINAL_TAB(adw_tab_page_get_child(page)) : nullptr;
+  g_signal_emit(notebook, signals[SETUP_MENU], 0, tab);
 }
 
 /* GObjectClass impl */
@@ -430,7 +470,8 @@ terminal_notebook_setup_menu (AdwTabView       *tab_view,
 static void
 terminal_notebook_init (TerminalNotebook *notebook)
 {
-  gtk_widget_init_template (GTK_WIDGET (notebook));
+  auto const widget = GTK_WIDGET(notebook);
+  gtk_widget_init_template(widget);
 
   adw_tab_view_set_default_icon(notebook->tab_view,
                                 terminal_app_get_default_icon_symbolic(terminal_app_get()));
@@ -441,9 +482,9 @@ terminal_notebook_dispose (GObject *object)
 {
   TerminalNotebook *notebook = TERMINAL_NOTEBOOK (object);
 
-  gtk_widget_dispose_template (GTK_WIDGET (notebook), TERMINAL_TYPE_NOTEBOOK);
-
   notebook->active_screen = nullptr;
+
+  gtk_widget_dispose_template (GTK_WIDGET (notebook), TERMINAL_TYPE_NOTEBOOK);
 
   G_OBJECT_CLASS (terminal_notebook_parent_class)->dispose (object);
 }
@@ -566,6 +607,15 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
                   G_TYPE_BOOLEAN,
                   1, TERMINAL_TYPE_SCREEN);
 
+  signals[SETUP_MENU] =
+    g_signal_new (I_("setup-menu"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  nullptr, nullptr,
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TERMINAL_TYPE_TAB);
 
   /* Remove unwanted and interfering keybindings */
   remove_binding (widget_class, GDK_KEY_Page_Up, GdkModifierType(GDK_CONTROL_MASK));
@@ -585,7 +635,6 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/notebook.ui");
 
   gtk_widget_class_bind_template_child (widget_class, TerminalNotebook, tab_view);
-  gtk_widget_class_bind_template_child (widget_class, TerminalNotebook, page_menu);
 
   gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_setup_menu);
   gtk_widget_class_bind_template_callback (widget_class, terminal_notebook_switch_page);
@@ -636,4 +685,76 @@ terminal_notebook_get_tab_view (TerminalNotebook *notebook)
   g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), nullptr);
 
   return notebook->tab_view;
+}
+
+void
+terminal_notebook_transfer_screen(TerminalNotebook* notebook,
+                                  TerminalScreen* screen,
+                                  TerminalNotebook* new_notebook,
+                                  int position)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(new_notebook));
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+
+  auto const tab = terminal_tab_get_from_screen (screen);
+  auto const page = adw_tab_view_get_page (notebook->tab_view, GTK_WIDGET (tab));
+
+  adw_tab_view_transfer_page(notebook->tab_view,
+                             page,
+                             new_notebook->tab_view,
+                             position);
+}
+
+void
+terminal_notebook_set_tab_pinned(TerminalNotebook* notebook,
+                                 TerminalTab* tab,
+                                 bool pinned)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  auto const page = adw_tab_view_get_page(notebook->tab_view, GTK_WIDGET(tab));
+  adw_tab_view_set_page_pinned(notebook->tab_view, page, pinned);
+
+  // FIXME connect to notifications
+  terminal_tab_set_pinned(tab, pinned);
+}
+
+void
+terminal_notebook_get_tab_actions(TerminalNotebook* notebook,
+                                  TerminalTab* tab,
+                                  bool* can_switch_left,
+                                  bool* can_switch_right,
+                                  bool* can_reorder_left,
+                                  bool* can_reorder_right,
+                                  bool* can_reorder_start,
+                                  bool* can_reorder_end,
+                                  bool* can_close,
+                                  bool* can_detach)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  auto const page = adw_tab_view_get_page(notebook->tab_view, GTK_WIDGET(tab));
+
+  auto const n_pages = adw_tab_view_get_n_pages(notebook->tab_view);
+  auto const n_pinned_pages = adw_tab_view_get_n_pinned_pages(notebook->tab_view);
+  auto const pos = adw_tab_view_get_page_position(notebook->tab_view, page);
+  auto const pinned = adw_tab_page_get_pinned(page);
+
+  *can_switch_left = pos > 0;
+  *can_switch_right = (pos + 1) < n_pages;
+  *can_reorder_left = pinned ? pos > 0 : pos >= n_pinned_pages;
+  *can_reorder_right = pinned ? (pos + 1) < n_pinned_pages : (pos + 1) < n_pages;
+  *can_reorder_start = (pinned && pos > 0) || pos > n_pinned_pages;
+  *can_reorder_end = (pinned && (pos + 1) < n_pinned_pages) || (pos + 1) < n_pages;
+  *can_close = !pinned;
+  *can_detach = n_pages > 1;
+
+  if (gtk_widget_get_direction(GTK_WIDGET(notebook)) == GTK_TEXT_DIR_RTL) {
+    using std::swap;
+    swap(*can_switch_left, *can_switch_right);
+    swap(*can_reorder_left, *can_reorder_right);
+  }
 }

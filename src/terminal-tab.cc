@@ -32,6 +32,8 @@ struct _TerminalTab
   GtkWidget *scrolled_window;
   GtkPolicyType hscrollbar_policy;
   GtkPolicyType vscrollbar_policy;
+
+  bool pinned;
 };
 
 enum
@@ -316,3 +318,21 @@ terminal_tab_destroy (TerminalTab *tab)
   tab->screen = nullptr;
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (tab->scrolled_window), nullptr);
 }
+
+void
+terminal_tab_set_pinned(TerminalTab* tab,
+                        bool pinned)
+{
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  tab->pinned = pinned;
+}
+
+bool
+terminal_tab_get_pinned(TerminalTab* tab)
+{
+  g_return_val_if_fail(TERMINAL_IS_TAB(tab), false);
+
+  return tab->pinned;
+}
+

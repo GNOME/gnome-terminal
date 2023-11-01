@@ -33,25 +33,39 @@
   <menu id="page_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">_Pin Terminal</attribute>
+        <attribute name="action">notebook.notebook-tab-pin</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+	<attribute name="accel"></attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Unpin Terminal</attribute>
+        <attribute name="action">notebook.notebook-tab-unpin</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+	<attribute name="accel"></attribute>
+      </item>
+    </section>
+    <section>
+      <item>
         <attribute name="label" translatable="yes">Move Terminal _Left</attribute>
-        <attribute name="action">win.tab-move-left</attribute>
+        <attribute name="action">notebook.notebook-tab-move-left</attribute>
 	<attribute name="accel"></attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Move Terminal _Right</attribute>
-        <attribute name="action">win.tab-move-right</attribute>
+        <attribute name="action">notebook.notebook-tab-move-right</attribute>
 	<attribute name="accel"></attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">_Detach Terminal</attribute>
-        <attribute name="action">win.tab-detach</attribute>
+        <attribute name="action">notebook.notebook-tab-detach</attribute>
 	<attribute name="accel"></attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Set _Title…</attribute>
-        <attribute name="action">win.set-title</attribute>
+        <attribute name="action">tabview.set-title</attribute>
         <attribute name="hidden-when">action-missing</attribute>
 	<attribute name="accel"></attribute>
       </item>
@@ -59,7 +73,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">C_lose Terminal</attribute>
-        <attribute name="action">win.close</attribute>
+        <attribute name="action">tabview.close</attribute>
         <attribute name="target">tab</attribute>
 	<attribute name="accel"></attribute>
       </item>

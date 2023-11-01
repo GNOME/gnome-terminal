@@ -65,6 +65,8 @@
 #define KEY_HELP                "help"
 #define KEY_MOVE_TAB_LEFT       "move-tab-left"
 #define KEY_MOVE_TAB_RIGHT      "move-tab-right"
+#define KEY_MOVE_TAB_START      "move-tab-start"
+#define KEY_MOVE_TAB_END        "move-tab-end"
 #define KEY_NEW_TAB             "new-tab"
 #define KEY_NEW_WINDOW          "new-window"
 #define KEY_NEXT_TAB            "next-tab"
@@ -173,6 +175,8 @@ static KeyEntry tabs_entries[] = {
   ENTRY_MDI (N_("Switch to Next Tab"),     KEY_NEXT_TAB,       "tab-switch-right", nullptr, nullptr),
   ENTRY_MDI (N_("Move Tab to the Left"),   KEY_MOVE_TAB_LEFT,  "tab-move-left",    nullptr, nullptr),
   ENTRY_MDI (N_("Move Tab to the Right"),  KEY_MOVE_TAB_RIGHT, "tab-move-right",   nullptr, nullptr),
+  ENTRY_MDI (N_("Move Tab to the Start"),  KEY_MOVE_TAB_START, "tab-move-start",   nullptr, nullptr),
+  ENTRY_MDI (N_("Move Tab to the End"),    KEY_MOVE_TAB_END,   "tab-move-end",     nullptr, nullptr),
   ENTRY_MDI (N_("Detach Tab"),             KEY_DETACH_TAB,     "tab-detach",       nullptr, nullptr),
   ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "1", "active-tab", "i", "0"),
   ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "2", "active-tab", "i", "1"),

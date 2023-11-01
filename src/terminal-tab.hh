@@ -45,4 +45,9 @@ void terminal_tab_add_overlay (TerminalTab *tab,
 void terminal_tab_remove_overlay (TerminalTab *tab,
                                   GtkWidget *child);
 
+void terminal_tab_set_pinned(TerminalTab* tab,
+                             bool pinned);
+
+bool terminal_tab_get_pinned(TerminalTab* tab);
+
 G_END_DECLS

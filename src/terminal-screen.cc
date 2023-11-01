@@ -2081,6 +2081,9 @@ terminal_screen_child_exited (VteTerminal *terminal,
   priv->child_pid = -1;
 
   action = TerminalExitAction(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY));
+  auto const tab = terminal_tab_get_from_screen(screen);
+  if (terminal_tab_get_pinned(tab))
+    action = TERMINAL_EXIT_HOLD;
 
   switch (action)
     {

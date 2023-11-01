@@ -1,7 +1,7 @@
 /*
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
- * Copyright © 2007, 2008, 2009, 2011, 2017 Christian Persch
+ * Copyright © 2007, 2008, 2009, 2011, 2017, 2023 Christian Persch
  * Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
@@ -61,10 +61,12 @@ struct _TerminalWindow
   AdwTabBar *tab_bar;
   TerminalHeaderbar *headerbar;
   TerminalNotebook *notebook;
+  GActionMap* notebook_context_action_group; // unowned
   AdwToolbarView *toolbar_view;
   GtkWidget *main_vbox;
   GtkWidget* ask_default_infobar;
   TerminalScreen *active_screen;
+  TerminalTab* notebook_context_tab; // unowned
 
   /* Size of a character cell in pixels */
   int old_char_width;
@@ -156,6 +158,10 @@ static void notebook_screen_removed_cb    (TerminalNotebook *notebook,
                                            TerminalWindow   *window);
 static void notebook_screens_reordered_cb (TerminalNotebook *notebook,
                                            TerminalWindow   *window);
+
+static void notebook_setup_menu_cb(TerminalNotebook* notebook,
+                                   TerminalTab* tab,
+                                   TerminalWindow* window);
 
 static gboolean screen_close_request_cb (TerminalNotebook *notebook,
                                          TerminalScreen   *screen,
@@ -767,6 +773,36 @@ action_tab_move_right_cb (GSimpleAction *action,
 }
 
 static void
+action_tab_move_start_cb(GSimpleAction* action,
+                         GVariant* parameter,
+                         void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+
+  if (!window->active_screen)
+    return;
+
+  terminal_notebook_reorder_screen_limits(window->notebook,
+                                          terminal_notebook_get_active_screen(window->notebook),
+                                          -1);
+}
+
+static void
+action_tab_move_end_cb(GSimpleAction* action,
+                       GVariant* parameter,
+                       void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+
+  if (!window->active_screen)
+    return;
+
+  terminal_notebook_reorder_screen_limits(window->notebook,
+                                          terminal_notebook_get_active_screen(window->notebook),
+                                          1);
+}
+
+static void
 action_zoom_in_cb (GSimpleAction *action,
                    GVariant *parameter,
                    gpointer user_data)
@@ -821,31 +857,39 @@ action_zoom_normal_cb (GSimpleAction *action,
 }
 
 static void
-action_tab_detach_cb (GSimpleAction *action,
-                      GVariant *parameter,
-                      gpointer user_data)
+detach_tab(TerminalWindow* window,
+           TerminalTab* tab)
 {
-  TerminalWindow *window = (TerminalWindow*)user_data;
-  TerminalApp *app;
-  TerminalWindow *new_window;
-  TerminalScreen *screen;
-  char geometry[32];
+  auto const screen = terminal_tab_get_screen(tab);
+
   int width, height;
-
-  app = terminal_app_get ();
-
-  screen = window->active_screen;
-
   terminal_screen_get_size (screen, &width, &height);
-  g_snprintf (geometry, sizeof (geometry), "%dx%d", width, height);
+  char geometry[32];
+  g_snprintf(geometry, sizeof(geometry), "%dx%d", width, height);
 
-  new_window = terminal_window_new (G_APPLICATION (app));
+  auto const new_window = terminal_window_new(G_APPLICATION(terminal_app_get()));
 
-  terminal_window_move_screen (window, new_window, screen, -1);
+  terminal_notebook_transfer_screen(window->notebook,
+                                    screen,
+                                    new_window->notebook,
+                                    0);
 
   terminal_window_parse_geometry (new_window, geometry);
 
   gtk_window_present (GTK_WINDOW (new_window));
+}
+
+static void
+action_tab_detach_cb (GSimpleAction *action,
+                      GVariant *parameter,
+                      gpointer user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+
+  if (!window->active_screen)
+    return;
+
+  detach_tab(window, terminal_tab_get_from_screen(window->active_screen));
 }
 
 static void
@@ -1251,6 +1295,94 @@ action_active_tab_state_cb (GSimpleAction *action,
   terminal_notebook_set_active_screen_num (window->notebook, g_variant_get_int32 (state));
 }
 
+/* Notebook context menu actions */
+
+static void
+action_notebook_tab_close_cb(GSimpleAction* action,
+                             GVariant* parameter,
+                             void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  auto const tab = window->notebook_context_tab;
+  window->notebook_context_tab = nullptr;
+
+  terminal_notebook_close_tab(window->notebook, tab);
+
+  // window may be destroyed at this point
+}
+
+static void
+action_notebook_tab_detach_cb(GSimpleAction* action,
+                              GVariant* parameter,
+                              void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  auto const tab = window->notebook_context_tab;
+  window->notebook_context_tab = nullptr;
+
+  detach_tab(window, tab);
+
+  // window may be destroyed at this point
+}
+
+static void
+action_notebook_tab_move_left_cb(GSimpleAction* action,
+                                 GVariant* parameter,
+                                 void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  terminal_notebook_reorder_tab(window->notebook, window->notebook_context_tab, -1);
+  window->notebook_context_tab = nullptr;
+}
+
+static void
+action_notebook_tab_move_right_cb(GSimpleAction* action,
+                                  GVariant* parameter,
+                                  void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  terminal_notebook_reorder_tab(window->notebook, window->notebook_context_tab, -1);
+  window->notebook_context_tab = nullptr;
+}
+
+static void
+action_notebook_tab_pin_cb(GSimpleAction* action,
+                           GVariant* parameter,
+                           void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  terminal_notebook_set_tab_pinned(window->notebook, window->notebook_context_tab, true);
+  window->notebook_context_tab = nullptr;
+}
+
+static void
+action_notebook_tab_unpin_cb(GSimpleAction* action,
+                             GVariant* parameter,
+                             void* user_data)
+{
+  auto const window = TERMINAL_WINDOW(user_data);
+  if (!window->notebook_context_tab)
+    return;
+
+  terminal_notebook_set_tab_pinned(window->notebook, window->notebook_context_tab, false);
+  window->notebook_context_tab = nullptr;
+}
+
 /* utility functions */
 
 static void
@@ -1382,21 +1514,29 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
   if (window->disposed)
     return;
 
-  int num_pages = terminal_notebook_get_n_screens (window->notebook);
-  int page_num = terminal_notebook_get_active_screen_num (window->notebook);
+  if (!window->active_screen)
+    return;
 
-  gboolean not_only = num_pages > 1;
-  gboolean not_first = page_num > 0;
-  gboolean not_last = page_num + 1 < num_pages;
+  auto const tab = terminal_tab_get_from_screen(window->active_screen);
 
-  gboolean not_first_lr, not_last_lr;
-  if (gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_RTL) {
-    not_first_lr = not_last;
-    not_last_lr = not_first;
-  } else {
-    not_first_lr = not_first;
-    not_last_lr = not_last;
-  }
+  bool can_switch_left, can_switch_right;
+  bool can_reorder_left, can_reorder_right, can_reorder_start, can_reorder_end;
+  bool can_close, can_detach;
+  terminal_notebook_get_tab_actions(window->notebook, tab,
+                                    &can_switch_left,
+                                    &can_switch_right,
+                                    &can_reorder_left,
+                                    &can_reorder_right,
+                                    &can_reorder_start,
+                                    &can_reorder_end,
+                                    &can_close,
+                                    &can_detach);
+  auto const pinned = terminal_tab_get_pinned(tab);
+
+  auto const num_pages = terminal_notebook_get_n_screens(window->notebook);
+  auto const not_only = num_pages > 1;
+
+  auto const page_num = terminal_notebook_get_active_screen_num (window->notebook);
 
   /* Hide the tabs menu in single-tab windows */
   g_simple_action_set_enabled (lookup_action (window, "tabs-menu"), not_only);
@@ -1411,12 +1551,13 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
   g_simple_action_set_state (lookup_action (window, "active-tab"),
                              g_variant_new_int32 (page_num));
 
-  gboolean wrap = not_only;
-  g_simple_action_set_enabled (lookup_action (window, "tab-switch-left"), not_first || wrap);
-  g_simple_action_set_enabled (lookup_action (window, "tab-switch-right"), not_last || wrap);
-  g_simple_action_set_enabled (lookup_action (window, "tab-move-left"), not_first_lr || wrap);
-  g_simple_action_set_enabled (lookup_action (window, "tab-move-right"), not_last_lr || wrap);
-  g_simple_action_set_enabled (lookup_action (window, "tab-detach"), not_only);
+  g_simple_action_set_enabled (lookup_action (window, "tab-switch-left"), can_switch_left);
+  g_simple_action_set_enabled (lookup_action (window, "tab-switch-right"), can_switch_right);
+  g_simple_action_set_enabled (lookup_action (window, "tab-move-left"), can_reorder_left);
+  g_simple_action_set_enabled (lookup_action (window, "tab-move-right"), can_reorder_right);
+  g_simple_action_set_enabled (lookup_action (window, "tab-move-start"), can_reorder_start);
+  g_simple_action_set_enabled (lookup_action (window, "tab-move-end"), can_reorder_end);
+  g_simple_action_set_enabled (lookup_action (window, "tab-detach"), can_detach);
 }
 
 static AdwTabView *
@@ -1836,6 +1977,8 @@ terminal_window_init (TerminalWindow *window)
     { "tab-detach",          action_tab_detach_cb,       nullptr,   nullptr, nullptr },
     { "tab-move-left",       action_tab_move_left_cb,    nullptr,   nullptr, nullptr },
     { "tab-move-right",      action_tab_move_right_cb,   nullptr,   nullptr, nullptr },
+    { "tab-move-start",      action_tab_move_start_cb,   nullptr,   nullptr, nullptr },
+    { "tab-move-end",        action_tab_move_end_cb,     nullptr,   nullptr, nullptr },
     { "tab-switch-left",     action_tab_switch_left_cb,  nullptr,   nullptr, nullptr },
     { "tab-switch-right",    action_tab_switch_right_cb, nullptr,   nullptr, nullptr },
     { "tabs-menu",           nullptr,                       nullptr,   nullptr, nullptr },
@@ -1863,6 +2006,15 @@ terminal_window_init (TerminalWindow *window)
     { "profile",             nullptr /* changes state */,   "s",  "''",      action_profile_state_cb         },
     { "read-only",           nullptr /* toggles state */,   nullptr, "false",   action_read_only_state_cb       },
   };
+  static GActionEntry const notebook_context_action_entries[] = {
+    { "notebook-tab-close",      action_notebook_tab_close_cb,      nullptr, nullptr, nullptr },
+    { "notebook-tab-detach",     action_notebook_tab_detach_cb,     nullptr, nullptr, nullptr },
+    { "notebook-tab-move-left",  action_notebook_tab_move_left_cb,  nullptr, nullptr, nullptr },
+    { "notebook-tab-move-right", action_notebook_tab_move_right_cb, nullptr, nullptr, nullptr },
+    { "notebook-tab-pin",        action_notebook_tab_pin_cb,        nullptr, nullptr, nullptr },
+    { "notebook-tab-unpin",      action_notebook_tab_unpin_cb,      nullptr, nullptr, nullptr },
+  };
+
   TerminalApp *app;
   GSettings *gtk_debug_settings;
   GtkWindowGroup *window_group;
@@ -1897,6 +2049,17 @@ terminal_window_init (TerminalWindow *window)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    window);
+
+  gs_unref_object auto action_group = window->notebook_context_action_group =
+    G_ACTION_MAP(g_simple_action_group_new());
+
+  g_action_map_add_action_entries(action_group,
+                                  notebook_context_action_entries,
+                                  G_N_ELEMENTS(notebook_context_action_entries),
+                                  window);
+  gtk_widget_insert_action_group(GTK_WIDGET(window),
+                                 "notebook",
+                                 G_ACTION_GROUP(action_group));
 
   /* Add "Set as default terminal" infobar */
   if (terminal_app_get_ask_default_terminal(app)) {
@@ -2056,6 +2219,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, notebook_screen_added_cb);
   gtk_widget_class_bind_template_callback (widget_class, notebook_screen_removed_cb);
   gtk_widget_class_bind_template_callback (widget_class, notebook_screens_reordered_cb);
+  gtk_widget_class_bind_template_callback (widget_class, notebook_setup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_update_geometry);
   gtk_widget_class_bind_template_callback (widget_class, handle_tab_dropped_on_desktop);
 
@@ -2107,6 +2271,8 @@ terminal_window_dispose (GObject *object)
       gtk_window_destroy (GTK_WINDOW (window->search_popover));
       window->search_popover = nullptr;
     }
+
+  window->notebook_context_action_group = nullptr;
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
@@ -2285,42 +2451,6 @@ terminal_window_remove_screen (TerminalWindow *window,
 {
   terminal_notebook_remove_screen (window->notebook, screen);
 }
-
-void
-terminal_window_move_screen (TerminalWindow *source_window,
-                             TerminalWindow *dest_window,
-                             TerminalScreen *screen,
-                             int dest_position)
-{
-  TerminalTab *tab;
-
-  g_return_if_fail (TERMINAL_IS_WINDOW (source_window));
-  g_return_if_fail (TERMINAL_IS_WINDOW (dest_window));
-  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
-  g_return_if_fail (gtk_widget_get_root (GTK_WIDGET (screen)) == GTK_ROOT (source_window));
-  g_return_if_fail (dest_position >= -1);
-
-  tab = terminal_tab_get_from_screen (screen);
-  g_assert (TERMINAL_IS_TAB (tab));
-
-  /* We have to ref the tab as well as the screen,
-   * because otherwise removing the tab from the source
-   * window's notebook will cause the tab and its containing
-   * screen to be gtk_widget_destroy()ed!
-   */
-  g_object_ref_sink (tab);
-  g_object_ref_sink (screen);
-  terminal_window_remove_screen (source_window, screen);
-
-  /* Now we can safely remove the screen from the tab and let the tab die */
-  terminal_tab_destroy (tab);
-  g_object_unref (tab);
-
-  terminal_window_add_screen (dest_window, screen, dest_position);
-  terminal_notebook_set_active_screen (dest_window->notebook, screen);
-  g_object_unref (screen);
-}
-
 GList*
 terminal_window_list_tabs (TerminalWindow *window)
 {
@@ -2525,6 +2655,10 @@ notebook_screen_removed_cb (TerminalNotebook *notebook,
   if (window->disposed)
     return;
 
+  if (window->notebook_context_tab &&
+      screen == terminal_tab_get_screen(window->notebook_context_tab))
+    window->notebook_context_tab = nullptr;
+
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: screen %p removed\n",
                          window, screen);
@@ -2601,6 +2735,61 @@ notebook_screens_reordered_cb (TerminalNotebook *notebook,
   g_assert (TERMINAL_IS_NOTEBOOK (notebook));
 
   terminal_window_update_tabs_actions_sensitivity (window);
+}
+
+static inline GSimpleAction *
+lookup_notebook_action(TerminalWindow* window,
+                       char const* name)
+{
+  GAction *action;
+
+  action = g_action_map_lookup_action(G_ACTION_MAP(window->notebook_context_action_group), name);
+  g_return_val_if_fail(action != nullptr, nullptr);
+
+  return G_SIMPLE_ACTION(action);
+}
+
+
+static void
+notebook_setup_menu_cb(TerminalNotebook* notebook,
+                       TerminalTab* tab,
+                       TerminalWindow* window)
+{
+  window->notebook_context_tab = tab; // unowned!
+  if (!tab)
+    return;
+
+  bool can_switch_left, can_switch_right;
+  bool can_reorder_left, can_reorder_right, can_reorder_start, can_reorder_end;
+  bool can_close, can_detach;
+  terminal_notebook_get_tab_actions(window->notebook, tab,
+                                    &can_switch_left,
+                                    &can_switch_right,
+                                    &can_reorder_left,
+                                    &can_reorder_right,
+                                    &can_reorder_start,
+                                    &can_reorder_end,
+                                    &can_close,
+                                    &can_detach);
+  auto const pinned = terminal_tab_get_pinned(tab);
+
+  auto action = lookup_notebook_action(window, "notebook-tab-move-left");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), can_reorder_left);
+
+  action = lookup_notebook_action(window, "notebook-tab-move-right");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), can_reorder_right);
+
+  action = lookup_notebook_action(window, "notebook-tab-detach");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), can_detach);
+
+  action = lookup_notebook_action(window, "notebook-tab-close");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), can_close);
+
+  action = lookup_notebook_action(window, "notebook-tab-pin");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), !pinned);
+
+  action = lookup_notebook_action(window, "notebook-tab-unpin");
+  g_simple_action_set_enabled(G_SIMPLE_ACTION(action), pinned);
 }
 
 gboolean
