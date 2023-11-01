@@ -138,6 +138,8 @@ struct _TerminalScreenPrivate
 
   GtkDropTargetAsync *drop_target;
   GtkWidget *drop_highlight;
+
+  GdkRGBA foreground;
 };
 
 enum
@@ -1382,6 +1384,8 @@ update_color_scheme (TerminalScreen *screen)
       if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY, &highlight_fg))
         highlight_fgp = &highlight_fg;
     }
+
+  priv->foreground = fg;
 
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
@@ -2774,4 +2778,14 @@ terminal_screen_is_active (TerminalScreen *screen)
     return FALSE;
 
   return terminal_notebook_get_active_screen (notebook) == screen;
+}
+
+void
+terminal_screen_get_foreground (TerminalScreen *screen,
+                                GdkRGBA        *foreground)
+{
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+  g_return_if_fail (foreground != nullptr);
+
+  *foreground = screen->priv->foreground;
 }

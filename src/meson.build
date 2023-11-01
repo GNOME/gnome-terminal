@@ -181,6 +181,8 @@ server_sources = app_sources + client_util_sources + debug_sources + dbus_source
   'terminal-settings-bridge-impl.hh',
   'terminal-window.cc',
   'terminal-window.hh',
+  'terminal-window-color.cc',
+  'terminal-window-color.hh',
 )
 
 if get_option('search_provider')

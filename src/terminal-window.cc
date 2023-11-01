@@ -43,6 +43,7 @@
 #include "terminal-schemas.hh"
 #include "terminal-tab.hh"
 #include "terminal-search-popover.hh"
+#include "terminal-window-color.hh"
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"
@@ -65,6 +66,8 @@ struct _TerminalWindow
   GtkWidget *main_vbox;
   GtkWidget* ask_default_infobar;
   TerminalScreen *active_screen;
+
+  TerminalWindowColor *window_color;
 
   /* Size of a character cell in pixels */
   int old_char_width;
@@ -2029,6 +2032,11 @@ terminal_window_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET |
                                                    G_SETTINGS_BIND_NO_SENSITIVITY),
                                 policy_type_to_visible, nullptr, nullptr, nullptr);
+
+  window->window_color = terminal_window_color_new (window);
+  g_object_bind_property (G_OBJECT (window->notebook), "active-screen",
+                          window->window_color, "screen",
+                          G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -2076,6 +2084,8 @@ terminal_window_dispose (GObject *object)
   TerminalApp *app = terminal_app_get ();
 
   window->disposed = TRUE;
+
+  g_clear_object (&window->window_color);
 
   gtk_widget_dispose_template (GTK_WIDGET (window), TERMINAL_TYPE_WINDOW);
 
