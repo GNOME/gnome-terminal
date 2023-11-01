@@ -237,6 +237,33 @@
             </child>
             <child>
               <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="style_window">
+                    <property name="title" translatable="yes">Style Window</property>
+                    <property name="subtitle" translatable="yes">Style the application window in the same colors as the terminal</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Window Transparency</property>
+                    <property name="sensitive" bind-source="style_window" bind-property="active" bind-flags="sync-create"/>
+                    <child>
+                      <object class="GtkScale">
+                        <property name="hexpand">true</property>
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="opacity">
+                            <property name="lower">.2</property>
+                            <property name="upper">1</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Palette</property>
                 <child>
                   <object class="AdwComboRow" id="color_palette">

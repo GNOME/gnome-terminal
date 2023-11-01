@@ -67,6 +67,7 @@ struct _TerminalProfileEditor
   AdwPreferencesGroup  *image_group;
   AdwSwitchRow         *limit_scrollback;
   AdwSwitchRow         *login_shell;
+  GtkScale             *opacity;
   GtkColorDialogButton *palette_0;
   GtkColorDialogButton *palette_1;
   GtkColorDialogButton *palette_2;
@@ -91,6 +92,7 @@ struct _TerminalProfileEditor
   AdwSpinRow           *scrollback_lines;
   AdwSwitchRow         *show_bold_in_bright;
   AdwSwitchRow         *show_scrollbar;
+  AdwSwitchRow         *style_window;
   AdwEntryRow          *title;
   AdwSwitchRow         *use_custom_command;
   AdwSwitchRow         *use_system_colors;
@@ -142,7 +144,7 @@ static const TerminalColorScheme color_schemes[] = {
   },
   /* Translators: "GNOME" is the name of a colour scheme, "light" can be translated */
   { N_("GNOME light"),
-    COLOR (0x17, 0x14, 0x21), /* Palette entry 0 */
+    COLOR (0x1e, 0x1e, 0x1e), /* Palette entry 0 */
     COLOR (0xff, 0xff, 0xff)  /* Palette entry 15 */
   },
   /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
@@ -1034,6 +1036,12 @@ terminal_profile_editor_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
                                 string_to_rgba, rgba_to_string,
                                 nullptr, nullptr);
+  g_settings_bind (self->settings, TERMINAL_PROFILE_OPACITY_KEY,
+                   self->opacity, "value",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+  g_settings_bind (self->settings, TERMINAL_PROFILE_STYLE_WINDOW_KEY,
+                   self->style_window, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
   encodings_model = create_encodings_model ();
   adw_combo_row_set_enable_search (self->encoding, TRUE);
@@ -1243,6 +1251,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, opacity);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_0);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_1);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_10);
@@ -1267,6 +1276,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scrollback_lines);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_bold_in_bright);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, show_scrollbar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, style_window);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_custom_command);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_colors);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, use_system_font);
