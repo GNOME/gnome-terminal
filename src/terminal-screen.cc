@@ -549,8 +549,10 @@ terminal_screen_size_allocate (GtkWidget *widget,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
+  GtkStyleContext *style_context;
   GtkRequisition min;
   GtkAllocation revealer_alloc;
+  GtkBorder padding;
   GtkRoot *root;
   int prev_column_count, column_count;
   int prev_row_count, row_count;
@@ -559,6 +561,9 @@ terminal_screen_size_allocate (GtkWidget *widget,
   prev_row_count = vte_terminal_get_row_count (VTE_TERMINAL (screen));
 
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->size_allocate (widget, width, height, baseline);
+
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (style_context, &padding);
 
   column_count = vte_terminal_get_column_count (VTE_TERMINAL (screen));
   row_count = vte_terminal_get_row_count (VTE_TERMINAL (screen));
@@ -591,8 +596,8 @@ terminal_screen_size_allocate (GtkWidget *widget,
   }
 
   gtk_widget_get_preferred_size (GTK_WIDGET (priv->size_revealer), &min, nullptr);
-  revealer_alloc.x = width - min.width;
-  revealer_alloc.y = height - min.height;
+  revealer_alloc.x = width - min.width + padding.right;
+  revealer_alloc.y = height - min.height + padding.bottom;
   revealer_alloc.width = min.width;
   revealer_alloc.height = min.height;
   gtk_widget_size_allocate (GTK_WIDGET (priv->size_revealer), &revealer_alloc, -1);
