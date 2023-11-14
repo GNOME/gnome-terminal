@@ -919,6 +919,12 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    self->custom_font, "sensitive",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
+                   self->custom_font_label, "sensitive",
+                   GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
+  g_settings_bind (self->settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
+                   self->custom_font, "activatable",
+                   GSettingsBindFlags(G_SETTINGS_BIND_GET|G_SETTINGS_BIND_INVERT_BOOLEAN));
 
   // Hide sixel pref when vte does not support images
   gtk_widget_set_visible(GTK_WIDGET(self->image_group),
