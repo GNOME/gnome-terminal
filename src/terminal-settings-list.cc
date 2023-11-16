@@ -31,12 +31,14 @@
 #include "terminal-schemas.hh"
 #include "terminal-debug.hh"
 #include "terminal-libgsystem.hh"
+#include "terminal-marshal.h"
 
 struct _TerminalSettingsList {
   GSettings parent;
 
   GSettingsBackend* settings_backend;
   GSettingsSchemaSource* schema_source;
+  GSettingsSchema* child_schema;
   char *path;
   char *child_schema_id;
 
@@ -53,6 +55,13 @@ struct _TerminalSettingsListClass {
 
   void (* children_changed) (TerminalSettingsList *list);
   void (* default_changed)  (TerminalSettingsList *list);
+  void (* child_change_event)(TerminalSettingsList *list,
+                              GSettings* child,
+                              GQuark const* keys,
+                              int n_keys);
+  void (* child_changed)(TerminalSettingsList *list,
+                         GSettings* child,
+                         char const* key);
 };
 
 enum {
@@ -64,6 +73,8 @@ enum {
 enum {
   SIGNAL_CHILDREN_CHANGED,
   SIGNAL_DEFAULT_CHANGED,
+  SIGNAL_CHILD_CHANGE_EVENT,
+  SIGNAL_CHILD_CHANGED,
   N_SIGNALS
 };
 
@@ -247,6 +258,40 @@ path_new (TerminalSettingsList *list,
   return g_strdup_printf ("%s:%s/", list->path, uuid);
 }
 
+static gboolean
+child_change_event_cb(GSettings* child,
+                      GQuark const* keys,
+                      int n_keys,
+                      TerminalSettingsList* list)
+{
+  gboolean rv;
+  g_signal_emit(list, signals[SIGNAL_CHILD_CHANGE_EVENT], 0,
+                child,
+                keys, n_keys,
+                &rv);
+
+  return false; // propagate
+}
+
+static void
+disconnect_child_change_event_foreach_cb(void* key,
+                                         void* ptr,
+                                         TerminalSettingsList* list)
+{
+  auto const child = reinterpret_cast<GSettings*>(ptr);
+  g_signal_handlers_disconnect_by_func(child,
+                                       (void*)child_change_event_cb,
+                                       list);
+}
+
+static void
+destroy_children_hashtable(TerminalSettingsList* list,
+                           GHashTable* ht)
+{
+  g_hash_table_foreach(ht, GHFunc(disconnect_child_change_event_foreach_cb), list);
+  g_hash_table_unref(ht);
+}
+
 static GSettings *
 terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
                                            const char *uuid)
@@ -269,6 +314,9 @@ terminal_settings_list_ref_child_internal (TerminalSettingsList *list,
                                             list->schema_source,
                                             list->child_schema_id,
                                             path);
+  g_signal_connect(child, "change-event",
+                   G_CALLBACK(child_change_event_cb),
+                   list);
   g_hash_table_insert (list->children, g_strdup (uuid), child /* adopted */);
 
  done:
@@ -402,8 +450,8 @@ terminal_settings_list_update_list (TerminalSettingsList *list)
     changed = g_strv_length (list->uuids) != 0;
   }
 
-  g_hash_table_unref (list->children);
-  list->children = new_children;
+  destroy_children_hashtable(list, list->children);
+  list->children = new_children; // adopted
 
   g_strfreev (list->uuids);
   list->uuids = uuids; /* adopts */
@@ -454,6 +502,31 @@ terminal_settings_list_changed (GSettings *list_settings,
 }
 
 static void
+terminal_settings_list_child_change_event(TerminalSettingsList* list,
+                                          GSettings* child,
+                                          GQuark const* keys,
+                                          int n_keys)
+{
+  if (!keys) {
+    gs_strfreev auto schema_keys = g_settings_schema_list_keys(list->child_schema);
+    n_keys = g_strv_length(schema_keys);
+    auto wkeys = reinterpret_cast<GQuark*>(g_alloca(n_keys * sizeof(GQuark)));
+    for (auto i = 0; schema_keys[i]; ++i)
+      wkeys[i] = g_quark_from_string(schema_keys[i]);
+
+    keys = const_cast<GQuark const*>(wkeys);
+  }
+
+  for (auto i = 0; i < n_keys; ++i) {
+    auto const key = g_quark_to_string(keys[i]);
+    if (g_str_has_suffix(key, "/"))
+      continue;
+
+    g_signal_emit(list, signals[SIGNAL_CHILD_CHANGED], keys[i], child, key);
+  }
+}
+
+static void
 terminal_settings_list_init (TerminalSettingsList *list)
 {
   list->flags = TERMINAL_SETTINGS_LIST_FLAG_NONE;
@@ -473,6 +546,11 @@ terminal_settings_list_constructed (GObject *object)
   g_assert (list->schema_source != nullptr);
   g_assert (list->child_schema_id != nullptr);
 
+  list->child_schema = g_settings_schema_source_lookup(list->schema_source,
+                                                       list->child_schema_id,
+                                                       true);
+  g_assert(list->child_schema);
+
   g_object_get (object, "path", &list->path, nullptr);
 
   list->children = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -488,10 +566,11 @@ terminal_settings_list_finalize (GObject *object)
   TerminalSettingsList *list = TERMINAL_SETTINGS_LIST (object);
 
   g_free (list->path);
+  g_clear_pointer(&list->child_schema, g_settings_schema_unref);
   g_free (list->child_schema_id);
   g_strfreev (list->uuids);
   g_free (list->default_uuid);
-  g_hash_table_unref (list->children);
+  destroy_children_hashtable(list, list->children);
   g_settings_schema_source_unref(list->schema_source);
   g_clear_object(&list->settings_backend);
 
@@ -586,6 +665,9 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+  g_signal_set_va_marshaller(signals[SIGNAL_CHILDREN_CHANGED],
+                             G_TYPE_FROM_CLASS(klass),
+                             g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * TerminalSettingsList::default-changed:
@@ -602,8 +684,60 @@ terminal_settings_list_class_init (TerminalSettingsListClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+  g_signal_set_va_marshaller(signals[SIGNAL_DEFAULT_CHANGED],
+                             G_TYPE_FROM_CLASS(klass),
+                             g_cclosure_marshal_VOID__VOIDv);
+
+  /**
+   * TerminalSettingsList::child-change-event:
+   * @list: the object on which the signal was emitted
+   * @child: the #GSettings child
+   * @keys: (nullable) array length=n_keys) (element-type GQuark): the changed keys, or %NULL
+   * @n_keys: the size of the @keys array
+   *
+   * The "child-change-event" signal is emitted when the settings of a child #GSettings
+   * has potentially changed.
+   */
+  signals[SIGNAL_CHILD_CHANGE_EVENT] =
+    g_signal_new ("child-change-event", TERMINAL_TYPE_SETTINGS_LIST,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalSettingsListClass, child_change_event),
+                  nullptr, nullptr,
+                  _terminal_marshal_VOID__OBJECT_POINTER_INT,
+                  G_TYPE_NONE,
+                  3,
+                  G_TYPE_SETTINGS,
+                  G_TYPE_POINTER,
+                  G_TYPE_INT);
+  g_signal_set_va_marshaller(signals[SIGNAL_CHILD_CHANGE_EVENT],
+                             G_TYPE_FROM_CLASS(klass),
+                             _terminal_marshal_VOID__OBJECT_POINTER_INTv);
+
+  /**
+   * TerminalSettingsList::child-changed:
+   * @list: the object on which the signal was emitted
+   * @child: the #GSettings child
+   * @key: the key that changed
+   *
+   * The "child-changed" signal is emitted when the settings of a child #GSettings
+   * has potentially changed.
+   */
+  signals[SIGNAL_CHILD_CHANGED] =
+    g_signal_new ("child-changed", TERMINAL_TYPE_SETTINGS_LIST,
+                  GSignalFlags(G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED),
+                  G_STRUCT_OFFSET (TerminalSettingsListClass, child_changed),
+                  nullptr, nullptr,
+                  _terminal_marshal_VOID__OBJECT_STRING,
+                  G_TYPE_NONE,
+                  2,
+                  G_TYPE_SETTINGS,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller(signals[SIGNAL_CHILD_CHANGED],
+                             G_TYPE_FROM_CLASS(klass),
+                             _terminal_marshal_VOID__OBJECT_STRINGv);
 
   settings_class->changed = terminal_settings_list_changed;
+  klass->child_change_event = terminal_settings_list_child_change_event;
 }
 
 
