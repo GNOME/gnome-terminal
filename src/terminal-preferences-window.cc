@@ -228,6 +228,11 @@ terminal_preferences_window_constructed (GObject *object)
                            G_CALLBACK (terminal_preferences_window_reload_profiles),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (profiles,
+                           "child-changed::" TERMINAL_PROFILE_VISIBLE_NAME_KEY,
+                           G_CALLBACK(terminal_preferences_window_reload_profiles),
+                           self,
+                           G_CONNECT_SWAPPED);
   terminal_preferences_window_reload_profiles (self);
 
   g_settings_bind_with_mapping (settings,
