@@ -33,8 +33,6 @@
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 
-#include <gtk/gtk.h>
-
 #include "terminal-debug.hh"
 #include "terminal-defines.hh"
 #include "terminal-i18n.hh"
