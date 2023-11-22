@@ -704,6 +704,9 @@ tab_switch_relative (TerminalWindow *window,
   int n_screens, value;
 
   n_screens = terminal_notebook_get_n_screens (window->notebook);
+
+  if (gtk_widget_get_direction(GTK_WIDGET(window->notebook)) == GTK_TEXT_DIR_RTL)
+    change = -change;
   value = terminal_notebook_get_active_screen_num (window->notebook) + change;
 
   if (value < 0)
@@ -744,15 +747,13 @@ action_tab_move_left_cb (GSimpleAction *action,
                          gpointer user_data)
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
-  int change;
 
   if (window->active_screen == nullptr)
     return;
 
-  change = gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_RTL ? 1 : -1;
   terminal_notebook_reorder_screen (window->notebook,
-                                         terminal_notebook_get_active_screen (window->notebook),
-                                         change);
+                                    terminal_notebook_get_active_screen (window->notebook),
+                                    -1);
 }
 
 static void
@@ -761,15 +762,13 @@ action_tab_move_right_cb (GSimpleAction *action,
                           gpointer user_data)
 {
   TerminalWindow *window = (TerminalWindow*)user_data;
-  int change;
 
   if (window->active_screen == nullptr)
     return;
 
-  change = gtk_widget_get_direction (GTK_WIDGET (window)) == GTK_TEXT_DIR_RTL ? -1 : 1;
   terminal_notebook_reorder_screen (window->notebook,
-                                         terminal_notebook_get_active_screen (window->notebook),
-                                         change);
+                                    terminal_notebook_get_active_screen (window->notebook),
+                                    1);
 }
 
 static void
@@ -1353,7 +1352,7 @@ action_notebook_tab_move_right_cb(GSimpleAction* action,
   if (!window->notebook_context_tab)
     return;
 
-  terminal_notebook_reorder_tab(window->notebook, window->notebook_context_tab, -1);
+  terminal_notebook_reorder_tab(window->notebook, window->notebook_context_tab, 1);
   window->notebook_context_tab = nullptr;
 }
 
@@ -1531,7 +1530,6 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
                                     &can_reorder_end,
                                     &can_close,
                                     &can_detach);
-  auto const pinned = terminal_tab_get_pinned(tab);
 
   auto const num_pages = terminal_notebook_get_n_screens(window->notebook);
   auto const not_only = num_pages > 1;
