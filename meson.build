@@ -49,7 +49,7 @@ vte_req_version              = '0.74.0'
 
 glib_req_version             = '2.52.0'
 glib_min_req_version         = '2.52'
-glib_max_allowed_version     = '2.52'
+glib_max_allowed_version     = '2.68'
 
 gtk_req_version              = '3.22.27'
 gtk_min_req_version          = '3.18'
