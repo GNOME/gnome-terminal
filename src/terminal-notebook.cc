@@ -745,7 +745,7 @@ terminal_notebook_get_tab_actions(TerminalNotebook* notebook,
 
   *can_switch_left = pos > 0;
   *can_switch_right = (pos + 1) < n_pages;
-  *can_reorder_left = pinned ? pos > 0 : pos >= n_pinned_pages;
+  *can_reorder_left = pinned ? pos > 0 : pos > n_pinned_pages;
   *can_reorder_right = pinned ? (pos + 1) < n_pinned_pages : (pos + 1) < n_pages;
   *can_reorder_start = (pinned && pos > 0) || pos > n_pinned_pages;
   *can_reorder_end = (pinned && (pos + 1) < n_pinned_pages) || (pos + 1) < n_pages;
