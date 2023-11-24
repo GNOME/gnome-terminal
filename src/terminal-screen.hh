@@ -62,7 +62,7 @@ struct _TerminalScreenClass
 
   void (* profile_set)        (TerminalScreen *screen,
                                GSettings *old_profile);
-  void (* show_popup_menu)    (TerminalScreen *screen,
+  void (* show_context_menu)  (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
   gboolean (* match_clicked)  (TerminalScreen *screen,
                                const char *url,
@@ -153,11 +153,6 @@ struct _TerminalScreenPopupInfo {
   char *hyperlink;
   char *number_info;
   char *timestamp_info;
-  double x;
-  double y;
-  guint button;
-  guint state;
-  guint32 timestamp;
 };
 
 TerminalScreenPopupInfo *terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info);

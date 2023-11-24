@@ -96,7 +96,6 @@ struct _TerminalWindow
 
   GtkWidget *confirm_close_dialog;
   TerminalSearchPopover *search_popover;
-  GtkPopoverMenu *context_menu;
 
   /* A GSource delaying transition until animations complete */
   guint fullscreen_transition;
@@ -1607,9 +1606,9 @@ menu_append(GMenu* menu,
 }
 
 static void
-screen_show_popup_menu_cb (TerminalScreen *screen,
-                           TerminalScreenPopupInfo *info,
-                           TerminalWindow *window)
+screen_show_context_menu_cb(TerminalScreen *screen,
+                            TerminalScreenPopupInfo *info,
+                            TerminalWindow *window)
 {
   TerminalApp *app = terminal_app_get ();
 
@@ -1617,6 +1616,9 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     return;
 
   remove_popup_info (window);
+  if (!info)
+    return;
+
   window->popup_info = terminal_screen_popup_info_ref (info);
 
   gs_unref_object GMenu *menu = g_menu_new ();
@@ -1737,21 +1739,7 @@ screen_show_popup_menu_cb (TerminalScreen *screen,
     menu_append (section7, _("Leave Full Screen"), "win.toggle-fullscreen");
   g_menu_append_section (menu, nullptr, G_MENU_MODEL (section7));
 
-  if (window->context_menu == nullptr) {
-    window->context_menu = GTK_POPOVER_MENU (gtk_popover_menu_new_from_model (nullptr));
-    gtk_popover_set_has_arrow (GTK_POPOVER (window->context_menu), FALSE);
-    gtk_popover_set_position (GTK_POPOVER (window->context_menu), GTK_POS_BOTTOM);
-    gtk_widget_set_halign (GTK_WIDGET (window->context_menu), GTK_ALIGN_START);
-    gtk_widget_set_parent (GTK_WIDGET (window->context_menu), GTK_WIDGET (window));
-  }
-
-  graphene_point_t point = {float(info->x), float(info->y)};
-  if (gtk_widget_compute_point (GTK_WIDGET (screen), GTK_WIDGET (window), &point, &point)) {
-    cairo_rectangle_int_t rect = {int(point.x), int(point.y), 1, 1};
-    gtk_popover_menu_set_menu_model (window->context_menu, G_MENU_MODEL (menu));
-    gtk_popover_set_pointing_to (GTK_POPOVER (window->context_menu), &rect);
-    gtk_popover_popup (GTK_POPOVER (window->context_menu));
-  }
+  vte_terminal_set_context_menu_model(VTE_TERMINAL(screen), G_MENU_MODEL(menu));
 }
 
 static gboolean
@@ -2151,22 +2139,6 @@ policy_type_to_visible (GValue   *value,
 }
 
 static void
-terminal_window_size_allocate (GtkWidget *widget,
-                               int width,
-                               int height,
-                               int baseline)
-{
-  TerminalWindow *window = TERMINAL_WINDOW (widget);
-
-  GTK_WIDGET_CLASS (terminal_window_parent_class)->size_allocate (widget, width, height, baseline);
-
-  if (window->context_menu != nullptr) {
-    gtk_popover_present (GTK_POPOVER (window->context_menu));
-  }
-
-}
-
-static void
 terminal_window_constructed (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
@@ -2206,7 +2178,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
   widget_class->css_changed = terminal_window_css_changed;
-  widget_class->size_allocate = terminal_window_size_allocate;
 
   window_class->close_request = terminal_window_close_request;
 
@@ -2241,7 +2212,6 @@ terminal_window_dispose (GObject *object)
 
   gtk_widget_dispose_template (GTK_WIDGET (window), TERMINAL_TYPE_WINDOW);
 
-  g_clear_pointer ((GtkWidget **)&window->context_menu, gtk_widget_unparent);
   g_clear_handle_id (&window->fullscreen_transition, g_source_remove);
 
   if (window->clipboard != nullptr) {
@@ -2595,8 +2565,8 @@ notebook_screen_added_cb (TerminalNotebook *notebook,
   g_signal_connect (screen, "hyperlink-hover-uri-changed",
                     G_CALLBACK (screen_hyperlink_hover_uri_changed), window);
 
-  g_signal_connect (screen, "show-popup-menu",
-                    G_CALLBACK (screen_show_popup_menu_cb), window);
+  g_signal_connect (screen, "show-context-menu",
+                    G_CALLBACK (screen_show_context_menu_cb), window);
   g_signal_connect (screen, "match-clicked",
                     G_CALLBACK (screen_match_clicked_cb), window);
   g_signal_connect (screen, "resize-window",
@@ -2682,7 +2652,7 @@ notebook_screen_removed_cb (TerminalNotebook *notebook,
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,
-                                        (void*)screen_show_popup_menu_cb,
+                                        (void*)screen_show_context_menu_cb,
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,

@@ -108,7 +108,7 @@ typedef struct {
 typedef struct
 {
   int tag;
-  TerminalURLFlavor flavor;
+  int flavor;
 } TagData;
 
 typedef struct {
@@ -143,7 +143,7 @@ struct _TerminalScreenPrivate
 enum
 {
   PROFILE_SET,
-  SHOW_POPUP_MENU,
+  SHOW_CONTEXT_MENU,
   MATCH_CLICKED,
   CLOSE_SCREEN,
   LAST_SIGNAL
@@ -183,11 +183,6 @@ static void terminal_screen_capture_click_pressed_cb (TerminalScreen  *screen,
                                                       double           x,
                                                       double           y,
                                                       GtkGestureClick *click);
-static void terminal_screen_bubble_click_pressed_cb (TerminalScreen  *screen,
-                                                     int              n_press,
-                                                     double           x,
-                                                     double           y,
-                                                     GtkGestureClick *click);
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
@@ -204,7 +199,7 @@ static void terminal_screen_check_extra (TerminalScreen *screen,
 static char* terminal_screen_check_match (TerminalScreen *screen,
                                           double          x,
                                           double          y,
-                                          int            *flavor);
+                                          TerminalURLFlavor* flavor);
 
 static void terminal_screen_show_info_bar (TerminalScreen *screen,
                                            GError *error,
@@ -226,11 +221,11 @@ static gboolean terminal_screen_get_child_command (TerminalScreen *screen,
                                                    char         ***argv_p,
                                                    GError        **err);
 
-static void terminal_screen_menu_popup_action (GtkWidget  *widget,
-                                               const char *action_name,
-                                               GVariant   *param);
-
 static void terminal_screen_queue_idle_exec (TerminalScreen *screen);
+
+static void terminal_screen_setup_context_menu(VteTerminal* terminal,
+                                               VteEventContext const* context,
+                                               TerminalScreen* screen);
 
 static void text_uri_list_free (TextUriList *uri_list);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (TextUriList, text_uri_list_free)
@@ -750,12 +745,12 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE,
                   1, G_TYPE_SETTINGS);
-  
-  signals[SHOW_POPUP_MENU] =
-    g_signal_new (I_("show-popup-menu"),
+
+  signals[SHOW_CONTEXT_MENU] =
+    g_signal_new (I_("show-context-menu"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, show_popup_menu),
+                  G_STRUCT_OFFSET (TerminalScreenClass, show_context_menu),
                   nullptr, nullptr,
                   g_cclosure_marshal_VOID__POINTER,
                   G_TYPE_NONE,
@@ -802,11 +797,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 				      G_PARAM_STATIC_NICK |
 				      G_PARAM_STATIC_BLURB)));
 
-  gtk_widget_class_install_action (widget_class,
-                                   "menu.popup",
-                                   nullptr,
-                                   terminal_screen_menu_popup_action);
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/screen.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, drop_target);
@@ -814,7 +804,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, TerminalScreen, size_revealer);
 
-  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_bubble_click_pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_screen_setup_context_menu);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_capture_click_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drag_enter);
   gtk_widget_class_bind_template_callback (widget_class, terminal_screen_drop_target_drag_leave);
@@ -1889,88 +1879,27 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
 }
 
 static void
-terminal_screen_do_popup (TerminalScreen *screen,
-                          int state,
-                          guint button,
-                          guint time,
-                          double x,
-                          double y,
-                          char *hyperlink,
-                          char *url,
-                          int url_flavor,
-                          char *number_info,
-                          char *timestamp_info)
+terminal_screen_setup_context_menu(VteTerminal* terminal,
+                                   VteEventContext const* context,
+                                   TerminalScreen* screen)
 {
-  TerminalScreenPopupInfo *info;
-
-  info = terminal_screen_popup_info_new (screen);
-  info->button = button;
-  info->state = state;
-  info->timestamp = time;
-  info->x = x;
-  info->y = y;
-  info->hyperlink = hyperlink; /* adopted */
-  info->url = url; /* adopted */
-  info->url_flavor = TerminalURLFlavor(url_flavor);
-  info->number_info = number_info; /* adopted */
-  info->timestamp_info = timestamp_info; /* adopted */
-
-  g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
-  terminal_screen_popup_info_unref (info);
-}
-
-static void
-terminal_screen_menu_popup_action (GtkWidget *widget,
-                                   const char *action_name,
-                                   GVariant *param)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-
-  terminal_screen_do_popup (screen, 0, 0, GDK_CURRENT_TIME, 0, 0,
-                            nullptr, nullptr, 0, nullptr, nullptr);
-}
-
-static void
-terminal_screen_bubble_click_pressed_cb (TerminalScreen  *screen,
-                                         int              n_press,
-                                         double           x,
-                                         double           y,
-                                         GtkGestureClick *click)
-{
-  if (n_press == 1) {
-    gs_free char *hyperlink = nullptr;
-    gs_free char *url = nullptr;
-    int url_flavor = 0;
-    gs_free char *number_info = nullptr;
-    gs_free char *timestamp_info = nullptr;
-
-    auto event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (click));
-    auto state = gdk_event_get_modifier_state (event) & gtk_accelerator_get_default_mod_mask ();
-    auto button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
-    auto time = gdk_event_get_time (event);
-
-    hyperlink = vte_terminal_check_hyperlink_at (VTE_TERMINAL (screen), x, y);
-    url = terminal_screen_check_match (screen, x, y, &url_flavor);
-    terminal_screen_check_extra (screen, x, y, &number_info, &timestamp_info);
-
-    if (button == 3)
-      {
-        if (!(state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_ALT_MASK)) ||
-            !(state & (GDK_CONTROL_MASK | GDK_ALT_MASK)))
-          {
-            terminal_screen_do_popup (screen, state, button, time, x, y,
-                                      g_steal_pointer (&hyperlink),
-                                      g_steal_pointer (&url),
-                                      url_flavor,
-                                      g_steal_pointer (&number_info),
-                                      g_steal_pointer (&timestamp_info));
-            gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
-            return;
-          }
-      }
+  if (!context) {
+    g_signal_emit(screen, signals[SHOW_CONTEXT_MENU], 0, nullptr);
+    return;
   }
 
-  gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_DENIED);
+  auto info = terminal_screen_popup_info_new(screen);
+  if (double x, y;
+      vte_event_context_get_coordinates(context, &x, &y)) {
+    info->hyperlink = vte_terminal_check_hyperlink_at (VTE_TERMINAL (screen), x, y);
+    info->url = terminal_screen_check_match (screen, x, y, &info->url_flavor);
+    terminal_screen_check_extra(screen, x, y,
+                                &info->number_info,
+                                &info->timestamp_info);
+  }
+
+  g_signal_emit(screen, signals[SHOW_CONTEXT_MENU], 0, info);
+  terminal_screen_popup_info_unref (info);
 }
 
 static void
@@ -1982,7 +1911,7 @@ terminal_screen_capture_click_pressed_cb (TerminalScreen  *screen,
 {
   gs_free char *hyperlink = nullptr;
   gs_free char *url = nullptr;
-  int url_flavor = 0;
+  auto url_flavor = TerminalURLFlavor{};
   gs_free char *number_info = nullptr;
   gs_free char *timestamp_info = nullptr;
   gboolean handled = FALSE;
@@ -2551,7 +2480,7 @@ static char*
 terminal_screen_check_match (TerminalScreen *screen,
                              double          x,
                              double          y,
-                             int            *flavor)
+                             TerminalURLFlavor* flavor)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSList *tags;
@@ -2565,7 +2494,7 @@ terminal_screen_check_match (TerminalScreen *screen,
       if (tag_data->tag == tag)
 	{
 	  if (flavor)
-	    *flavor = tag_data->flavor;
+	    *flavor = TerminalURLFlavor(tag_data->flavor);
 	  return match;
 	}
     }
