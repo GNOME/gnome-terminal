@@ -190,10 +190,10 @@ terminal_tab_class_init (TerminalTabClass *klass)
  *
  * Returns: a new #TerminalTab for @screen
  */
-GtkWidget *
+TerminalTab*
 terminal_tab_new (TerminalScreen *screen)
 {
-  return reinterpret_cast<GtkWidget*>
+  return reinterpret_cast<TerminalTab*>
     (g_object_new (TERMINAL_TYPE_TAB,
 		   "screen", screen,
 		   nullptr));

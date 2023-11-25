@@ -303,6 +303,7 @@ action_new_terminal_cb (GSimpleAction *action,
   }
 
   TerminalScreen *parent_screen = window->active_screen;
+  auto const parent_tab = parent_screen ? terminal_tab_get_from_screen(parent_screen) : nullptr;
 
   profiles_list = terminal_app_get_profiles_list (app);
   if (g_str_equal (uuid_str, "current"))
@@ -321,9 +322,10 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalScreen *screen = terminal_screen_new (profile,
                                                 nullptr /* title */,
                                                 1.0);
+  auto const tab = terminal_tab_new(screen);
 
   /* Now add the new screen to the window */
-  terminal_window_add_screen (window, screen, -1);
+  terminal_window_add_tab(window, tab, parent_tab);
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
@@ -2406,41 +2408,22 @@ terminal_window_get_active_screen_num (TerminalWindow *window)
 }
 
 void
-terminal_window_add_screen (TerminalWindow *window,
-                            TerminalScreen *screen,
-                            int            position)
+terminal_window_add_tab(TerminalWindow* window,
+                        TerminalTab* tab,
+                        TerminalTab* parent_tab)
 {
-  GtkWidget *old_window;
+  auto const global_settings = terminal_app_get_global_settings(terminal_app_get());
+  auto const position_pref = TerminalNewTabPosition
+    (g_settings_get_enum(global_settings, TERMINAL_SETTING_NEW_TAB_POSITION_KEY));
 
-  old_window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (screen)));
-  if (GTK_IS_ROOT (old_window) &&
-      TERMINAL_IS_WINDOW (old_window) &&
-      TERMINAL_WINDOW (old_window)== window)
-    return;
-
-  if (TERMINAL_IS_WINDOW (old_window))
-    terminal_window_remove_screen (TERMINAL_WINDOW (old_window), screen);
-
-  if (position == -1) {
-    GSettings *global_settings = terminal_app_get_global_settings (terminal_app_get ());
-    TerminalNewTabPosition position_pref = TerminalNewTabPosition
-      (g_settings_get_enum (global_settings,
-			    TERMINAL_SETTING_NEW_TAB_POSITION_KEY));
-    switch (position_pref) {
-    case TERMINAL_NEW_TAB_POSITION_NEXT:
-      position = terminal_window_get_active_screen_num (window) + 1;
-      break;
-
-    default:
-    case TERMINAL_NEW_TAB_POSITION_LAST:
-      position = -1;
-      break;
-    }
+  if (position_pref == TERMINAL_NEW_TAB_POSITION_NEXT &&
+      parent_tab) {
+    terminal_notebook_add_tab(window->notebook, tab, parent_tab);
+  } else {
+    terminal_notebook_append_tab(window->notebook, tab, false);
   }
 
-  terminal_notebook_add_screen (window->notebook, screen, position);
-
-  gtk_widget_grab_focus (GTK_WIDGET (screen));
+  gtk_widget_grab_focus(GTK_WIDGET(terminal_tab_get_screen(tab)));
 }
 
 void

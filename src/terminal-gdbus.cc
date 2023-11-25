@@ -518,7 +518,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   /* Now we can create the new screen */
   TerminalScreen *screen = terminal_screen_new (profile, title, zoom);
-  terminal_window_add_screen (window, screen, -1);
+  auto const tab = terminal_tab_new(screen);
+  auto const parent_tab = parent_screen ? terminal_tab_get_from_screen(parent_screen) : nullptr;
+  terminal_window_add_tab(window, tab, parent_tab);
 
   /* Apply window properties */
   gboolean active;

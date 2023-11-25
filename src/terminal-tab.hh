@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalTab, terminal_tab, TERMINAL, TAB, GtkWidget)
 
-GtkWidget *terminal_tab_new (TerminalScreen *screen);
+TerminalTab* terminal_tab_new (TerminalScreen *screen);
 
 TerminalScreen *terminal_tab_get_screen (TerminalTab *tab);
 

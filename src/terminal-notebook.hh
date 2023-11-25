@@ -27,9 +27,12 @@
 G_DECLARE_FINAL_TYPE (TerminalNotebook, terminal_notebook, TERMINAL, NOTEBOOK, GtkWidget)
 
 GtkWidget      *terminal_notebook_new                    (void);
-void            terminal_notebook_add_screen             (TerminalNotebook *notebook,
-                                                          TerminalScreen   *screen,
-                                                          int               position);
+void            terminal_notebook_add_tab(TerminalNotebook *notebook,
+                                          TerminalTab* tab,
+                                          TerminalTab* parent_tab);
+void            terminal_notebook_append_tab(TerminalNotebook *notebook,
+                                             TerminalTab* tab,
+                                             bool pinned);
 void            terminal_notebook_remove_screen          (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen);
 TerminalScreen *terminal_notebook_get_active_screen      (TerminalNotebook *notebook);

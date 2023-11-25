@@ -21,6 +21,7 @@
 #include <adwaita.h>
 
 #include "terminal-screen.hh"
+#include "terminal-tab.hh"
 
 G_BEGIN_DECLS
 
@@ -32,9 +33,9 @@ TerminalWindow *terminal_window_new                      (GApplication   *app);
 int             terminal_window_get_active_screen_num    (TerminalWindow *window);
 void            terminal_window_set_titlebar             (TerminalWindow *window,
                                                           GtkWidget      *titlebar);
-void            terminal_window_add_screen               (TerminalWindow *window,
-                                                          TerminalScreen *screen,
-                                                          int             position);
+void            terminal_window_add_tab(TerminalWindow *window,
+                                        TerminalTab* tab,
+                                        TerminalTab* parent_tab);
 void            terminal_window_remove_screen            (TerminalWindow *window,
                                                           TerminalScreen *screen);
 void            terminal_window_update_size              (TerminalWindow *window);
