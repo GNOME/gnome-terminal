@@ -2421,7 +2421,7 @@ terminal_window_add_tab(TerminalWindow* window,
 
   if (position_pref == TERMINAL_NEW_TAB_POSITION_NEXT &&
       parent_tab) {
-    terminal_notebook_add_tab(window->notebook, tab, parent_tab);
+    terminal_notebook_insert_tab(window->notebook, tab, parent_tab, false);
   } else {
     terminal_notebook_append_tab(window->notebook, tab, false);
   }

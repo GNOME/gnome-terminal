@@ -89,9 +89,10 @@ remove_reorder_bindings (GtkWidgetClass *widget_class,
 }
 
 void
-terminal_notebook_add_tab(TerminalNotebook *notebook,
-                          TerminalTab* tab,
-                          TerminalTab* parent_tab)
+terminal_notebook_insert_tab(TerminalNotebook *notebook,
+                             TerminalTab* tab,
+                             TerminalTab* parent_tab,
+                             bool pinned)
 {
   g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
   g_return_if_fail(TERMINAL_IS_TAB(tab));
@@ -99,15 +100,23 @@ terminal_notebook_add_tab(TerminalNotebook *notebook,
   g_return_if_fail(!gtk_widget_get_parent(GTK_WIDGET(tab)));
 
   if (!parent_tab)
-    return terminal_notebook_append_tab(notebook, tab, false);
+    return terminal_notebook_append_tab(notebook, tab, pinned);
 
   auto const parent_page = adw_tab_view_get_page(notebook->tab_view,
                                                  GTK_WIDGET(parent_tab));
   g_return_if_fail(parent_page);
 
-  auto const page = adw_tab_view_add_page(notebook->tab_view,
-                                          GTK_WIDGET(tab),
-                                          parent_page);
+  auto const ppos = adw_tab_view_get_page_position(notebook->tab_view, parent_page);
+  auto const n_pinned = adw_tab_view_get_n_pinned_pages(notebook->tab_view);
+  auto const npos = ppos < n_pinned ? n_pinned : ppos + 1;
+
+  auto const page = pinned ?
+    adw_tab_view_insert_pinned(notebook->tab_view,
+                               GTK_WIDGET(tab),
+                               npos) :
+    adw_tab_view_insert(notebook->tab_view,
+                        GTK_WIDGET(tab),
+                        npos);
 
   auto const screen = terminal_tab_get_screen(tab);
   g_object_bind_property(screen, "title",
@@ -124,9 +133,9 @@ terminal_notebook_append_tab(TerminalNotebook *notebook,
   g_return_if_fail(TERMINAL_IS_TAB(tab));
   g_return_if_fail(!gtk_widget_get_parent(GTK_WIDGET(tab)));
 
-  auto const page = pinned ? adw_tab_view_append_pinned(notebook->tab_view,
-                                                        GTK_WIDGET(tab))
-    : adw_tab_view_append(notebook->tab_view, GTK_WIDGET(tab));
+  auto const page = pinned ?
+    adw_tab_view_append_pinned(notebook->tab_view, GTK_WIDGET(tab)) :
+    adw_tab_view_append(notebook->tab_view, GTK_WIDGET(tab));
 
   auto const screen = terminal_tab_get_screen(tab);
   g_object_bind_property(screen, "title",

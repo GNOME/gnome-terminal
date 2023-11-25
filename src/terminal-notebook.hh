@@ -27,9 +27,10 @@
 G_DECLARE_FINAL_TYPE (TerminalNotebook, terminal_notebook, TERMINAL, NOTEBOOK, GtkWidget)
 
 GtkWidget      *terminal_notebook_new                    (void);
-void            terminal_notebook_add_tab(TerminalNotebook *notebook,
-                                          TerminalTab* tab,
-                                          TerminalTab* parent_tab);
+void            terminal_notebook_insert_tab(TerminalNotebook *notebook,
+                                             TerminalTab* tab,
+                                             TerminalTab* parent_tab,
+                                             bool pinned);
 void            terminal_notebook_append_tab(TerminalNotebook *notebook,
                                              TerminalTab* tab,
                                              bool pinned);
