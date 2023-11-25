@@ -303,7 +303,7 @@ action_new_terminal_cb (GSimpleAction *action,
   }
 
   TerminalScreen *parent_screen = window->active_screen;
-  auto const parent_tab = parent_screen ? terminal_tab_get_from_screen(parent_screen) : nullptr;
+  auto parent_tab = parent_screen ? terminal_tab_get_from_screen(parent_screen) : nullptr;
 
   profiles_list = terminal_app_get_profiles_list (app);
   if (g_str_equal (uuid_str, "current"))
@@ -316,15 +316,18 @@ action_new_terminal_cb (GSimpleAction *action,
   if (profile == nullptr)
     return;
 
-  if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
+  if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW) {
     window = terminal_window_new (G_APPLICATION (app));
+    // Cannot use not use the parent tab since it belongs to a different window
+    parent_tab = nullptr;
+  }
 
   TerminalScreen *screen = terminal_screen_new (profile,
                                                 nullptr /* title */,
                                                 1.0);
   auto const tab = terminal_tab_new(screen);
 
-  /* Now add the new screen to the window */
+  // Now add the new screen to the window.
   terminal_window_add_tab(window, tab, parent_tab);
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
