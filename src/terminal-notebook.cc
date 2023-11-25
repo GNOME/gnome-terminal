@@ -108,15 +108,14 @@ terminal_notebook_insert_tab(TerminalNotebook *notebook,
 
   auto const ppos = adw_tab_view_get_page_position(notebook->tab_view, parent_page);
   auto const n_pinned = adw_tab_view_get_n_pinned_pages(notebook->tab_view);
-  auto const npos = ppos < n_pinned ? n_pinned : ppos + 1;
 
   auto const page = pinned ?
     adw_tab_view_insert_pinned(notebook->tab_view,
                                GTK_WIDGET(tab),
-                               npos) :
+                               ppos < n_pinned ? ppos + 1 : n_pinned) :
     adw_tab_view_insert(notebook->tab_view,
                         GTK_WIDGET(tab),
-                        npos);
+                        ppos < n_pinned ? n_pinned : ppos + 1);
 
   auto const screen = terminal_tab_get_screen(tab);
   g_object_bind_property(screen, "title",
