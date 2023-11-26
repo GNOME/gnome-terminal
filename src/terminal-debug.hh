@@ -37,6 +37,7 @@ typedef enum {
   TERMINAL_DEBUG_SEARCH        = 1 << 9,
   TERMINAL_DEBUG_BRIDGE        = 1 << 10,
   TERMINAL_DEBUG_DEFAULT       = 1 << 11,
+  TERMINAL_DEBUG_FOCUS         = 1 << 12,
 } TerminalDebugFlags;
 
 void _terminal_debug_init(void);
@@ -72,6 +73,8 @@ static void _terminal_debug_print (guint flags, const char *fmt, ...)
   }
 }
 #endif
+
+void _terminal_debug_attach_focus_listener(void* widget);
 
 #ifdef G_DISABLE_ASSERT
 #define terminal_assert_cmpfloat(a,op,b) G_STMT_START {} G_STMT_END

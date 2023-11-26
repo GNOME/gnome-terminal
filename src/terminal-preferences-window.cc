@@ -26,6 +26,7 @@
 #include "terminal-profile-row.hh"
 #include "terminal-schemas.hh"
 #include "terminal-shortcut-editor.hh"
+#include "terminal-debug.hh"
 
 struct _TerminalPreferencesWindow
 {
@@ -323,6 +324,12 @@ static void
 terminal_preferences_window_init (TerminalPreferencesWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+#ifdef ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF(TERMINAL_DEBUG_FOCUS) {
+    _terminal_debug_attach_focus_listener(GTK_WIDGET(self));
+  }
+#endif
 }
 
 GtkWindow*

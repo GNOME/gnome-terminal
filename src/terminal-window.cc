@@ -2120,6 +2120,12 @@ terminal_window_init (TerminalWindow *window)
     gdk_x11_surface_set_utf8_property (surface, "WM_WINDOW_ROLE", role);
   }
 #endif
+
+#ifdef ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF(TERMINAL_DEBUG_FOCUS) {
+    _terminal_debug_attach_focus_listener(GTK_WIDGET(window));
+  }
+#endif
 }
 
 static void
