@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues\n"
-"POT-Creation-Date: 2023-01-24 23:02+0000\n"
-"PO-Revision-Date: 2023-01-25 14:03+0000\n"
+"POT-Creation-Date: 2023-11-22 21:53+0000\n"
+"PO-Revision-Date: 2023-12-03 21:34+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -22,12 +22,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.1\n"
 "X-Language: pt_PT\n"
 "X-Source-Language: C\n"
 
 #: data/org.gnome.Terminal.desktop.in:3
-#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:152
+#: data/org.gnome.Terminal.metainfo.xml.in:37 src/server.cc:184
 #: src/terminal-accels.cc:232 src/terminal-menubar.ui.in:144
 #: src/terminal-tab-label.cc:81 src/terminal-window.cc:1903
 #: src/terminal-window.cc:2207 src/terminal-window.cc:2522 src/terminal.cc:598
@@ -56,7 +56,7 @@ msgstr "Preferências"
 msgid "Configure the command line"
 msgstr "Configurar a linha de comandos"
 
-#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:143
+#: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:146
 msgid "Terminal Preferences"
 msgstr "Preferências do Terminal"
 
@@ -857,18 +857,18 @@ msgstr "Seguinte"
 
 #: src/preferences.ui:50
 msgctxt "theme variant"
-msgid "Default"
-msgstr "Predefinido"
+msgid "Follow system style"
+msgstr "Seguir o estilo do sistema"
 
 #: src/preferences.ui:54
 msgctxt "theme variant"
-msgid "Light"
-msgstr "Claro"
+msgid "Light style"
+msgstr "Estilo claro"
 
 #: src/preferences.ui:58
 msgctxt "theme variant"
-msgid "Dark"
-msgstr "Escuro"
+msgid "Dark style"
+msgstr "Estilo escuro"
 
 #. ambiguous-width characers are
 #: src/preferences.ui:107
@@ -1499,6 +1499,7 @@ msgid "Palette entry %u"
 msgstr "Entrada de paleta %u"
 
 #: src/search-popover.ui:7 src/search-popover.ui:37 src/terminal-accels.cc:150
+#: src/terminal-headerbar.ui:118
 msgid "Find"
 msgstr "Localizar"
 
@@ -1530,7 +1531,7 @@ msgstr "Comparar como expressão _regular"
 msgid "_Wrap around"
 msgstr "_Dar a volta"
 
-#: src/terminal-accels.cc:126
+#: src/terminal-accels.cc:126 src/terminal-headerbar.ui:48
 msgid "New Tab"
 msgstr "Novo Separador"
 
@@ -1687,30 +1688,34 @@ msgstr "_Ação"
 msgid "Shortcut _Key"
 msgstr "_Tecla de atalho"
 
-#: src/terminal-app.cc:550
+#: src/terminal-app.cc:576
 msgid "New Terminal"
 msgstr "Novo Terminal"
 
-#: src/terminal-app.cc:560 src/terminal-window.cc:1804
+#: src/terminal-app.cc:586 src/terminal-window.cc:1804
 msgid "New _Terminal"
 msgstr "_Novo Terminal"
 
-#: src/terminal-app.cc:562 src/terminal-window.cc:1813
+#: src/terminal-app.cc:588 src/terminal-window.cc:1813
 msgid "New _Tab"
 msgstr "Novo _Separador"
 
-#: src/terminal-app.cc:563 src/terminal-headermenu.ui:39
+#: src/terminal-app.cc:589 src/terminal-headermenu.ui:39
 #: src/terminal-window.cc:1809
 msgid "New _Window"
 msgstr "Nova _Janela"
 
-#: src/terminal-app.cc:612
+#: src/terminal-app.cc:638
 msgid "Change _Profile"
 msgstr "Alterar _perfil"
 
-#: src/terminal-app.cc:625
+#: src/terminal-app.cc:651
 msgid "_Profile"
 msgstr "_Perfil"
+
+#: src/terminal-headerbar.ui:72 src/terminal-prefs.cc:657
+msgid "Profiles"
+msgstr "Perfis"
 
 #: src/terminal-headermenu.ui:23 src/terminal-menubar.ui.in:115
 msgid "Zoom _Out"
@@ -1766,7 +1771,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspetor"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1536
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1542
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Preferências"
@@ -2265,33 +2270,29 @@ msgstr "Geral"
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: src/terminal-prefs.cc:657
-msgid "Profiles"
-msgstr "Perfis"
-
-#: src/terminal-screen.cc:1402
+#: src/terminal-screen.cc:1405
 msgid "No command supplied nor shell requested"
 msgstr "Nenhum comando indicado nem terminal pedido"
 
-#: src/terminal-screen.cc:1537 src/terminal-screen.cc:1884
+#: src/terminal-screen.cc:1543 src/terminal-screen.cc:1890
 msgid "_Relaunch"
 msgstr "_Reiniciar"
 
-#: src/terminal-screen.cc:1540
+#: src/terminal-screen.cc:1546
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ocorreu um erro ao criar o processo filho para este terminal"
 
-#: src/terminal-screen.cc:1888
+#: src/terminal-screen.cc:1894
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "O processo filho terminou normalmente com o estado %d."
 
-#: src/terminal-screen.cc:1891
+#: src/terminal-screen.cc:1897
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "O processo filho foi abortado pelo sinal %d."
 
-#: src/terminal-screen.cc:1894
+#: src/terminal-screen.cc:1900
 msgid "The child process was aborted."
 msgstr "O processo filho foi abortado."
 
@@ -2475,6 +2476,14 @@ msgstr "Fechar jane_la"
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Falha ao processar argumentos: %s\n"
+
+#~ msgctxt "theme variant"
+#~ msgid "Default"
+#~ msgstr "Predefinido"
+
+#~ msgctxt "theme variant"
+#~ msgid "Dark"
+#~ msgstr "Escuro"
 
 #~ msgid "org.gnome.Terminal"
 #~ msgstr "org.gnome.Terminal"
