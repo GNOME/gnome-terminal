@@ -827,8 +827,6 @@ option_wait_cb (const gchar *option_name,
   if (options->initial_windows)
     {
       InitialTab *it = ensure_top_tab (options);
-
-      g_free (it->working_dir);
       it->wait = TRUE;
     }
   else
