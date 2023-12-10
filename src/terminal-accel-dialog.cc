@@ -148,8 +148,8 @@ terminal_accel_dialog_key_pressed (GtkWidget             *widget,
       /* Backspace disables the current shortcut */
       if (real_mask == 0 && keyval_lower == GDK_KEY_BackSpace)
         {
-          terminal_accel_dialog_set_accelerator (self, NULL);
-          gtk_widget_activate_action (GTK_WIDGET (self), "shortcut.set", NULL);
+          terminal_accel_dialog_set_accelerator (self, nullptr);
+          gtk_widget_activate_action (GTK_WIDGET (self), "shortcut.set", nullptr);
           return GDK_EVENT_STOP;
         }
 
@@ -314,14 +314,14 @@ terminal_accel_dialog_class_init (TerminalAccelDialogClass *klass)
     g_param_spec_string ("accelerator",
                          "Accelerator",
                          "Accelerator",
-                         NULL,
+                         nullptr,
                          GParamFlags(G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SHORTCUT_TITLE] =
     g_param_spec_string ("shortcut-title",
                          "Title",
                          "Title",
-                         NULL,
+                         nullptr,
                          GParamFlags(G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   signals[SHORTCUT_SET] =
@@ -329,7 +329,7 @@ terminal_accel_dialog_class_init (TerminalAccelDialogClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_FIRST,
                   0,
-                  NULL, NULL, NULL,
+                  nullptr, nullptr, nullptr,
                   G_TYPE_NONE,
                   1,
                   G_TYPE_STRING);
@@ -345,9 +345,9 @@ terminal_accel_dialog_class_init (TerminalAccelDialogClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, terminal_accel_dialog_key_pressed);
   gtk_widget_class_bind_template_callback (widget_class, terminal_accel_dialog_key_released);
 
-  gtk_widget_class_install_action (widget_class, "shortcut.set", NULL, shortcut_set_cb);
+  gtk_widget_class_install_action (widget_class, "shortcut.set", nullptr, shortcut_set_cb);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GdkModifierType(0), "window.close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, GdkModifierType(0), "window.close", nullptr);
 }
 
 static void
@@ -369,10 +369,10 @@ terminal_accel_dialog_init (TerminalAccelDialog *self)
 gchar *
 terminal_accel_dialog_get_accelerator (TerminalAccelDialog *self)
 {
-  g_return_val_if_fail (TERMINAL_IS_ACCEL_DIALOG (self), NULL);
+  g_return_val_if_fail (TERMINAL_IS_ACCEL_DIALOG (self), nullptr);
 
   if (self->keyval == 0)
-    return NULL;
+    return nullptr;
 
   return gtk_accelerator_name (self->keyval, self->modifier);
 }
@@ -386,7 +386,7 @@ terminal_accel_dialog_set_accelerator (TerminalAccelDialog *self,
 
   g_return_if_fail (TERMINAL_IS_ACCEL_DIALOG (self));
 
-  if (accelerator == NULL)
+  if (accelerator == nullptr)
     {
       if (self->keyval != 0 || self->modifier != 0)
         {
@@ -410,11 +410,11 @@ void
 terminal_accel_dialog_set_shortcut_title (TerminalAccelDialog *self,
                                           const gchar         *shortcut_title)
 {
-  g_autofree gchar *label = NULL;
+  g_autofree gchar *label = nullptr;
 
   g_return_if_fail (TERMINAL_IS_ACCEL_DIALOG (self));
 
-  if (shortcut_title != NULL)
+  if (shortcut_title != nullptr)
     {
       /* Translators: <b>%s</b> is used to show the provided text in bold */
       label = g_strdup_printf (_("Enter new shortcut to change <b>%s</b>."), shortcut_title);
@@ -432,7 +432,7 @@ terminal_accel_dialog_set_shortcut_title (TerminalAccelDialog *self,
 const gchar *
 terminal_accel_dialog_get_shortcut_title (TerminalAccelDialog *self)
 {
-  g_return_val_if_fail (TERMINAL_IS_ACCEL_DIALOG (self), NULL);
+  g_return_val_if_fail (TERMINAL_IS_ACCEL_DIALOG (self), nullptr);
 
   return self->shortcut_title;
 }
@@ -440,6 +440,6 @@ terminal_accel_dialog_get_shortcut_title (TerminalAccelDialog *self)
 GtkWidget *
 terminal_accel_dialog_new (void)
 {
-  return (GtkWidget*)g_object_new (TERMINAL_TYPE_ACCEL_DIALOG, NULL);
+  return (GtkWidget*)g_object_new (TERMINAL_TYPE_ACCEL_DIALOG, nullptr);
 }
 

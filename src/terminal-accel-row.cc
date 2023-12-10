@@ -182,12 +182,12 @@ terminal_accel_row_class_init (TerminalAccelRowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, accelerator_to_label);
 
   properties[PROP_ACCELERATOR] =
-    g_param_spec_string ("accelerator", NULL, NULL,
+    g_param_spec_string ("accelerator", nullptr, nullptr,
                          nullptr,
                          GParamFlags(G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_KEY] =
-    g_param_spec_string ("key", NULL, NULL,
+    g_param_spec_string ("key", nullptr, nullptr,
                          nullptr,
                          GParamFlags(G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

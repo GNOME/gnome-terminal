@@ -56,7 +56,7 @@ terminal_profile_row_duplicate (GtkWidget  *widget,
   g_autofree char *new_name = g_strdup_printf ("%s %s", name, _("Duplicate"));
   g_autofree char *uuid = terminal_app_new_profile (app, self->settings, new_name);
   TerminalSettingsList *profiles_list = terminal_app_get_profiles_list (app);
-  g_autoptr(GSettings) settings = terminal_profiles_list_ref_profile_by_uuid (profiles_list, uuid, NULL);
+  g_autoptr(GSettings) settings = terminal_profiles_list_ref_profile_by_uuid (profiles_list, uuid, nullptr);
 
   if (settings != nullptr && window != nullptr) {
     terminal_preferences_window_edit_profile (TERMINAL_PREFERENCES_WINDOW (window), settings);
