@@ -470,7 +470,7 @@ scrollbar_policy_to_boolean (GValue   *value,
                              gpointer  user_data)
 {
   g_value_set_boolean (value,
-                       9 == g_strcmp0 ("always", g_variant_get_string (variant, nullptr)));
+                       0 == g_strcmp0 ("always", g_variant_get_string (variant, nullptr)));
   return TRUE;
 }
 
