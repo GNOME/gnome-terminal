@@ -346,13 +346,19 @@ schema_key_range_compatible(GSettingsSchema* source_schema,
     gs_unref_variant GVariant* source_max = nullptr;
     g_variant_get(source_data, "(**)", &source_min, &source_max);
 
-    /* The source interval must be contained within the reference interval */
-    if (g_variant_compare(source_min, reference_min) < 0 ||
-        g_variant_compare(source_max, reference_max) > 0) {
+    // The source interval must be equal to the reference interval
+    if (g_variant_compare(source_min, reference_min) != 0 ||
+        g_variant_compare(source_max, reference_max) != 0) {
+      gs_free auto reference_min_str = g_variant_print(reference_min, true);
+      gs_free auto reference_max_str = g_variant_print(reference_max, true);
+      gs_free auto source_min_str = g_variant_print(source_min, true);
+      gs_free auto source_max_str = g_variant_print(source_max, true);
       g_set_error(error, TERMINAL_SCHEMA_VERIFIER_ERROR,
                   TERMINAL_SCHEMA_VERIFIER_KEY_RANGE_INTERVAL,
-                  "Schema \"%s\" key \"%s\" has range interval not contained in reference range interval",
-                  g_settings_schema_get_id(source_schema), key);
+                  "Schema \"%s\" key \"%s\" has range interval [%s, %s] not equal to the reference range interval [%s, %s]",
+                  g_settings_schema_get_id(source_schema), key,
+                  source_min_str, source_max_str,
+                  reference_min_str, reference_max_str);
         return FALSE;
     }
   } else {
