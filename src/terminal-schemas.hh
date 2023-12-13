@@ -60,6 +60,7 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY       "highlight-colors-set"
 #define TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY "highlight-background-color"
 #define TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY "highlight-foreground-color"
+#define TERMINAL_PROFILE_KINETIC_SCROLLING_KEY          "kinetic-scrolling"
 #define TERMINAL_PROFILE_LOGIN_SHELL_KEY                "login-shell"
 #define TERMINAL_PROFILE_NAME_KEY                       "name"
 #define TERMINAL_PROFILE_PALETTE_KEY                    "palette"

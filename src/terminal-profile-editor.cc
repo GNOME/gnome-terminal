@@ -64,6 +64,7 @@ struct _TerminalProfileEditor
   GtkSwitch            *highlight_colors_set;
   AdwPreferencesGroup  *image_group;
   AdwSwitchRow         *limit_scrollback;
+  AdwSwitchRow         *kinetic_scrolling;
   AdwSwitchRow         *login_shell;
   GtkColorDialogButton *palette_0;
   GtkColorDialogButton *palette_1;
@@ -937,6 +938,10 @@ terminal_profile_editor_constructed (GObject *object)
                                 scrollbar_policy_to_index, index_to_scrollbar_policy,
                                 nullptr, nullptr);
 
+  g_settings_bind (self->settings, TERMINAL_PROFILE_KINETIC_SCROLLING_KEY,
+                   self->kinetic_scrolling, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
   g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
                    self->scroll_on_keystroke, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
@@ -1226,6 +1231,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_color_text);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, highlight_colors_set);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, image_group);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, kinetic_scrolling);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, limit_scrollback);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, login_shell);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_0);
