@@ -121,6 +121,9 @@ terminal_notebook_insert_tab(TerminalNotebook *notebook,
   g_object_bind_property(screen, "title",
                          page, "title",
                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon",
+                         page, "icon",
+                         G_BINDING_SYNC_CREATE);
 }
 
 void
@@ -139,6 +142,9 @@ terminal_notebook_append_tab(TerminalNotebook *notebook,
   auto const screen = terminal_tab_get_screen(tab);
   g_object_bind_property(screen, "title",
                          page, "title",
+                         G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon",
+                         page, "icon",
                          G_BINDING_SYNC_CREATE);
 }
 
