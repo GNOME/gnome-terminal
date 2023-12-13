@@ -464,27 +464,6 @@ recurse_remove_emoji_hint (GtkWidget *widget)
   }
 }
 
-static gboolean
-scrollbar_policy_to_boolean (GValue   *value,
-                             GVariant *variant,
-                             gpointer  user_data)
-{
-  g_value_set_boolean (value,
-                       0 == g_strcmp0 ("always", g_variant_get_string (variant, nullptr)));
-  return TRUE;
-}
-
-static GVariant *
-boolean_to_scrollbar_policy (const GValue       *value,
-                             const GVariantType *type,
-                             gpointer            user_data)
-{
-  if (g_value_get_boolean (value))
-    return g_variant_new_string ("always");
-  else
-    return g_variant_new_string ("never");
-}
-
 static void
 terminal_profile_editor_copy_uuid (GtkWidget  *widget,
                                    const char *action_name,
@@ -852,6 +831,9 @@ SETTING_TO_INDEX_TRANSFORM(erase_binding_to_index,
 SETTING_TO_INDEX_TRANSFORM(ambiguous_width_to_index,
                            index_to_ambiguous_width,
                            {"narrow", "wide"})
+SETTING_TO_INDEX_TRANSFORM(scrollbar_policy_to_index,
+                           index_to_scrollbar_policy,
+                           {"always", "overlay", "never"})
 
 static gboolean
 encoding_to_index (GValue   *value,
@@ -950,10 +932,9 @@ terminal_profile_editor_constructed (GObject *object)
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
-                                self->show_scrollbar, "active",
+                                self->show_scrollbar, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                scrollbar_policy_to_boolean,
-                                boolean_to_scrollbar_policy,
+                                scrollbar_policy_to_index, index_to_scrollbar_policy,
                                 nullptr, nullptr);
 
   g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,

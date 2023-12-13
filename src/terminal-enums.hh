@@ -64,6 +64,12 @@ typedef enum {
   TERMINAL_PRESERVE_WORKING_DIRECTORY_ALWAYS = 2,
 } TerminalPreserveWorkingDirectory;
 
+typedef enum {
+  TERMINAL_SCROLLBAR_POLICY_ALWAYS  = 0,
+  TERMINAL_SCROLLBAR_POLICY_OVERLAY = 1,
+  TERMINAL_SCROLLBAR_POLICY_NEVER   = 2,
+} TerminalScrollbarPolicy;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */

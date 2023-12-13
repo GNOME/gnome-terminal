@@ -20,6 +20,7 @@
 
 #include <gtk/gtk.h>
 
+#include "terminal-enums.hh"
 #include "terminal-screen.hh"
 
 G_BEGIN_DECLS
@@ -37,8 +38,8 @@ void terminal_tab_destroy (TerminalTab *tab);
 TerminalTab *terminal_tab_get_from_screen (TerminalScreen *screen);
 
 void terminal_tab_set_policy (TerminalTab *tab,
-                              GtkPolicyType hpolicy,
-                              GtkPolicyType vpolicy);
+                              TerminalScrollbarPolicy hpolicy,
+                              TerminalScrollbarPolicy vpolicy);
 
 void terminal_tab_add_overlay (TerminalTab *tab,
                                GtkWidget *child);

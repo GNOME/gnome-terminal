@@ -20,6 +20,7 @@
 
 #include "terminal-tab.hh"
 #include "terminal-debug.hh"
+#include "terminal-type-builtins.hh"
 
 #include <gtk/gtk.h>
 
@@ -30,8 +31,8 @@ struct _TerminalTab
   TerminalScreen *screen;
   GtkWidget *overlay;
   GtkWidget *scrolled_window;
-  GtkPolicyType hscrollbar_policy;
-  GtkPolicyType vscrollbar_policy;
+  TerminalScrollbarPolicy hscrollbar_policy;
+  TerminalScrollbarPolicy vscrollbar_policy;
 
   bool pinned;
 };
@@ -51,8 +52,8 @@ G_DEFINE_FINAL_TYPE (TerminalTab, terminal_tab, GTK_TYPE_WIDGET)
 static void
 terminal_tab_init (TerminalTab *tab)
 {
-  tab->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
-  tab->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
+  tab->hscrollbar_policy = TERMINAL_SCROLLBAR_POLICY_ALWAYS;
+  tab->vscrollbar_policy = TERMINAL_SCROLLBAR_POLICY_NEVER;
 }
 
 static void
@@ -69,14 +70,15 @@ terminal_tab_constructed (GObject *object)
 
   tab->scrolled_window =
     (GtkWidget *)g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                               "hscrollbar-policy", tab->hscrollbar_policy,
-                               "vscrollbar-policy", tab->vscrollbar_policy,
                                "child", tab->screen,
                                "propagate-natural-width", TRUE,
                                "propagate-natural-height", TRUE,
                                nullptr);
   gtk_overlay_set_child (GTK_OVERLAY (tab->overlay),
                          tab->scrolled_window);
+
+  // Apply the scrollbar policy
+  terminal_tab_set_policy(tab, tab->hscrollbar_policy, tab->vscrollbar_policy);
 }
 
 static void
@@ -126,14 +128,14 @@ terminal_tab_set_property (GObject *object,
       tab->screen = (TerminalScreen*)g_value_get_object (value);
       break;
     case PROP_HSCROLLBAR_POLICY:
-      terminal_tab_set_policy (tab,
-                                            GtkPolicyType(g_value_get_enum (value)),
-                                            tab->vscrollbar_policy);
+      terminal_tab_set_policy(tab,
+                              TerminalScrollbarPolicy(g_value_get_enum(value)),
+                              tab->vscrollbar_policy);
       break;
     case PROP_VSCROLLBAR_POLICY:
-      terminal_tab_set_policy (tab,
-                                            tab->hscrollbar_policy,
-                                            GtkPolicyType(g_value_get_enum (value)));
+      terminal_tab_set_policy(tab,
+                              tab->hscrollbar_policy,
+                              TerminalScrollbarPolicy(g_value_get_enum(value)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -162,24 +164,27 @@ terminal_tab_class_init (TerminalTabClass *klass)
                           TERMINAL_TYPE_SCREEN,
                           GParamFlags(G_PARAM_READWRITE |
                                       G_PARAM_CONSTRUCT_ONLY |
-                                      G_PARAM_STATIC_STRINGS)));
-     
+                                      G_PARAM_STATIC_STRINGS |
+                                      G_PARAM_EXPLICIT_NOTIFY)));
+
   g_object_class_install_property
     (gobject_class,
      PROP_HSCROLLBAR_POLICY,
      g_param_spec_enum ("hscrollbar-policy", nullptr, nullptr,
-                        GTK_TYPE_POLICY_TYPE,
-                        GTK_POLICY_AUTOMATIC,
+                        TERMINAL_TYPE_SCROLLBAR_POLICY,
+                        TERMINAL_SCROLLBAR_POLICY_NEVER,
                         GParamFlags(G_PARAM_READWRITE |
-                                    G_PARAM_STATIC_STRINGS)));
+                                    G_PARAM_STATIC_STRINGS |
+                                    G_PARAM_EXPLICIT_NOTIFY)));
   g_object_class_install_property
     (gobject_class,
      PROP_VSCROLLBAR_POLICY,
      g_param_spec_enum ("vscrollbar-policy", nullptr, nullptr,
-                        GTK_TYPE_POLICY_TYPE,
-                        GTK_POLICY_AUTOMATIC,
+                        TERMINAL_TYPE_SCROLLBAR_POLICY,
+                        TERMINAL_SCROLLBAR_POLICY_ALWAYS,
                         GParamFlags(G_PARAM_READWRITE |
-                                    G_PARAM_STATIC_STRINGS)));
+                                    G_PARAM_STATIC_STRINGS |
+                                    G_PARAM_EXPLICIT_NOTIFY)));
 }
 
 /* public API */
@@ -236,24 +241,19 @@ terminal_tab_get_from_screen (TerminalScreen *screen)
 /**
  * terminal_tab_set_policy:
  * @tab: a #TerminalTab
- * @hpolicy: a #GtkPolicyType
- * @vpolicy: a #GtkPolicyType
+ * @hpolicy: a #TerminalScrollbarPolicy
+ * @vpolicy: a #TerminalScrollbarPolicy
  *
  * Sets @tab's scrollbar policy.
  */
 void
 terminal_tab_set_policy (TerminalTab *tab,
-                                      GtkPolicyType hpolicy,
-                                      GtkPolicyType vpolicy)
+                         TerminalScrollbarPolicy hpolicy,
+                         TerminalScrollbarPolicy vpolicy)
 {
-  GObject *object;
-  GtkSettings *settings;
-  gboolean overlay_scrolling;
-
   g_return_if_fail (TERMINAL_IS_TAB (tab));
 
-  object = G_OBJECT (tab);
-
+  auto const object = G_OBJECT (tab);
   g_object_freeze_notify (object);
 
   if (tab->hscrollbar_policy != hpolicy) {
@@ -265,29 +265,25 @@ terminal_tab_set_policy (TerminalTab *tab,
     g_object_notify (object, "vscrollbar-policy");
   }
 
-  settings = gtk_settings_get_default ();
-  g_object_get (settings,
-                "gtk-overlay-scrolling", &overlay_scrolling,
-                nullptr);
 
-  switch (vpolicy) {
-  case GTK_POLICY_NEVER:
-    if (overlay_scrolling)
-      vpolicy = GTK_POLICY_AUTOMATIC;
-    else
-      vpolicy = GTK_POLICY_EXTERNAL;
-    break;
-  case GTK_POLICY_AUTOMATIC:
-  case GTK_POLICY_ALWAYS:
-    vpolicy = GTK_POLICY_ALWAYS;
-    break;
-  default:
-    terminal_assert_not_reached ();
-  }
+  auto const hpolicy_gtk = GTK_POLICY_NEVER; // regardless of hscrollbar_policy
 
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (tab->scrolled_window), hpolicy, vpolicy);
-  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (tab->scrolled_window),
-                                             vpolicy == GTK_POLICY_AUTOMATIC);
+  auto vpolicy_to_gtk = [](TerminalScrollbarPolicy policy) constexpr noexcept -> auto
+  {
+    switch (policy) {
+    case TERMINAL_SCROLLBAR_POLICY_NEVER: return GTK_POLICY_EXTERNAL;
+    case TERMINAL_SCROLLBAR_POLICY_OVERLAY: return GTK_POLICY_AUTOMATIC;
+    default: terminal_assert_not_reached();
+      [[fallthrough]];
+    case TERMINAL_SCROLLBAR_POLICY_ALWAYS: return GTK_POLICY_ALWAYS;
+    }
+  };
+
+  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (tab->scrolled_window),
+                                 hpolicy_gtk,
+                                 vpolicy_to_gtk(tab->vscrollbar_policy));
+  gtk_scrolled_window_set_overlay_scrolling(GTK_SCROLLED_WINDOW(tab->scrolled_window),
+                                            tab->vscrollbar_policy == TERMINAL_SCROLLBAR_POLICY_OVERLAY);
 
   g_object_thaw_notify (object);
 }

@@ -2531,15 +2531,14 @@ void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GtkPolicyType vpolicy;
 
   auto const tab = terminal_tab_get_from_screen (screen);
   if (tab == nullptr)
     return;
 
-  vpolicy = GtkPolicyType(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
+  auto const vpolicy = TerminalScrollbarPolicy(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
 
-  terminal_tab_set_policy (tab, GTK_POLICY_NEVER, vpolicy);
+  terminal_tab_set_policy (tab, TERMINAL_SCROLLBAR_POLICY_NEVER, vpolicy);
 }
 
 void

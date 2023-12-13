@@ -461,8 +461,34 @@
               <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Scrolling</property>
                 <child>
-                  <object class="AdwSwitchRow" id="show_scrollbar">
-                    <property name="title" translatable="yes">Show Scrollbar</property>
+                  <object class="AdwComboRow" id="show_scrollbar">
+                    <property name="title" translatable="yes">Show scrollbar</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Regular</property>
+                            <property name="value">'always'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Overlay</property>
+                            <property name="value">'overlay'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">None</property>
+                            <property name="value">'never'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
