@@ -79,7 +79,6 @@
 #define KEY_RESET               "reset"
 #define KEY_SAVE_CONTENTS       "save-contents"
 #define KEY_SELECT_ALL          "select-all"
-#define KEY_TOGGLE_MENUBAR      "toggle-menubar"
 #define KEY_ZOOM_IN             "zoom-in"
 #define KEY_ZOOM_NORMAL         "zoom-normal"
 #define KEY_ZOOM_OUT            "zoom-out"
@@ -157,7 +156,6 @@ static KeyEntry search_entries[] = {
 };
 
 static KeyEntry view_entries[] = {
-  ENTRY (N_("Hide and Show Menubar"), KEY_TOGGLE_MENUBAR, "menubar-visible", nullptr, nullptr),
   ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",      nullptr, nullptr),
   ENTRY (N_("Zoom In"),               KEY_ZOOM_IN,        "zoom-in",         nullptr, nullptr),
   ENTRY (N_("Zoom Out"),              KEY_ZOOM_OUT,       "zoom-out",        nullptr, nullptr),
