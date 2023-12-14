@@ -32,7 +32,6 @@ struct _TerminalPreferencesWindow
 {
   AdwPreferencesWindow  parent_instance;
 
-  AdwSwitchRow         *access_keys;
   AdwSwitchRow         *accelerator_key;
   GtkListBoxRow        *add_profile_row;
   AdwSwitchRow         *always_check_default;
@@ -209,11 +208,6 @@ terminal_preferences_window_constructed (GObject *object)
                    "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
   g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
-                   self->access_keys,
-                   "active",
-                   GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
-  g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                    self->accelerator_key,
                    "active",
@@ -289,7 +283,6 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/preferences-window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, accelerator_key);
-  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, access_keys);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, add_profile_row);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, always_check_default);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_mode);
