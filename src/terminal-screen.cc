@@ -1350,7 +1350,7 @@ update_color_scheme (TerminalScreen *screen)
         bg = colors[7];
       } else {
         fg = {0, 0, 0, 1};
-        bg = {1, 1, 1, 0};
+        bg = {1, 1, 1, 1};
       }
       break;
 
