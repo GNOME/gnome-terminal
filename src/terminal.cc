@@ -484,9 +484,6 @@ handle_options (TerminalOptions *options,
           if (options->zoom_set || it->zoom_set)
             g_variant_builder_add (&builder, "{sv}",
                                    "zoom", g_variant_new_double (it->zoom_set ? it->zoom : options->zoom));
-          if (iw->force_menubar_state)
-            g_variant_builder_add (&builder, "{sv}",
-                                   "show-menubar", g_variant_new_boolean (iw->menubar_state));
 
           gs_free_error GError *err = nullptr;
           gs_free char *object_path = nullptr;
