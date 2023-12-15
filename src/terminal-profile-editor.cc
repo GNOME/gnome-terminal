@@ -83,7 +83,6 @@ struct _TerminalProfileEditor
   GtkColorDialogButton *palette_14;
   GtkColorDialogButton *palette_15;
   AdwComboRow          *preserve_working_directory;
-  AdwSwitchRow         *rewrap_on_resize;
   AdwSpinRow           *rows;
   AdwSwitchRow         *scroll_on_keystroke;
   AdwSwitchRow         *scroll_on_output;
@@ -975,10 +974,6 @@ terminal_profile_editor_constructed (GObject *object)
                    self->use_system_colors, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
-  g_settings_bind (self->settings, TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY,
-                   self->rewrap_on_resize, "active",
-                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
-
   g_settings_bind (self->settings, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    self->bold_color_set, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT|G_SETTINGS_BIND_INVERT_BOOLEAN));
@@ -1251,7 +1246,6 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_8);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_9);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rewrap_on_resize);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_keystroke);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_output);
