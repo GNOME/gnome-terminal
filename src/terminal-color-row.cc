@@ -22,6 +22,7 @@
 struct _TerminalColorRow
 {
   AdwActionRow parent_instance;
+  GtkColorButton* button;
   GdkRGBA color;
 };
 
@@ -31,7 +32,25 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (TerminalColorRow, terminal_color_row, ADW_TYPE_ACTION_ROW)
+static GObject *
+terminal_color_row_get_internal_child (GtkBuildable *buildable,
+                                       GtkBuilder   *builder,
+                                       const char   *name)
+{
+  if (g_str_equal(name, "button"))
+    return G_OBJECT(TERMINAL_COLOR_ROW(buildable)->button);
+
+  return nullptr;
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->get_internal_child = terminal_color_row_get_internal_child;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE(TerminalColorRow, terminal_color_row, ADW_TYPE_ACTION_ROW,
+                              G_IMPLEMENT_INTERFACE(GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 
@@ -101,6 +120,8 @@ terminal_color_row_class_init (TerminalColorRowClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/color-row.ui");
+
+  gtk_widget_class_bind_template_child (widget_class, TerminalColorRow, button);
 }
 
 static void
