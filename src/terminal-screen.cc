@@ -235,6 +235,10 @@ static void terminal_screen_menu_popup_action (GtkWidget  *widget,
 
 static void terminal_screen_queue_idle_exec (TerminalScreen *screen);
 
+static void _terminal_screen_update_scrollbar (TerminalScreen *screen);
+
+static void _terminal_screen_update_kinetic_scrolling (TerminalScreen *screen);
+
 static void text_uri_list_free (TextUriList *uri_list);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (TextUriList, text_uri_list_free)
 
@@ -1203,6 +1207,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY))
     _terminal_screen_update_scrollbar (screen);
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_KINETIC_SCROLLING_KEY))
+    _terminal_screen_update_kinetic_scrolling (screen);
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING_KEY))
     {
@@ -2527,7 +2534,7 @@ terminal_screen_drop_target_drag_leave (TerminalScreen     *screen,
   gtk_widget_hide (priv->drop_highlight);
 }
 
-void
+static void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -2539,6 +2546,18 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
   auto const vpolicy = TerminalScrollbarPolicy(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
 
   terminal_tab_set_policy (tab, TERMINAL_SCROLLBAR_POLICY_NEVER, vpolicy);
+}
+
+void
+_terminal_screen_update_kinetic_scrolling(TerminalScreen* screen)
+{
+  auto const tab = terminal_tab_get_from_screen (screen);
+  if (tab == nullptr)
+    return;
+
+  auto const priv = screen->priv;
+  auto const value = g_settings_get_boolean(priv->profile, TERMINAL_PROFILE_KINETIC_SCROLLING_KEY);
+  terminal_tab_set_kinetic_scrolling(tab, value);
 }
 
 void

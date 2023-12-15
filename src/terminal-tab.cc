@@ -35,6 +35,7 @@ struct _TerminalTab
   TerminalScrollbarPolicy vscrollbar_policy;
 
   bool pinned;
+  bool kinetic_scrolling;
 };
 
 enum
@@ -42,8 +43,12 @@ enum
   PROP_0,
   PROP_SCREEN,
   PROP_HSCROLLBAR_POLICY,
-  PROP_VSCROLLBAR_POLICY
+  PROP_VSCROLLBAR_POLICY,
+  PROP_KINETIC_SCROLLING,
+  N_PROPS
 };
+
+static GParamSpec* pspecs[N_PROPS];
 
 G_DEFINE_FINAL_TYPE (TerminalTab, terminal_tab, GTK_TYPE_WIDGET)
 
@@ -54,6 +59,8 @@ terminal_tab_init (TerminalTab *tab)
 {
   tab->hscrollbar_policy = TERMINAL_SCROLLBAR_POLICY_ALWAYS;
   tab->vscrollbar_policy = TERMINAL_SCROLLBAR_POLICY_NEVER;
+  tab->pinned = false;
+  tab->kinetic_scrolling = false;
 }
 
 static void
@@ -109,6 +116,9 @@ terminal_tab_get_property (GObject *object,
     case PROP_VSCROLLBAR_POLICY:
       g_value_set_enum (value, tab->vscrollbar_policy);
       break;
+    case PROP_KINETIC_SCROLLING:
+      g_value_set_boolean(value, tab->kinetic_scrolling);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -137,6 +147,9 @@ terminal_tab_set_property (GObject *object,
                               tab->hscrollbar_policy,
                               TerminalScrollbarPolicy(g_value_get_enum(value)));
       break;
+    case PROP_KINETIC_SCROLLING:
+      terminal_tab_set_kinetic_scrolling(tab, g_value_get_boolean(value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -157,34 +170,36 @@ terminal_tab_class_init (TerminalTabClass *klass)
   gtk_widget_class_set_layout_manager_type(widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name(widget_class, TERMINAL_TAB_CSS_NAME);
 
-  g_object_class_install_property
-    (gobject_class,
-     PROP_SCREEN,
-     g_param_spec_object ("screen", nullptr, nullptr,
-                          TERMINAL_TYPE_SCREEN,
-                          GParamFlags(G_PARAM_READWRITE |
-                                      G_PARAM_CONSTRUCT_ONLY |
-                                      G_PARAM_STATIC_STRINGS |
-                                      G_PARAM_EXPLICIT_NOTIFY)));
+  pspecs[PROP_SCREEN] =
+    g_param_spec_object("screen", nullptr, nullptr,
+                        TERMINAL_TYPE_SCREEN,
+                        GParamFlags(G_PARAM_READWRITE |
+                                    G_PARAM_CONSTRUCT_ONLY |
+                                    G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_property
-    (gobject_class,
-     PROP_HSCROLLBAR_POLICY,
-     g_param_spec_enum ("hscrollbar-policy", nullptr, nullptr,
-                        TERMINAL_TYPE_SCROLLBAR_POLICY,
-                        TERMINAL_SCROLLBAR_POLICY_NEVER,
-                        GParamFlags(G_PARAM_READWRITE |
-                                    G_PARAM_STATIC_STRINGS |
-                                    G_PARAM_EXPLICIT_NOTIFY)));
-  g_object_class_install_property
-    (gobject_class,
-     PROP_VSCROLLBAR_POLICY,
-     g_param_spec_enum ("vscrollbar-policy", nullptr, nullptr,
-                        TERMINAL_TYPE_SCROLLBAR_POLICY,
-                        TERMINAL_SCROLLBAR_POLICY_ALWAYS,
-                        GParamFlags(G_PARAM_READWRITE |
-                                    G_PARAM_STATIC_STRINGS |
-                                    G_PARAM_EXPLICIT_NOTIFY)));
+  pspecs[PROP_HSCROLLBAR_POLICY] =
+    g_param_spec_enum("hscrollbar-policy", nullptr, nullptr,
+                      TERMINAL_TYPE_SCROLLBAR_POLICY,
+                      TERMINAL_SCROLLBAR_POLICY_NEVER,
+                      GParamFlags(G_PARAM_READWRITE |
+                                  G_PARAM_STATIC_STRINGS |
+                                  G_PARAM_EXPLICIT_NOTIFY));
+  pspecs[PROP_VSCROLLBAR_POLICY] =
+    g_param_spec_enum("vscrollbar-policy", nullptr, nullptr,
+                      TERMINAL_TYPE_SCROLLBAR_POLICY,
+                      TERMINAL_SCROLLBAR_POLICY_ALWAYS,
+                      GParamFlags(G_PARAM_READWRITE |
+                                  G_PARAM_STATIC_STRINGS |
+                                  G_PARAM_EXPLICIT_NOTIFY));
+
+  pspecs[PROP_KINETIC_SCROLLING] =
+    g_param_spec_boolean("kinetic-scrolling", nullptr, nullptr,
+                         false,
+                         GParamFlags(G_PARAM_READWRITE |
+                                     G_PARAM_STATIC_STRINGS |
+                                     G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_properties(gobject_class, G_N_ELEMENTS(pspecs), pspecs);
 }
 
 /* public API */
@@ -258,11 +273,11 @@ terminal_tab_set_policy (TerminalTab *tab,
 
   if (tab->hscrollbar_policy != hpolicy) {
     tab->hscrollbar_policy = hpolicy;
-    g_object_notify (object, "hscrollbar-policy");
+    g_object_notify_by_pspec(object, pspecs[PROP_HSCROLLBAR_POLICY]);
   }
   if (tab->vscrollbar_policy != vpolicy) {
     tab->vscrollbar_policy = vpolicy;
-    g_object_notify (object, "vscrollbar-policy");
+    g_object_notify_by_pspec(object, pspecs[PROP_VSCROLLBAR_POLICY]);
   }
 
 
@@ -332,3 +347,22 @@ terminal_tab_get_pinned(TerminalTab* tab)
   return tab->pinned;
 }
 
+void
+terminal_tab_set_kinetic_scrolling(TerminalTab* tab,
+                                   bool enable)
+{
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  tab->kinetic_scrolling = enable;
+  gtk_scrolled_window_set_kinetic_scrolling(GTK_SCROLLED_WINDOW(tab->scrolled_window),
+                                            enable);
+  g_object_notify_by_pspec(G_OBJECT(tab), pspecs[PROP_KINETIC_SCROLLING]);
+}
+
+bool
+terminal_tab_get_kinetic_scrolling(TerminalTab* tab)
+{
+  g_return_val_if_fail(TERMINAL_IS_TAB(tab), false);
+
+  return tab->kinetic_scrolling;
+}

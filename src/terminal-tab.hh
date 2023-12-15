@@ -51,4 +51,9 @@ void terminal_tab_set_pinned(TerminalTab* tab,
 
 bool terminal_tab_get_pinned(TerminalTab* tab);
 
+void terminal_tab_set_kinetic_scrolling(TerminalTab* tab,
+                                        bool enable);
+
+bool terminal_tab_get_kinetic_scrolling(TerminalTab* tab);
+
 G_END_DECLS

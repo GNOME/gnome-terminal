@@ -124,8 +124,6 @@ void       terminal_screen_get_cell_size (TerminalScreen *screen,
                                           int *width_chars,
                                           int *height_chars);
 
-void _terminal_screen_update_scrollbar (TerminalScreen *screen);
-
 void terminal_screen_save_config (TerminalScreen *screen,
                                   GKeyFile *key_file,
                                   const char *group);
