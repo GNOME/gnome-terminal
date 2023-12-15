@@ -45,15 +45,15 @@ G_DEFINE_FINAL_TYPE (TerminalProfileRow, terminal_profile_row, ADW_TYPE_ACTION_R
 static GParamSpec *properties [N_PROPS];
 
 static void
-terminal_profile_row_duplicate (GtkWidget  *widget,
-                                const char *action_name,
-                                GVariant   *param)
+terminal_profile_row_clone (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *param)
 {
   GtkWidget *window = gtk_widget_get_ancestor (widget, TERMINAL_TYPE_PREFERENCES_WINDOW);
   TerminalProfileRow *self = TERMINAL_PROFILE_ROW (widget);
   TerminalApp *app = terminal_app_get ();
   g_autofree char *name = g_settings_get_string (self->settings, "visible-name");
-  g_autofree char *new_name = g_strdup_printf ("%s %s", name, _("Duplicate"));
+  g_autofree char *new_name = g_strdup_printf ("%s (%s)", name, _("Copy"));
   g_autofree char *uuid = terminal_app_new_profile (app, self->settings, new_name);
   TerminalSettingsList *profiles_list = terminal_app_get_profiles_list (app);
   g_autoptr(GSettings) settings = terminal_profiles_list_ref_profile_by_uuid (profiles_list, uuid, nullptr);
@@ -72,7 +72,7 @@ terminal_profile_row_edit (GtkWidget  *widget,
 }
 
 static void
-terminal_profile_row_remove (GtkWidget  *widget,
+terminal_profile_row_delete (GtkWidget  *widget,
                              const char *action_name,
                              GVariant   *param)
 {
@@ -113,7 +113,7 @@ terminal_profile_row_constructed (GObject *object)
   is_default = g_strcmp0 (self->uuid, default_uuid) == 0;
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self),
-                                 "profile.make-default",
+                                 "profile.set-as-default",
                                  !is_default);
   gtk_widget_set_visible (GTK_WIDGET (self->default_label), is_default);
 
@@ -122,7 +122,7 @@ terminal_profile_row_constructed (GObject *object)
    * last item from the list.
    */
   gtk_widget_action_set_enabled (GTK_WIDGET (self),
-                                 "profile.remove",
+                                 "profile.delete",
                                  !is_default);
 
   g_settings_bind (self->settings, "visible-name", self, "title",
@@ -197,19 +197,19 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_install_action (widget_class,
-                                   "profile.duplicate",
+                                   "profile.clone",
                                    nullptr,
-                                   terminal_profile_row_duplicate);
+                                   terminal_profile_row_clone);
   gtk_widget_class_install_action (widget_class,
                                    "profile.edit",
                                    nullptr,
                                    terminal_profile_row_edit);
   gtk_widget_class_install_action (widget_class,
-                                   "profile.remove",
+                                   "profile.delete",
                                    nullptr,
-                                   terminal_profile_row_remove);
+                                   terminal_profile_row_delete);
   gtk_widget_class_install_action (widget_class,
-                                   "profile.make-default",
+                                   "profile.set-as-default",
                                    nullptr,
                                    terminal_profile_row_make_default);
 
