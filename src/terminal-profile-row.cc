@@ -28,7 +28,7 @@ struct _TerminalProfileRow
 {
   AdwActionRow  parent_instance;
 
-  GtkImage     *checkmark;
+  GtkLabel     *default_label;
 
   char         *uuid;
   GSettings    *settings;
@@ -115,7 +115,7 @@ terminal_profile_row_constructed (GObject *object)
   gtk_widget_action_set_enabled (GTK_WIDGET (self),
                                  "profile.make-default",
                                  !is_default);
-  gtk_widget_set_visible (GTK_WIDGET (self->checkmark), is_default);
+  gtk_widget_set_visible (GTK_WIDGET (self->default_label), is_default);
 
   /* This handles both the "is-default" as well as a single profile
    * (which is going to be the default) so you cannot remove the
@@ -215,7 +215,7 @@ terminal_profile_row_class_init (TerminalProfileRowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/profile-row.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, TerminalProfileRow, checkmark);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileRow, default_label);
 }
 
 static void

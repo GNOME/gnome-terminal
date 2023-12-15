@@ -19,10 +19,15 @@
   <template class="TerminalProfileRow" parent="AdwActionRow">
     <property name="activatable">true</property>
     <child type="suffix">
-      <object class="GtkImage" id="checkmark">
-        <property name="valign">center</property>
-        <property name="icon-name">object-select-symbolic</property>
+      <object class="GtkLabel" id="default_label">
+        <property name="focus-on-click">0</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="1" comments="Default profile label">Default</property>
         <property name="margin-end">6</property>
+        <property name="selectable">0</property>
+        <property name="single-line-mode">1</property>
+        <property name="xalign">1.0</property>
+        <property name="yalign">0.5</property>
       </object>
     </child>
     <child type="suffix">
