@@ -921,6 +921,37 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
 }
 
 /*
+ * terminal_util_remove_widget_shortcuts:
+ *
+ * There appears to be no direct way to remove or skip a shortcut added
+ * with gtk_widget_add_shortcut() or gtk_widget_class_add_binding(), so
+ * we need to do it this complicated way.
+ */
+void
+terminal_util_remove_widget_shortcuts(GtkWidget* widget)
+{
+  g_return_if_fail(GTK_IS_WIDGET(widget));
+
+  gs_unref_object auto controllers = gtk_widget_observe_controllers(widget);
+  auto const n_controllers = g_list_model_get_n_items(controllers);
+  for (auto i = 0u; i < n_controllers; ++i) {
+    gs_unref_object auto controller = reinterpret_cast<GtkEventController*>
+      (g_list_model_get_item(controllers, i));
+    if (!controller)
+      continue;
+
+    if (!GTK_IS_SHORTCUT_CONTROLLER(controller))
+      continue;
+
+    auto const name = gtk_event_controller_get_name(controller);
+    if (!name || !g_str_equal(name, "gtk-widget-class-shortcuts"))
+      continue;
+
+    gtk_widget_remove_controller(widget, controller);
+  }
+}
+
+/*
  * "1234567", "'", 3 -> "1'234'567"
  */
 static char *

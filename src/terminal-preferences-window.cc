@@ -26,6 +26,7 @@
 #include "terminal-profile-row.hh"
 #include "terminal-schemas.hh"
 #include "terminal-shortcut-editor.hh"
+#include "terminal-util.hh"
 #include "terminal-debug.hh"
 
 struct _TerminalPreferencesWindow
@@ -45,6 +46,21 @@ struct _TerminalPreferencesWindow
 };
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
+
+static void
+recurse_remove_pop_on_escape(GtkWidget *widget)
+{
+  if (ADW_IS_NAVIGATION_VIEW(widget)) {
+    adw_navigation_view_set_pop_on_escape(ADW_NAVIGATION_VIEW(widget), false);
+    return;
+  }
+
+  for (auto child = gtk_widget_get_first_child (widget);
+       child != nullptr;
+       child = gtk_widget_get_next_sibling (child)) {
+    recurse_remove_pop_on_escape(child);
+  }
+}
 
 static void
 terminal_preferences_window_add_profile (GtkWidget  *widget,
@@ -259,6 +275,12 @@ terminal_preferences_window_constructed (GObject *object)
                                 index_to_string,
                                 g_object_ref (self->tab_positions),
                                 g_object_unref);
+
+  // Unfortunately there is no API for AdwPreferencesWindow to do this,
+  // nor can we directly get its AdwNavigationView since it's not an
+  // internal-child in GtkBuilder.
+  recurse_remove_pop_on_escape(GTK_WIDGET(self));
+  terminal_util_remove_widget_shortcuts(GTK_WIDGET(self));
 }
 
 static void

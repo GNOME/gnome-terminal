@@ -115,6 +115,8 @@ gboolean terminal_util_is_default_terminal(void);
 
 gboolean terminal_util_make_default_terminal(void);
 
+void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */
