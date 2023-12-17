@@ -23,6 +23,7 @@
 #include "terminal-app.hh"
 #include "terminal-schemas.hh"
 #include "terminal-shortcut-editor.hh"
+#include "terminal-util.hh"
 
 struct _TerminalShortcutEditor
 {
@@ -44,7 +45,7 @@ terminal_shortcut_editor_constructed (GObject *object)
 
   terminal_accels_populate_preferences (self->page);
 
-  g_settings_bind (settings,
+  terminal_util_g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
                    self->enable_shortcuts,
                    "active",

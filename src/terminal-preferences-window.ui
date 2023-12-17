@@ -28,6 +28,22 @@
         </child>
       </object>
     </child>
+    <child>
+      <object class="GtkGestureClick" id="right_click_gesture">
+        <signal name="pressed" handler="terminal_preferences_window_click_pressed_cb" />
+        <property name="button">3</property>
+        <property name="propagation-phase">capture</property>
+      </object>
+    </child>
+    <menu id="context_menu_model">
+      <section>
+	<item>
+          <attribute name="label" translatable="yes">_Reset to default</attribute>
+          <attribute name="action">preferences.reset</attribute>
+	  <attribute name="accel"></attribute>
+	</item>
+      </section>
+    </menu>
     <property name="default-height">700</property>
     <child>
       <object class="AdwPreferencesPage">

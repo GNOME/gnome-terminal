@@ -117,6 +117,30 @@ gboolean terminal_util_make_default_terminal(void);
 
 void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
 
+void terminal_util_set_settings_and_key_for_widget(GtkWidget* widget,
+                                                   GSettings* settings,
+                                                   char const* key);
+
+gboolean terminal_util_get_settings_and_key_for_widget(GtkWidget* widget,
+                                                       GSettings** settings,
+                                                       char const** key);
+
+void terminal_util_g_settings_bind(GSettings* settings,
+                                   char const* key,
+                                   void* object,
+                                   char const* property,
+                                   GSettingsBindFlags flags);
+
+void terminal_util_g_settings_bind_with_mapping(GSettings* settings,
+                                                char const* key,
+                                                void* object,
+                                                char const* property,
+                                                GSettingsBindFlags flags,
+                                                GSettingsBindGetMapping get_mapping,
+                                                GSettingsBindSetMapping set_mapping,
+                                                void* user_data,
+                                                GDestroyNotify destroy);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */

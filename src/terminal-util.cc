@@ -1973,3 +1973,70 @@ terminal_util_make_default_terminal(void)
 
   return xte_config_is_default();
 }
+
+#define SETTINGS_ID "Terminal::Settings"
+#define KEY_ID "Terminal::Key"
+
+void
+terminal_util_set_settings_and_key_for_widget(GtkWidget* widget,
+                                              GSettings* settings,
+                                              char const* key)
+{
+  g_return_if_fail(GTK_IS_WIDGET(widget));
+  g_return_if_fail(key);
+  g_return_if_fail(!terminal_util_get_settings_and_key_for_widget(widget, nullptr, nullptr));
+  g_object_set_data_full(G_OBJECT(widget), SETTINGS_ID,
+                         g_object_ref(settings),
+                         g_object_unref);
+  g_object_set_data(G_OBJECT(widget), KEY_ID,
+                    (void*)g_intern_string(key));
+}
+
+gboolean
+terminal_util_get_settings_and_key_for_widget(GtkWidget* widget,
+                                              GSettings** settings,
+                                              char const** key)
+{
+  g_return_val_if_fail(GTK_IS_WIDGET(widget), false);
+
+  auto const settings_data = reinterpret_cast<GSettings*>(g_object_get_data(G_OBJECT(widget), SETTINGS_ID));
+  auto const key_data = reinterpret_cast<char const*>(g_object_get_data(G_OBJECT(widget), KEY_ID));
+
+  if (settings)
+    *settings = settings_data;
+  if (key)
+    *key = key_data;
+
+  return settings_data && key_data;
+}
+
+void
+terminal_util_g_settings_bind(GSettings* settings,
+                              char const* key,
+                              void* object,
+                              char const* property,
+                              GSettingsBindFlags flags)
+{
+  g_return_if_fail(GTK_IS_WIDGET(object));
+  g_settings_bind(settings, key, object, property, flags);
+
+  terminal_util_set_settings_and_key_for_widget(GTK_WIDGET(object), settings, key);
+}
+
+void
+terminal_util_g_settings_bind_with_mapping(GSettings* settings,
+                                           char const* key,
+                                           void* object,
+                                           char const* property,
+                                           GSettingsBindFlags flags,
+                                           GSettingsBindGetMapping get_mapping,
+                                           GSettingsBindSetMapping set_mapping,
+                                           void* user_data,
+                                           GDestroyNotify destroy)
+{
+  g_return_if_fail(GTK_IS_WIDGET(object));
+  g_settings_bind_with_mapping(settings, key, object, property, flags,
+                               get_mapping, set_mapping, user_data, destroy);
+
+  terminal_util_set_settings_and_key_for_widget(GTK_WIDGET(object), settings, key);
+}

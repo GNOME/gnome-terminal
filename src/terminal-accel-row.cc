@@ -23,6 +23,7 @@
 #include "terminal-accel-row.hh"
 #include "terminal-accels.hh"
 #include "terminal-app.hh"
+#include "terminal-util.hh"
 
 struct _TerminalAccelRow
 {
@@ -108,6 +109,9 @@ terminal_accel_row_constructed (GObject *object)
   settings = terminal_accels_get_settings ();
 
   g_settings_bind (settings, self->key, self, "accelerator", G_SETTINGS_BIND_DEFAULT);
+  terminal_util_set_settings_and_key_for_widget(GTK_WIDGET(self),
+                                                settings,
+                                                self->key);
 }
 
 static void

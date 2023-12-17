@@ -28,6 +28,7 @@
 #include "terminal-shortcut-editor.hh"
 #include "terminal-util.hh"
 #include "terminal-debug.hh"
+#include "terminal-libgsystem.hh"
 
 struct _TerminalPreferencesWindow
 {
@@ -43,6 +44,11 @@ struct _TerminalPreferencesWindow
   GListModel           *tab_positions;
   AdwComboRow          *theme_variant;
   GListModel           *theme_variants;
+
+  GMenuModel* context_menu_model;
+  GtkPopoverMenu* context_menu;
+  GSettings* context_settings; // unowned
+  char const* context_settings_key; // unowned
 };
 
 G_DEFINE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, ADW_TYPE_PREFERENCES_WINDOW)
@@ -60,6 +66,61 @@ recurse_remove_pop_on_escape(GtkWidget *widget)
        child = gtk_widget_get_next_sibling (child)) {
     recurse_remove_pop_on_escape(child);
   }
+}
+
+static bool
+terminal_preferences_window_show_context_menu(TerminalPreferencesWindow* self,
+                                              double x,
+                                              double y)
+{
+  auto picked = gtk_widget_pick(GTK_WIDGET(self), x, y, GTK_PICK_DEFAULT);
+  if (!picked)
+    return false;
+
+  auto row = gtk_widget_get_ancestor(picked, ADW_TYPE_PREFERENCES_ROW);
+  if (!row)
+    return false;
+
+  if (ADW_IS_ENTRY_ROW(row))
+    return false; // don't override the context menu for rows having a text entry
+
+  if (!terminal_util_get_settings_and_key_for_widget(row,
+                                                     &self->context_settings,
+                                                     &self->context_settings_key))
+    return false;
+
+  if (!self->context_menu) {
+    self->context_menu = GTK_POPOVER_MENU(gtk_popover_menu_new_from_model(self->context_menu_model));
+    gtk_popover_set_has_arrow(GTK_POPOVER(self->context_menu), false);
+    gtk_popover_set_position(GTK_POPOVER(self->context_menu), GTK_POS_BOTTOM);
+    gtk_widget_set_halign(GTK_WIDGET(self->context_menu), GTK_ALIGN_START);
+    gtk_widget_set_parent(GTK_WIDGET(self->context_menu), GTK_WIDGET(self));
+  }
+
+  auto const rect = cairo_rectangle_int_t{int(x), int(y), 0, 0};
+  gtk_popover_set_pointing_to(GTK_POPOVER(self->context_menu), &rect);
+
+  gtk_popover_popup (GTK_POPOVER(self->context_menu));
+
+  return true;
+}
+
+static void
+terminal_preferences_window_click_pressed_cb(GtkGestureClick* gesture,
+                                             int n_press,
+                                             double x,
+                                             double y,
+                                             TerminalPreferencesWindow* self)
+{
+  auto handled = false;
+
+  if (n_press == 1)
+    handled = terminal_preferences_window_show_context_menu(self, x, y);
+
+  if (handled)
+    gtk_gesture_set_state(GTK_GESTURE(gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+  else
+    gtk_gesture_set_state(GTK_GESTURE(gesture), GTK_EVENT_SEQUENCE_DENIED);
 }
 
 static void
@@ -97,6 +158,17 @@ terminal_preferences_window_set_as_default (GtkWidget  *widget,
                                             GVariant   *param)
 {
   terminal_app_make_default_terminal (terminal_app_get ());
+}
+
+static void
+terminal_preferences_window_reset(GtkWidget* widget,
+                                  char const* action_name,
+                                  GVariant* parameter)
+{
+  auto const self = TERMINAL_PREFERENCES_WINDOW(widget);
+
+  g_settings_reset(self->context_settings,
+                   self->context_settings_key);
 }
 
 static void
@@ -198,6 +270,21 @@ index_to_string (const GValue       *value,
 }
 
 static void
+terminal_preferences_window_size_allocate(GtkWidget* widget,
+                                          int width,
+                                          int height,
+                                          int baseline)
+{
+  auto const self = TERMINAL_PREFERENCES_WINDOW(widget);
+
+  GTK_WIDGET_CLASS(terminal_preferences_window_parent_class)->size_allocate(widget, width, height, baseline);
+
+  if (self->context_menu) {
+    gtk_popover_present(GTK_POPOVER(self->context_menu));
+  }
+}
+
+static void
 terminal_preferences_window_constructed (GObject *object)
 {
   TerminalPreferencesWindow *self = (TerminalPreferencesWindow *)object;
@@ -218,12 +305,12 @@ terminal_preferences_window_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
   notify_is_default_terminal_cb (self, nullptr, app);
 
-  g_settings_bind (settings,
+  terminal_util_g_settings_bind (settings,
                    TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY,
                    self->always_check_default,
                    "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET));
-  g_settings_bind (settings,
+  terminal_util_g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                    self->accelerator_key,
                    "active",
@@ -246,7 +333,7 @@ terminal_preferences_window_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
   terminal_preferences_window_reload_profiles (self);
 
-  g_settings_bind_with_mapping (settings,
+  terminal_util_g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_THEME_VARIANT_KEY,
                                 self->theme_variant,
                                 "selected",
@@ -256,7 +343,7 @@ terminal_preferences_window_constructed (GObject *object)
                                 g_object_ref (self->theme_variants),
                                 g_object_unref);
 
-  g_settings_bind_with_mapping (settings,
+  terminal_util_g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY,
                                 self->new_terminal_mode,
                                 "selected",
@@ -266,7 +353,7 @@ terminal_preferences_window_constructed (GObject *object)
                                 g_object_ref (self->new_terminal_modes),
                                 g_object_unref);
 
-  g_settings_bind_with_mapping (settings,
+  terminal_util_g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_NEW_TAB_POSITION_KEY,
                                 self->tab_position,
                                 "selected",
@@ -288,6 +375,8 @@ terminal_preferences_window_dispose (GObject *object)
 {
   TerminalPreferencesWindow *self = (TerminalPreferencesWindow *)object;
 
+  g_clear_pointer(reinterpret_cast<GtkWidget**>(&self->context_menu), gtk_widget_unparent);
+
   gtk_widget_dispose_template (GTK_WIDGET (self), TERMINAL_TYPE_PREFERENCES_WINDOW);
 
   G_OBJECT_CLASS (terminal_preferences_window_parent_class)->dispose (object);
@@ -302,6 +391,8 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   object_class->constructed = terminal_preferences_window_constructed;
   object_class->dispose = terminal_preferences_window_dispose;
 
+  widget_class->size_allocate = terminal_preferences_window_size_allocate;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/preferences-window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, accelerator_key);
@@ -314,6 +405,8 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, tab_positions);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variant);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variants);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, context_menu_model);
+  gtk_widget_class_bind_template_callback(widget_class, terminal_preferences_window_click_pressed_cb);
 
   gtk_widget_class_install_action (widget_class,
                                    "terminal.set-as-default",
@@ -329,6 +422,11 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
                                    "profile.add",
                                    nullptr,
                                    terminal_preferences_window_add_profile);
+
+  gtk_widget_class_install_action (widget_class,
+                                   "preferences.reset",
+                                   nullptr,
+                                   terminal_preferences_window_reset);
 
   g_type_ensure (TERMINAL_TYPE_PREFERENCES_LIST_ITEM);
   g_type_ensure (TERMINAL_TYPE_PROFILE_EDITOR);
