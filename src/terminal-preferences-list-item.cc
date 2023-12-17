@@ -116,9 +116,9 @@ terminal_preferences_list_item_init (TerminalPreferencesListItem *self)
 }
 
 GVariant *
-terminal_preferences_list_item_get_value (TerminalPreferencesListItem *self)
+terminal_preferences_list_item_get_value (TerminalPreferencesListItem const* self)
 {
-  g_return_val_if_fail (TERMINAL_IS_PREFERENCES_LIST_ITEM (self), nullptr);
+  g_return_val_if_fail (TERMINAL_IS_PREFERENCES_LIST_ITEM((void*)self), nullptr);
 
   return self->value;
 }

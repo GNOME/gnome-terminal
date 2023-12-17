@@ -27,6 +27,7 @@
 #include "terminal-schemas.hh"
 #include "terminal-screen.hh"
 #include "terminal-util.hh"
+#include "terminal-libgsystem.hh"
 
 #define COLOR(r, g, b) { .red = (r) / 255.0, .green = (g) / 255.0, .blue = (b) / 255.0, .alpha = 1.0 }
 #define PALETTE_SIZE (16)
@@ -88,7 +89,7 @@ struct _TerminalProfileEditor
   AdwSwitchRow         *scroll_on_output;
   AdwSpinRow           *scrollback_lines;
   AdwSwitchRow         *show_bold_in_bright;
-  AdwSwitchRow         *show_scrollbar;
+  AdwComboRow          *show_scrollbar;
   AdwEntryRow          *title;
   AdwSwitchRow         *use_custom_command;
   AdwSwitchRow         *use_system_colors;
@@ -783,89 +784,57 @@ sanitize_font_string (GValue   *value,
   return TRUE;
 }
 
-#define SETTING_TO_INDEX_TRANSFORM(from, to, ...)             \
-static const char * const from##_indexes[] = __VA_ARGS__;     \
-static gboolean                                               \
-from (GValue   *value,                                        \
-      GVariant *variant,                                      \
-      gpointer  user_data)                                    \
-{                                                             \
-  const char *str = g_variant_get_string (variant, nullptr);  \
-  for (guint i = 0; i < G_N_ELEMENTS(from##_indexes); i++) {  \
-    if (strcmp (str, from##_indexes[i]) == 0) {               \
-      g_value_set_uint (value, i);                            \
-      return TRUE;                                            \
-    }                                                         \
-  }                                                           \
-  return FALSE;                                               \
-}                                                             \
-static GVariant *                                             \
-to (const GValue       *value,                                \
-    const GVariantType *type,                                 \
-    gpointer            user_data)                            \
-{                                                             \
-  guint index = g_value_get_uint (value);                     \
-  if (index < G_N_ELEMENTS (from##_indexes))                  \
-    return g_variant_new_string (from##_indexes[index]);      \
-  return nullptr;                                             \
-}
-
-SETTING_TO_INDEX_TRANSFORM(cursor_shape_to_index,
-                           index_to_cursor_shape,
-                           {"block", "ibeam", "underline"})
-SETTING_TO_INDEX_TRANSFORM(cursor_blink_to_index,
-                           index_to_cursor_blink,
-                           {"system", "on", "off"})
-SETTING_TO_INDEX_TRANSFORM(blink_mode_to_index,
-                           index_to_blink_mode,
-                           {"always", "never", "focused", "unfocused"})
-SETTING_TO_INDEX_TRANSFORM(exit_action_to_index,
-                           index_to_exit_action,
-                           {"close", "restart", "hold"})
-SETTING_TO_INDEX_TRANSFORM(preserve_working_directory_to_index,
-                           index_to_preserve_working_directory,
-                           {"never", "safe", "always"})
-SETTING_TO_INDEX_TRANSFORM(erase_binding_to_index,
-                           index_to_erase_binding,
-                           {"auto", "ascii-backspace", "ascii-delete", "delete-sequence", "tty"})
-SETTING_TO_INDEX_TRANSFORM(ambiguous_width_to_index,
-                           index_to_ambiguous_width,
-                           {"narrow", "wide"})
-SETTING_TO_INDEX_TRANSFORM(scrollbar_policy_to_index,
-                           index_to_scrollbar_policy,
-                           {"always", "overlay", "never"})
-
 static gboolean
-encoding_to_index (GValue   *value,
-                   GVariant *variant,
-                   gpointer  user_data)
+index_from_list_value(GValue* value,
+                      GVariant *variant,
+                      void* user_data)
 {
-  GListModel *model = G_LIST_MODEL (user_data);
-  guint n_items = g_list_model_get_n_items (model);
+  auto const model = reinterpret_cast<GListModel*>(user_data);
+  if (g_list_model_get_item_type(model) != TERMINAL_TYPE_PREFERENCES_LIST_ITEM)
+    return false;
 
-  for (guint i = 0; i < n_items; i++) {
-  g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, i));
-    GVariant *item_value = terminal_preferences_list_item_get_value (item);
+  auto const str = g_variant_get_string(variant, nullptr);
+  auto const n_items = g_list_model_get_n_items(model);
+  for (auto i = 0u; i < n_items; ++i) {
+    gs_unref_object auto item = reinterpret_cast<TerminalPreferencesListItem const*>
+      (g_list_model_get_item(model, i));
+    if (!item)
+      continue;
 
-    if (g_variant_equal (variant, item_value)) {
-      g_value_set_uint (value, i);
-      return TRUE;
-    }
+    auto const ivariant = terminal_preferences_list_item_get_value(item);
+    if (!ivariant)
+      continue;
+
+    if (!g_variant_is_of_type(ivariant, G_VARIANT_TYPE("s")))
+      continue;
+
+    auto const istr = g_variant_get_string(ivariant, nullptr);
+    if (!g_str_equal(istr, str))
+      continue;
+
+    g_value_set_uint(value, i);
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 static GVariant *
-index_to_encoding (const GValue       *value,
-                   const GVariantType *type,
-                   gpointer            user_data)
+list_value_from_index(const GValue* value,
+                      const GVariantType* type,
+                      void* user_data)
 {
-  guint index = g_value_get_uint (value);
-  GListModel *model = G_LIST_MODEL (user_data);
-  g_autoptr(TerminalPreferencesListItem) item = TERMINAL_PREFERENCES_LIST_ITEM (g_list_model_get_item (model, index));
+  auto const model = reinterpret_cast<GListModel*>(user_data);
+  if (g_list_model_get_item_type(model) != TERMINAL_TYPE_PREFERENCES_LIST_ITEM)
+    return nullptr;
 
-  return g_variant_ref (terminal_preferences_list_item_get_value (item));
+  auto const i = g_value_get_uint(value);
+  gs_unref_object auto item = reinterpret_cast<TerminalPreferencesListItem const*>
+    (g_list_model_get_item(model, i));
+  if (!item)
+    return nullptr;
+
+  return g_variant_ref(terminal_preferences_list_item_get_value(item));
 }
 
 static void
@@ -934,8 +903,9 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
                                 self->show_scrollbar, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                scrollbar_policy_to_index, index_to_scrollbar_policy,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->show_scrollbar),
+                                nullptr);
 
   g_settings_bind (self->settings, TERMINAL_PROFILE_KINETIC_SCROLLING_KEY,
                    self->kinetic_scrolling, "active",
@@ -1060,61 +1030,64 @@ terminal_profile_editor_constructed (GObject *object)
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_TEXT_BLINK_MODE_KEY,
                                 self->allow_blinking_text, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                blink_mode_to_index, index_to_blink_mode,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->allow_blinking_text),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
                                 self->cursor_blink, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                cursor_blink_to_index, index_to_cursor_blink,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->cursor_blink),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                                 self->cursor_shape, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                cursor_shape_to_index, index_to_cursor_shape,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->cursor_shape),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_EXIT_ACTION_KEY,
                                 self->when_command_exits, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                exit_action_to_index, index_to_exit_action,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->when_command_exits),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_PRESERVE_WORKING_DIRECTORY_KEY,
                                 self->preserve_working_directory, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                preserve_working_directory_to_index,
-                                index_to_preserve_working_directory,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->preserve_working_directory),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
                                 self->backspace_key, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                erase_binding_to_index,
-                                index_to_erase_binding,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->backspace_key),
+                                nullptr);
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_DELETE_BINDING_KEY,
                                 self->delete_key, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                erase_binding_to_index,
-                                index_to_erase_binding,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->delete_key),
+                                nullptr);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_ENCODING_KEY,
                                 self->encoding, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                encoding_to_index,
-                                index_to_encoding,
+                                index_from_list_value, list_value_from_index,
                                 g_object_ref (encodings_model),
                                 g_object_unref);
 
   g_settings_bind_with_mapping (self->settings, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY,
                                 self->ambiguous_width, "selected",
                                 GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT),
-                                ambiguous_width_to_index,
-                                index_to_ambiguous_width,
-                                nullptr, nullptr);
+                                index_from_list_value, list_value_from_index,
+                                adw_combo_row_get_model(self->ambiguous_width),
+                                nullptr);
 
   recurse_remove_emoji_hint (GTK_WIDGET (self->cell_height));
   recurse_remove_emoji_hint (GTK_WIDGET (self->cell_width));
