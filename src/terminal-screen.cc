@@ -112,6 +112,8 @@ struct _TerminalScreenPrivate
   gboolean exec_on_realize;
   guint idle_exec_source;
   ExecData *exec_data;
+
+  GIcon* icon;
 };
 
 enum
@@ -126,6 +128,7 @@ enum
 enum {
   PROP_0,
   PROP_PROFILE,
+  PROP_ICON,
   PROP_TITLE,
 };
 
@@ -550,6 +553,9 @@ terminal_screen_get_property (GObject *object,
       case PROP_PROFILE:
         g_value_set_object (value, terminal_screen_get_profile (screen));
         break;
+      case PROP_ICON:
+        g_value_set_object(value, screen->priv->icon);
+        break;
       case PROP_TITLE:
         g_value_set_string (value, terminal_screen_get_title (screen));
         break;
@@ -572,6 +578,7 @@ terminal_screen_set_property (GObject *object,
       case PROP_PROFILE:
         terminal_screen_set_profile (screen, (GSettings*)g_value_get_object (value));
         break;
+      case PROP_ICON:
       case PROP_TITLE:
         /* not writable */
       default:
@@ -655,13 +662,21 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_object_class_install_property
     (object_class,
+     PROP_ICON,
+     g_param_spec_object ("icon", nullptr, nullptr,
+                          G_TYPE_ICON,
+                          GParamFlags(G_PARAM_READABLE |
+				      G_PARAM_STATIC_STRINGS |
+                                      G_PARAM_EXPLICIT_NOTIFY)));
+
+  g_object_class_install_property
+    (object_class,
      PROP_TITLE,
      g_param_spec_string ("title", nullptr, nullptr,
                           nullptr,
                           GParamFlags(G_PARAM_READABLE |
-				      G_PARAM_STATIC_NAME |
-				      G_PARAM_STATIC_NICK |
-				      G_PARAM_STATIC_BLURB)));
+				      G_PARAM_STATIC_STRINGS |
+                                      G_PARAM_EXPLICIT_NOTIFY)));
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
@@ -713,6 +728,8 @@ terminal_screen_dispose (GObject *object)
     }
 
   terminal_screen_clear_exec_data (screen, TRUE);
+
+  g_clear_object(&screen->priv->icon);
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 
@@ -2358,4 +2375,12 @@ terminal_screen_paste_text (TerminalScreen* screen,
   /* Note that @text MUST be NUL-terminated */
 
   vte_terminal_paste_text (VTE_TERMINAL (screen), text);
+}
+
+GIcon*
+terminal_screen_get_icon(TerminalScreen* screen)
+{
+  g_return_val_if_fail(TERMINAL_IS_SCREEN(screen), nullptr);
+
+  return screen->priv->icon;
 }

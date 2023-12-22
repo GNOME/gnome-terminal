@@ -35,6 +35,7 @@ struct _TerminalTabLabelPrivate
 {
   TerminalScreen *screen;
   GtkWidget *label;
+  GtkWidget* image;
   GtkWidget *close_button;
   gboolean bold;
   GtkPositionType tab_pos;
@@ -89,6 +90,17 @@ sync_tab_label (TerminalScreen *screen,
                                                      TERMINAL_TYPE_WINDOW));
   if (window != nullptr)
     terminal_window_update_size (window);
+}
+
+static void
+sync_tab_icon(TerminalScreen* screen,
+              GParamSpec* pspec,
+              GtkWidget* image)
+{
+  auto const icon = terminal_screen_get_icon(screen);
+
+  gtk_image_set_from_gicon(GTK_IMAGE(image), icon, GTK_ICON_SIZE_MENU);
+  gtk_widget_set_visible(image, icon != nullptr);
 }
 
 static void
@@ -186,8 +198,12 @@ terminal_tab_label_constructed (GObject *object)
   hbox = GTK_WIDGET (tab_label);
 
   g_assert (priv->screen != nullptr);
-  
+
   gtk_box_set_spacing (GTK_BOX (hbox), SPACING);
+
+  priv->image = gtk_image_new();
+  gtk_widget_set_no_show_all(priv->image, true);
+  gtk_box_pack_start(GTK_BOX(hbox), priv->image, false, false, 0);
 
   priv->label = label = gtk_label_new (nullptr);
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
@@ -210,6 +226,10 @@ terminal_tab_label_constructed (GObject *object)
   g_signal_connect (priv->screen, "notify::title",
                     G_CALLBACK (sync_tab_label), label);
 
+  sync_tab_icon (priv->screen, nullptr, priv->image);
+  g_signal_connect (priv->screen, "notify::icon",
+                    G_CALLBACK (sync_tab_icon), priv->image);
+
   g_signal_connect (close_button, "clicked",
 		    G_CALLBACK (close_button_clicked_cb), tab_label);
 
@@ -226,6 +246,9 @@ terminal_tab_label_dispose (GObject *object)
     g_signal_handlers_disconnect_by_func (priv->screen,
                                           (void*)sync_tab_label,
                                           priv->label);
+    g_signal_handlers_disconnect_by_func (priv->screen,
+                                          (void*)sync_tab_icon,
+                                          priv->image);
     g_object_unref (priv->screen);
     priv->screen = nullptr;
   }
