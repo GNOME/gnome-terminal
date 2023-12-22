@@ -1399,6 +1399,12 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                "active",
 			       GSettingsBindFlags(G_SETTINGS_BIND_GET |
 						  G_SETTINGS_BIND_SET));
+  profile_prefs_settings_bind (profile, TERMINAL_PROFILE_SCROLL_ON_INSERT_KEY,
+                               gtk_builder_get_object (builder,
+                                                       "scroll-on-insert-checkbutton"),
+                               "active",
+			       GSettingsBindFlags(G_SETTINGS_BIND_GET |
+						  G_SETTINGS_BIND_SET));
   profile_prefs_settings_bind (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                                gtk_builder_get_object (builder,
                                                        "custom-font-checkbutton"),
