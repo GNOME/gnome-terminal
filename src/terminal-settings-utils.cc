@@ -254,6 +254,23 @@ strv_contains(char const* const* strv,
 }
 
 static gboolean
+strv_set_equal(char const* const* strv1,
+               gsize len1,
+               char const* const* strv2,
+               gsize len2)
+{
+  if (len1 != len2)
+    return false;
+
+  for (auto i = gsize{0}; i < len2; ++i) {
+    if (!strv_contains(strv1, strv2[i]))
+        return false;
+  }
+
+  return true;
+}
+
+static gboolean
 schema_key_range_compatible(GSettingsSchema* source_schema,
                             GSettingsSchemaKey* source_key,
                             char const* key,
@@ -291,16 +308,19 @@ schema_key_range_compatible(GSettingsSchema* source_schema,
     size_t reference_values_len = 0;
     gs_free char const** reference_values = g_variant_get_strv(reference_data, &reference_values_len);
 
-    /* Check that every enum value in source is valid according to the reference */
-    for (size_t i = 0; i < source_values_len; ++i) {
-      if (!strv_contains(reference_values, source_values[i])) {
-        g_set_error(error, TERMINAL_SCHEMA_VERIFIER_ERROR,
-                    TERMINAL_SCHEMA_VERIFIER_KEY_RANGE_ENUM_VALUE,
-                    "Schema \"%s\" key \"%s\" has enum value \"%s\" not in reference schema",
-                    g_settings_schema_get_id(source_schema),
-                    key, source_values[i]);
+    // The sets of enum values in source and reference must be equal
+    if (!strv_set_equal(source_values, source_values_len,
+                        reference_values, reference_values_len)) {
+      gs_free auto source_values_set_str = g_strjoinv(", ", (char**)source_values);
+      gs_free auto reference_values_set_str = g_strjoinv(", ", (char**)reference_values);
+      g_set_error(error, TERMINAL_SCHEMA_VERIFIER_ERROR,
+                  TERMINAL_SCHEMA_VERIFIER_KEY_RANGE_ENUM_VALUE,
+                  "Schema \"%s\" key \"%s\" enum values set {%s} not equal to reference schema set {%s}",
+                  g_settings_schema_get_id(source_schema),
+                  key,
+                  source_values_set_str,
+                  reference_values_set_str);
         return FALSE;
-      }
     }
   } else if (g_str_equal(reference_type, "flags")) {
     /* Our schemas don't use flags. If that changes, need to implement this! */
