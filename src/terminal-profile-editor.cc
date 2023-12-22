@@ -85,6 +85,7 @@ struct _TerminalProfileEditor
   GtkColorDialogButton *palette_15;
   AdwComboRow          *preserve_working_directory;
   AdwSpinRow           *rows;
+  AdwSwitchRow         *scroll_on_insert;
   AdwSwitchRow         *scroll_on_keystroke;
   AdwSwitchRow         *scroll_on_output;
   AdwSpinRow           *scrollback_lines;
@@ -914,6 +915,10 @@ terminal_profile_editor_constructed (GObject *object)
                    self->kinetic_scrolling, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
 
+  terminal_util_g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_INSERT_KEY,
+                   self->scroll_on_insert, "active",
+                   GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
+
   terminal_util_g_settings_bind (self->settings, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
                    self->scroll_on_keystroke, "active",
                    GSettingsBindFlags(G_SETTINGS_BIND_DEFAULT));
@@ -1226,6 +1231,7 @@ terminal_profile_editor_class_init (TerminalProfileEditorClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, palette_9);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, preserve_working_directory);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, rows);
+  gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_insert);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_keystroke);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scroll_on_output);
   gtk_widget_class_bind_template_child (widget_class, TerminalProfileEditor, scrollback_lines);
