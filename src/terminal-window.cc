@@ -59,6 +59,7 @@ struct _TerminalWindow
 
   GtkWidget *titlebar;
   AdwTabBar *tab_bar;
+  AdwTabOverview* tab_overview;
   TerminalHeaderbar *headerbar;
   TerminalNotebook *notebook;
   GActionMap* notebook_context_action_group; // unowned
@@ -101,8 +102,11 @@ struct _TerminalWindow
   /* A GSource delaying transition until animations complete */
   guint fullscreen_transition;
 
+  guint focus_active_tab_source;
+
   guint disposed : 1;
   guint present_on_insert : 1;
+  guint tab_overview_animating : 1;
 
   guint realized : 1;
 };
@@ -253,14 +257,12 @@ lookup_action (TerminalWindow *window,
   return G_SIMPLE_ACTION (action);
 }
 
-/* GAction callbacks */
-
-static void
-action_new_terminal_cb (GSimpleAction *action,
-                        GVariant      *parameter,
-                        gpointer      user_data)
+static TerminalTab*
+terminal_window_new_tab(TerminalWindow* window,
+                        char const* mode_str,
+                        char const* uuid_str,
+                        bool grab_focus)
 {
-  TerminalWindow *window = TERMINAL_WINDOW (user_data);
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
   gs_unref_object GSettings *profile = nullptr;
@@ -269,9 +271,6 @@ action_new_terminal_cb (GSimpleAction *action,
   g_assert (TERMINAL_IS_WINDOW (window));
 
   app = terminal_app_get ();
-
-  const char *mode_str, *uuid_str;
-  g_variant_get (parameter, "(&s&s)", &mode_str, &uuid_str);
 
   TerminalNewTerminalMode mode;
   if (g_str_equal (mode_str, "tab"))
@@ -314,7 +313,7 @@ action_new_terminal_cb (GSimpleAction *action,
     profile = terminal_settings_list_ref_child (profiles_list, uuid_str);
 
   if (profile == nullptr)
-    return;
+    return nullptr;
 
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW) {
     window = terminal_window_new (G_APPLICATION (app));
@@ -330,13 +329,97 @@ action_new_terminal_cb (GSimpleAction *action,
   // Now add the new screen to the window.
   terminal_window_add_tab(window, tab, parent_tab);
   terminal_window_switch_screen (window, screen);
-  gtk_widget_grab_focus (GTK_WIDGET (screen));
+
+  if (grab_focus)
+    gtk_widget_grab_focus(GTK_WIDGET(screen));
 
   /* Start child process, if possible by using the same args as the parent screen */
   terminal_screen_reexec_from_screen (screen, parent_screen, nullptr, nullptr);
 
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
     gtk_window_present (GTK_WINDOW (window));
+
+  return tab;
+}
+
+static gboolean
+terminal_window_focus_active_tab_cb(void* data)
+{
+  auto const window = reinterpret_cast<TerminalWindow*>(data);
+
+  g_assert(TERMINAL_IS_WINDOW(window));
+
+  window->focus_active_tab_source = 0;
+  window->tab_overview_animating = false;
+
+  if (auto const active_tab = terminal_window_get_active_tab(window)) {
+    gtk_widget_grab_focus(GTK_WIDGET(active_tab));
+    gtk_widget_queue_resize(GTK_WIDGET(active_tab));
+  }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+terminal_window_tab_overview_notify_open_cb(AdwTabOverview* tab_overview,
+                                            GParamSpec* pspec,
+                                            TerminalWindow* window)
+{
+  g_assert(TERMINAL_IS_WINDOW(window));
+  g_assert(ADW_IS_TAB_OVERVIEW(tab_overview));
+
+  // For some reason when we get here the selected page is not
+  // getting focused. So work around libadwaita by deferring the
+  // focus to an idle so that we can ensure we're working with
+  // the appropriate focus tab.
+  //
+  // See https://gitlab.gnome.org/GNOME/libadwaita/-/issues/670
+
+  g_clear_handle_id(&window->focus_active_tab_source, g_source_remove);
+
+  if (!adw_tab_overview_get_open(tab_overview)) {
+    auto delay_msec = 425u; // Sync with libadwaita!
+    auto gtk_enable_animations = gboolean{false};
+    g_object_get (gtk_settings_get_default(),
+                  "gtk-enable-animations", &gtk_enable_animations,
+                  nullptr);
+
+    if (!gtk_enable_animations)
+      delay_msec = 10;
+
+    window->focus_active_tab_source = g_timeout_add_full(G_PRIORITY_LOW,
+                                                         delay_msec,
+                                                         terminal_window_focus_active_tab_cb,
+                                                         window, nullptr);
+
+    if (auto const active_tab = terminal_window_get_active_tab(window))
+      gtk_widget_grab_focus(GTK_WIDGET(active_tab));
+  }
+
+  window->tab_overview_animating = false;
+}
+
+static AdwTabPage*
+terminal_window_tab_overview_create_tab_cb(AdwTabOverview* tab_overview,
+                                           TerminalWindow* window)
+{
+  auto const tab = terminal_window_new_tab(window, "tab", "default", false);
+  return adw_tab_view_get_page (terminal_notebook_get_tab_view(window->notebook),
+                                GTK_WIDGET(tab));
+}
+
+/* GAction callbacks */
+
+static void
+action_new_terminal_cb (GSimpleAction *action,
+                        GVariant      *parameter,
+                        gpointer      user_data)
+{
+  const char *mode_str, *uuid_str;
+  g_variant_get (parameter, "(&s&s)", &mode_str, &uuid_str);
+
+  auto const window = reinterpret_cast<TerminalWindow*>(user_data);
+  terminal_window_new_tab(window, mode_str, uuid_str, true);
 }
 
 #ifdef ENABLE_SAVE
@@ -1550,6 +1633,10 @@ terminal_window_update_tabs_actions_sensitivity (TerminalWindow *window)
   /* Disable tab switching (and all its shortcuts) in SDI windows */
   g_simple_action_set_enabled (lookup_action (window, "active-tab"), not_only);
 
+  // FIXME: do the equivalent of
+  // g_simple_action_set_enabled (lookup_action (window, "tab-overview"), not_only);
+  // or just hide the "show overview" button?
+
   /* Set the active tab */
   g_simple_action_set_state (lookup_action (window, "active-tab"),
                              g_variant_new_int32 (page_num));
@@ -2053,6 +2140,13 @@ terminal_window_init (TerminalWindow *window)
                                    action_entries, G_N_ELEMENTS (action_entries),
                                    window);
 
+  // Property actions
+  gs_unref_object auto propaction = g_property_action_new("tab-overview",
+                                                          window->tab_overview,
+                                                          "open");
+  g_action_map_add_action(G_ACTION_MAP(window), G_ACTION(propaction));
+
+  // Notebook actions
   gs_unref_object auto action_group = window->notebook_context_action_group =
     G_ACTION_MAP(g_simple_action_group_new());
 
@@ -2231,11 +2325,14 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, notebook_setup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_update_geometry);
   gtk_widget_class_bind_template_callback (widget_class, handle_tab_dropped_on_desktop);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_window_tab_overview_notify_open_cb);
+  gtk_widget_class_bind_template_callback (widget_class, terminal_window_tab_overview_create_tab_cb);
 
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, headerbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, main_vbox);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, notebook);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, tab_bar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, tab_overview);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, toolbar_view);
 
   g_type_ensure (TERMINAL_TYPE_HEADERBAR);
@@ -2254,6 +2351,7 @@ terminal_window_dispose (GObject *object)
 
   g_clear_pointer ((GtkWidget **)&window->context_menu, gtk_widget_unparent);
   g_clear_handle_id (&window->fullscreen_transition, g_source_remove);
+  g_clear_handle_id(&window->focus_active_tab_source, g_source_remove);
 
   if (window->clipboard != nullptr) {
     g_signal_handlers_disconnect_by_func (app,
@@ -2498,6 +2596,12 @@ TerminalScreen*
 terminal_window_get_active (TerminalWindow *window)
 {
   return terminal_notebook_get_active_screen (window->notebook);
+}
+
+TerminalTab*
+terminal_window_get_active_tab(TerminalWindow *window)
+{
+  return terminal_notebook_get_active_tab(window->notebook);
 }
 
 static void
@@ -3083,4 +3187,12 @@ terminal_window_in_fullscreen_transition (TerminalWindow *window)
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), FALSE);
 
   return window->fullscreen_transition != 0;
+}
+
+bool
+terminal_window_is_animating (TerminalWindow* window)
+{
+  g_return_val_if_fail(TERMINAL_IS_WINDOW(window), false);
+
+  return window->tab_overview_animating;
 }

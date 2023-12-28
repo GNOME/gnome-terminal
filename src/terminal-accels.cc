@@ -79,6 +79,7 @@
 #define KEY_RESET               "reset"
 #define KEY_SAVE_CONTENTS       "save-contents"
 #define KEY_SELECT_ALL          "select-all"
+#define KEY_SHOW_TABS_OVERVIEW  "show-tabs-overview"
 #define KEY_ZOOM_IN             "zoom-in"
 #define KEY_ZOOM_NORMAL         "zoom-normal"
 #define KEY_ZOOM_OUT            "zoom-out"
@@ -176,6 +177,7 @@ static KeyEntry tabs_entries[] = {
   ENTRY_MDI (N_("Move Tab to the Start"),  KEY_MOVE_TAB_START, "tab-move-start",   nullptr, nullptr),
   ENTRY_MDI (N_("Move Tab to the End"),    KEY_MOVE_TAB_END,   "tab-move-end",     nullptr, nullptr),
   ENTRY_MDI (N_("Detach Tab"),             KEY_DETACH_TAB,     "tab-detach",       nullptr, nullptr),
+  ENTRY_MDI (N_("Show Tabs Overview"), KEY_SHOW_TABS_OVERVIEW, "tab-overview",     nullptr, nullptr),
   ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "1", "active-tab", "i", "0"),
   ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "2", "active-tab", "i", "1"),
   ENTRY_MDI (nullptr, KEY_SWITCH_TAB_PREFIX "3", "active-tab", "i", "2"),

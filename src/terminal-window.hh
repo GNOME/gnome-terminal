@@ -42,6 +42,7 @@ void            terminal_window_update_size              (TerminalWindow *window
 void            terminal_window_switch_screen            (TerminalWindow *window,
                                                           TerminalScreen *screen);
 TerminalScreen *terminal_window_get_active               (TerminalWindow *window);
+TerminalTab*    terminal_window_get_active_tab           (TerminalWindow *window);
 GList          *terminal_window_list_tabs   (TerminalWindow *window);
 gboolean        terminal_window_parse_geometry           (TerminalWindow *window,
                                                           const char     *geometry);
@@ -49,5 +50,6 @@ void            terminal_window_update_geometry          (TerminalWindow *window
 void            terminal_window_request_close            (TerminalWindow *window);
 const char     *terminal_window_get_uuid                 (TerminalWindow *window);
 gboolean        terminal_window_in_fullscreen_transition (TerminalWindow *window);
+bool terminal_window_is_animating (TerminalWindow* window);
 
 G_END_DECLS

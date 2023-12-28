@@ -37,6 +37,7 @@ void            terminal_notebook_append_tab(TerminalNotebook *notebook,
 void            terminal_notebook_remove_screen          (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen);
 TerminalScreen *terminal_notebook_get_active_screen      (TerminalNotebook *notebook);
+TerminalTab*    terminal_notebook_get_active_tab         (TerminalNotebook *notebook);
 void            terminal_notebook_set_active_screen      (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen);
 void            terminal_notebook_set_active_screen_num  (TerminalNotebook *notebook,

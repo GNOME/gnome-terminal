@@ -210,6 +210,18 @@ terminal_notebook_get_active_screen (TerminalNotebook *notebook)
   return terminal_tab_get_screen (TERMINAL_TAB (child));
 }
 
+TerminalTab*
+terminal_notebook_get_active_tab(TerminalNotebook* notebook)
+{
+  g_return_val_if_fail(TERMINAL_IS_NOTEBOOK(notebook), nullptr);
+
+  auto const page = adw_tab_view_get_selected_page(notebook->tab_view);
+  if (!page)
+    return nullptr;
+
+  return TERMINAL_TAB(adw_tab_page_get_child(page));
+}
+
 void
 terminal_notebook_set_active_screen (TerminalNotebook *notebook,
                                      TerminalScreen   *screen)

@@ -6,39 +6,47 @@
     </style>
     <property name="title" translatable="yes">Terminal</property>
     <property name="content">
-      <object class="AdwToolbarView" id="toolbar_view">
-        <property name="top-bar-style">flat</property>
-        <child type="top">
-          <object class="TerminalHeaderbar" id="headerbar">
-          </object>
-        </child>
-        <child type="top">
-          <object class="AdwTabBar" id="tab_bar">
-            <property name="view">tab_view</property>
-            <property name="focus-on-click">0</property>
-            <property name="can-focus">0</property>
-          </object>
-        </child>
-        <property name="content">
-          <object class="GtkBox" id="main_vbox">
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="TerminalNotebook" id="notebook">
-                <property name="vexpand">true</property>
-                <signal name="screen-close-request" handler="screen_close_request_cb" swapped="0" object="TerminalWindow"/>
-                <signal name="screen-switched" handler="notebook_screen_switched_cb" after="1" swapped="0" object="TerminalWindow"/>
-                <signal name="screen-added" handler="notebook_screen_added_cb" after="1" swapped="0" object="TerminalWindow"/>
-                <signal name="screen-removed" handler="notebook_screen_removed_cb" after="1" swapped="0" object="TerminalWindow"/>
-                <signal name="screens-reordered" handler="notebook_screens_reordered_cb" after="1" swapped="0" object="TerminalWindow"/>
-                <signal name="setup-menu" handler="notebook_setup_menu_cb" after="1" swapped="0" object="TerminalWindow"/>
-                <signal name="notify::show-tabs" handler="terminal_window_update_geometry" swapped="1" object="TerminalWindow"/>
-                <child internal-child="tab_view">
-                  <object class="AdwTabView" id="tab_view">
-                    <signal name="create-window" handler="handle_tab_dropped_on_desktop" swapped="0" object="TerminalWindow"/>
+      <object class="AdwTabOverview" id="tab_overview">
+        <property name="enable-new-tab">true</property>
+        <signal name="notify::open" handler="terminal_window_tab_overview_notify_open_cb" after="1" />
+        <signal name="create-tab" handler="terminal_window_tab_overview_create_tab_cb" />
+        <property name="view">tab_view</property>
+        <property name="child">
+          <object class="AdwToolbarView" id="toolbar_view">
+            <property name="top-bar-style">flat</property>
+            <child type="top">
+              <object class="TerminalHeaderbar" id="headerbar">
+              </object>
+            </child>
+            <child type="top">
+              <object class="AdwTabBar" id="tab_bar">
+                <property name="view">tab_view</property>
+                <property name="focus-on-click">0</property>
+                <property name="can-focus">0</property>
+              </object>
+            </child>
+            <property name="content">
+              <object class="GtkBox" id="main_vbox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="TerminalNotebook" id="notebook">
+                    <property name="vexpand">true</property>
+                    <signal name="screen-close-request" handler="screen_close_request_cb" swapped="0" object="TerminalWindow"/>
+                    <signal name="screen-switched" handler="notebook_screen_switched_cb" after="1" swapped="0" object="TerminalWindow"/>
+                    <signal name="screen-added" handler="notebook_screen_added_cb" after="1" swapped="0" object="TerminalWindow"/>
+                    <signal name="screen-removed" handler="notebook_screen_removed_cb" after="1" swapped="0" object="TerminalWindow"/>
+                    <signal name="screens-reordered" handler="notebook_screens_reordered_cb" after="1" swapped="0" object="TerminalWindow"/>
+                    <signal name="setup-menu" handler="notebook_setup_menu_cb" after="1" swapped="0" object="TerminalWindow"/>
+                    <signal name="notify::show-tabs" handler="terminal_window_update_geometry" swapped="1" object="TerminalWindow"/>
+                    <child internal-child="tab_view">
+                      <object class="AdwTabView" id="tab_view">
+                     <signal name="create-window" handler="handle_tab_dropped_on_desktop" swapped="0" object="TerminalWindow"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </property>
       </object>
