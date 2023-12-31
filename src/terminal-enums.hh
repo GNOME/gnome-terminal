@@ -70,6 +70,12 @@ typedef enum {
   TERMINAL_SCROLLBAR_POLICY_NEVER   = 2,
 } TerminalScrollbarPolicy;
 
+typedef enum {
+  TERMINAL_ROUNDED_CORNERS_NONE = 0,
+  TERMINAL_ROUNDED_CORNERS_TOP = 1,
+  TERMINAL_ROUNDED_CORNERS_ALL = 2,
+} TerminalRoundedCorners;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */

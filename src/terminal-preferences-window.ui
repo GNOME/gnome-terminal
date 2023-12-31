@@ -82,6 +82,37 @@
                 </property>
               </object>
             </child>
+            <child>
+              <object class="AdwComboRow" id="rounded_corners">
+                <property name="title" translatable="yes">Rounded corners</property>
+                <property name="expression">
+                  <lookup name="title" type="TerminalPreferencesListItem"/>
+                </property>
+                <property name="model">
+                  <object class="GListStore" id="rounded_corners_model">
+                    <property name="item-type">TerminalPreferencesListItem</property>
+                    <child>
+                      <object class="TerminalPreferencesListItem">
+                        <property name="title" translatable="yes">Default</property>
+                        <property name="value">'all'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalPreferencesListItem">
+                        <property name="title" translatable="yes">Top only</property>
+                        <property name="value">'top'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalPreferencesListItem">
+                        <property name="title" translatable="yes">None</property>
+                        <property name="value">'none'</property>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

@@ -1960,6 +1960,28 @@ window_sync_ask_default_terminal_cb(TerminalApp* app,
 }
 
 static void
+window_sync_rounded_corners_cb(GSettings* settings,
+                               char const* key,
+                               TerminalWindow* window)
+{
+  auto const corners = g_settings_get_enum(settings, key);
+
+  static char const* css_classes[3] = {
+    "no-rounded-corners",
+    "top-rounded-corners",
+    "all-rounded-corners",
+  };
+
+  auto const widget = GTK_WIDGET(window);
+  for (auto i = 0; i < 3; ++i) {
+    if (corners == i)
+      gtk_widget_add_css_class(widget, css_classes[i]);
+    else
+      gtk_widget_remove_css_class(widget, css_classes[i]);
+  }
+}
+
+static void
 default_infobar_response_cb(GtkInfoBar* infobar,
                             int response,
                             TerminalWindow* window)
@@ -2295,6 +2317,10 @@ terminal_window_constructed (GObject *object)
                                 GSettingsBindFlags(G_SETTINGS_BIND_GET |
                                                    G_SETTINGS_BIND_NO_SENSITIVITY),
                                 policy_type_to_visible, nullptr, nullptr, nullptr);
+
+  window_sync_rounded_corners_cb(settings, TERMINAL_SETTING_ROUNDED_CORNERS_KEY, window);
+  g_signal_connect(settings, "changed::" TERMINAL_SETTING_ROUNDED_CORNERS_KEY,
+                   G_CALLBACK(window_sync_rounded_corners_cb), window);
 }
 
 static void
@@ -2380,6 +2406,11 @@ terminal_window_dispose (GObject *object)
     }
 
   window->notebook_context_action_group = nullptr;
+
+  auto const settings = terminal_app_get_global_settings(terminal_app_get());
+  g_signal_handlers_disconnect_by_func(settings,
+                                       (void*)window_sync_rounded_corners_cb,
+                                       window);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }

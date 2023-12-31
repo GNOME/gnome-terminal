@@ -8,10 +8,24 @@ window.terminal-window scrolledwindow overshoot.bottom
   background: none;
 }
 
-window.terminal-window.csd
+window.terminal-window.csd.no-rounded-corners
+{
+  border-radius: 0;
+}
+
+window.terminal-window.csd.top-rounded-corners
 {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+window.terminal-window.csd.all-rounded-corners vte-terminal
+{
+    /* Use the same value as adwaita's window corner radius! */
+    padding-top: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
 }
 
 popover button.model

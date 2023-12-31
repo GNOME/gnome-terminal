@@ -40,6 +40,8 @@ struct _TerminalPreferencesWindow
   AdwComboRow          *new_terminal_mode;
   GListModel           *new_terminal_modes;
   GtkListBox           *profiles_list_box;
+  AdwComboRow          *rounded_corners;
+  GListModel           *rounded_corners_model;
   AdwComboRow          *tab_position;
   GListModel           *tab_positions;
   AdwComboRow          *theme_variant;
@@ -334,6 +336,16 @@ terminal_preferences_window_constructed (GObject *object)
   terminal_preferences_window_reload_profiles (self);
 
   terminal_util_g_settings_bind_with_mapping (settings,
+                                TERMINAL_SETTING_ROUNDED_CORNERS_KEY,
+                                self->rounded_corners,
+                                "selected",
+                                GSettingsBindFlags(G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET),
+                                string_to_index,
+                                index_to_string,
+                                g_object_ref (self->rounded_corners_model),
+                                g_object_unref);
+
+  terminal_util_g_settings_bind_with_mapping (settings,
                                 TERMINAL_SETTING_THEME_VARIANT_KEY,
                                 self->theme_variant,
                                 "selected",
@@ -401,6 +413,8 @@ terminal_preferences_window_class_init (TerminalPreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_mode);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, new_terminal_modes);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, profiles_list_box);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, rounded_corners);
+  gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, rounded_corners_model);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, tab_position);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, tab_positions);
   gtk_widget_class_bind_template_child (widget_class, TerminalPreferencesWindow, theme_variant);
