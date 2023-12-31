@@ -47,6 +47,17 @@
                 </child>
               </object>
             </property>
+	    <child type="bottom">
+              <object class="GtkRevealer" id="find_bar_revealer">
+                <property name="reveal-child">false</property>
+                <!-- Disable for now because VteTerminal won't gracefully resize -->
+                <property name="transition-duration">0</property>
+                <child>
+                  <object class="TerminalFindBar" id="find_bar">
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </property>
       </object>

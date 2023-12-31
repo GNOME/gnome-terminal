@@ -37,12 +37,12 @@
 #include "terminal-debug.hh"
 #include "terminal-enums.hh"
 #include "terminal-headerbar.hh"
+#include "terminal-find-bar.hh"
 #include "terminal-icon-button.hh"
 #include "terminal-intl.hh"
 #include "terminal-notebook.hh"
 #include "terminal-schemas.hh"
 #include "terminal-tab.hh"
-#include "terminal-search-popover.hh"
 #include "terminal-util.hh"
 #include "terminal-window.hh"
 #include "terminal-libgsystem.hh"
@@ -96,7 +96,10 @@ struct _TerminalWindow
   GdkToplevelState window_state;
 
   GtkWidget *confirm_close_dialog;
-  TerminalSearchPopover *search_popover;
+
+  TerminalFindBar* find_bar;
+  GtkRevealer* find_bar_revealer;
+
   GtkPopoverMenu *context_menu;
 
   /* A GSource delaying transition until animations complete */
@@ -175,8 +178,7 @@ static gboolean screen_close_request_cb (TerminalNotebook *notebook,
 static gboolean find_larger_zoom_factor                   (double         *zoom);
 static gboolean find_smaller_zoom_factor                  (double         *zoom);
 static void     terminal_window_update_zoom_sensitivity   (TerminalWindow *window);
-static void     terminal_window_update_search_sensitivity (TerminalScreen *screen,
-                                                           TerminalWindow *window);
+static void     terminal_window_update_search_sensitivity (TerminalWindow *window);
 static void     terminal_window_update_paste_sensitivity  (TerminalWindow *window);
 static void     terminal_window_show                      (GtkWidget      *widget);
 static gboolean confirm_close_window_or_tab               (TerminalWindow *window,
@@ -1115,50 +1117,6 @@ action_inspector_cb (GSimpleAction *action,
 }
 
 static void
-search_popover_search_cb (TerminalSearchPopover *popover,
-                          gboolean backward,
-                          TerminalWindow *window)
-{
-  if (G_UNLIKELY (window->active_screen == nullptr))
-    return;
-
-  if (backward)
-    vte_terminal_search_find_previous (VTE_TERMINAL (window->active_screen));
-  else
-    vte_terminal_search_find_next (VTE_TERMINAL (window->active_screen));
-}
-
-static void
-search_popover_notify_regex_cb (TerminalSearchPopover *popover,
-                                GParamSpec *pspec G_GNUC_UNUSED,
-                                TerminalWindow *window)
-{
-  VteRegex *regex;
-
-  if (G_UNLIKELY (window->active_screen == nullptr))
-    return;
-
-  regex = terminal_search_popover_get_regex (popover);
-  vte_terminal_search_set_regex (VTE_TERMINAL (window->active_screen), regex, 0);
-
-  terminal_window_update_search_sensitivity (window->active_screen, window);
-}
-
-static void
-search_popover_notify_wrap_around_cb (TerminalSearchPopover *popover,
-                                      GParamSpec *pspec G_GNUC_UNUSED,
-                                      TerminalWindow *window)
-{
-  gboolean wrap;
-
-  if (G_UNLIKELY (window->active_screen == nullptr))
-    return;
-
-  wrap = terminal_search_popover_get_wrap_around (popover);
-  vte_terminal_search_set_wrap_around (VTE_TERMINAL (window->active_screen), wrap);
-}
-
-static void
 action_find_cb (GSimpleAction *action,
                 GVariant *parameter,
                 gpointer user_data)
@@ -1168,32 +1126,8 @@ action_find_cb (GSimpleAction *action,
   if (G_UNLIKELY(window->active_screen == nullptr))
     return;
 
-  if (window->search_popover != nullptr) {
-    search_popover_notify_regex_cb (window->search_popover, nullptr, window);
-    search_popover_notify_wrap_around_cb (window->search_popover, nullptr, window);
-
-    gtk_window_present (GTK_WINDOW (window->search_popover));
-    gtk_widget_grab_focus (GTK_WIDGET (window->search_popover));
-    return;
-  }
-
-  if (window->active_screen == nullptr)
-    return;
-
-  window->search_popover = terminal_search_popover_new (GTK_WIDGET (window));
-
-  g_signal_connect (window->search_popover, "search", G_CALLBACK (search_popover_search_cb), window);
-
-  search_popover_notify_regex_cb (window->search_popover, nullptr, window);
-  g_signal_connect (window->search_popover, "notify::regex", G_CALLBACK (search_popover_notify_regex_cb), window);
-
-  search_popover_notify_wrap_around_cb (window->search_popover, nullptr, window);
-  g_signal_connect (window->search_popover, "notify::wrap-around", G_CALLBACK (search_popover_notify_wrap_around_cb), window);
-
-  g_signal_connect_swapped (window->search_popover, "destroy", G_CALLBACK (g_nullify_pointer), &window->search_popover);
-
-  gtk_window_present (GTK_WINDOW (window->search_popover));
-  gtk_widget_grab_focus (GTK_WIDGET (window->search_popover));
+  gtk_revealer_set_reveal_child(window->find_bar_revealer, true);
+  gtk_widget_grab_focus(GTK_WIDGET(window->find_bar));
 }
 
 static void
@@ -1537,13 +1471,9 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 }
 
 static void
-terminal_window_update_search_sensitivity (TerminalScreen *screen,
-                                           TerminalWindow *window)
+terminal_window_update_search_sensitivity (TerminalWindow *window)
 {
-  if (screen != window->active_screen)
-    return;
-
-  gboolean can_search = vte_terminal_search_get_regex (VTE_TERMINAL (screen)) != nullptr;
+  auto const can_search = window->active_screen ? vte_terminal_search_get_regex(VTE_TERMINAL(window->active_screen)) != nullptr : false;
 
   g_simple_action_set_enabled (lookup_action (window, "find-forward"), can_search);
   g_simple_action_set_enabled (lookup_action (window, "find-backward"), can_search);
@@ -2354,6 +2284,8 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_tab_overview_notify_open_cb);
   gtk_widget_class_bind_template_callback (widget_class, terminal_window_tab_overview_create_tab_cb);
 
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, find_bar);
+  gtk_widget_class_bind_template_child (widget_class, TerminalWindow, find_bar_revealer);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, headerbar);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, main_vbox);
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, notebook);
@@ -2362,6 +2294,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, TerminalWindow, toolbar_view);
 
   g_type_ensure (TERMINAL_TYPE_HEADERBAR);
+  g_type_ensure (TERMINAL_TYPE_FIND_BAR);
   g_type_ensure (TERMINAL_TYPE_NOTEBOOK);
 }
 
@@ -2394,16 +2327,6 @@ terminal_window_dispose (GObject *object)
   }
 
   remove_popup_info (window);
-
-  if (window->search_popover != nullptr)
-    {
-      g_signal_handlers_disconnect_matched (window->search_popover, G_SIGNAL_MATCH_DATA,
-                                            0, 0, nullptr, nullptr, window);
-      g_signal_handlers_disconnect_matched (window->search_popover, G_SIGNAL_MATCH_DATA,
-                                            0, 0, nullptr, nullptr, &window->search_popover);
-      gtk_window_destroy (GTK_WINDOW (window->search_popover));
-      window->search_popover = nullptr;
-    }
 
   window->notebook_context_action_group = nullptr;
 
@@ -2650,15 +2573,14 @@ notebook_screen_switched_cb (TerminalNotebook *notebook,
   if (window->disposed)
     return;
 
-  if (screen == nullptr || old_active_screen == screen)
+  if (old_active_screen == screen)
     return;
 
-  if (window->search_popover != nullptr)
-    gtk_widget_hide (GTK_WIDGET (window->search_popover));
+  window->active_screen = screen;
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: setting active tab to screen %p (old active screen %p)\n",
-                         window, screen, window->active_screen);
+                         window, screen, old_active_screen);
 
   if (old_active_screen != nullptr && screen != nullptr) {
     terminal_screen_get_size (old_active_screen, &old_grid_width, &old_grid_height);
@@ -2667,7 +2589,17 @@ notebook_screen_switched_cb (TerminalNotebook *notebook,
     vte_terminal_set_size (VTE_TERMINAL (screen), old_grid_width, old_grid_height);
   }
 
-  window->active_screen = screen;
+  if (!screen) {
+    gtk_revealer_set_reveal_child(window->find_bar_revealer, false);
+    gtk_window_set_title(GTK_WINDOW(window), _("Terminal"));
+    terminal_window_update_search_sensitivity(window);
+  }
+
+  terminal_find_bar_set_screen(window->find_bar, screen);
+  g_simple_action_set_enabled(lookup_action(window, "find"), screen != nullptr);
+
+  if (!screen)
+    return;
 
   sync_screen_title (screen, nullptr, window);
 
@@ -2682,7 +2614,7 @@ notebook_screen_switched_cb (TerminalNotebook *notebook,
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (screen, window);
   terminal_window_update_zoom_sensitivity (window);
-  terminal_window_update_search_sensitivity (screen, window);
+  terminal_window_update_search_sensitivity(window);
   terminal_window_update_paste_sensitivity (window);
 }
 
@@ -2733,7 +2665,7 @@ notebook_screen_added_cb (TerminalNotebook *notebook,
                     G_CALLBACK (screen_close_cb), window);
 
   terminal_window_update_tabs_actions_sensitivity (window);
-  terminal_window_update_search_sensitivity (screen, window);
+  terminal_window_update_search_sensitivity(window);
   terminal_window_update_paste_sensitivity (window);
 
 #if 0
@@ -2839,7 +2771,7 @@ notebook_screen_removed_cb (TerminalNotebook *notebook,
     }
 
   terminal_window_update_tabs_actions_sensitivity (window);
-  terminal_window_update_search_sensitivity (screen, window);
+  terminal_window_update_search_sensitivity(window);
 
   if (pages == 1)
     {

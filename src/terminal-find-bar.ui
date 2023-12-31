@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2023 Christian Hergert
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<interface>
+  <template class="TerminalFindBar" parent="GtkWidget">
+    <property name="margin-top">6</property>
+    <property name="margin-bottom">6</property>
+    <property name="margin-end">9</property>
+    <property name="margin-start">6</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkEntry" id="entry">
+                <property name="width-chars">10</property>
+                <property name="hexpand">true</property>
+                <property name="primary-icon-name">edit-find-symbolic</property>
+                <property name="placeholder-text">Search History…</property>
+                <signal name="changed" handler="terminal_find_bar_entry_changed_cb" swapped="1"/>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name="propagation-phase">capture</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">&lt;shift&gt;Return</property>
+                        <property name="action">action(search.down)</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">Return</property>
+                        <property name="action">action(search.up)</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-up-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search up to next result</property>
+                    <property name="action-name">search.up</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-down-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Search down to next result</property>
+                    <property name="action-name">search.down</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="search_options">
+                <property name="icon-name">emblem-system-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Search Options</property>
+                <property name="always-show-arrow">true</property>
+                <property name="direction">up</property>
+                <property name="popover">
+                  <object class="GtkPopover">
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkCheckButton" id="match_case">
+                            <property name="label" translatable="yes">Match _Case</property>
+                            <property name="use-underline">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="whole_words">
+                            <property name="label" translatable="yes">Whole _Words</property>
+                            <property name="use-underline">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="use_regex">
+                            <property name="label" translatable="yes">Use _Regular Expressions</property>
+                            <property name="use-underline">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="margin-start">12</property>
+                <property name="icon-name">window-close-symbolic</property>
+                <property name="action-name">search.dismiss</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="close-button"/>
+                </style>
+                <accessibility>
+                  <property name="label" translatable="yes">Close</property>
+                  <property name="description" translatable="yes">Close the search bar</property>
+                </accessibility>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

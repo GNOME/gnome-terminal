@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_UTIL_H
-#define TERMINAL_UTIL_H
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -143,4 +142,8 @@ void terminal_util_g_settings_bind_with_mapping(GSettings* settings,
 
 G_END_DECLS
 
-#endif /* TERMINAL_UTIL_H */
+static inline bool
+terminal_str_empty0(char const* str) noexcept
+{
+  return !str || !*str;
+}
