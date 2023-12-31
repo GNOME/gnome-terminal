@@ -94,6 +94,24 @@ sanitize_modifier_mask (GdkModifierType mods)
                          ~GDK_LOCK_MASK);
 }
 
+static bool
+should_drop_shift(unsigned keyval_was,
+                  unsigned keyval_is)
+{
+  if (keyval_was == keyval_is) {
+    // Allow use of shift+arrow. See prompt#55
+    if (keyval_was == GDK_KEY_Left ||
+        keyval_was == GDK_KEY_Right ||
+        keyval_was == GDK_KEY_Up ||
+        keyval_was == GDK_KEY_Down)
+      return false;
+
+    return true;
+  }
+
+  return false;
+}
+
 static gboolean
 terminal_accel_dialog_key_pressed (GtkWidget             *widget,
                                    guint                  keyval,
@@ -156,8 +174,7 @@ terminal_accel_dialog_key_pressed (GtkWidget             *widget,
       self->keyval = gdk_keyval_to_lower (keyval);
       self->modifier = sanitize_modifier_mask (state);
 
-      if ((state & GDK_SHIFT_MASK) != 0 &&
-          self->keyval == keyval)
+      if ((state & GDK_SHIFT_MASK) != 0 && should_drop_shift (self->keyval, keyval))
         self->modifier = GdkModifierType(self->modifier & ~GDK_SHIFT_MASK);
 
       if ((state & GDK_LOCK_MASK) == 0 &&
