@@ -167,7 +167,7 @@ terminal_util_show_about (void)
     "Copyright © 2002–2004 Havoc Pennington\n"
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2019 Christian Persch\n"
+    "Copyright © 2007–2024 Christian Persch\n"
     "Copyright © 2013–2019 Egmont Koblinger\n"
     "Copyright © 2023 Christian Hergert";
   char *licence_text;
@@ -227,11 +227,13 @@ terminal_util_show_about (void)
 
   licence_text = terminal_util_get_licence_text ();
 
-  /* gnome 40 corresponds to g-t 3.40.x. After that, gnome version
+  /* gnome 46 corresponds to g-t 4.0.x. After that, gnome version
    * increases by 1 while the g-t minor version increases by 2 between
    * stable releases.
    */
-  auto const gnome_version = 40 + (TERMINAL_MINOR_VERSION - 40 + 1) / 2;
+  auto const gnome_version =
+    46 + ((TERMINAL_MAJOR_VERSION > 3) ? ((TERMINAL_MINOR_VERSION + 1) / 2) : 0);
+
   version = g_strdup_printf (_("Version %s for GNOME %d"),
                              VERSION,
                              gnome_version);
