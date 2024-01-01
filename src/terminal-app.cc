@@ -489,39 +489,6 @@ compare_profile_label_cb (gconstpointer ap,
 }
 
 static void
-menu_append_numbered (GMenu *menu,
-                      const char *label,
-                      int num,
-                      const char *action_name,
-                      GVariant *target /* floating, consumed */)
-{
-  gs_free_gstring GString *str;
-  gs_unref_object GMenuItem *item;
-  const char *p;
-
-  /* Who'd use more that 4 underscores in a profile name... */
-  str = g_string_sized_new (strlen (label) + 4 + 1 + 8);
-
-  if (num < 10)
-    g_string_append_printf (str, "_%Id. ", num);
-  else if (num < 36)
-    g_string_append_printf (str, "_%c. ",  (char)('A' + num - 10));
-
-  /* Append the label with underscores elided */
-  for (p = label; *p; p++) {
-    if (*p == '_')
-      g_string_append (str, "__");
-    else
-      g_string_append_c (str, *p);
-  }
-
-  item = g_menu_item_new (str->str, nullptr);
-  g_menu_item_set_action_and_target_value (item, action_name, target);
-  g_menu_item_set_attribute(item, "accel", "s", "");
-  g_menu_append_item (menu, item);
-}
-
-static void
 fill_header_new_terminal_menu (GMenuModel *menu,
                                ProfileData *data,
                                guint n_profiles)
@@ -534,9 +501,9 @@ fill_header_new_terminal_menu (GMenuModel *menu,
   section = g_menu_new ();
 
   for (guint i = 0; i < n_profiles; i++) {
-    menu_append_numbered (section, data[i].label, i + 1,
-                          "win.new-terminal",
-                          g_variant_new ("(ss)", "default", data[i].uuid));
+    terminal_util_menu_append_numbered (section, data[i].label, i + 1,
+                                        "win.new-terminal",
+                                        g_variant_new ("(ss)", "default", data[i].uuid));
   }
 
   g_menu_append_section (G_MENU (menu), _("New Terminal"), G_MENU_MODEL (section));
@@ -552,9 +519,9 @@ set_profile_submenu_new (ProfileData *data,
 
   GMenu *menu = g_menu_new ();
   for (guint i = 0; i < n_profiles; i++) {
-    menu_append_numbered (menu, data[i].label, i + 1,
-                          "win.profile",
-                          g_variant_new_string (data[i].uuid));
+    terminal_util_menu_append_numbered (menu, data[i].label, i + 1,
+                                        "win.profile",
+                                        g_variant_new_string (data[i].uuid));
   }
 
   return menu;

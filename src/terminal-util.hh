@@ -116,6 +116,12 @@ gboolean terminal_util_make_default_terminal(void);
 
 void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
 
+void terminal_util_menu_append_numbered (GMenu *menu,
+                                         const char *label,
+                                         int num,
+                                         const char *action_name,
+                                         GVariant *target /* consumed if floating */);
+
 void terminal_util_set_settings_and_key_for_widget(GtkWidget* widget,
                                                    GSettings* settings,
                                                    char const* key);
