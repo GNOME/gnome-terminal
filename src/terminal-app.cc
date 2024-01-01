@@ -521,35 +521,6 @@ menu_append_numbered (GMenu *menu,
   g_menu_append_item (menu, item);
 }
 
-#if 0
-static void
-append_new_terminal_item (GMenu *section,
-                          const char *label,
-                          const char *target,
-                          ProfileData *data,
-                          guint n_profiles)
-{
-  gs_unref_object GMenuItem *item = g_menu_item_new (label, nullptr);
-
-  if (n_profiles > 1) {
-    gs_unref_object GMenu *submenu = g_menu_new ();
-
-    for (guint i = 0; i < n_profiles; i++) {
-      menu_append_numbered (submenu, data[i].label, i + 1,
-                            "win.new-terminal",
-                            g_variant_new ("(ss)", target, data[i].uuid));
-    }
-
-    g_menu_item_set_link (item, G_MENU_LINK_SUBMENU, G_MENU_MODEL (submenu));
-  } else {
-    g_menu_item_set_action_and_target (item, "win.new-terminal",
-                                       "(ss)", target, "current");
-  }
-  g_menu_item_set_attribute(item, "accel", "s", "");
-  g_menu_append_item (section, item);
-}
-#endif
-
 static void
 fill_header_new_terminal_menu (GMenuModel *menu,
                                ProfileData *data,
