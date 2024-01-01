@@ -140,7 +140,7 @@ struct _TerminalApp
 #endif /* ENABLE_SEARCH_PROVIDER */
 
   GMenuModel *profilemenu;
-  GMenuModel *headermenu;
+  GMenuModel* headermenu;
   GMenu *headermenu_set_profile_section;
 
   GMenu *set_profile_menu;
@@ -448,8 +448,6 @@ terminal_app_check_default(TerminalApp* app)
 
 #ifdef TERMINAL_SERVER
 
-static void terminal_app_update_profile_menus (TerminalApp *app);
-
 typedef struct {
   char *uuid;
   char *label;
@@ -478,14 +476,6 @@ foreach_profile_cb (TerminalSettingsList *list,
   data.label = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
 
   g_array_append_val (user_data->array, data);
-
-  /* only connect if we haven't seen this profile before */
-  if (g_signal_handler_find (profile,
-			     GSignalMatchType(G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA),
-                             0, 0, nullptr,
-			     (void*)terminal_app_update_profile_menus, user_data->app) == 0)
-    g_signal_connect_swapped (profile, "changed::" TERMINAL_PROFILE_VISIBLE_NAME_KEY,
-                              G_CALLBACK (terminal_app_update_profile_menus), user_data->app);
 }
 
 static int
@@ -851,6 +841,8 @@ terminal_app_startup (GApplication *application)
 
   /* Keep dynamic menus updated */
   g_signal_connect_swapped (app->profiles_list, "children-changed",
+                            G_CALLBACK (terminal_app_update_profile_menus), app);
+  g_signal_connect_swapped (app->profiles_list, "child-changed::" TERMINAL_PROFILE_VISIBLE_NAME_KEY,
                             G_CALLBACK (terminal_app_update_profile_menus), app);
 
 #endif /* TERMINAL_SERVER */
