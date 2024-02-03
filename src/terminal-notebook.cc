@@ -502,6 +502,10 @@ terminal_notebook_grab_focus (GtkWidget *widget)
   TerminalScreen *screen;
 
   screen = terminal_notebook_get_active_screen (TERMINAL_NOTEBOOK (widget));
+
+  if (screen == nullptr)
+    return FALSE;
+
   return gtk_widget_grab_focus (GTK_WIDGET (screen));
 }
 
