@@ -1013,8 +1013,8 @@ terminal_util_number_info (const char *str)
 
   errno = 0;
   char* end;
-  gint64 num = g_ascii_strtoull(str, &end, hex ? 16 : 10);
-  if (errno || str == end || num == -1)
+  guint64 num = g_ascii_strtoull(str, &end, hex ? 16 : 10);
+  if (errno || str == end)
     return nullptr;
 
   /* No use in dec-hex conversion for so small numbers */
@@ -1027,18 +1027,18 @@ terminal_util_number_info (const char *str)
   if (thousep[0] != '\0') {
     /* If thousep is nonempty, use printf's magic which can handle
        more complex separating logics, e.g. 2+2+2+3 for some locales */
-    decstr = g_strdup_printf("%'" G_GINT64_FORMAT, num);
+    decstr = g_strdup_printf("%'" G_GUINT64_FORMAT, num);
   } else {
     /* If, however, thousep is empty, override it with a space so that we
        do always group the digits (that's the whole point of this feature;
        the choice of space guarantees not conflicting with the decimal separator) */
-    gs_free char *tmp = g_strdup_printf("%" G_GINT64_FORMAT, num);
+    gs_free char *tmp = g_strdup_printf("%" G_GUINT64_FORMAT, num);
     thousep = " ";
     decstr = add_separators(tmp, thousep, 3);
   }
 
   /* Group the hex digits by 4 using the same nonempty separator */
-  hextmp = g_strdup_printf("%" G_GINT64_MODIFIER "x", (guint64)(num));
+  hextmp = g_strdup_printf("%" G_GINT64_MODIFIER "x", num);
   hexstr = add_separators(hextmp, thousep, 4);
 
   /* Find out the human-readable magnitude, e.g. 15.99 Mi */
