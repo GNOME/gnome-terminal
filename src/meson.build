@@ -229,9 +229,13 @@ if get_option('search_provider')
     'terminal-search-provider.hh',
   )
 
+  search_provider_dbus_interface = files(
+    'org.gnome.ShellSearchProvider2.xml',
+  )
+
   server_sources += gnome.gdbus_codegen(
     'terminal-search-provider-gdbus-generated',
-    gt_prefix / gt_dbusinterfacedir / 'org.gnome.ShellSearchProvider2.xml',
+    search_provider_dbus_interface,
     autocleanup: 'none',
     install_header: false,
     interface_prefix: 'org.gnome.Shell',
