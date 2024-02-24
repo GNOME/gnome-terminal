@@ -566,6 +566,17 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
 }
 
 static void
+profile_scrollback_warning_update_cb (GSettings *profile,
+                                      const char *key,
+                                      GtkWidget *infobar)
+{
+  gboolean unlimited = g_settings_get_boolean (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY);
+  gint lines = g_settings_get_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES_KEY);
+
+  gtk_widget_set_visible (infobar, unlimited || lines >= 1000000);
+}
+
+static void
 custom_command_entry_changed_cb (GtkEntry *entry)
 {
   const char *command;
@@ -1472,6 +1483,16 @@ profile_prefs_load (const char *uuid, GSettings *profile)
                                         gtk_builder_get_object (builder, "palette-box"),
                                         "sensitive",
                                         FALSE);
+
+  /* Scrolling options */
+  w = (GtkWidget *) gtk_builder_get_object (builder, "scrollback-warning");
+  profile_scrollback_warning_update_cb (profile, nullptr, w);
+  profile_prefs_signal_connect (profile, "changed::" TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
+                                G_CALLBACK (profile_scrollback_warning_update_cb),
+                                w);
+  profile_prefs_signal_connect (profile, "changed::" TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
+                                G_CALLBACK (profile_scrollback_warning_update_cb),
+                                w);
 
   /* Compatibility options */
   w = (GtkWidget *) gtk_builder_get_object (builder, "encoding-combobox");
