@@ -142,7 +142,7 @@ static const TerminalColorScheme color_schemes[] = {
   },
   /* Translators: "GNOME" is the name of a colour scheme, "light" can be translated */
   { N_("GNOME light"),
-    COLOR (0x17, 0x14, 0x21), /* Palette entry 0 */
+    COLOR (0x1e, 0x1e, 0x1e), /* Palette entry 0 */
     COLOR (0xff, 0xff, 0xff)  /* Palette entry 15 */
   },
   /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
@@ -197,7 +197,7 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][PALETTE_SIZE
 {
   /* Based on GNOME 3.32 palette: https://developer.gnome.org/hig/stable/icon-design.html.en#palette */
   {
-    COLOR (0x1e, 0x1e, 0x1e),  /* Suggested background for contrast */
+    COLOR (0x1e, 0x1e, 0x1e),  /* Suggested background for contrast: libadwaita dark mode @view_bg_color */
     COLOR (0xc0, 0x1c, 0x28),  /* Red 4 */
     COLOR (0x26, 0xa2, 0x69),  /* Green 5 */
     COLOR (0xa2, 0x73, 0x4c),  /* Blend of Brown 2 and Brown 3 */
