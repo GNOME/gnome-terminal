@@ -147,7 +147,7 @@ static const TerminalColorScheme color_schemes[] = {
   },
   /* Translators: "GNOME" is the name of a colour scheme, "dark" can be translated */
   { N_("GNOME dark"),
-    COLOR (0xff, 0xff, 0xff), /* Palette entry 7 */
+    COLOR (0xd0, 0xcf, 0xcc), /* Palette entry 7 */
     COLOR (0x1e, 0x1e, 0x1e)  /* Palette entry 0 */
   },
   /* Translators: "Tango" is the name of a colour scheme, "light" can be translated */
@@ -204,7 +204,7 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][PALETTE_SIZE
     COLOR (0x12, 0x48, 0x8b),  /* Blend of Blue 5 and Dark 4 */
     COLOR (0xa3, 0x47, 0xba),  /* Purple 3 */
     COLOR (0x2a, 0xa1, 0xb3),  /* Linear addition Blue 5 + Green 5, darkened slightly */
-    COLOR (0xff, 0xff, 0xff),  /* Light 1 */
+    COLOR (0xd0, 0xcf, 0xcc),  /* Blend of Light 3 and Light 4 */
     COLOR (0x5e, 0x5c, 0x64),  /* Dark 2 */
     COLOR (0xf6, 0x61, 0x51),  /* Red 1 */
     COLOR (0x33, 0xd1, 0x7a),  /* Green 3 */
@@ -212,7 +212,7 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][PALETTE_SIZE
     COLOR (0x2a, 0x7b, 0xde),  /* Blend of Blue 3 and Blue 4 */
     COLOR (0xc0, 0x61, 0xcb),  /* Purple 2 */
     COLOR (0x33, 0xc7, 0xde),  /* Linear addition Blue 4 + Green 4, darkened slightly */
-    COLOR (0xd0, 0xcf, 0xcc)   /* Blend of Light 3 and Light 4 */
+    COLOR (0xff, 0xff, 0xff)   /* Light 1 */
   },
 
   /* Tango palette */
