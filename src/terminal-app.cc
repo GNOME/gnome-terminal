@@ -40,14 +40,14 @@
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
 
+#include <handy.h>
+
 #ifdef TERMINAL_SERVER
 #include "terminal-gdbus.hh"
 #include "terminal-prefs-process.hh"
 #include "terminal-screen-container.hh"
 #include "terminal-screen.hh"
 #include "terminal-window.hh"
-
-#include <handy.h>
 #endif
 
 #ifdef TERMINAL_PREFERENCES
@@ -150,9 +150,9 @@ struct _TerminalApp
 
   GWeakRef prefs_process_ref;
 
-  HdyStyleManager* style_manager;
-
 #endif /* TERMINAL_SERVER */
+
+  HdyStyleManager* style_manager;
 
   gboolean ask_default;
   gboolean xte_is_default;
@@ -385,8 +385,6 @@ terminal_app_remove_profile (TerminalApp *app,
   terminal_settings_list_remove_child (app->profiles_list, uuid);
 }
 
-#ifdef TERMINAL_SERVER
-
 static void
 terminal_app_theme_variant_changed_cb (GSettings   *settings,
                                        const char  *key,
@@ -419,8 +417,6 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
                    nullptr);
   }
 }
-
-#endif /* TERMINAL_SERVER */
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
@@ -1037,6 +1033,8 @@ terminal_app_constructed(GObject *object)
    */
   app->unified_menu = g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_UNIFIED_MENU_KEY);
 
+#endif /* TERMINAL_SERVER */
+
   app->style_manager = hdy_style_manager_get_default();
 
   auto const gtk_settings = gtk_settings_get_default ();
@@ -1051,6 +1049,8 @@ terminal_app_constructed(GObject *object)
                    "notify::system-supports-color-schemes",
                    G_CALLBACK(terminal_app_theme_variant_changed_cb),
                    gtk_settings);
+
+#ifdef TERMINAL_SERVER
 
   /* Clipboard targets */
   GdkDisplay *display = gdk_display_get_default ();
