@@ -1085,13 +1085,13 @@ terminal_util_timestamp_info (const char *str)
     return nullptr;
 
   /* Java uses Unix time in milliseconds. */
-  if (num >= 1000000000000 && num <= 1999999999999)
+  if (num >= 1000000000000 && num <= 9999999999999)
     num /= 1000;
 
   /* Fun: use inclusive interval so you can right-click on these numbers
-   * and check the human-readable time in gnome-terminal.
-   * (They're Sep 9 2001 and May 18 2033 by the way.) */
-  if (num < 1000000000 || num > 1999999999)
+   * right here and check the human-readable time in gnome-terminal.
+   * (They're Sep 9 2001 and Nov 20 2286 by the way.) */
+  if (num < 1000000000 || num > 9999999999)
     return nullptr;
 
   gs_unref_date_time GDateTime* date = g_date_time_new_from_unix_local (num);
