@@ -1065,6 +1065,15 @@ terminal_options_parse (int *argcp,
     return nullptr;
   }
 
+  // Error out if there are any arguments left after parsing
+  if (*argcp > 1) {
+    g_set_error (error,
+                 G_OPTION_ERROR,
+                 G_OPTION_ERROR_BAD_VALUE,
+                 _("Too many arguments"));
+    return nullptr;
+  }
+
 #ifdef GDK_WINDOWING_X11
   /* Do this here so that gdk_display is initialized */
   if (options->startup_id == nullptr) {
