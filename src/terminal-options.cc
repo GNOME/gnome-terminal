@@ -430,6 +430,15 @@ option_command_callback (const gchar *option_name,
 
   deprecated_command_option_warning (option_name);
 
+  // Already have argv e.g. via '--' ?
+  if (options->exec_argv) {
+    g_set_error (error,
+                 G_OPTION_ERROR,
+                 G_OPTION_ERROR_BAD_VALUE,
+                 _("Cannot specify more than one command to run"));
+    return FALSE;
+  }
+
   if (!g_shell_parse_argv (value, nullptr, &exec_argv, &err))
     {
       g_set_error(error,
