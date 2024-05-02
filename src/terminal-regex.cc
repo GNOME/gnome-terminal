@@ -241,6 +241,7 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "Trailing ellipsis http://foo/bar.html...",    "http://foo/bar.html");
   assert_match (REGEX_URL_AS_IS, "Trailing comma http://foo/bar,baz,",          "http://foo/bar,baz");
   assert_match (REGEX_URL_AS_IS, "Trailing semicolon http://foo/bar;baz;",      "http://foo/bar;baz");
+  assert_match (REGEX_URL_AS_IS, "Trailing colon http://foo/bar:baz:",          "http://foo/bar:baz");
   assert_match (REGEX_URL_AS_IS, "See <http://foo/bar>",                        "http://foo/bar");
   assert_match (REGEX_URL_AS_IS, "<http://foo.bar/asdf.qwer.html>",             "http://foo.bar/asdf.qwer.html");
   assert_match (REGEX_URL_AS_IS, "Go to http://192.168.1.1.",                   "http://192.168.1.1");
