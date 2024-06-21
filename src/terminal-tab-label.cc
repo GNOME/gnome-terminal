@@ -202,6 +202,7 @@ terminal_tab_label_constructed (GObject *object)
   gtk_box_set_spacing (GTK_BOX (hbox), SPACING);
 
   priv->image = gtk_image_new();
+  gtk_image_set_pixel_size(GTK_IMAGE(priv->image), 16);
   gtk_widget_set_no_show_all(priv->image, true);
   gtk_box_pack_start(GTK_BOX(hbox), priv->image, false, false, 0);
 
