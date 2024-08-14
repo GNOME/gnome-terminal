@@ -1928,6 +1928,69 @@ default_infobar_response_cb(GtkInfoBar* infobar,
   }
 }
 
+// Adwaita's tab bar closes tabs from middle-click, which
+// is undesirable. Since there is no API to inhibit this,
+// we need to install a capturing event handler to claim
+// the middle button click before AdwTabBox can see it.
+
+static void
+tab_bar_click_pressed_cb(GtkGesture* gesture,
+                         int n_press,
+                         double x,
+                         double y,
+                         void* user_data)
+{
+  if (gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gesture)) == GDK_BUTTON_MIDDLE) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+    return;
+  }
+}
+
+static void
+tab_bar_click_released_cb(GtkGesture* gesture,
+                          int n_press,
+                          double x,
+                          double y,
+                          void* user_data)
+{
+  if (gtk_gesture_single_get_current_button(GTK_GESTURE_SINGLE(gesture)) == GDK_BUTTON_MIDDLE) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+    return;
+  }
+}
+
+static void
+capture_middle_click(GtkWidget* widget)
+{
+  auto gesture = gtk_gesture_click_new();
+  gtk_gesture_single_set_button(GTK_GESTURE_SINGLE(gesture),
+                                GDK_BUTTON_MIDDLE);
+  gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(gesture),
+                                             GTK_PHASE_CAPTURE);
+  g_signal_connect(gesture, "pressed",
+                   G_CALLBACK(tab_bar_click_pressed_cb), nullptr);
+  g_signal_connect(gesture, "released",
+                   G_CALLBACK(tab_bar_click_released_cb), nullptr);
+
+  gtk_widget_add_controller(widget, GTK_EVENT_CONTROLLER(gesture)); // adopts gesture
+}
+
+static void
+recurse_capture_middle_click(GtkWidget *widget,
+                             GType type)
+{
+  if (g_type_is_a(G_OBJECT_TYPE(widget), type)) {
+    capture_middle_click(widget);
+    return;
+  }
+
+  for (auto child = gtk_widget_get_first_child(widget);
+       child != nullptr;
+       child = gtk_widget_get_next_sibling(child)) {
+    recurse_capture_middle_click(child, type);
+  }
+}
+
 /*****************************************/
 
 static void
@@ -2172,6 +2235,10 @@ terminal_window_init (TerminalWindow *window)
     _terminal_debug_attach_focus_listener(GTK_WIDGET(window));
   }
 #endif
+
+  // Intercept middle-click on the tab bar to prevent it from closing a tab.
+  recurse_capture_middle_click(GTK_WIDGET(window->tab_bar),
+                               g_type_from_name("AdwTabBox"));
 }
 
 static void
