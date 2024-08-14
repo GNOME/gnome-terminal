@@ -269,7 +269,8 @@ handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
       g_variant_builder_add (&builder, "{sv}", "id", g_variant_new_string (results[i]));
-      g_variant_builder_add (&builder, "{sv}", "name", g_variant_new_string (title));
+      if (title && title[0])
+        g_variant_builder_add (&builder, "{sv}", "name", g_variant_new_string (title));
       if (text != nullptr)
         {
           escaped_text = g_markup_escape_text (text, -1);
@@ -277,7 +278,7 @@ handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
         }
       g_variant_builder_close (&builder);
 
-      _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Meta for %s: %s\n", results[i], title);
+      _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Meta for %s: %s\n", results[i], title ?:"(null)");
     }
 
   terminal_search_provider2_complete_get_result_metas (skeleton, invocation, g_variant_builder_end (&builder));
