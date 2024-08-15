@@ -277,7 +277,7 @@ handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
         }
       g_variant_builder_close (&builder);
 
-      _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Meta for %s: %s\n", results[i], title ?:"(null)");
+      _terminal_debug_print (TERMINAL_DEBUG_SEARCH, "Meta for %s: %s\n", results[i], title ? title : "(null)");
     }
 
   terminal_search_provider2_complete_get_result_metas (skeleton, invocation, g_variant_builder_end (&builder));
