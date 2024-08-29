@@ -180,7 +180,7 @@ init_server (int argc,
     chdir ("/");
 #pragma GCC diagnostic pop
 
-  g_set_prgname ("gnome-terminal-server");
+  g_set_prgname (app_id ? app_id : TERMINAL_APPLICATION_ID);
   g_set_application_name (_("Terminal"));
 
   GError *error = nullptr;
