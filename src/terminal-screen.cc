@@ -2460,6 +2460,8 @@ terminal_screen_drop_target_drop (TerminalScreen     *screen,
   g_assert (GDK_IS_DROP (drop));
   g_assert (GTK_IS_DROP_TARGET_ASYNC (drop_target));
 
+  gtk_widget_hide (priv->drop_highlight);
+
   formats = gdk_drop_get_formats (drop);
 
   if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_FILE_LIST) ||
