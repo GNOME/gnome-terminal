@@ -134,6 +134,8 @@ gboolean terminal_screen_has_foreground_process (TerminalScreen *screen,
                                                  char           **process_name,
                                                  char           **cmdline);
 
+GIcon* terminal_screen_get_window_icon(TerminalScreen* screen);
+
 GIcon* terminal_screen_get_icon(TerminalScreen* screen);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */

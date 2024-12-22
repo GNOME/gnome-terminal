@@ -38,7 +38,7 @@ gt_dns_name = 'org.gnome.Terminal'
 # Compiler requirements
 
 c_req_std = 'gnu11'
-cxx_req_std               = 'gnu++14'
+cxx_req_std               = 'gnu++17'
 gxx_req_version           = '4.8.1'
 clangxx_req_version       = '3.3'
 
