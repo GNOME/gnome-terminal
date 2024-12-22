@@ -124,6 +124,9 @@ terminal_notebook_insert_tab(TerminalNotebook *notebook,
   g_object_bind_property(screen, "icon",
                          page, "icon",
                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon-progress",
+                         page, "indicator-icon",
+                         G_BINDING_SYNC_CREATE);
 }
 
 void
@@ -145,6 +148,9 @@ terminal_notebook_append_tab(TerminalNotebook *notebook,
                          G_BINDING_SYNC_CREATE);
   g_object_bind_property(screen, "icon",
                          page, "icon",
+                         G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon-progress",
+                         page, "indicator-icon",
                          G_BINDING_SYNC_CREATE);
 }
 

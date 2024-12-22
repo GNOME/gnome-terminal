@@ -136,6 +136,8 @@ gboolean terminal_screen_is_active (TerminalScreen *screen);
 
 GIcon* terminal_screen_get_icon(TerminalScreen* screen);
 
+GIcon* terminal_screen_get_icon_progress(TerminalScreen* screen);
+
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)
 #define TERMINAL_SCALE_XXXX_SMALL  (TERMINAL_SCALE_XXX_SMALL/1.2)
