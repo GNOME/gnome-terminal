@@ -139,7 +139,8 @@ struct _TerminalScreenPrivate
   GtkDropTargetAsync *drop_target;
   GtkWidget *drop_highlight;
 
-  GIcon* icon;
+  GIcon* icon_color;
+  GIcon* icon_image;
 };
 
 enum
@@ -152,11 +153,13 @@ enum
 };
 
 enum {
-  PROP_0,
-  PROP_PROFILE,
+  PROP_PROFILE = 1,
   PROP_ICON,
   PROP_TITLE,
+  N_PROPS
 };
+
+static GParamSpec* pspecs[N_PROPS];
 
 static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
@@ -452,6 +455,68 @@ terminal_screen_enable_menu_bar_accel_notify_cb (GSettings *settings,
                                  g_settings_get_boolean (settings, key));
 }
 
+static void
+terminal_screen_icon_color_changed_cb(TerminalScreen* screen,
+                                      char const* prop,
+                                      VteTerminal* terminal)
+{
+  auto const priv = screen->priv;
+
+  g_clear_object(&priv->icon_color);
+
+  auto color = GdkRGBA{};
+  if (vte_terminal_get_termprop_rgba_by_id(terminal,
+                                           VTE_PROPERTY_ID_ICON_COLOR,
+                                           &color)) {
+    // There appears to be no way to look up an icon size like gtk3's
+    // gtk_icon_size_lookup, so just use a value that should work ok
+    // at scales 1 and 2.
+    auto const w = 32, h = 32;
+
+    auto surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+    auto cr = cairo_create(surface);
+    cairo_set_source_rgb(cr, color.red, color.green, color.blue);
+    cairo_new_sub_path(cr);
+    cairo_arc(cr, w / 2, h / 2, w / 2 - 1, 0, G_PI * 2);
+    cairo_close_path(cr);
+    cairo_fill(cr);
+
+    gs_unref_bytes auto bytes =
+      g_bytes_new_with_free_func(cairo_image_surface_get_data(surface),
+                                 size_t(cairo_image_surface_get_height(surface)) *
+                                 size_t(cairo_image_surface_get_stride(surface)),
+                                 GDestroyNotify(cairo_surface_destroy),
+                                 cairo_surface_reference(surface));
+
+    priv->icon_color =
+      G_ICON(gdk_memory_texture_new(cairo_image_surface_get_width(surface),
+                                    cairo_image_surface_get_height(surface),
+                                    GDK_MEMORY_DEFAULT,
+                                    bytes,
+                                    cairo_image_surface_get_stride(surface)));
+
+    cairo_destroy(cr);
+    cairo_surface_destroy(surface);
+  }
+
+  g_object_notify_by_pspec(G_OBJECT(terminal), pspecs[PROP_ICON]);
+}
+
+static void
+terminal_screen_icon_image_changed_cb(TerminalScreen* screen,
+                                      char const* prop,
+                                      VteTerminal* terminal)
+{
+  auto const priv = screen->priv;
+
+  g_clear_object(&priv->icon_image);
+  priv->icon_image =
+    G_ICON(vte_terminal_ref_termprop_image_texture_by_id(terminal,
+                                                         VTE_PROPERTY_ID_ICON_IMAGE));
+
+  g_object_notify_by_pspec(G_OBJECT(terminal), pspecs[PROP_ICON]);
+}
+
 static TerminalWindow *
 terminal_screen_get_window (TerminalScreen *screen)
 {
@@ -677,6 +742,11 @@ terminal_screen_init (TerminalScreen *screen)
                     G_CALLBACK (terminal_screen_window_title_changed),
                     screen);
 
+  g_signal_connect(screen, "termprop-changed::" VTE_TERMPROP_ICON_COLOR,
+                   G_CALLBACK(terminal_screen_icon_color_changed_cb), screen);
+  g_signal_connect(screen, "termprop-changed::" VTE_TERMPROP_ICON_IMAGE,
+                   G_CALLBACK(terminal_screen_icon_image_changed_cb), screen);
+
   app = terminal_app_get ();
   g_signal_connect (terminal_app_get_desktop_interface_settings (app), "changed::" MONOSPACE_FONT_KEY_NAME,
                     G_CALLBACK (terminal_screen_system_font_changed_cb), screen);
@@ -697,7 +767,7 @@ terminal_screen_get_property (GObject *object,
         g_value_set_object (value, terminal_screen_get_profile (screen));
         break;
       case PROP_ICON:
-        g_value_set_object(value, screen->priv->icon);
+        g_value_set_object(value, terminal_screen_get_icon(screen));
         break;
       case PROP_TITLE:
         g_value_set_string (value, terminal_screen_get_title (screen));
@@ -793,33 +863,29 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_TYPE_NONE,
                   0);
 
-  g_object_class_install_property
-    (object_class,
-     PROP_PROFILE,
+  pspecs[PROP_PROFILE] =
      g_param_spec_object ("profile", nullptr, nullptr,
                           G_TYPE_SETTINGS,
                           GParamFlags(G_PARAM_READWRITE |
 				      G_PARAM_STATIC_NAME |
 				      G_PARAM_STATIC_NICK |
-				      G_PARAM_STATIC_BLURB)));
+				      G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property
-    (object_class,
-     PROP_ICON,
+  pspecs[PROP_ICON] =
      g_param_spec_object ("icon", nullptr, nullptr,
                           G_TYPE_ICON,
                           GParamFlags(G_PARAM_READABLE |
 				      G_PARAM_STATIC_STRINGS |
-                                      G_PARAM_EXPLICIT_NOTIFY)));
+                                      G_PARAM_EXPLICIT_NOTIFY));
 
-  g_object_class_install_property
-    (object_class,
-     PROP_TITLE,
+  pspecs[PROP_TITLE] =
      g_param_spec_string ("title", nullptr, nullptr,
                           nullptr,
                           GParamFlags(G_PARAM_READABLE |
 				      G_PARAM_STATIC_STRINGS |
-                                      G_PARAM_EXPLICIT_NOTIFY)));
+                                      G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_properties(object_class, N_PROPS, pspecs);
 
   gtk_widget_class_install_action (widget_class,
                                    "menu.popup",
@@ -898,7 +964,8 @@ terminal_screen_dispose (GObject *object)
 
   terminal_screen_clear_exec_data (screen, TRUE);
 
-  g_clear_object(&screen->priv->icon);
+  g_clear_object(&screen->priv->icon_color);
+  g_clear_object(&screen->priv->icon_image);
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 
@@ -1502,7 +1569,7 @@ terminal_screen_set_profile (TerminalScreen *screen,
   if (old_profile)
     g_object_unref (old_profile);
 
-  g_object_notify (G_OBJECT (screen), "profile");
+  g_object_notify_by_pspec (G_OBJECT (screen), pspecs[PROP_PROFILE]);
 }
 
 GSettings*
@@ -2084,7 +2151,7 @@ static void
 terminal_screen_window_title_changed (VteTerminal *vte_terminal,
                                       TerminalScreen *screen)
 {
-  g_object_notify (G_OBJECT (screen), "title");
+  g_object_notify_by_pspec (G_OBJECT (screen), pspecs[PROP_TITLE]);
 }
 
 static void
@@ -2819,5 +2886,10 @@ terminal_screen_get_icon(TerminalScreen* screen)
 {
   g_return_val_if_fail(TERMINAL_IS_SCREEN(screen), nullptr);
 
-  return screen->priv->icon;
+  if (screen->priv->icon_image)
+    return screen->priv->icon_image;
+  else if (screen->priv->icon_color)
+    return screen->priv->icon_color;
+  else
+    return nullptr;
 }
