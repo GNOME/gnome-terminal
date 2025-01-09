@@ -83,7 +83,7 @@ Also see https://wiki.gnome.org/Apps/Terminal/Debugging for more information.
 Debugging
 ---------
 
-After installing GNOME-TERMINAL with `-Ddebugg=true` flag, you can use `GNOME_TERMINAL_DEBUG` variable to control
+After installing GNOME-TERMINAL with `-Ddbg=true` flag, you can use `GNOME_TERMINAL_DEBUG` variable to control
 GNOME-TERMINAL to print out the debug information
 
 ```
