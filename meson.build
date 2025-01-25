@@ -46,6 +46,13 @@ clangxx_req_version       = '3.3'
 
 vte_req                      = 'vte-2.91-gtk4'
 vte_req_version              = '0.72.2'
+vte_default_options          = [
+  'docs=false',
+  'gir=false',
+  'gtk3=false',
+  'gtk4=true',
+  'vapi=false',
+]
 
 glib_req_version             = '2.76.0'
 glib_min_req_version         = '2.76'
@@ -369,7 +376,11 @@ add_project_arguments(global_cxxflags, language: 'cpp')
 
 # Dependencies
 
-vte_dep         = dependency(vte_req,        version: '>=' + vte_req_version)
+vte_dep = dependency(
+  vte_req,
+  version: '>=' + vte_req_version,
+  default_options: vte_default_options
+)
 
 gio_dep         = dependency('gio-2.0',      version: '>=' + glib_req_version)
 gio_unix_dep    = dependency('gio-unix-2.0', version: '>=' + glib_req_version)

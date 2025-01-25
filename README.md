@@ -1,19 +1,30 @@
-GNOME TErminal
+GNOME Terminal
 ==============
 
-Source & Releases
------------------
+CI status
+---------
+
+[![pipeline status](https://gitlab.gnome.org/GNOME/gnome-terminal/badges/master/pipeline.svg)](https://gitlab.gnome.org/GNOME/gnome-terminal/-/commits/master)
+
+[![coverage report](https://gitlab.gnome.org/GNOME/gnome-terminal/badges/master/coverage.svg)](https://gitlab.gnome.org/GNOME/gnome-terminal/-/commits/master)
+
+Releases
+--------
+
+[![Latest Release](https://gitlab.gnome.org/GNOME/gnome-terminal/-/badges/release.svg)](https://gitlab.gnome.org/GNOME/gnome-terminal/-/releases)
+
+Tarballs for newer releases are available from the
+[package registry](https://gitlab.gnome.org/GNOME/gnome-terminal/-/packages)
+and new and old release are also available on
+[download.gnome.org](https://download.gnome.org/sources/gnome-terminal/).
+
+Source code
+-----------
 
 To get the source code, use
 ```
 $ git clone https://gitlab.gnome.org/GNOME/gnome-terminal
 ```
-
-To get the source for a release version, use the corresponding git tag, or
-download a tarball at
-https://gitlab.gnome.org/GNOME/gnome-terminal/-/archive/TAG/gnome-terminal-TAG.tar.bz2
-replacing `TAG` with the desired tag's name (e.g. `3.40.0`). Older releases are also
-available at https://download.gnome.org/sources/gnome-terminal .
 
 Building from source
 --------------------
@@ -24,7 +35,7 @@ Start by installing the build dependencies, and a C++ compiler.
 
 For fedora and related distributions, use
 ```
-sudo dnf build-dep vte291 gnome-terminal
+sudo dnf build-dep vte291-gtk4 gnome-terminal
 sudo dnf install g++
 ```
 while for debian and related distributions, use
