@@ -27,7 +27,7 @@ project(
     'GFDL-1.3-only',                # the appstream data
   ],
   meson_version: '>= 0.62.0',
-  version: '3.51.0',
+  version: '3.55.0',
 )
 
 # Naming
@@ -46,6 +46,14 @@ clangxx_req_version       = '3.3'
 
 vte_req                      = 'vte-2.91'
 vte_req_version              = '0.79.0'
+vte_default_options          = [
+  'docs=false',
+  'gir=false',
+  'glade=false',
+  'gtk3=true',
+  'gtk4=false',
+  'vapi=false',
+]
 
 glib_req_version             = '2.52.0'
 glib_min_req_version         = '2.52'
@@ -358,7 +366,11 @@ add_project_arguments(global_cxxflags, language: 'cpp')
 
 # Dependencies
 
-vte_dep       = dependency(vte_req,        version: '>=' + vte_req_version)
+vte_dep = dependency(
+  vte_req,
+  version: '>=' + vte_req_version,
+  default_options: vte_default_options
+)
 
 gio_dep       = dependency('gio-2.0',      version: '>=' + glib_req_version)
 gio_unix_dep  = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
