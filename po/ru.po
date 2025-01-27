@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal trunk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues/\n"
-"POT-Creation-Date: 2024-10-03 19:49+0000\n"
-"PO-Revision-Date: 2024-10-04 11:29+1000\n"
+"POT-Creation-Date: 2025-01-27 01:56+0000\n"
+"PO-Revision-Date: 2025-01-27 21:05+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -41,9 +41,10 @@ msgid "Use the command line"
 msgstr "Использовать командную строку"
 
 #: data/org.gnome.Terminal.desktop.in:5
-#: data/org.gnome.Terminal.Preferences.desktop.in:8
-msgid "shell;prompt;command;commandline;cmd;"
-msgstr "оболочка;строка;команда;командная строка;cmd;"
+msgid "shell;prompt;command;commandline;cmd;ptyxis;terminal;cli;console;"
+msgstr ""
+"shell;prompt;command;commandline;cmd;ptyxis;terminal;cli;console;оболочка;"
+"терминал;команда;командная строка;"
 
 #: data/org.gnome.Terminal.desktop.in:18 src/terminal-accels.cc:127
 msgid "New Window"
@@ -56,6 +57,10 @@ msgstr "Параметры"
 #: data/org.gnome.Terminal.Preferences.desktop.in:4
 msgid "Configure the command line"
 msgstr "Настроить командную строку"
+
+#: data/org.gnome.Terminal.Preferences.desktop.in:8
+msgid "shell;prompt;command;commandline;cmd;"
+msgstr "оболочка;строка;команда;командная строка;cmd;"
 
 #: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:146
 msgid "Terminal Preferences"
@@ -132,43 +137,31 @@ msgstr "UserDocs"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:60
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:43
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/home"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/home"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:61
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:44
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:62
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:45
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/FAQ"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/FAQ"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:63
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:46
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://help.gnome.org/users/gnome-terminal/stable/"
 msgstr "https://help.gnome.org/users/gnome-terminal/stable/"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:64
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:47
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://l10n.gnome.org/module/gnome-terminal/"
 msgstr "https://l10n.gnome.org/module/gnome-terminal/"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:65
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:48
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal"
 
@@ -1837,7 +1830,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Инспектор"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1562
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1795
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Параметры"
@@ -2345,33 +2338,33 @@ msgstr "Основное"
 msgid "Shortcuts"
 msgstr "Комбинации клавиш"
 
-#: src/terminal-screen.cc:1425
+#: src/terminal-screen.cc:1658
 msgid "No command supplied nor shell requested"
 msgstr "Не задана команда или оболочка"
 
-#: src/terminal-screen.cc:1563 src/terminal-screen.cc:1910
+#: src/terminal-screen.cc:1796 src/terminal-screen.cc:2143
 msgid "_Relaunch"
 msgstr "Пере_запустить"
 
-#: src/terminal-screen.cc:1566
+#: src/terminal-screen.cc:1799
 msgid "There was an error creating the child process for this terminal"
 msgstr "Произошла ошибка при создании дочернего процесса для этого терминала"
 
-#: src/terminal-screen.cc:1914
+#: src/terminal-screen.cc:2147
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Дочерний процесс корректно завершился с кодом %d."
 
-#: src/terminal-screen.cc:1917
+#: src/terminal-screen.cc:2150
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Работа дочернего процесса прервана по сигналу %d."
 
-#: src/terminal-screen.cc:1920
+#: src/terminal-screen.cc:2153
 msgid "The child process was aborted."
 msgstr "Работа дочернего процесса прервана."
 
-#: src/terminal-tab-label.cc:222
+#: src/terminal-tab-label.cc:223
 msgid "Close tab"
 msgstr "Закрыть вкладку"
 
