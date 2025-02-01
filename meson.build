@@ -27,7 +27,7 @@ project(
     'GFDL-1.3-only',                # the appstream data
   ],
   meson_version: '>= 0.62.0',
-  version: '3.55.0',
+  version: '3.55.90',
 )
 
 # Naming
@@ -45,7 +45,7 @@ clangxx_req_version       = '3.3'
 # Requirements
 
 vte_req                      = 'vte-2.91'
-vte_req_version              = '0.79.0'
+vte_req_version              = '0.79.90'
 vte_default_options          = [
   'docs=false',
   'gir=false',
