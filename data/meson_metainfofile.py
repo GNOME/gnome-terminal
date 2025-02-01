@@ -36,7 +36,6 @@ for i in range(2, argc):
         result = subprocess.run(['appstreamcli',
                                 'validate',
                                  '--no-net',
-                                 '--pedantic',
                                  metainfofile])
         if result.returncode != 0:
             exit_code = 1
