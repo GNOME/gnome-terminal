@@ -34,6 +34,11 @@ debug_sources = files(
   'terminal-debug.hh',
 )
 
+default_sources = files(
+  'terminal-default.cc',
+  'terminal-default.hh',
+)
+
 dbus_sources = gnome.gdbus_codegen(
   'terminal-gdbus-generated',
   gt_dns_name + '.xml',
@@ -153,7 +158,7 @@ server_resources_sources = gnome.compile_resources(
   install: false,
 )
 
-server_sources = app_sources + client_util_sources + debug_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
+server_sources = app_sources + client_util_sources + debug_sources + default_sources + dbus_sources + egg_sources + i18n_sources + marshal_sources + misc_sources + profiles_sources + regex_sources + server_resources_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'server.cc',
   'terminal-enums.hh',
   'terminal-find-bar.cc',
@@ -288,7 +293,7 @@ prefs_resources_sources = gnome.compile_resources(
   install: false,
 )
 
-prefs_main_sources = app_sources + client_util_sources + debug_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
+prefs_main_sources = app_sources + client_util_sources + debug_sources + default_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'prefs-main.cc',
   'terminal-accel-dialog.cc',
   'terminal-accel-dialog.hh',
@@ -480,3 +485,20 @@ foreach test: test_units
     env: test_env,
   )
 endforeach
+
+# Non-unit tests
+
+test_default_sources = debug_sources + default_sources + misc_sources
+
+test_default = executable(
+  'test-default',
+  cpp_args: common_cxxflags + [
+    '-DTERMINAL_DEFAULT_MAIN',
+  ],
+  dependencies: [
+    glib_dep,
+  ],
+  include_directories: [top_inc, src_inc,],
+  sources: test_default_sources,
+  install: false,
+)

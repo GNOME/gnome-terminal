@@ -110,10 +110,6 @@ gboolean terminal_util_check_envv(char const* const* strv);
 
 char** terminal_util_get_desktops(void);
 
-gboolean terminal_util_is_default_terminal(void);
-
-gboolean terminal_util_make_default_terminal(void);
-
 void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
 
 void terminal_util_menu_append_numbered (GMenu *menu,
