@@ -7,14 +7,14 @@
 # Pedro Albuquerque <palbuquerque73o@gmail.com>, 2015.
 # Sérgio Cardeira <cardeira dot sergio at gmail dot com>, 2016.
 # Juliano de Souza Camargo <julianosc@protonmail.com>, 2020.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022, 2023, 2024.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022, 2023, 2024, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-terminal/issues/\n"
-"POT-Creation-Date: 2024-10-03 19:49+0000\n"
-"PO-Revision-Date: 2024-10-09 12:36+0100\n"
+"POT-Creation-Date: 2025-02-13 00:56+0000\n"
+"PO-Revision-Date: 2025-02-15 14:51+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Language: pt_PT\n"
 "X-Source-Language: C\n"
 
@@ -40,9 +40,8 @@ msgid "Use the command line"
 msgstr "Utilizar a linha de comandos"
 
 #: data/org.gnome.Terminal.desktop.in:5
-#: data/org.gnome.Terminal.Preferences.desktop.in:8
-msgid "shell;prompt;command;commandline;cmd;"
-msgstr "consola;linhacomandos;comando;terminal;cmd;"
+msgid "shell;prompt;command;commandline;cmd;ptyxis;terminal;cli;console;"
+msgstr "shell;consola;linhacomandos;comando;terminal;cmd;terminal;ptyxis;cli;"
 
 #: data/org.gnome.Terminal.desktop.in:18 src/terminal-accels.cc:127
 msgid "New Window"
@@ -55,6 +54,10 @@ msgstr "Preferências"
 #: data/org.gnome.Terminal.Preferences.desktop.in:4
 msgid "Configure the command line"
 msgstr "Configurar a linha de comandos"
+
+#: data/org.gnome.Terminal.Preferences.desktop.in:8
+msgid "shell;prompt;command;commandline;cmd;"
+msgstr "consola;linhacomandos;comando;terminal;cmd;"
 
 #: data/org.gnome.Terminal.Preferences.desktop.in:9 src/prefs-main.cc:146
 msgid "Terminal Preferences"
@@ -80,9 +83,9 @@ msgid ""
 "GNOME Terminal is a terminal emulator application for accessing a UNIX shell "
 "environment which can be used to run programs available on your system."
 msgstr ""
-"Terminal GNOME é uma aplicação emuladora de terminal para aceder ao ambiente "
-"de linha de comandos UNIX que pode ser utilizado para executar aplicações "
-"disponíveis no seu sistema."
+"O GNOME Terminal é uma aplicação emuladora de terminal para aceder ao "
+"ambiente de linha de comandos UNIX que pode ser utilizado para executar "
+"aplicações disponíveis no seu sistema."
 
 #: data/org.gnome.Terminal.metainfo.xml.in:41
 msgid ""
@@ -132,43 +135,31 @@ msgstr "DocumentosUtilizador"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:60
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:43
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/home"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/home"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:61
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:44
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:62
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:45
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/FAQ"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal/-/wikis/FAQ"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:63
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:46
-#| msgid ""
-#| "https://help.gnome.org/users/gnome-terminal/stable/figures/gnome-terminal."
-#| "png"
 msgid "https://help.gnome.org/users/gnome-terminal/stable/"
 msgstr "https://help.gnome.org/users/gnome-terminal/stable/"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:64
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:47
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://l10n.gnome.org/module/gnome-terminal/"
 msgstr "https://l10n.gnome.org/module/gnome-terminal/"
 
 #: data/org.gnome.Terminal.metainfo.xml.in:65
 #: data/org.gnome.Terminal.Nautilus.metainfo.xml.in:48
-#| msgid "https://wiki.gnome.org/Apps/Terminal"
 msgid "https://gitlab.gnome.org/GNOME/gnome-terminal"
 msgstr "https://gitlab.gnome.org/GNOME/gnome-terminal"
 
@@ -1834,7 +1825,7 @@ msgstr "_4. 132×43"
 msgid "_Inspector"
 msgstr "_Inspetor"
 
-#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1562
+#: src/terminal-headermenu.ui:106 src/terminal-screen.cc:1795
 #: src/terminal-window.cc:1797
 msgid "_Preferences"
 msgstr "_Preferências"
@@ -2343,33 +2334,33 @@ msgstr "Geral"
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: src/terminal-screen.cc:1425
+#: src/terminal-screen.cc:1658
 msgid "No command supplied nor shell requested"
 msgstr "Nenhum comando indicado nem terminal pedido"
 
-#: src/terminal-screen.cc:1563 src/terminal-screen.cc:1910
+#: src/terminal-screen.cc:1796 src/terminal-screen.cc:2143
 msgid "_Relaunch"
 msgstr "_Reiniciar"
 
-#: src/terminal-screen.cc:1566
+#: src/terminal-screen.cc:1799
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ocorreu um erro ao criar o processo filho para este terminal"
 
-#: src/terminal-screen.cc:1914
+#: src/terminal-screen.cc:2147
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "O processo filho terminou normalmente com o estado %d."
 
-#: src/terminal-screen.cc:1917
+#: src/terminal-screen.cc:2150
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "O processo filho foi abortado pelo sinal %d."
 
-#: src/terminal-screen.cc:1920
+#: src/terminal-screen.cc:2153
 msgid "The child process was aborted."
 msgstr "O processo filho foi abortado."
 
-#: src/terminal-tab-label.cc:222
+#: src/terminal-tab-label.cc:223
 msgid "Close tab"
 msgstr "Fechar separador"
 
