@@ -33,13 +33,22 @@
 #define TERMINAL_DESKTOP_FILENAME TERMINAL_APPLICATION_ID DOT_DESKTOP
 
 static char**
-get_desktops(void)
+get_desktops_lc(void)
 {
   auto const desktop = g_getenv("XDG_CURRENT_DESKTOP");
   if (!desktop)
     return nullptr;
 
-  return g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
+  auto strv = g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
+  if (!strv)
+    return nullptr;
+
+  for (auto p = strv; *p; ++p) {
+    gs_free auto str = *p;
+    *p = g_ascii_strdown(str, -1);
+  }
+
+  return strv;
 }
 
 static bool
@@ -287,7 +296,7 @@ xte_config_rewrite(char const* desktop_id)
   }
 
   // Install as default for all current desktops
-  gs_strfreev auto desktops = get_desktops();
+  gs_strfreev auto desktops = get_desktops_lc();
   if (desktops) {
     for (auto i = 0; desktops[i]; ++i) {
       gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
@@ -365,7 +374,7 @@ xte_config_get_default_for_path_and_desktops(char const* base_path,
 static char*
 xte_config_get_default(char const* native_name)
 {
-  gs_strfreev auto desktops = get_desktops();
+  gs_strfreev auto desktops = get_desktops_lc();
   auto const user_dir = g_get_user_config_dir();
   if (auto term = xte_config_get_default_for_path_and_desktops(user_dir, desktops, native_name))
     return term;
