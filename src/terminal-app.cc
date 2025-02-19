@@ -30,6 +30,7 @@
 
 #include "terminal-intl.hh"
 #include "terminal-debug.hh"
+#include "terminal-default.hh"
 #include "terminal-app.hh"
 #include "terminal-accels.hh"
 #include "terminal-client-utils.hh"
@@ -434,7 +435,7 @@ terminal_app_check_default(TerminalApp* app)
 
   // Check whether gnome-terminal is the default terminal
   // as per XDG-Terminal-Exec.
-  app->xte_is_default = terminal_util_is_default_terminal();
+  app->xte_is_default = terminal_is_default();
 
   gboolean ask = false;
   g_settings_get(app->global_settings, TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY, "b", &ask);
@@ -1703,7 +1704,7 @@ void
 terminal_app_make_default_terminal(TerminalApp* app)
 {
   g_return_if_fail(TERMINAL_IS_APP(app));
-  terminal_util_make_default_terminal();
-  app->xte_is_default = terminal_util_is_default_terminal();
+  terminal_make_default();
+  app->xte_is_default = terminal_is_default();
   g_object_notify(G_OBJECT(app), "is-default-terminal");
 }
