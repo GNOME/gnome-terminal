@@ -129,42 +129,96 @@ static bool
 xte_data_check(char const* name,
                bool full)
 {
-  gs_free auto user_path = g_build_filename(g_get_user_data_dir(),
-                                            XTE_CONFIG_DIRNAME,
-                                            name,
-                                            nullptr);
-  if (xte_data_check_one(user_path, full))
-    return true;
+  { // Legacy x-t-e spec
+    gs_free auto path = g_build_filename(g_get_user_data_dir(),
+                                         XTE_CONFIG_DIRNAME,
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  {
+    gs_free auto path = g_build_filename(g_get_user_data_dir(),
+                                         "applications",
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  {
+    gs_free auto path = g_build_filename(g_get_user_data_dir(),
+                                         "flatpak",
+                                         "exports",
+                                         "share",
+                                         "applications",
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  if (!g_str_equal(TERM_PREFIX, "/usr/local")) {
+    gs_free auto path = g_build_filename(TERM_PREFIX,
+                                         "local",
+                                         "share",
+                                         XTE_CONFIG_DIRNAME,
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
 
-  gs_free auto flatpak_user_path = g_build_filename(g_get_user_data_dir(),
-                                                    "flatpak",
-                                                    "exports",
-                                                    "share",
-                                                    "applications",
-                                                    name,
-                                                    nullptr);
-  if (xte_data_check_one(flatpak_user_path, full))
-    return true;
+    gs_free auto path2 = g_build_filename(TERM_PREFIX,
+                                          "local",
+                                          "share",
+                                          "applications",
+                                          name,
+                                         nullptr);
+    if (xte_data_check_one(path2, full))
+      return true;
+  }
+  {
+    gs_free auto path = g_build_filename(TERM_DATADIR,
+                                         XTE_CONFIG_DIRNAME,
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  {
+    gs_free auto path = g_build_filename(TERM_DATADIR,
+                                         "applications",
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  {
+    gs_free auto path = g_build_filename("/var",
+                                         "lib",
+                                         "flatpak",
+                                         "exports",
+                                         "share",
+                                         "applications",
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
+  }
+  if (!g_str_equal(TERM_PREFIX, "/usr")) {
+    gs_free auto path = g_build_filename("/usr", "share",
+                                         XTE_CONFIG_DIRNAME,
+                                         name,
+                                         nullptr);
+    if (xte_data_check_one(path, full))
+      return true;
 
-  gs_free auto local_path = g_build_filename(TERM_PREFIX, "local", "share",
-                                             XTE_CONFIG_DIRNAME,
-                                             name,
-                                             nullptr);
-  if (xte_data_check_one(local_path, full))
-    return true;
-
-  gs_free auto sys_path = g_build_filename(TERM_DATADIR,
-                                           XTE_CONFIG_DIRNAME,
-                                           name,
-                                           nullptr);
-  if (xte_data_check_one(sys_path, full))
-    return true;
-
-  gs_free auto flatpak_system_path = g_build_filename("/var/lib/flatpak/exports/share/applications",
-                                                      name,
-                                                      nullptr);
-  if (xte_data_check_one(flatpak_system_path, full))
-    return true;
+    gs_free auto path2 = g_build_filename("/usr",
+                                          "share",
+                                          "applications",
+                                          name,
+                                          nullptr);
+    if (xte_data_check_one(path2, full))
+      return true;
+  }
 
   return false;
 }
