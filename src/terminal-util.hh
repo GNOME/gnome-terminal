@@ -111,9 +111,37 @@ gboolean terminal_util_check_envv(char const* const* strv);
 
 char** terminal_util_get_desktops(void);
 
-gboolean terminal_util_is_default_terminal(void);
+void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
 
-gboolean terminal_util_make_default_terminal(void);
+void terminal_util_menu_append_numbered (GMenu *menu,
+                                         const char *label,
+                                         int num,
+                                         const char *action_name,
+                                         GVariant *target /* consumed if floating */);
+
+void terminal_util_set_settings_and_key_for_widget(GtkWidget* widget,
+                                                   GSettings* settings,
+                                                   char const* key);
+
+gboolean terminal_util_get_settings_and_key_for_widget(GtkWidget* widget,
+                                                       GSettings** settings,
+                                                       char const** key);
+
+void terminal_util_g_settings_bind(GSettings* settings,
+                                   char const* key,
+                                   void* object,
+                                   char const* property,
+                                   GSettingsBindFlags flags);
+
+void terminal_util_g_settings_bind_with_mapping(GSettings* settings,
+                                                char const* key,
+                                                void* object,
+                                                char const* property,
+                                                GSettingsBindFlags flags,
+                                                GSettingsBindGetMapping get_mapping,
+                                                GSettingsBindSetMapping set_mapping,
+                                                void* user_data,
+                                                GDestroyNotify destroy);
 
 G_END_DECLS
 
