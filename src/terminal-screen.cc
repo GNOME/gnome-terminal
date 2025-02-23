@@ -1943,6 +1943,9 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
 
   terminal_util_add_proxy_env (env_table);
 
+  // Force ncurses to not use the dec graphics charset
+  g_hash_table_replace (env_table, g_strdup("NCURSES_NO_UTF8_ACS"), g_strdup("1"));
+
   /* Add gnome-terminal private env vars used to communicate back to g-t-server */
   GDBusConnection *connection = g_application_get_dbus_connection (G_APPLICATION (app));
   g_hash_table_replace (env_table, g_strdup (TERMINAL_ENV_SERVICE_NAME),
