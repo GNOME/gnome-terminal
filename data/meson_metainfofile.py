@@ -37,6 +37,7 @@ for i in range(2, argc):
                                 'validate',
                                  '--no-net',
                                  '--pedantic',
+                                 '--explain',
                                  metainfofile])
         if result.returncode != 0:
             exit_code = 1
