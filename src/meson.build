@@ -362,7 +362,7 @@ prefs_main = executable(
 
 # Legacy client
 
-client_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + profiles_sources + settings_utils_sources + types_sources + files(
+client_sources = client_util_sources + debug_sources + dbus_sources + i18n_sources + marshal_sources + profiles_sources + settings_utils_sources + types_sources + files(
   'terminal-options.cc',
   'terminal-options.hh',
   'terminal.cc',
