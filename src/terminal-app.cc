@@ -27,6 +27,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+#include <gio/gdesktopappinfo.h>
 
 #include <adwaita.h>
 
@@ -79,6 +80,7 @@
 #include <time.h>
 
 #define GNOME_TERMINAL_PREFERENCES_ICON_NAME    "org.gnome.Terminal.Preferences"
+#define GNOME_TERMINAL_PREFERENCES_DESKTOP_NAME "org.gnome.Terminal.Preferences.desktop"
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
@@ -1325,12 +1327,18 @@ terminal_app_edit_preferences(TerminalApp* app,
   if (profile)
     uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
 
-  auto const display = gdk_display_get_default();
-  gs_unref_object auto context = gdk_display_get_app_launch_context(display);
+  gs_unref_object auto appinfo =
+    g_desktop_app_info_new(GNOME_TERMINAL_PREFERENCES_DESKTOP_NAME);
+  gs_free char* token = nullptr;
+  if (appinfo) {
+    auto const display = gdk_display_get_default();
+    gs_unref_object auto context = gdk_display_get_app_launch_context(display);
 
-  gs_free char* token =
-      G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id(G_APP_LAUNCH_CONTEXT(context),
-                                                                     nullptr, nullptr);
+    token = G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id
+      (G_APP_LAUNCH_CONTEXT(context),
+       G_APP_INFO(appinfo),
+       nullptr); // no files
+  }
   if (!token)
     token = terminal_client_get_fallback_startup_id();
 
