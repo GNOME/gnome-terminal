@@ -44,8 +44,8 @@ clangxx_req_version       = '3.3'
 
 # Requirements
 
-vte_req                      = 'vte-2.91'
-vte_req_version              = '0.79.0'
+vte_gtk3_req                 = 'vte-2.91'
+vte_gtk3_req_version         = '0.79.0'
 vte_default_options          = [
   'docs=false',
   'gir=false',
@@ -59,9 +59,9 @@ glib_req_version             = '2.52.0'
 glib_min_req_version         = '2.52'
 glib_max_allowed_version     = '2.68'
 
-gtk_req_version              = '3.22.27'
-gtk_min_req_version          = '3.18'
-gtk_max_allowed_version      = '3.24'
+gtk3_req_version             = '3.22.27'
+gtk3_min_req_version         = '3.18'
+gtk3_max_allowed_version     = '3.24'
 
 libhandy_req_version         = '1.6.0'
 libnautilus_ext_req_version  = '43'
@@ -217,15 +217,15 @@ glib_version_cxxflags = [
   '-DGLIB_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
 ]
 
-minver = gtk_min_req_version.split('.')
-maxver = gtk_max_allowed_version.split('.')
+minver = gtk3_min_req_version.split('.')
+maxver = gtk3_max_allowed_version.split('.')
 
-gtk_version_cxxflags = [
+gtk3_version_cxxflags = [
   '-DGDK_VERSION_MIN_REQUIRED=(G_ENCODE_VERSION(' + minver[0] + ',' + minver[1] + '))',
   '-DGDK_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
 ]
 
-version_cxxflags = glib_version_cxxflags + gtk_version_cxxflags
+version_cxxflags = glib_version_cxxflags + gtk3_version_cxxflags
 
 # Asserts must not be disabled
 
@@ -366,16 +366,16 @@ add_project_arguments(global_cxxflags, language: 'cpp')
 
 # Dependencies
 
-vte_dep = dependency(
-  vte_req,
-  version: '>=' + vte_req_version,
+vte_gtk3_dep = dependency(
+  vte_gtk3_req,
+  version: '>=' + vte_gtk3_req_version,
   default_options: vte_default_options
 )
 
 gio_dep       = dependency('gio-2.0',      version: '>=' + glib_req_version)
 gio_unix_dep  = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
 glib_dep      = dependency('glib-2.0',     version: '>=' + glib_req_version)
-gtk_dep       = dependency('gtk+-3.0',     version: '>=' + gtk_req_version)
+gtk3_dep      = dependency('gtk+-3.0',     version: '>=' + gtk3_req_version)
 libhandy_dep  = dependency('libhandy-1',   version: '>=' + libhandy_req_version)
 pcre2_dep     = dependency('libpcre2-8',   version: '>=' + pcre2_req_version)
 pthreads_dep  = dependency('threads')
@@ -389,7 +389,7 @@ else
   libnautilus_extension_dep = dependency('', required: false,)
 endif
 
-if gtk_dep.get_variable('targets').contains('x11')
+if gtk3_dep.get_variable('targets').contains('x11')
   x11_dep = dependency('x11')
 else
   x11_dep = dependency('', required: false)

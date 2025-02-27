@@ -262,14 +262,14 @@ server_deps = [
   gio_dep,
   gio_unix_dep,
   glib_dep,
-  gtk_dep,
+  gtk3_dep,
   libdl_dep,
   libhandy_dep,
   pcre2_dep,
   pthreads_dep,
   schemas_dep,
   uuid_dep,
-  vte_dep,
+  vte_gtk3_dep,
   x11_dep,
 ]
 
@@ -386,10 +386,10 @@ client_deps = [
   gio_dep,
   gio_unix_dep,
   glib_dep,
-  gtk_dep,
+  gtk3_dep,
   x11_dep,
   uuid_dep,
-  vte_dep,
+  vte_gtk3_dep,
 ]
 
 client = executable(
