@@ -40,6 +40,7 @@ _terminal_debug_init(void)
     { "search",        TERMINAL_DEBUG_SEARCH        },
     { "bridge",        TERMINAL_DEBUG_BRIDGE        },
     { "default",       TERMINAL_DEBUG_DEFAULT       },
+    { "focus",         TERMINAL_DEBUG_FOCUS         },
   };
 
   _terminal_debug_flags = TerminalDebugFlags(g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),
@@ -48,3 +49,44 @@ _terminal_debug_init(void)
 #endif /* ENABLE_DEBUG */
 }
 
+#ifdef ENABLE_DEBUG
+
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES)
+
+#include <gtk/gtk.h>
+#include "terminal-libgsystem.hh"
+
+#if GTK_CHECK_VERSION(4, 0, 0)
+
+static char*
+object_to_string(void* object)
+{
+  if (!object)
+    return g_strdup("(nil)");
+
+  return g_strdup_printf("%s(%p)", G_OBJECT_TYPE_NAME(object), object);
+}
+
+static void
+focus_notify_cb(GtkWindow* window,
+                GParamSpec* pspec,
+                void* user_data)
+{
+  gs_free auto window_str = object_to_string(window);
+  gs_free auto focus_str = object_to_string(gtk_window_get_focus(window));
+  g_printerr("Focus %s focus-widget %s\n", window_str, focus_str);
+}
+
+void
+_terminal_debug_attach_focus_listener(void* widget)
+{
+  g_return_if_fail(GTK_IS_WINDOW(widget));
+
+  g_signal_connect(widget, "notify::focus-widget", G_CALLBACK(focus_notify_cb), nullptr);
+}
+
+#endif // gtk4
+
+#endif // TERMINAL_SERVER || TERMINAL_PREFERENCES
+
+#endif // ENABLE_DEBUG
