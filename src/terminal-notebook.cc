@@ -476,8 +476,6 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkNotebookClass *notebook_class = GTK_NOTEBOOK_CLASS (klass);
 
-  g_type_class_add_private (gobject_class, sizeof (TerminalNotebookPrivate));
-
   gobject_class->constructed = terminal_notebook_constructed;
   gobject_class->get_property = terminal_notebook_get_property;
   gobject_class->set_property = terminal_notebook_set_property;

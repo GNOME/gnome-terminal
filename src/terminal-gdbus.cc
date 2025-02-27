@@ -319,8 +319,6 @@ terminal_receiver_impl_class_init (TerminalReceiverImplClass *klass)
 			   GParamFlags(G_PARAM_READWRITE |
 				       G_PARAM_CONSTRUCT_ONLY |
 				       G_PARAM_STATIC_STRINGS)));
-
-  g_type_class_add_private (gobject_class, sizeof (TerminalReceiverImplPrivate));
 }
 
 /* public API */
@@ -557,7 +555,6 @@ terminal_factory_impl_init (TerminalFactoryImpl *impl)
 static void
 terminal_factory_impl_class_init (TerminalFactoryImplClass *klass)
 {
-  /* g_type_class_add_private (klass, sizeof (TerminalFactoryImplPrivate)); */
 }
 
 /**

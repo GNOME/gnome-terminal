@@ -2374,8 +2374,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
   gtk_binding_entry_skip (binding_set, GDK_KEY_D, GdkModifierType(GDK_CONTROL_MASK|GDK_SHIFT_MASK));
   g_type_class_unref (window_klass);
 
-  g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/window.ui");
 
   gtk_widget_class_set_css_name(widget_class, TERMINAL_WINDOW_CSS_NAME);

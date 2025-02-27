@@ -222,8 +222,6 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
-
   gobject_class->constructed = terminal_screen_container_constructed;
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;

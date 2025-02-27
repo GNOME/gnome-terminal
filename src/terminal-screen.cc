@@ -911,8 +911,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_object_class_install_properties(object_class, N_PROPS, pspecs);
 
-  g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
-
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);

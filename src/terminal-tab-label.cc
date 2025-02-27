@@ -336,8 +336,6 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
 				      G_PARAM_STATIC_NICK |
 				      G_PARAM_STATIC_BLURB |
 				      G_PARAM_CONSTRUCT_ONLY)));
-
-  g_type_class_add_private (gobject_class, sizeof (TerminalTabLabelPrivate));
 }
 
 /* public API */

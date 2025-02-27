@@ -48,9 +48,6 @@ terminal_info_bar_init (TerminalInfoBar *bar)
 static void
 terminal_info_bar_class_init (TerminalInfoBarClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  g_type_class_add_private (gobject_class, sizeof (TerminalInfoBarPrivate));
 }
 
 /* public API */
