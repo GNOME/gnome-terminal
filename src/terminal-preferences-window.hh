@@ -1,5 +1,6 @@
 /*
- * Copyright © 2001 Havoc Pennington
+ * Copyright © 2013 Christian Persch
+ * Copyright © 2023 Christian Hergert
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,32 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_ACCELS_H
-#define TERMINAL_ACCELS_H
+#pragma once
 
-#include <gio/gio.h>
-#include <gtk/gtk.h>
-
-#ifdef TERMINAL_PREFERENCES
 #include <adwaita.h>
-#endif
 
 G_BEGIN_DECLS
 
-void terminal_accels_init (GApplication *application,
-                           GSettings *settings,
-                           gboolean use_headerbar);
+#define TERMINAL_TYPE_PREFERENCES_WINDOW (terminal_preferences_window_get_type())
 
-void terminal_accels_shutdown (void);
+G_DECLARE_FINAL_TYPE (TerminalPreferencesWindow, terminal_preferences_window, TERMINAL, PREFERENCES_WINDOW, AdwPreferencesWindow)
 
-#ifdef TERMINAL_PREFERENCES
-
-GSettings *terminal_accels_get_settings (void);
-
-void terminal_accels_populate_preferences (AdwPreferencesPage *page);
-
-#endif
+GtkWindow *terminal_preferences_window_new          (GtkApplication* application);
+void       terminal_preferences_window_edit_profile (TerminalPreferencesWindow *self,
+                                                     GSettings                 *settings);
 
 G_END_DECLS
-
-#endif /* TERMINAL_ACCELS_H */

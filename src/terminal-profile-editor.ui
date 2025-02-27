@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2023 Christian Hergert
+ 
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<interface>
+  <template class="TerminalProfileEditor" parent="AdwNavigationPage">
+    <property name="title" translatable="yes">Edit Profile</property>
+    <child>
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+          </object>
+        </child>
+        <property name="content">
+          <object class="AdwPreferencesPage" id="page">
+            <property name="title" translatable="yes">Profile</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="visible_name">
+                    <property name="title" translatable="yes">Name</property>
+                    <property name="show-apply-button">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Identifier</property>
+                    <child type="suffix">
+                      <object class="GtkLabel" id="uuid">
+                        <property name="selectable">false</property>
+                      </object>
+                    </child>
+		    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="valign">center</property>
+			<property name="action-name">uuid.copy</property>
+                        <property name="icon-name">edit-copy-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">Copy</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+		    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Font</property>
+                <child>
+                  <object class="AdwSwitchRow" id="use_system_font">
+                    <property name="title" translatable="yes">Use System Font</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow" id="custom_font">
+                    <property name="action-name">profile.select-custom-font</property>
+                    <property name="activatable">yes</property>
+                    <property name="title" translatable="yes">Custom Font</property>
+                    <child type="suffix">
+                      <object class="GtkBox">
+                        <property name="hexpand">true</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkLabel" id="custom_font_label">
+                            <property name="hexpand">true</property>
+                            <property name="xalign">1</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">go-next-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="allow_blinking_text">
+                    <property name="title" translatable="yes">Allow Blinking Text</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Always</property>
+                            <property name="value">'always'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Never</property>
+                            <property name="value">'never'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">When focused</property>
+                            <property name="value">'focused'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">When unfocused</property>
+                            <property name="value">'unfocused'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Colors</property>
+                <child>
+                  <object class="AdwSwitchRow" id="use_system_colors">
+                    <property name="title" translatable="yes">Use Colors from Palette</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="sensitive" bind-source="use_system_colors" bind-property="active" bind-flags="invert-boolean"/>
+                <child>
+                  <object class="AdwComboRow" id="color_schemes">
+                    <property name="sensitive" bind-source="use_system_colors" bind-property="active" bind-flags="invert-boolean"/>
+                    <property name="title" translatable="yes">Use Colors from Scheme</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwExpanderRow">
+                    <property name="title" translatable="yes">Override Default Color</property>
+                    <child>
+                      <object class="TerminalColorRow" id="default_color_text">
+                        <property name="title" translatable="yes">Text</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Text Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="default_color_background">
+                        <property name="title" translatable="yes">Background</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Background Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwExpanderRow">
+                    <property name="title" translatable="yes">Override Bold Color</property>
+                    <child type="suffix">
+                      <object class="GtkSwitch" id="bold_color_set">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="bold_color_text">
+                        <property name="title" translatable="yes">Text</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Bold Text Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwExpanderRow">
+                    <property name="title" translatable="yes">Override Cursor Color</property>
+                    <child type="suffix">
+                      <object class="GtkSwitch" id="cursor_colors_set">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="cursor_color_text">
+                        <property name="title" translatable="yes">Text</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Cursor Foreground Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="cursor_color_background">
+                        <property name="title" translatable="yes">Background</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Cursor Background Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwExpanderRow">
+                    <property name="title" translatable="yes">Override Highlight Color</property>
+                    <child type="suffix">
+                      <object class="GtkSwitch" id="highlight_colors_set">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="highlight_color_text">
+                        <property name="title" translatable="yes">Text</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Highlight Foreground Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="TerminalColorRow" id="highlight_color_background">
+                        <property name="title" translatable="yes">Background</property>
+			<child internal-child="button">
+			  <object class="GtkColorButton">
+                            <property name="title" translatable="yes">Choose Highlight Background Color</property>
+			  </object>
+			</child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Palette</property>
+                <child>
+                  <object class="AdwComboRow" id="color_palette">
+                    <property name="title" translatable="yes">Use Colors from Palette</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwPreferencesRow">
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="homogeneous">true</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="spacing">6</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkColorButton" id="palette_0">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 0</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_1">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 1</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_2">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 2</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_3">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 3</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_4">
+                            <property name="title">Choose Palette Color 4</property>
+                            <property name="show-editor">1</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_5">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 5</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_6">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 6</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_7">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 7</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesRow">
+                    <child>
+                      <object class="GtkBox">
+                        <property name="halign">center</property>
+                        <property name="homogeneous">true</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="margin-top">6</property>
+                        <property name="spacing">6</property>
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkColorButton" id="palette_8">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 8</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_9">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 9</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_10">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 10</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_11">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 11</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_12">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 12</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_13">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 13</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_14">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 14</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkColorButton" id="palette_15">
+                            <property name="show-editor">1</property>
+                            <property name="title">Choose Palette Color 15</property>
+                            <signal name="notify::rgba" handler="terminal_profile_editor_palette_index_changed" swapped="1"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="show_bold_in_bright">
+                    <property name="title" translatable="yes">Show Bold Text in Bright Colors</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Cursor</property>
+                <child>
+                  <object class="AdwComboRow" id="cursor_shape">
+                    <property name="title" translatable="yes">Shape</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Block</property>
+                            <property name="value">'block'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">I-Beam</property>
+                            <property name="value">'ibeam'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Underline</property>
+                            <property name="value">'underline'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="cursor_blink">
+                    <property name="title" translatable="yes">Blinking</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Default</property>
+                            <property name="value">'system'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Enabled</property>
+                            <property name="value">'on'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Disabled</property>
+                            <property name="value">'off'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Terminal Size</property>
+                <child>
+                  <object class="AdwSpinRow" id="columns">
+                    <property name="title" translatable="yes">Columns</property>
+                    <property name="numeric">1</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">16</property>
+                        <property name="upper">511</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="rows">
+                    <property name="title" translatable="yes">Rows</property>
+                    <property name="numeric">1</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">4</property>
+                        <property name="upper">511</property>
+                        <property name="step-increment">1</property>
+                        <property name="page-increment">10</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSpinRow" id="cell_width">
+                    <property name="title" translatable="yes">Cell Width Scale</property>
+                    <property name="subtitle" translatable="yes">Increases the width of character cells</property>
+                    <property name="numeric">1</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">2.0</property>
+                        <property name="step-increment">.01</property>
+                        <property name="page-increment">.1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="cell_height">
+                    <property name="title" translatable="yes">Cell Height Scale</property>
+                    <property name="subtitle" translatable="yes">Increase the height of character cells</property>
+                    <property name="numeric">1</property>
+                    <property name="digits">2</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">1.0</property>
+                        <property name="upper">2.0</property>
+                        <property name="step-increment">.01</property>
+                        <property name="page-increment">.1</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="action-name">size.reset</property>
+                    <property name="width-request">125</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Scrolling</property>
+                <child>
+                  <object class="AdwComboRow" id="show_scrollbar">
+                    <property name="title" translatable="yes">Show scrollbar</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Regular</property>
+                            <property name="value">'always'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Overlay</property>
+                            <property name="value">'overlay'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">None</property>
+                            <property name="value">'never'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="kinetic_scrolling">
+                    <property name="title" translatable="yes">Kinetic scrolling</property>
+                    <property name="subtitle" translatable="yes">When used on touchscreens</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="scroll_on_output">
+                    <property name="title" translatable="yes">Scroll on Output</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="scroll_on_keystroke">
+                    <property name="title" translatable="yes">Scroll on Keystroke</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSwitchRow" id="scroll_on_insert">
+                    <property name="title" translatable="yes">Scroll on Paste</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="limit_scrollback">
+                    <property name="title" translatable="yes">Limit Scrollback</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwSpinRow" id="scrollback_lines">
+                    <binding name="sensitive">
+                      <lookup name="active">limit_scrollback</lookup>
+                    </binding>
+                    <property name="title" translatable="yes">Scrollback Lines</property>
+                    <property name="numeric">1</property>
+                    <property name="adjustment">
+                      <object class="GtkAdjustment">
+                        <property name="lower">0</property>
+                        <property name="upper">2147483647</property>
+                        <property name="step-increment">10</property>
+                        <property name="page-increment">100</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup" id="image_group">
+                <property name="title" translatable="yes">Images</property>
+                <child>
+                  <object class="AdwSwitchRow" id="enable_sixel">
+                    <property name="title" translatable="yes">Enable SIXEL images</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Sound</property>
+                <child>
+                  <object class="AdwSwitchRow" id="audible_bell">
+                    <property name="title" translatable="yes">Terminal bell</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Command</property>
+                <child>
+                  <object class="AdwSwitchRow" id="login_shell">
+                    <property name="title" translatable="yes">Run command as a login shell</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwSwitchRow" id="use_custom_command">
+                    <property name="title" translatable="yes">Use Custom Command</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="custom_command">
+                    <property name="title" translatable="yes">Custom Command</property>
+                    <property name="show-apply-button">1</property>
+                    <binding name="sensitive">
+                      <lookup name="active">use_custom_command</lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="preserve_working_directory">
+                    <property name="title" translatable="yes">Preserve Working Directory</property>
+                    <property name="subtitle" translatable="yes">Preserve the working directory when opening a new terminal</property>
+                    <property name="model">preserve_directory_options</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="when_command_exits">
+                    <property name="title" translatable="yes">When command exits</property>
+                    <property name="model">exit_actions</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Compatibility</property>
+                <child>
+                  <object class="AdwComboRow" id="backspace_key">
+                    <property name="title" translatable="yes">Backspace Key</property>
+                    <property name="subtitle" translatable="yes">Sequence to send for Backspace key</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">erase_bindings</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="delete_key">
+                    <property name="title" translatable="yes">Delete Key</property>
+                    <property name="subtitle" translatable="yes">Sequence to send for Delete key</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">erase_bindings</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="encoding">
+                    <property name="title" translatable="yes">Encoding</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwComboRow" id="ambiguous_width">
+                    <property name="title" translatable="yes">Ambiguous-width Characters</property>
+                    <property name="expression">
+                      <lookup name="title" type="TerminalPreferencesListItem"/>
+                    </property>
+                    <property name="model">
+                      <object class="GListStore">
+                        <property name="item-type">TerminalPreferencesListItem</property>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Narrow</property>
+                            <property name="value">'narrow'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="TerminalPreferencesListItem">
+                            <property name="title" translatable="yes">Wide</property>
+                            <property name="value">'wide'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="action-name">compatibility.reset</property>
+                    <property name="width-request">125</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+  <object class="GListStore" id="erase_bindings">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Automatic</property>
+        <property name="value">'auto'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Control-H</property>
+        <property name="value">'ascii-backspace'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">ASCII DEL</property>
+        <property name="value">'ascii-delete'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">Escape Sequence</property>
+        <property name="value">'delete-sequence'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes">TTY Erase</property>
+        <property name="value">'tty'</property>
+      </object>
+    </child>
+  </object>
+  <object class="GListStore" id="preserve_directory_options">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="Preserve working directory">Never</property>
+        <property name="value">'never'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="Preserve working directory">Shell only</property>
+        <property name="value">'safe'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="Preserve working directory">Always</property>
+        <property name="value">'always'</property>
+      </object>
+    </child>
+  </object>
+  <object class="GListStore" id="exit_actions">
+    <property name="item-type">TerminalPreferencesListItem</property>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="When command exits">Close terminal</property>
+        <property name="value">'close'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="When command exits">Restart command</property>
+        <property name="value">'restart'</property>
+      </object>
+    </child>
+    <child>
+      <object class="TerminalPreferencesListItem">
+        <property name="title" translatable="yes" comments="When command exits">Hold terminal</property>
+        <property name="value">'hold'</property>
+      </object>
+    </child>
+  </object>
+</interface>

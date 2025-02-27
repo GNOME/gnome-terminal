@@ -49,6 +49,8 @@
 #include "terminal-version.hh"
 #include "terminal-libgsystem.hh"
 
+#ifdef TERMINAL_SERVER
+
 /**
  * terminal_util_show_error_dialog:
  * @transient_parent: parent of the future dialog window;
@@ -759,6 +761,8 @@ terminal_util_get_is_shell (const char *command)
   return FALSE;
 }
 
+#endif // TERMINAL_SERVER
+
 static gboolean
 s_to_rgba (GVariant *variant,
            gpointer *result,
@@ -893,6 +897,8 @@ terminal_g_settings_set_rgba_palette (GSettings      *settings,
   g_settings_set (settings, key, "^as", strv);
 }
 
+#ifdef TERMINAL_SERVER
+
 static void
 mnemonic_label_set_sensitive_cb (GtkWidget *widget,
                                  GParamSpec *pspec,
@@ -936,6 +942,45 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
                            (GtkCallback) (GCallback) terminal_util_bind_mnemonic_label_sensitivity,
                            nullptr);
 }
+
+#endif // TERMINAL_SERVER
+
+#ifdef TERMINAL_PREFERENCES
+
+/*
+ * terminal_util_remove_widget_shortcuts:
+ *
+ * There appears to be no direct way to remove or skip a shortcut added
+ * with gtk_widget_add_shortcut() or gtk_widget_class_add_binding(), so
+ * we need to do it this complicated way.
+ */
+void
+terminal_util_remove_widget_shortcuts(GtkWidget* widget)
+{
+  g_return_if_fail(GTK_IS_WIDGET(widget));
+
+  gs_unref_object auto controllers = gtk_widget_observe_controllers(widget);
+  auto const n_controllers = g_list_model_get_n_items(controllers);
+  for (auto i = 0u; i < n_controllers; ++i) {
+    gs_unref_object auto controller = reinterpret_cast<GtkEventController*>
+      (g_list_model_get_item(controllers, i));
+    if (!controller)
+      continue;
+
+    if (!GTK_IS_SHORTCUT_CONTROLLER(controller))
+      continue;
+
+    auto const name = gtk_event_controller_get_name(controller);
+    if (!name || !g_str_equal(name, "gtk-widget-class-shortcuts"))
+      continue;
+
+    gtk_widget_remove_controller(widget, controller);
+  }
+}
+
+#endif // TERMINAL_PREFERENCES
+
+#ifdef TERMINAL_SERVER
 
 /*
  * "1234567", "'", 3 -> "1'234'567"
@@ -1445,6 +1490,8 @@ terminal_util_translate_encoding (const char *encoding)
   return replacement;
 }
 
+#endif // TERMINAL_SERVER
+
 /* BEGIN code copied from glib
  *
  * Copyright (C) 1995-1998  Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -1585,6 +1632,8 @@ terminal_util_get_desktops(void)
   return g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
 }
 
+#ifdef TERMINAL_SERVER
+
 void
 terminal_util_menu_append_numbered (GMenu *menu,
                                     const char *label,
@@ -1617,6 +1666,8 @@ terminal_util_menu_append_numbered (GMenu *menu,
   g_menu_item_set_attribute(item, "accel", "s", "");
   g_menu_append_item (menu, item);
 }
+
+#endif // TERMINAL_SERVER
 
 #define SETTINGS_ID "Terminal::Settings"
 #define KEY_ID "Terminal::Key"

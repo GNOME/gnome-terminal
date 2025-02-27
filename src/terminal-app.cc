@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
@@ -41,7 +43,12 @@
 #include "terminal-defines.hh"
 #include "terminal-libgsystem.hh"
 
+#ifdef TERMINAL_SERVER
 #include <handy.h>
+#endif
+#ifdef TERMINAL_PREFERENCES
+#include <adwaita.h>
+#endif
 
 #ifdef TERMINAL_SERVER
 #include "terminal-gdbus.hh"
@@ -52,7 +59,7 @@
 #endif
 
 #ifdef TERMINAL_PREFERENCES
-#include "terminal-prefs.hh"
+#include "terminal-preferences-window.hh"
 #endif
 
 #ifndef TERMINAL_SERVER
@@ -70,7 +77,12 @@
 #include <time.h>
 
 #ifdef GDK_WINDOWING_X11
+#ifdef TERMINAL_SERVER
 #include <gdk/gdkx.h>
+#endif
+#ifdef TERMINAL_PREFERENCES
+#include <gdk/x11/gdkx.h>
+#endif
 #endif
 
 #define GNOME_TERMINAL_PREFERENCES_ICON_NAME    "org.gnome.Terminal.Preferences"
@@ -85,7 +97,12 @@
 
 #define GTK_SETTING_PREFER_DARK_THEME           "gtk-application-prefer-dark-theme"
 
+#ifdef TERMINAL_SERVER
 #define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.Settings.Debug"
+#endif
+#ifdef TERMINAL_PREFERENCES
+#define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.gtk4.Settings.Debug"
+#endif
 
 #ifdef DISUNIFY_NEW_TERMINAL_SECTION
 #error Use a gsettings override instead
@@ -107,15 +124,27 @@ enum {
  */
 
 struct _TerminalAppClass {
+#ifdef TERMINAL_SERVER
   GtkApplicationClass parent_class;
+#endif
+#ifdef TERMINAL_PREFERENCES
+  AdwApplicationClass parent_class;
+#endif
 
+#ifdef TERMINAL_SERVER
   void (* clipboard_targets_changed) (TerminalApp *app,
                                       GtkClipboard *clipboard);
+#endif
 };
 
 struct _TerminalApp
 {
+#ifdef TERMINAL_SERVER
   GtkApplication parent_instance;
+#endif
+#ifdef TERMINAL_PREFERENCES
+  AdwApplication parent_instance;
+#endif
 
   TerminalSettingsList *profiles_list;
 
@@ -153,7 +182,19 @@ struct _TerminalApp
 
 #endif /* TERMINAL_SERVER */
 
+#ifdef TERMINAL_PREFERENCES
+  GtkWindow* prefs_window;
+#endif
+
+#ifdef TERMINAL_SERVER
   HdyStyleManager* style_manager;
+#endif
+#ifdef TERMINAL_PREFERENCES
+  AdwStyleManager* style_manager;
+#endif
+
+  GIcon* default_icon;
+  GIcon* default_icon_symbolic;
 
   gboolean ask_default;
   gboolean xte_is_default;
@@ -167,7 +208,9 @@ enum
   LAST_SIGNAL
 };
 
+#ifdef TERMINAL_SERVER
 static guint signals[LAST_SIGNAL];
+#endif
 
 /* Debugging helper */
 
@@ -285,6 +328,23 @@ terminal_app_should_use_headerbar (TerminalApp *app)
   return strv_contains_gnome(desktops);
 }
 
+#ifdef TERMINAL_PREFERENCES
+static void
+parse_css_error_cb(GtkCssProvider* provider,
+                   void* section,
+                   GError* error,
+                   GError** ret_error) noexcept
+{
+  if (!error)
+    return;
+
+  if (error->domain == GTK_CSS_PARSER_WARNING)
+    g_printerr("Warning parsing CSS: %s", error->message);
+  else
+    *ret_error = g_error_copy(error);
+}
+#endif // TERMINAL_PREFERENCES
+
 static gboolean
 load_css_from_resource (GApplication *application,
                         GtkCssProvider *provider,
@@ -293,7 +353,6 @@ load_css_from_resource (GApplication *application,
   const char *base_path;
   gs_free char *uri;
   gs_unref_object GFile *file;
-  gs_free_error GError *error = nullptr;
 
   base_path = g_application_get_resource_base_path (application);
 
@@ -311,8 +370,19 @@ load_css_from_resource (GApplication *application,
   if (!g_file_query_exists (file, nullptr /* cancellable */))
     return FALSE;
 
+  gs_free_error GError *error = nullptr;
+#ifdef TERMINAL_SERVER
   if (!gtk_css_provider_load_from_file (provider, file, &error))
     g_assert_no_error (error);
+#endif // TERMINAL_SERVER
+#ifdef TERMINAL_PREFERENCES
+  auto const id = g_signal_connect(provider, "parsing-error",
+                                   G_CALLBACK(parse_css_error_cb), &error);
+
+  gtk_css_provider_load_from_file(provider, file);
+  g_signal_handler_disconnect(provider, id);
+  g_assert_no_error (error);
+#endif // TERMINAL_PREFERENCES
 
   return TRUE;
 }
@@ -327,9 +397,16 @@ add_css_provider (GApplication *application,
   if (!load_css_from_resource (application, provider, theme))
     return;
 
+#ifdef TERMINAL_SERVER
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#endif
+#ifdef TERMINAL_PREFERENCES
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#endif
 }
 
 static void
@@ -386,6 +463,8 @@ terminal_app_remove_profile (TerminalApp *app,
   terminal_settings_list_remove_child (app->profiles_list, uuid);
 }
 
+#ifdef TERMINAL_SERVER
+
 static void
 terminal_app_theme_variant_changed_cb (GSettings   *settings,
                                        const char  *key,
@@ -418,6 +497,45 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
                    nullptr);
   }
 }
+
+#endif
+
+#ifdef TERMINAL_PREFERENCES
+
+static void
+terminal_app_theme_variant_changed_cb (GSettings   *settings,
+                                       const char  *key,
+                                       GtkSettings *gtk_settings)
+{
+  auto const theme = TerminalThemeVariant(g_settings_get_enum(settings, key));
+
+  auto const app = terminal_app_get();
+  if (adw_style_manager_get_system_supports_color_schemes(app->style_manager)) {
+    switch (theme) {
+    case TERMINAL_THEME_VARIANT_SYSTEM:
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_PREFER_LIGHT);
+      break;
+    case TERMINAL_THEME_VARIANT_LIGHT:
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_FORCE_LIGHT);
+      break;
+    case TERMINAL_THEME_VARIANT_DARK:
+      adw_style_manager_set_color_scheme(app->style_manager,
+                                         ADW_COLOR_SCHEME_FORCE_DARK);
+    }
+  } else {
+    if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
+      gtk_settings_reset_property(gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
+    else
+      g_object_set(gtk_settings,
+                   GTK_SETTING_PREFER_DARK_THEME,
+                   theme == TERMINAL_THEME_VARIANT_DARK,
+                   nullptr);
+  }
+}
+
+#endif // TERMINAL_PREFERENCES
 
 /* Submenus for New Terminal per profile, and to change profiles */
 
@@ -769,20 +887,20 @@ struct PrefsLaunchData {
   GWeakRef app_ref;
   char* profile_uuid;
   char* hint;
-  unsigned timestamp;
+  char* activation_token;
 };
 
 static auto
 prefs_launch_data_new(TerminalApp* app,
                       char const* profile_uuid,
                       char const* hint,
-                      unsigned timestamp)
+                      char const* activation_token)
 {
   auto data = g_new(PrefsLaunchData, 1);
   g_weak_ref_init(&data->app_ref, app);
   data->profile_uuid = g_strdup(profile_uuid);
   data->hint = g_strdup(hint);
-  data->timestamp = timestamp;
+  data->activation_token = g_strdup(activation_token);
 
   return data;
 }
@@ -793,6 +911,7 @@ prefs_launch_data_free(PrefsLaunchData* data)
   g_weak_ref_clear(&data->app_ref);
   g_free(data->profile_uuid);
   g_free(data->hint);
+  g_free(data->activation_token);
   g_free(data);
 }
 
@@ -818,7 +937,7 @@ launch_prefs_cb(GObject* source,
     terminal_prefs_process_show(process,
                                 data->profile_uuid,
                                 data->hint,
-                                data->timestamp);
+                                data->activation_token);
   } else {
     _terminal_debug_print(TERMINAL_DEBUG_BRIDGE,
                           "Failed to launch preferences process: %s\n", error->message);
@@ -837,7 +956,7 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = (TerminalApp*)user_data;
 
-  terminal_app_edit_preferences (app, nullptr, nullptr, gtk_get_current_event_time());
+  terminal_app_edit_preferences (app, nullptr, nullptr);
 }
 
 static void
@@ -875,7 +994,12 @@ app_menu_quit_cb (GSimpleAction *action,
 
 /* Class implementation */
 
+#ifdef TERMINAL_SERVER
 G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
+#endif
+#ifdef TERMINAL_PREFERENCES
+G_DEFINE_TYPE (TerminalApp, terminal_app, ADW_TYPE_APPLICATION)
+#endif
 
 /* GApplicationClass impl */
 
@@ -898,7 +1022,10 @@ terminal_app_startup (GApplication *application)
 #if defined(TERMINAL_SERVER)
   gdk_set_program_class("Gnome-terminal");
 #elif defined(TERMINAL_PREFERENCES)
-  gdk_set_program_class("Gnome-terminal-preferences");
+  auto const display = gdk_display_get_default ();
+  if (GDK_IS_X11_DISPLAY (display)) {
+    gdk_x11_display_set_program_class (display, "Gnome-terminal-preferences");
+  }
 #else
 #error
 #endif
@@ -942,6 +1069,34 @@ terminal_app_startup (GApplication *application)
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
 
+static void
+terminal_app_shutdown (GApplication *application)
+{
+  G_APPLICATION_CLASS (terminal_app_parent_class)->shutdown (application);
+
+#ifdef TERMINAL_PREFERENCES
+  auto const app = TERMINAL_APP(application);
+
+  if (app->prefs_window)
+    gtk_window_destroy(app->prefs_window);
+#endif
+}
+
+#ifdef TERMINAL_PREFERENCES
+
+static void
+terminal_app_prefs_window_destroyed_cb(GtkWidget* window,
+                                       TerminalApp* app)
+{
+  g_signal_handlers_disconnect_by_func(window,
+                                       (void*)terminal_app_prefs_window_destroyed_cb,
+                                       app);
+
+  app->prefs_window = nullptr;
+}
+
+#endif /* TERMINAL_PREFERENCES */
+
 /* GObjectClass impl */
 
 static void
@@ -949,7 +1104,12 @@ terminal_app_init (TerminalApp* app)
 {
 #ifdef TERMINAL_SERVER
   hdy_init ();
+#endif
+#ifdef TERMINAL_PREFERENCES
+  adw_init();
+#endif
 
+#ifdef TERMINAL_SERVER
   g_weak_ref_init(&app->prefs_process_ref, nullptr);
 
   app->screen_map = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, nullptr);
@@ -1036,7 +1196,12 @@ terminal_app_constructed(GObject *object)
 
 #endif /* TERMINAL_SERVER */
 
+#ifdef TERMINAL_SERVER
   app->style_manager = hdy_style_manager_get_default();
+#endif
+#ifdef TERMINAL_PREFERENCES
+  app->style_manager = adw_style_manager_get_default();
+#endif
 
   auto const gtk_settings = gtk_settings_get_default ();
   terminal_app_theme_variant_changed_cb (app->global_settings,
@@ -1096,6 +1261,16 @@ terminal_app_finalize (GObject *object)
   g_hash_table_destroy (app->screen_map);
 #endif
 
+#ifdef TERMINAL_PREFERENCES
+  if (app->prefs_window) {
+    g_signal_handlers_disconnect_by_func(app->prefs_window,
+                                         (void*)terminal_app_prefs_window_destroyed_cb,
+                                         app);
+    gtk_window_destroy(app->prefs_window);
+    app->prefs_window = nullptr;
+  }
+#endif
+
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
   g_object_unref (app->system_proxy_settings);
@@ -1122,6 +1297,9 @@ terminal_app_finalize (GObject *object)
 
   g_weak_ref_clear(&app->prefs_process_ref);
 #endif /* TERMINAL_SERVER */
+
+  g_clear_object (&app->default_icon);
+  g_clear_object (&app->default_icon_symbolic);
 
   terminal_accels_shutdown ();
 
@@ -1286,11 +1464,13 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
+  g_application_class->shutdown = terminal_app_shutdown;
 #ifdef TERMINAL_SERVER
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
 #endif
 
+#ifdef TERMINAL_SERVER
   signals[CLIPBOARD_TARGETS_CHANGED] =
     g_signal_new (I_("clipboard-targets-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -1299,6 +1479,7 @@ terminal_app_class_init (TerminalAppClass *klass)
                   nullptr, nullptr,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, G_TYPE_OBJECT);
+#endif
 }
 
 /* Public API */
@@ -1439,35 +1620,93 @@ terminal_app_get_clipboard_targets (TerminalApp *app,
   return app->clipboard_targets;
 }
 
-#endif /* TERMINAL_SERVER */
-
 void
 terminal_app_edit_preferences(TerminalApp* app,
                               GSettings* profile,
-                              char const* hint,
-                              unsigned timestamp)
+                              char const* hint)
 {
-#ifdef TERMINAL_SERVER
   gs_free char* uuid = nullptr;
   if (profile)
     uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+
+  auto const display = gdk_display_get_default();
+  gs_unref_object auto context = gdk_display_get_app_launch_context(display);
+
+  gs_free char* token =
+    G_APP_LAUNCH_CONTEXT_GET_CLASS(context)->get_startup_notify_id(G_APP_LAUNCH_CONTEXT(context),
+                                                                   nullptr, nullptr);
+  if (!token)
+    token = terminal_client_get_fallback_startup_id();
 
   gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
   if (process) {
     terminal_prefs_process_show(process,
                                 uuid,
                                 hint,
-                                timestamp);
+                                token);
   } else {
     terminal_prefs_process_new_async(nullptr, // cancellable,
                                      GAsyncReadyCallback(launch_prefs_cb),
-                                     prefs_launch_data_new(app, uuid, hint, timestamp));
+                                     prefs_launch_data_new(app, uuid, hint, token));
   }
-#endif /* TERMINAL_SERVER */
-#ifdef TERMINAL_PREFERENCES
-  terminal_prefs_show_preferences(profile, hint, timestamp);
-#endif
 }
+
+#endif /* TERMINAL_SERVER */
+
+#ifdef TERMINAL_PREFERENCES
+
+static bool
+timestamp_from_activation_token(char const* token,
+                                guint32* timestamp)
+{
+  if (!token)
+    return false;
+
+  if (auto needle = g_strrstr(token, "_TIME")) {
+    needle += strlen("_TIME");
+
+    char* end = nullptr;
+    errno = 0;
+    auto const v = g_ascii_strtoull(needle, &end, 0);
+    if (errno || end == needle ||
+        v > G_MAXUINT32)
+      return false;
+
+    *timestamp = guint32(v);
+    return true;
+  }
+
+  return false;
+}
+
+void
+terminal_app_edit_preferences(TerminalApp* app,
+                              GSettings* profile,
+                              char const* hint,
+                              char const* activation_token)
+{
+  if (!app->prefs_window) {
+    app->prefs_window = terminal_preferences_window_new(GTK_APPLICATION(app));
+    if (activation_token)
+      gtk_window_set_startup_id(app->prefs_window, activation_token);
+
+    g_signal_connect(app->prefs_window, "destroy",
+                     G_CALLBACK(terminal_app_prefs_window_destroyed_cb),
+                     app);
+  }
+
+  if (profile)
+    terminal_preferences_window_edit_profile(TERMINAL_PREFERENCES_WINDOW(app->prefs_window),
+                                             profile);
+
+  guint32 timestamp;
+  if (timestamp_from_activation_token(activation_token, &timestamp))
+    gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
+  else
+    gtk_window_present(GTK_WINDOW(app->prefs_window));
+}
+
+#endif /* TERMINAL_PREFERENCES */
 
 /**
  * terminal_app_get_profiles_list:
@@ -1707,4 +1946,26 @@ terminal_app_make_default_terminal(TerminalApp* app)
   terminal_make_default();
   app->xte_is_default = terminal_is_default();
   g_object_notify(G_OBJECT(app), "is-default-terminal");
+}
+
+GIcon*
+terminal_app_get_default_icon(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
+
+  if (!app->default_icon)
+    app->default_icon = g_themed_icon_new(GNOME_TERMINAL_ICON_NAME);
+
+  return app->default_icon;
+}
+
+GIcon*
+terminal_app_get_default_icon_symbolic(TerminalApp* app)
+{
+  g_return_val_if_fail(TERMINAL_IS_APP(app), nullptr);
+
+  if (!app->default_icon_symbolic)
+    app->default_icon_symbolic = g_themed_icon_new(GNOME_TERMINAL_ICON_SYMBOLIC_NAME);
+
+  return app->default_icon_symbolic;
 }

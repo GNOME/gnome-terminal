@@ -545,12 +545,13 @@ terminal_factory_impl_iface_init (TerminalFactoryIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalFactoryImpl, terminal_factory_impl, TERMINAL_TYPE_FACTORY_SKELETON,
+                         G_ADD_PRIVATE(TerminalFactoryImpl)
                          G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_FACTORY, terminal_factory_impl_iface_init))
 
 static void
 terminal_factory_impl_init (TerminalFactoryImpl *impl)
 {
-  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl, TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImplPrivate);
+  impl->priv = (TerminalFactoryImplPrivate*)terminal_factory_impl_get_instance_private (impl);
 }
 
 static void

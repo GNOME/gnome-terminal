@@ -35,11 +35,15 @@
 
 #include <gio/gio.h>
 
-#ifndef TERMINAL_NAUTILUS
+#if defined(TERMINAL_SERVER) || defined(TERMINAL_PREFERENCES) || defined(TERMINAL_CLIENT)
 #include <gdk/gdk.h>
-#if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
+#ifdef GDK_WINDOWING_X11
+#ifdef TERMINAL_PREFERENCES
+#include <gdk/x11/gdkx.h>
+#else
 #include <gdk/gdkx.h>
-#endif
+#endif // TERMINAL_PREFERENCES
+#endif // GDK_WINDOWING_X11
 #endif
 
 #ifdef ENABLE_DEBUG

@@ -16,14 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_UTIL_H
-#define TERMINAL_UTIL_H
+#pragma once
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
+#ifdef TERMINAL_SERVER
 void terminal_util_show_error_dialog (GtkWindow *transient_parent,
                                       GtkWidget **weap_ptr,
                                       GError *error,
@@ -71,6 +71,8 @@ char **terminal_util_get_etc_shells (void);
 
 gboolean terminal_util_get_is_shell (const char *command);
 
+#endif // TERMINAL_SERVER
+
 const GdkRGBA *terminal_g_settings_get_rgba (GSettings  *settings,
                                              const char *key,
                                              GdkRGBA    *rgba);
@@ -85,6 +87,8 @@ void terminal_g_settings_set_rgba_palette (GSettings      *settings,
                                            const char     *key,
                                            const GdkRGBA  *colors,
                                            gsize           n_colors);
+
+#ifdef TERMINAL_SERVER
 
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
@@ -104,20 +108,22 @@ void terminal_util_save_print_settings (GtkPrintSettings *settings,
 
 const char *terminal_util_translate_encoding (const char *encoding);
 
-char *terminal_util_find_program_in_path (const char *path,
-                                          const char *program);
-
-gboolean terminal_util_check_envv(char const* const* strv);
-
-char** terminal_util_get_desktops(void);
-
-void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
-
 void terminal_util_menu_append_numbered (GMenu *menu,
                                          const char *label,
                                          int num,
                                          const char *action_name,
                                          GVariant *target /* consumed if floating */);
+
+#endif // TERMINAL_SERVER
+
+gboolean terminal_util_check_envv(char const* const* strv);
+
+char *terminal_util_find_program_in_path (const char *path,
+                                          const char *program);
+
+char** terminal_util_get_desktops(void);
+
+void terminal_util_remove_widget_shortcuts(GtkWidget* widget);
 
 void terminal_util_set_settings_and_key_for_widget(GtkWidget* widget,
                                                    GSettings* settings,
@@ -143,6 +149,10 @@ void terminal_util_g_settings_bind_with_mapping(GSettings* settings,
                                                 void* user_data,
                                                 GDestroyNotify destroy);
 
-G_END_DECLS
+static inline bool
+terminal_str_empty0(char const* str) noexcept
+{
+  return !str || !*str;
+}
 
-#endif /* TERMINAL_UTIL_H */
+G_END_DECLS

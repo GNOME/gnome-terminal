@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002 Havoc Pennington
+ * Copyright 2023 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_PROFILE_EDITOR_H
-#define TERMINAL_PROFILE_EDITOR_H
+#pragma once
 
-#include <gio/gio.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
-void profile_prefs_init (void);
+#define TERMINAL_TYPE_SHORTCUT_EDITOR (terminal_shortcut_editor_get_type())
 
-void profile_prefs_destroy (void);
+G_DECLARE_FINAL_TYPE (TerminalShortcutEditor, terminal_shortcut_editor, TERMINAL, SHORTCUT_EDITOR, AdwNavigationPage)
 
-void profile_prefs_unload (void);
-
-void profile_prefs_load (const char *uuid,
-                         GSettings *profile);
+GtkWidget *terminal_shortcut_editor_new (void);
 
 G_END_DECLS
-
-#endif /* TERMINAL_PROFILE_EDITOR_H */

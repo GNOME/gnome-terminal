@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright © 2023 Christian Hergert
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<interface>
+  <template class="TerminalProfileRow" parent="AdwActionRow">
+    <property name="activatable">true</property>
+    <child type="suffix">
+      <object class="GtkLabel" id="default_label">
+        <property name="focus-on-click">0</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="1" comments="Default profile label">Default</property>
+        <property name="margin-end">6</property>
+        <property name="selectable">0</property>
+        <property name="single-line-mode">1</property>
+        <property name="xalign">1.0</property>
+        <property name="yalign">0.5</property>
+      </object>
+    </child>
+    <child type="suffix">
+      <object class="GtkMenuButton">
+        <style>
+          <class name="flat"/>
+        </style>
+        <property name="icon-name">view-more-symbolic</property>
+        <property name="valign">center</property>
+        <property name="menu-model">profile_menu</property>
+      </object>
+    </child>
+  </template>
+  <menu id="profile_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Edit</attribute>
+        <attribute name="action">profile.edit</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Clone</attribute>
+        <attribute name="action">profile.clone</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="action">profile.delete</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Set as default</attribute>
+        <attribute name="action">profile.set-as-default</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

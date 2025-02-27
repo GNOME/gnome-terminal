@@ -38,14 +38,14 @@
 
 static char* arg_profile_uuid = nullptr;
 static char* arg_hint = nullptr;
+static char* arg_activation_token = nullptr;
 static int arg_bus_fd = -1;
-static int arg_timestamp = -1;
 
 static const GOptionEntry options[] = {
   {"profile", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_profile_uuid, "Profile", "UUID"},
   {"hint", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_hint, "Hint", "HINT"},
   {"bus-fd", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &arg_bus_fd, "Bus FD", "FD"},
-  {"timestamp", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_INT, &arg_timestamp, "Timestamp", "VALUE"},
+  {"activation-token", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &arg_activation_token, "Activation token", "TOKEN"},
   {nullptr}
 };
 
@@ -82,10 +82,10 @@ preferences_cb(GSimpleAction* action,
   gs_free char* hint_str = nullptr;
   g_variant_lookup(parameter, "hint", "s", &hint_str);
 
-  guint32 ts = 0;
-  g_variant_lookup(parameter, "timestamp", "u", &ts);
+  gs_free char* token_str = nullptr;
+  g_variant_lookup(parameter, "activation-token", "s", &token_str);
 
-  terminal_app_edit_preferences(app, profile, hint_str, ts);
+  terminal_app_edit_preferences(app, profile, hint_str, token_str);
 }
 
 static void
@@ -142,12 +142,22 @@ main(int argc,
     chdir("/");
 #pragma GCC diagnostic pop
 
-  g_set_prgname(TERMINAL_PREFERENCES_APPLICATION_ID);
+  g_set_prgname("gnome-terminal-preferences");
   g_set_application_name(_("Terminal Preferences"));
 
-  gs_free_error GError *error = nullptr;
-  if (!gtk_init_with_args(&argc, &argv, nullptr, options, nullptr, &error)) {
-    g_printerr("Failed to parse arguments: %s\n", error->message);
+  gs_free_option_context auto context = g_option_context_new(nullptr);
+  g_option_context_set_translation_domain(context, GETTEXT_PACKAGE);
+  g_option_context_set_ignore_unknown_options(context, false);
+  g_option_context_add_main_entries(context, options, GETTEXT_PACKAGE);
+
+  gs_free_error GError* error = nullptr;
+  if (!g_option_context_parse(context, &argc, &argv, &error)) {
+    g_printerr ("Failed to parse arguments: %s\n", error ? error->message : "");
+    return _EXIT_FAILURE_ARGPARSE;
+  }
+
+  if (!gtk_init_check ()) {
+    g_printerr ("Failed to init GTK\n");
     return _EXIT_FAILURE_GTK_INIT;
   }
 
@@ -258,7 +268,7 @@ main(int argc,
     terminal_app_edit_preferences(TERMINAL_APP(app),
                                   profile,
                                   arg_hint,
-                                  unsigned(arg_timestamp));
+                                  arg_activation_token);
   }
 
   auto const r = g_application_run(app, 0, nullptr);

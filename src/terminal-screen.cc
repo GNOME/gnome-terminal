@@ -1773,8 +1773,7 @@ info_bar_response_cb (GtkWidget *info_bar,
     case RESPONSE_EDIT_PREFERENCES:
       terminal_app_edit_preferences (terminal_app_get (),
                                      terminal_screen_get_profile (screen),
-                                     "custom-command-entry",
-                                     gtk_get_current_event_time());
+                                     "custom-command-entry");
       break;
     default:
       gtk_widget_destroy (info_bar);
@@ -2367,7 +2366,10 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
   if (container == nullptr)
     return;
 
+  // OVERLAY not supported here on gtk3
   vpolicy = GtkPolicyType(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY));
+  if (vpolicy != GTK_POLICY_ALWAYS && vpolicy != GTK_POLICY_NEVER)
+    vpolicy = GTK_POLICY_NEVER;
 
   terminal_screen_container_set_policy (container, GTK_POLICY_NEVER, vpolicy);
 }

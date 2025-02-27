@@ -34,9 +34,15 @@
     <value nick='next' value='1'/>
   </enum>
 
+  <enum id='org.gnome.Terminal.RoundedCorners'>
+    <value nick='none' value='0' />
+    <value nick='top' value='1' />
+    <value nick='all' value='2' />
+  </enum>
+
    <enum id='org.gnome.Terminal.ScrollbarPolicy'>
     <value nick='always' value='0'/>
-    <!-- <value nick='automatic' value='1'/> -->
+    <value nick='overlay' value='1'/>
     <value nick='never' value='2'/>
   </enum>
 
@@ -135,7 +141,7 @@
       <description>Human-readable name of the profile.</description>
     </key>
     <key name="foreground-color" type="s">
-      <default>'#171421'</default>
+      <default>'#1e1e1e'</default>
       <summary>Default color of text in the terminal</summary>
       <description>Default color of text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as “red”).</description>
     </key>
@@ -239,6 +245,10 @@
       <default>'always'</default>
       <summary>When to show the scrollbar</summary>
     </key>
+    <key name="kinetic-scrolling" type="b">
+      <default>true</default>
+      <summary>Whether to enable kinetic scrolling</summary>
+    </key>
     <key name="scrollback-lines" type="i">
       <default>10000</default>
       <summary>Number of lines to keep in scrollback</summary>
@@ -305,15 +315,15 @@
       <description>Run this command in place of the shell, if use_custom_command is true.</description>
     </key>
     <key name="palette" type="as">
-      <default>['#171421',
+      <default>['#1e1e1e',
                 '#c01c28',
                 '#26a269',
                 '#a2734c',
                 '#12488b',
                 '#a347ba',
                 '#2aa1b3',
-                '#d0cfcc',
-                '#5e5c64',
+                '#cfcfcf',
+                '#5d5d5d',
                 '#f66151',
                 '#33d17a',
                 '#e9ad0c',
@@ -460,9 +470,21 @@
       <default>'&lt;Control&gt;&lt;Shift&gt;Page_Down'</default>
       <summary>Keyboard shortcut to move the current tab to the right</summary>
     </key>
+    <key name="move-tab-start" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to move the current tab to the start</summary>
+    </key>
+    <key name="move-tab-end" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to move the current tab to the end</summary>
+    </key>
     <key name="detach-tab" type="s">
       <default>'disabled'</default>
       <summary>Keyboard shortcut to detach current tab</summary>
+    </key>
+    <key name="show-tabs-overview" type="s">
+      <default>'disabled'</default>
+      <summary>Keyboard shortcut to show the tabs overview</summary>
     </key>
     <key name="switch-to-tab-1" type="s">
       <default>'&lt;Alt&gt;1'</default>
@@ -708,6 +730,11 @@
     <key name="new-tab-position" enum="org.gnome.Terminal.NewTabPosition">
       <default>'last'</default>
       <summary>Whether new tabs should open next to the current one or at the last position</summary>
+    </key>
+
+    <key name="rounded-corners" enum="org.gnome.Terminal.RoundedCorners">
+      <default>'top'</default>
+      <summary>Whether windows should have rounded corners</summary>
     </key>
 
     <!-- Default terminal -->

@@ -232,7 +232,13 @@ gtk3_version_cxxflags = [
   '-DGDK_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
 ]
 
-version_cxxflags = glib_version_cxxflags + gtk3_version_cxxflags
+minver = gtk4_min_req_version.split('.')
+maxver = gtk4_max_allowed_version.split('.')
+
+gtk4_version_cxxflags = [
+  '-DGDK_VERSION_MIN_REQUIRED=(G_ENCODE_VERSION(' + minver[0] + ',' + minver[1] + '))',
+  '-DGDK_VERSION_MAX_ALLOWED=(G_ENCODE_VERSION(' + maxver[0] + ',' + maxver[1] + '))',
+]
 
 # Asserts must not be disabled
 
@@ -390,14 +396,22 @@ vte_gtk3_dep = dependency(
   default_options: vte_default_options
 )
 
-gio_dep       = dependency('gio-2.0',      version: '>=' + glib_req_version)
-gio_unix_dep  = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
-glib_dep      = dependency('glib-2.0',     version: '>=' + glib_req_version)
-gtk3_dep      = dependency('gtk+-3.0',     version: '>=' + gtk3_req_version)
-libhandy_dep  = dependency('libhandy-1',   version: '>=' + libhandy_req_version)
-pcre2_dep     = dependency('libpcre2-8',   version: '>=' + pcre2_req_version)
-pthreads_dep  = dependency('threads')
-schemas_dep   = dependency('gsettings-desktop-schemas',
+vte_gtk4_dep = dependency(
+  vte_gtk4_req,
+  version: '>=' + vte_gtk4_req_version,
+  default_options: vte_default_options
+)
+
+gio_dep        = dependency('gio-2.0',      version: '>=' + glib_req_version)
+gio_unix_dep   = dependency('gio-unix-2.0', version: '>=' + glib_req_version)
+glib_dep       = dependency('glib-2.0',     version: '>=' + glib_req_version)
+gtk3_dep       = dependency('gtk+-3.0',     version: '>=' + gtk3_req_version)
+gtk4_dep       = dependency('gtk4',         version: '>=' + gtk4_req_version)
+libadwaita_dep = dependency('libadwaita-1', version: '>=' + libadwaita_req_version)
+libhandy_dep   = dependency('libhandy-1',   version: '>=' + libhandy_req_version)
+pcre2_dep      = dependency('libpcre2-8',   version: '>=' + pcre2_req_version)
+pthreads_dep   = dependency('threads')
+schemas_dep    = dependency('gsettings-desktop-schemas',
                                            version: '>=' + schemas_req_version)
 uuid_dep      = dependency('uuid')
 

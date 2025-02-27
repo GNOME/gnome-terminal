@@ -1,0 +1,68 @@
+/* Generic theme-independent CSS file */
+
+window.terminal-window scrolledwindow undershoot.top,
+window.terminal-window scrolledwindow undershoot.bottom,
+window.terminal-window scrolledwindow overshoot.top,
+window.terminal-window scrolledwindow overshoot.bottom
+{
+  background: none;
+}
+
+window.terminal-window.csd.no-rounded-corners
+{
+  border-radius: 0;
+}
+
+window.terminal-window.csd.top-rounded-corners
+{
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+window.terminal-window.csd.all-rounded-corners vte-terminal
+{
+    /* Use the same value as adwaita's window corner radius! */
+    padding-top: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 6px;
+}
+
+popover button.model
+{
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.disclosure-button
+{
+  padding-left: 4px;
+  padding-right: 4px;
+  min-width: 0;
+}
+
+vte-terminal revealer.size label
+{
+  background: @theme_bg_color;
+  padding: 3px 12px;
+  border-top-left-radius: 9px;
+  border-top: 1px solid alpha(@borders,.5);
+  border-left: 1px solid alpha(@borders,.5);
+}
+
+vte-terminal:drop(active) .drop-highlight
+{
+  box-shadow: 0 0 1px 1px @accent_bg_color;
+}
+
+findbar .close-button
+{
+  min-height: 0;
+  min-width: 0;
+  border-radius: 99px;
+}
+
+findbar .close-button image
+{
+  padding: 0;
+}

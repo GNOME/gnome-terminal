@@ -167,7 +167,7 @@ util_sources = files(
 
 # Flags
 
-common_cxxflags = release_cxxflags + version_cxxflags + [
+common_cxxflags = release_cxxflags + glib_version_cxxflags + [
   '-DTERMINAL_COMPILATION',
   '-DTERM_PREFIX="@0@"'.format(gt_prefix),
   '-DTERM_BINDIR="@0@"'.format(gt_prefix / gt_bindir),
@@ -177,6 +177,18 @@ common_cxxflags = release_cxxflags + version_cxxflags + [
   '-DTERM_PKGDATADIR="@0@"'.format(gt_prefix / gt_pkgdatadir),
   '-DTERM_PKGLIBDIR="@0@"'.format(gt_prefix / gt_pkglibdir),
   '-DVTE_DISABLE_DEPRECATION_WARNINGS',
+]
+
+common_deps = [
+  gio_dep,
+  gio_unix_dep,
+  glib_dep,
+  libdl_dep,
+  pcre2_dep,
+  pthreads_dep,
+  schemas_dep,
+  uuid_dep,
+  x11_dep,
 ]
 
 # Server
@@ -254,23 +266,14 @@ server_incs = [
   src_inc,
 ]
 
-server_cxxflags = common_cxxflags + [
+server_cxxflags = common_cxxflags + gtk3_version_cxxflags + [
   '-DTERMINAL_SERVER',
 ]
 
-server_deps = [
-  gio_dep,
-  gio_unix_dep,
-  glib_dep,
+server_deps = common_deps + [
   gtk3_dep,
-  libdl_dep,
   libhandy_dep,
-  pcre2_dep,
-  pthreads_dep,
-  schemas_dep,
-  uuid_dep,
   vte_gtk3_dep,
-  x11_dep,
 ]
 
 server = executable(
@@ -334,20 +337,37 @@ prefs_resources_sources = gnome.compile_resources(
 
 prefs_main_sources = app_sources + client_util_sources + debug_sources + default_sources + i18n_sources + marshal_sources + misc_sources + prefs_resources_sources + profiles_sources + settings_dbus_sources + settings_utils_sources + types_sources + util_sources + version_sources + files(
   'prefs-main.cc',
-  'profile-editor.cc',
-  'profile-editor.hh',
-  'terminal-prefs.cc',
-  'terminal-prefs.hh',
+  'terminal-accel-dialog.cc',
+  'terminal-accel-dialog.hh',
+  'terminal-accel-row.cc',
+  'terminal-accel-row.hh',
+  'terminal-color-row.cc',
+  'terminal-color-row.hh',
+  'terminal-preferences-list-item.cc',
+  'terminal-preferences-list-item.hh',
+  'terminal-preferences-window.cc',
+  'terminal-preferences-window.hh',
+  'terminal-profile-editor.cc',
+  'terminal-profile-editor.hh',
+  'terminal-profile-row.cc',
+  'terminal-profile-row.hh',
   'terminal-settings-bridge-backend.cc',
   'terminal-settings-bridge-backend.hh',
+  'terminal-shortcut-editor.cc',
+  'terminal-shortcut-editor.hh',
 )
 
-prefs_main_cxxflags = common_cxxflags + [
+prefs_main_cxxflags = common_cxxflags + gtk4_version_cxxflags + [
   '-DTERMINAL_PREFERENCES',
 ]
 
 prefs_main_incs = server_incs
-prefs_main_deps = server_deps
+
+prefs_main_deps = common_deps + [
+  gtk4_dep,
+  vte_gtk4_dep,
+  libadwaita_dep,
+]
 
 prefs_main = executable(
   gt_name + '-preferences',
@@ -447,6 +467,7 @@ if get_option('nautilus_extension')
   nautilus_cxxflags = glib_version_cxxflags + [
     '-DTERMINAL_NAUTILUS',
     '-DTERM_LOCALEDIR="@0@"'.format(gt_prefix / gt_localedir),
+    '-DGTK=4',
   ]
 
   nautilus_deps = [

@@ -21,12 +21,17 @@
 
 #include <gtk/gtk.h>
 
+#ifdef TERMINAL_SERVER
 #include "terminal-screen.hh"
+#endif
+
 #include "terminal-profiles-list.hh"
 
 G_BEGIN_DECLS
 
 #define GNOME_TERMINAL_ICON_NAME "org.gnome.Terminal"
+
+#define GNOME_TERMINAL_ICON_SYMBOLIC_NAME GNOME_TERMINAL_ICON_NAME "-symbolic"
 
 #define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal"
 
@@ -54,14 +59,21 @@ GApplication *terminal_app_new (const char *app_id,
 
 GDBusObjectManagerServer *terminal_app_get_object_manager (TerminalApp *app);
 
+#ifdef TERMINAL_SERVER
+
 GdkAtom *terminal_app_get_clipboard_targets (TerminalApp *app,
                                              GtkClipboard *clipboard,
                                              int *n_targets);
 
+#endif // TERMINAL_SERVER
+
 void terminal_app_edit_preferences (TerminalApp *app,
                                     GSettings   *profile,
-                                    const char  *widget_name,
-                                    unsigned timestamp);
+                                    const char  *widget_name
+#ifdef TERMINAL_PREFERENCES
+                                    , char const* activation_token
+#endif
+                                    );
 
 char *terminal_app_new_profile (TerminalApp *app,
                                 GSettings   *default_base_profile,
@@ -69,6 +81,8 @@ char *terminal_app_new_profile (TerminalApp *app,
 
 void terminal_app_remove_profile (TerminalApp *app,
                                   GSettings *profile);
+
+#ifdef TERMINAL_SERVER
 
 char *terminal_app_dup_screen_object_path (TerminalApp *app,
                                            TerminalScreen *screen);
@@ -84,6 +98,8 @@ void terminal_app_register_screen (TerminalApp *app,
 
 void terminal_app_unregister_screen (TerminalApp *app,
                                      TerminalScreen *screen);
+
+#endif // TERMINAL_SERVER
 
 TerminalSettingsList *terminal_app_get_profiles_list (TerminalApp *app);
 
@@ -136,6 +152,10 @@ gboolean terminal_app_get_ask_default_terminal(TerminalApp* app);
 void terminal_app_unset_ask_default_terminal(TerminalApp* app);
 
 void terminal_app_make_default_terminal(TerminalApp* app);
+
+GIcon* terminal_app_get_default_icon(TerminalApp* app);
+
+GIcon* terminal_app_get_default_icon_symbolic(TerminalApp* app);
 
 G_END_DECLS
 
