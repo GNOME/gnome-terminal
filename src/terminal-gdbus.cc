@@ -32,8 +32,6 @@
 
 /* ------------------------------------------------------------------------- */
 
-#define TERMINAL_RECEIVER_IMPL_GET_PRIVATE(impl)(G_TYPE_INSTANCE_GET_PRIVATE ((impl), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImplPrivate))
-
 struct _TerminalReceiverImplPrivate {
   TerminalScreen *screen; /* unowned! */
 };
@@ -249,12 +247,13 @@ terminal_receiver_impl_iface_init (TerminalReceiverIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalReceiverImpl, terminal_receiver_impl, TERMINAL_TYPE_RECEIVER_SKELETON,
+                         G_ADD_PRIVATE(TerminalReceiverImpl)
                          G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_RECEIVER, terminal_receiver_impl_iface_init))
 
 static void
 terminal_receiver_impl_init (TerminalReceiverImpl *impl)
 {
-  impl->priv = TERMINAL_RECEIVER_IMPL_GET_PRIVATE (impl);
+  impl->priv = (TerminalReceiverImplPrivate*)terminal_receiver_impl_get_instance_private (impl);
 }
 
 static void

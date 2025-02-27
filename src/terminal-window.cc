@@ -172,7 +172,8 @@ static void terminal_window_show (GtkWidget *widget);
 static gboolean confirm_close_window_or_tab (TerminalWindow *window,
                                              TerminalScreen *screen);
 
-G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_TYPE_WITH_CODE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW,
+                         G_ADD_PRIVATE(TerminalWindow))
 
 /* Zoom helpers */
 
@@ -2184,7 +2185,7 @@ terminal_window_init (TerminalWindow *window)
 
   app = terminal_app_get ();
 
-  priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
+  priv = window->priv = (TerminalWindowPrivate*)terminal_window_get_instance_private(window);
 
   gtk_widget_init_template (GTK_WIDGET (window));
 

@@ -32,8 +32,6 @@
 #include "terminal-schemas.hh"
 #include "terminal-libgsystem.hh"
 
-#define TERMINAL_NOTEBOOK_GET_PRIVATE(notebook)(G_TYPE_INSTANCE_GET_PRIVATE ((notebook), TERMINAL_TYPE_NOTEBOOK, TerminalNotebookPrivate))
-
 struct _TerminalNotebookPrivate
 {
   TerminalScreen *active_screen;
@@ -271,6 +269,7 @@ terminal_notebook_mdi_iface_init (TerminalMdiContainerInterface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalNotebook, terminal_notebook, GTK_TYPE_NOTEBOOK,
+                         G_ADD_PRIVATE(TerminalNotebook)
                          G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_MDI_CONTAINER, terminal_notebook_mdi_iface_init))
 
 /* GtkNotebookClass impl */
@@ -388,7 +387,7 @@ terminal_notebook_init (TerminalNotebook *notebook)
 {
   TerminalNotebookPrivate *priv;
 
-  priv = notebook->priv = TERMINAL_NOTEBOOK_GET_PRIVATE (notebook);
+  priv = notebook->priv = (TerminalNotebookPrivate*)terminal_notebook_get_instance_private(notebook);
 
   priv->active_screen = nullptr;
   priv->policy = GTK_POLICY_AUTOMATIC;

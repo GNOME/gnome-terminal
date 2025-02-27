@@ -46,25 +46,32 @@ clangxx_req_version       = '3.3'
 
 vte_gtk3_req                 = 'vte-2.91'
 vte_gtk3_req_version         = '0.79.0'
+vte_gtk4_req                 = 'vte-2.91-gtk4'
+vte_gtk4_req_version         = '0.79.0'
 vte_default_options          = [
   'docs=false',
   'gir=false',
   'glade=false',
   'gtk3=true',
-  'gtk4=false',
+  'gtk4=true',
   'vapi=false',
 ]
 
-glib_req_version             = '2.52.0'
-glib_min_req_version         = '2.52'
-glib_max_allowed_version     = '2.68'
+glib_req_version             = '2.76.0'
+glib_min_req_version         = '2.76'
+glib_max_allowed_version     = '2.76'
 
 gtk3_req_version             = '3.22.27'
 gtk3_min_req_version         = '3.18'
 gtk3_max_allowed_version     = '3.24'
 
+gtk4_req_version             = '4.12.0'
+gtk4_min_req_version         = '4.12'
+gtk4_max_allowed_version     = '4.12'
+
+libadwaita_req_version       = '1.4'
 libhandy_req_version         = '1.6.0'
-libnautilus_ext_req_version  = '43'
+libnautilus_ext_req_version  = '45'
 pcre2_req_version            = '10.00'
 schemas_req_version          = '0.1.0'
 
@@ -250,6 +257,7 @@ endforeach
 # Compiler flags
 
 compiler_flags_common = [
+  '-Wno-deprecated-declarations',
   '-Waggregate-return',
   '-Wall',
   '-Wcast-align',
@@ -358,6 +366,16 @@ foreach flags : compiler_flags_common_multi
     global_cflags += flags
   endif
 endforeach
+
+# Release flags
+
+release_cxxflags = []
+if not enable_debug
+  release_cxxflags += [
+    '-DG_DISABLE_ASSERT',
+    '-DG_DISABLE_CAST_CHECKS',
+  ]
+endif
 
 # ... and now make these flags the default
 

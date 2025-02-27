@@ -26,8 +26,6 @@
 
 #include <gtk/gtk.h>
 
-#define TERMINAL_SCREEN_CONTAINER_GET_PRIVATE(screen_container)(G_TYPE_INSTANCE_GET_PRIVATE ((screen_container), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainerPrivate))
-
 struct _TerminalScreenContainerPrivate
 {
   TerminalScreen *screen;
@@ -49,7 +47,8 @@ enum
   PROP_VSCROLLBAR_POLICY
 };
 
-G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY)
+G_DEFINE_TYPE_WITH_CODE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY,
+                         G_ADD_PRIVATE(TerminalScreenContainer))
 
 #define TERMINAL_SCREEN_CONTAINER_CSS_NAME "terminal-screen-container"
 
@@ -115,7 +114,7 @@ terminal_screen_container_init (TerminalScreenContainer *container)
 {
   TerminalScreenContainerPrivate *priv;
 
-  priv = container->priv = TERMINAL_SCREEN_CONTAINER_GET_PRIVATE (container);
+  priv = container->priv = (TerminalScreenContainerPrivate*)terminal_screen_container_get_instance_private(container);
 
   priv->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
   priv->vscrollbar_policy = GTK_POLICY_AUTOMATIC;

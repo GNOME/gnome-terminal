@@ -370,7 +370,8 @@ terminal_screen_clear_exec_data (TerminalScreen *screen,
   priv->exec_data = nullptr;
 }
 
-G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
+G_DEFINE_TYPE_WITH_CODE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL,
+                         G_ADD_PRIVATE(TerminalScreen))
 
 static void
 free_tag_data (TagData *tagdata)
@@ -710,7 +711,7 @@ terminal_screen_init (TerminalScreen *screen)
   uuid_t u;
   char uuidstr[37];
 
-  priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
+  priv = screen->priv = (TerminalScreenPrivate*)terminal_screen_get_instance_private(screen);
 
   uuid_generate (u);
   uuid_unparse (u, uuidstr);

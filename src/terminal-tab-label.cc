@@ -27,8 +27,6 @@
 #include "terminal-icon-button.hh"
 #include "terminal-window.hh"
 
-#define TERMINAL_TAB_LABEL_GET_PRIVATE(tab_label)(G_TYPE_INSTANCE_GET_PRIVATE ((tab_label), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelPrivate))
-
 #define SPACING (4)
 
 struct _TerminalTabLabelPrivate
@@ -55,7 +53,8 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (TerminalTabLabel, terminal_tab_label, GTK_TYPE_BOX);
+G_DEFINE_TYPE_WITH_CODE (TerminalTabLabel, terminal_tab_label, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE(TerminalTabLabel))
 
 /* helper functions */
 
@@ -181,7 +180,7 @@ terminal_tab_label_init (TerminalTabLabel *tab_label)
 {
   TerminalTabLabelPrivate *priv;
 
-  priv = tab_label->priv = TERMINAL_TAB_LABEL_GET_PRIVATE (tab_label);
+  priv = tab_label->priv = (TerminalTabLabelPrivate*)terminal_tab_label_get_instance_private(tab_label);
 
   priv->tab_pos = (GtkPositionType) -1; /* invalid */
 }
