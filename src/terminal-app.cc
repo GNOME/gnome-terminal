@@ -1596,7 +1596,17 @@ terminal_app_get_system_font (TerminalApp *app)
 
   font = g_settings_get_string (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME);
 
-  return pango_font_description_from_string (font);
+  auto desc = pango_font_description_from_string (font);
+
+  /* override system font for Arabic */
+  g_autofree gchar *lang = g_utf8_substring (g_get_language_names()[0], 0, 2);
+  if (g_str_equal (lang, "ar") || g_str_equal (lang, "fa")) {
+    auto family = pango_font_description_get_family (desc);
+    if (family && !g_str_has_prefix (family, "DejaVu Sans Mono"))
+      pango_font_description_set_family (desc, "DejaVu Sans Mono");
+  }
+
+  return desc;
 }
 
 #ifdef TERMINAL_SERVER
