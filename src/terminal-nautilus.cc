@@ -307,6 +307,60 @@ create_terminal (ExecData *data /* transfer full */)
   char startup_id[32];
   char **argv;
   int argc;
+  
+  // Check if terminal is already running using TerminalFocus extension
+  gboolean terminal_running = FALSE;
+  GDBusConnection *connection = g_bus_get_sync(G_BUS_TYPE_SESSION, nullptr, nullptr);
+  if (connection != nullptr) {
+    GVariant *result = g_dbus_connection_call_sync(
+      connection,
+      "org.gnome.Shell",
+      "/org/gnome/Shell/Extensions/TerminalFocus",
+      "org.gnome.Shell.Extensions.TerminalFocus",
+      "hasTerminalWindow",
+      nullptr,  // No parameters
+      G_VARIANT_TYPE("(b)"),  // Return type is boolean
+      G_DBUS_CALL_FLAGS_NONE,
+      -1,
+      nullptr,
+      &error);
+
+    if (result != nullptr) {
+      g_variant_get(result, "(b)", &terminal_running);
+      g_variant_unref(result);
+    }
+
+    if (terminal_running) {
+      // Focus existing terminal window using TerminalFocus extension
+      GVariant *focus_result = g_dbus_connection_call_sync(
+        connection,
+        "org.gnome.Shell",
+        "/org/gnome/Shell/Extensions/TerminalFocus",
+        "org.gnome.Shell.Extensions.TerminalFocus",
+        "focusTerminal",
+        nullptr,  // No parameters
+        G_VARIANT_TYPE("(b)"),  // Return type is boolean
+        G_DBUS_CALL_FLAGS_NONE,
+        -1,
+        nullptr,
+        &error);
+
+      if (focus_result != nullptr) {
+        g_variant_unref(focus_result);
+      }
+      
+      // Run the shared script with the path
+      gchar *cmd = g_strdup_printf("/home/lucky/applications/custom-terminal-startup.sh \"%s\"", data->path);
+      g_spawn_command_line_async(cmd, nullptr);
+      g_free(cmd);
+      
+      g_object_unref(connection);
+      exec_data_free(data);
+      return TRUE;
+    }
+    
+    g_object_unref(connection);
+  }
 
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      GDBusProxyFlags(G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
