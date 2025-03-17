@@ -45,7 +45,7 @@ clangxx_req_version       = '3.3'
 # Requirements
 
 vte_req                      = 'vte-2.91'
-vte_req_version              = '0.79.0'
+vte_req_version              = '0.80.0'
 vte_default_options          = [
   'docs=false',
   'gir=false',
