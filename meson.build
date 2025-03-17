@@ -45,9 +45,9 @@ clangxx_req_version       = '3.3'
 # Requirements
 
 vte_gtk3_req                 = 'vte-2.91'
-vte_gtk3_req_version         = '0.79.0'
+vte_gtk3_req_version         = '0.80.0'
 vte_gtk4_req                 = 'vte-2.91-gtk4'
-vte_gtk4_req_version         = '0.79.0'
+vte_gtk4_req_version         = '0.80.0'
 vte_default_options          = [
   'docs=false',
   'gir=false',
