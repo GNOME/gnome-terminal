@@ -86,7 +86,6 @@ typedef struct
   char    *default_title;
   char   **exec_argv;
   char    *default_profile;
-  gboolean default_profile_is_id;
   gboolean no_environment;
 
   gboolean  execute;
@@ -103,7 +102,6 @@ typedef struct
 typedef struct
 {
   char *profile;
-  gboolean profile_is_id;
   char **exec_argv;
   char *title;
   char *working_dir;

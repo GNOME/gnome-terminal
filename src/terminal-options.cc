@@ -198,6 +198,7 @@ initial_tab_new (char *profile /* adopts */)
   it->active = FALSE;
   it->fd_list = nullptr;
   it->fd_array = nullptr;
+  it->wait = false;
 
   return it;
 }
