@@ -487,7 +487,7 @@ listbox_create_row (const char *name,
 
   GtkStack *home_stack = GTK_STACK (gtk_stack_new ());
   gtk_widget_set_margin_start (GTK_WIDGET (home_stack), 12);
-  GtkImage *home_image = GTK_IMAGE (gtk_image_new_from_icon_name ("emblem-default-symbolic", GTK_ICON_SIZE_BUTTON));
+  GtkImage *home_image = GTK_IMAGE (gtk_image_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_BUTTON));
   gtk_widget_set_tooltip_text (GTK_WIDGET (home_image), _("This is the default profile"));
   gtk_stack_add_named (home_stack, GTK_WIDGET (home_image), "home");
   GtkLabel *home_label = GTK_LABEL (gtk_label_new (""));
