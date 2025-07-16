@@ -34,6 +34,13 @@ void            terminal_notebook_insert_tab(TerminalNotebook *notebook,
 void            terminal_notebook_append_tab(TerminalNotebook *notebook,
                                              TerminalTab* tab,
                                              bool pinned);
+
+
+void            terminal_notebook_prepend_tab(TerminalNotebook *notebook,
+                                              TerminalTab* tab,
+                                              bool pinned);
+
+
 void            terminal_notebook_remove_screen          (TerminalNotebook *notebook,
                                                           TerminalScreen   *screen);
 TerminalScreen *terminal_notebook_get_active_screen      (TerminalNotebook *notebook);

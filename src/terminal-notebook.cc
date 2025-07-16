@@ -154,6 +154,35 @@ terminal_notebook_append_tab(TerminalNotebook *notebook,
                          G_BINDING_SYNC_CREATE);
 }
 
+
+
+
+void
+terminal_notebook_prepend_tab(TerminalNotebook *notebook,
+                             TerminalTab* tab,
+                             bool pinned)
+{
+  g_return_if_fail(TERMINAL_IS_NOTEBOOK(notebook));
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+  g_return_if_fail(!gtk_widget_get_parent(GTK_WIDGET(tab)));
+
+  auto const page = pinned ?
+    adw_tab_view_prepend_pinned(notebook->tab_view, GTK_WIDGET(tab)) :
+    adw_tab_view_prepend(notebook->tab_view, GTK_WIDGET(tab));
+
+  auto const screen = terminal_tab_get_screen(tab);
+  g_object_bind_property(screen, "title",
+                        page, "title",
+                        G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon",
+                        page, "icon",
+                        G_BINDING_SYNC_CREATE);
+  g_object_bind_property(screen, "icon-progress",
+                        page, "indicator-icon",
+                        G_BINDING_SYNC_CREATE);
+}
+
+
 void
 terminal_notebook_confirm_close (TerminalNotebook *notebook,
                                  TerminalScreen   *screen,
