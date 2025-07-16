@@ -2555,6 +2555,8 @@ terminal_window_get_active_screen_num (TerminalWindow *window)
 // }
 
 
+
+
 void
 terminal_window_add_tab(TerminalWindow* window,
                        TerminalTab* tab,
@@ -2564,18 +2566,28 @@ terminal_window_add_tab(TerminalWindow* window,
   auto const position_pref = TerminalNewTabPosition
     (g_settings_get_enum(global_settings, TERMINAL_SETTING_NEW_TAB_POSITION_KEY));
 
-  if (position_pref == TERMINAL_NEW_TAB_POSITION_NEXT &&
-      parent_tab) {
-    terminal_notebook_insert_tab(window->notebook, tab, parent_tab, false);
-  } else if (position_pref == TERMINAL_NEW_TAB_POSITION_LAST) {
-    // Modified behavior: prepend tab to open on the left instead of right
-    terminal_notebook_prepend_tab(window->notebook, tab, false);
-  } else {
-    terminal_notebook_append_tab(window->notebook, tab, false);
+  switch (position_pref) {
+    case TERMINAL_NEW_TAB_POSITION_FIRST:
+      terminal_notebook_prepend_tab(window->notebook, tab, false);
+      break;
+    
+    case TERMINAL_NEW_TAB_POSITION_NEXT:
+      if (parent_tab) {
+        terminal_notebook_insert_tab(window->notebook, tab, parent_tab, false);
+      } else {
+        terminal_notebook_append_tab(window->notebook, tab, false);
+      }
+      break;
+    
+    case TERMINAL_NEW_TAB_POSITION_LAST:
+    default:
+      terminal_notebook_append_tab(window->notebook, tab, false);
+      break;
   }
 
   gtk_widget_grab_focus(GTK_WIDGET(terminal_tab_get_screen(tab)));
 }
+
 
 
 void

@@ -30,8 +30,9 @@
   </enum>
 
   <enum id='org.gnome.Terminal.NewTabPosition'>
-    <value nick='last' value='0'/>
-    <value nick='next' value='1'/>
+    <value nick='first' value='0'/>
+    <value nick='last' value='1'/>
+    <value nick='next' value='2'/>
   </enum>
 
   <enum id='org.gnome.Terminal.RoundedCorners'>
@@ -705,9 +706,10 @@
       <summary>Which theme variant to use</summary>
     </key>
 
-    <key name="new-tab-position" enum="org.gnome.Terminal.NewTabPosition">
+    <key name='new-tab-position' enum='org.gnome.Terminal.NewTabPosition'>
       <default>'last'</default>
-      <summary>Whether new tabs should open next to the current one or at the last position</summary>
+      <summary>Where to place new tabs</summary>
+      <description>Where to place new tabs in the tab bar. "first" places them at the leftmost position, "last" at the rightmost position, and "next" next to the current tab.</description>
     </key>
 
     <key name="rounded-corners" enum="org.gnome.Terminal.RoundedCorners">

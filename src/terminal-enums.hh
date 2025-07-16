@@ -29,10 +29,13 @@ typedef enum {
   TERMINAL_NEW_TERMINAL_MODE_TAB
 } TerminalNewTerminalMode;
 
+
 typedef enum {
+  TERMINAL_NEW_TAB_POSITION_FIRST,
   TERMINAL_NEW_TAB_POSITION_LAST,
   TERMINAL_NEW_TAB_POSITION_NEXT
 } TerminalNewTabPosition;
+
 
 typedef enum
 {
