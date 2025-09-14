@@ -443,6 +443,13 @@ xte_config_get_default(char const* native_name)
   if (auto term = xte_config_get_default_for_path_and_desktops("/usr/etc/xdg", desktops, native_name))
     return term;
 
+  auto data_dirs = g_get_system_data_dirs();
+  for (auto i = gsize{0}; data_dirs[i]; ++i) {
+    gs_free auto path = g_build_filename(data_dirs[i], "xdg-terminal-exec", nullptr);
+    if (auto term = xte_config_get_default_for_path_and_desktops(path, desktops, native_name))
+      return term;
+  }
+
   return nullptr;
 }
 
