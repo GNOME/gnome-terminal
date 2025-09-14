@@ -324,6 +324,10 @@ xte_config_rewrite(char const* path,
         continue;
       if (strcmp(lines[i], desktop_id) == 0)
         continue;
+      if (auto colon = strchr(lines[i], ':');
+          colon &&
+          strncmp(lines[i], desktop_id, colon - lines[i]) == 0)
+          continue;
 
       g_string_append(str, lines[i]);
       g_string_append_c(str, NEWLINE);
