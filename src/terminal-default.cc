@@ -129,10 +129,16 @@ static bool
 xte_data_check(char const* name,
                bool full)
 {
+  gs_strfreev auto segments = g_strsplit(name, ":", 2);
+
+  auto const desktop_id = segments[0];
+  if (!desktop_id || !desktop_id[0])
+    return false;
+
   { // Legacy x-t-e spec
     gs_free auto path = g_build_filename(g_get_user_data_dir(),
                                          XTE_CONFIG_DIRNAME,
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -140,7 +146,7 @@ xte_data_check(char const* name,
   {
     gs_free auto path = g_build_filename(g_get_user_data_dir(),
                                          "applications",
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -151,7 +157,7 @@ xte_data_check(char const* name,
                                          "exports",
                                          "share",
                                          "applications",
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -161,7 +167,7 @@ xte_data_check(char const* name,
                                          "local",
                                          "share",
                                          XTE_CONFIG_DIRNAME,
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -170,7 +176,7 @@ xte_data_check(char const* name,
                                           "local",
                                           "share",
                                           "applications",
-                                          name,
+                                          desktop_id,
                                          nullptr);
     if (xte_data_check_one(path2, full))
       return true;
@@ -186,7 +192,7 @@ xte_data_check(char const* name,
   {
     gs_free auto path = g_build_filename(TERM_DATADIR,
                                          "applications",
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -198,7 +204,7 @@ xte_data_check(char const* name,
                                          "exports",
                                          "share",
                                          "applications",
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -206,7 +212,7 @@ xte_data_check(char const* name,
   if (!g_str_equal(TERM_PREFIX, "/usr")) {
     gs_free auto path = g_build_filename("/usr", "share",
                                          XTE_CONFIG_DIRNAME,
-                                         name,
+                                         desktop_id,
                                          nullptr);
     if (xte_data_check_one(path, full))
       return true;
@@ -214,7 +220,7 @@ xte_data_check(char const* name,
     gs_free auto path2 = g_build_filename("/usr",
                                           "share",
                                           "applications",
-                                          name,
+                                          desktop_id,
                                           nullptr);
     if (xte_data_check_one(path2, full))
       return true;
