@@ -297,15 +297,10 @@ terminal_notebook_switch_page (GtkNotebook     *gtk_notebook,
    * account.
    * FIXME!
    */
-//   if (old_active_screen)
-//     gtk_widget_hide (GTK_WIDGET (terminal_screen_container_get_from_screen (old_active_screen)));
-  /* Make sure that the widget is no longer hidden due to the workaround */
-//   if (child)
-//     gtk_widget_show (child);
   if (old_active_screen)
-    gtk_widget_hide (GTK_WIDGET (old_active_screen));
+    terminal_screen_container_set_active(terminal_screen_container_get_from_screen(old_active_screen), false);
   if (screen)
-    gtk_widget_show (GTK_WIDGET (screen));
+    terminal_screen_container_set_active(TERMINAL_SCREEN_CONTAINER(child), true);
 
   priv->active_screen = screen;
 
