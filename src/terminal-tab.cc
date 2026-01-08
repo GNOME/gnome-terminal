@@ -366,3 +366,12 @@ terminal_tab_get_kinetic_scrolling(TerminalTab* tab)
 
   return tab->kinetic_scrolling;
 }
+
+void
+terminal_tab_set_active(TerminalTab* tab,
+                        bool active)
+{
+  g_return_if_fail(TERMINAL_IS_TAB(tab));
+
+  gtk_widget_set_visible(tab->scrolled_window, active);
+}

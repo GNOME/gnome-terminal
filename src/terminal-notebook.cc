@@ -423,6 +423,11 @@ terminal_notebook_switch_page (AdwTabView       *tab_view,
   if (screen == old_active_screen)
     return;
 
+  if (old_active_screen)
+    terminal_tab_set_active(terminal_tab_get_from_screen(old_active_screen), false);
+  if (screen)
+    terminal_tab_set_active(terminal_tab_get_from_screen(screen), true);
+
   notebook->active_screen = screen;
 
   g_signal_emit (notebook, signals[SCREEN_SWITCHED], 0, old_active_screen, screen);

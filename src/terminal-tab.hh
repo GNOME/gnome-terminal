@@ -56,4 +56,7 @@ void terminal_tab_set_kinetic_scrolling(TerminalTab* tab,
 
 bool terminal_tab_get_kinetic_scrolling(TerminalTab* tab);
 
+void terminal_tab_set_active(TerminalTab* tab,
+                             bool active);
+
 G_END_DECLS
