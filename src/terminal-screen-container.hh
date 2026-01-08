@@ -59,6 +59,9 @@ void terminal_screen_container_set_policy (TerminalScreenContainer *container,
                                            GtkPolicyType hpolicy,
                                            GtkPolicyType vpolicy);
 
+void terminal_screen_container_set_active(TerminalScreenContainer *container,
+                                          gboolean active);
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_CONTAINER_H */
