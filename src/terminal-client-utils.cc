@@ -226,12 +226,14 @@ terminal_client_get_environment_filters (void)
     "GNOME_DESKTOP_ICON",
     "INVOCATION_ID",
     "JOURNAL_STREAM",
+    "LC_TERMINAL",
     "LINES",
     "LISTEN_FDNAMES",
     "LISTEN_FDS",
     "LISTEN_PID",
     "MAINPID",
     "MANAGERPID",
+    "MLTERM",
     "NOTIFY_SOCKET",
     "NOTIFY_SOCKET",
     "PIDFILE",
@@ -250,7 +252,14 @@ terminal_client_get_environment_filters (void)
     "WATCHDOG_USEC",
     "WCWIDTH_CJK_LEGACY",
     "WINDOWID",
+    "WT_SESSION",
+    "WT_PROFILE",
     "XDG_ACTIVATION_TOKEN",
+    "all_proxy",
+    "ftp_proxy",
+    "http_proxy",
+    "https_proxy",
+    "no_proxy",
     nullptr
   };
 
@@ -265,16 +274,24 @@ terminal_client_get_environment_prefix_filters (void)
     // "VTE_", ?
 
     /* other terminals */
+    "ALACRITTY_",
+    "CONTOUR_",
     "FOOT_",
+    "GHOSTTY_",
     "ITERM2_",
+    "KITTY_",
+    "KONSOLE_",
     "MC_",
     "MINTTY_",
+    "MOSH_",
     "PUTTY_",
     "RXVT_",
     "TERM_",
+    "TERMINAL_",
     "URXVT_",
     "WEZTERM_",
     "XTERM_",
+    "ZUTTY_",
     nullptr
   };
 
