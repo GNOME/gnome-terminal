@@ -1404,8 +1404,12 @@ terminal_screen_exec (TerminalScreen *screen,
     for (gsize i = 0; i < fd_array_data_len; i++) {
       const int fd = fd_array_data[2 * i];
       const int idx = fd_array_data[2 * i + 1];
-      terminal_assert_cmpint(idx, >=, 0);
-      terminal_assert_cmpuint(idx, <, n_fds);
+      if (idx < 0 || idx > n_fds) {
+        g_set_error(error, G_IO_ERROR, G_IO_ERROR_INVALID_ARGUMENT,
+                    "FD index out of bounds");
+        exec_data_unref(data);
+	return FALSE;
+      }
 
       data->fd_map[idx] = fd;
     }
