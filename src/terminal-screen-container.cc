@@ -387,3 +387,23 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
 
   g_object_thaw_notify (object);
 }
+
+void
+terminal_screen_container_set_active(TerminalScreenContainer *container,
+                                     gboolean active)
+{
+  auto const priv = container->priv;
+
+#ifdef USE_SCROLLED_WINDOW
+  gtk_widget_set_visible(priv->scrolled_window, active);
+#else
+  gtk_widget_set_visible(priv->hbox, active);
+#if 0
+  if (active && priv->screen)
+    gtk_range_set_adjustment(GTK_RANGE(priv->vscrollbar),
+                             gtk_scrollable_get_vadjustment(GTK_SCROLLABLE (priv->screen)));
+  else
+    gtk_range_set_adjustment(GTK_RANGE(priv->vscrollbar), nullptr);
+#endif // 0
+#endif // USE_SCROLLED_WINDOW
+}
