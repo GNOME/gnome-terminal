@@ -2568,20 +2568,24 @@ terminal_window_list_tabs (TerminalWindow *window)
   return terminal_notebook_list_tabs (window->notebook);
 }
 
+static inline bool
+should_update_window_size (TerminalWindow *window)
+{
+  /* Don't adjust the size of maximized or tiled (snapped, half-maximized)
+   * windows: if we do, there will be ugly gaps of up to 1 character cell
+   * around otherwise tiled windows, and unnecessary SIGWINCHes when
+   * switching tabs. */
+  return !(window->realized && window_state_is_snapped(window->window_state));
+}
+
 void
 terminal_window_update_size (TerminalWindow *window)
 {
   int grid_width, grid_height;
   int pixel_width, pixel_height;
 
-  if (window->realized &&
-      window_state_is_snapped(window->window_state))
-    {
-      /* Don't adjust the size of maximized or tiled (snapped, half-maximized)
-       * windows: if we do, there will be ugly gaps of up to 1 character cell
-       * around otherwise tiled windows. */
-      return;
-    }
+  if (!should_update_window_size(window))
+    return;
 
   if (!window->active_screen)
     return;
@@ -2651,7 +2655,7 @@ notebook_screen_switched_cb (TerminalNotebook *notebook,
                          "[window %p] MDI: setting active tab to screen %p (old active screen %p)\n",
                          window, screen, old_active_screen);
 
-  if (old_active_screen != nullptr && screen != nullptr) {
+  if (old_active_screen != nullptr && screen != nullptr && should_update_window_size(window)) {
     terminal_screen_get_size (old_active_screen, &old_grid_width, &old_grid_height);
 
     /* This is so that we maintain the same grid */
@@ -2673,9 +2677,10 @@ notebook_screen_switched_cb (TerminalNotebook *notebook,
   sync_screen_title (screen, nullptr, window);
 
   /* set size of window to current grid size */
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] setting size after flipping notebook pages\n",
-                         window);
+  if (should_update_window_size(window))
+    _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                           "[window %p] setting size after flipping notebook pages\n",
+                           window);
   terminal_window_update_size (window);
 
   terminal_window_update_tabs_actions_sensitivity (window);
