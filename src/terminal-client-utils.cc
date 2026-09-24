@@ -219,6 +219,7 @@ terminal_client_get_environment_filters (void)
     "DESKTOP_STARTUP_ID",
     "EXIT_CODE",
     "EXIT_STATUS",
+    "G_ENABLE_DIAGNOSTIC",
     "GIO_LAUNCHED_DESKTOP_FILE",
     "GIO_LAUNCHED_DESKTOP_FILE_PID",
     "GJS_DEBUG_OUTPUT",
@@ -226,6 +227,7 @@ terminal_client_get_environment_filters (void)
     "GNOME_DESKTOP_ICON",
     "INVOCATION_ID",
     "JOURNAL_STREAM",
+    "LC_TERMINAL",
     "LINES",
     "LISTEN_FDNAMES",
     "LISTEN_FDS",
@@ -249,6 +251,8 @@ terminal_client_get_environment_filters (void)
     "WATCHDOG_PID",
     "WATCHDOG_USEC",
     "WCWIDTH_CJK_LEGACY",
+    "WT_SESSION",
+    "WT_PROFILE",
     "WINDOWID",
     "XDG_ACTIVATION_TOKEN",
     nullptr
@@ -266,15 +270,22 @@ terminal_client_get_environment_prefix_filters (void)
 
     /* other terminals */
     "FOOT_",
+    "GHOSTTY_",
     "ITERM2_",
+    "KITTY_",
+    "KONSOLE_",
     "MC_",
     "MINTTY_",
+    "MOSH_",
     "PUTTY_",
     "RXVT_",
     "TERM_",
+    "TERMINAL_",
     "URXVT_",
+    "WARP_",
     "WEZTERM_",
     "XTERM_",
+    "ZUTTY_",
     nullptr
   };
 
