@@ -538,8 +538,8 @@ terminal_screen_ensure_icon_progress(TerminalScreen* screen)
 
         if (fraction < 1.) {
           cairo_move_to(cr, xc, yc);
-          cairo_line_to(cr, xc + radius, yc);
-          cairo_arc_negative(cr, xc, yc, radius, 0, 2 * G_PI * (1. - fraction));
+          cairo_line_to(cr, xc, yc - radius);
+          cairo_arc(cr, xc, yc, radius, - G_PI / 2.0, 2.0 * G_PI * (fraction - 0.25));
           cairo_line_to(cr, xc, yc);
         } else {
           cairo_arc(cr, xc, yc, radius, 0, 2 * G_PI);
