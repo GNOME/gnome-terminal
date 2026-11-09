@@ -1514,6 +1514,10 @@ screen_resize_window_cb (TerminalScreen *screen,
                          guint rows,
                          TerminalWindow* window)
 {
+#ifdef ENABLE_DEBUG
+  if (vte_get_test_flags() != VTE_TEST_FLAGS_ALL)
+    return;
+
   if (window->realized &&
       window_state_is_snapped(window->window_state))
     return;
@@ -1522,6 +1526,7 @@ screen_resize_window_cb (TerminalScreen *screen,
 
   if (screen == window->active_screen)
     terminal_window_update_size (window);
+#endif // ENABLE_DEBUG
 }
 
 static void
