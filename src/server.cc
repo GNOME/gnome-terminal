@@ -44,6 +44,9 @@
 #include "terminal-libgsystem.hh"
 
 static char *app_id = nullptr;
+#ifdef ENABLE_DEBUG
+static gboolean vte_test_mode = false;
+#endif
 
 #define INACTIVITY_TIMEOUT (100 /* ms */)
 
@@ -98,6 +101,9 @@ option_app_id_cb (const gchar *option_name,
 
 static const GOptionEntry options[] = {
   { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, (void*)option_app_id_cb, "Application ID", "ID" },
+#ifdef ENABLE_DEBUG
+  { "vte-test-mode", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &vte_test_mode, "VTE test mode", nullptr },
+#endif
   { nullptr }
 };
 
@@ -199,10 +205,27 @@ init_server (int argc,
     return _EXIT_FAILURE_GTK_INIT;
   }
 
+#ifdef ENABLE_DEBUG
+  if (vte_test_mode) {
+    // Only allowed for non-default app ID
+    if (!app_id || g_str_equal(app_id, TERMINAL_APPLICATION_ID)) {
+      g_printerr("Vte test mode requires a non-default application ID\n");
+      return _EXIT_FAILURE_UNSUPPORTED_OPTION;
+    }
+
+    vte_set_test_flags(VTE_TEST_FLAGS_ALL);
+    if (vte_get_test_flags() != VTE_TEST_FLAGS_ALL) {
+      g_printerr("Vte test mode requires a vte debug build\n");
+      return _EXIT_FAILURE_UNSUPPORTED_OPTION;
+    }
+  }
+#endif // ENABLE_DEBUG
+
   if (!increase_rlimit_nofile ()) {
     auto const errsv = errno;
     g_printerr ("Failed to increase RLIMIT_NOFILE: %s\n", g_strerror(errsv));
   }
+
 
   /* Now we can create the app */
   auto const app = terminal_app_new (app_id, G_APPLICATION_IS_SERVICE, nullptr);
