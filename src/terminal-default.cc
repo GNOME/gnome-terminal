@@ -1,5 +1,5 @@
 /*
- * Copyright © 2008, 2011, 2025 Christian Persch
+ * Copyright © 2008, 2011, 2025, 2026 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,6 +32,40 @@
 #define DOT_DESKTOP ".desktop"
 #define TERMINAL_DESKTOP_FILENAME TERMINAL_APPLICATION_ID DOT_DESKTOP
 
+static bool
+validate_desktop(char const* desktop)
+{
+  if (!desktop|| !desktop[0])
+    return false;
+
+  for (auto i = size_t{0}; desktop[i]; ++i) {
+    if (desktop[i] != '-' && desktop[i] != '_' &&
+        !g_ascii_isalnum (desktop[i]))
+      return false;
+  }
+
+  return true;
+}
+
+static char**
+validate_and_lc_desktops(char const* const* strv)
+{
+  if (!strv)
+    return nullptr;
+
+  auto builder = g_ptr_array_new();
+
+  for (auto i = size_t{0}; strv[i]; ++i) {
+    if (!validate_desktop(strv[i]))
+      continue;
+
+    g_ptr_array_add(builder, g_ascii_strdown(strv[i], -1));
+  }
+
+  g_ptr_array_add(builder, nullptr);
+  return reinterpret_cast<char**>(g_ptr_array_free(builder, false));
+}
+
 static char**
 get_desktops_lc(void)
 {
@@ -39,16 +73,11 @@ get_desktops_lc(void)
   if (!desktop)
     return nullptr;
 
-  auto strv = g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
-  if (!strv)
+  gs_strfreev auto raw_strv = g_strsplit(desktop, G_SEARCHPATH_SEPARATOR_S, -1);
+  if (!raw_strv)
     return nullptr;
 
-  for (auto p = strv; *p; ++p) {
-    gs_free auto str = *p;
-    *p = g_ascii_strdown(str, -1);
-  }
-
-  return strv;
+  return validate_and_lc_desktops(raw_strv);
 }
 
 static bool
