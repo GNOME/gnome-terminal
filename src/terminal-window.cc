@@ -99,7 +99,8 @@ struct _TerminalWindowPrivate
 
 #define TERMINAL_WINDOW_CSS_NAME "terminal-window"
 
-#define MIN_WIDTH_CHARS 4
+/* Make sure TAB characters fit after a resize, see https://gitlab.gnome.org/GNOME/gnome-terminal/-/issues/8158 */
+#define MIN_WIDTH_CHARS 8
 #define MIN_HEIGHT_CHARS 1
 
 #if 1
