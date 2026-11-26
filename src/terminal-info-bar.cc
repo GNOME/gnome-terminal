@@ -99,12 +99,9 @@ terminal_info_bar_class_init (TerminalInfoBarClass *klass)
  * Returns: a new #TerminalInfoBar for @screen
  */
 GtkWidget *
-terminal_info_bar_new (GtkMessageType type,
-                       const char *first_button_text,
-                       ...)
+terminal_info_bar_new (GtkMessageType type)
 {
   TerminalInfoBar *info_bar;
-  va_list args;
 
   info_bar = reinterpret_cast<TerminalInfoBar*>
     (g_object_new (TERMINAL_TYPE_INFO_BAR,
@@ -120,6 +117,25 @@ terminal_info_bar_new (GtkMessageType type,
                            G_CALLBACK (terminal_info_bar_response_cb),
                            info_bar,
                            G_CONNECT_SWAPPED);
+
+  return GTK_WIDGET(info_bar);
+}
+
+/**
+ * terminal_info_bar_new_with_buttons:
+ * @type: a #GtkMessageType
+ *
+ * Returns: a new #TerminalInfoBar for @screen
+ */
+GtkWidget *
+terminal_info_bar_new_with_buttons (GtkMessageType type,
+                                    const char *first_button_text,
+                                    ...)
+{
+  TerminalInfoBar *info_bar;
+  va_list args;
+
+  info_bar = reinterpret_cast<TerminalInfoBar*>(terminal_info_bar_new(type));
 
   va_start (args, first_button_text);
   while (first_button_text != nullptr) {

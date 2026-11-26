@@ -50,7 +50,11 @@ GType terminal_app_get_type (void);
 
 GApplication *terminal_app_new (const char *app_id,
                                 GApplicationFlags flags,
-                                GSettingsBackend* backend);
+                                GSettingsBackend* backend
+#ifdef TERMINAL_SERVER
+                                , gboolean implement_intent
+#endif
+                                );
 
 #define terminal_app_get (TerminalApp *) g_application_get_default
 
@@ -142,6 +146,9 @@ void* terminal_app_get_adw_style_manager(TerminalApp* app);
 GIcon* terminal_app_get_default_icon(TerminalApp* app);
 
 GIcon* terminal_app_get_default_icon_symbolic(TerminalApp* app);
+
+bool terminal_get_timestamp_from_activation_token(char const* token,
+                                                  guint32* timestamp);
 
 G_END_DECLS
 

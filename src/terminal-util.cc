@@ -1716,3 +1716,44 @@ terminal_util_g_settings_bind_with_mapping(GSettings* settings,
 
   terminal_util_set_settings_and_key_for_widget(GTK_WIDGET(object), settings, key);
 }
+
+// BEGIN copied from glib/gio/gdesktopappinfo.c
+// there under LGPL2+ and used and modified here under GPL3+
+// Copyright © 2006-2007 Red Hat, Inc.
+// Copyright © 2007 Ryan Lortie
+
+/*
+ * terminal_util_make_gicon_from_name:
+ * @icon_name:
+ *
+ * Creates a #GIcon for the name.
+ *
+ * Returns: (nullable): a #GIcon
+ */
+GIcon*
+terminal_util_make_gicon_from_name(char const* icon_name)
+{
+  g_return_val_if_fail(icon_name, nullptr);
+
+  if (g_path_is_absolute(icon_name)) {
+    gs_unref_object auto file = g_file_new_for_path(icon_name);
+    return g_file_icon_new(file);
+  }
+
+  // Work around a common mistake in desktop files
+  if (auto dot = strrchr(icon_name, '.');
+      dot && (g_ascii_strcasecmp(dot, ".png") == 0||
+              g_ascii_strcasecmp(dot, ".xpm") == 0||
+              g_ascii_strcasecmp(dot, ".svg") == 0)) {
+    gs_free auto name = g_strndup(icon_name, dot - icon_name);
+    return g_themed_icon_new(name);
+  }
+
+  return g_themed_icon_new(icon_name);
+
+  // Note: deliberately NOT using g_icon_new_for_string() since that
+  // supports a weird 'serialised' format that we do not want to expose
+  // passed through desktop files via the terminal intent interface.
+}
+
+// END copied from glib/gio/gdesktopappinfo.c

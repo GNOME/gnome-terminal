@@ -102,6 +102,9 @@ enum {
   PROP_SETTINGS_BACKEND = 1,
   PROP_IS_DEFAULT_TERMINAL,
   PROP_ASK_DEFAULT_TERMINAL,
+#ifdef TERMINAL_SERVER
+  PROP_IMPLEMENT_INTENT,
+#endif
 };
 
 /*
@@ -135,7 +138,9 @@ struct _TerminalApp
   GSettings *gtk_debug_settings;
 
 #ifdef TERMINAL_SERVER
-  GDBusObjectManagerServer *object_manager;
+  GDBusObjectManagerServer *org_gnome_object_manager;
+  TerminalIntent* terminal_intent;
+  bool implement_intent;
   GHashTable *screen_map;
 
 #ifdef ENABLE_SEARCH_PROVIDER
@@ -164,8 +169,8 @@ struct _TerminalApp
   GIcon* default_icon;
   GIcon* default_icon_symbolic;
 
-  gboolean ask_default;
-  gboolean xte_is_default;
+  gboolean ask_default_terminal;
+  gboolean is_default_terminal;
   gboolean unified_menu;
   gboolean use_headerbar;
 };
@@ -442,11 +447,11 @@ terminal_app_check_default(TerminalApp* app)
 
   // Check whether gnome-terminal is the default terminal
   // as per XDG-Terminal-Exec.
-  app->xte_is_default = terminal_is_default();
+  app->is_default_terminal = terminal_is_default();
 
   gboolean ask = false;
   g_settings_get(app->global_settings, TERMINAL_SETTING_ALWAYS_CHECK_DEFAULT_KEY, "b", &ask);
-  app->ask_default = (ask != false) && !app->xte_is_default;
+  app->ask_default_terminal = (ask != false) && !app->is_default_terminal;
 }
 
 #ifdef TERMINAL_SERVER
@@ -993,6 +998,7 @@ terminal_app_finalize (GObject *object)
   g_clear_object (&app->headermenu);
   g_clear_object (&app->headermenu_set_profile_section);
   g_clear_object (&app->set_profile_menu);
+  g_clear_object (&app->terminal_intent); // should be nullptr at this point already
 
   {
     gs_unref_object auto process = reinterpret_cast<TerminalPrefsProcess*>(g_weak_ref_get(&app->prefs_process_ref));
@@ -1024,11 +1030,16 @@ terminal_app_get_property(GObject* object,
     g_value_set_object(value, app->settings_backend);
     break;
   case PROP_IS_DEFAULT_TERMINAL:
-    g_value_set_boolean(value, app->xte_is_default);
+    g_value_set_boolean(value, app->is_default_terminal);
     break;
   case PROP_ASK_DEFAULT_TERMINAL:
-    g_value_set_boolean(value, app->ask_default);
+    g_value_set_boolean(value, app->ask_default_terminal);
     break;
+#ifdef TERMINAL_SERVER
+  case PROP_IMPLEMENT_INTENT:
+    g_value_set_boolean(value, app->implement_intent);
+    break;
+#endif // TERMINAL_SERVER
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     break;
@@ -1048,8 +1059,13 @@ terminal_app_set_property(GObject* object,
     app->settings_backend = G_SETTINGS_BACKEND(g_value_dup_object(value));
     break;
   case PROP_ASK_DEFAULT_TERMINAL:
-    app->ask_default = g_value_get_boolean(value);
+    app->ask_default_terminal = g_value_get_boolean(value);
     break;
+#ifdef TERMINAL_SERVER
+  case PROP_IMPLEMENT_INTENT:
+    app->implement_intent = g_value_get_boolean(value) != false;
+    break;
+#endif // TERMINAL_SERVER
   case PROP_IS_DEFAULT_TERMINAL: // not writable
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1066,8 +1082,6 @@ terminal_app_dbus_register (GApplication    *application,
                             GError         **error)
 {
   TerminalApp *app = TERMINAL_APP (application);
-  gs_unref_object TerminalObjectSkeleton *object = nullptr;
-  gs_unref_object TerminalFactory *factory = nullptr;
 
   if (!G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_register (application,
                                                                        connection,
@@ -1091,15 +1105,32 @@ terminal_app_dbus_register (GApplication    *application,
   }
 #endif /* ENABLE_SEARCH_PROVIDER */
 
-  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
-  factory = terminal_factory_impl_new ();
-  terminal_object_skeleton_set_factory (object, factory);
+#ifdef TERMINAL_SERVER
+  if (app->implement_intent) {
+    app->terminal_intent = terminal_intent_impl_new();
+    if (!g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(app->terminal_intent),
+                                          connection,
+                                          object_path,
+                                          error))
+      return false;
+  }
+#endif // TERMINAL_SERVER
 
-  app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
-  g_dbus_object_manager_server_export (app->object_manager, G_DBUS_OBJECT_SKELETON (object));
+  gs_unref_object TerminalObjectSkeleton* object = nullptr;
+  gs_unref_object TerminalFactory* factory = nullptr;
+  object = terminal_object_skeleton_new(TERMINAL_FACTORY_OBJECT_PATH);
+  factory = terminal_factory_impl_new();
+  terminal_object_skeleton_set_factory(object, factory);
 
-  /* And export the object */
-  g_dbus_object_manager_server_set_connection (app->object_manager, connection);
+  app->org_gnome_object_manager =
+    g_dbus_object_manager_server_new(TERMINAL_OBJECT_PATH_PREFIX);
+
+  g_dbus_object_manager_server_export(app->org_gnome_object_manager,
+				      G_DBUS_OBJECT_SKELETON(object));
+
+  /* And export the objects */
+  g_dbus_object_manager_server_set_connection(app->org_gnome_object_manager,
+					      connection);
   return TRUE;
 }
 
@@ -1110,11 +1141,20 @@ terminal_app_dbus_unregister (GApplication    *application,
 {
   TerminalApp *app = TERMINAL_APP (application);
 
-  if (app->object_manager) {
-    g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
-    g_object_unref (app->object_manager);
-    app->object_manager = nullptr;
+  if (app->org_gnome_object_manager) {
+    g_dbus_object_manager_server_unexport(app->org_gnome_object_manager,
+					  TERMINAL_FACTORY_OBJECT_PATH);
+    g_object_unref(app->org_gnome_object_manager);
+    app->org_gnome_object_manager = nullptr;
   }
+
+#ifdef TERMINAL_SERVER
+  if (app->terminal_intent) {
+    g_dbus_interface_skeleton_unexport(G_DBUS_INTERFACE_SKELETON(app->terminal_intent));
+    g_object_unref(app->terminal_intent);
+    app->terminal_intent = nullptr;
+  }
+#endif // TERMINAL_SERVER
 
 #ifdef ENABLE_SEARCH_PROVIDER
   if (app->search_provider) {
@@ -1167,6 +1207,19 @@ terminal_app_class_init (TerminalAppClass *klass)
                           GParamFlags(G_PARAM_READWRITE |
                                       G_PARAM_STATIC_STRINGS)));
 
+#ifdef TERMINAL_SERVER
+  g_object_class_install_property
+    (object_class,
+     PROP_IMPLEMENT_INTENT,
+     g_param_spec_boolean("implement-intent", nullptr, nullptr,
+                          false,
+                          GParamFlags(G_PARAM_WRITABLE |
+                                      G_PARAM_CONSTRUCT_ONLY |
+                                      G_PARAM_STATIC_NAME |
+                                      G_PARAM_STATIC_NICK |
+                                      G_PARAM_STATIC_BLURB)));
+#endif // TERMINAL_SERVER
+
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
   g_application_class->shutdown = terminal_app_shutdown;
@@ -1181,7 +1234,7 @@ terminal_app_class_init (TerminalAppClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalAppClass, clipboard_targets_changed),
                   nullptr, nullptr,
-                  nullptr,
+                  g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1, GDK_TYPE_CLIPBOARD);
 }
 
@@ -1190,13 +1243,20 @@ terminal_app_class_init (TerminalAppClass *klass)
 GApplication*
 terminal_app_new(char const* app_id,
                  GApplicationFlags flags,
-                 GSettingsBackend* backend)
+                 GSettingsBackend* backend
+#ifdef TERMINAL_SERVER
+                 , gboolean implement_intent
+#endif
+                 )
 {
   return reinterpret_cast<GApplication*>
     (g_object_new (TERMINAL_TYPE_APP,
 		   "application-id", app_id ? app_id : TERMINAL_APPLICATION_ID,
 		   "flags", flags,
                    "settings-backend", backend,
+#ifdef TERMINAL_SERVER
+                   "implement-intent", implement_intent,
+#endif
 		   nullptr));
 }
 
@@ -1234,8 +1294,8 @@ terminal_app_get_receiver_impl_by_object_path (TerminalApp *app,
                                                const char *object_path)
 {
   gs_unref_object GDBusObject *skeleton =
-    g_dbus_object_manager_get_object (G_DBUS_OBJECT_MANAGER (app->object_manager),
-                                      object_path);
+    g_dbus_object_manager_get_object(G_DBUS_OBJECT_MANAGER(app->org_gnome_object_manager),
+				     object_path);
   if (skeleton == nullptr || !TERMINAL_IS_OBJECT_SKELETON (skeleton))
     return nullptr;
 
@@ -1281,7 +1341,7 @@ terminal_app_register_screen (TerminalApp *app,
   terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (impl));
   g_object_unref (impl);
 
-  g_dbus_object_manager_server_export (app->object_manager,
+  g_dbus_object_manager_server_export (app->org_gnome_object_manager,
                                        G_DBUS_OBJECT_SKELETON (skeleton));
 }
 
@@ -1303,7 +1363,7 @@ terminal_app_unregister_screen (TerminalApp *app,
   if (impl != nullptr)
     terminal_receiver_impl_unset_screen (impl);
 
-  g_dbus_object_manager_server_unexport (app->object_manager, object_path);
+  g_dbus_object_manager_server_unexport (app->org_gnome_object_manager, object_path);
 }
 
 GdkContentFormats *
@@ -1357,11 +1417,9 @@ terminal_app_edit_preferences(TerminalApp* app,
 
 #endif /* TERMINAL_SERVER */
 
-#ifdef TERMINAL_PREFERENCES
-
-static bool
-timestamp_from_activation_token(char const* token,
-                                guint32* timestamp)
+bool
+terminal_get_timestamp_from_activation_token(char const* token,
+                                             guint32* timestamp)
 {
   if (!token)
     return false;
@@ -1382,6 +1440,8 @@ timestamp_from_activation_token(char const* token,
 
   return false;
 }
+
+#ifdef TERMINAL_PREFERENCES
 
 void
 terminal_app_edit_preferences(TerminalApp* app,
@@ -1404,7 +1464,7 @@ terminal_app_edit_preferences(TerminalApp* app,
                                              profile);
 
   guint32 timestamp;
-  if (timestamp_from_activation_token(activation_token, &timestamp))
+  if (terminal_get_timestamp_from_activation_token(activation_token, &timestamp))
     gtk_window_present_with_time(GTK_WINDOW(app->prefs_window), timestamp);
   else
     gtk_window_present(GTK_WINDOW(app->prefs_window));
@@ -1562,8 +1622,8 @@ terminal_app_get_system_font (TerminalApp *app)
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
-  g_warn_if_fail (app->object_manager != nullptr);
-  return app->object_manager;
+  g_warn_if_fail (app->org_gnome_object_manager != nullptr);
+  return app->org_gnome_object_manager;
 }
 
 void*
@@ -1608,21 +1668,21 @@ gboolean
 terminal_app_is_default_terminal(TerminalApp* app)
 {
   g_return_val_if_fail(TERMINAL_IS_APP(app), false);
-  return app->xte_is_default;
+  return app->is_default_terminal;
 }
 
 gboolean
 terminal_app_get_ask_default_terminal(TerminalApp* app)
 {
   g_return_val_if_fail(TERMINAL_IS_APP(app), false);
-  return app->ask_default;
+  return app->ask_default_terminal;
 }
 
 void
 terminal_app_unset_ask_default_terminal(TerminalApp* app)
 {
   g_return_if_fail(TERMINAL_IS_APP(app));
-  app->ask_default = false;
+  app->ask_default_terminal = false;
   g_object_notify(G_OBJECT(app), "ask-default-terminal");
 }
 
@@ -1631,7 +1691,7 @@ terminal_app_make_default_terminal(TerminalApp* app)
 {
   g_return_if_fail(TERMINAL_IS_APP(app));
   terminal_make_default();
-  app->xte_is_default = terminal_is_default();
+  app->is_default_terminal = terminal_is_default();
   g_object_notify(G_OBJECT(app), "is-default-terminal");
 }
 

@@ -26,9 +26,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (TerminalInfoBar, terminal_info_bar, TERMINAL, INFO_BAR, GtkWidget)
 
-GtkWidget *terminal_info_bar_new (GtkMessageType type,
-                                  const char *first_button_text,
-                                  ...) G_GNUC_NULL_TERMINATED;
+GtkWidget *terminal_info_bar_new (GtkMessageType type);
+
+GtkWidget *terminal_info_bar_new_with_buttons (GtkMessageType type,
+                                               const char *first_button_text,
+                                               ...) G_GNUC_NULL_TERMINATED;
 
 void terminal_info_bar_format_text (TerminalInfoBar *bar,
                                     const char *format,

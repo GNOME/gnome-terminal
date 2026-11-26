@@ -1,5 +1,5 @@
 /*
- *  Copyright © 2011 Christian Persch
+ *  Copyright © 2011, 2021 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,8 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_RECEIVER_IMPL_H
-#define TERMINAL_RECEIVER_IMPL_H
+#pragma once
 
 #include <glib-object.h>
 
@@ -85,6 +84,29 @@ GType terminal_factory_impl_get_type (void);
 
 TerminalFactory *terminal_factory_impl_new (void);
 
-G_END_DECLS
+/* ------------------------------------------------------------------------- */
 
-#endif /* !TERMINAL_RECEIVER_IMPL_H */
+#define TERMINAL_TYPE_INTENT_IMPL              (terminal_intent_impl_get_type ())
+#define TERMINAL_INTENT_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_INTENT_IMPL, TerminalIntentImpl))
+#define TERMINAL_INTENT_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), TERMINAL_TYPE_INTENT_IMPL, TerminalIntentImplClass))
+#define TERMINAL_IS_INTENT_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), TERMINAL_TYPE_INTENT_IMPL))
+#define TERMINAL_IS_INTENT_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), TERMINAL_TYPE_INTENT_IMPL))
+#define TERMINAL_INTENT_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), TERMINAL_TYPE_INTENT_IMPL, TerminalIntentImplClass))
+
+typedef struct _TerminalIntentImpl        TerminalIntentImpl;
+typedef struct _TerminalIntentImplClass   TerminalIntentImplClass;
+
+struct _TerminalIntentImplClass {
+  TerminalIntentSkeletonClass parent_class;
+};
+
+struct _TerminalIntentImpl
+{
+  TerminalIntentSkeleton parent_instance;
+};
+
+GType terminal_intent_impl_get_type (void);
+
+TerminalIntent *terminal_intent_impl_new (void);
+
+G_END_DECLS

@@ -141,14 +141,20 @@ struct _TerminalScreenPrivate
   GtkDropTargetAsync *drop_target;
   GtkWidget *drop_highlight;
 
+  char* static_title;
+
   GIcon* icon_color;
   GIcon* icon_image;
+  GIcon* icon_intent; // as set by the desktop file from terminal intent
 
   bool has_progress;
   bool icon_progress_set;
   VteProgressHint progress_hint;
   double progress_fraction;
   GIcon* icon_progress;
+
+  bool exit_action_set;
+  TerminalExitAction exit_action;
 };
 
 enum
@@ -227,12 +233,12 @@ static void terminal_screen_show_info_bar (TerminalScreen *screen,
 
 
 static char**terminal_screen_get_child_environment (TerminalScreen *screen,
-                                                    char **initial_envv,
+                                                    char const* const* initial_envv,
                                                     char **path,
                                                     char **shell);
 
 static gboolean terminal_screen_get_child_command (TerminalScreen *screen,
-                                                   char          **exec_argv,
+                                                   char const* const* exec_argv,
                                                    const char     *path_env,
                                                    const char     *shell_env,
                                                    gboolean        shell,
@@ -246,8 +252,6 @@ static void terminal_screen_menu_popup_action (GtkWidget  *widget,
                                                GVariant   *param);
 
 static void terminal_screen_queue_idle_exec (TerminalScreen *screen);
-
-static void _terminal_screen_update_scrollbar (TerminalScreen *screen);
 
 static void _terminal_screen_update_kinetic_scrolling (TerminalScreen *screen);
 
@@ -298,9 +302,9 @@ fake_dup3 (int fd, int fd2, int flags)
 #endif /* !__linux__ */
 
 static char*
-strv_to_string (char **strv)
+strv_to_string (char const* const* strv)
 {
-  return strv ? g_strjoinv (" ", strv) : g_strdup ("(null)");
+  return strv ? g_strjoinv (" ", (char**)strv) : g_strdup ("(null)");
 }
 
 static char*
@@ -869,6 +873,8 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv->child_pid = -1;
 
+  priv->static_title = nullptr;
+
   priv->has_progress = false;
   priv->progress_hint = VTE_PROGRESS_HINT_INACTIVE;
   priv->progress_fraction = 0.;
@@ -968,9 +974,11 @@ terminal_screen_set_property (GObject *object,
       case PROP_PROFILE:
         terminal_screen_set_profile (screen, (GSettings*)g_value_get_object (value));
         break;
+      case PROP_TITLE:
+        terminal_screen_set_static_title(screen, g_value_get_string(value));
+        break;
       case PROP_ICON:
       case PROP_ICON_PROGRESS:
-      case PROP_TITLE:
         /* not writable */
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1066,7 +1074,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   pspecs[PROP_TITLE] =
      g_param_spec_string ("title", nullptr, nullptr,
                           nullptr,
-                          GParamFlags(G_PARAM_READABLE |
+                          GParamFlags(G_PARAM_READWRITE |
 				      G_PARAM_STATIC_STRINGS |
                                       G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1151,6 +1159,9 @@ terminal_screen_dispose (GObject *object)
 
   g_clear_object(&screen->priv->icon_color);
   g_clear_object(&screen->priv->icon_image);
+  g_clear_object(&screen->priv->icon_intent);
+
+  g_clear_pointer(&screen->priv->static_title, GDestroyNotify(g_free));
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 
@@ -1313,10 +1324,10 @@ terminal_screen_reexec (TerminalScreen *screen,
 
 gboolean
 terminal_screen_exec (TerminalScreen *screen,
-                      char **argv,
-                      char **initial_envv,
+                      char const* const* argv,
+                      char const* const* initial_envv,
                       gboolean as_shell,
-                      const char *cwd,
+                      char const* cwd,
                       GUnixFDList *fd_list,
                       GVariant *fd_array,
                       TerminalScreenExecCallback callback,
@@ -1336,7 +1347,7 @@ terminal_screen_exec (TerminalScreen *screen,
                            "[screen %p] exec: argv:[%s] envv:%p(%u) as-shell:%s cwd:%s\n",
                            screen,
                            (argv_str = strv_to_string(argv)),
-                           initial_envv, initial_envv ? g_strv_length (initial_envv) : 0,
+                           initial_envv, initial_envv ? g_strv_length((char**)initial_envv) : 0,
                            as_shell ? "true":"false",
                            cwd);
   }
@@ -1361,7 +1372,7 @@ terminal_screen_exec (TerminalScreen *screen,
 
   gs_free char *path = nullptr;
   gs_free char *shell = nullptr;
-  gs_strfreev char **envv = terminal_screen_get_child_environment (screen,
+  gs_strfreev char **envv = terminal_screen_get_child_environment(screen,
                                                                   initial_envv,
                                                                   &path,
                                                                   &shell);
@@ -1418,7 +1429,7 @@ terminal_screen_exec (TerminalScreen *screen,
     data->fd_map = nullptr;
   }
 
-  data->argv = g_strdupv (argv);
+  data->argv = g_strdupv ((char**)argv);
   data->exec_argv = g_strdupv (exec_argv);
   data->cwd = g_strdup (cwd);
   data->envv = g_strdupv (envv);
@@ -1438,7 +1449,22 @@ terminal_screen_exec (TerminalScreen *screen,
 const char*
 terminal_screen_get_title (TerminalScreen *screen)
 {
-  return vte_terminal_get_window_title (VTE_TERMINAL (screen));
+  g_return_val_if_fail(TERMINAL_IS_SCREEN(screen), nullptr);
+  if (auto const dynamic_title = vte_terminal_get_window_title(VTE_TERMINAL(screen));
+      dynamic_title && dynamic_title[0])
+    return dynamic_title;
+
+  return screen->priv->static_title;
+}
+
+void
+terminal_screen_set_static_title (TerminalScreen *screen,
+                                  char const* str)
+{
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+
+  if (g_set_str(&screen->priv->static_title, str))
+    g_object_notify_by_pspec(G_OBJECT(screen), pspecs[PROP_TITLE]);
 }
 
 static void
@@ -1802,7 +1828,7 @@ should_preserve_cwd (TerminalPreserveWorkingDirectory preserve_cwd,
 
 static gboolean
 terminal_screen_get_child_command (TerminalScreen *screen,
-                                   char          **argv,
+                                   char const* const* argv,
                                    const char     *path_env,
                                    const char     *shell_env,
                                    gboolean        as_shell,
@@ -1825,7 +1851,7 @@ terminal_screen_get_child_command (TerminalScreen *screen,
 
   if (argv)
     {
-      exec_argv = g_strdupv (argv);
+      exec_argv = g_strdupv((char**)argv);
 
       /* argv and cwd come from the command line client, so it must always be used */
       *preserve_cwd_p = TRUE;
@@ -1900,13 +1926,13 @@ remove_prefixed_cb(void* key,
 }
 
 static char**
-terminal_screen_get_child_environment (TerminalScreen *screen,
-                                       char **initial_envv,
-                                       char **path,
-                                       char **shell)
+terminal_screen_get_child_environment(TerminalScreen *screen,
+				      char const* const* initial_envv,
+				      char **path,
+				      char **shell)
 {
   TerminalApp *app = terminal_app_get ();
-  char **env;
+  char const* const* env = nullptr;
   gs_strfreev char** current_environ = nullptr;
   char *e, *v;
   GHashTable *env_table;
@@ -1919,14 +1945,16 @@ terminal_screen_get_child_environment (TerminalScreen *screen,
   if (initial_envv)
     env = initial_envv;
   else {
-    env = current_environ = g_get_environ ();
+    current_environ = g_get_environ ();
     /* Remove this variable which we set in server.c:main() */
-    env = g_environ_unsetenv (env, "G_ENABLE_DIAGNOSTIC");
+    current_environ = g_environ_unsetenv(current_environ, "G_ENABLE_DIAGNOSTIC");
+
+    env = current_environ;
   }
 
   for (i = 0; env[i]; ++i)
     {
-      v = strchr (env[i], '=');
+      v = strchr ((char*)env[i], '=');
       if (v)
           g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
         else
@@ -2018,10 +2046,10 @@ terminal_screen_show_info_bar (TerminalScreen *screen,
   if (!gtk_widget_get_parent (GTK_WIDGET (screen)))
     return;
 
-  info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
-                                    _("_Preferences"), RESPONSE_EDIT_PREFERENCES,
-                                    !show_relaunch ? nullptr : _("_Relaunch"), RESPONSE_RELAUNCH,
-                                    nullptr);
+  info_bar = terminal_info_bar_new_with_buttons (GTK_MESSAGE_ERROR,
+                                                 _("_Preferences"), RESPONSE_EDIT_PREFERENCES,
+                                                 !show_relaunch ? nullptr : _("_Relaunch"), RESPONSE_RELAUNCH,
+                                                 nullptr);
   terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                  _("There was an error creating the child process for this terminal"));
   terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
@@ -2366,10 +2394,16 @@ terminal_screen_child_exited (VteTerminal *terminal,
 
   priv->child_pid = -1;
 
-  action = TerminalExitAction(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY));
+  if (priv->exit_action_set)
+    action = priv->exit_action;
+  else
+    action = TerminalExitAction(g_settings_get_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION_KEY));
+
   auto const tab = terminal_tab_get_from_screen(screen);
   if (terminal_tab_get_pinned(tab))
     action = TERMINAL_EXIT_HOLD;
+
+  auto const can_relaunch = !priv->exit_action_set;
 
   switch (action)
     {
@@ -2382,9 +2416,12 @@ terminal_screen_child_exited (VteTerminal *terminal,
     case TERMINAL_EXIT_HOLD: {
       GtkWidget *info_bar;
 
-      info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO,
-                                        _("_Relaunch"), RESPONSE_RELAUNCH,
-                                        nullptr);
+      info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO);
+      if (can_relaunch)
+        gtk_info_bar_add_button(GTK_INFO_BAR(info_bar),
+                                _("_Relaunch"),
+                                RESPONSE_RELAUNCH);
+
       if (WIFEXITED (status)) {
         terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                       _("The child process exited normally with status %d."), WEXITSTATUS (status));
@@ -2798,7 +2835,7 @@ terminal_screen_drop_target_drag_leave (TerminalScreen     *screen,
   gtk_widget_hide (priv->drop_highlight);
 }
 
-static void
+void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -3073,6 +3110,17 @@ terminal_screen_is_active (TerminalScreen *screen)
   return terminal_notebook_get_active_screen (notebook) == screen;
 }
 
+void
+terminal_screen_set_intent_icon(TerminalScreen* screen,
+                                GIcon* icon)
+{
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+  g_return_if_fail(!icon || G_IS_ICON(icon));
+
+  if (g_set_object(&screen->priv->icon_intent, icon))
+    g_object_notify_by_pspec(G_OBJECT(screen), pspecs[PROP_ICON]);
+}
+
 GIcon*
 terminal_screen_get_icon(TerminalScreen* screen)
 {
@@ -3082,6 +3130,8 @@ terminal_screen_get_icon(TerminalScreen* screen)
     return screen->priv->icon_image;
   else if (screen->priv->icon_color)
     return screen->priv->icon_color;
+  else if (screen->priv->icon_intent)
+    return screen->priv->icon_intent;
   else
     return nullptr;
 }
@@ -3092,4 +3142,15 @@ terminal_screen_get_icon_progress(TerminalScreen* screen)
   g_return_val_if_fail(TERMINAL_IS_SCREEN(screen), nullptr);
 
   return terminal_screen_ensure_icon_progress(screen);
+}
+
+void
+terminal_screen_set_exit_action(TerminalScreen* screen,
+                                TerminalExitAction action)
+{
+  g_return_if_fail(TERMINAL_IS_SCREEN(screen));
+
+  auto const priv = screen->priv;
+  priv->exit_action = action;
+  priv->exit_action_set = true;
 }

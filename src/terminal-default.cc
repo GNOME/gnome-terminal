@@ -28,6 +28,15 @@
 #define XTE_CONFIG_DIRNAME  "xdg-terminals"
 #define XTE_CONFIG_FILENAME "xdg-terminals.list"
 
+#define XIA_CONFIG_FILENAME "intentapps.list"
+#define XIA_DEFAULT_APPLICATIONS_GROUP "Default Applications"
+#define XIA_INTENT_TERMINAL1 "org.freedesktop.Terminal1"
+
+// glib forward-compat
+#ifndef G_KEY_FILE_DESKTOP_KEY_IMPLEMENTS
+#define G_KEY_FILE_DESKTOP_KEY_IMPLEMENTS "Implements"
+#endif
+
 #define NEWLINE '\n'
 #define DOT_DESKTOP ".desktop"
 #define TERMINAL_DESKTOP_FILENAME TERMINAL_APPLICATION_ID DOT_DESKTOP
@@ -81,8 +90,21 @@ get_desktops_lc(void)
 }
 
 static bool
-xte_data_check_one(char const* file,
-                   bool full)
+desktop_name_is_foreign(char const* name,
+                        char const* native_name)
+{
+  return !g_str_equal(name, native_name);
+}
+
+typedef enum {
+  CHECK_XIA = 1 << 0,
+  CHECK_XTE = 1 << 1,
+  CHECK_FULL = 1 << 2,
+} CheckFlags;
+
+static bool
+desktop_data_check_one(char const* file,
+                       CheckFlags flags)
 {
   if (!g_file_test(file, G_FILE_TEST_EXISTS)) {
     _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
@@ -91,12 +113,12 @@ xte_data_check_one(char const* file,
     return false;
   }
 
-  if (!full)
+  if ((flags & CHECK_FULL) == 0)
     return true;
 
   gs_free_error GError* error = nullptr;
-  gs_unref_key_file auto kf = g_key_file_new();
-  if (!g_key_file_load_from_file(kf,
+  gs_unref_key_file auto keyfile = g_key_file_new();
+  if (!g_key_file_load_from_file(keyfile,
                                  file,
                                  GKeyFileFlags(G_KEY_FILE_NONE),
                                  &error)) {
@@ -107,9 +129,31 @@ xte_data_check_one(char const* file,
     return false;
   }
 
-  if (!g_key_file_has_group(kf, G_KEY_FILE_DESKTOP_GROUP)) {
+  if (!g_key_file_has_group(keyfile, G_KEY_FILE_DESKTOP_GROUP)) {
     _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
                           "Keyfile file \"%s\" is not a desktop file.\n",
+                          file);
+    return false;
+  }
+
+  if (gs_free auto type = g_key_file_get_string(keyfile,
+                                                G_KEY_FILE_DESKTOP_GROUP,
+                                                G_KEY_FILE_DESKTOP_KEY_TYPE,
+                                                nullptr);
+      !type ||
+      !g_str_equal(type, G_KEY_FILE_DESKTOP_TYPE_APPLICATION)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Keyfile file \"%s\" has incorrec type \"%s\".\n",
+                          file, type ? type : "(nil)");
+    return false;
+  }
+
+  if (!g_key_file_has_key(keyfile,
+                          G_KEY_FILE_DESKTOP_GROUP,
+                          G_KEY_FILE_DESKTOP_KEY_NAME,
+                          nullptr)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Keyfile file \"%s\" is missing the Name entry.\n",
                           file);
     return false;
   }
@@ -117,7 +161,7 @@ xte_data_check_one(char const* file,
   // As per the XDG desktop entry spec, the (optional) TryExec key contains
   // the name of an executable that can be used to determine if the programme
   // is actually present.
-  gs_free auto try_exec = g_key_file_get_string(kf,
+  gs_free auto try_exec = g_key_file_get_string(keyfile,
                                                 G_KEY_FILE_DESKTOP_GROUP,
                                                 G_KEY_FILE_DESKTOP_KEY_TRY_EXEC,
                                                 nullptr);
@@ -151,12 +195,27 @@ xte_data_check_one(char const* file,
                           file);
   }
 
+  if (flags & CHECK_XIA) {
+    if (gs_strfreev auto interfaces = g_key_file_get_string_list(keyfile,
+                                                                 G_KEY_FILE_DESKTOP_GROUP,
+                                                                 G_KEY_FILE_DESKTOP_KEY_IMPLEMENTS,
+                                                                 nullptr,
+                                                                 nullptr);
+        !interfaces ||
+        !g_strv_contains(interfaces, XIA_INTENT_TERMINAL1)) {
+      _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                            "Keyfile file \"%s\" does not implement intent \"%s\".\n",
+                            file, XIA_INTENT_TERMINAL1);
+      return false;
+    }
+  }
+
   return true;
 }
 
 static bool
-xte_data_check(char const* name,
-               bool full)
+desktop_data_check(char const* name,
+                   CheckFlags flags)
 {
   gs_strfreev auto segments = g_strsplit(name, ":", 2);
 
@@ -164,12 +223,14 @@ xte_data_check(char const* name,
   if (!desktop_id || !desktop_id[0])
     return false;
 
-  { // Legacy x-t-e spec
+  auto const include_xte_dirs = (flags & CHECK_XTE) != 0;
+
+  if (include_xte_dirs) { // Legacy x-t-e spec
     gs_free auto path = g_build_filename(g_get_user_data_dir(),
                                          XTE_CONFIG_DIRNAME,
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
   {
@@ -177,7 +238,7 @@ xte_data_check(char const* name,
                                          "applications",
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
   {
@@ -188,34 +249,35 @@ xte_data_check(char const* name,
                                          "applications",
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
-  if (!g_str_equal(TERM_PREFIX, "/usr/local")) {
+  if (include_xte_dirs && !g_str_equal(TERM_PREFIX, "/usr/local")) {
     gs_free auto path = g_build_filename(TERM_PREFIX,
                                          "local",
                                          "share",
                                          XTE_CONFIG_DIRNAME,
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
-
+  }
+  if (!g_str_equal(TERM_PREFIX, "/usr/local")) {
     gs_free auto path2 = g_build_filename(TERM_PREFIX,
                                           "local",
                                           "share",
                                           "applications",
                                           desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path2, full))
+    if (desktop_data_check_one(path2, flags))
       return true;
   }
-  {
+  if (include_xte_dirs) {
     gs_free auto path = g_build_filename(TERM_DATADIR,
                                          XTE_CONFIG_DIRNAME,
                                          name,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
   {
@@ -223,7 +285,7 @@ xte_data_check(char const* name,
                                          "applications",
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
   {
@@ -235,33 +297,36 @@ xte_data_check(char const* name,
                                          "applications",
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
   }
-  if (!g_str_equal(TERM_PREFIX, "/usr")) {
+  if (include_xte_dirs && !g_str_equal(TERM_PREFIX, "/usr")) {
     gs_free auto path = g_build_filename("/usr", "share",
                                          XTE_CONFIG_DIRNAME,
                                          desktop_id,
                                          nullptr);
-    if (xte_data_check_one(path, full))
+    if (desktop_data_check_one(path, flags))
       return true;
-
+  }
+  if (!g_str_equal(TERM_PREFIX, "/usr")) {
     gs_free auto path2 = g_build_filename("/usr",
                                           "share",
                                           "applications",
                                           desktop_id,
                                           nullptr);
-    if (xte_data_check_one(path2, full))
+    if (desktop_data_check_one(path2, flags))
       return true;
   }
 
   return false;
 }
 
+// XDG Terminal Exec
+
 static bool
 xte_data_ensure(char const* desktop_id)
 {
-  if (xte_data_check(desktop_id, false))
+  if (desktop_data_check(desktop_id, CHECK_XTE))
     return true;
 
   // If we get here, there wasn't a desktop file in any of the paths. Install
@@ -332,7 +397,7 @@ xte_config_read(char const* path,
   if (!lines)
     return nullptr;
 
-  for (auto i = 0; lines[i]; ++i)
+  for (auto i = size_t{0}; lines[i]; ++i)
     lines[i] = g_strstrip(lines[i]);
 
   return lines;
@@ -348,7 +413,7 @@ xte_config_rewrite(char const* path,
 
   gs_strfreev auto lines = xte_config_read(path, nullptr);
   if (lines) {
-    for (auto i = 0; lines[i]; ++i) {
+    for (auto i = size_t{0}; lines[i]; ++i) {
       if (lines[i][0] == '\0')
         continue;
       if (strcmp(lines[i], desktop_id) == 0)
@@ -382,7 +447,7 @@ xte_config_rewrite(char const* desktop_id)
       errno != EEXIST) {
     auto const errsv = errno;
     _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
-                          "Failed to create directory %s: %s\n",
+                          "Failed to user config create directory %s: %s\n",
                           user_dir, g_strerror(errsv));
    // Nothing to do if we can't even create the directory
     return;
@@ -391,7 +456,7 @@ xte_config_rewrite(char const* desktop_id)
   // Install as default for all current desktops
   gs_strfreev auto desktops = get_desktops_lc();
   if (desktops) {
-    for (auto i = 0; desktops[i]; ++i) {
+    for (auto i = size_t{0}; desktops[i]; ++i) {
       gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
                                           desktops[i]);
       gs_free auto path = g_build_filename(user_dir, name, nullptr);
@@ -405,13 +470,6 @@ xte_config_rewrite(char const* desktop_id)
   xte_config_rewrite(path, desktop_id);
 }
 
-static bool
-xte_config_is_foreign(char const* name,
-                      char const* native_name)
-{
-  return !g_str_equal(name, native_name);
-}
-
 static char*
 xte_config_get_default_for_path(char const* path,
                                 char const* native_name)
@@ -421,17 +479,17 @@ xte_config_get_default_for_path(char const* path,
     return nullptr;
 
   // A terminal is the default if it's the first non-comment line in the file
-  for (auto i = 0; lines[i]; ++i) {
+  for (auto i = size_t{0}; lines[i]; ++i) {
     auto const line = lines[i];
     if (!line[0] || line[0] == '#')
       continue;
 
     // If a foreign terminal is default, check whether it is actually installed.
     // (We always ensure our own desktop file exists.)
-    if (xte_config_is_foreign(line, native_name) &&
-        !xte_data_check(line, true)) {
+    if (desktop_name_is_foreign(line, native_name) &&
+        !desktop_data_check(line, CheckFlags(CHECK_XTE | CHECK_FULL))) {
       _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
-                            "Default entry \"%s\" from config \"%s\" is not installed, skipping.\n",
+                            "Default XTE entry \"%s\" from config \"%s\" is not installed, skipping.\n",
                             line, path);
       return nullptr;
     }
@@ -448,7 +506,7 @@ xte_config_get_default_for_path_and_desktops(char const* base_path,
                                              char const* native_name)
 {
   if (desktops) {
-    for (auto i = 0; desktops[i]; ++i) {
+    for (auto i = size_t{0}; desktops[i]; ++i) {
       gs_free auto name = g_strdup_printf("%s-" XTE_CONFIG_FILENAME,
                                           desktops[i]);
       gs_free auto path = g_build_filename(base_path, name, nullptr);
@@ -498,87 +556,406 @@ xte_config_is_default(char const* desktop_id,
   return is_default;
 }
 
-gboolean
-terminal_is_default(void)
+static bool
+xte_config_set_default(char const* desktop_id = TERMINAL_DESKTOP_FILENAME)
 {
-  auto const desktop_id = TERMINAL_DESKTOP_FILENAME;
-  auto set = false;
-  auto const is_default = xte_config_is_default(desktop_id, &set);
-  if (!set) {
-    // No terminal is default yet, so we claim the default.
-    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
-                          "No default terminal, claiming default.\n");
-    return terminal_make_default();
-  }
-
-  if (is_default) {
-    // If we're the default terminal, ensure our desktop file is installed
-    // in the right location.
-    xte_data_ensure(desktop_id);
-  }
-
-  return is_default;
-}
-
-gboolean
-terminal_make_default(void)
-{
-  auto const desktop_id = TERMINAL_DESKTOP_FILENAME;
-
   xte_config_rewrite(desktop_id);
   xte_data_ensure(desktop_id);
 
   return xte_config_is_default(desktop_id);
 }
 
+// XDG Intent Apps
+// https://specifications.freedesktop.org/intent-apps/latest/
+
+static bool
+xia_config_set_default_for_path(char const* path,
+                                char const* desktop_id)
+{
+  _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                        "Reading XIA config file \"%s\"\n",
+                        path);
+
+  gs_unref_key_file auto keyfile = g_key_file_new();
+
+  if (gs_free_error GError* err = nullptr;
+      !g_key_file_load_from_file(keyfile,
+                                 path,
+                                 GKeyFileFlags(G_KEY_FILE_KEEP_COMMENTS | G_KEY_FILE_KEEP_TRANSLATIONS),
+                                 &err) &&
+      !g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to read XIA config \"%s\": %s\n",
+                          path, err->message);
+
+    // Ignore error, just clear the file
+    g_key_file_unref(keyfile);
+    keyfile = g_key_file_new();
+  }
+
+  auto arr = g_ptr_array_new();
+  g_ptr_array_add(arr, g_strdup(desktop_id));
+
+  if (gs_strfreev auto apps = g_key_file_get_string_list(keyfile,
+                                                         XIA_DEFAULT_APPLICATIONS_GROUP,
+                                                         XIA_INTENT_TERMINAL1,
+                                                         nullptr,
+                                                         nullptr)) {
+    for (auto i = size_t{0}; apps[i]; ++i) {
+      auto const app = apps[i];
+      if (g_str_equal(app, desktop_id))
+        continue;
+
+      g_ptr_array_add(arr, g_strdup(app));
+    }
+  }
+
+  auto const n = arr->len;
+
+  g_ptr_array_add(arr, nullptr);
+  gs_strfreev auto strv = reinterpret_cast<char**>(g_ptr_array_free(arr, false));
+
+  g_key_file_set_string_list(keyfile,
+                             XIA_DEFAULT_APPLICATIONS_GROUP,
+                             XIA_INTENT_TERMINAL1,
+                             strv, n);
+
+  if (gs_free_error GError* err = nullptr;
+      !g_key_file_save_to_file(keyfile, path, &err)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to write XIA config \"%s\": %s\n",
+                          path, err->message);
+    return false;
+  }
+
+  return true;
+}
+
+static void
+xia_config_set_default(char const* desktop_id = TERMINAL_DESKTOP_FILENAME)
+{
+  auto const user_dir = g_get_user_config_dir();
+  if (g_mkdir_with_parents(user_dir, 0700) != 0 &&
+      errno != EEXIST) {
+    auto const errsv = errno;
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Failed to create user config directory %s: %s\n",
+                          user_dir, g_strerror(errsv));
+   // Nothing to do if we can't even create the directory
+    return;
+  }
+
+  // Install as default for all current desktops
+  gs_strfreev auto desktops = get_desktops_lc();
+  if (desktops) {
+    for (auto i = size_t{0}; desktops[i]; ++i) {
+      gs_free auto name = g_strdup_printf("%s-" XIA_CONFIG_FILENAME,
+                                          desktops[i]);
+      gs_free auto path = g_build_filename(user_dir, name, nullptr);
+
+      xia_config_set_default_for_path(path, desktop_id);
+    }
+  }
+
+  // Install as non-desktop specific default too
+  gs_free auto path = g_build_filename(user_dir, XIA_CONFIG_FILENAME, nullptr);
+  xia_config_set_default_for_path(path, desktop_id);
+}
+
+static char*
+xia_config_get_default_for_path(char const* path,
+                                char const* native_name)
+{
+  _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                        "Reading XIA config file \"%s\"\n",
+                        path);
+
+  gs_unref_key_file auto keyfile = g_key_file_new();
+
+  if (gs_free_error GError* err = nullptr;
+      !g_key_file_load_from_file(keyfile,
+                                 path,
+                                 GKeyFileFlags(G_KEY_FILE_NONE),
+                                 &err)) {
+    if (!g_error_matches(err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
+      _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                            "Failed to load XIA config file \"%s\": %s\n",
+                            path, err->message);
+    return nullptr;
+  }
+
+  if (!g_key_file_has_group(keyfile, XIA_DEFAULT_APPLICATIONS_GROUP)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "\"%s\" is missing the \"%s\" group and so is not a valid XIA config file\n",
+                          path, XIA_DEFAULT_APPLICATIONS_GROUP);
+    return nullptr;
+  }
+
+  if (!g_key_file_has_key(keyfile,
+                          XIA_DEFAULT_APPLICATIONS_GROUP,
+                          XIA_INTENT_TERMINAL1,
+                          nullptr)) {
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "\"%s\" has no key \"%s\"\n",
+                          path, XIA_INTENT_TERMINAL1);
+    return nullptr;
+  }
+
+  gs_strfreev auto apps = g_key_file_get_string_list(keyfile,
+                                                     XIA_DEFAULT_APPLICATIONS_GROUP,
+                                                     XIA_INTENT_TERMINAL1,
+                                                     nullptr,
+                                                     nullptr);
+  if (!apps)
+    return nullptr;
+
+  for (auto i = size_t{0}; apps[i]; ++i) {
+    auto const app = apps[i];
+
+    // If a foreign terminal is default, check whether it is actually installed
+    // and implements the terminal intent.
+    // (Our own desktop file exists and implements the terminal intent.)
+    if (desktop_name_is_foreign(app, native_name) &&
+        !desktop_data_check(app, CheckFlags(CHECK_XTE | CHECK_FULL))) {
+      _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                            "Default XIA entry \"%s\" from config \"%s\" is not installed or not intent, skipping.\n",
+                            app, path);
+      continue;
+    }
+
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "Returning XIA default \"%s\" from config \"%s\".\n",
+                          app, path);
+    return g_strdup(app);
+  }
+
+  return nullptr;
+}
+
+static char*
+xia_config_get_default_for_path_and_desktops(char const* base_path,
+                                             char const* const* desktops,
+                                             char const* native_name)
+{
+  if (desktops) {
+    for (auto i = size_t{0}; desktops[i]; ++i) {
+      gs_free auto name = g_strdup_printf("%s-" XIA_CONFIG_FILENAME,
+                                          desktops[i]);
+      gs_free auto path = g_build_filename(base_path, name, nullptr);
+      if (auto term = xia_config_get_default_for_path(path, native_name))
+        return term;
+    }
+  }
+
+  gs_free auto sys_path = g_build_filename(base_path, XIA_CONFIG_FILENAME, nullptr);
+  if (auto term = xia_config_get_default_for_path(sys_path, native_name))
+    return term;
+
+  return nullptr;
+}
+
+static char*
+xia_config_get_default(char const* native_name)
+{
+  gs_strfreev auto desktops = get_desktops_lc();
+  auto const user_dir = g_get_user_config_dir();
+  if (auto term = xia_config_get_default_for_path_and_desktops(user_dir, desktops, native_name))
+    return term;
+
+  auto config_dirs = g_get_system_config_dirs();
+  for (auto i = size_t{0}; config_dirs[i]; ++i) {
+    if (auto term = xia_config_get_default_for_path_and_desktops(config_dirs[i], desktops, native_name))
+      return term;
+  }
+
+  auto data_dirs = g_get_system_data_dirs();
+  for (auto i = size_t{0}; data_dirs[i]; ++i) {
+    if (auto term = xia_config_get_default_for_path_and_desktops(data_dirs[i], desktops, native_name))
+      return term;
+  }
+
+  return nullptr;
+}
+
+static bool
+xia_config_is_default(char const* desktop_id,
+                      bool* set = nullptr)
+{
+  gs_free auto term = xia_config_get_default(desktop_id);
+
+  auto const is_default = term && g_str_equal(term, desktop_id);
+  if (set)
+    *set = term != nullptr;
+  return is_default;
+}
+
+// public API
+
+gboolean
+terminal_is_default(void)
+{
+  auto const desktop_id = TERMINAL_DESKTOP_FILENAME;
+
+  gs_free auto xia_default = xia_config_get_default(desktop_id);
+  gs_free auto xte_default = xte_config_get_default(desktop_id);
+
+  auto const xia_default_set = xia_default != nullptr;
+  auto const xte_default_set = xte_default != nullptr;
+
+  auto xia_is_default = xia_default && g_str_equal(xia_default, desktop_id);
+  auto xte_is_default = xte_default && g_str_equal(xte_default, desktop_id);
+
+  // If one of XTE/XIA is not set but the other is set to gnome-terminal,
+  // copy that pref over.
+  if (xte_is_default && !xia_default_set) {
+    // No XIA default yet, claim XIA default
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "No XIA default terminal, claiming default.\n");
+    xia_config_set_default(desktop_id);
+    xia_is_default = xia_config_is_default(desktop_id);
+  }
+  if (xia_is_default && !xte_default_set) {
+    // No XTE default yet, claim XTE default
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "No XTE default terminal, claiming default.\n");
+    xte_is_default = xte_config_set_default(desktop_id);
+  } else if (!xia_default_set && !xte_default_set) {
+    // neither has a pref set yet, claim both
+    _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                          "No XIA or XTE default terminal, claiming default.\n");
+    xia_config_set_default(desktop_id);
+    xia_is_default = xia_config_is_default(desktop_id);
+
+    xte_is_default = xte_config_set_default(desktop_id);
+  }
+
+  if (xte_is_default) {
+    // If we're the default terminal, ensure our desktop file is installed
+    // in the right location.
+    xte_data_ensure(desktop_id);
+  }
+
+  _terminal_debug_print(TERMINAL_DEBUG_DEFAULT,
+                        "XIA is-default %d, XTE is-default %d\n",
+                        xia_is_default, xte_is_default);
+
+  return xte_is_default && xia_is_default;
+}
+
+void
+terminal_make_default(void)
+{
+  auto const desktop_id = TERMINAL_DESKTOP_FILENAME;
+
+  xte_config_set_default(desktop_id);
+  xia_config_set_default(desktop_id);
+}
+
 #ifdef TERMINAL_DEFAULT_MAIN
+
+#include <clocale>
 
 static int
 usage(char const* argv0) noexcept
 {
   g_printerr("Usage: %s [--debug] [get|set] [DESKTOP_ID]\n", argv0);
-  return 1;
+  return _EXIT_FAILURE_ARGPARSE;
 }
 
 static void
-show_default(char const* desktop_id)
+show_default(char const* desktop_id,
+             bool xia,
+             bool xte)
 {
-  g_printerr("Reading default terminal...\n");
-  gs_free auto term = xte_config_get_default(desktop_id);
-  if (term) {
-    g_printerr("Default terminal: %s\n", term);
-  } else {
-    g_printerr("Default terminal not set\n");
+  if (xia) {
+    gs_free auto xia_term = xia_config_get_default(desktop_id);
+    if (xia_term) {
+      g_printerr("Default XIA terminal: %s\n", xia_term);
+    } else {
+      g_printerr("Default XIA terminal not set\n");
+    }
+  }
+  if (xte) {
+    gs_free auto xte_term = xte_config_get_default(desktop_id);
+    if (xte_term) {
+      g_printerr("Default XTE terminal: %s\n", xte_term);
+    } else {
+      g_printerr("Default XTE terminal not set\n");
+    }
   }
 }
+
+static void
+set_default(char const* desktop_id,
+            bool xia,
+            bool xte)
+{
+  if (xia) {
+    g_printerr("Setting %s as default XIA terminal...\n", desktop_id);
+    xia_config_set_default(desktop_id);
+  }
+  if (xte) {
+    g_printerr("Setting %s as default XIA terminal...\n", desktop_id);
+    xte_config_set_default(desktop_id);
+  }
+
+  show_default(desktop_id, xia, xte);
+}
+
+static gboolean arg_debug = false;
+static gboolean arg_xia = false;
+static gboolean arg_xte = false;
+
+static const GOptionEntry goptions[] = {
+  {"debug", 0, 0, G_OPTION_ARG_NONE, &arg_debug, "Debug output", nullptr},
+  {"xia", 0, 0, G_OPTION_ARG_NONE, &arg_xia, "XDG intent applications", nullptr},
+  {"xte", 0, 0, G_OPTION_ARG_NONE, &arg_xia, "XDG terminal exec", nullptr},
+  {nullptr}
+};
 
 int
 main(int argc,
      char* argv[])
 {
-  if (argc < 2)
-    return usage(argv[0]);
-
-  auto idx = 1;
-  if (g_str_equal(argv[idx], "--debug")) {
-    g_setenv("GNOME_TERMINAL_DEBUG", "default", true);
-    _terminal_debug_init();
-    ++idx;
+  if (setlocale(LC_ALL, "") == nullptr) {
+    g_printerr("Locale not supported.\n");
+    return _EXIT_FAILURE_UNSUPPORTED_LOCALE;
   }
 
-  if (idx >= argc)
+  char const* charset = nullptr;
+  if (!g_get_charset(&charset)) {
+    g_printerr("Non UTF-8 locale (%s) is not supported!\n", charset);
+    return _EXIT_FAILURE_NO_UTF8;
+  }
+
+  gs_free_option_context auto context = g_option_context_new("[get|set]");
+  g_option_context_set_ignore_unknown_options(context, true);
+  g_option_context_add_main_entries(context, goptions, GETTEXT_PACKAGE);
+
+  gs_free_error GError* error = nullptr;
+  if (!g_option_context_parse(context, &argc, &argv, &error)) {
+    g_printerr("Failed to parse arguments: %s\n", error ? error->message : "");
+    return usage(argv[0]);
+  }
+
+  if (arg_debug) {
+    g_setenv("GNOME_TERMINAL_DEBUG", "default", true);
+    _terminal_debug_init();
+  }
+
+  if (argc < 1 || argc > 3)
     return usage(argv[0]);
 
-  auto const verb = argv[idx++];
-  auto const desktop_id = idx < argc ? argv[idx] : TERMINAL_DESKTOP_FILENAME;
+  auto const verb = argc > 1 ? argv[1] : nullptr;
+  auto const desktop_id = argc > 2 ? argv[2] : TERMINAL_DESKTOP_FILENAME;
 
-  if (g_str_equal(verb, "get")) {
-    show_default(desktop_id);
+  auto const use_xia = !arg_xte || arg_xia;
+  auto const use_xte = !arg_xia || arg_xte;
+
+  if (!verb || g_str_equal(verb, "get")) {
+    show_default(desktop_id, use_xia, use_xte);
   } else if (g_str_equal(verb, "set")) {
-    g_printerr("Setting %s as default terminal...\n", desktop_id);
-    xte_config_rewrite(desktop_id);
-    // xte_data_ensure(desktop_id);
-    show_default(desktop_id);
+    set_default(desktop_id, use_xia, use_xte);
   } else {
     return usage(argv[0]);
   }

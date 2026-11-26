@@ -502,3 +502,19 @@ test_default = executable(
   sources: test_default_sources,
   install: false,
 )
+
+test_intent_sources = dbus_sources + misc_sources + files(
+  'test-intent.cc',
+)
+
+test_intent = executable(
+  'test-intent',
+  cpp_args: common_cxxflags,
+  dependencies: [
+    gio_dep,
+    glib_dep,
+  ],
+  include_directories: [top_inc, src_inc,],
+  sources: test_intent_sources,
+  install: false,
+)

@@ -143,6 +143,8 @@ void terminal_util_g_settings_bind_with_mapping(GSettings* settings,
                                                 void* user_data,
                                                 GDestroyNotify destroy);
 
+GIcon* terminal_util_make_gicon_from_name(char const* icon_name);
+
 G_END_DECLS
 
 static inline bool

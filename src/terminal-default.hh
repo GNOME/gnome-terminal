@@ -23,6 +23,6 @@ G_BEGIN_DECLS
 
 gboolean terminal_is_default(void);
 
-gboolean terminal_make_default(void);
+void terminal_make_default(void);
 
 G_END_DECLS

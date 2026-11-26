@@ -24,6 +24,8 @@
 
 #include <vte/vte.h>
 
+#include "terminal-enums.hh"
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -84,10 +86,10 @@ typedef void (* TerminalScreenExecCallback) (TerminalScreen *screen,
                                              gpointer        user_data);
 
 gboolean terminal_screen_exec (TerminalScreen *screen,
-                               char **argv,
-                               char **envv,
+                               char const* const* argv,
+                               char const* const* envv,
                                gboolean as_shell,
-                               const char *cwd,
+                               char const* cwd,
                                GUnixFDList *fd_list,
                                GVariant *fd_array,
                                TerminalScreenExecCallback callback,
@@ -115,6 +117,9 @@ GSettings* terminal_screen_ref_profile (TerminalScreen *screen);
 
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 
+void terminal_screen_set_static_title (TerminalScreen *screen,
+                                       char const* str);
+
 char *terminal_screen_get_current_dir (TerminalScreen *screen);
 
 void       terminal_screen_get_size (TerminalScreen *screen,
@@ -123,6 +128,11 @@ void       terminal_screen_get_size (TerminalScreen *screen,
 void       terminal_screen_get_cell_size (TerminalScreen *screen,
                                           int *width_chars,
                                           int *height_chars);
+
+void _terminal_screen_update_scrollbar (TerminalScreen *screen);
+
+void terminal_screen_set_exit_action(TerminalScreen* screen,
+                                     TerminalExitAction action);
 
 void terminal_screen_save_config (TerminalScreen *screen,
                                   GKeyFile *key_file,
@@ -133,6 +143,9 @@ gboolean terminal_screen_has_foreground_process (TerminalScreen *screen,
                                                  char           **cmdline);
 
 gboolean terminal_screen_is_active (TerminalScreen *screen);
+
+void terminal_screen_set_intent_icon(TerminalScreen* screen,
+                                     GIcon* icon);
 
 GIcon* terminal_screen_get_icon(TerminalScreen* screen);
 
